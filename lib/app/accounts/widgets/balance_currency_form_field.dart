@@ -36,33 +36,6 @@ class AmountAndCurrencyFormField extends StatelessWidget {
 
     return Column(
       children: [
-        TextFormField(
-          controller: amountController,
-          decoration: InputDecoration(
-            labelText: amountLabel + (isRequired ? ' *' : ''),
-            hintText: 'Ex.: 200',
-            suffixText: currency?.symbol,
-            border: appInputBorder.copyWith(
-              borderRadius: BorderRadius.only(
-                topLeft: inputBorderRadius,
-                topRight: inputBorderRadius,
-              ),
-            ),
-            // Disable the error text by setting empty error style
-            errorStyle: const TextStyle(height: 0, fontSize: 0),
-          ),
-          keyboardType: TextInputType.number,
-          enabled: enabled,
-          inputFormatters: decimalDigitFormatter(currency?.decimalPlaces ?? 2),
-          validator: (value) => fieldValidator(
-            value,
-            validator: ValidatorType.double,
-            isRequired: isRequired,
-          ),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          textInputAction: TextInputAction.next,
-        ),
-        const Divider(),
         ReadOnlyTextFormField(
           displayValue: currency != null
               ? currency!.name
@@ -97,11 +70,38 @@ class AmountAndCurrencyFormField extends StatelessWidget {
                 : null,
             border: appInputBorder.copyWith(
               borderRadius: BorderRadius.only(
+                topLeft: inputBorderRadius,
+                topRight: inputBorderRadius,
+              ),
+            ),
+          ),
+        ),
+        const Divider(),
+        TextFormField(
+          controller: amountController,
+          decoration: InputDecoration(
+            labelText: amountLabel + (isRequired ? ' *' : ''),
+            hintText: 'Ex.: 200',
+            suffixText: currency?.symbol,
+            border: appInputBorder.copyWith(
+              borderRadius: BorderRadius.only(
                 bottomLeft: inputBorderRadius,
                 bottomRight: inputBorderRadius,
               ),
             ),
+            // Disable the error text by setting empty error style
+            errorStyle: const TextStyle(height: 0, fontSize: 0),
           ),
+          keyboardType: TextInputType.number,
+          enabled: enabled,
+          inputFormatters: decimalDigitFormatter(currency?.decimalPlaces ?? 2),
+          validator: (value) => fieldValidator(
+            value,
+            validator: ValidatorType.double,
+            isRequired: isRequired,
+          ),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textInputAction: TextInputAction.next,
         ),
       ],
     );
