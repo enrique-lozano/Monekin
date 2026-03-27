@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -202,24 +201,10 @@ class AccountService {
   }) {
     // Investment accounts use portfolio value (latest valuation or invested capital)
     if (account.type == AccountType.investment) {
-      final stream = InvestmentService.instance
-          .getPortfolioValue(account, date: date)
-          .map((v) => v.roundWithDecimals(account.currency.decimalPlaces));
-
-      if (!convertToPreferredCurrency) return stream;
-
-      // Convert to preferred currency via exchange rate
-      return stream.switchMap(
-        (value) => ExchangeRateService.instance
-            .calculateExchangeRateToPreferredCurrency(
-              amount: value,
-              fromCurrency: account.currency.code,
-              date: date,
-            )
-            .map(
-              (converted) =>
-                  converted.roundWithDecimals(account.currency.decimalPlaces),
-            ),
+      return InvestmentService.instance.getInvestmentAccountMoney(
+        account,
+        date: date,
+        convertToPreferredCurrency: convertToPreferredCurrency,
       );
     }
 
@@ -256,7 +241,7 @@ class AccountService {
     final hasAccountFilter = accountIds != null;
 
     // Get the non-investment accounts initial balance (converted to the preferred currency if necessary)
-    final initialBalanceQuery = db
+    final nonInvestmentInitialAmount = db
         .customSelect(
           """
           SELECT COALESCE(
@@ -293,12 +278,13 @@ class AccountService {
           return 0.0;
         });
 
-    final nonInvestmentTransactions =
+    final nonInvestmentTransactionsBalance =
         _watchNonInvestmentAccountIds(accountIds: accountIds).switchMap((ids) {
           if (ids.isEmpty) return Stream.value(0.0);
           return TransactionService.instance.getTransactionsValueBalance(
             filters: trFilters.copyWith(maxDate: date, accountsIDs: ids),
             convertToPreferredCurrency: convertToPreferredCurrency,
+            exchDate: date,
           );
         });
 
@@ -309,8 +295,8 @@ class AccountService {
     );
 
     return Rx.combineLatest3(
-      initialBalanceQuery,
-      nonInvestmentTransactions,
+      nonInvestmentInitialAmount,
+      nonInvestmentTransactionsBalance,
       investmentTotal,
       (double ini, double tr, double inv) => ini + tr + inv,
     );

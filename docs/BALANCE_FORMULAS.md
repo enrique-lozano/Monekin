@@ -4,7 +4,9 @@ This document describes how account balances and net worth are computed in Monek
 
 ---
 
-## 1. Normal and Saving Accounts
+## 1. Account Values
+
+### 1.1 Normal and Saving accounts
 
 The balance of a normal or saving account at a given date $t$ is:
 
@@ -30,13 +32,7 @@ Where:
 
 > **Implementation:** `AccountService.getAccountsMoney()`
 
----
-
-## 2. Investment Accounts
-
-Investment accounts model assets like stocks, funds, or other holdings whose market value may fluctuate independently of cash flows.
-
-### 2.1 Portfolio Value (Balance)
+### 1.2 Investment Accounts
 
 The balance of an investment account is its **portfolio value**:
 
@@ -50,7 +46,9 @@ $$
 
 A **valuation** is a user-recorded snapshot of the account's market value at a point in time. If no valuation has been recorded, the balance falls back to the invested capital.
 
-### 2.2 Invested Capital
+> **Implementation:** `InvestmentService.getInvestmentAccountMoney()`
+
+#### Invested Capital
 
 Invested capital represents the net amount of money the user has put into the account:
 
@@ -68,7 +66,9 @@ Where:
 
 Only confirmed (non-pending, non-voided) transfers are included.
 
-### 2.3 Profit & Return
+> **Implementation:** `InvestmentService.getInvestedCapital()`
+
+#### Profit & Return
 
 $$
 \text{Profit} = V - C_{invested}
@@ -80,11 +80,11 @@ $$
 
 A positive profit means the portfolio has gained value beyond what was invested; a negative value indicates a loss.
 
-> **Implementation:** `InvestmentService.getPortfolioValue()`, `InvestmentService.getInvestedCapital()`
+> **Implementation:** `InvestmentService.getInvestmentProfit()`
 
 ---
 
-## 3. Stand-alone Assets
+## 2. Stand-alone Assets
 
 Assets (e.g., real estate, vehicles, collectibles) are tracked independently from accounts. Their current value is:
 
@@ -102,7 +102,7 @@ Where $V_{initial}$ is the value assigned to the asset when it was first created
 
 ---
 
-## 4. Net Worth
+## 3. Net Worth
 
 Net worth aggregates all the user's financial positions into a single figure, expressed in the user's preferred currency:
 

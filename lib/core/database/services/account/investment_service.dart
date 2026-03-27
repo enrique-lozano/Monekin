@@ -1,7 +1,9 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show DateUtils;
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
@@ -152,16 +154,38 @@ class InvestmentService {
   ///
   /// If no valuation has been recorded (for the given date), falls back to
   /// [getInvestedCapital].
-  Stream<double> getPortfolioValue(Account account, {DateTime? date}) {
-    return getLatestValuationForAccount(account.id, date: date).switchMap((
-      valuation,
-    ) {
-      if (valuation != null) {
-        return Stream.value(valuation.value);
-      }
+  ///
+  /// If [convertToPreferredCurrency] is not set or `false`, the returned value
+  /// is in the account currency. If `true`, the value is converted to the preferred
+  /// currency using the exchange rate at the given date (or latest if date is null).
+  Stream<double> getInvestmentAccountMoney(
+    Account account, {
+    DateTime? date,
+    bool convertToPreferredCurrency = false,
+  }) {
+    return getLatestValuationForAccount(account.id, date: date)
+        .switchMap((valuation) {
+          if (valuation != null) {
+            return Stream.value(valuation.value);
+          }
 
-      return getInvestedCapital(account, date: date);
-    });
+          return getInvestedCapital(account, date: date);
+        })
+        .switchMap((value) {
+          if (!convertToPreferredCurrency) return Stream.value(value);
+
+          // Convert to preferred currency via exchange rate
+          return ExchangeRateService.instance
+              .calculateExchangeRateToPreferredCurrency(
+                amount: value,
+                fromCurrency: account.currency.code,
+                date: date,
+              );
+        })
+        .map(
+          (converted) =>
+              converted.roundWithDecimals(account.currency.decimalPlaces),
+        );
   }
 
   /// Returns the profit (in the account currency) and the profit percentage
@@ -173,7 +197,7 @@ class InvestmentService {
     Account account,
   ) {
     return Rx.combineLatest2(
-      getPortfolioValue(account),
+      getInvestmentAccountMoney(account),
       getInvestedCapital(account),
       (double portfolioValue, double investedCapital) {
         final profit = portfolioValue - investedCapital;
