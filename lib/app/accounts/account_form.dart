@@ -363,7 +363,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
                       return Column(
                         children: [
-                          const SizedBox(height: 6),
                           ListTileField(
                             leading: Icon(
                               _type.icon,
@@ -382,7 +381,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               }
                             },
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 12),
                         ],
                       );
                     },
@@ -483,7 +482,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           ),
                           contentPadding: const EdgeInsets.only(
                             left: 16,
-                            right: 4,
+                            right: 8,
                           ),
                           shape: appInputBorder,
                           tileColor: Theme.of(
