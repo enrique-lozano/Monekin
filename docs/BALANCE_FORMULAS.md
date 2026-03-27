@@ -1,97 +1,121 @@
 # Balance Formulas
 
-This document describes how account balances are computed across different account types in Monekin.
+This document describes how account balances and net worth are computed in Monekin from a financial perspective.
 
 ---
 
-## Normal and Saving Accounts
+## 1. Normal and Saving Accounts
 
-**Formula:**
+The balance of a normal or saving account at a given date $t$ is:
 
-```
-balance = iniValue
-        + Σ income (type = 'I', status not in {'P', 'V'}, date ≤ targetDate)
-        - Σ expense (type = 'E', status not in {'P', 'V'}, date ≤ targetDate)
-        + Σ transfer valueInDestiny (receivingAccountID = accountId, status not in {'P', 'V'}, date ≤ targetDate)
-        - Σ transfer value (accountID = accountId, type = 'T', status not in {'P', 'V'}, date ≤ targetDate)
-```
-
-**Implementation:**
-
-- `AccountService.getAccountsMoney()` in `lib/core/database/services/account/account_service.dart`
-- Two sub-streams are combined via `Rx.combineLatest`:
-  1. **Initial balance** — raw SQL `SUM(iniValue)` for rows with `accounts.date ≤ targetDate`
-  2. **Transaction balance** — `TransactionService.getTransactionsValueBalance()`
-
-**Key notes:**
-
-- `iniValue` is skipped (treated as 0) when `accounts.date > targetDate` — the account had not been opened yet.
-- Exchange rates are applied when `convertToPreferredCurrency = true`.
-- Pending (`'P'`) and voided (`'V'`) transactions are excluded.
-
----
-
-## Investment Accounts
-
-**Formula:**
-
-```
-balance = latestValuation(account) ?? investedCapital(account)
-```
+$$
+B(t) = B_0 + \sum I_i - \sum E_j + \sum T^{in}_k - \sum T^{out}_l
+$$
 
 Where:
 
-```
-investedCapital = iniValue
-                + Σ transfer valueInDestiny (receivingAccountID = accountId, type = 'T', status not in {'P', 'V'})
-                - Σ transfer value          (accountID = accountId,          type = 'T', status not in {'P', 'V'})
-```
+| Symbol | Meaning |
+| --- | --- |
+| $B_0$ | **Opening balance** — the initial value of the account at the time it was created. Only counted if the account's opening date $\leq t$. |
+| $\sum I_i$ | **Total income** — all confirmed income transactions dated on or before $t$. |
+| $\sum E_j$ | **Total expenses** — all confirmed expense transactions dated on or before $t$. |
+| $\sum T^{in}_k$ | **Incoming transfers** — the value received from transfers into this account, dated on or before $t$. The received amount may differ from the sent amount due to currency conversion. |
+| $\sum T^{out}_l$ | **Outgoing transfers** — the value sent from this account to other accounts, dated on or before $t$. |
 
-**Interpretation:**
+**Notes:**
 
-- If the user has recorded at least one **valuation** for the account, the latest valuation value is used as the balance.
-- Otherwise, the balance falls back to `investedCapital` — the net amount of money the user has transferred into the investment account.
+- Pending and voided transactions are excluded from all sums.
+- When computing balances in a common currency, exchange rates are applied at the transaction date.
+- If the account was opened after date $t$, its balance is considered $0$.
 
-**Implementation split:**
-
-| Method                        | Location            | Role                                                                   |
-| ----------------------------- | ------------------- | ---------------------------------------------------------------------- |
-| `getPortfolioValue(account)`  | `InvestmentService` | Current balance (valuation or fallback)                                |
-| `getInvestedCapital(account)` | `InvestmentService` | Total money put into the account                                       |
-| `getAccountMoney(account:)`   | `AccountService`    | Entry point — delegates to `getPortfolioValue` for investment accounts |
-
-**Key notes:**
-
-- Only the `getAccountMoney()` single-account overload short-circuits for investment accounts. The multi-account `getAccountsMoney()` still uses the SQL sum path — do not pass investment account IDs directly to it without modification.
-- Profit is `portfolioValue - investedCapital`; profit % is `profit / investedCapital`.
-- Valuations are stored in the `valuations` table with `accountId` set and `assetId` NULL.
+> **Implementation:** `AccountService.getAccountsMoney()`
 
 ---
 
-## Assets (Stand-alone)
+## 2. Investment Accounts
 
-Assets are not accounts. Their "balance" is:
+Investment accounts model assets like stocks, funds, or other holdings whose market value may fluctuate independently of cash flows.
 
-```
-value = latestValuation(asset) ?? asset.initialValue
-```
+### 2.1 Portfolio Value (Balance)
 
-Tracked via `InvestmentService.getAssetValue(asset)`.
+The balance of an investment account is its **portfolio value**:
+
+$$
+V =
+\begin{cases}
+\text{latest valuation} & \text{if at least one valuation exists} \\
+C_{invested} & \text{otherwise (fallback)}
+\end{cases}
+$$
+
+A **valuation** is a user-recorded snapshot of the account's market value at a point in time. If no valuation has been recorded, the balance falls back to the invested capital.
+
+### 2.2 Invested Capital
+
+Invested capital represents the net amount of money the user has put into the account:
+
+$$
+C_{invested} = B_0 + \sum T^{in}_k - \sum T^{out}_l
+$$
+
+Where:
+
+| Symbol | Meaning |
+| --- | --- |
+| $B_0$ | **Opening balance** at account creation. |
+| $\sum T^{in}_k$ | **Incoming transfers** — money transferred into the investment account. |
+| $\sum T^{out}_l$ | **Outgoing transfers** — money withdrawn from the investment account. |
+
+Only confirmed (non-pending, non-voided) transfers are included.
+
+### 2.3 Profit & Return
+
+$$
+\text{Profit} = V - C_{invested}
+$$
+
+$$
+\text{Return (\%)} = \frac{V - C_{invested}}{C_{invested}} \times 100
+$$
+
+A positive profit means the portfolio has gained value beyond what was invested; a negative value indicates a loss.
+
+> **Implementation:** `InvestmentService.getPortfolioValue()`, `InvestmentService.getInvestedCapital()`
 
 ---
 
-## Net Worth
+## 3. Stand-alone Assets
 
-Net worth sums three components in the user's preferred currency:
+Assets (e.g., real estate, vehicles, collectibles) are tracked independently from accounts. Their current value is:
 
-```
-netWorth = Σ balance(normal/saving accounts where includeInNetWorth = 1 and not closed)
-         + Σ portfolioValue(investment accounts where includeInNetWorth = 1 and not closed)
-         + Σ value(assets where includeInNetWorth = 1)
-```
+$$
+V_{asset} =
+\begin{cases}
+\text{latest valuation} & \text{if at least one valuation exists} \\
+V_{initial} & \text{otherwise}
+\end{cases}
+$$
 
-Net worth is derived from:
+Where $V_{initial}$ is the value assigned to the asset when it was first created.
 
-- non-investment account balances (`iniValue + transactions`)
-- investment account portfolio values (latest valuation at/before date, fallback to invested capital)
-- assets (latest valuation, fallback to initial value)
+> **Implementation:** `InvestmentService.getAssetValue()`
+
+---
+
+## 4. Net Worth
+
+Net worth aggregates all the user's financial positions into a single figure, expressed in the user's preferred currency:
+
+$$
+W = \underbrace{\sum B_a(t)}_{\text{account balances}} + \underbrace{\sum V_b}_{\text{investment portfolios}} + \underbrace{\sum V_c}_{\text{assets}}
+$$
+
+Where:
+
+| Component | Included if |
+| --- | --- |
+| $B_a(t)$ — Balance of each normal/saving account | Account is open and marked *include in net worth* |
+| $V_b$ — Portfolio value of each investment account | Account is open and marked *include in net worth* |
+| $V_c$ — Value of each stand-alone asset | Asset is marked *include in net worth* |
+
+All values are converted to the user's preferred currency before summing.
