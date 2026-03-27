@@ -4,65 +4,67 @@ This document describes how account balances and net worth are computed in Monek
 
 ---
 
-## 1. Account Values
+## 1. Accounts
 
-### 1.1 Normal and Saving accounts
+How to compute the balance of an account. In financial terms, the **balance** (Spanish: *saldo*) is the net amount available in an account after all transactions.
 
-The balance of a normal or saving account at a given date $t$ is:
+### 1.1 Normal and Saving Accounts
+
+The balance of account $a$ at a given date $t$ is:
 
 $$
-B(t) = B_0 + \sum I_i - \sum E_j + \sum T^{in}_k - \sum T^{out}_l
+\text{AccountValue}(a, t) = \text{InitialValue}(a) + \sum \text{Income}(a, t) - \sum \text{Expense}(a, t) + \sum \text{TransfersIn}(a, t) - \sum \text{TransfersOut}(a, t)
 $$
 
 Where:
 
-| Symbol | Meaning |
+| Term | Meaning |
 | --- | --- |
-| $B_0$ | **Opening balance** — the initial value of the account at the time it was created. Only counted if the account's opening date $\leq t$. |
-| $\sum I_i$ | **Total income** — all confirmed income transactions dated on or before $t$. |
-| $\sum E_j$ | **Total expenses** — all confirmed expense transactions dated on or before $t$. |
-| $\sum T^{in}_k$ | **Incoming transfers** — the value received from transfers into this account, dated on or before $t$. The received amount may differ from the sent amount due to currency conversion. |
-| $\sum T^{out}_l$ | **Outgoing transfers** — the value sent from this account to other accounts, dated on or before $t$. |
+| $\text{InitialValue}(a)$ | **Opening balance** — the value of the account at the time it was created. Only counted if the account's opening date $\leq t$. |
+| $\sum \text{Income}(a, t)$ | **Total income** — all confirmed income transactions in account $a$ dated on or before $t$. |
+| $\sum \text{Expense}(a, t)$ | **Total expenses** — all confirmed expense transactions in account $a$ dated on or before $t$. |
+| $\sum \text{TransfersIn}(a, t)$ | **Incoming transfers** — the value received from transfers into account $a$, dated on or before $t$. The received amount may differ from the sent amount due to currency conversion. |
+| $\sum \text{TransfersOut}(a, t)$ | **Outgoing transfers** — the value sent from account $a$ to other accounts, dated on or before $t$. |
 
 **Notes:**
 
 - Pending and voided transactions are excluded from all sums.
-- When computing balances in a common currency, exchange rates are applied at the transaction date.
-- If the account was opened after date $t$, its balance is considered $0$.
+- When computing balances in a common currency, the result is converted using the exchange rate at time $t$.
+- If the account was opened after date $t$, its balance is $0$.
 
 > **Implementation:** `AccountService.getAccountsMoney()`
 
 ### 1.2 Investment Accounts
 
-The balance of an investment account is its **portfolio value**:
+The balance of an investment account equals its **portfolio value** — the current market worth of the holdings:
 
 $$
-V =
+\text{AccountValue}(a) =
 \begin{cases}
-\text{latest valuation} & \text{if at least one valuation exists} \\
-C_{invested} & \text{otherwise (fallback)}
+\text{LatestValuation}(a) & \text{if at least one valuation exists} \\
+\text{InvestedCapital}(a) & \text{otherwise (fallback)}
 \end{cases}
 $$
 
-A **valuation** is a user-recorded snapshot of the account's market value at a point in time. If no valuation has been recorded, the balance falls back to the invested capital.
+A **valuation** is a user-recorded snapshot of the account's market value at a point in time. If no valuation exists, the balance falls back to the invested capital.
 
-> **Implementation:** `InvestmentService.getInvestmentAccountMoney()`
+> **Implementation:** `InvestmentService.getInvestmentAccountValue()`
 
 #### Invested Capital
 
 Invested capital represents the net amount of money the user has put into the account:
 
 $$
-C_{invested} = B_0 + \sum T^{in}_k - \sum T^{out}_l
+\text{InvestedCapital}(a) = \text{InitialValue}(a) + \sum \text{TransfersIn}(a) - \sum \text{TransfersOut}(a)
 $$
 
 Where:
 
-| Symbol | Meaning |
+| Term | Meaning |
 | --- | --- |
-| $B_0$ | **Opening balance** at account creation. |
-| $\sum T^{in}_k$ | **Incoming transfers** — money transferred into the investment account. |
-| $\sum T^{out}_l$ | **Outgoing transfers** — money withdrawn from the investment account. |
+| $\text{InitialValue}(a)$ | **Opening balance** at account creation. |
+| $\sum \text{TransfersIn}(a)$ | **Incoming transfers** — money transferred into the investment account. |
+| $\sum \text{TransfersOut}(a)$ | **Outgoing transfers** — money withdrawn from the investment account. |
 
 Only confirmed (non-pending, non-voided) transfers are included.
 
@@ -71,11 +73,11 @@ Only confirmed (non-pending, non-voided) transfers are included.
 #### Profit & Return
 
 $$
-\text{Profit} = V - C_{invested}
+\text{Profit}(a) = \text{PortfolioValue}(a) - \text{InvestedCapital}(a)
 $$
 
 $$
-\text{Return (\%)} = \frac{V - C_{invested}}{C_{invested}} \times 100
+\text{Return}(a) = \frac{\text{PortfolioValue}(a) - \text{InvestedCapital}(a)}{\text{InvestedCapital}(a)} \times 100
 $$
 
 A positive profit means the portfolio has gained value beyond what was invested; a negative value indicates a loss.
@@ -84,19 +86,19 @@ A positive profit means the portfolio has gained value beyond what was invested;
 
 ---
 
-## 2. Stand-alone Assets
+## 2. Assets
 
-Assets (e.g., real estate, vehicles, collectibles) are tracked independently from accounts. Their current value is:
+Assets (e.g., real estate, vehicles, collectibles) are tracked independently from accounts. Unlike accounts, they have no transaction ledger — their worth is determined solely by valuations. Their current value is:
 
 $$
-V_{asset} =
+\text{AssetValue}(s) =
 \begin{cases}
-\text{latest valuation} & \text{if at least one valuation exists} \\
-V_{initial} & \text{otherwise}
+\text{LatestValuation}(s) & \text{if at least one valuation exists} \\
+\text{InitialValue}(s) & \text{otherwise}
 \end{cases}
 $$
 
-Where $V_{initial}$ is the value assigned to the asset when it was first created.
+Where $\text{InitialValue}(s)$ is the value assigned to the asset when it was first created.
 
 > **Implementation:** `InvestmentService.getAssetValue()`
 
@@ -107,15 +109,17 @@ Where $V_{initial}$ is the value assigned to the asset when it was first created
 Net worth aggregates all the user's financial positions into a single figure, expressed in the user's preferred currency:
 
 $$
-W = \underbrace{\sum B_a(t)}_{\text{account balances}} + \underbrace{\sum V_b}_{\text{investment portfolios}} + \underbrace{\sum V_c}_{\text{assets}}
+\text{NetWorth}(t) = \sum_{a \in A_c} \text{AccountValue}(a, t) \;+\; \sum_{a \in A_i} \text{AccountValue}(a, t) \;+\; \sum_{s \in S} \text{AssetValue}(s, t)
 $$
 
 Where:
 
-| Component | Included if |
-| --- | --- |
-| $B_a(t)$ — Balance of each normal/saving account | Account is open and marked *include in net worth* |
-| $V_b$ — Portfolio value of each investment account | Account is open and marked *include in net worth* |
-| $V_c$ — Value of each stand-alone asset | Asset is marked *include in net worth* |
+| Set | Description | Included if |
+| --- | --- | --- |
+| $A_c$ | Normal and saving accounts | Account is open and marked *include in net worth* |
+| $A_i$ | Investment accounts | Account is open and marked *include in net worth* |
+| $S$ | Stand-alone assets | Asset is marked *include in net worth* |
 
-All values are converted to the user's preferred currency before summing.
+- $\text{AccountValue}(a, t)$ refers to the account balance as defined in sections 1.1 and 1.2.
+- $\text{AssetValue}(s, t)$ refers to the asset value as defined in section 2.
+- All values are converted to the user's preferred currency before summing.

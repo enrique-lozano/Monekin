@@ -87,7 +87,7 @@ class AccountService {
   }) {
     final query = db.select(db.accounts)
       ..where((a) {
-        final notInvestment = a.type.isNotValue('investment');
+        final notInvestment = a.type.isNotValue(AccountType.investment.name);
         if (accountIds == null) return notInvestment;
         return notInvestment & a.id.isIn(accountIds.toList());
       });
@@ -100,73 +100,29 @@ class AccountService {
     Iterable<String>? accountIds,
     required bool convertToPreferredCurrency,
   }) {
-    final hasAccountFilter = accountIds != null;
+    return getAccounts(
+      predicate: (a, c) {
+        final isInvestment = a.type.equals(AccountType.investment.name);
+        if (accountIds == null) return isInvestment;
+        return isInvestment & a.id.isIn(accountIds.toList());
+      },
+    ).switchMap((accounts) {
+      if (accounts.isEmpty) return Stream.value(0.0);
 
-    final sql =
-        '''
-      SELECT COALESCE(
-        SUM(
-          CASE WHEN a.date > ?1 THEN 0
-          ELSE (
-            COALESCE(
-              (SELECT v.value
-               FROM valuations v
-               WHERE v.accountId = a.id
-                 AND unixepoch(v.date) <= unixepoch(?2)
-               ORDER BY v.date DESC
-               LIMIT 1),
-              (
-                a.iniValue +
-                COALESCE((
-                  SELECT SUM(COALESCE(t.valueInDestiny, t.value))
-                  FROM transactions t
-                  WHERE t.receivingAccountID = a.id
-                    AND t.type = 'T'
-                    AND (t.status IS NULL OR t.status NOT IN ('P', 'V'))
-                    AND unixepoch(t.date) <= unixepoch(?3)
-                ), 0) -
-                COALESCE((
-                  SELECT SUM(t.value)
-                  FROM transactions t
-                  WHERE t.accountID = a.id
-                    AND t.type = 'T'
-                    AND (t.status IS NULL OR t.status NOT IN ('P', 'V'))
-                    AND unixepoch(t.date) <= unixepoch(?4)
-                ), 0)
-              )
-            )
-            ${convertToPreferredCurrency ? ' * COALESCE(excRate.exchangeRate, 1)' : ''}
-          )
-          END
-        ),
-      0) AS balance
-      FROM accounts a
-      ${convertToPreferredCurrency ? _joinAccountAndRate(date, accountTableName: 'a', columnName: 'excRate') : ''}
-      WHERE a.type = 'investment'
-        ${hasAccountFilter ? 'AND a.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''}
-    ''';
+      final streams = accounts.map(
+        (account) => account.date.isAfter(date)
+            ? Stream.value(0.0)
+            : InvestmentService.instance.getInvestmentAccountValue(
+                account,
+                date: date,
+                convertToPreferredCurrency: convertToPreferredCurrency,
+              ),
+      );
 
-    return db
-        .customSelect(
-          sql,
-          readsFrom: {
-            db.accounts,
-            db.valuations,
-            db.transactions,
-            if (convertToPreferredCurrency) db.exchangeRates,
-          },
-          variables: [
-            Variable.withDateTime(date),
-            Variable.withDateTime(date),
-            Variable.withDateTime(date),
-            Variable.withDateTime(date),
-            if (convertToPreferredCurrency) Variable.withDateTime(date),
-            if (hasAccountFilter)
-              for (final id in accountIds) Variable.withString(id),
-          ],
-        )
-        .watchSingleOrNull()
-        .map((row) => (row?.data['balance'] as num? ?? 0).toDouble());
+      return Rx.combineLatestList(
+        streams,
+      ).map((values) => values.fold(0.0, (sum, v) => sum + v));
+    });
   }
 
   /// Get the amount of money that an account has in a certain period of time,
@@ -201,7 +157,7 @@ class AccountService {
   }) {
     // Investment accounts use portfolio value (latest valuation or invested capital)
     if (account.type == AccountType.investment) {
-      return InvestmentService.instance.getInvestmentAccountMoney(
+      return InvestmentService.instance.getInvestmentAccountValue(
         account,
         date: date,
         convertToPreferredCurrency: convertToPreferredCurrency,
@@ -255,7 +211,7 @@ class AccountService {
           AS balance
           FROM accounts
               ${convertToPreferredCurrency ? _joinAccountAndRate(date) : ''}
-          WHERE accounts.type != 'investment'
+          WHERE accounts.type != '${AccountType.investment.name}'
               ${hasAccountFilter ? 'AND accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''} 
           """,
           readsFrom: {

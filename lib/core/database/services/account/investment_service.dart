@@ -147,7 +147,7 @@ class InvestmentService {
         .map((netTransfers) => account.iniValue + netTransfers);
   }
 
-  /// Returns the portfolio value for an investment account.
+  /// Returns the portfolio money/value for an investment account.
   ///
   /// If [date] is provided, returns the value from the **latest valuation
   /// at or before** that date. Otherwise, returns the latest valuation.
@@ -158,7 +158,7 @@ class InvestmentService {
   /// If [convertToPreferredCurrency] is not set or `false`, the returned value
   /// is in the account currency. If `true`, the value is converted to the preferred
   /// currency using the exchange rate at the given date (or latest if date is null).
-  Stream<double> getInvestmentAccountMoney(
+  Stream<double> getInvestmentAccountValue(
     Account account, {
     DateTime? date,
     bool convertToPreferredCurrency = false,
@@ -197,7 +197,7 @@ class InvestmentService {
     Account account,
   ) {
     return Rx.combineLatest2(
-      getInvestmentAccountMoney(account),
+      getInvestmentAccountValue(account),
       getInvestedCapital(account),
       (double portfolioValue, double investedCapital) {
         final profit = portfolioValue - investedCapital;
