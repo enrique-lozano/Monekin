@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
@@ -213,7 +214,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
   @override
   void initState() {
     super.initState();
-    _dataStream = getEvolutionData();
+    _dataStream = _createDataStream();
   }
 
   @override
@@ -223,33 +224,34 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     if (oldWidget.timeRange != widget.timeRange ||
         oldWidget.filters != widget.filters ||
         oldWidget.accountsIds != widget.accountsIds) {
-      _dataStream = getEvolutionData();
+      _dataStream = _createDataStream();
     }
   }
 
-  Stream<List<_FundEvolutionPoint>?> getEvolutionData() {
+  Stream<List<_FundEvolutionPoint>?> _createDataStream() {
     final timeRange = widget.timeRange;
 
     if (timeRange == null) {
       return Stream.value(null);
     }
 
-    final List<DateTime> dates = [];
-    final List<String> labels = [];
-    final List<Stream<double>> balances = [];
+    return Stream.value(null).switchMap((_) => _buildEvolutionData(timeRange));
+  }
+
+  Stream<List<_FundEvolutionPoint>> _buildEvolutionData(
+    DateTimeRange timeRange,
+  ) {
+    final dates = <DateTime>[];
+    final labels = <String>[];
+    final balances = <Stream<double>>[];
 
     DateTime currentDay = timeRange.start.justDay();
-
-    final dayRange = (timeRange.end.difference(timeRange.start).inDays / 100)
+    final dayRange = ((timeRange.end.difference(timeRange.start).inDays) / 100)
         .ceil();
 
     while (currentDay.compareTo(timeRange.end) < 0) {
       dates.add(currentDay);
-      labels.add(
-        currentDay.year == currentYear
-            ? DateFormat.MMMMd().format(currentDay)
-            : DateFormat.yMMMd().format(currentDay),
-      );
+      labels.add(_formatDateLabel(currentDay));
 
       balances.add(
         AccountService.instance.getAccountsMoney(
@@ -275,9 +277,15 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     );
   }
 
+  String _formatDateLabel(DateTime date) {
+    return date.year == currentYear
+        ? DateFormat.MMMMd().format(date)
+        : DateFormat.yMMMd().format(date);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<List<_FundEvolutionPoint>?>(
       stream: _dataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -289,16 +297,40 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
         return StreamBuilder(
           stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
           builder: (context, userCurrencySnapshot) {
-            return TimeSeriesEvolutionChart<_FundEvolutionPoint>(
-              data: points,
-              dateExtractor: (p) => p.date,
-              valueExtractor: (p) => p.value,
-              currency: userCurrencySnapshot.data,
-              tooltipTitleBuilder: (p) => p.label,
-            );
+            return _buildChart(points, userCurrencySnapshot.data);
           },
         );
       },
+    );
+  }
+
+  Widget _buildChart(List<_FundEvolutionPoint> points, CurrencyInDB? currency) {
+    // Handle edge case: when all values are the same or very close,
+    // add padding to the min/max values to ensure proper axis rendering
+    double? minY;
+    double? maxY;
+
+    if (points.isNotEmpty) {
+      final values = points.map((p) => p.value).toList();
+      final min = values.reduce((a, b) => a < b ? a : b);
+      final max = values.reduce((a, b) => a > b ? a : b);
+
+      // If all values are effectively the same, add 10% padding
+      if ((max - min).abs() < 0.0001) {
+        final padding = (min.abs() * 0.1).abs() + 1;
+        minY = min - padding;
+        maxY = max + padding;
+      }
+    }
+
+    return TimeSeriesEvolutionChart<_FundEvolutionPoint>(
+      data: points,
+      dateExtractor: (p) => p.date,
+      valueExtractor: (p) => p.value,
+      currency: currency,
+      tooltipTitleBuilder: (p) => p.label,
+      minY: minY,
+      maxY: maxY,
     );
   }
 }
