@@ -57,14 +57,6 @@ class InvestmentService {
   // Valuation CRUD
   // ---------------------------------------------------------------------------
 
-  Future<int> insertValuation(ValuationInDB valuation) {
-    return db.into(db.valuations).insert(valuation);
-  }
-
-  Future<bool> updateValuation(ValuationInDB valuation) {
-    return db.update(db.valuations).replace(valuation);
-  }
-
   /// Inserts a valuation, or replaces an existing one if there is already
   /// a valuation for the same account/asset on the same day.
   Future<int> insertOrUpdateValuation(ValuationInDB valuation) async {
@@ -73,6 +65,7 @@ class InvestmentService {
     // force-unwrapping a null accountId for asset-only valuations and ensures
     // we deduplicate within the correct scope.
     Stream<List<ValuationInDB>>? existingStream;
+
     if (valuation.accountId != null) {
       existingStream = getValuationsForAccount(valuation.accountId!);
     } else if (valuation.assetId != null) {
@@ -84,8 +77,7 @@ class InvestmentService {
 
       final sameDay = existing.where(
         (v) =>
-            v.id != valuation.id &&
-            DateUtils.isSameDay(v.date, valuation.date),
+            v.id != valuation.id && DateUtils.isSameDay(v.date, valuation.date),
       );
 
       if (sameDay.isNotEmpty) {
