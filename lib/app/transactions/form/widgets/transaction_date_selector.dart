@@ -22,7 +22,7 @@ class TransactionDateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final dateFormat = getFullDateFormatBasedOnYear(date);
+    final dateFormat = getMMMdDateFormatBasedOnYear(date);
 
     return Column(
       children: [

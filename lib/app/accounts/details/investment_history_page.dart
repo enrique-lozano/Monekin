@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -17,6 +16,7 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -111,13 +111,12 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
         widget.account.id,
       ),
       builder: (context, snapshot) {
-        final valuations = snapshot.data
         final valuations = snapshot.data == null
             ? null
             : (List<ValuationInDB>.from(snapshot.data!)
-              ..sort((a, b) => b.date.compareTo(a.date)));
-        final displayValuation =
-            _hoveredValuation ?? valuations?.firstOrNull;
+                ..sort((a, b) => b.date.compareTo(a.date)));
+
+        final displayValuation = _hoveredValuation ?? valuations?.firstOrNull;
 
         return PageFramework(
           title: t.account.investment.history,
@@ -153,7 +152,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
       child: ListTile(
         leading: Skeleton.keep(child: account.displayIcon(context, size: 42)),
         title: Text(widget.account.name),
-        titleTextStyle: Theme.of(context).textTheme.labelMedium,
+        //titleTextStyle: Theme.of(context).textTheme.labelMedium,
         subtitle: Row(
           spacing: 8,
           crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -167,7 +166,9 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
                   currency: widget.account.currency,
                 ),
               ),
-              Text('(${DateFormat.yMMMd().format(displayValuation.date)})'),
+              Text(
+                '(${getMMMdDateFormatBasedOnYear(displayValuation.date).format(displayValuation.date)})',
+              ),
             ] else
               Text(
                 valuations == null
@@ -204,7 +205,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
                     children: [
                       Text(
                         t.account.investment.invested_capital,
-                        style: Theme.of(context).textTheme.labelSmall,
+                        style: Theme.of(context).textTheme.labelMedium,
                       ),
                       StreamBuilder(
                         stream: InvestmentService.instance.getInvestedCapital(
@@ -228,7 +229,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
                       children: [
                         Text(
                           t.account.investment.profit,
-                          style: Theme.of(context).textTheme.labelSmall,
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
                         Row(
                           children: [
@@ -284,6 +285,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
         data: valuations,
         dateExtractor: (v) => v.date,
         valueExtractor: (v) => v.value,
+        currency: account.currency,
         onHover: (valuation) {
           setState(() {
             _hoveredValuation = valuation;

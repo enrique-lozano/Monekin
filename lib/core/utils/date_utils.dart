@@ -23,10 +23,13 @@ double getPercentBetweenDates(DateTimeRange timeRange, DateTime timeToCheck) {
 
 /// Get a date format that will display the month and day,
 /// and the year only if it's different from the current year
-DateFormat getFullDateFormatBasedOnYear(DateTime date) {
+DateFormat getMMMdDateFormatBasedOnYear(
+  DateTime date, {
+  shortenMonthInPrevYears = true,
+}) {
   if (date.year == currentYear) {
     return DateFormat.MMMMd();
   } else {
-    return DateFormat.yMMMd();
+    return shortenMonthInPrevYears ? DateFormat.yMMMd() : DateFormat.yMMMMd();
   }
 }

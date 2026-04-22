@@ -188,7 +188,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                     ),
                     mode: DateTimeFieldPickerMode.date,
                     initialDate: date,
-                    dateFormat: getFullDateFormatBasedOnYear(date),
+                    dateFormat: getMMMdDateFormatBasedOnYear(date),
                     validator: (e) =>
                         e == null ? t.general.validations.required : null,
                     onDateSelected: (DateTime value) {

@@ -33,7 +33,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
     while (currentDay.compareTo(endDate) < 0) {
       dates.add(currentDay);
-      labels.add(getFullDateFormatBasedOnYear(currentDay).format(currentDay));
+      labels.add(getMMMdDateFormatBasedOnYear(currentDay).format(currentDay));
       values.add(budget.getValueOnDate(currentDay).first);
       currentDay = currentDay.add(Duration(days: dayRange));
     }

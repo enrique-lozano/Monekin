@@ -142,7 +142,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             style: const TextStyle(fontStyle: FontStyle.italic),
                           )
                         : Text(
-                            getFullDateFormatBasedOnYear(
+                            getMMMdDateFormatBasedOnYear(
                               latestValuation.date,
                             ).format(latestValuation.date),
                           ),

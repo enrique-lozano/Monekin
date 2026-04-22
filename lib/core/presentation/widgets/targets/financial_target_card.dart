@@ -235,11 +235,11 @@ class TargetHeader extends StatelessWidget {
                     final startDate = range.start;
                     final endDate = range.end;
 
-                    final startDateLabel = getFullDateFormatBasedOnYear(
+                    final startDateLabel = getMMMdDateFormatBasedOnYear(
                       startDate,
                     ).format(startDate);
 
-                    final endDateLabel = getFullDateFormatBasedOnYear(
+                    final endDateLabel = getMMMdDateFormatBasedOnYear(
                       endDate,
                     ).format(endDate);
 
