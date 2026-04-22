@@ -112,9 +112,12 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
       ),
       builder: (context, snapshot) {
         final valuations = snapshot.data
-          ?..sort((a, b) => b.date.compareTo(a.date));
-
-        final displayValuation = _hoveredValuation ?? valuations?.firstOrNull;
+        final valuations = snapshot.data == null
+            ? null
+            : (List<ValuationInDB>.from(snapshot.data!)
+              ..sort((a, b) => b.date.compareTo(a.date)));
+        final displayValuation =
+            _hoveredValuation ?? valuations?.firstOrNull;
 
         return PageFramework(
           title: t.account.investment.history,
