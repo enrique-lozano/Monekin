@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -13,7 +12,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/constants.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -189,9 +188,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                     ),
                     mode: DateTimeFieldPickerMode.date,
                     initialDate: date,
-                    dateFormat: date.year == currentYear
-                        ? DateFormat.MMMMd()
-                        : DateFormat.yMMMd(),
+                    dateFormat: getFullDateFormatBasedOnYear(date),
                     validator: (e) =>
                         e == null ? t.general.validations.required : null,
                     onDateSelected: (DateTime value) {

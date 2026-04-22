@@ -30,6 +30,7 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class AccountDetailsPage extends StatefulWidget {
@@ -141,9 +142,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             style: const TextStyle(fontStyle: FontStyle.italic),
                           )
                         : Text(
-                            DateFormat.yMMMd().add_Hm().format(
+                            getFullDateFormatBasedOnYear(
                               latestValuation.date,
-                            ),
+                            ).format(latestValuation.date),
                           ),
                   ),
                 ],

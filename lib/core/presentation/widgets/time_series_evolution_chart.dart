@@ -202,7 +202,7 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                       )
                       .toList(),
             isCurved: true,
-            curveSmoothness: 0.2,
+            curveSmoothness: 0.05,
             color: isNotEnoughData
                 ? Theme.of(context).colorScheme.outlineVariant
                 : lineColor,

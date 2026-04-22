@@ -11,7 +11,9 @@ import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.da
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/constants.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -251,7 +253,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
 
     while (currentDay.compareTo(timeRange.end) < 0) {
       dates.add(currentDay);
-      labels.add(_formatDateLabel(currentDay));
+      labels.add(getFullDateFormatBasedOnYear(currentDay).format(currentDay));
 
       balances.add(
         AccountService.instance.getAccountsMoney(
@@ -275,12 +277,6 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
         ),
       ),
     );
-  }
-
-  String _formatDateLabel(DateTime date) {
-    return date.year == currentYear
-        ? DateFormat.MMMMd().format(date)
-        : DateFormat.yMMMd().format(date);
   }
 
   @override

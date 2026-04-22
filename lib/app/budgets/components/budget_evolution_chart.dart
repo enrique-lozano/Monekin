@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
-import 'package:monekin/core/utils/constants.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class BudgetEvolutionChart extends StatelessWidget {
@@ -34,14 +33,8 @@ class BudgetEvolutionChart extends StatelessWidget {
 
     while (currentDay.compareTo(endDate) < 0) {
       dates.add(currentDay);
-      labels.add(
-        currentDay.year == currentYear
-            ? DateFormat.MMMMd().format(currentDay)
-            : DateFormat.yMMMd().format(currentDay),
-      );
-
+      labels.add(getFullDateFormatBasedOnYear(currentDay).format(currentDay));
       values.add(budget.getValueOnDate(currentDay).first);
-
       currentDay = currentDay.add(Duration(days: dayRange));
     }
 
