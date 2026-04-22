@@ -68,15 +68,29 @@ class InvestmentService {
   /// Inserts a valuation, or replaces an existing one if there is already
   /// a valuation for the same account/asset on the same day.
   Future<int> insertOrUpdateValuation(ValuationInDB valuation) async {
-    final existing = await getValuationsForAccount(valuation.accountId!).first;
+    // Choose the appropriate existing valuations stream based on whether this
+    // valuation is associated with an account or an asset. This avoids
+    // force-unwrapping a null accountId for asset-only valuations and ensures
+    // we deduplicate within the correct scope.
+    Stream<List<ValuationInDB>>? existingStream;
+    if (valuation.accountId != null) {
+      existingStream = getValuationsForAccount(valuation.accountId!);
+    } else if (valuation.assetId != null) {
+      existingStream = getValuationsForAsset(valuation.assetId!);
+    }
 
-    final sameDay = existing.where(
-      (v) =>
-          v.id != valuation.id && DateUtils.isSameDay(v.date, valuation.date),
-    );
+    if (existingStream != null) {
+      final existing = await existingStream.first;
 
-    if (sameDay.isNotEmpty) {
-      valuation = valuation.copyWith(id: sameDay.first.id);
+      final sameDay = existing.where(
+        (v) =>
+            v.id != valuation.id &&
+            DateUtils.isSameDay(v.date, valuation.date),
+      );
+
+      if (sameDay.isNotEmpty) {
+        valuation = valuation.copyWith(id: sameDay.first.id);
+      }
     }
 
     return db
