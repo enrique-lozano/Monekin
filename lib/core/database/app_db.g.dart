@@ -565,18 +565,6 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     requiredDuringInsert: false,
     $customConstraints: '',
   );
-  static const VerificationMeta _includeInNetWorthMeta = const VerificationMeta(
-    'includeInNetWorth',
-  );
-  late final GeneratedColumn<bool> includeInNetWorth = GeneratedColumn<bool>(
-    'includeInNetWorth',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    $customConstraints: 'NOT NULL DEFAULT 1',
-    defaultValue: const CustomExpression('1'),
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -592,7 +580,6 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     currencyId,
     iban,
     swift,
-    includeInNetWorth,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -698,15 +685,6 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         swift.isAcceptableOrUnknown(data['swift']!, _swiftMeta),
       );
     }
-    if (data.containsKey('includeInNetWorth')) {
-      context.handle(
-        _includeInNetWorthMeta,
-        includeInNetWorth.isAcceptableOrUnknown(
-          data['includeInNetWorth']!,
-          _includeInNetWorthMeta,
-        ),
-      );
-    }
     return context;
   }
 
@@ -770,10 +748,6 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}swift'],
       ),
-      includeInNetWorth: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}includeInNetWorth'],
-      )!,
     );
   }
 
@@ -798,6 +772,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   /// Creation/Opening date of this account. Before this date, no transactions can exists on it.
   final DateTime date;
   final String? description;
+
+  /// The type of the account. It can be 'normal', 'investment'...
   final AccountType type;
   final String iconId;
 
@@ -814,9 +790,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final String currencyId;
   final String? iban;
   final String? swift;
-
-  /// Whether to include this account when computing the user's net worth
-  final bool includeInNetWorth;
   const AccountInDB({
     required this.id,
     required this.name,
@@ -831,7 +804,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     required this.currencyId,
     this.iban,
     this.swift,
-    required this.includeInNetWorth,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -861,7 +833,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     if (!nullToAbsent || swift != null) {
       map['swift'] = Variable<String>(swift);
     }
-    map['includeInNetWorth'] = Variable<bool>(includeInNetWorth);
     return map;
   }
 
@@ -888,7 +859,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       swift: swift == null && nullToAbsent
           ? const Value.absent()
           : Value(swift),
-      includeInNetWorth: Value(includeInNetWorth),
     );
   }
 
@@ -913,7 +883,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       currencyId: serializer.fromJson<String>(json['currencyId']),
       iban: serializer.fromJson<String?>(json['iban']),
       swift: serializer.fromJson<String?>(json['swift']),
-      includeInNetWorth: serializer.fromJson<bool>(json['includeInNetWorth']),
     );
   }
   @override
@@ -933,7 +902,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'currencyId': serializer.toJson<String>(currencyId),
       'iban': serializer.toJson<String?>(iban),
       'swift': serializer.toJson<String?>(swift),
-      'includeInNetWorth': serializer.toJson<bool>(includeInNetWorth),
     };
   }
 
@@ -951,7 +919,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     String? currencyId,
     Value<String?> iban = const Value.absent(),
     Value<String?> swift = const Value.absent(),
-    bool? includeInNetWorth,
   }) => AccountInDB(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -966,7 +933,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     currencyId: currencyId ?? this.currencyId,
     iban: iban.present ? iban.value : this.iban,
     swift: swift.present ? swift.value : this.swift,
-    includeInNetWorth: includeInNetWorth ?? this.includeInNetWorth,
   );
   AccountInDB copyWithCompanion(AccountsCompanion data) {
     return AccountInDB(
@@ -991,9 +957,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           : this.currencyId,
       iban: data.iban.present ? data.iban.value : this.iban,
       swift: data.swift.present ? data.swift.value : this.swift,
-      includeInNetWorth: data.includeInNetWorth.present
-          ? data.includeInNetWorth.value
-          : this.includeInNetWorth,
     );
   }
 
@@ -1012,8 +975,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
-          ..write('swift: $swift, ')
-          ..write('includeInNetWorth: $includeInNetWorth')
+          ..write('swift: $swift')
           ..write(')'))
         .toString();
   }
@@ -1033,7 +995,6 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     currencyId,
     iban,
     swift,
-    includeInNetWorth,
   );
   @override
   bool operator ==(Object other) =>
@@ -1051,8 +1012,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.closingDate == this.closingDate &&
           other.currencyId == this.currencyId &&
           other.iban == this.iban &&
-          other.swift == this.swift &&
-          other.includeInNetWorth == this.includeInNetWorth);
+          other.swift == this.swift);
 }
 
 class AccountsCompanion extends UpdateCompanion<AccountInDB> {
@@ -1069,7 +1029,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<String> currencyId;
   final Value<String?> iban;
   final Value<String?> swift;
-  final Value<bool> includeInNetWorth;
   final Value<int> rowid;
   const AccountsCompanion({
     this.id = const Value.absent(),
@@ -1085,7 +1044,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.currencyId = const Value.absent(),
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
-    this.includeInNetWorth = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AccountsCompanion.insert({
@@ -1102,7 +1060,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     required String currencyId,
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
-    this.includeInNetWorth = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -1126,7 +1083,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<String>? currencyId,
     Expression<String>? iban,
     Expression<String>? swift,
-    Expression<bool>? includeInNetWorth,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1143,7 +1099,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (currencyId != null) 'currencyId': currencyId,
       if (iban != null) 'iban': iban,
       if (swift != null) 'swift': swift,
-      if (includeInNetWorth != null) 'includeInNetWorth': includeInNetWorth,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1162,7 +1117,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Value<String>? currencyId,
     Value<String?>? iban,
     Value<String?>? swift,
-    Value<bool>? includeInNetWorth,
     Value<int>? rowid,
   }) {
     return AccountsCompanion(
@@ -1179,7 +1133,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       currencyId: currencyId ?? this.currencyId,
       iban: iban ?? this.iban,
       swift: swift ?? this.swift,
-      includeInNetWorth: includeInNetWorth ?? this.includeInNetWorth,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1226,9 +1179,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     if (swift.present) {
       map['swift'] = Variable<String>(swift.value);
     }
-    if (includeInNetWorth.present) {
-      map['includeInNetWorth'] = Variable<bool>(includeInNetWorth.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1251,7 +1201,6 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
           ..write('swift: $swift, ')
-          ..write('includeInNetWorth: $includeInNetWorth, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1851,18 +1800,6 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
-  static const VerificationMeta _includeInNetWorthMeta = const VerificationMeta(
-    'includeInNetWorth',
-  );
-  late final GeneratedColumn<bool> includeInNetWorth = GeneratedColumn<bool>(
-    'includeInNetWorth',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    $customConstraints: 'NOT NULL DEFAULT 1',
-    defaultValue: const CustomExpression('1'),
-  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1871,7 +1808,6 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     currencyId,
     initialValue,
     creationDate,
-    includeInNetWorth,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1935,15 +1871,6 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     } else if (isInserting) {
       context.missing(_creationDateMeta);
     }
-    if (data.containsKey('includeInNetWorth')) {
-      context.handle(
-        _includeInNetWorthMeta,
-        includeInNetWorth.isAcceptableOrUnknown(
-          data['includeInNetWorth']!,
-          _includeInNetWorthMeta,
-        ),
-      );
-    }
     return context;
   }
 
@@ -1977,10 +1904,6 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}creationDate'],
       )!,
-      includeInNetWorth: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}includeInNetWorth'],
-      )!,
     );
   }
 
@@ -2010,9 +1933,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
 
   /// Date this asset was acquired or created
   final DateTime creationDate;
-
-  /// Whether to include this asset when computing the user's net worth
-  final bool includeInNetWorth;
   const AssetInDB({
     required this.id,
     required this.name,
@@ -2020,7 +1940,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     required this.currencyId,
     required this.initialValue,
     required this.creationDate,
-    required this.includeInNetWorth,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2033,7 +1952,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     map['currencyId'] = Variable<String>(currencyId);
     map['initialValue'] = Variable<double>(initialValue);
     map['creationDate'] = Variable<DateTime>(creationDate);
-    map['includeInNetWorth'] = Variable<bool>(includeInNetWorth);
     return map;
   }
 
@@ -2047,7 +1965,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       currencyId: Value(currencyId),
       initialValue: Value(initialValue),
       creationDate: Value(creationDate),
-      includeInNetWorth: Value(includeInNetWorth),
     );
   }
 
@@ -2063,7 +1980,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       currencyId: serializer.fromJson<String>(json['currencyId']),
       initialValue: serializer.fromJson<double>(json['initialValue']),
       creationDate: serializer.fromJson<DateTime>(json['creationDate']),
-      includeInNetWorth: serializer.fromJson<bool>(json['includeInNetWorth']),
     );
   }
   @override
@@ -2076,7 +1992,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       'currencyId': serializer.toJson<String>(currencyId),
       'initialValue': serializer.toJson<double>(initialValue),
       'creationDate': serializer.toJson<DateTime>(creationDate),
-      'includeInNetWorth': serializer.toJson<bool>(includeInNetWorth),
     };
   }
 
@@ -2087,7 +2002,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     String? currencyId,
     double? initialValue,
     DateTime? creationDate,
-    bool? includeInNetWorth,
   }) => AssetInDB(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -2095,7 +2009,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     currencyId: currencyId ?? this.currencyId,
     initialValue: initialValue ?? this.initialValue,
     creationDate: creationDate ?? this.creationDate,
-    includeInNetWorth: includeInNetWorth ?? this.includeInNetWorth,
   );
   AssetInDB copyWithCompanion(AssetsCompanion data) {
     return AssetInDB(
@@ -2113,9 +2026,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       creationDate: data.creationDate.present
           ? data.creationDate.value
           : this.creationDate,
-      includeInNetWorth: data.includeInNetWorth.present
-          ? data.includeInNetWorth.value
-          : this.includeInNetWorth,
     );
   }
 
@@ -2127,8 +2037,7 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
           ..write('description: $description, ')
           ..write('currencyId: $currencyId, ')
           ..write('initialValue: $initialValue, ')
-          ..write('creationDate: $creationDate, ')
-          ..write('includeInNetWorth: $includeInNetWorth')
+          ..write('creationDate: $creationDate')
           ..write(')'))
         .toString();
   }
@@ -2141,7 +2050,6 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     currencyId,
     initialValue,
     creationDate,
-    includeInNetWorth,
   );
   @override
   bool operator ==(Object other) =>
@@ -2152,8 +2060,7 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
           other.description == this.description &&
           other.currencyId == this.currencyId &&
           other.initialValue == this.initialValue &&
-          other.creationDate == this.creationDate &&
-          other.includeInNetWorth == this.includeInNetWorth);
+          other.creationDate == this.creationDate);
 }
 
 class AssetsCompanion extends UpdateCompanion<AssetInDB> {
@@ -2163,7 +2070,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
   final Value<String> currencyId;
   final Value<double> initialValue;
   final Value<DateTime> creationDate;
-  final Value<bool> includeInNetWorth;
   final Value<int> rowid;
   const AssetsCompanion({
     this.id = const Value.absent(),
@@ -2172,7 +2078,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     this.currencyId = const Value.absent(),
     this.initialValue = const Value.absent(),
     this.creationDate = const Value.absent(),
-    this.includeInNetWorth = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AssetsCompanion.insert({
@@ -2182,7 +2087,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     required String currencyId,
     this.initialValue = const Value.absent(),
     required DateTime creationDate,
-    this.includeInNetWorth = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -2195,7 +2099,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     Expression<String>? currencyId,
     Expression<double>? initialValue,
     Expression<DateTime>? creationDate,
-    Expression<bool>? includeInNetWorth,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2205,7 +2108,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
       if (currencyId != null) 'currencyId': currencyId,
       if (initialValue != null) 'initialValue': initialValue,
       if (creationDate != null) 'creationDate': creationDate,
-      if (includeInNetWorth != null) 'includeInNetWorth': includeInNetWorth,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2217,7 +2119,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     Value<String>? currencyId,
     Value<double>? initialValue,
     Value<DateTime>? creationDate,
-    Value<bool>? includeInNetWorth,
     Value<int>? rowid,
   }) {
     return AssetsCompanion(
@@ -2227,7 +2128,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
       currencyId: currencyId ?? this.currencyId,
       initialValue: initialValue ?? this.initialValue,
       creationDate: creationDate ?? this.creationDate,
-      includeInNetWorth: includeInNetWorth ?? this.includeInNetWorth,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2253,9 +2153,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     if (creationDate.present) {
       map['creationDate'] = Variable<DateTime>(creationDate.value);
     }
-    if (includeInNetWorth.present) {
-      map['includeInNetWorth'] = Variable<bool>(includeInNetWorth.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2271,7 +2168,6 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
           ..write('currencyId: $currencyId, ')
           ..write('initialValue: $initialValue, ')
           ..write('creationDate: $creationDate, ')
-          ..write('includeInNetWorth: $includeInNetWorth, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -7886,7 +7782,6 @@ abstract class _$AppDB extends GeneratedDatabase {
         displayOrder: row.read<int>('displayOrder'),
         iconId: row.read<String>('iconId'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
-        includeInNetWorth: row.read<bool>('includeInNetWorth'),
         closingDate: row.readNullable<DateTime>('closingDate'),
         description: row.readNullable<String>('description'),
         iban: row.readNullable<String>('iban'),
@@ -8008,7 +7903,6 @@ abstract class _$AppDB extends GeneratedDatabase {
         name: row.read<String>('name'),
         initialValue: row.read<double>('initialValue'),
         creationDate: row.read<DateTime>('creationDate'),
-        includeInNetWorth: row.read<bool>('includeInNetWorth'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         description: row.readNullable<String>('description'),
       ),
@@ -8115,7 +8009,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift", "a"."includeInNetWorth" AS "nested_0.includeInNetWorth","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift", "ra"."includeInNetWorth" AS "nested_3.includeInNetWorth","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
@@ -9399,7 +9293,6 @@ typedef $AccountsCreateCompanionBuilder =
       required String currencyId,
       Value<String?> iban,
       Value<String?> swift,
-      Value<bool> includeInNetWorth,
       Value<int> rowid,
     });
 typedef $AccountsUpdateCompanionBuilder =
@@ -9417,7 +9310,6 @@ typedef $AccountsUpdateCompanionBuilder =
       Value<String> currencyId,
       Value<String?> iban,
       Value<String?> swift,
-      Value<bool> includeInNetWorth,
       Value<int> rowid,
     });
 
@@ -9528,11 +9420,6 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
 
   ColumnFilters<String> get swift => $composableBuilder(
     column: $table.swift,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get includeInNetWorth => $composableBuilder(
-    column: $table.includeInNetWorth,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -9653,11 +9540,6 @@ class $AccountsOrderingComposer extends Composer<_$AppDB, Accounts> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get includeInNetWorth => $composableBuilder(
-    column: $table.includeInNetWorth,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   $CurrenciesOrderingComposer get currencyId {
     final $CurrenciesOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -9731,11 +9613,6 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
 
   GeneratedColumn<String> get swift =>
       $composableBuilder(column: $table.swift, builder: (column) => column);
-
-  GeneratedColumn<bool> get includeInNetWorth => $composableBuilder(
-    column: $table.includeInNetWorth,
-    builder: (column) => column,
-  );
 
   $CurrenciesAnnotationComposer get currencyId {
     final $CurrenciesAnnotationComposer composer = $composerBuilder(
@@ -9827,7 +9704,6 @@ class $AccountsTableManager
                 Value<String> currencyId = const Value.absent(),
                 Value<String?> iban = const Value.absent(),
                 Value<String?> swift = const Value.absent(),
-                Value<bool> includeInNetWorth = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountsCompanion(
                 id: id,
@@ -9843,7 +9719,6 @@ class $AccountsTableManager
                 currencyId: currencyId,
                 iban: iban,
                 swift: swift,
-                includeInNetWorth: includeInNetWorth,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -9861,7 +9736,6 @@ class $AccountsTableManager
                 required String currencyId,
                 Value<String?> iban = const Value.absent(),
                 Value<String?> swift = const Value.absent(),
-                Value<bool> includeInNetWorth = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountsCompanion.insert(
                 id: id,
@@ -9877,7 +9751,6 @@ class $AccountsTableManager
                 currencyId: currencyId,
                 iban: iban,
                 swift: swift,
-                includeInNetWorth: includeInNetWorth,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -10429,7 +10302,6 @@ typedef $AssetsCreateCompanionBuilder =
       required String currencyId,
       Value<double> initialValue,
       required DateTime creationDate,
-      Value<bool> includeInNetWorth,
       Value<int> rowid,
     });
 typedef $AssetsUpdateCompanionBuilder =
@@ -10440,7 +10312,6 @@ typedef $AssetsUpdateCompanionBuilder =
       Value<String> currencyId,
       Value<double> initialValue,
       Value<DateTime> creationDate,
-      Value<bool> includeInNetWorth,
       Value<int> rowid,
     });
 
@@ -10515,11 +10386,6 @@ class $AssetsFilterComposer extends Composer<_$AppDB, Assets> {
 
   ColumnFilters<DateTime> get creationDate => $composableBuilder(
     column: $table.creationDate,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get includeInNetWorth => $composableBuilder(
-    column: $table.includeInNetWorth,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10605,11 +10471,6 @@ class $AssetsOrderingComposer extends Composer<_$AppDB, Assets> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get includeInNetWorth => $composableBuilder(
-    column: $table.includeInNetWorth,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   $CurrenciesOrderingComposer get currencyId {
     final $CurrenciesOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -10660,11 +10521,6 @@ class $AssetsAnnotationComposer extends Composer<_$AppDB, Assets> {
 
   GeneratedColumn<DateTime> get creationDate => $composableBuilder(
     column: $table.creationDate,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<bool> get includeInNetWorth => $composableBuilder(
-    column: $table.includeInNetWorth,
     builder: (column) => column,
   );
 
@@ -10751,7 +10607,6 @@ class $AssetsTableManager
                 Value<String> currencyId = const Value.absent(),
                 Value<double> initialValue = const Value.absent(),
                 Value<DateTime> creationDate = const Value.absent(),
-                Value<bool> includeInNetWorth = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssetsCompanion(
                 id: id,
@@ -10760,7 +10615,6 @@ class $AssetsTableManager
                 currencyId: currencyId,
                 initialValue: initialValue,
                 creationDate: creationDate,
-                includeInNetWorth: includeInNetWorth,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -10771,7 +10625,6 @@ class $AssetsTableManager
                 required String currencyId,
                 Value<double> initialValue = const Value.absent(),
                 required DateTime creationDate,
-                Value<bool> includeInNetWorth = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssetsCompanion.insert(
                 id: id,
@@ -10780,7 +10633,6 @@ class $AssetsTableManager
                 currencyId: currencyId,
                 initialValue: initialValue,
                 creationDate: creationDate,
-                includeInNetWorth: includeInNetWorth,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

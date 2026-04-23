@@ -80,10 +80,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     
     iban TEXT,
-    swift TEXT,
-
-    -- Whether to include this account when computing the user's net worth
-    includeInNetWorth BOOLEAN NOT NULL DEFAULT 1
+    swift TEXT
 ) AS AccountInDB;
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -331,10 +328,7 @@ CREATE TABLE IF NOT EXISTS assets (
     initialValue REAL NOT NULL DEFAULT 0,
 
     -- Date this asset was acquired or created
-    creationDate DATETIME NOT NULL,
-
-    -- Whether to include this asset when computing the user's net worth
-    includeInNetWorth BOOLEAN NOT NULL DEFAULT 1
+    creationDate DATETIME NOT NULL
 ) AS AssetInDB;
 
 CREATE TABLE IF NOT EXISTS valuations (

@@ -61,7 +61,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Color _color = ColorHex.get(defaultColorPickerOptions.randomItem());
   Currency? _currency;
   Currency? _userPrCurrency;
-  bool _includeInNetWorth = true;
 
   late final Account? _accountToEdit;
 
@@ -112,7 +111,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iban: _ibanController.text.isEmpty ? null : _ibanController.text,
       description: _textController.text.isEmpty ? null : _textController.text,
       swift: _swiftController.text.isEmpty ? null : _swiftController.text,
-      includeInNetWorth: _includeInNetWorth,
     );
 
     // Check for accounts with same names before continue:
@@ -181,7 +179,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _closeDate = _accountToEdit.closingDate;
 
     _type = _accountToEdit.type;
-    _includeInNetWorth = _accountToEdit.includeInNetWorth;
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
       _balanceController.text = value.toStringAsFixed(
@@ -469,26 +466,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           textInputAction: TextInputAction.next,
                         ),
 
-                        SwitchListTile(
-                          value: _includeInNetWorth,
-                          onChanged: (value) {
-                            setState(() {
-                              _includeInNetWorth = value;
-                            });
-                          },
-                          title: Text(t.account.form.include_in_net_worth),
-                          subtitle: Text(
-                            t.account.form.include_in_net_worth_descr,
-                          ),
-                          contentPadding: const EdgeInsets.only(
-                            left: 16,
-                            right: 8,
-                          ),
-                          shape: appInputBorder,
-                          tileColor: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
-                        ),
                         const SizedBox(height: 22),
                       ],
                     ),

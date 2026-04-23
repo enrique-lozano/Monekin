@@ -8,7 +8,6 @@ class Asset extends AssetInDB {
     required super.name,
     required super.initialValue,
     required super.creationDate,
-    required super.includeInNetWorth,
     required this.currency,
     super.description,
   }) : super(currencyId: currency.code);
@@ -18,7 +17,6 @@ class Asset extends AssetInDB {
     name: asset.name,
     initialValue: asset.initialValue,
     creationDate: asset.creationDate,
-    includeInNetWorth: asset.includeInNetWorth,
     currency: currency,
     description: asset.description,
   );

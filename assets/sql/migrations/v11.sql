@@ -7,7 +7,6 @@ PRAGMA foreign_keys = OFF;
 
 -- Step 2: Recreate the accounts table to:
 --   • Allow the new 'investment' account type
---   • Add the includeInNetWorth column (defaults to 1 = true)
 CREATE TABLE accounts_new (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
@@ -21,8 +20,7 @@ CREATE TABLE accounts_new (
     closingDate TEXT,
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     iban TEXT,
-    swift TEXT,
-    includeInNetWorth INTEGER NOT NULL DEFAULT 1
+    swift TEXT
 );
 
 -- Step 3: Copy existing accounts
@@ -48,8 +46,7 @@ CREATE TABLE IF NOT EXISTS assets (
     description TEXT,
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     initialValue REAL NOT NULL DEFAULT 0,
-    creationDate TEXT NOT NULL,
-    includeInNetWorth INTEGER NOT NULL DEFAULT 1
+    creationDate TEXT NOT NULL
 );
 
 -- ---------------------------------------------------------------

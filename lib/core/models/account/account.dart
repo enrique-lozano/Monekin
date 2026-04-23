@@ -72,7 +72,6 @@ class Account extends AccountInDB {
     required super.displayOrder,
     required super.iconId,
     required this.currency,
-    required super.includeInNetWorth,
     super.closingDate,
     super.description,
     super.iban,
@@ -138,6 +137,5 @@ class Account extends AccountInDB {
     closingDate: account.closingDate,
     type: account.type,
     color: account.color,
-    includeInNetWorth: account.includeInNetWorth,
   );
 }
