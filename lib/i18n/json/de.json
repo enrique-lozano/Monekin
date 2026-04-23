@@ -808,7 +808,6 @@
       "due_today": "Heute fällig",
       "days_ago": "Vor {{x}} Tagen",
       "overdue_by": "Um {{x}} Tage überfällig",
-
       "per_day": "/ Tag",
       "no_transactions": "Für diese Schuld wurden keine Transaktionen gefunden"
     },
@@ -950,6 +949,13 @@
         "warn": "Wenn Du die Region änderst, wird die App aktualisiert",
         "first_day_of_week": "Erster Tag der Woche"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "App-Strukturen",
+      "tags": "Definieren Sie Tags, um Ihre Transaktionen besser zu organisieren",
+      "categories": "Organisation von Kategorien und Unterkategorien",
+      "accounts": "Verwalten und bearbeiten Sie Ihre Konten",
+      "filters": "Konfigurieren Sie globale Filter, die Sie für Transaktionen und Statistiken verwenden können"
     },
     "SECURITY": {
       "title": "Sicherheit",

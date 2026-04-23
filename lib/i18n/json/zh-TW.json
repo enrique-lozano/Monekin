@@ -808,7 +808,6 @@
       "due_today": "今天到期",
       "days_ago": "{{x}} days ago",
       "overdue_by": "Overdue by {{x}} days",
-
       "per_day": "/ 天",
       "no_transactions": "未找到該債務的交易"
     },
@@ -950,6 +949,13 @@
         "warn": "更改區域時應用程式將更新",
         "first_day_of_week": "一週的第一天"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "應用程式結構",
+      "tags": "定義標籤以更好地組織您的交易",
+      "categories": "類別和子類別組織",
+      "accounts": "管理和編輯您的帳戶",
+      "filters": "配置可用於事務和統計的全域過濾器"
     },
     "SECURITY": {
       "title": "安全",

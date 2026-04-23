@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
 import 'package:monekin/app/debts/debts_page.dart';
 import 'package:monekin/app/goals/goals_page.dart';
@@ -11,7 +9,6 @@ import 'package:monekin/app/settings/help_us_page.dart';
 import 'package:monekin/app/settings/settings_page.dart';
 import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/tags/tag_list.page.dart';
 import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/goal/goal.dart';
@@ -119,24 +116,6 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
         icon: Icons.repeat_rounded,
         onTap: () => RouteUtils.pushRoute(const RecurrentTransactionPage()),
         id: AppMenuDestinationsID.recurrentTransactions,
-      ),
-      _ActionItem(
-        title: t.general.categories,
-        icon: Icons.category_rounded,
-        onTap: () => RouteUtils.pushRoute(const CategoriesListPage()),
-        id: AppMenuDestinationsID.categories,
-      ),
-      _ActionItem(
-        title: t.tags.display(n: 10),
-        icon: Icons.label_outline_rounded,
-        onTap: () => RouteUtils.pushRoute(const TagListPage()),
-        id: null,
-      ),
-      _ActionItem(
-        title: t.general.accounts,
-        icon: Icons.account_balance_wallet_rounded,
-        onTap: () => RouteUtils.pushRoute(const AllAccountsPage()),
-        id: AppMenuDestinationsID.accounts,
       ),
     ];
 

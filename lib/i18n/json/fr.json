@@ -948,6 +948,13 @@
         "first_day_of_week": "Premier jour de la semaine"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "Structures d'applications",
+      "tags": "Définir des balises pour une meilleure organisation de vos transactions",
+      "categories": "Organisation des catégories et sous-catégories",
+      "accounts": "Gérer et modifier vos comptes",
+      "filters": "Configurez des filtres globaux que vous pouvez utiliser pour les transactions et les statistiques"
+    },
     "SECURITY": {
       "title": "Sécurité",
       "private_mode_at_launch": "Mode privé au démarrage",
