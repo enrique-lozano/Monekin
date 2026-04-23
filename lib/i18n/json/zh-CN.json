@@ -507,7 +507,8 @@
       "iban": "国际银行账户号码（IBAN）",
       "swift": "银行识别码（SWIFT）",
       "include-in-net-worth": "计入净资产",
-      "include-in-net-worth.descr": "将此账户纳入总净资产计算"
+      "include-in-net-worth.descr": "将此账户纳入总净资产计算",
+      "correct_balance_description": "调整余额会修改账户的初始值。此修正不会反映在统计数据中。"
     },
     "INVESTMENT": {
       "details-header": "投资",

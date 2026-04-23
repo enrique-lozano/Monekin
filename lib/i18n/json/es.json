@@ -510,7 +510,8 @@
       "iban": "IBAN",
       "swift": "SWIFT",
       "include-in-net-worth": "Incluir en el patrimonio neto",
-      "include-in-net-worth.descr": "Añadir esta cuenta al cálculo del patrimonio neto total"
+      "include-in-net-worth.descr": "Añadir esta cuenta al cálculo del patrimonio neto total",
+      "correct_balance_description": "Ajustar el saldo modifica el valor inicial de la cuenta. Esta corrección no se reflejará en tus estadísticas."
     },
     "INVESTMENT": {
       "details-header": "Inversión",

@@ -507,7 +507,8 @@
       "iban": "IBAN",
       "swift": "SWIFT",
       "include-in-net-worth": "Include in net worth",
-      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+      "include-in-net-worth.descr": "Add this account to the total net worth calculation",
+      "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics."
     },
     "INVESTMENT": {
       "details-header": "Investment",

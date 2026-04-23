@@ -507,7 +507,8 @@
       "iban": "IBAN",
       "swift": "SWIFT",
       "include-in-net-worth": "計入淨資產",
-      "include-in-net-worth.descr": "將此帳戶納入總淨資產計算"
+      "include-in-net-worth.descr": "將此帳戶納入總淨資產計算",
+      "correct_balance_description": "調整餘額會修改帳戶的初始值。此修正不會反映在統計資料中。"
     },
     "INVESTMENT": {
       "details-header": "投資",

@@ -507,7 +507,8 @@
       "iban": "IBAN",
       "swift": "SWIFT",
       "include-in-net-worth": "Inclure dans le patrimoine net",
-      "include-in-net-worth.descr": "Ajouter ce compte au calcul du patrimoine net total"
+      "include-in-net-worth.descr": "Ajouter ce compte au calcul du patrimoine net total",
+      "correct_balance_description": "Ajuster le solde modifie la valeur initiale du compte. Cette correction ne sera pas reflétée dans vos statistiques."
     },
     "INVESTMENT": {
       "details-header": "Investissement",
