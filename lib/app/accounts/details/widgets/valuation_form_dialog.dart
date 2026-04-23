@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -112,6 +113,7 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
             ),
             const SizedBox(height: 22),
             DateTimeFormField(
+              mode: DateTimeFieldPickerMode.date,
               decoration: InputDecoration(
                 suffixIcon: const Icon(Icons.event),
                 labelText: '${t.general.time.date} *',
