@@ -226,4 +226,33 @@ class InvestmentService {
       asset.id,
     ).map((valuation) => valuation?.value ?? asset.initialValue);
   }
+
+  Stream<double> getTotalAssetsValue() {
+    return getAssets().switchMap((assets) {
+      if (assets.isEmpty) {
+        return Stream.value(0.0);
+      }
+
+      final streams = assets.map(getAssetValue);
+
+      return CombineLatestStream.list(
+        streams,
+      ).map((values) => values.fold(0.0, (sum, value) => sum + value));
+    });
+  }
+
+  /// Returns the profit (in the asset currency) and the profit percentage
+  /// for an asset.
+  ///
+  /// Profit = currentValue - initialValue
+  /// Percent = profit / initialValue  (0 when initialValue == 0)
+  Stream<({double value, double percent})> getAssetProfit(Asset asset) {
+    return getAssetValue(asset).map((currentValue) {
+      final profit = currentValue - asset.initialValue;
+      final percent = asset.initialValue != 0
+          ? profit / asset.initialValue
+          : 0.0;
+      return (value: profit, percent: percent);
+    });
+  }
 }

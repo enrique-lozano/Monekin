@@ -808,7 +808,6 @@
       "due_today": "Due today",
       "days_ago": "{{x}} giorni fa",
       "overdue_by": "In ritardo di {{x}} giorni",
-
       "per_day": "/ giorno",
       "no_transactions": "Nessuna transazione trovata per questo debito"
     },
@@ -851,6 +850,53 @@
         "title": "Creare debito",
         "success": "Debito creato con successo"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Attività",
+    "empty_description": "Non hai ancora creato alcuna risorsa. Beni come immobili, veicoli o oggetti da collezione possono essere monitorati con le loro valutazioni",
+    "create": "Aggiungi risorsa",
+    "create_success": "Risorsa creata con successo",
+    "edit_success": "Risorsa modificata correttamente",
+    "delete": "Elimina risorsa",
+    "delete_success": "Risorsa eliminata correttamente",
+    "delete_confirmation": "Questa azione non può essere annullata. Verranno eliminate anche tutte le valutazioni per questo asset.",
+    "profit": "Profitto",
+    "profit_percent": "Ritorno %",
+    "total_value": "Valore totale delle attività",
+    "FORM": {
+      "name": "Nome della risorsa",
+      "name_required": "Inserisci il nome di una risorsa",
+      "description": "Descrizione",
+      "initial_value": "Valore iniziale",
+      "initial_value_required": "Inserisci un valore iniziale",
+      "initial_value_invalid": "Inserisci un numero valido",
+      "currency": "Valuta",
+      "select_currency": "Seleziona una valuta",
+      "creation_date": "Data di creazione",
+      "edit": "Modifica risorsa",
+      "create": "Crea risorsa",
+      "already_exists": "Esiste già una risorsa con questo nome. Potresti volerlo modificare"
+    },
+    "VALUATION": {
+      "history": "Storia della valutazione",
+      "no_valuations": "Nessuna valutazione ancora registrata. Inizia aggiungendo la prima valutazione",
+      "add_valuation": "Aggiungi valutazione",
+      "edit_valuation": "Modifica valutazione",
+      "value": "Valore",
+      "value_required": "Inserisci un valore",
+      "value_invalid": "Inserisci un numero valido",
+      "update_value_success": "Valutazione aggiunta con successo",
+      "edit_valuation_success": "Valutazione aggiornata con successo",
+      "delete_valuation_success": "Valutazione eliminata correttamente",
+      "delete_all_valuations": "Elimina tutte le valutazioni",
+      "delete_all_valuations_success": "Tutte le valutazioni sono state eliminate correttamente"
+    },
+    "SORT": {
+      "name_asc": "Nome (A-Z)",
+      "name_desc": "Nome (Z-A)",
+      "value_asc": "Valore (prima il più basso)",
+      "value_desc": "Valore (prima il più alto)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

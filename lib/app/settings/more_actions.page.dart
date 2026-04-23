@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/all_accounts_page.dart';
+import 'package:monekin/app/assets/assets_list_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/categories_list_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
@@ -137,6 +138,12 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
         icon: Icons.account_balance_wallet_rounded,
         onTap: () => RouteUtils.pushRoute(const AllAccountsPage()),
         id: AppMenuDestinationsID.accounts,
+      ),
+      _ActionItem(
+        title: t.assets.title,
+        icon: Icons.house_rounded,
+        onTap: () => RouteUtils.pushRoute(const AssetsListPage()),
+        id: AppMenuDestinationsID.assets,
       ),
     ];
 

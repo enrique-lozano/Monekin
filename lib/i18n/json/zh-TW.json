@@ -808,7 +808,6 @@
       "due_today": "今天到期",
       "days_ago": "{{x}} days ago",
       "overdue_by": "Overdue by {{x}} days",
-
       "per_day": "/ 天",
       "no_transactions": "未找到該債務的交易"
     },
@@ -851,6 +850,53 @@
         "title": "創造債務",
         "success": "債務創建成功"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "資產",
+    "empty_description": "您還沒有創建任何資產。可以追蹤房地產、車輛或收藏品等資產的估值",
+    "create": "新增資產",
+    "create_success": "資產創建成功",
+    "edit_success": "資產編輯成功",
+    "delete": "刪除資產",
+    "delete_success": "資產刪除成功",
+    "delete_confirmation": "此操作無法撤銷。該資產的所有估值也將被刪除。",
+    "profit": "利潤",
+    "profit_percent": "返回 ％",
+    "total_value": "資產總值",
+    "FORM": {
+      "name": "資產名稱",
+      "name_required": "請輸入資產名稱",
+      "description": "描述",
+      "initial_value": "初始值",
+      "initial_value_required": "請輸入初始值",
+      "initial_value_invalid": "請輸入有效號碼",
+      "currency": "貨幣",
+      "select_currency": "請選擇貨幣",
+      "creation_date": "建立日期",
+      "edit": "編輯資產",
+      "create": "創建資產",
+      "already_exists": "具有此名稱的資產已存在。您可能想要編輯它"
+    },
+    "VALUATION": {
+      "history": "估值歷史",
+      "no_valuations": "尚未記錄估值。首先加入第一個估值",
+      "add_valuation": "新增估價",
+      "edit_valuation": "編輯估值",
+      "value": "價值",
+      "value_required": "請輸入一個值",
+      "value_invalid": "請輸入有效號碼",
+      "update_value_success": "估價添加成功",
+      "edit_valuation_success": "估值更新成功",
+      "delete_valuation_success": "評估刪除成功",
+      "delete_all_valuations": "刪除所有估價",
+      "delete_all_valuations_success": "所有估價已成功刪除"
+    },
+    "SORT": {
+      "name_asc": "姓名（A-Z）",
+      "name_desc": "姓名（Z-A）",
+      "value_asc": "值（最低的在前）",
+      "value_desc": "值（最高的在前）"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

@@ -94,11 +94,8 @@ class _ColumnWithReorderableListAndSearchState
                         .firstWhere((bp) => bp.id == BreakpointID.md)
                         .width,
                   ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: t.general.tap_to_search,
-                      prefixIcon: const Icon(Icons.search_rounded),
-                    ),
+                  child: SearchBar(
+                    hintText: t.general.tap_to_search,
                     onChanged: _onSearchChanged,
                   ),
                 ),
