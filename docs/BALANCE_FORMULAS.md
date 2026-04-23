@@ -20,7 +20,7 @@ Where:
 
 | Term | Meaning |
 | --- | --- |
-| $\text{InitialValue}(a)$ | **Opening balance** — the value of the account at the time it was created. Only counted if the account's opening date $\leq t$. |
+| $\text{InitialValue}(a)$ | **Opening balance** — the value of the account at the time it was created. |
 | $\sum \text{Income}(a, t)$ | **Total income** — all confirmed income transactions in account $a$ dated on or before $t$. |
 | $\sum \text{Expense}(a, t)$ | **Total expenses** — all confirmed expense transactions in account $a$ dated on or before $t$. |
 | $\sum \text{TransfersIn}(a, t)$ | **Incoming transfers** — the value received from transfers into account $a$, dated on or before $t$. The received amount may differ from the sent amount due to currency conversion. |
