@@ -480,6 +480,7 @@
     "n_transactions": "İşlem sayısı",
     "add_money": "Para ekle",
     "withdraw_money": "Para çek",
+    "correct_balance": "Bakiye düzelt",
     "no-accounts": "Burada görüntülenecek işlem bulunamadı. Alttaki '+' düğmesine tıklayarak bir işlem ekleyin",
     "TYPES": {
       "title": "Hesap türü",
@@ -487,7 +488,9 @@
       "normal": "Normal hesap",
       "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
       "saving": "Tasarruf hesabı",
-      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel"
+      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel",
+      "investment": "Yatırım hesabı",
+      "investment.descr": "Bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve değerini değerlemeler aracılığıyla manuel olarak güncelleyin"
     },
     "FORM": {
       "name": "Hesap adı",
@@ -502,7 +505,28 @@
       "already-exists": "Aynı ada sahip başka bir hesap zaten var, lütfen başka bir tane yazın",
       "tr-before-opening-date": "Bu hesapta açılış tarihinden önce bir tarihe sahip işlemler var",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Net değere dahil et",
+      "include-in-net-worth.descr": "Bu hesabı toplam net değer hesaplamasına dahil et"
+    },
+    "INVESTMENT": {
+      "details-header": "Yatırım",
+      "invested-capital": "Yatırılan sermaye",
+      "portfolio-value": "Portföy değeri",
+      "profit": "Kâr",
+      "last-valuation": "Son değerleme",
+      "no-valuations": "Henüz değerleme kaydedilmedi",
+      "update-value": "Değeri güncelle",
+      "update-value.descr": "Mevcut portföy değerini kaydet",
+      "update-value.success": "Değerleme başarıyla kaydedildi",
+      "history": "Değerleme geçmişi",
+      "history-empty": "Bu hesap için henüz değerleme kaydedilmedi",
+      "add-valuation": "Değerleme ekle",
+      "edit-valuation": "Değerlemeyi düzenle",
+      "edit-valuation.success": "Değerleme başarıyla düzenlendi",
+      "delete-valuation.success": "Değerleme başarıyla silindi",
+      "delete-all-valuations": "Tüm değerlemeleri sil",
+      "delete-all-valuations.success": "Tüm değerlemeler başarıyla silindi"
     },
     "DELETE": {
       "warning-header": "Hesap silinsin mi?",

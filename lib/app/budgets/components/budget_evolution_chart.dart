@@ -1,15 +1,11 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/core/utils/constants.dart';
+import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class BudgetEvolutionChart extends StatelessWidget {
@@ -17,9 +13,12 @@ class BudgetEvolutionChart extends StatelessWidget {
 
   final Budget budget;
 
-  Future<LineChartDataItem?> getEvolutionData(BuildContext context) async {
-    List<Future<double>> balance = [];
-    List<String> labels = [];
+  Future<List<_BudgetEvolutionPoint>> _getEvolutionData(
+    BuildContext context,
+  ) async {
+    final List<Future<double>> values = [];
+    final List<String> labels = [];
+    final List<DateTime> dates = [];
 
     final startDate = budget.currentDateRange.start;
     final endDate = budget.currentDateRange.end;
@@ -33,32 +32,32 @@ class BudgetEvolutionChart extends StatelessWidget {
     final dayRange = (endDate.difference(startDate).inDays / 100).ceil();
 
     while (currentDay.compareTo(endDate) < 0) {
-      labels.add(
-        currentDay.year == currentYear
-            ? DateFormat.MMMMd().format(currentDay)
-            : DateFormat.yMMMd().format(currentDay),
-      );
-
-      balance.add(budget.getValueOnDate(currentDay).first);
-
+      dates.add(currentDay);
+      labels.add(getMMMdDateFormatBasedOnYear(currentDay).format(currentDay));
+      values.add(budget.getValueOnDate(currentDay).first);
       currentDay = currentDay.add(Duration(days: dayRange));
     }
 
-    return LineChartDataItem(
-      balance: await Future.wait(balance),
-      labels: labels,
+    final resolved = await Future.wait(values);
+
+    return List.generate(
+      resolved.length,
+      (i) => _BudgetEvolutionPoint(
+        date: dates[i],
+        value: resolved[i],
+        label: labels[i],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final lineColor = Theme.of(context).colorScheme.primary;
     final t = Translations.of(context);
 
     return SizedBox(
       height: 300,
       child: FutureBuilder(
-        future: getEvolutionData(context),
+        future: _getEvolutionData(context),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Column(
@@ -73,123 +72,36 @@ class BudgetEvolutionChart extends StatelessWidget {
             );
           }
 
+          final points = snapshot.data ?? const <_BudgetEvolutionPoint>[];
+          final maxValue = points.isEmpty
+              ? 0.0
+              : points.map((e) => e.value).reduce(max);
+          final maxY = max(maxValue + maxValue * 0.1, budget.limitAmount * 1.1);
+
           return StreamBuilder(
             stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
-
             builder: (context, userCurrencySnapshot) {
-              return LineChart(
-                LineChartData(
-                  gridData: const FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                  ),
-                  extraLinesData: ExtraLinesData(
-                    horizontalLines: [
-                      HorizontalLine(
-                        y: budget.limitAmount,
-                        color: Theme.of(context).colorScheme.tertiary,
-                        dashArray: [12, 2],
-                        label: HorizontalLineLabel(
-                          show: true,
-                          padding: const EdgeInsets.only(left: 2),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                          ),
-                          labelResolver: (p0) => t.budgets.details.budget_value,
-                        ),
-                      ),
-                    ],
-                  ),
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (spot) =>
-                          Theme.of(context).colorScheme.surface,
-                      tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-                      tooltipMargin: -10,
-                      getTooltipItems: (touchedSpots) {
-                        return touchedSpots.map((barSpot) {
-                          final flSpot = barSpot;
-                          if (flSpot.x == 0 || flSpot.x == 6) {
-                            return null;
-                          }
+              final limitLineColor = Theme.of(context).colorScheme.tertiary;
 
-                          return LineTooltipItem(
-                            '${snapshot.data!.labels[flSpot.x.toInt()]} \n',
-                            const TextStyle(fontSize: 12),
-                            textAlign: TextAlign.start,
-                            children: UINumberFormatter.currency(
-                              currency: userCurrencySnapshot.data,
-                              amountToConvert:
-                                  snapshot.data!.balance[flSpot.x.toInt()],
-                              integerStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ).getTextSpanList(context),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    leftTitles: noAxisTitles,
-                    topTitles: noAxisTitles,
-                    bottomTitles: noAxisTitles,
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 46,
-                        getTitlesWidget: (value, meta) {
-                          if (value == meta.max || value == meta.min) {
-                            return Container();
-                          }
-
-                          return SideTitleWidget(
-                            meta: meta,
-                            child: Text(
-                              meta.formattedValue,
-                              style: smallAxisTitleStyle(context),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  borderData: FlBorderData(show: false),
-                  minY: 0,
-                  maxY: max(
-                    snapshot.data!.balance.max +
-                        snapshot.data!.balance.max * 0.1,
-                    budget.limitAmount * 1.1,
-                  ),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: List.generate(
-                        snapshot.data!.balance.length,
-                        (index) => FlSpot(
-                          index.toDouble(),
-                          snapshot.data!.balance[index],
-                        ),
-                      ),
-                      isCurved: true,
-                      curveSmoothness: 0.025,
-                      color: lineColor,
-                      barWidth: 3,
-                      isStrokeCapRound: true,
-                      dotData: const FlDotData(show: false),
-                      belowBarData: BarAreaData(
+              return TimeSeriesEvolutionChart<_BudgetEvolutionPoint>(
+                data: points,
+                dateExtractor: (p) => p.date,
+                valueExtractor: (p) => p.value,
+                currency: userCurrencySnapshot.data,
+                tooltipTitleBuilder: (p) => p.label,
+                minY: 0,
+                maxY: maxY,
+                extraLinesData: ExtraLinesData(
+                  horizontalLines: [
+                    HorizontalLine(
+                      y: budget.limitAmount,
+                      color: limitLineColor,
+                      dashArray: [12, 2],
+                      label: HorizontalLineLabel(
                         show: true,
-                        applyCutOffY: true,
-                        cutOffY: 0,
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            lineColor.withAlpha(100),
-                            lineColor.withAlpha(1),
-                          ],
-                        ),
+                        padding: const EdgeInsets.only(left: 2),
+                        style: TextStyle(color: limitLineColor),
+                        labelResolver: (_) => t.budgets.details.budget_value,
                       ),
                     ),
                   ],
@@ -201,4 +113,16 @@ class BudgetEvolutionChart extends StatelessWidget {
       ),
     );
   }
+}
+
+class _BudgetEvolutionPoint {
+  final DateTime date;
+  final double value;
+  final String label;
+
+  _BudgetEvolutionPoint({
+    required this.date,
+    required this.value,
+    required this.label,
+  });
 }

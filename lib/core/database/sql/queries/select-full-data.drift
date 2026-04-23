@@ -10,6 +10,7 @@ import './../../../models/category/category.dart';
 import './../../../models/budget/budget.dart';
 import './../../../models/goal/goal.dart';
 import './../../../models/debt/debt.dart';
+import './../../../models/asset/asset.dart';
 import './../../../models/exchange-rate/exchange_rate.dart';
 import './../../../models/transaction/transaction.dart';
 import './../../../models/filters/saved_filter.dart';
@@ -31,6 +32,48 @@ getDebtsWithFullData($predicate = TRUE) WITH Debt:
     WHERE $predicate 
     ORDER BY $orderBy
     LIMIT $limit;
+
+getAssetsWithFullData($predicate = TRUE) WITH Asset:
+    SELECT a.*, currency.**
+    FROM assets a
+        INNER JOIN currencies currency
+        ON a.currencyId = currency.code
+    WHERE $predicate
+    ORDER BY $orderBy
+    LIMIT $limit;
+
+getValuationsForAccount(:accountId AS TEXT):
+    SELECT *
+    FROM valuations
+    WHERE accountId = :accountId
+    ORDER BY date DESC;
+
+getLatestValuationForAccount(:accountId AS TEXT):
+    SELECT *
+    FROM valuations
+    WHERE accountId = :accountId
+    ORDER BY date DESC
+    LIMIT 1;
+
+getLatestValuationForAccountAtDate(:accountId AS TEXT, :date AS DATETIME):
+    SELECT *
+    FROM valuations
+    WHERE accountId = :accountId AND date <= :date
+    ORDER BY date DESC
+    LIMIT 1;
+
+getValuationsForAsset(:assetId AS TEXT):
+    SELECT *
+    FROM valuations
+    WHERE assetId = :assetId
+    ORDER BY date DESC;
+
+getLatestValuationForAsset(:assetId AS TEXT):
+    SELECT *
+    FROM valuations
+    WHERE assetId = :assetId
+    ORDER BY date DESC
+    LIMIT 1;
 
 getTransactionsWithFullData($predicate = TRUE) WITH MoneyTransaction: 
     SELECT 

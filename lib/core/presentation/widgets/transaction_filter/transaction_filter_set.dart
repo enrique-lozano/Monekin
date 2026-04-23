@@ -18,6 +18,10 @@ class TransactionFilterSet {
   /// Accounts that this filter contains. Will be null if this filter is not in use, or if all accounts are selected
   final Iterable<String>? accountsIDs;
 
+  /// When true, if accountsIDs is specified, transactions with a
+  /// receiving account in the list will also be included in results.
+  ///
+  /// Defaults to `true`
   final bool includeReceivingAccountsInAccountFilters;
 
   /// Categories that this filter contains. Will be null if this filter is not in use, or if all categories are selected

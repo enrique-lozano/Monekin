@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_string_interpolations
-
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +21,7 @@ import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -250,6 +249,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 12,
                 children: [
                   TextFormField(
                     controller: _nameController,
@@ -262,7 +262,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     textInputAction: TextInputAction.next,
                   ),
-                  const SizedBox(height: 16),
                   IconAndColorSelector(
                     iconSelectorModalSubtitle:
                         t.icon_selector.select_account_icon,
@@ -301,7 +300,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     }),
                     data: (color: _color, icon: _icon),
                   ),
-                  const SizedBox(height: 16),
                   AmountAndCurrencyFormField(
                     amountController: _balanceController,
                     currency: _currency,
@@ -316,7 +314,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       });
                     },
                   ),
-                  const SizedBox(height: 12),
                   if (_currency != null)
                     StreamBuilder(
                       stream: ExchangeRateService.instance
@@ -324,7 +321,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData ||
                             _currency?.code == _userPrCurrency?.code) {
-                          return Container();
+                          return SizedBox.shrink();
                         } else {
                           return InlineInfoCard(
                             text: t.account.form.currency_not_found_warn,
@@ -348,30 +345,50 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               )
                               .map((count) => count == 0),
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData || snapshot.data! == false) {
-                        return Container();
+                      // Hide the selector when:
+                      // - Still loading or account has income/expense transactions
+                      // - Editing an investment account (can't convert away from it)
+                      // - Editing a non-investment account (can't convert to investment)
+                      final hasTransactions =
+                          !snapshot.hasData || snapshot.data! == false;
+                      final isInvestmentEdit =
+                          _accountToEdit?.type == AccountType.investment;
+
+                      if (hasTransactions || isInvestmentEdit) {
+                        return SizedBox.shrink();
                       }
 
                       return Column(
                         children: [
-                          const SizedBox(height: 12),
-                          AccountTypeSelector(
-                            selectedType: _type,
-                            onSelected: (newType) {
-                              setState(() {
-                                _type = newType;
-                              });
+                          ListTileField(
+                            leading: Icon(
+                              _type.icon,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            title: t.account.types.title,
+                            subtitle: _type.title(context),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () async {
+                              final selected = await showAccountTypeSelector(
+                                context,
+                                selectedType: _type,
+                              );
+                              if (selected != null) {
+                                setState(() => _type = selected);
+                              }
                             },
                           ),
+                          const SizedBox(height: 12),
                         ],
                       );
                     },
                   ),
-                  const SizedBox(height: 16),
+
                   ShowMoreContentButton(
                     child: Column(
+                      spacing: 12,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 12),
                         DateTimeFormField(
                           decoration: InputDecoration(
                             suffixIcon: const Icon(Icons.event),
@@ -388,9 +405,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                             });
                           },
                         ),
-                        const SizedBox(height: 22),
-                        if (_accountToEdit != null &&
-                            _accountToEdit.isClosed) ...[
+                        if (_accountToEdit != null && _accountToEdit.isClosed)
                           DateTimeFormField(
                             decoration: InputDecoration(
                               suffixIcon: const Icon(Icons.event),
@@ -406,36 +421,39 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               });
                             },
                           ),
-                          const SizedBox(height: 22),
-                        ],
-                        TextFormField(
-                          controller: _ibanController,
-                          decoration: InputDecoration(
-                            labelText: t.account.form.iban,
-                            border: appInputBorder.copyWith(
-                              borderRadius: BorderRadius.only(
-                                topLeft: inputBorderRadius,
-                                topRight: inputBorderRadius,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: _ibanController,
+                              decoration: InputDecoration(
+                                labelText: t.account.form.iban,
+                                border: appInputBorder.copyWith(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: inputBorderRadius,
+                                    topRight: inputBorderRadius,
+                                  ),
+                                ),
                               ),
+                              textInputAction: TextInputAction.next,
                             ),
-                          ),
-                          textInputAction: TextInputAction.next,
-                        ),
-                        const Divider(),
-                        TextFormField(
-                          controller: _swiftController,
-                          decoration: InputDecoration(
-                            labelText: t.account.form.swift,
-                            border: appInputBorder.copyWith(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: inputBorderRadius,
-                                bottomRight: inputBorderRadius,
+                            const Divider(),
+                            TextFormField(
+                              controller: _swiftController,
+                              decoration: InputDecoration(
+                                labelText: t.account.form.swift,
+                                border: appInputBorder.copyWith(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: inputBorderRadius,
+                                    bottomRight: inputBorderRadius,
+                                  ),
+                                ),
                               ),
+                              textInputAction: TextInputAction.next,
                             ),
-                          ),
-                          textInputAction: TextInputAction.next,
+                          ],
                         ),
-                        const SizedBox(height: 22),
+
                         TextFormField(
                           minLines: 2,
                           maxLines: 10,
@@ -447,6 +465,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                           ),
                           textInputAction: TextInputAction.next,
                         ),
+
                         const SizedBox(height: 22),
                       ],
                     ),

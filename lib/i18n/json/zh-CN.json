@@ -480,6 +480,7 @@
     "n_transactions": "交易数量",
     "add_money": "增加金额",
     "withdraw_money": "减少金额",
+    "correct_balance": "修正余额",
     "no-accounts": "未发现应当显示的交易。请点击底部的 '+' 按钮新增一个交易",
     "TYPES": {
       "title": "账户类型",
@@ -487,7 +488,9 @@
       "normal": "普通账户",
       "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
       "saving": "储蓄账户",
-      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱"
+      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱",
+      "investment": "投资账户",
+      "investment.descr": "券商、加密货币交易所或投资组合账户。跟踪您的投资资本，并通过估值手动更新其价值"
     },
     "FORM": {
       "name": "账户名称",
@@ -502,7 +505,28 @@
       "already-exists": "此账户名已存在，请起一个新的账户名",
       "tr-before-opening-date": "此账户中有早于开户日期的交易",
       "iban": "国际银行账户号码（IBAN）",
-      "swift": "银行识别码（SWIFT）"
+      "swift": "银行识别码（SWIFT）",
+      "include-in-net-worth": "计入净资产",
+      "include-in-net-worth.descr": "将此账户纳入总净资产计算"
+    },
+    "INVESTMENT": {
+      "details-header": "投资",
+      "invested-capital": "已投资本金",
+      "portfolio-value": "投资组合价值",
+      "profit": "收益",
+      "last-valuation": "最近估值",
+      "no-valuations": "暂无估值记录",
+      "update-value": "更新价值",
+      "update-value.descr": "记录当前投资组合价值",
+      "update-value.success": "估值记录成功",
+      "history": "估值历史",
+      "history-empty": "此账户暂无估值记录",
+      "add-valuation": "添加估值",
+      "edit-valuation": "编辑估值",
+      "edit-valuation.success": "估值编辑成功",
+      "delete-valuation.success": "估值删除成功",
+      "delete-all-valuations": "删除所有估值",
+      "delete-all-valuations.success": "所有估值已成功删除"
     },
     "DELETE": {
       "warning-header": "删除账户？",

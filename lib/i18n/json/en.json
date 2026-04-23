@@ -480,6 +480,7 @@
     "n_transactions": "Number of transactions",
     "add_money": "Add money",
     "withdraw_money": "Withdraw money",
+    "correct_balance": "Correct balance",
     "no-accounts": "No accounts found to display here. Add an account by clicking the '+' button at the bottom",
     "TYPES": {
       "title": "Account type",
@@ -487,7 +488,9 @@
       "normal": "Normal account",
       "normal.descr": "Useful to record your day-to-day finances. It is the most common account, it allows you to add expenses, income...",
       "saving": "Savings account",
-      "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money"
+      "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Account name",
@@ -502,7 +505,28 @@
       "already-exists": "There is already another one with the same name, please write another",
       "tr-before-opening-date": "There are transactions in this account with a date before the opening date",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Include in net worth",
+      "include-in-net-worth.descr": "Add this account to the total net worth calculation"
+    },
+    "INVESTMENT": {
+      "details-header": "Investment",
+      "invested-capital": "Invested capital",
+      "portfolio-value": "Portfolio value",
+      "profit": "Profit",
+      "last-valuation": "Last valuation",
+      "no-valuations": "No valuations recorded yet",
+      "update-value": "Update value",
+      "update-value.descr": "Record the current portfolio value",
+      "update-value.success": "Valuation recorded successfully",
+      "history": "Valuation history",
+      "history-empty": "No valuations recorded yet for this account",
+      "add-valuation": "Add valuation",
+      "edit-valuation": "Edit valuation",
+      "edit-valuation.success": "Valuation edited successfully",
+      "delete-valuation.success": "Valuation deleted successfully",
+      "delete-all-valuations": "Delete all valuations",
+      "delete-all-valuations.success": "All valuations deleted successfully"
     },
     "DELETE": {
       "warning-header": "Delete account?",

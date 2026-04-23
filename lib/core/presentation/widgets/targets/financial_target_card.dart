@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/goals/goal_details_page.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -14,6 +13,7 @@ import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -235,13 +235,13 @@ class TargetHeader extends StatelessWidget {
                     final startDate = range.start;
                     final endDate = range.end;
 
-                    final startDateLabel = startDate.year == currentYear
-                        ? DateFormat.MMMd().format(startDate)
-                        : DateFormat.yMMMd().format(startDate);
+                    final startDateLabel = getMMMdDateFormatBasedOnYear(
+                      startDate,
+                    ).format(startDate);
 
-                    final endDateLabel = endDate.year == currentYear
-                        ? DateFormat.MMMd().format(endDate)
-                        : DateFormat.yMMMd().format(endDate);
+                    final endDateLabel = getMMMdDateFormatBasedOnYear(
+                      endDate,
+                    ).format(endDate);
 
                     return Text(
                       '$startDateLabel - $endDateLabel',

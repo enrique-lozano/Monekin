@@ -480,6 +480,7 @@
     "n_transactions": "Tranzakciók száma",
     "add_money": "Hozzáadás",
     "withdraw_money": "Pénzfelvétel",
+    "correct_balance": "Egyenleg javítás",
     "no-accounts": "Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.",
     "TYPES": {
       "title": "Számlatípus",
@@ -487,7 +488,9 @@
       "normal": "Normál számla",
       "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...",
       "saving": "Megtakarítási számla",
-      "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez."
+      "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.",
+      "investment": "Befektetési számla",
+      "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla. Kövesse nyomon befektetett tőkéjét és frissítse az értékét manuálisan értékeléseken keresztül"
     },
     "FORM": {
       "name": "Számla neve",
@@ -502,7 +505,28 @@
       "already-exists": "Ugyanezzel a névvel már van egy másik is. Kérjük, adjon meg egy másikat.",
       "tr-before-opening-date": "A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Beleszámítás a nettó vagyonba",
+      "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához"
+    },
+    "INVESTMENT": {
+      "details-header": "Befektetés",
+      "invested-capital": "Befektetett tőke",
+      "portfolio-value": "Portfólió értéke",
+      "profit": "Nyereség",
+      "last-valuation": "Utolsó értékelés",
+      "no-valuations": "Még nincs értékelés rögzítve",
+      "update-value": "Érték frissítése",
+      "update-value.descr": "A portfólió aktuális értékének rögzítése",
+      "update-value.success": "Értékelés sikeresen rögzítve",
+      "history": "Értékelési előzmények",
+      "history-empty": "Még nincs értékelés ehhez a számlához",
+      "add-valuation": "Értékelés hozzáadása",
+      "edit-valuation": "Értékelés szerkesztése",
+      "edit-valuation.success": "Értékelés sikeresen szerkesztve",
+      "delete-valuation.success": "Értékelés sikeresen törölve",
+      "delete-all-valuations": "Összes értékelés törlése",
+      "delete-all-valuations.success": "Összes értékelés sikeresen törölve"
     },
     "DELETE": {
       "warning-header": "Törli a számlát?",

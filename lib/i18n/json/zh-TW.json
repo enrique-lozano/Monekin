@@ -480,6 +480,7 @@
     "n_transactions": "交易數量",
     "add_money": "增加金額",
     "withdraw_money": "取出金額",
+    "correct_balance": "修正餘額",
     "no-accounts": "未發現此處顯示的交易。請點選底部的 '+' 按鈕新增交易",
     "TYPES": {
       "title": "帳戶類型",
@@ -487,7 +488,9 @@
       "normal": "普通帳戶",
       "normal.descr": "對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入......",
       "saving": "儲蓄帳戶",
-      "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢"
+      "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢",
+      "investment": "投資帳戶",
+      "investment.descr": "券商、加密貨幣交易所或投資組合帳戶。追蹤您的投資本金，並透過估值手動更新其價值"
     },
     "FORM": {
       "name": "帳戶名稱",
@@ -501,8 +504,29 @@
       "currency-not-found-warn": "您沒有該貨幣的匯率資訊。1.0 將用作預設匯率。您可以在設定中修改",
       "already-exists": "已經有另一個同名，請再寫一個",
       "tr-before-opening-date": "該帳戶中有日期早於開戶日期的交易",
-      "iban": "iban",
-      "swift": "swift"
+      "iban": "IBAN",
+      "swift": "SWIFT",
+      "include-in-net-worth": "計入淨資產",
+      "include-in-net-worth.descr": "將此帳戶納入總淨資產計算"
+    },
+    "INVESTMENT": {
+      "details-header": "投資",
+      "invested-capital": "已投資本金",
+      "portfolio-value": "投資組合價值",
+      "profit": "收益",
+      "last-valuation": "最近估值",
+      "no-valuations": "尚無估值記錄",
+      "update-value": "更新價值",
+      "update-value.descr": "記錄當前投資組合價值",
+      "update-value.success": "估值記錄成功",
+      "history": "估值歷史",
+      "history-empty": "此帳戶尚無估值記錄",
+      "add-valuation": "新增估值",
+      "edit-valuation": "編輯估值",
+      "edit-valuation.success": "估值編輯成功",
+      "delete-valuation.success": "估值刪除成功",
+      "delete-all-valuations": "刪除所有估值",
+      "delete-all-valuations.success": "所有估值已成功刪除"
     },
     "DELETE": {
       "warning-header": "刪除帳戶？",

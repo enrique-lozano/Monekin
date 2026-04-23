@@ -49,7 +49,11 @@ class ExchangeRateService {
     return db.getLastExchangeRates(limit: limit).watch();
   }
 
-  /// Get all the exchange rates that a currency have in the app
+  /// Get the exchange rate for a given currency at a specific date, if exists.
+  ///
+  /// **IMPORTANT:** If there are no exchange rates for the specified date, it will return
+  /// null, even if there are exchange rates for the same currency in previous dates.
+  /// If you want to get the last exchange rate before a specified date, use [getLastExchangeRateOf]
   Stream<ExchangeRate?> getExchangeRateItem(
     String currencyCode,
     DateTime date,
@@ -58,7 +62,7 @@ class ExchangeRateService {
         .getExchangeRates(
           predicate: (e, currency) =>
               e.currencyCode.equals(currencyCode) &
-              e.date.date.equals(DateFormat('yyyy-MM-dd').format(date)),
+              e.date.equals(DateFormat('yyyy-MM-dd').format(date)),
           limit: 1,
         )
         .watchSingleOrNull();
@@ -90,7 +94,7 @@ class ExchangeRateService {
         .getExchangeRates(
           predicate: (e, currency) =>
               e.currencyCode.equals(currencyCode) &
-              e.date.isSmallerOrEqualValue(date!),
+              e.date.isSmallerOrEqualValue(date!.toIso8601String()),
           limit: 1,
         )
         .watchSingleOrNull();

@@ -480,6 +480,7 @@
     "n_transactions": "Numero di transazioni",
     "add_money": "Aggiungi denaro",
     "withdraw_money": "Preleva denaro",
+    "correct_balance": "Correggi saldo",
     "no-accounts": "Nessuna transazione trovata da mostrare qui. Aggiungi una transazione cliccando sul pulsante '+' in basso",
     "TYPES": {
       "title": "Tipo di conto",
@@ -487,7 +488,9 @@
       "normal": "Conto normale",
       "normal.descr": "Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...",
       "saving": "Conto risparmio",
-      "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro"
+      "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro",
+      "investment": "Conto investimento",
+      "investment.descr": "Un conto broker, exchange di criptovalute o portafoglio. Tieni traccia del tuo capitale investito e aggiorna il suo valore manualmente tramite valutazioni"
     },
     "FORM": {
       "name": "Nome conto",
@@ -502,7 +505,28 @@
       "already-exists": "Ne esiste già un altro con lo stesso nome, per favore scrivine un altro",
       "tr-before-opening-date": "Ci sono transazioni in questo conto con una data precedente alla data di apertura",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Includi nel patrimonio netto",
+      "include-in-net-worth.descr": "Aggiungi questo conto al calcolo del patrimonio netto totale"
+    },
+    "INVESTMENT": {
+      "details-header": "Investimento",
+      "invested-capital": "Capitale investito",
+      "portfolio-value": "Valore del portafoglio",
+      "profit": "Profitto",
+      "last-valuation": "Ultima valutazione",
+      "no-valuations": "Nessuna valutazione registrata",
+      "update-value": "Aggiorna valore",
+      "update-value.descr": "Registra il valore attuale del portafoglio",
+      "update-value.success": "Valutazione registrata con successo",
+      "history": "Storico valutazioni",
+      "history-empty": "Nessuna valutazione registrata per questo conto",
+      "add-valuation": "Aggiungi valutazione",
+      "edit-valuation": "Modifica valutazione",
+      "edit-valuation.success": "Valutazione modificata con successo",
+      "delete-valuation.success": "Valutazione eliminata con successo",
+      "delete-all-valuations": "Elimina tutte le valutazioni",
+      "delete-all-valuations.success": "Tutte le valutazioni eliminate con successo"
     },
     "DELETE": {
       "warning-header": "Eliminare conto?",

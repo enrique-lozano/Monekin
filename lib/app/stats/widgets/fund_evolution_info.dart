@@ -1,29 +1,32 @@
 import 'package:collection/collection.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monekin/app/stats/utils/common_axis_titles.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
-import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/constants.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class LineChartDataItem {
-  List<double> balance;
-  List<String> labels;
+class _FundEvolutionPoint {
+  final DateTime date;
+  final double value;
+  final String label;
 
-  LineChartDataItem({required this.balance, required this.labels});
+  _FundEvolutionPoint({
+    required this.date,
+    required this.value,
+    required this.label,
+  });
 }
 
 class FundEvolutionInfo extends StatelessWidget {
@@ -174,6 +177,7 @@ class FundEvolutionInfo extends StatelessWidget {
                         );
 
                   return FundEvolutionLineChart(
+                    accountsIds: accountsSnapshot.data?.map((e) => e.id),
                     filters: filters,
                     loadingWidget: loadingWidget,
                     timeRange: chartDateRange,
@@ -194,10 +198,12 @@ class FundEvolutionLineChart extends StatefulWidget {
     this.timeRange,
     required this.filters,
     required this.loadingWidget,
+    this.accountsIds,
   });
 
   final DateTimeRange? timeRange;
   final TransactionFilterSet filters;
+  final Iterable<String>? accountsIds;
   final Widget loadingWidget;
 
   @override
@@ -205,12 +211,12 @@ class FundEvolutionLineChart extends StatefulWidget {
 }
 
 class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
-  late Stream<LineChartDataItem?> _dataStream;
+  late Stream<List<_FundEvolutionPoint>?> _dataStream;
 
   @override
   void initState() {
     super.initState();
-    _dataStream = getEvolutionData();
+    _dataStream = _createDataStream();
   }
 
   @override
@@ -218,35 +224,40 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.timeRange != widget.timeRange ||
-        oldWidget.filters != widget.filters) {
-      _dataStream = getEvolutionData();
+        oldWidget.filters != widget.filters ||
+        oldWidget.accountsIds != widget.accountsIds) {
+      _dataStream = _createDataStream();
     }
   }
 
-  Stream<LineChartDataItem?> getEvolutionData() {
+  Stream<List<_FundEvolutionPoint>?> _createDataStream() {
     final timeRange = widget.timeRange;
 
     if (timeRange == null) {
       return Stream.value(null);
     }
 
-    List<Stream<double>> balance = [];
-    List<String> labels = [];
+    return Stream.value(null).switchMap((_) => _buildEvolutionData(timeRange));
+  }
+
+  Stream<List<_FundEvolutionPoint>> _buildEvolutionData(
+    DateTimeRange timeRange,
+  ) {
+    final dates = <DateTime>[];
+    final labels = <String>[];
+    final balances = <Stream<double>>[];
 
     DateTime currentDay = timeRange.start.justDay();
-
-    final dayRange = (timeRange.end.difference(timeRange.start).inDays / 100)
+    final dayRange = ((timeRange.end.difference(timeRange.start).inDays) / 100)
         .ceil();
 
     while (currentDay.compareTo(timeRange.end) < 0) {
-      labels.add(
-        currentDay.year == currentYear
-            ? DateFormat.MMMMd().format(currentDay)
-            : DateFormat.yMMMd().format(currentDay),
-      );
+      dates.add(currentDay);
+      labels.add(getMMMdDateFormatBasedOnYear(currentDay).format(currentDay));
 
-      balance.add(
+      balances.add(
         AccountService.instance.getAccountsMoney(
+          accountIds: widget.accountsIds,
           trFilters: widget.filters,
           date: currentDay,
         ),
@@ -255,186 +266,67 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
       currentDay = currentDay.add(Duration(days: dayRange));
     }
 
-    return Rx.combineLatest(
-      balance,
-      (values) => LineChartDataItem(balance: values, labels: labels),
+    return Rx.combineLatest<double, List<_FundEvolutionPoint>>(
+      balances,
+      (values) => List.generate(
+        values.length,
+        (i) => _FundEvolutionPoint(
+          date: dates[i],
+          value: values[i],
+          label: labels[i],
+        ),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final lineColor = Theme.of(context).colorScheme.primary;
-
-    return StreamBuilder(
+    return StreamBuilder<List<_FundEvolutionPoint>?>(
       stream: _dataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return widget.loadingWidget;
         }
 
-        final ultraLightBorderColor = isAppInLightBrightness(context)
-            ? Colors.black12
-            : Colors.white12;
+        final points = snapshot.data ?? const <_FundEvolutionPoint>[];
 
         return StreamBuilder(
           stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
           builder: (context, userCurrencySnapshot) {
-            return Stack(
-              children: [
-                LineChart(
-                  LineChartData(
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      getDrawingHorizontalLine: (value) =>
-                          defaultGridLine(value).copyWith(
-                            color: ultraLightBorderColor,
-                            strokeWidth: 0.5,
-                          ),
-                    ),
-                    lineTouchData: LineTouchData(
-                      enabled: snapshot.hasData,
-                      touchTooltipData: LineTouchTooltipData(
-                        fitInsideVertically: true,
-                        fitInsideHorizontally: true,
-                        getTooltipColor: (spot) =>
-                            Theme.of(context).colorScheme.surface,
-                        getTooltipItems: (touchedSpots) {
-                          return touchedSpots.map((barSpot) {
-                            final flSpot = barSpot;
-                            if (flSpot.x == 0 || flSpot.x == 6) {
-                              return null;
-                            }
-
-                            return LineTooltipItem(
-                              '${snapshot.data!.labels[flSpot.x.toInt()]} \n',
-                              const TextStyle(fontSize: 12),
-                              textAlign: TextAlign.start,
-                              children: UINumberFormatter.currency(
-                                currency: userCurrencySnapshot.data,
-                                amountToConvert:
-                                    snapshot.data!.balance[flSpot.x.toInt()],
-                                integerStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                ),
-                              ).getTextSpanList(context),
-                            );
-                          }).toList();
-                        },
-                      ),
-                    ),
-                    minY: snapshot.hasData
-                        ? (snapshot.data!.balance.allItemsEqual()
-                              ? snapshot.data!.balance.first - 10.2
-                              : null)
-                        : 2,
-                    maxY: snapshot.hasData
-                        ? (snapshot.data!.balance.allItemsEqual()
-                              ? snapshot.data!.balance.first + 10.2
-                              : null)
-                        : 5,
-                    titlesData: FlTitlesData(
-                      show: true,
-                      rightTitles: noAxisTitles,
-                      topTitles: noAxisTitles,
-                      bottomTitles: noAxisTitles,
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: snapshot.hasData,
-                          reservedSize: 28,
-                          getTitlesWidget: (value, meta) {
-                            if (value == meta.max || value == meta.min) {
-                              return Container();
-                            }
-
-                            return SideTitleWidget(
-                              meta: meta,
-                              child: BlurBasedOnPrivateMode(
-                                child: Text(
-                                  meta.formattedValue,
-                                  maxLines: 1,
-                                  textAlign: TextAlign.end,
-                                  softWrap: false,
-                                  overflow: TextOverflow.visible,
-                                  style: smallAxisTitleStyle(context),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    borderData: FlBorderData(
-                      show: false,
-                      border: Border(
-                        bottom: BorderSide(color: ultraLightBorderColor),
-                        right: BorderSide(color: ultraLightBorderColor),
-                      ),
-                    ),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: snapshot.hasData
-                            ? List.generate(
-                                snapshot.data!.balance.length,
-                                (index) => FlSpot(
-                                  index.toDouble(),
-                                  snapshot.data!.balance[index],
-                                ),
-                              )
-                            : [
-                                const FlSpot(0, 3),
-                                const FlSpot(2.6, 2.2),
-                                const FlSpot(4.9, 4.3),
-                                const FlSpot(6.8, 3.1),
-                                const FlSpot(8, 4),
-                                const FlSpot(9.5, 3),
-                                const FlSpot(11, 4),
-                              ],
-                        isCurved: true,
-                        curveSmoothness: snapshot.hasData ? 0.025 : 0.2,
-                        color: snapshot.hasData
-                            ? lineColor
-                            : Colors.grey.withOpacity(0.2),
-                        barWidth: 3,
-                        isStrokeCapRound: true,
-                        dotData: const FlDotData(show: false),
-                        belowBarData: BarAreaData(
-                          show: true,
-                          applyCutOffY: true,
-                          cutOffY: 0,
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: snapshot.hasData
-                                ? [
-                                    lineColor.withAlpha(100),
-                                    lineColor.withAlpha(1),
-                                  ]
-                                : [Colors.grey, Colors.grey.lighten(0.3)]
-                                      .map((color) => color.withOpacity(0.15))
-                                      .toList(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (!snapshot.hasData)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        t.general.insufficient_data,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-                  ),
-              ],
-            );
+            return _buildChart(points, userCurrencySnapshot.data);
           },
         );
       },
+    );
+  }
+
+  Widget _buildChart(List<_FundEvolutionPoint> points, CurrencyInDB? currency) {
+    // Handle edge case: when all values are the same or very close,
+    // add padding to the min/max values to ensure proper axis rendering
+    double? minY;
+    double? maxY;
+
+    if (points.isNotEmpty) {
+      final values = points.map((p) => p.value).toList();
+      final min = values.reduce((a, b) => a < b ? a : b);
+      final max = values.reduce((a, b) => a > b ? a : b);
+
+      // If all values are effectively the same, add 10% padding
+      if ((max - min).abs() < 0.0001) {
+        final padding = (min.abs() * 0.1).abs() + 1;
+        minY = min - padding;
+        maxY = max + padding;
+      }
+    }
+
+    return TimeSeriesEvolutionChart<_FundEvolutionPoint>(
+      data: points,
+      dateExtractor: (p) => p.date,
+      valueExtractor: (p) => p.value,
+      currency: currency,
+      tooltipTitleBuilder: (p) => p.label,
+      minY: minY,
+      maxY: maxY,
     );
   }
 }
