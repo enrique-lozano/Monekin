@@ -1000,6 +1000,13 @@
         "first_day_of_week": "Primer día de la semana"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "Estructuras de aplicaciones",
+      "tags": "Defina etiquetas para lograr una mejor organización de sus transacciones",
+      "categories": "Organización de categorías y subcategorías.",
+      "accounts": "Administra y edita tus cuentas",
+      "filters": "Configura filtros globales que puedes usar para transacciones y estadísticas"
+    },
     "SECURITY": {
       "title": "Seguridad",
       "private_mode_at_launch": "Modo privado al arrancar",
@@ -1011,7 +1018,7 @@
     },
     "TRANSACTIONS": {
       "menu_title": "Transacciones",
-      "menu_descr": "Configura el comportamiento de tus transacciones",
+      "menu_descr": "Configura el comportamiento y la apariencia de todo lo relacionado con tus transacciones",
       "title": "Ajustes de transacciones",
       "STYLE": {
         "title": "Estilo de transacción",

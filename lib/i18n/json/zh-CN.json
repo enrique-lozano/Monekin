@@ -997,6 +997,13 @@
         "first_day_of_week": "一周的第一天"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "应用程序结构",
+      "tags": "定义标签以更好地组织您的交易",
+      "categories": "类别和子类别组织",
+      "accounts": "管理和编辑您的帐户",
+      "filters": "配置可用于事务和统计的全局过滤器"
+    },
     "SECURITY": {
       "title": "安全",
       "private_mode_at_launch": "启动隐私模式",

@@ -997,6 +997,13 @@
         "first_day_of_week": "A hét első napja"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "Alkalmazásstruktúrák",
+      "tags": "Határozzon meg címkéket a tranzakciók jobb megszervezéséhez",
+      "categories": "Kategóriák és alkategóriák szervezése",
+      "accounts": "Kezelje és szerkessze fiókjait",
+      "filters": "Konfiguráljon globális szűrőket, amelyeket tranzakciókhoz és statisztikákhoz használhat"
+    },
     "SECURITY": {
       "title": "Biztonság",
       "private_mode_at_launch": "Privát mód indításkor",

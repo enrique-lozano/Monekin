@@ -997,6 +997,13 @@
         "first_day_of_week": "Haftanın ilk günü"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "Uygulama yapıları",
+      "tags": "İşlemlerinizi daha iyi organize etmek için etiketleri tanımlayın",
+      "categories": "Kategoriler ve alt kategorilerin organizasyonu",
+      "accounts": "Hesaplarınızı yönetin ve düzenleyin",
+      "filters": "İşlemler ve istatistikler için kullanabileceğiniz genel filtreleri yapılandırın"
+    },
     "SECURITY": {
       "title": "Güvenlik",
       "private_mode_at_launch": "Başlangıçta özel mod",

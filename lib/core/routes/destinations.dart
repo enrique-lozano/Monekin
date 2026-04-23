@@ -23,7 +23,6 @@ enum AppMenuDestinationsID {
   assets,
   stats,
   settings,
-  categories,
 }
 
 class MainMenuDestination {
