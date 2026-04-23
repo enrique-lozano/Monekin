@@ -507,7 +507,8 @@
       "iban": "IBAN",
       "swift": "SWIFT",
       "include-in-net-worth": "Beleszámítás a nettó vagyonba",
-      "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához"
+      "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához",
+      "correct_balance_description": "A számlaegyenleg módosítása megváltoztatja a számla kezdeti értékét. Ez a korrekció nem jelenik meg a statisztikákban."
     },
     "INVESTMENT": {
       "details-header": "Befektetés",

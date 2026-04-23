@@ -507,7 +507,8 @@
       "iban": "IBAN",
       "swift": "SWIFT",
       "include-in-net-worth": "Im Nettovermögen einbeziehen",
-      "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen"
+      "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen",
+      "correct_balance_description": "Das Anpassen des Kontostands ändert den Anfangswert des Kontos. Diese Korrektur wird in deinen Statistiken nicht berücksichtigt."
     },
     "INVESTMENT": {
       "details-header": "Investment",

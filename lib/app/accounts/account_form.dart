@@ -70,8 +70,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Future<void> submitForm() async {
     final accountService = AccountService.instance;
 
-    double newBalance = double.parse(_balanceController.text);
-
+    double iniValue;
     if (_accountToEdit != null) {
       // Check if there are transactions before the opening date of the account:
       if ((await TransactionService.instance
@@ -91,17 +90,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
         return;
       }
 
-      newBalance =
-          _accountToEdit.iniValue +
-          newBalance -
-          await accountService.getAccountMoney(account: _accountToEdit).first;
+      iniValue = _accountToEdit.iniValue;
+    } else {
+      iniValue = double.parse(_balanceController.text);
     }
 
     Account accountToSubmit = Account(
       id: _accountToEdit?.id ?? generateUUID(),
       name: _nameController.text,
       displayOrder: _accountToEdit?.displayOrder ?? 10,
-      iniValue: newBalance,
+      iniValue: iniValue,
       date: _openingDate,
       closingDate: _closeDate,
       type: _type,
@@ -181,10 +179,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _type = _accountToEdit.type;
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
-      _balanceController.text = value.toStringAsFixed(
-        _accountToEdit.currency.decimalPlaces,
-      );
-      _color = _accountToEdit.getComputedColor(context);
+      setState(() {
+        _color = _accountToEdit.getComputedColor(context);
+      });
     });
 
     _icon = _accountToEdit.icon;
@@ -300,20 +297,27 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     }),
                     data: (color: _color, icon: _icon),
                   ),
-                  AmountAndCurrencyFormField(
-                    amountController: _balanceController,
-                    currency: _currency,
-                    amountLabel: widget.account != null
-                        ? t.account.form.current_balance
-                        : t.account.form.initial_balance,
-                    enabled:
-                        !(widget.account != null && widget.account!.isClosed),
-                    onCurrencySelected: (newCurrency) {
-                      setState(() {
-                        _currency = newCurrency;
-                      });
-                    },
-                  ),
+                  if (widget.account == null)
+                    AmountAndCurrencyFormField(
+                      amountController: _balanceController,
+                      currency: _currency,
+                      amountLabel: t.account.form.initial_balance,
+                      enabled: true,
+                      onCurrencySelected: (newCurrency) {
+                        setState(() {
+                          _currency = newCurrency;
+                        });
+                      },
+                    )
+                  else if (_currency != null)
+                    CurrencyFormField(
+                      currency: _currency,
+                      onCurrencySelected: (newCurrency) {
+                        setState(() {
+                          _currency = newCurrency;
+                        });
+                      },
+                    ),
                   if (_currency != null)
                     StreamBuilder(
                       stream: ExchangeRateService.instance
