@@ -6,12 +6,14 @@ class ShowMoreContentButton extends StatefulWidget {
   const ShowMoreContentButton({
     super.key,
     required this.child,
-    this.sidePadding = 0,
+    this.headerPadding = const EdgeInsets.all(0),
     this.title,
   });
 
   final Widget child;
-  final double sidePadding;
+
+  /// Horizontal padding for the button in the header
+  final EdgeInsetsGeometry headerPadding;
 
   /// Label of the button (if null, "Show more fields" will be used)
   final String? title;
@@ -28,10 +30,7 @@ class _ShowMoreContentButtonState extends State<ShowMoreContentButton> {
     final t = Translations.of(context);
 
     final header = Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 0,
-        horizontal: widget.sidePadding,
-      ),
+      padding: widget.headerPadding,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 12,

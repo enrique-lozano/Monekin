@@ -244,237 +244,287 @@ class _AccountFormPageState extends State<AccountFormPage> {
             padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 12,
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      labelText: '${t.account.form.name} *',
-                      hintText: 'Ex.: My account',
+              child: Builder(
+                builder: (context) {
+                  final List<Widget> formChildren = [];
+
+                  void add(Widget w) {
+                    formChildren.add(w);
+                    formChildren.add(const SizedBox(height: 12));
+                  }
+
+                  // Name
+                  add(
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: '${t.account.form.name} *',
+                        hintText: 'Ex.: My account',
+                      ),
+                      validator: (value) =>
+                          fieldValidator(value, isRequired: true),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      textInputAction: TextInputAction.next,
                     ),
-                    validator: (value) =>
-                        fieldValidator(value, isRequired: true),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    textInputAction: TextInputAction.next,
-                  ),
-                  IconAndColorSelector(
-                    iconSelectorModalSubtitle:
-                        t.icon_selector.select_account_icon,
-                    iconDisplayer: IconDisplayer(
-                      supportedIcon: _icon,
-                      size: 36,
-                      isOutline: true,
-                      outlineWidth: 1.5,
-                      onTap: () {
-                        showIconSelectorModal(
-                          context,
-                          IconSelectorModal(
-                            preselectedIconID: _icon.id,
-                            subtitle: t.icon_selector.select_account_icon,
-                            onIconSelected: (selectedIcon) {
-                              setState(() {
-                                _icon = selectedIcon;
-                              });
-                            },
-                          ),
+                  );
+
+                  // Icon & color selector
+                  add(
+                    IconAndColorSelector(
+                      iconSelectorModalSubtitle:
+                          t.icon_selector.select_account_icon,
+                      iconDisplayer: IconDisplayer(
+                        supportedIcon: _icon,
+                        size: 36,
+                        isOutline: true,
+                        outlineWidth: 1.5,
+                        onTap: () {
+                          showIconSelectorModal(
+                            context,
+                            IconSelectorModal(
+                              preselectedIconID: _icon.id,
+                              subtitle: t.icon_selector.select_account_icon,
+                              onIconSelected: (selectedIcon) {
+                                setState(() {
+                                  _icon = selectedIcon;
+                                });
+                              },
+                            ),
+                          );
+                        },
+                        mainColor: _color.lighten(
+                          isDark ? IconDisplayer.darkLightenFactor : 0,
+                        ),
+                        secondaryColor: _color.lighten(
+                          isDark ? 0 : IconDisplayer.darkLightenFactor,
+                        ),
+                        displayMode: IconDisplayMode.polygon,
+                      ),
+                      onDataChange: ((data) {
+                        setState(() {
+                          _icon = data.icon;
+                          _color = data.color;
+                        });
+                      }),
+                      data: (color: _color, icon: _icon),
+                    ),
+                  );
+
+                  // Amount / Currency fields (conditionally add)
+                  if (widget.account == null) {
+                    add(
+                      AmountAndCurrencyFormField(
+                        amountController: _balanceController,
+                        currency: _currency,
+                        amountLabel: t.account.form.initial_balance,
+                        enabled: true,
+                        onCurrencySelected: (newCurrency) {
+                          setState(() {
+                            _currency = newCurrency;
+                          });
+                        },
+                      ),
+                    );
+                  } else if (_currency != null) {
+                    add(
+                      CurrencyFormField(
+                        currency: _currency,
+                        onCurrencySelected: (newCurrency) {
+                          setState(() {
+                            _currency = newCurrency;
+                          });
+                        },
+                      ),
+                    );
+                  }
+
+                  // Exchange rate info: only include spacing when showing content
+                  if (_currency != null) {
+                    formChildren.add(
+                      StreamBuilder(
+                        stream: ExchangeRateService.instance
+                            .getLastExchangeRateOf(
+                              currencyCode: _currency!.code,
+                            ),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData ||
+                              _currency?.code == _userPrCurrency?.code) {
+                            return const SizedBox.shrink();
+                          } else {
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                InlineInfoCard(
+                                  text: t.account.form.currency_not_found_warn,
+                                  mode: InlineInfoCardMode.warn,
+                                ),
+                                const SizedBox(height: 12),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    );
+                  }
+
+                  // Account type selector stream: include spacing only when visible
+                  formChildren.add(
+                    StreamBuilder(
+                      stream: _accountToEdit == null
+                          ? Stream.value(true)
+                          : TransactionService.instance
+                                .countTransactions(
+                                  filters: TransactionFilterSet(
+                                    transactionTypes: [
+                                      TransactionType.expense,
+                                      TransactionType.income,
+                                    ],
+                                    accountsIDs: [_accountToEdit.id],
+                                  ),
+                                )
+                                .map((count) => count == 0),
+                      builder: (context, snapshot) {
+                        final hasTransactions =
+                            !snapshot.hasData || snapshot.data! == false;
+                        final isInvestmentEdit =
+                            _accountToEdit?.type == AccountType.investment;
+
+                        if (hasTransactions || isInvestmentEdit) {
+                          return const SizedBox.shrink();
+                        }
+
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ListTileField(
+                              leading: Icon(
+                                _type.icon,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              title: t.account.types.title,
+                              subtitle: _type.title(context),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () async {
+                                final selected = await showAccountTypeSelector(
+                                  context,
+                                  selectedType: _type,
+                                );
+                                if (selected != null) {
+                                  setState(() => _type = selected);
+                                }
+                              },
+                            ),
+                            const SizedBox(height: 12),
+                          ],
                         );
                       },
-                      mainColor: _color.lighten(
-                        isDark ? IconDisplayer.darkLightenFactor : 0,
-                      ),
-                      secondaryColor: _color.lighten(
-                        isDark ? 0 : IconDisplayer.darkLightenFactor,
-                      ),
-                      displayMode: IconDisplayMode.polygon,
                     ),
-                    onDataChange: ((data) {
-                      setState(() {
-                        _icon = data.icon;
-                        _color = data.color;
-                      });
-                    }),
-                    data: (color: _color, icon: _icon),
-                  ),
-                  if (widget.account == null)
-                    AmountAndCurrencyFormField(
-                      amountController: _balanceController,
-                      currency: _currency,
-                      amountLabel: t.account.form.initial_balance,
-                      enabled: true,
-                      onCurrencySelected: (newCurrency) {
-                        setState(() {
-                          _currency = newCurrency;
-                        });
-                      },
-                    )
-                  else if (_currency != null)
-                    CurrencyFormField(
-                      currency: _currency,
-                      onCurrencySelected: (newCurrency) {
-                        setState(() {
-                          _currency = newCurrency;
-                        });
-                      },
-                    ),
-                  if (_currency != null)
-                    StreamBuilder(
-                      stream: ExchangeRateService.instance
-                          .getLastExchangeRateOf(currencyCode: _currency!.code),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData ||
-                            _currency?.code == _userPrCurrency?.code) {
-                          return SizedBox.shrink();
-                        } else {
-                          return InlineInfoCard(
-                            text: t.account.form.currency_not_found_warn,
-                            mode: InlineInfoCardMode.warn,
-                          );
-                        }
-                      },
-                    ),
-                  StreamBuilder(
-                    stream: _accountToEdit == null
-                        ? Stream.value(true)
-                        : TransactionService.instance
-                              .countTransactions(
-                                filters: TransactionFilterSet(
-                                  transactionTypes: [
-                                    TransactionType.expense,
-                                    TransactionType.income,
-                                  ],
-                                  accountsIDs: [_accountToEdit.id],
-                                ),
-                              )
-                              .map((count) => count == 0),
-                    builder: (context, snapshot) {
-                      // Hide the selector when:
-                      // - Still loading or account has income/expense transactions
-                      // - Editing an investment account (can't convert away from it)
-                      // - Editing a non-investment account (can't convert to investment)
-                      final hasTransactions =
-                          !snapshot.hasData || snapshot.data! == false;
-                      final isInvestmentEdit =
-                          _accountToEdit?.type == AccountType.investment;
+                  );
 
-                      if (hasTransactions || isInvestmentEdit) {
-                        return SizedBox.shrink();
-                      }
-
-                      return Column(
+                  // Show more fields
+                  // Build the inner column as before (it manages its own spacing)
+                  formChildren.add(
+                    ShowMoreContentButton(
+                      headerPadding: const EdgeInsets.only(top: 12),
+                      child: Column(
+                        spacing: 12,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          ListTileField(
-                            leading: Icon(
-                              _type.icon,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            title: t.account.types.title,
-                            subtitle: _type.title(context),
-                            trailing: const Icon(Icons.chevron_right),
-                            onTap: () async {
-                              final selected = await showAccountTypeSelector(
-                                context,
-                                selectedType: _type,
-                              );
-                              if (selected != null) {
-                                setState(() => _type = selected);
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-                      );
-                    },
-                  ),
-
-                  ShowMoreContentButton(
-                    child: Column(
-                      spacing: 12,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        DateTimeFormField(
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.event),
-                            labelText: '${t.account.date} *',
-                          ),
-                          initialDate: _openingDate,
-                          dateFormat: DateFormat.yMMMd().add_jm(),
-                          lastDate: _closeDate ?? DateTime.now(),
-                          validator: (e) =>
-                              e == null ? t.general.validations.required : null,
-                          onDateSelected: (DateTime value) {
-                            setState(() {
-                              _openingDate = value;
-                            });
-                          },
-                        ),
-                        if (_accountToEdit != null && _accountToEdit.isClosed)
                           DateTimeFormField(
                             decoration: InputDecoration(
                               suffixIcon: const Icon(Icons.event),
-                              labelText: t.account.close_date,
+                              labelText: '${t.account.date} *',
                             ),
-                            initialDate: _closeDate,
-                            firstDate: _openingDate,
-                            lastDate: DateTime.now(),
+                            initialDate: _openingDate,
                             dateFormat: DateFormat.yMMMd().add_jm(),
+                            lastDate: _closeDate ?? DateTime.now(),
+                            validator: (e) => e == null
+                                ? t.general.validations.required
+                                : null,
                             onDateSelected: (DateTime value) {
                               setState(() {
-                                _closeDate = value;
+                                _openingDate = value;
                               });
                             },
                           ),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextFormField(
-                              controller: _ibanController,
+                          if (_accountToEdit != null && _accountToEdit.isClosed)
+                            DateTimeFormField(
                               decoration: InputDecoration(
-                                labelText: t.account.form.iban,
-                                border: appInputBorder.copyWith(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: inputBorderRadius,
-                                    topRight: inputBorderRadius,
+                                suffixIcon: const Icon(Icons.event),
+                                labelText: t.account.close_date,
+                              ),
+                              initialDate: _closeDate,
+                              firstDate: _openingDate,
+                              lastDate: DateTime.now(),
+                              dateFormat: DateFormat.yMMMd().add_jm(),
+                              onDateSelected: (DateTime value) {
+                                setState(() {
+                                  _closeDate = value;
+                                });
+                              },
+                            ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                controller: _ibanController,
+                                decoration: InputDecoration(
+                                  labelText: t.account.form.iban,
+                                  border: appInputBorder.copyWith(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: inputBorderRadius,
+                                      topRight: inputBorderRadius,
+                                    ),
                                   ),
                                 ),
+                                textInputAction: TextInputAction.next,
                               ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const Divider(),
-                            TextFormField(
-                              controller: _swiftController,
-                              decoration: InputDecoration(
-                                labelText: t.account.form.swift,
-                                border: appInputBorder.copyWith(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: inputBorderRadius,
-                                    bottomRight: inputBorderRadius,
+                              const Divider(),
+                              TextFormField(
+                                controller: _swiftController,
+                                decoration: InputDecoration(
+                                  labelText: t.account.form.swift,
+                                  border: appInputBorder.copyWith(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: inputBorderRadius,
+                                      bottomRight: inputBorderRadius,
+                                    ),
                                   ),
                                 ),
+                                textInputAction: TextInputAction.next,
                               ),
-                              textInputAction: TextInputAction.next,
-                            ),
-                          ],
-                        ),
-
-                        TextFormField(
-                          minLines: 2,
-                          maxLines: 10,
-                          controller: _textController,
-                          decoration: InputDecoration(
-                            labelText: t.account.form.notes,
-                            hintText: t.account.form.notes_placeholder,
-                            alignLabelWithHint: true,
+                            ],
                           ),
-                          textInputAction: TextInputAction.next,
-                        ),
 
-                        const SizedBox(height: 22),
-                      ],
+                          TextFormField(
+                            minLines: 2,
+                            maxLines: 10,
+                            controller: _textController,
+                            decoration: InputDecoration(
+                              labelText: t.account.form.notes,
+                              hintText: t.account.form.notes_placeholder,
+                              alignLabelWithHint: true,
+                            ),
+                            textInputAction: TextInputAction.next,
+                          ),
+
+                          const SizedBox(height: 22),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  );
+
+                  // Remove trailing spacing if present
+                  if (formChildren.isNotEmpty &&
+                      formChildren.last is SizedBox) {
+                    formChildren.removeLast();
+                  }
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: formChildren,
+                  );
+                },
               ),
             ),
           );
