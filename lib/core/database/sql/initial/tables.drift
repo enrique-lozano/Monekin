@@ -16,7 +16,9 @@ import './../../../models/debt/debt_direction.enum.dart';
 import './../../services/user-setting/user_setting_service.dart';
 import './../../services/app-data/app_data_service.dart';
 import './../../utils/database_enum.dart';
-import './../../utils/list_converters.dart';
+import './../../utils/converters/list_converters.dart';
+import './../../utils/converters/custom_enum_converter.dart';
+import './../../utils/converters/date_converters.dart';
 
 CREATE TABLE IF NOT EXISTS currencies (
     -- ISO 4217 currency code. Identifies a currency uniquely ([see more](https://en.wikipedia.org/wiki/ISO_4217#List_of_ISO_4217_currency_codes))
@@ -43,7 +45,7 @@ CREATE TABLE IF NOT EXISTS currencies (
 
 CREATE TABLE IF NOT EXISTS exchangeRates (
     id TEXT NOT NULL PRIMARY KEY,
-    date DATETIME NOT NULL,
+    date TEXT NOT NULL MAPPED BY `const DateTypeConverter()`,
     currencyCode TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     exchangeRate REAL NOT NULL
 ) AS ExchangeRateInDB;
@@ -341,7 +343,7 @@ CREATE TABLE IF NOT EXISTS valuations (
     assetId TEXT REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
 
     -- Date of this valuation snapshot
-    date DATETIME NOT NULL,
+    date TEXT NOT NULL MAPPED BY `const DateTypeConverter()`,
 
     -- Value at the time of this snapshot, in the currency of the account or asset
     value REAL NOT NULL,

@@ -2212,15 +2212,15 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     $customConstraints:
         'REFERENCES assets(id)ON UPDATE CASCADE ON DELETE CASCADE',
   );
-  static const VerificationMeta _dateMeta = const VerificationMeta('date');
-  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-    'date',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL',
-  );
+  late final GeneratedColumnWithTypeConverter<DateTime, String> date =
+      GeneratedColumn<String>(
+        'date',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+        $customConstraints: 'NOT NULL',
+      ).withConverter<DateTime>(Valuations.$converterdate);
   static const VerificationMeta _valueMeta = const VerificationMeta('value');
   late final GeneratedColumn<double> value = GeneratedColumn<double>(
     'value',
@@ -2261,14 +2261,6 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
         assetId.isAcceptableOrUnknown(data['assetId']!, _assetIdMeta),
       );
     }
-    if (data.containsKey('date')) {
-      context.handle(
-        _dateMeta,
-        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_dateMeta);
-    }
     if (data.containsKey('value')) {
       context.handle(
         _valueMeta,
@@ -2298,10 +2290,12 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}assetId'],
       ),
-      date: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}date'],
-      )!,
+      date: Valuations.$converterdate.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}date'],
+        )!,
+      ),
       value: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}value'],
@@ -2314,6 +2308,8 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     return Valuations(attachedDatabase, alias);
   }
 
+  static TypeConverter<DateTime, String> $converterdate =
+      const DateTypeConverter();
   @override
   List<String> get customConstraints => const [
     'CHECK((accountId IS NULL)!=(assetId IS NULL))',
@@ -2353,7 +2349,9 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
     if (!nullToAbsent || assetId != null) {
       map['assetId'] = Variable<String>(assetId);
     }
-    map['date'] = Variable<DateTime>(date);
+    {
+      map['date'] = Variable<String>(Valuations.$converterdate.toSql(date));
+    }
     map['value'] = Variable<double>(value);
     return map;
   }
@@ -2474,7 +2472,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     Expression<String>? id,
     Expression<String>? accountId,
     Expression<String>? assetId,
-    Expression<DateTime>? date,
+    Expression<String>? date,
     Expression<double>? value,
     Expression<int>? rowid,
   }) {
@@ -2519,7 +2517,9 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
       map['assetId'] = Variable<String>(assetId.value);
     }
     if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
+      map['date'] = Variable<String>(
+        Valuations.$converterdate.toSql(date.value),
+      );
     }
     if (value.present) {
       map['value'] = Variable<double>(value.value);
@@ -4252,15 +4252,15 @@ class ExchangeRates extends Table
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL PRIMARY KEY',
   );
-  static const VerificationMeta _dateMeta = const VerificationMeta('date');
-  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
-    'date',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: true,
-    $customConstraints: 'NOT NULL',
-  );
+  late final GeneratedColumnWithTypeConverter<DateTime, String> date =
+      GeneratedColumn<String>(
+        'date',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+        $customConstraints: 'NOT NULL',
+      ).withConverter<DateTime>(ExchangeRates.$converterdate);
   static const VerificationMeta _currencyCodeMeta = const VerificationMeta(
     'currencyCode',
   );
@@ -4303,14 +4303,6 @@ class ExchangeRates extends Table
     } else if (isInserting) {
       context.missing(_idMeta);
     }
-    if (data.containsKey('date')) {
-      context.handle(
-        _dateMeta,
-        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
-      );
-    } else if (isInserting) {
-      context.missing(_dateMeta);
-    }
     if (data.containsKey('currencyCode')) {
       context.handle(
         _currencyCodeMeta,
@@ -4346,10 +4338,12 @@ class ExchangeRates extends Table
         DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
-      date: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}date'],
-      )!,
+      date: ExchangeRates.$converterdate.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}date'],
+        )!,
+      ),
       currencyCode: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}currencyCode'],
@@ -4366,6 +4360,8 @@ class ExchangeRates extends Table
     return ExchangeRates(attachedDatabase, alias);
   }
 
+  static TypeConverter<DateTime, String> $converterdate =
+      const DateTypeConverter();
   @override
   bool get dontWriteConstraints => true;
 }
@@ -4386,7 +4382,9 @@ class ExchangeRateInDB extends DataClass
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
-    map['date'] = Variable<DateTime>(date);
+    {
+      map['date'] = Variable<String>(ExchangeRates.$converterdate.toSql(date));
+    }
     map['currencyCode'] = Variable<String>(currencyCode);
     map['exchangeRate'] = Variable<double>(exchangeRate);
     return map;
@@ -4496,7 +4494,7 @@ class ExchangeRatesCompanion extends UpdateCompanion<ExchangeRateInDB> {
        exchangeRate = Value(exchangeRate);
   static Insertable<ExchangeRateInDB> custom({
     Expression<String>? id,
-    Expression<DateTime>? date,
+    Expression<String>? date,
     Expression<String>? currencyCode,
     Expression<double>? exchangeRate,
     Expression<int>? rowid,
@@ -4533,7 +4531,9 @@ class ExchangeRatesCompanion extends UpdateCompanion<ExchangeRateInDB> {
       map['id'] = Variable<String>(id.value);
     }
     if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
+      map['date'] = Variable<String>(
+        ExchangeRates.$converterdate.toSql(date.value),
+      );
     }
     if (currencyCode.present) {
       map['currencyCode'] = Variable<String>(currencyCode.value);
@@ -8221,7 +8221,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     ).asyncMap(
       (QueryRow row) async => ExchangeRate(
         id: row.read<String>('id'),
-        date: row.read<DateTime>('date'),
+        date: ExchangeRates.$converterdate.fromSql(row.read<String>('date')),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         exchangeRate: row.read<double>('exchangeRate'),
       ),
@@ -8236,7 +8236,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     ).asyncMap(
       (QueryRow row) async => ExchangeRate(
         id: row.read<String>('id'),
-        date: row.read<DateTime>('date'),
+        date: ExchangeRates.$converterdate.fromSql(row.read<String>('date')),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         exchangeRate: row.read<double>('exchangeRate'),
       ),
@@ -10789,10 +10789,11 @@ class $ValuationsFilterComposer extends Composer<_$AppDB, Valuations> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get date =>
+      $composableBuilder(
+        column: $table.date,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<double> get value => $composableBuilder(
     column: $table.value,
@@ -10859,7 +10860,7 @@ class $ValuationsOrderingComposer extends Composer<_$AppDB, Valuations> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get date => $composableBuilder(
+  ColumnOrderings<String> get date => $composableBuilder(
     column: $table.date,
     builder: (column) => ColumnOrderings(column),
   );
@@ -10927,7 +10928,7 @@ class $ValuationsAnnotationComposer extends Composer<_$AppDB, Valuations> {
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get date =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
 
   GeneratedColumn<double> get value =>
@@ -12504,10 +12505,11 @@ class $ExchangeRatesFilterComposer extends Composer<_$AppDB, ExchangeRates> {
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<DateTime> get date => $composableBuilder(
-    column: $table.date,
-    builder: (column) => ColumnFilters(column),
-  );
+  ColumnWithTypeConverterFilters<DateTime, DateTime, String> get date =>
+      $composableBuilder(
+        column: $table.date,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
 
   ColumnFilters<double> get exchangeRate => $composableBuilder(
     column: $table.exchangeRate,
@@ -12551,7 +12553,7 @@ class $ExchangeRatesOrderingComposer extends Composer<_$AppDB, ExchangeRates> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<DateTime> get date => $composableBuilder(
+  ColumnOrderings<String> get date => $composableBuilder(
     column: $table.date,
     builder: (column) => ColumnOrderings(column),
   );
@@ -12597,7 +12599,7 @@ class $ExchangeRatesAnnotationComposer
   GeneratedColumn<String> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
-  GeneratedColumn<DateTime> get date =>
+  GeneratedColumnWithTypeConverter<DateTime, String> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
 
   GeneratedColumn<double> get exchangeRate => $composableBuilder(
