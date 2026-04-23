@@ -17,6 +17,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -113,8 +114,8 @@ class DebtDetailsPage extends StatelessWidget {
                   listPadding: EdgeInsets.only(
                     bottom: 64,
                   ).withSafeBottom(context),
-                  onEmptyList: Center(
-                    child: Text(t.debts.details.no_transactions),
+                  onEmptyList: NoResults(
+                    description: t.debts.details.no_transactions,
                   ),
                   isScrollable: true,
                   showGroupDivider: false,
@@ -159,8 +160,7 @@ class DebtDetailsPage extends StatelessWidget {
         final remainingAmount = data.remaining;
         final totalAmount = data.total;
         final collectedAmount = totalAmount - remainingAmount;
-        final progress =
-            totalAmount <= 0 ? 0.0 : collectedAmount / totalAmount;
+        final progress = totalAmount <= 0 ? 0.0 : collectedAmount / totalAmount;
 
         final color = debt.type.color(context);
         final int? daysLeft = debt.endDate?.difference(DateTime.now()).inDays;

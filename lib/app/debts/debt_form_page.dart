@@ -272,11 +272,15 @@ class _DebtFormPageState extends State<DebtFormPage> {
           AnimatedExpanded(
             expand: _radioValue == 1,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 6),
-                Text(
-                  t.debts.form.from_amount.description,
-                  style: Theme.of(context).textTheme.bodySmall,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    t.debts.form.from_amount.description,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 ..._buildAmountAndCurrencyFields(context),
