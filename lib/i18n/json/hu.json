@@ -808,7 +808,6 @@
       "due_today": "Ma esedékes",
       "days_ago": "{{x}} napja",
       "overdue_by": "{{x}} napot késik",
-
       "per_day": "/ nap",
       "no_transactions": "Nem található tranzakció ehhez az adóssághoz"
     },
@@ -950,6 +949,13 @@
         "warn": "Régióváltáskor az alkalmazás frissülni fog",
         "first_day_of_week": "A hét első napja"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Alkalmazásstruktúrák",
+      "tags": "Határozzon meg címkéket a tranzakciók jobb megszervezéséhez",
+      "categories": "Kategóriák és alkategóriák szervezése",
+      "accounts": "Kezelje és szerkessze fiókjait",
+      "filters": "Konfiguráljon globális szűrőket, amelyeket tranzakciókhoz és statisztikákhoz használhat"
     },
     "SECURITY": {
       "title": "Biztonság",

@@ -808,7 +808,6 @@
       "due_today": "Due today",
       "days_ago": "{{x}} giorni fa",
       "overdue_by": "In ritardo di {{x}} giorni",
-
       "per_day": "/ giorno",
       "no_transactions": "Nessuna transazione trovata per questo debito"
     },
@@ -950,6 +949,13 @@
         "warn": "Quando cambi regione l'app si aggiornerà",
         "first_day_of_week": "Primo giorno della settimana"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Strutture dell'app",
+      "tags": "Definisci i tag per ottenere una migliore organizzazione delle tue transazioni",
+      "categories": "Organizzazione di categorie e sottocategorie",
+      "accounts": "Gestisci e modifica i tuoi account",
+      "filters": "Configura filtri globali che puoi utilizzare per transazioni e statistiche"
     },
     "SECURITY": {
       "title": "Sicurezza",

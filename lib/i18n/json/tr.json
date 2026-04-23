@@ -808,7 +808,6 @@
       "due_today": "Bugün vadesi doluyor",
       "days_ago": "{{x}} gün önce",
       "overdue_by": "{{x}} gün gecikti",
-
       "per_day": "/ gün",
       "no_transactions": "Bu borç için işlem bulunamadı"
     },
@@ -950,6 +949,13 @@
         "warn": "Bölge değiştirildiğinde uygulama güncellenecektir",
         "first_day_of_week": "Haftanın ilk günü"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Uygulama yapıları",
+      "tags": "İşlemlerinizi daha iyi organize etmek için etiketleri tanımlayın",
+      "categories": "Kategoriler ve alt kategorilerin organizasyonu",
+      "accounts": "Hesaplarınızı yönetin ve düzenleyin",
+      "filters": "İşlemler ve istatistikler için kullanabileceğiniz genel filtreleri yapılandırın"
     },
     "SECURITY": {
       "title": "Güvenlik",

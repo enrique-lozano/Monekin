@@ -948,6 +948,13 @@
         "first_day_of_week": "First day of week"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "App structures",
+      "tags": "Define tags to achieve better organization of your transactions",
+      "categories": "Categories and subcategories organization",
+      "accounts": "Manage and edit your accounts",
+      "filters": "Configure global filters that you can use for transactions and statistics"
+    },
     "SECURITY": {
       "title": "Security",
       "private_mode_at_launch": "Private mode at launch",
@@ -959,7 +966,7 @@
     },
     "TRANSACTIONS": {
       "menu_title": "Transactions",
-      "menu_descr": "Configure the behavior of your transactions",
+      "menu_descr": "Configure the behavior and appearance of all transaction-related features",
       "title": "Transactions Settings",
       "STYLE": {
         "title": "Transaction style",
@@ -999,7 +1006,7 @@
     },
     "APPEARANCE": {
       "menu_title": "Theme & Style",
-      "menu_descr": "Theme selection, colors and other things related to the app appearance",
+      "menu_descr": "Color schemes, fonts and other global visual settings",
       "theme_and_colors": "Theme and colors",
       "THEME": {
         "title": "Theme",
