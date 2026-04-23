@@ -120,7 +120,7 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
               ),
               initialDate: _date,
               lastDate: DateTime.now(),
-              dateFormat: DateFormat.yMMMd().add_jm(),
+              dateFormat: DateFormat.yMMMMd(),
               validator: (e) =>
                   e == null ? t.general.validations.required : null,
               onDateSelected: (DateTime value) {
