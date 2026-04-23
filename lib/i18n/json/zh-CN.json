@@ -512,6 +512,8 @@
     },
     "INVESTMENT": {
       "details-header": "投资",
+      "correct_balance_title": "更正已投资本金",
+      "correct_balance_description": "此账户使用手动估值来跟踪投资组合价值。此操作仅更新已投资本金（初始值），不会更改已记录的估值或投资统计信息。",
       "invested-capital": "已投资本金",
       "portfolio-value": "投资组合价值",
       "profit": "收益",

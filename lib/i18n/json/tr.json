@@ -512,6 +512,8 @@
     },
     "INVESTMENT": {
       "details-header": "Yatırım",
+      "correct_balance_title": "Yatırılan sermayeyi düzelt",
+      "correct_balance_description": "Bu hesap, portföy değerini manuel değerlemelerle takip eder. Bu işlem yalnızca yatırılan sermayeyi (başlangıç değeri) günceller ve kaydedilmiş değerlemeleri veya yatırım istatistiklerini değiştirmez.",
       "invested-capital": "Yatırılan sermaye",
       "portfolio-value": "Portföy değeri",
       "profit": "Kâr",

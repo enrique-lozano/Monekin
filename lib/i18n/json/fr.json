@@ -512,6 +512,8 @@
     },
     "INVESTMENT": {
       "details-header": "Investissement",
+      "correct_balance_title": "Corriger le capital investi",
+      "correct_balance_description": "Ce compte utilise des évaluations manuelles pour la valeur du portefeuille. Cette action met à jour uniquement le capital investi (valeur initiale) et ne modifiera pas les évaluations enregistrées ni les statistiques d'investissement.",
       "invested-capital": "Capital investi",
       "portfolio-value": "Valeur du portefeuille",
       "profit": "Profit",

@@ -512,6 +512,8 @@
     },
     "INVESTMENT": {
       "details-header": "Befektetés",
+      "correct_balance_title": "Befektetett tőke korrigálása",
+      "correct_balance_description": "Ez a számla kézi értékeléseket használ a portfólió értékének nyomon követésére. Ez a művelet csak a befektetett tőkét (kezdőérték) frissíti, és nem módosítja a rögzített értékeléseket vagy a befektetési statisztikákat.",
       "invested-capital": "Befektetett tőke",
       "portfolio-value": "Portfólió értéke",
       "profit": "Nyereség",

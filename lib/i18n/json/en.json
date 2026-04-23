@@ -512,6 +512,8 @@
     },
     "INVESTMENT": {
       "details-header": "Investment",
+      "correct_balance_title": "Correct invested capital",
+      "correct_balance_description": "This account uses manual valuations for portfolio value. This action only updates the invested capital (initial value) and will not change recorded valuations or investment statistics.",
       "invested-capital": "Invested capital",
       "portfolio-value": "Portfolio value",
       "profit": "Profit",

@@ -515,6 +515,8 @@
     },
     "INVESTMENT": {
       "details-header": "Inversión",
+      "correct_balance_title": "Corregir capital invertido",
+      "correct_balance_description": "Esta cuenta utiliza valoraciones manuales para el valor de la cartera. Esta acción solo actualiza el capital invertido (valor inicial) y no cambiará las valoraciones registradas ni las estadísticas de inversión.",
       "invested-capital": "Capital invertido",
       "portfolio-value": "Valor de la cartera",
       "profit": "Beneficio",

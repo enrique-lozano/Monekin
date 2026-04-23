@@ -512,6 +512,8 @@
     },
     "INVESTMENT": {
       "details-header": "Investment",
+      "correct_balance_title": "Investiertes Kapital korrigieren",
+      "correct_balance_description": "Dieses Konto verwendet manuelle Bewertungen für den Portfoliowert. Diese Aktion aktualisiert nur das investierte Kapital (Anfangswert) und ändert nicht die aufgezeichneten Bewertungen oder Investitionsstatistiken.",
       "invested-capital": "Investiertes Kapital",
       "portfolio-value": "Portfoliowert",
       "profit": "Gewinn",
