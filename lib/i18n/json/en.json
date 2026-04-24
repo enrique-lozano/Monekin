@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "How much money do I have in foreign currency?",
     "balance-evolution": "Balance trend",
     "balance-evolution-subtitle": "Do I have more money than before?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Compared to the previous period",
     "cash-flow": "Cash flow",
     "cash-flow-subtitle": "Am I spending less than I earn?",
@@ -850,6 +854,53 @@
         "title": "Create debt",
         "success": "Debt created successfully"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Assets",
+    "empty_description": "You haven't created any assets yet. Assets like real estate, vehicles, or collectibles can be tracked with their valuations",
+    "create": "Add asset",
+    "create_success": "Asset created successfully",
+    "edit_success": "Asset edited successfully",
+    "delete": "Delete asset",
+    "delete_success": "Asset deleted successfully",
+    "delete_confirmation": "This action cannot be undone. All valuations for this asset will also be deleted.",
+    "profit": "Profit",
+    "profit_percent": "Return %",
+    "total_value": "Assets total value",
+    "FORM": {
+      "name": "Asset name",
+      "name_required": "Please enter an asset name",
+      "description": "Description",
+      "initial_value": "Initial value",
+      "initial_value_required": "Please enter an initial value",
+      "initial_value_invalid": "Please enter a valid number",
+      "currency": "Currency",
+      "select_currency": "Please select a currency",
+      "creation_date": "Acquisition date",
+      "edit": "Edit asset",
+      "create": "Create asset",
+      "already_exists": "An asset with this name already exists. You may want to edit it"
+    },
+    "VALUATION": {
+      "history": "Valuation history",
+      "no_valuations": "No valuations recorded yet. Start by adding the first valuation",
+      "add_valuation": "Add valuation",
+      "edit_valuation": "Edit valuation",
+      "value": "Value",
+      "value_required": "Please enter a value",
+      "value_invalid": "Please enter a valid number",
+      "update_value_success": "Valuation added successfully",
+      "edit_valuation_success": "Valuation updated successfully",
+      "delete_valuation_success": "Valuation deleted successfully",
+      "delete_all_valuations": "Delete all valuations",
+      "delete_all_valuations_success": "All valuations deleted successfully"
+    },
+    "SORT": {
+      "name_asc": "Name (A-Z)",
+      "name_desc": "Name (Z-A)",
+      "value_asc": "Value (lowest first)",
+      "value_desc": "Value (highest first)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

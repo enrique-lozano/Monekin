@@ -123,7 +123,16 @@ class InvestmentService {
     return db.getValuationsForAsset(assetId: assetId).watch();
   }
 
-  Stream<ValuationInDB?> getLatestValuationForAsset(String assetId) {
+  Stream<ValuationInDB?> getLatestValuationForAsset(
+    String assetId, {
+    DateTime? date,
+  }) {
+    if (date != null) {
+      return db
+          .getLatestValuationForAssetAtDate(assetId: assetId, date: date)
+          .watchSingleOrNull();
+    }
+
     return db.getLatestValuationForAsset(assetId: assetId).watchSingleOrNull();
   }
 
@@ -169,6 +178,10 @@ class InvestmentService {
     DateTime? date,
     bool convertToPreferredCurrency = false,
   }) {
+    if (date != null && date.isBefore(account.date)) {
+      return Stream.value(0.0);
+    }
+
     return getLatestValuationForAccount(account.id, date: date)
         .switchMap((valuation) {
           if (valuation != null) {
@@ -217,13 +230,80 @@ class InvestmentService {
   // Asset value
   // ---------------------------------------------------------------------------
 
-  /// Returns the current value for an asset.
+  /// Returns the current value for an asset
   ///
   /// Uses the latest valuation if one exists; otherwise returns the asset's
   /// [initialValue].
-  Stream<double> getAssetValue(AssetInDB asset) {
-    return getLatestValuationForAsset(
-      asset.id,
-    ).map((valuation) => valuation?.value ?? asset.initialValue);
+  Stream<double> getCurrentAssetValue(
+    AssetInDB asset, {
+    convertToPreferredCurrency = false,
+  }) {
+    return getAssetValueAtDate(
+      asset,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+  }
+
+  Stream<double> getAssetValueAtDate(
+    AssetInDB asset, {
+    DateTime? date,
+    convertToPreferredCurrency = false,
+  }) {
+    if (date != null && date.isBefore(asset.creationDate)) {
+      return Stream.value(0.0);
+    }
+
+    return getLatestValuationForAsset(asset.id, date: date).switchMap((
+      valuation,
+    ) {
+      final value = valuation?.value ?? asset.initialValue;
+
+      if (!convertToPreferredCurrency) return Stream.value(value);
+
+      return ExchangeRateService.instance
+          .calculateExchangeRateToPreferredCurrency(
+            amount: value,
+            fromCurrency: asset.currencyId,
+            date: date,
+          );
+    });
+  }
+
+  /// Returns the total value of all assets at a specific date, converted to the user preferred currency.
+  Stream<double> getTotalAssetsValueAtDate({DateTime? date}) {
+    return getAssets().switchMap((assets) {
+      if (assets.isEmpty) {
+        return Stream.value(0.0);
+      }
+
+      final streams = assets
+          .map(
+            (asset) => getAssetValueAtDate(
+              asset,
+              date: date,
+              convertToPreferredCurrency: true,
+            ),
+          )
+          .toList();
+
+      return CombineLatestStream.list(
+        streams,
+      ).map((values) => values.fold(0.0, (sum, value) => sum + value));
+    });
+  }
+
+  /// Returns the profit (in the asset currency) and the profit percentage
+  /// for an asset.
+  ///
+  /// Profit = currentValue - initialValue
+  /// Percent = profit / initialValue  (0 when initialValue == 0)
+  Stream<({double value, double percent})> getAssetProfit(Asset asset) {
+    return getCurrentAssetValue(asset).map((currentValue) {
+      final profit = currentValue - asset.initialValue;
+      final percent = asset.initialValue != 0
+          ? profit / asset.initialValue
+          : 0.0;
+      return (value: profit, percent: percent);
+    });
   }
 }

@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Скільки я маю грошей в іноземній валюті?",
     "balance-evolution": "Тенденція балансу",
     "balance-evolution-subtitle": "У мене більше грошей, ніж раніше?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Порівняно з попереднім періодом",
     "cash-flow": "Грошовий потік",
     "cash-flow-subtitle": "Я витрачаю менше, ніж заробляю?",
@@ -850,6 +854,53 @@
         "title": "Створити борг",
         "success": "Борг створено успішно"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Активи",
+    "empty_description": "Ви ще не створили жодного об’єкта. Такі активи, як нерухомість, транспортні засоби або предмети колекціонування, можна відстежувати за допомогою їх оцінки",
+    "create": "Додати актив",
+    "create_success": "Ресурс створено успішно",
+    "edit_success": "Ресурс успішно відредаговано",
+    "delete": "Видалити ресурс",
+    "delete_success": "Ресурс успішно видалено",
+    "delete_confirmation": "Цю дію не можна скасувати. Усі оцінки цього активу також буде видалено.",
+    "profit": "Прибуток",
+    "profit_percent": "Повернення %",
+    "total_value": "Загальна вартість активів",
+    "FORM": {
+      "name": "Назва активу",
+      "name_required": "Введіть назву активу",
+      "description": "опис",
+      "initial_value": "Початкове значення",
+      "initial_value_required": "Будь ласка, введіть початкове значення",
+      "initial_value_invalid": "Введіть дійсний номер",
+      "currency": "Валюта",
+      "select_currency": "Виберіть валюту",
+      "creation_date": "Дата створення",
+      "edit": "Редагувати ресурс",
+      "create": "Створити актив",
+      "already_exists": "Об’єкт із такою назвою вже існує. Ви можете відредагувати його"
+    },
+    "VALUATION": {
+      "history": "Історія оцінки",
+      "no_valuations": "Оцінок ще не зареєстровано. Почніть із додавання першої оцінки",
+      "add_valuation": "Додайте оцінку",
+      "edit_valuation": "Редагувати оцінку",
+      "value": "Значення",
+      "value_required": "Будь ласка, введіть значення",
+      "value_invalid": "Введіть дійсний номер",
+      "update_value_success": "Оцінку успішно додано",
+      "edit_valuation_success": "Оцінку успішно оновлено",
+      "delete_valuation_success": "Оцінку успішно видалено",
+      "delete_all_valuations": "Видалити всі оцінки",
+      "delete_all_valuations_success": "Усі оцінки успішно видалено"
+    },
+    "SORT": {
+      "name_asc": "Ім'я (А-Я)",
+      "name_desc": "Ім'я (Я-А)",
+      "value_asc": "Значення (спочатку найменше)",
+      "value_desc": "Значення (спочатку найвище)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

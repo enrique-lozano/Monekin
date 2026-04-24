@@ -264,6 +264,10 @@
     "balance-by-currency-subtitle": "¿Cuanto dinero tengo en moneda extranjera?",
     "balance-evolution": "Tendencia de saldo",
     "balance-evolution-subtitle": "¿Tengo más dinero que antes?",
+    "net-worth": "Patrimonio",
+    "net-worth-subtitle": "La diferencia entre lo que tienes y lo que debes.",
+    "net-worth-composition": "Composición del patrimonio",
+    "net-worth-composition-subtitle": "Reparto entre cuentas, inversiones y deudas.",
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
     "cash-flow-subtitle": "¿Estoy gastando menos de lo que gano?",
@@ -853,6 +857,53 @@
         "title": "Crear deuda",
         "success": "Deuda creada exitosamente"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Activos",
+    "empty_description": "Aún no has creado ningún activo. Se puede realizar un seguimiento de activos como bienes raíces, vehículos o objetos de colección con sus valoraciones.",
+    "create": "Agregar activo",
+    "create_success": "Activo creado exitosamente",
+    "edit_success": "Recurso editado correctamente",
+    "delete": "Eliminar activo",
+    "delete_success": "Activo eliminado correctamente",
+    "delete_confirmation": "Esta acción no se puede deshacer. También se eliminarán todas las valoraciones de este activo.",
+    "profit": "Ganancia",
+    "profit_percent": "Devolver %",
+    "total_value": "Valor total de los activos",
+    "FORM": {
+      "name": "Nombre del activo",
+      "name_required": "Por favor ingrese un nombre de activo",
+      "description": "Descripción",
+      "initial_value": "Valor inicial",
+      "initial_value_required": "Por favor ingrese un valor inicial",
+      "initial_value_invalid": "Por favor ingresa un número válido",
+      "currency": "Divisa",
+      "select_currency": "Por favor seleccione una moneda",
+      "creation_date": "Fecha de adquisición",
+      "edit": "Editar activo",
+      "create": "Crear activo",
+      "already_exists": "Ya existe un activo con este nombre. Quizás quieras editarlo"
+    },
+    "VALUATION": {
+      "history": "Historial de valoración",
+      "no_valuations": "Aún no se han registrado valoraciones. Comience agregando la primera valoración.",
+      "add_valuation": "Añadir valoración",
+      "edit_valuation": "Editar valoración",
+      "value": "Valor",
+      "value_required": "Por favor introduce un valor",
+      "value_invalid": "Por favor ingresa un número válido",
+      "update_value_success": "Valoración agregada exitosamente",
+      "edit_valuation_success": "Valoración actualizada con éxito",
+      "delete_valuation_success": "Valoración eliminada con éxito",
+      "delete_all_valuations": "Eliminar todas las valoraciones",
+      "delete_all_valuations_success": "Todas las valoraciones se eliminaron correctamente"
+    },
+    "SORT": {
+      "name_asc": "Nombre (A-Z)",
+      "name_desc": "Nombre (Z-A)",
+      "value_asc": "Valor (el más bajo primero)",
+      "value_desc": "Valor (el más alto primero)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

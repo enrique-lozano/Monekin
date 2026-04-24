@@ -7,6 +7,9 @@ from googletrans import Translator
 FILE_PATH = "./_missing_translations.json"
 translator = Translator()
 
+# Limit concurrency to avoid rate limiting / overload
+SEM = asyncio.Semaphore(20)
+
 
 def load_json(file_path: str) -> Dict[str, Any]:
     with open(file_path, "r", encoding="utf-8") as file:
@@ -19,37 +22,51 @@ def save_json(file_path: str, data: Dict[str, Any]) -> None:
 
 
 async def translate_text(text: str, dest_language: str) -> str:
-    translation = await translator.translate(text, dest=dest_language)
-    return translation.text
+    async with SEM:
+        translation = await translator.translate(text, dest=dest_language)
+        return translation.text
+
+
+async def translate_recursive(obj: Any, lang: str) -> Any:
+    if isinstance(obj, dict):
+        keys = list(obj.keys())
+        values = await asyncio.gather(
+            *(translate_recursive(obj[k], lang) for k in keys)
+        )
+        return dict(zip(keys, values))
+
+    elif isinstance(obj, list):
+        return await asyncio.gather(*(translate_recursive(item, lang) for item in obj))
+
+    elif isinstance(obj, str):
+        return await translate_text(obj, lang)
+
+    else:
+        return obj
 
 
 async def translate_lang_json(data: Dict[str, Any], lang: str) -> None:
-    if len(data) == 0:
+    if not data:
         return
 
     print(f"- Translating '{lang}'")
+    translated = await translate_recursive(data, lang)
 
-    async def translate_recursive(obj: Any) -> Any:
-        if isinstance(obj, dict):
-            for key, value in obj.items():
-                obj[key] = await translate_recursive(value)
-            return obj
-        elif isinstance(obj, list):
-            return [await translate_recursive(item) for item in obj]
-        elif isinstance(obj, str):
-            return await translate_text(obj, lang)
-        else:
-            return obj
-
-    await translate_recursive(data)
+    # mutate original dict to keep reference
+    data.clear()
+    data.update(translated)
 
 
 async def translate_data(data: Dict[str, Any]) -> None:
+    tasks = []
+
     for lang, translations in data.items():
         if lang == "@@info":
             continue
 
-        await translate_lang_json(translations, lang)
+        tasks.append(translate_lang_json(translations, lang))
+
+    await asyncio.gather(*tasks)
 
     save_json(FILE_PATH, data)
     print("\n✅ Translation completed and file updated.\n")

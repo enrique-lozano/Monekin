@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Mennyi pénzem van devizában?",
     "balance-evolution": "Egyenleg alakulása",
     "balance-evolution-subtitle": "Több pénzem van, mint korábban?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Az előző időszakhoz képest",
     "cash-flow": "Pénzforgalom",
     "cash-flow-subtitle": "Kevesebbet költök, mint amennyit megkeresek?",
@@ -850,6 +854,53 @@
         "title": "Adósság létrehozása",
         "success": "Az adósság sikeresen létrehozva"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Eszközök",
+    "empty_description": "Még nem hozott létre tartalmat. Az olyan vagyontárgyak, mint az ingatlanok, járművek vagy gyűjtemények nyomon követhetők értékelésükkel",
+    "create": "Eszköz hozzáadása",
+    "create_success": "Az elem sikeresen létrehozva",
+    "edit_success": "A tartalom sikeresen szerkesztve",
+    "delete": "Eszköz törlése",
+    "delete_success": "Az elem sikeresen törölve",
+    "delete_confirmation": "Ez a művelet nem vonható vissza. Az eszköz összes értékelése szintén törlődik.",
+    "profit": "Nyereség",
+    "profit_percent": "hozam %",
+    "total_value": "Az eszközök összértéke",
+    "FORM": {
+      "name": "Eszköz neve",
+      "name_required": "Kérjük, adjon meg egy elemnevet",
+      "description": "Leírás",
+      "initial_value": "Kezdeti érték",
+      "initial_value_required": "Adjon meg egy kezdeti értéket",
+      "initial_value_invalid": "Kérjük, adjon meg egy érvényes számot",
+      "currency": "Valuta",
+      "select_currency": "Kérjük, válasszon egy pénznemet",
+      "creation_date": "Létrehozás dátuma",
+      "edit": "Eszköz szerkesztése",
+      "create": "Eszköz létrehozása",
+      "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni"
+    },
+    "VALUATION": {
+      "history": "Értékelés története",
+      "no_valuations": "Még nem rögzítettek értékelést. Kezdje az első értékelés hozzáadásával",
+      "add_valuation": "Értékelés hozzáadása",
+      "edit_valuation": "Értékelés szerkesztése",
+      "value": "Érték",
+      "value_required": "Adjon meg egy értéket",
+      "value_invalid": "Kérjük, adjon meg egy érvényes számot",
+      "update_value_success": "Az értékelés sikeresen hozzáadva",
+      "edit_valuation_success": "Az értékelés sikeresen frissítve",
+      "delete_valuation_success": "Az értékelés sikeresen törölve",
+      "delete_all_valuations": "Törölje az összes értékelést",
+      "delete_all_valuations_success": "Az összes értékelés sikeresen törölve"
+    },
+    "SORT": {
+      "name_asc": "Név (A-Z)",
+      "name_desc": "Név (Z-A)",
+      "value_asc": "Érték (a legalacsonyabb először)",
+      "value_desc": "Érték (a legmagasabb először)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

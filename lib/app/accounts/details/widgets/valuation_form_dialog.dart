@@ -25,14 +25,23 @@ Future<ValuationInDB?> showValuationFormDialog(
 class ValuationFormDialog extends StatefulWidget {
   const ValuationFormDialog({
     super.key,
-    required this.accountId,
+    this.accountId,
+    this.assetId,
     this.currencySymbol,
     this.valuationToEdit,
-  });
+    required this.firstDate,
+  }) : assert(
+         (accountId != null && assetId == null) ||
+             (accountId == null && assetId != null),
+         'You must specify either an account or an asset, not both.',
+       );
 
-  final String accountId;
+  final String? accountId;
+  final String? assetId;
   final String? currencySymbol;
   final ValuationInDB? valuationToEdit;
+
+  final DateTime firstDate;
 
   @override
   State<ValuationFormDialog> createState() => _ValuationFormDialogState();
@@ -72,7 +81,7 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
     final result = ValuationInDB(
       id: widget.valuationToEdit?.id ?? generateUUID(),
       accountId: widget.accountId,
-      assetId: null,
+      assetId: widget.assetId,
       date: _date,
       value: value,
     );
@@ -119,6 +128,7 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
                 labelText: '${t.general.time.date} *',
               ),
               initialDate: _date,
+              firstDate: widget.firstDate,
               lastDate: DateTime.now(),
               dateFormat: DateFormat.yMMMMd(),
               validator: (e) =>

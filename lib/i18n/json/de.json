@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Wie viel Geld habe ich in Fremdwährung?",
     "balance-evolution": "Trend",
     "balance-evolution-subtitle": "Habe ich mehr Geld als vorher?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Im Vergleich zur Vorperiode",
     "cash-flow": "Cashflow",
     "cash-flow-subtitle": "Gebe ich weniger aus, als ich verdiene?",
@@ -850,6 +854,53 @@
         "title": "Schulden machen",
         "success": "Schulden erfolgreich erstellt"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Vermögenswerte",
+    "empty_description": "Sie haben noch keine Assets erstellt. Vermögenswerte wie Immobilien, Fahrzeuge oder Sammlerstücke können mit ihren Bewertungen verfolgt werden",
+    "create": "Asset hinzufügen",
+    "create_success": "Asset erfolgreich erstellt",
+    "edit_success": "Asset erfolgreich bearbeitet",
+    "delete": "Asset löschen",
+    "delete_success": "Asset erfolgreich gelöscht",
+    "delete_confirmation": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Bewertungen für diesen Vermögenswert werden ebenfalls gelöscht.",
+    "profit": "Profitieren",
+    "profit_percent": "Zurückkehren %",
+    "total_value": "Gesamtwert der Vermögenswerte",
+    "FORM": {
+      "name": "Asset-Name",
+      "name_required": "Bitte geben Sie einen Asset-Namen ein",
+      "description": "Beschreibung",
+      "initial_value": "Anfangswert",
+      "initial_value_required": "Bitte geben Sie einen Anfangswert ein",
+      "initial_value_invalid": "Bitte geben Sie eine gültige Nummer ein",
+      "currency": "Währung",
+      "select_currency": "Bitte wählen Sie eine Währung aus",
+      "creation_date": "Erstellungsdatum",
+      "edit": "Asset bearbeiten",
+      "create": "Asset erstellen",
+      "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten"
+    },
+    "VALUATION": {
+      "history": "Bewertungshistorie",
+      "no_valuations": "Es wurden noch keine Bewertungen erfasst. Beginnen Sie mit dem Hinzufügen der ersten Bewertung",
+      "add_valuation": "Bewertung hinzufügen",
+      "edit_valuation": "Bewertung bearbeiten",
+      "value": "Wert",
+      "value_required": "Bitte geben Sie einen Wert ein",
+      "value_invalid": "Bitte geben Sie eine gültige Nummer ein",
+      "update_value_success": "Bewertung erfolgreich hinzugefügt",
+      "edit_valuation_success": "Bewertung erfolgreich aktualisiert",
+      "delete_valuation_success": "Bewertung erfolgreich gelöscht",
+      "delete_all_valuations": "Alle Bewertungen löschen",
+      "delete_all_valuations_success": "Alle Bewertungen erfolgreich gelöscht"
+    },
+    "SORT": {
+      "name_asc": "Name (A-Z)",
+      "name_desc": "Name (Z-A)",
+      "value_asc": "Wert (niedrigster zuerst)",
+      "value_desc": "Wert (höchster zuerst)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

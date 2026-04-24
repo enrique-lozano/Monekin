@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Combien d'argent ai-je en devise étrangère ?",
     "balance-evolution": "Évolution du solde",
     "balance-evolution-subtitle": "Ai-je plus d'argent qu'avant ?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Par rapport à la période précédente",
     "cash-flow": "Flux de trésorerie",
     "cash-flow-subtitle": "Est-ce que je dépense moins que ce que je gagne ?",
@@ -850,6 +854,53 @@
         "title": "Créer de la dette",
         "success": "Dette créée avec succès"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Actifs",
+    "empty_description": "Vous n'avez pas encore créé d'éléments. Les actifs tels que l'immobilier, les véhicules ou les objets de collection peuvent être suivis grâce à leurs évaluations",
+    "create": "Ajouter un actif",
+    "create_success": "Actif créé avec succès",
+    "edit_success": "Élément modifié avec succès",
+    "delete": "Supprimer l'élément",
+    "delete_success": "Élément supprimé avec succès",
+    "delete_confirmation": "Cette action ne peut pas être annulée. Toutes les évaluations de cet actif seront également supprimées.",
+    "profit": "Profit",
+    "profit_percent": "Retour %",
+    "total_value": "Valeur totale des actifs",
+    "FORM": {
+      "name": "Nom de l'actif",
+      "name_required": "Veuillez saisir un nom d'actif",
+      "description": "Description",
+      "initial_value": "Valeur initiale",
+      "initial_value_required": "Veuillez saisir une valeur initiale",
+      "initial_value_invalid": "Veuillez entrer un numéro valide",
+      "currency": "Devise",
+      "select_currency": "Veuillez sélectionner une devise",
+      "creation_date": "Date de création",
+      "edit": "Modifier l'élément",
+      "create": "Créer un actif",
+      "already_exists": "Un actif portant ce nom existe déjà. Vous voudrez peut-être le modifier"
+    },
+    "VALUATION": {
+      "history": "Historique d'évaluation",
+      "no_valuations": "Aucune évaluation enregistrée pour le moment. Commencez par ajouter la première évaluation",
+      "add_valuation": "Ajouter une évaluation",
+      "edit_valuation": "Modifier l'évaluation",
+      "value": "Valeur",
+      "value_required": "Veuillez saisir une valeur",
+      "value_invalid": "Veuillez entrer un numéro valide",
+      "update_value_success": "Évaluation ajoutée avec succès",
+      "edit_valuation_success": "Valorisation mise à jour avec succès",
+      "delete_valuation_success": "Évaluation supprimée avec succès",
+      "delete_all_valuations": "Supprimer toutes les évaluations",
+      "delete_all_valuations_success": "Toutes les évaluations ont été supprimées avec succès"
+    },
+    "SORT": {
+      "name_asc": "Nom (A-Z)",
+      "name_desc": "Nom (Z-A)",
+      "value_asc": "Valeur (la plus basse en premier)",
+      "value_desc": "Valeur (la plus élevée en premier)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

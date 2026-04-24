@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "我有多少的外币？",
     "balance-evolution": "余额趋势",
     "balance-evolution-subtitle": "我是否比之前更有钱了？",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "与上一段时间相比",
     "cash-flow": "现金流",
     "cash-flow-subtitle": "我的支出是否少于我的收入？",
@@ -850,6 +854,53 @@
         "title": "创造债务",
         "success": "债务创建成功"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "资产",
+    "empty_description": "您还没有创建任何资产。可以跟踪房地产、车辆或收藏品等资产的估值",
+    "create": "添加资产",
+    "create_success": "资产创建成功",
+    "edit_success": "资产编辑成功",
+    "delete": "删除资产",
+    "delete_success": "资产删除成功",
+    "delete_confirmation": "此操作无法撤消。该资产的所有估值也将被删除。",
+    "profit": "利润",
+    "profit_percent": "返回 ％",
+    "total_value": "资产总值",
+    "FORM": {
+      "name": "资产名称",
+      "name_required": "请输入资产名称",
+      "description": "描述",
+      "initial_value": "初始值",
+      "initial_value_required": "请输入初始值",
+      "initial_value_invalid": "请输入有效号码",
+      "currency": "货币",
+      "select_currency": "请选择货币",
+      "creation_date": "创建日期",
+      "edit": "编辑资产",
+      "create": "创建资产",
+      "already_exists": "具有此名称的资产已存在。您可能想要编辑它"
+    },
+    "VALUATION": {
+      "history": "估值历史",
+      "no_valuations": "尚未记录估值。首先添加第一个估值",
+      "add_valuation": "添加估价",
+      "edit_valuation": "编辑估值",
+      "value": "价值",
+      "value_required": "请输入一个值",
+      "value_invalid": "请输入有效号码",
+      "update_value_success": "估价添加成功",
+      "edit_valuation_success": "估值更新成功",
+      "delete_valuation_success": "评估删除成功",
+      "delete_all_valuations": "删除所有估价",
+      "delete_all_valuations_success": "所有估价已成功删除"
+    },
+    "SORT": {
+      "name_asc": "姓名（A-Z）",
+      "name_desc": "姓名（Z-A）",
+      "value_asc": "值（最低的在前）",
+      "value_desc": "值（最高的在前）"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

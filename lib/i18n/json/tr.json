@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Yabancı para biriminde ne kadar param var?",
     "balance-evolution": "Bakiye trendi",
     "balance-evolution-subtitle": "Eskisinden daha çok param var mı?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Önceki döneme göre",
     "cash-flow": "Nakit akışı",
     "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
@@ -850,6 +854,53 @@
         "title": "Borç oluştur",
         "success": "Borç başarıyla oluşturuldu"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Varlıklar",
+    "empty_description": "Henüz herhangi bir öğe oluşturmadınız. Gayrimenkul, araç veya koleksiyon gibi varlıklar değerlemeleriyle takip edilebilir",
+    "create": "Öğe ekle",
+    "create_success": "Öğe başarıyla oluşturuldu",
+    "edit_success": "Öğe başarıyla düzenlendi",
+    "delete": "Öğeyi sil",
+    "delete_success": "Öğe başarıyla silindi",
+    "delete_confirmation": "Bu eylem geri alınamaz. Bu varlığa ilişkin tüm değerlemeler de silinecek.",
+    "profit": "Kâr",
+    "profit_percent": "Geri dönmek %",
+    "total_value": "Varlıkların toplam değeri",
+    "FORM": {
+      "name": "Öğe adı",
+      "name_required": "Lütfen bir varlık adı girin",
+      "description": "Tanım",
+      "initial_value": "Başlangıç ​​değeri",
+      "initial_value_required": "Lütfen bir başlangıç ​​değeri girin",
+      "initial_value_invalid": "Lütfen geçerli bir numara girin",
+      "currency": "Para birimi",
+      "select_currency": "Lütfen bir para birimi seçin",
+      "creation_date": "Oluşturulma tarihi",
+      "edit": "Öğeyi düzenle",
+      "create": "Öğe oluştur",
+      "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz"
+    },
+    "VALUATION": {
+      "history": "Değerleme geçmişi",
+      "no_valuations": "Henüz değerleme kaydedilmedi. İlk değerlemeyi ekleyerek başlayın",
+      "add_valuation": "Değerleme ekle",
+      "edit_valuation": "Değerlemeyi düzenle",
+      "value": "Değer",
+      "value_required": "Lütfen bir değer girin",
+      "value_invalid": "Lütfen geçerli bir numara girin",
+      "update_value_success": "Değerleme başarıyla eklendi",
+      "edit_valuation_success": "Değerleme başarıyla güncellendi",
+      "delete_valuation_success": "Değerleme başarıyla silindi",
+      "delete_all_valuations": "Tüm değerlemeleri sil",
+      "delete_all_valuations_success": "Tüm değerlemeler başarıyla silindi"
+    },
+    "SORT": {
+      "name_asc": "İsim (A'dan Z'ye)",
+      "name_desc": "İsim (Z-A)",
+      "value_asc": "Değer (önce en düşük)",
+      "value_desc": "Değer (önce en yüksek)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

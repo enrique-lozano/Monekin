@@ -41,12 +41,13 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
     super.dispose();
   }
 
-  Future<void> _addValuation() async {
+  Future<void> _addValuation(Account account) async {
     final newValuation = await showValuationFormDialog(
       context,
       ValuationFormDialog(
-        accountId: widget.account.id,
-        currencySymbol: widget.account.currency.symbol,
+        accountId: account.id,
+        firstDate: account.date,
+        currencySymbol: account.currency.symbol,
       ),
     );
 
@@ -65,6 +66,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
         accountId: widget.account.id,
         currencySymbol: widget.account.currency.symbol,
         valuationToEdit: valuation,
+        firstDate: widget.account.date,
       ),
     );
 
@@ -315,7 +317,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               FilledButton.tonalIcon(
-                onPressed: _addValuation,
+                onPressed: () => _addValuation(widget.account),
                 icon: const Icon(Icons.add_rounded),
                 label: Text(t.ui_actions.add),
               ),
