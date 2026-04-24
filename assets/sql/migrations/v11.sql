@@ -26,7 +26,7 @@ CREATE TABLE accounts_new (
 -- Step 3: Copy existing accounts
 INSERT INTO accounts_new
     SELECT id, name, iniValue, date, description, type, iconId, displayOrder,
-           color, closingDate, currencyId, iban, swift, 1
+           color, closingDate, currencyId, iban, swift
     FROM accounts;
 
 -- Step 4: Drop the old table and rename
