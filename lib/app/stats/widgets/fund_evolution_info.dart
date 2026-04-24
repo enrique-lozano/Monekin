@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -10,10 +9,8 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
-import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:path/path.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -237,7 +234,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
       return Stream.value(null);
     }
 
-    return Stream.value(null).switchMap((_) => _buildEvolutionData(timeRange));
+    return _buildEvolutionData(timeRange);
   }
 
   Stream<List<_FundEvolutionPoint>> _buildEvolutionData(

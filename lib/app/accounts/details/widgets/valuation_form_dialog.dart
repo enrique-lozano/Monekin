@@ -29,6 +29,7 @@ class ValuationFormDialog extends StatefulWidget {
     this.assetId,
     this.currencySymbol,
     this.valuationToEdit,
+    required this.firstDate,
   }) : assert(
          (accountId != null && assetId == null) ||
              (accountId == null && assetId != null),
@@ -39,6 +40,8 @@ class ValuationFormDialog extends StatefulWidget {
   final String? assetId;
   final String? currencySymbol;
   final ValuationInDB? valuationToEdit;
+
+  final DateTime firstDate;
 
   @override
   State<ValuationFormDialog> createState() => _ValuationFormDialogState();
@@ -125,6 +128,7 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
                 labelText: '${t.general.time.date} *',
               ),
               initialDate: _date,
+              firstDate: widget.firstDate,
               lastDate: DateTime.now(),
               dateFormat: DateFormat.yMMMMd(),
               validator: (e) =>

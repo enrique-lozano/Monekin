@@ -7958,6 +7958,17 @@ abstract class _$AppDB extends GeneratedDatabase {
     ).asyncMap(valuations.mapFromRow);
   }
 
+  Selectable<ValuationInDB> getLatestValuationForAssetAtDate({
+    required String assetId,
+    required DateTime date,
+  }) {
+    return customSelect(
+      'SELECT * FROM valuations WHERE assetId = ?1 AND date <= ?2 ORDER BY date DESC LIMIT 1',
+      variables: [Variable<String>(assetId), Variable<DateTime>(date)],
+      readsFrom: {valuations},
+    ).asyncMap(valuations.mapFromRow);
+  }
+
   Selectable<MoneyTransaction> getTransactionsWithFullData({
     GetTransactionsWithFullData$predicate? predicate,
     GetTransactionsWithFullData$orderBy? orderBy,

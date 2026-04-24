@@ -91,7 +91,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
 
       final streams = assets.map((asset) {
         return InvestmentService.instance
-            .getAssetValue(asset)
+            .getCurrentAssetValue(asset)
             .map((value) => (asset, value));
       });
 
@@ -119,7 +119,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
           ListTile(
             title: Text(t.assets.total_value),
             subtitle: StreamBuilder(
-              stream: InvestmentService.instance.getTotalAssetsValue(),
+              stream: InvestmentService.instance.getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();

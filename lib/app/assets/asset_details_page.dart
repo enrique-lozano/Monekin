@@ -19,6 +19,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AssetDetailsPage extends StatefulWidget {
@@ -41,13 +42,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     super.dispose();
   }
 
-  Future<void> _addValuation() async {
+  Future<void> _addValuation(Asset asset) async {
     final t = Translations.of(context);
     final newValuation = await showValuationFormDialog(
       context,
       ValuationFormDialog(
-        assetId: widget.asset.id,
-        currencySymbol: widget.asset.currency.symbol,
+        assetId: asset.id,
+        currencySymbol: asset.currency.symbol,
+        firstDate: asset.creationDate,
       ),
     );
 
@@ -59,14 +61,15 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     }
   }
 
-  Future<void> _editValuation(ValuationInDB valuation) async {
+  Future<void> _editValuation(ValuationInDB valuation, Asset asset) async {
     final t = Translations.of(context);
     final updatedValuation = await showValuationFormDialog(
       context,
       ValuationFormDialog(
-        assetId: widget.asset.id,
-        currencySymbol: widget.asset.currency.symbol,
+        assetId: asset.id,
+        currencySymbol: asset.currency.symbol,
         valuationToEdit: valuation,
+        firstDate: asset.creationDate,
       ),
     );
 
@@ -125,12 +128,16 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return StreamBuilder<List<ValuationInDB>>(
-      stream: InvestmentService.instance.getValuationsForAsset(widget.asset.id),
+    return StreamBuilder(
+      stream: Rx.combineLatest2(
+        InvestmentService.instance.getValuationsForAsset(widget.asset.id),
+        InvestmentService.instance.getAssetById(widget.asset.id),
+        (a, b) => (valuations: a, asset: b),
+      ),
       builder: (context, snapshot) {
         final valuations = snapshot.data == null
             ? null
-            : (List<ValuationInDB>.from(snapshot.data!)
+            : (List<ValuationInDB>.from(snapshot.data!.valuations)
                 ..sort((a, b) => b.date.compareTo(a.date)));
 
         final displayValuation = _hoveredValuation ?? valuations?.firstOrNull;
@@ -162,8 +169,18 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             ),
           ],
           body: BreakpointContainer(
-            lgChild: _buildDesktopLayout(context, valuations, displayValuation),
-            child: _buildMobileLayout(context, valuations, displayValuation),
+            lgChild: _buildDesktopLayout(
+              context,
+              valuations,
+              displayValuation,
+              snapshot.data?.asset,
+            ),
+            child: _buildMobileLayout(
+              context,
+              valuations,
+              displayValuation,
+              snapshot.data?.asset,
+            ),
           ),
         );
       },
@@ -174,16 +191,19 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     BuildContext context,
     List<ValuationInDB>? valuations,
     ValuationInDB? displayValuation,
+    Asset? asset,
   ) {
+    asset ??= widget.asset;
+
     return Skeletonizer(
       enabled: valuations == null,
       child: StreamBuilder<double>(
-        stream: InvestmentService.instance.getAssetValue(widget.asset),
+        stream: InvestmentService.instance.getCurrentAssetValue(asset),
         builder: (context, valueSnapshot) {
-          final value = valueSnapshot.data ?? widget.asset.initialValue;
+          final value = valueSnapshot.data ?? asset!.initialValue;
 
           return ListTile(
-            title: Text(widget.asset.name),
+            title: Text(asset!.name),
             titleTextStyle: Theme.of(context).textTheme.headlineMedium,
             subtitle: Row(
               spacing: 8,
@@ -197,7 +217,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                     ),
                     child: CurrencyDisplayer(
                       amountToConvert: displayValuation.value,
-                      currency: widget.asset.currency,
+                      currency: asset.currency,
                     ),
                   ),
                   Text(
@@ -210,7 +230,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                     ),
                     child: CurrencyDisplayer(
                       amountToConvert: value,
-                      currency: widget.asset.currency,
+                      currency: asset.currency,
                     ),
                   ),
               ],
@@ -269,7 +289,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
       child: TimeSeriesEvolutionChart<ValuationInDB>(
-        data: valuations,
+        data: [
+          ValuationInDB(
+            id: 'INITIAL_VALUE',
+            date: widget.asset.creationDate,
+            value: widget.asset.initialValue,
+          ),
+          ...valuations,
+        ],
         dateExtractor: (v) => v.date,
         valueExtractor: (v) => v.value,
         currency: widget.asset.currency,
@@ -285,8 +312,10 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   Widget _buildValuationListSection(
     BuildContext context,
     List<ValuationInDB>? valuations,
+    Asset? asset,
   ) {
     final t = Translations.of(context);
+    asset ??= widget.asset;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -301,11 +330,11 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 t.assets.valuation.history,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              if (valuations != null && valuations.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.add_rounded),
-                  onPressed: _addValuation,
-                ),
+              FilledButton.tonalIcon(
+                onPressed: () => _addValuation(asset!),
+                icon: const Icon(Icons.add_rounded),
+                label: Text(t.ui_actions.add),
+              ),
             ],
           ),
         ),
@@ -331,7 +360,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                       currency: widget.asset.currency,
                     ),
                   ),
-                  onEdit: _editValuation,
+                  onEdit: (valuation) => _editValuation(valuation, asset!),
                   onDelete: _deleteValuation,
                   scrollController: _scrollController,
                 );
@@ -346,17 +375,18 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     BuildContext context,
     List<ValuationInDB>? valuations,
     ValuationInDB? displayValuation,
+    Asset? asset,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
-        _buildCurrentValueTile(context, valuations, displayValuation),
+        _buildCurrentValueTile(context, valuations, displayValuation, asset),
         _buildSummarySection(context),
         if (valuations != null && MediaQuery.of(context).size.height > 550)
           _buildChartSection(context, valuations),
         const SizedBox(height: 16),
-        Expanded(child: _buildValuationListSection(context, valuations)),
+        Expanded(child: _buildValuationListSection(context, valuations, asset)),
       ],
     );
   }
@@ -365,6 +395,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     BuildContext context,
     List<ValuationInDB>? valuations,
     ValuationInDB? displayValuation,
+    Asset? asset,
   ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,14 +404,20 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         Flexible(
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCurrentValueTile(context, valuations, displayValuation),
+              _buildCurrentValueTile(
+                context,
+                valuations,
+                displayValuation,
+                asset,
+              ),
               _buildSummarySection(context),
               _buildChartSection(context, valuations),
             ],
           ),
         ),
-        Flexible(child: _buildValuationListSection(context, valuations)),
+        Flexible(child: _buildValuationListSection(context, valuations, asset)),
       ],
     );
   }
