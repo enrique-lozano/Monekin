@@ -512,7 +512,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "Includi nel patrimonio netto",
       "include-in-net-worth.descr": "Aggiungi questo conto al calcolo del patrimonio netto totale",
-      "correct_balance_description": "Regolare il saldo modifica il valore iniziale del conto. Questa correzione non sarà riflessa nelle statistiche."
+      "correct_balance_description": "Regolare il saldo modifica il valore iniziale del conto. Questa correzione non sarà riflessa nelle statistiche.",
+      "valuation_before_creation_date": "In questo conto sono presenti valutazioni con una data precedente alla data di creazione"
     },
     "INVESTMENT": {
       "details-header": "Investimento",
@@ -880,7 +881,8 @@
       "creation_date": "Data di creazione",
       "edit": "Modifica risorsa",
       "create": "Crea risorsa",
-      "already_exists": "Esiste già una risorsa con questo nome. Potresti volerlo modificare"
+      "already_exists": "Esiste già una risorsa con questo nome. Potresti volerlo modificare",
+      "valuation_before_creation_date": "Sono presenti valutazioni in questo bene con una data antecedente alla data di acquisizione"
     },
     "VALUATION": {
       "history": "Storia della valutazione",

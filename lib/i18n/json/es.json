@@ -515,7 +515,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "Incluir en el patrimonio neto",
       "include-in-net-worth.descr": "Añadir esta cuenta al cálculo del patrimonio neto total",
-      "correct_balance_description": "Ajustar el saldo modifica el valor inicial de la cuenta. Esta corrección no se reflejará en tus estadísticas."
+      "correct_balance_description": "Ajustar el saldo modifica el valor inicial de la cuenta. Esta corrección no se reflejará en tus estadísticas.",
+      "valuation_before_creation_date": "Hay valoraciones en esta cuenta con fecha anterior a la fecha de creación"
     },
     "INVESTMENT": {
       "details-header": "Inversión",
@@ -883,7 +884,8 @@
       "creation_date": "Fecha de adquisición",
       "edit": "Editar activo",
       "create": "Crear activo",
-      "already_exists": "Ya existe un activo con este nombre. Quizás quieras editarlo"
+      "already_exists": "Ya existe un activo con este nombre. Quizás quieras editarlo",
+      "valuation_before_creation_date": "Hay valoraciones en este activo con una fecha anterior a la fecha de adquisición"
     },
     "VALUATION": {
       "history": "Historial de valoración",

@@ -512,7 +512,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "Net değere dahil et",
       "include-in-net-worth.descr": "Bu hesabı toplam net değer hesaplamasına dahil et",
-      "correct_balance_description": "Bakiyeyi düzeltmek, hesabın başlangıç değerini değiştirir. Bu düzeltme istatistiklere yansımayacaktır."
+      "correct_balance_description": "Bakiyeyi düzeltmek, hesabın başlangıç değerini değiştirir. Bu düzeltme istatistiklere yansımayacaktır.",
+      "valuation_before_creation_date": "Bu hesapta oluşturulma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
     },
     "INVESTMENT": {
       "details-header": "Yatırım",
@@ -880,7 +881,8 @@
       "creation_date": "Oluşturulma tarihi",
       "edit": "Öğeyi düzenle",
       "create": "Öğe oluştur",
-      "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz"
+      "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz",
+      "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
     },
     "VALUATION": {
       "history": "Değerleme geçmişi",
