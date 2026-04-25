@@ -799,7 +799,7 @@
     },
     "DIRECTION": {
       "lent": "借出",
-      "borrowed": "借來的"
+      "borrowed": "借入"
     },
     "STATUS": {
       "active": "已啟用",
