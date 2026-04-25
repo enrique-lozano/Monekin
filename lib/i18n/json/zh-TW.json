@@ -809,7 +809,7 @@
       "collected_amount": "收取金額",
       "remaining": "剩餘的",
       "no_deadline": "無截止日期",
-      "in_days": "{{x}} 天後",
+      "in_days": "{{x}}天後",
       "due_today": "今天到期",
       "days_ago": "{{x}}天前",
       "overdue_by": "逾期{{x}}天",
