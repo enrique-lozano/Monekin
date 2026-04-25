@@ -341,12 +341,12 @@
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",
       "selected.short": {
-        "one": "{{n}} 已選取",
-        "other": "{{n}} 已選取"
+        "one": "{{n}}已選取",
+        "other": "{{n}}已選取"
       },
       "selected.long": {
-        "one": "已選擇 {{n}} 筆交易",
-        "other": "選擇 {{n}} 筆交易"
+        "one": "已選擇{{n}}筆交易",
+        "other": "已選擇{{n}}筆交易"
       },
       "BULK_EDIT": {
         "dates": "編輯日期",
@@ -358,10 +358,10 @@
       "title": "交易過濾器",
       "from_value": "從金額",
       "to_value": "最多金額",
-      "from_value_def": "來自 {{x}}",
-      "to_value_def": "最多 {{x}}",
+      "from_value_def": "來自{{x}}",
+      "to_value_def": "最多{{x}}",
       "from_date_def": "從{{date}}開始",
-      "to_date_def": "截至 {{date}}",
+      "to_date_def": "截至{{date}}",
       "reset": "重置過濾器",
       "saved": {
         "title": "已儲存的過濾器",
@@ -384,10 +384,10 @@
         "date-max": "所選日期晚於當前日期。交易將新增為待處理",
         "date-after-account-creation": "您無法建立日期早於所屬帳戶建立日期的交易",
         "negative-transfer": "轉帳的貨幣價值不能為負數",
-        "transfer-between-same-accounts": "來源帳號與目標帳號不能符合"
+        "transfer-between-same-accounts": "轉出帳戶與轉入帳戶不能相同"
       },
-      "title": "交易標題",
-      "title.short": "資質",
+      "title": "交易名稱",
+      "title.short": "名稱",
       "value": "交易價值",
       "tap-to-see-more": "點擊查看更多詳細資訊",
       "no-tags": "-- 無標籤 --",
@@ -397,14 +397,14 @@
       "exchange-to-preferred-in-date": "交易日"
     },
     "REVERSED": {
-      "title": "逆向交易",
-      "title.short": "逆向交易",
+      "title": "反向交易",
+      "title.short": "反向交易",
       "description-for-expenses": "儘管是收入交易，但它的金額為正數。這些類型的交易可用於表示先前記錄的收入的返還，例如退款或償還債務。",
       "description-for-incomes": "儘管是一項收入交易，但其金額為負數。這些類型的交易可用於作廢或更正錯誤記錄的收入，反映資金的返還或退款或記錄債務的支付。"
     },
     "STATUS": {
       "display": {
-        "one": "地位",
+        "one": "狀態",
         "other": "狀態"
       },
       "display_long": "交易狀態",
@@ -469,8 +469,8 @@
       "delete-message": "此操作不可逆轉，不會影響您已確認/付款的交易"
     },
     "STATUS": {
-      "delayed_by": "延遲了 {{x}}d",
-      "coming_in": "{{x}} 天後"
+      "delayed_by": "延遲{{x}}天",
+      "coming_in": "{{x}}天後"
     }
   },
   "ACCOUNT": {
@@ -490,7 +490,7 @@
       "title": "帳戶類型",
       "warning": "帳戶類型一旦選擇，以後將無法更改",
       "normal": "普通帳戶",
-      "normal.descr": "對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入......",
+      "normal.descr": "對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入...",
       "saving": "儲蓄帳戶",
       "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢",
       "investment": "投資帳戶",
@@ -579,14 +579,14 @@
     },
     "TYPES": {
       "display": "貨幣類型",
-      "fiat": "菲亞特",
+      "fiat": "FIAT",
       "crypto": "加密貨幣",
       "other": "其他"
     },
     "CURRENCY-FORM": {
       "name": "顯示名稱",
       "code": "貨幣代碼",
-      "symbol": "象徵",
+      "symbol": "符號",
       "decimal-digits": "小數位",
       "create": "創建貨幣",
       "create-success": "貨幣創建成功",
@@ -710,12 +710,12 @@
         "fail": "超出預算"
       },
       "DESCRIPTION": {
-        "active-on-track": "在剩餘的 {{ remainingDays }} 天裡，您每天可以花費 {{ dailyAmount }}",
-        "active-overspending": "為了回到正軌，您應該在剩餘的 {{ remainingDays }} 天裡將每天的支出限制在 {{ dailyAmount }}",
+        "active-on-track": "在剩餘的 {{ remainingDays }} 天裡，您每天可以花費{{ dailyAmount }}",
+        "active-overspending": "為了回到正軌，您應該在剩餘的{{ remainingDays }} 天裡將每天的支出限制在 {{ dailyAmount }}",
         "active-indeterminate": "您還剩 {{ amount }} 可以消費。",
-        "active-exceeded": "您已經超出了預算限額 {{ amount }}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出",
+        "active-exceeded": "您已經超出了預算限額{{ amount }}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出",
         "success": "做得好！該預算已成功完成。繼續創建預算以管理您的支出",
-        "fail": "您超出了預算 {{ amount }}。下次請更加小心！"
+        "fail": "您超出了預算{{ amount }}。下次請更加小心！"
       }
     }
   },
@@ -769,11 +769,11 @@
         "fail": "目標失敗"
       },
       "DESCRIPTION": {
-        "active-on-track": "您正在尋找目標的軌道上！您必須在剩餘的 {{ remainingDays }} 天內每天節省 {{ dailyAmount }}",
-        "active-behind-schedule": "你落後於計劃了。您必須每天節省 {{ dailyAmount }} 才能在 {{ remainingDays }} 天后達到您的目標",
-        "active-indeterminate": "您還需要 {{ amount }} 才能實現目標。",
+        "active-on-track": "您正在尋找目標的軌道上！您必須在剩餘的{{ remainingDays }}天內每天節省{{ dailyAmount }}",
+        "active-behind-schedule": "你落後於計劃了。您必須每天節省{{ dailyAmount }}才能在{{ remainingDays }} 天後達到您的目標",
+        "active-indeterminate": "您還需要{{ amount }}才能實現目標。",
         "success": "恭喜！你達到了你的目標。",
-        "fail": "您與目標相差了 {{ amount }}。"
+        "fail": "您與目標相差了{{ amount }}。"
       }
     }
   },
@@ -799,26 +799,26 @@
     },
     "DIRECTION": {
       "lent": "借出",
-      "borrowed": "借來的"
+      "borrowed": "借入"
     },
     "STATUS": {
-      "active": "積極的",
-      "close": "關閉"
+      "active": "啟用中",
+      "close": "已關閉"
     },
     "DETAILS": {
       "collected_amount": "收取金額",
-      "remaining": "其餘的",
+      "remaining": "剩餘的",
       "no_deadline": "無截止日期",
-      "in_days": "{{x}} 天后",
+      "in_days": "{{x}}天後",
       "due_today": "今天到期",
-      "days_ago": "{{x}} days ago",
-      "overdue_by": "Overdue by {{x}} days",
+      "days_ago": "{{x}}天前",
+      "overdue_by": "逾期{{x}}天",
       "per_day": "/ 天",
       "no_transactions": "未找到該債務的交易"
     },
     "EMPTY": {
       "no_debts_active": "未發現活躍債務。首先點擊下面的按鈕建立新債務",
-      "no_debts_closed": "未發現已結清的債務。当您收回所有债务或支付所有所欠债务时，债务就结束了。"
+      "no_debts_closed": "未發現已結清的債務。當您收回所有債務或支付所有所欠債務时，債務就结束了。"
     },
     "ACTIONS": {
       "edit": {
@@ -840,7 +840,7 @@
         "title": "連結現有交易",
         "description": "選擇現有記錄將其連結到該債務",
         "success": "與債務掛鉤的交易",
-        "creating": "您正在建立與債務 <b>{{ name }}</b> 關聯的交易"
+        "creating": "您正在建立與債務<b>{{ name }}</b>關聯的交易"
       },
       "unlink_transaction": {
         "title": "取消與債務的關聯",
@@ -867,7 +867,7 @@
     "delete_success": "資產刪除成功",
     "delete_confirmation": "此操作無法撤銷。該資產的所有估值也將被刪除。",
     "profit": "利潤",
-    "profit_percent": "返回 ％",
+    "profit_percent": "返回 %",
     "total_value": "資產總值",
     "FORM": {
       "name": "資產名稱",
@@ -899,10 +899,10 @@
       "delete_all_valuations_success": "所有估價已成功刪除"
     },
     "SORT": {
-      "name_asc": "姓名（A-Z）",
-      "name_desc": "姓名（Z-A）",
-      "value_asc": "值（最低的在前）",
-      "value_desc": "值（最高的在前）"
+      "name_asc": "名稱（A-Z）",
+      "name_desc": "名稱（Z-A）",
+      "value_asc": "數值（最低的在前）",
+      "value_desc": "數值（最高的在前）"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -924,14 +924,13 @@
       "transactions.descr": "以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。",
       "transactions-to-export": {
         "one": "1 筆交易要導出",
-        "other": "要導出的 {{ n }} 筆交易"
+        "other": "要導出的{{ n }}筆交易"
       },
       "description": "以不同格式下載資料",
       "send_file": "發送文件",
       "see_folder": "查看文件夾",
       "success": "檔案已在{{x}}中成功儲存/下載",
-      "error": "下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員",
-      "dialog_title": "儲存/傳送文件"
+      "error": "下載檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員"
     },
     "IMPORT": {
       "title": "匯入您的資料",
@@ -958,18 +957,17 @@
           "其他欄位"
         ],
         "steps-descr": [
-          "從您的裝置中選擇一個 .csv 檔案。確保它的第一行描述了每列的名稱。",
-          "選擇每筆交易價值的欄位。使用負值表示支出，使用正值表示收入。",
-          "選擇每筆交易所屬帳戶的列。您也可以選擇預設帳戶，以防我們找不到您想要的帳戶。如果未指定預設帳戶，我們將建立一個同名帳戶。",
-          "選擇交易類別名稱所在的欄位。您必須指定一個預設類別，以便我們將此類別指派給交易，以防找不到該類別。",
-          "選擇每筆交易日期的欄位。如果未指定，交易將使用當前日期建立。",
-          "選擇其他交易屬性的資料列"
+          "從您的裝置選擇一個 .csv 檔案。請確保首行已包含各個欄位的名稱說明。",
+          "選擇代表每筆交易金額的欄位。請將支出記為負值，收入記為正值。",
+          "選擇每筆交易歸屬的帳戶欄位。您也可以選擇一個預設帳戶以防找不到對應項目；若未指定，系統將自動建立同名帳戶。",
+          "指定交易類別名稱所在的欄位。您必須指定一個預設類別，以便在找不到對應項目時進行歸類。",
+          "選擇每筆交易日期的欄位。若未指定，將以目前日期建立交易。",
+          "指定其他選填交易屬性的對應欄位。"
         ],
         "success": "已成功導入{{x}}筆交易"
       },
       "success": "導入成功",
       "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。",
-      "cancelled": "導入已被用戶取消"
     },
     "ABOUT": {
       "title": "有關您的資料庫的資訊",
@@ -1042,21 +1040,21 @@
         "remove_status": "刪除狀態"
       },
       "DEFAULT_VALUES": {
-        "title": "Default Form Values",
-        "page_title": "New Transaction: Default Form Values",
-        "reuse_last_transaction": "Reuse Last Transaction Values",
-        "reuse_last_transaction_descr": "Automatically fill the form with some values from the last created transaction",
-        "fields_to_reuse": "Fields to reuse",
-        "reuse_last_values_modal_descr": "Select the fields that should be pre-filled with the values from the last created transaction.",
-        "default_values_separator": "Default Values",
-        "default_category": "Default Category",
-        "default_status": "Default Status",
-        "default_tags": "Default Tags",
-        "no_tags_selected": "No tags selected"
+        "title": "預設值",
+        "page_title": "新增交易: 預設值",
+        "reuse_last_transaction": "重複使用上一筆交易數值",
+        "reuse_last_transaction_descr": "自動使用上一筆建立的交易內容填寫表單",
+        "fields_to_reuse": "重複使用的欄位",
+        "reuse_last_values_modal_descr": "選擇要從上一筆交易中自動帶入的欄位",
+        "default_values_separator": "預設值",
+        "default_category": "預設類別",
+        "default_status": "預設狀態",
+        "default_tags": "預設標籤",
+        "no_tags_selected": "未選取標籤"
       },
       "DEFAULT_TYPE": {
-        "title": "Default Type",
-        "modal_title": "Select Default Type"
+        "title": "預設類別",
+        "modal_title": "選擇預設類別"
       }
     },
     "APPEARANCE": {
@@ -1069,7 +1067,7 @@
         "light": "明亮主題",
         "dark": "黑暗主題"
       },
-      "amoled_mode": "amoled mode",
+      "amoled_mode": "MOLED 模式",
       "amoled_mode_descr": "盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助",
       "dynamic_colors": "動態色彩",
       "dynamic_colors_descr": "盡可能使用系統強調色",
