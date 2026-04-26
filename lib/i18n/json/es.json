@@ -354,7 +354,8 @@
       "BULK_EDIT": {
         "dates": "Editar fechas",
         "categories": "Editar categorías",
-        "status": "Editar estados"
+        "status": "Editar estados",
+        "tags": "Editar etiquetas"
       }
     },
     "FILTERS": {
@@ -624,6 +625,7 @@
       "all": "Todas las etiquetas"
     },
     "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
+    "no-tags": "Aún no has creado ninguna etiqueta. Ve a la configuración para crear una etiqueta.",
     "without-tags": "Sin etiquetas",
     "add": "Añadir etiqueta",
     "create": "Crear etiqueta",

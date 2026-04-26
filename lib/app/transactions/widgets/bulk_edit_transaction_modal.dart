@@ -11,6 +11,9 @@ import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 
 class BulkEditTransactionModal extends StatelessWidget {
   const BulkEditTransactionModal({
@@ -88,7 +91,7 @@ class BulkEditTransactionModal extends StatelessWidget {
               text: t.transaction.list.bulk_edit.status,
               iconData: Icons.fullscreen_rounded,
               onTap: () {
-                showTransactioStatusModal(context, initialStatus: null).then((
+                showTransactionStatusModal(context, initialStatus: null).then((
                   modalRes,
                 ) {
                   if (modalRes == null) {
@@ -101,6 +104,39 @@ class BulkEditTransactionModal extends StatelessWidget {
                       (e) => TransactionService.instance.updateTransaction(
                         e.copyWith(status: Value(modalRes.result)),
                       ),
+                    ),
+                  );
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildSelectOption(
+              text: t.transaction.list.bulk_edit.tags,
+              iconData: Icons.label_rounded,
+              onTap: () {
+                showTagListModal(
+                  context,
+                  modal: TagSelector(
+                    allowEmptySubmit: true,
+                    includeNullTag: false,
+                  ),
+                ).then((modalRes) {
+                  if (modalRes == null) return;
+
+                  final tagIds = modalRes
+                      .whereType<Tag>()
+                      .map((e) => e.id)
+                      .toList();
+
+                  performUpdates(
+                    context,
+                    futures: transactionsToEdit.map(
+                      (e) => TagService.instance
+                      .unlinkTagsFromTransaction(transactionId: e.id)
+                      .then((_) => TagService.instance.linkTagsToTransaction(
+                      transactionId: e.id,
+                      tagIds: tagIds,
+                      ))
                     ),
                   );
                 });
@@ -131,7 +167,7 @@ class BulkEditTransactionModal extends StatelessWidget {
 
   void performUpdates(
     BuildContext context, {
-    required Iterable<Future<int>> futures,
+    required Iterable<Future> futures,
   }) {
     RouteUtils.popRoute();
 

@@ -48,7 +48,7 @@ class TransactionStatusSelector extends StatelessWidget {
       onTap: () {
         unfocusCurrentFocusedItem(context);
 
-        showTransactioStatusModal(context, initialStatus: status).then((
+        showTransactionStatusModal(context, initialStatus: status).then((
           modalRes,
         ) {
           if (modalRes == null) return;

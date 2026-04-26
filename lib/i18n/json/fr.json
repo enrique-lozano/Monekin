@@ -351,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Modifier les dates",
         "categories": "Modifier les catégories",
-        "status": "Modifier les statuts"
+        "status": "Modifier les statuts",
+        "tags": "Modifier les tags"
       }
     },
     "FILTERS": {
@@ -621,6 +622,7 @@
       "all": "Tous les tags"
     },
     "empty-list": "Vous n'avez encore créé aucun tag. Les tags et catégories sont un excellent moyen de catégoriser vos mouvements",
+    "no-tags": "Vous n'avez pas encore créé de tags. Allez dans les paramètres pour créer un label.",
     "without-tags": "Sans tag",
     "add": "Ajouter un tag",
     "create": "Créer une étiquette",
