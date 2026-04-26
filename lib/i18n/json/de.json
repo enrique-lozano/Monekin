@@ -613,6 +613,8 @@
     },
     "FORM": {
       "name": "Schlagworte-Name",
+      "name-hint": "Z.B.: Essen",
+      "forbidden-char-error": "Der Name darf kein ';' enthalten",
       "description": "Beschreibung"
     },
     "SELECT": {
@@ -946,22 +948,29 @@
         "defaultAccount": "Standardkonto",
         "removeDefaultAccount": "Standardkonto entfernen",
         "defaultCategory": "Standardkategorie",
+        "defaultTags": "Standardtags",
         "select-a-column": "Wählen eine Spalte aus der CSV-Datei aus",
+        "date-format": "Datumsformat",
+        "note-column": "Notizspalte",
+        "title-column": "Titelsspalte",
+        "tag-separator": "Tag-Trennzeichen in der CSV-Datei",
         "steps": [
           "Wähle Deine Datei aus",
           "Spalte für Menge",
           "Spalte für Konto",
           "Spalte für Kategorie",
+          "Spalte für Tags",
           "Spalte für Datum",
-          "andere Spalten"
+          "Andere Spalten"
         ],
         "steps-descr": [
-          "Wähle eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält",
-          "Wählen die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwende negative Werte für Ausgaben und positive Werte für Einnahmen.",
-          "Wähle die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt ",
-          "Gebe die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.",
-          "Wähle die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.",
-          "Gibt die Spalten für andere optionale Transaktionsattribute an"
+          "Wähl eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält.",
+          "Wähl die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwend negative Werte für Ausgaben und positive Werte für Einnahmen.",
+          "Wähl die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt.",
+          "Gib die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.",
+          "Gib die Spalte an, wo die Transaktions-Tags stehen. Wird nichts angegeben, werden Transaktionen mit Standard-Tags erstellt.",
+          "Wähl die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.",
+          "Gib die Spalten für andere optionale Transaktionsattribute an."
         ],
         "success": "Erfolgreich {{x}} Transaktionen importiert"
       },

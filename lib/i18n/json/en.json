@@ -197,7 +197,7 @@
     "no-accounts.descr": "Start using all the magic of Monekin. Create at least one account to start adding transactions",
     "last-transactions": "Last transactions",
     "should-create-account.header": "Oops!",
-    "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions"
+    "should-create-account.message": "You must have at least one non-archived account before you can start creating transactions"
   },
   "FINANCIAL-HEALTH": {
     "display": "Financial health",
@@ -613,6 +613,8 @@
     },
     "FORM": {
       "name": "Tag name",
+      "name-hint": "E.g.: Food",
+      "forbidden-char-error": "The name cannot contain ';'",
       "description": "Description"
     },
     "SELECT": {
@@ -945,22 +947,29 @@
         "defaultAccount": "Default account",
         "removeDefaultAccount": "Remove default account",
         "defaultCategory": "Default Category",
+        "defaultTags": "Default Tags",
         "select-a-column": "Select a column from the .csv",
+        "date-format": "Date format",
+        "note-column": "Note column",
+        "title-column": "Title column",
+        "tag-separator": "Tag separator in the .csv",
         "steps": [
           "Select your file",
-          "Column for quantity",
+          "Column for amount",
           "Column for account",
           "Column for category",
+          "Column for tags",
           "Column for date",
-          "other columns"
+          "Other columns"
         ],
         "steps-descr": [
-          "Select a .csv file from your device. Make sure it has a first row that describes the name of each column",
+          "Select a .csv file from your device. Make sure it has a first row that describes the name of each column.",
           "Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.",
-          "Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name ",
-          "Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found",
-          "Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date",
-          "Specifies the columns for other optional transaction attributes"
+          "Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name.",
+          "Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found.",
+          "Specify the column where the transaction tags are located. If not specified, transactions will be created with default tags.",
+          "Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date.",
+          "Specifies the columns for other optional transaction attributes."
         ],
         "success": "Successfully imported {{x}} transactions"
       },

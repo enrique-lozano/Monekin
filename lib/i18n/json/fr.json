@@ -613,6 +613,8 @@
     },
     "FORM": {
       "name": "Nom du tag",
+      "name-hint": "Ex.: Nourriture",
+      "forbidden-char-error": "Le nom ne peut pas contenir de ';'",
       "description": "Description"
     },
     "SELECT": {
@@ -945,22 +947,29 @@
         "defaultAccount": "Compte par défaut",
         "removeDefaultAccount": "Supprimer le compte par défaut",
         "defaultCategory": "Catégorie par défaut",
+        "defaultTags": "Étiquettes par défaut",
         "select-a-column": "Sélectionnez une colonne du .csv",
+        "date-format": "Format de la date",
+        "note-column": "Colonne des notes",
+        "title-column": "Colonne des titres",
+        "tag-separator": "Séparateur d'étiquettes dans le .csv",
         "steps": [
           "Sélectionnez votre fichier",
           "Colonne pour le montant",
           "Colonne pour le compte",
           "Colonne pour la catégorie",
+          "Colonne pour les étiquettes",
           "Colonne pour la date",
-          "autres colonnes"
+          "Autres colonnes"
         ],
         "steps-descr": [
-          "Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu'il possède une première ligne décrivant le nom de chaque colonne",
+          "Sélectionnez un fichier .csv depuis votre appareil. Assurez-vous qu'il possède une première ligne décrivant le nom de chaque colonne.",
           "Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes.",
-          "Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n'est spécifié, nous en créerons un avec le même nom",
-          "Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l'assignions aux transactions si la catégorie ne peut pas être trouvée",
-          "Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n'est pas indiquée, les transactions seront créées avec la date actuelle",
-          "Indiquez les colonnes pour les autres attributs optionnels de la transaction"
+          "Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n'est spécifié, nous en créerons un avec le même nom.",
+          "Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l'assignions aux transactions si la catégorie ne peut pas être trouvée.",
+          "Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.",
+          "Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n'est pas indiquée, les transactions seront créées avec la date actuelle.",
+          "Indiquez les colonnes pour les autres attributs optionnels de la transaction."
         ],
         "success": "{{x}} transactions importées avec succès"
       },

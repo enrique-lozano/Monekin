@@ -613,6 +613,8 @@
     },
     "FORM": {
       "name": "Nome etichetta",
+      "name-hint": "Es.: Cibo",
+      "forbidden-char-error": "Il nome non può contenere ';'",
       "description": "Descrizione"
     },
     "SELECT": {
@@ -946,20 +948,27 @@
         "defaultAccount": "Conto predefinito",
         "removeDefaultAccount": "Rimuovi conto predefinito",
         "defaultCategory": "Categoria predefinita",
+        "defaultTags": "Tag predefiniti",
         "select-a-column": "Seleziona una colonna dal .csv",
+        "date-format": "Formato data",
+        "note-column": "Colonna note",
+        "title-column": "Colonna titolo",
+        "tag-separator": "Separatore di tag nel file .csv",
         "steps": [
           "Seleziona il tuo file",
           "Colonna per la quantità",
           "Colonna per il conto",
           "Colonna per la categoria",
+          "Colonna per i tag",
           "Colonna per la data",
-          "altre colonne"
+          "Altre colonne"
         ],
         "steps-descr": [
           "Seleziona un file .csv dal tuo dispositivo. Assicurati che abbia una prima riga che descriva il nome di ciascuna colonna",
           "Seleziona la colonna in cui è specificato il valore di ogni transazione. Usa valori negativi per le spese e valori positivi per le entrate.",
           "Seleziona la colonna in cui è specificato il conto a cui appartiene ogni transazione. Puoi anche selezionare un conto predefinito nel caso in cui non riusciamo a trovare il conto che desideri. Se non viene specificato un conto predefinito, ne creeremo uno con lo stesso nome",
           "Specifica la colonna in cui si trova il nome della categoria della transazione. Devi specificare una categoria predefinita in modo da assegnare questa categoria alle transazioni, nel caso in cui la categoria non possa essere trovata",
+          "Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.",
           "Seleziona la colonna in cui è specificata la data di ogni transazione. Se non specificato, le transazioni verranno create con la data attuale",
           "Specifica le colonne per altri attributi opzionali della transazione"
         ],
