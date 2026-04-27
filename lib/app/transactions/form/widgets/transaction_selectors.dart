@@ -153,7 +153,7 @@ class TransactionTagsSelector extends StatelessWidget {
           if (value == null) {
             return;
           }
-          onTagsChanged(value.nonNulls.toList());
+          onTagsChanged(value.selectedTags.nonNulls.toList());
         });
       },
       title: tags.isEmpty
