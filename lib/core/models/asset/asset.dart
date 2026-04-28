@@ -1,5 +1,4 @@
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/models/asset/asset_type.enum.dart';
 
 class Asset extends AssetInDB {
   final CurrencyInDB currency;
@@ -10,8 +9,8 @@ class Asset extends AssetInDB {
     required super.initialValue,
     required super.creationDate,
     required this.currency,
+    required super.assetType,
     super.description,
-    super.assetType,
     super.linkedAccountID,
   }) : super(currencyId: currency.code);
 

@@ -436,6 +436,10 @@
       "transfer": {
         "one": "轉移",
         "other": "轉移"
+      },
+      "investment": {
+        "one": "投資",
+        "other": "投資"
       }
     }
   },
@@ -868,7 +872,29 @@
     "profit": "利潤",
     "profit_percent": "返回 ％",
     "total_value": "資產總值",
+    "TYPES": {
+      "stocks": "股票",
+      "funds": "資金",
+      "crypto": "加密貨幣",
+      "real_estate": "房地產",
+      "vehicle": "車輛",
+      "jewelry_art": "珠寶與藝術品",
+      "other": "其他"
+    },
+    "DETAILS": {
+      "select_account": "選擇一個帳戶",
+      "buy": "買",
+      "sell": "賣",
+      "update_value": "更新值",
+      "trade_sheet_title_buy": "購買（添加到資產）",
+      "trade_sheet_title_sell": "出售（減少資產）",
+      "trade_valuation_notice": "該日期的估值將更新以反映此金額。",
+      "treat_as_investment": "視為投資（僅限現金部分）",
+      "notes_optional": "註釋（可選）"
+    },
     "FORM": {
+      "asset_type": "資產類型",
+      "linked_account": "關聯帳戶（可選）",
       "name": "資產名稱",
       "name_required": "請輸入資產名稱",
       "description": "描述",

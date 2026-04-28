@@ -436,6 +436,10 @@
       "transfer": {
         "one": "Überweisen",
         "other": "Überweisungen"
+      },
+      "investment": {
+        "one": "Investition",
+        "other": "Investitionen"
       }
     }
   },
@@ -868,7 +872,29 @@
     "profit": "Profitieren",
     "profit_percent": "Zurückkehren %",
     "total_value": "Gesamtwert der Vermögenswerte",
+    "TYPES": {
+      "stocks": "Aktien",
+      "funds": "Mittel",
+      "crypto": "Krypto",
+      "real_estate": "Immobilie",
+      "vehicle": "Fahrzeug",
+      "jewelry_art": "Schmuck & Kunst",
+      "other": "Andere"
+    },
+    "DETAILS": {
+      "select_account": "Wählen Sie ein Konto aus",
+      "buy": "Kaufen",
+      "sell": "Verkaufen",
+      "update_value": "Wert aktualisieren",
+      "trade_sheet_title_buy": "Kaufen (zum Vermögenswert hinzufügen)",
+      "trade_sheet_title_sell": "Verkaufen (Vermögenswert reduzieren)",
+      "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
+      "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
+      "notes_optional": "Notizen (optional)"
+    },
     "FORM": {
+      "asset_type": "Asset-Typ",
+      "linked_account": "Verknüpftes Konto (optional)",
       "name": "Asset-Name",
       "name_required": "Bitte geben Sie einen Asset-Namen ein",
       "description": "Beschreibung",

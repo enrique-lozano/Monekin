@@ -324,6 +324,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             id: 'INITIAL_VALUE',
             date: widget.asset.creationDate,
             value: widget.asset.initialValue,
+            deprecated: false,
           ),
           ...valuations,
         ],

@@ -436,6 +436,10 @@
       "transfer": {
         "one": "Transfer",
         "other": "Transferler"
+      },
+      "investment": {
+        "one": "Yatırım",
+        "other": "Yatırımlar"
       }
     }
   },
@@ -868,7 +872,29 @@
     "profit": "Kâr",
     "profit_percent": "Geri dönmek %",
     "total_value": "Varlıkların toplam değeri",
+    "TYPES": {
+      "stocks": "Hisse senetleri",
+      "funds": "Fonlar",
+      "crypto": "Kripto",
+      "real_estate": "Gayrimenkul",
+      "vehicle": "Araç",
+      "jewelry_art": "Takı ve sanat",
+      "other": "Diğer"
+    },
+    "DETAILS": {
+      "select_account": "Bir hesap seçin",
+      "buy": "Satın almak",
+      "sell": "Satmak",
+      "update_value": "Değeri güncelle",
+      "trade_sheet_title_buy": "Satın al (varlığa ekle)",
+      "trade_sheet_title_sell": "Sat (varlığı azalt)",
+      "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
+      "treat_as_investment": "Yatırım olarak değerlendirin (yalnızca nakit ayağı)",
+      "notes_optional": "Notlar (isteğe bağlı)"
+    },
     "FORM": {
+      "asset_type": "Varlık türü",
+      "linked_account": "Bağlı hesap (isteğe bağlı)",
       "name": "Öğe adı",
       "name_required": "Lütfen bir varlık adı girin",
       "description": "Tanım",

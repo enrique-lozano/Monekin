@@ -436,6 +436,10 @@
       "transfer": {
         "one": "Trasferimento",
         "other": "Trasferimenti"
+      },
+      "investment": {
+        "one": "Investimento",
+        "other": "Investimenti"
       }
     }
   },
@@ -868,7 +872,29 @@
     "profit": "Profitto",
     "profit_percent": "Ritorno %",
     "total_value": "Valore totale delle attività",
+    "TYPES": {
+      "stocks": "Azioni",
+      "funds": "Fondi",
+      "crypto": "Criptovaluta",
+      "real_estate": "Immobiliare",
+      "vehicle": "Veicolo",
+      "jewelry_art": "Gioielli e arte",
+      "other": "Altro"
+    },
+    "DETAILS": {
+      "select_account": "Seleziona un conto",
+      "buy": "Acquistare",
+      "sell": "Vendere",
+      "update_value": "Aggiorna valore",
+      "trade_sheet_title_buy": "Acquista (aggiungi alla risorsa)",
+      "trade_sheet_title_sell": "Vendere (ridurre l'asset)",
+      "trade_valuation_notice": "Una valutazione verrà aggiornata per questa data per riflettere questo importo.",
+      "treat_as_investment": "Trattare come investimento (solo gamba contante)",
+      "notes_optional": "Note (facoltativo)"
+    },
     "FORM": {
+      "asset_type": "Tipo di risorsa",
+      "linked_account": "Account collegato (facoltativo)",
       "name": "Nome della risorsa",
       "name_required": "Inserisci il nome di una risorsa",
       "description": "Descrizione",

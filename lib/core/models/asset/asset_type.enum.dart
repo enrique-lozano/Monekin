@@ -17,8 +17,7 @@ enum AssetType implements DatabaseEnum<String> {
   @override
   final String databaseValue;
 
-  bool get isFinancial =>
-      this == stocks || this == funds || this == crypto;
+  bool get isFinancial => this == stocks || this == funds || this == crypto;
 
   bool get isPhysical =>
       this == realEstate || this == vehicle || this == jewelryArt;
@@ -29,9 +28,9 @@ enum AssetType implements DatabaseEnum<String> {
       AssetType.stocks => t.stocks,
       AssetType.funds => t.funds,
       AssetType.crypto => t.crypto,
-      AssetType.realEstate => t.realEstate,
+      AssetType.realEstate => t.real_estate,
       AssetType.vehicle => t.vehicle,
-      AssetType.jewelryArt => t.jewelryArt,
+      AssetType.jewelryArt => t.jewelry_art,
       AssetType.other => t.other,
     };
   }

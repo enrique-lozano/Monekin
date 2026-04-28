@@ -13,6 +13,7 @@ import 'package:monekin/core/database/utils/converters/date_converters.dart';
 import 'package:monekin/core/database/utils/converters/list_converters.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';

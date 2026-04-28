@@ -244,10 +244,7 @@ class _AssetFormPageState extends State<AssetFormPage> {
                         child: Text('—'),
                       ),
                       ...accounts.map(
-                        (a) => DropdownMenuItem(
-                          value: a,
-                          child: Text(a.name),
-                        ),
+                        (a) => DropdownMenuItem(value: a, child: Text(a.name)),
                       ),
                     ],
                     onChanged: (a) => setState(() => _linkedAccount = a),

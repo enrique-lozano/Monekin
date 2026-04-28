@@ -436,6 +436,10 @@
       "transfer": {
         "one": "转账",
         "other": "转账"
+      },
+      "investment": {
+        "one": "投资",
+        "other": "投资"
       }
     }
   },
@@ -868,7 +872,29 @@
     "profit": "利润",
     "profit_percent": "返回 ％",
     "total_value": "资产总值",
+    "TYPES": {
+      "stocks": "股票",
+      "funds": "资金",
+      "crypto": "加密货币",
+      "real_estate": "房地产",
+      "vehicle": "车辆",
+      "jewelry_art": "珠宝与艺术品",
+      "other": "其他"
+    },
+    "DETAILS": {
+      "select_account": "选择一个帐户",
+      "buy": "买",
+      "sell": "卖",
+      "update_value": "更新值",
+      "trade_sheet_title_buy": "购买（添加到资产）",
+      "trade_sheet_title_sell": "出售（减少资产）",
+      "trade_valuation_notice": "该日期的估值将更新以反映这一金额。",
+      "treat_as_investment": "视为投资（仅限现金部分）",
+      "notes_optional": "注释（可选）"
+    },
     "FORM": {
+      "asset_type": "资产类型",
+      "linked_account": "关联帐户（可选）",
       "name": "资产名称",
       "name_required": "请输入资产名称",
       "description": "描述",

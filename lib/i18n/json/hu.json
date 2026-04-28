@@ -436,6 +436,10 @@
       "transfer": {
         "one": "Áthelyezés",
         "other": "Áthelyezések"
+      },
+      "investment": {
+        "one": "Beruházás",
+        "other": "Beruházások"
       }
     }
   },
@@ -868,7 +872,29 @@
     "profit": "Nyereség",
     "profit_percent": "hozam %",
     "total_value": "Az eszközök összértéke",
+    "TYPES": {
+      "stocks": "Készletek",
+      "funds": "Alapok",
+      "crypto": "Crypto",
+      "real_estate": "Ingatlan",
+      "vehicle": "Jármű",
+      "jewelry_art": "Ékszer és művészet",
+      "other": "Más"
+    },
+    "DETAILS": {
+      "select_account": "Válasszon egy fiókot",
+      "buy": "Vétel",
+      "sell": "Elad",
+      "update_value": "Frissítse az értéket",
+      "trade_sheet_title_buy": "Vásárlás (hozzáadás az eszközhöz)",
+      "trade_sheet_title_sell": "Eladás (vagyon csökkentése)",
+      "trade_valuation_notice": "Az erre a dátumra vonatkozó értékelést frissítjük, hogy tükrözze ezt az összeget.",
+      "treat_as_investment": "Befektetésként kezelve (csak készpénzes láb)",
+      "notes_optional": "Megjegyzések (nem kötelező)"
+    },
     "FORM": {
+      "asset_type": "Eszköz típusa",
+      "linked_account": "Kapcsolt fiók (opcionális)",
       "name": "Eszköz neve",
       "name_required": "Kérjük, adjon meg egy elemnevet",
       "description": "Leírás",

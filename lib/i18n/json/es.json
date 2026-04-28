@@ -439,6 +439,10 @@
       "transfer": {
         "one": "Transferencia",
         "other": "Transferencias"
+      },
+      "investment": {
+        "one": "Inversión",
+        "other": "Inversiones"
       }
     }
   },
@@ -871,7 +875,29 @@
     "profit": "Ganancia",
     "profit_percent": "Devolver %",
     "total_value": "Valor total de los activos",
+    "TYPES": {
+      "stocks": "Cepo",
+      "funds": "Fondos",
+      "crypto": "Cripto",
+      "real_estate": "Bienes raíces",
+      "vehicle": "Vehículo",
+      "jewelry_art": "Joyería y arte",
+      "other": "Otro"
+    },
+    "DETAILS": {
+      "select_account": "Seleccione una cuenta",
+      "buy": "Comprar",
+      "sell": "Vender",
+      "update_value": "Actualizar valor",
+      "trade_sheet_title_buy": "Comprar (agregar al activo)",
+      "trade_sheet_title_sell": "Vender (reducir activo)",
+      "trade_valuation_notice": "Se actualizará una valoración para esta fecha para reflejar este monto.",
+      "treat_as_investment": "Tratar como inversión (solo tramo de efectivo)",
+      "notes_optional": "Notas (opcional)"
+    },
     "FORM": {
+      "asset_type": "Tipo de activo",
+      "linked_account": "Cuenta vinculada (opcional)",
       "name": "Nombre del activo",
       "name_required": "Por favor ingrese un nombre de activo",
       "description": "Descripción",

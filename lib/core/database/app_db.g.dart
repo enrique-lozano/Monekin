@@ -1800,6 +1800,29 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
+  late final GeneratedColumnWithTypeConverter<AssetType, String>
+  assetType = GeneratedColumn<String>(
+    'assetType',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT \'other\' CHECK (assetType IN (\'stocks\', \'funds\', \'crypto\', \'real_estate\', \'vehicle\', \'jewelry_art\', \'other\'))',
+    defaultValue: const CustomExpression('\'other\''),
+  ).withConverter<AssetType>(Assets.$converterassetType);
+  static const VerificationMeta _linkedAccountIDMeta = const VerificationMeta(
+    'linkedAccountID',
+  );
+  late final GeneratedColumn<String> linkedAccountID = GeneratedColumn<String>(
+    'linkedAccountID',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'REFERENCES accounts(id)ON UPDATE CASCADE ON DELETE SET NULL',
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1808,6 +1831,8 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     currencyId,
     initialValue,
     creationDate,
+    assetType,
+    linkedAccountID,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1871,6 +1896,15 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     } else if (isInserting) {
       context.missing(_creationDateMeta);
     }
+    if (data.containsKey('linkedAccountID')) {
+      context.handle(
+        _linkedAccountIDMeta,
+        linkedAccountID.isAcceptableOrUnknown(
+          data['linkedAccountID']!,
+          _linkedAccountIDMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1904,6 +1938,16 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
         DriftSqlType.dateTime,
         data['${effectivePrefix}creationDate'],
       )!,
+      assetType: Assets.$converterassetType.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}assetType'],
+        )!,
+      ),
+      linkedAccountID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}linkedAccountID'],
+      ),
     );
   }
 
@@ -1912,6 +1956,8 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     return Assets(attachedDatabase, alias);
   }
 
+  static JsonTypeConverter2<AssetType, String, String> $converterassetType =
+      const EnumNameConverter<AssetType>(AssetType.values);
   @override
   bool get dontWriteConstraints => true;
 }
@@ -1933,6 +1979,10 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
 
   /// Date this asset was acquired or created
   final DateTime creationDate;
+  final AssetType assetType;
+
+  /// When set, this asset rolls into the linked account total (e.g. brokerage portfolio)
+  final String? linkedAccountID;
   const AssetInDB({
     required this.id,
     required this.name,
@@ -1940,6 +1990,8 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     required this.currencyId,
     required this.initialValue,
     required this.creationDate,
+    required this.assetType,
+    this.linkedAccountID,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1952,6 +2004,14 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     map['currencyId'] = Variable<String>(currencyId);
     map['initialValue'] = Variable<double>(initialValue);
     map['creationDate'] = Variable<DateTime>(creationDate);
+    {
+      map['assetType'] = Variable<String>(
+        Assets.$converterassetType.toSql(assetType),
+      );
+    }
+    if (!nullToAbsent || linkedAccountID != null) {
+      map['linkedAccountID'] = Variable<String>(linkedAccountID);
+    }
     return map;
   }
 
@@ -1965,6 +2025,10 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       currencyId: Value(currencyId),
       initialValue: Value(initialValue),
       creationDate: Value(creationDate),
+      assetType: Value(assetType),
+      linkedAccountID: linkedAccountID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(linkedAccountID),
     );
   }
 
@@ -1980,6 +2044,10 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       currencyId: serializer.fromJson<String>(json['currencyId']),
       initialValue: serializer.fromJson<double>(json['initialValue']),
       creationDate: serializer.fromJson<DateTime>(json['creationDate']),
+      assetType: Assets.$converterassetType.fromJson(
+        serializer.fromJson<String>(json['assetType']),
+      ),
+      linkedAccountID: serializer.fromJson<String?>(json['linkedAccountID']),
     );
   }
   @override
@@ -1992,6 +2060,10 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       'currencyId': serializer.toJson<String>(currencyId),
       'initialValue': serializer.toJson<double>(initialValue),
       'creationDate': serializer.toJson<DateTime>(creationDate),
+      'assetType': serializer.toJson<String>(
+        Assets.$converterassetType.toJson(assetType),
+      ),
+      'linkedAccountID': serializer.toJson<String?>(linkedAccountID),
     };
   }
 
@@ -2002,6 +2074,8 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     String? currencyId,
     double? initialValue,
     DateTime? creationDate,
+    AssetType? assetType,
+    Value<String?> linkedAccountID = const Value.absent(),
   }) => AssetInDB(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -2009,6 +2083,10 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     currencyId: currencyId ?? this.currencyId,
     initialValue: initialValue ?? this.initialValue,
     creationDate: creationDate ?? this.creationDate,
+    assetType: assetType ?? this.assetType,
+    linkedAccountID: linkedAccountID.present
+        ? linkedAccountID.value
+        : this.linkedAccountID,
   );
   AssetInDB copyWithCompanion(AssetsCompanion data) {
     return AssetInDB(
@@ -2026,6 +2104,10 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       creationDate: data.creationDate.present
           ? data.creationDate.value
           : this.creationDate,
+      assetType: data.assetType.present ? data.assetType.value : this.assetType,
+      linkedAccountID: data.linkedAccountID.present
+          ? data.linkedAccountID.value
+          : this.linkedAccountID,
     );
   }
 
@@ -2037,7 +2119,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
           ..write('description: $description, ')
           ..write('currencyId: $currencyId, ')
           ..write('initialValue: $initialValue, ')
-          ..write('creationDate: $creationDate')
+          ..write('creationDate: $creationDate, ')
+          ..write('assetType: $assetType, ')
+          ..write('linkedAccountID: $linkedAccountID')
           ..write(')'))
         .toString();
   }
@@ -2050,6 +2134,8 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     currencyId,
     initialValue,
     creationDate,
+    assetType,
+    linkedAccountID,
   );
   @override
   bool operator ==(Object other) =>
@@ -2060,7 +2146,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
           other.description == this.description &&
           other.currencyId == this.currencyId &&
           other.initialValue == this.initialValue &&
-          other.creationDate == this.creationDate);
+          other.creationDate == this.creationDate &&
+          other.assetType == this.assetType &&
+          other.linkedAccountID == this.linkedAccountID);
 }
 
 class AssetsCompanion extends UpdateCompanion<AssetInDB> {
@@ -2070,6 +2158,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
   final Value<String> currencyId;
   final Value<double> initialValue;
   final Value<DateTime> creationDate;
+  final Value<AssetType> assetType;
+  final Value<String?> linkedAccountID;
   final Value<int> rowid;
   const AssetsCompanion({
     this.id = const Value.absent(),
@@ -2078,6 +2168,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     this.currencyId = const Value.absent(),
     this.initialValue = const Value.absent(),
     this.creationDate = const Value.absent(),
+    this.assetType = const Value.absent(),
+    this.linkedAccountID = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AssetsCompanion.insert({
@@ -2087,6 +2179,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     required String currencyId,
     this.initialValue = const Value.absent(),
     required DateTime creationDate,
+    this.assetType = const Value.absent(),
+    this.linkedAccountID = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -2099,6 +2193,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     Expression<String>? currencyId,
     Expression<double>? initialValue,
     Expression<DateTime>? creationDate,
+    Expression<String>? assetType,
+    Expression<String>? linkedAccountID,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2108,6 +2204,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
       if (currencyId != null) 'currencyId': currencyId,
       if (initialValue != null) 'initialValue': initialValue,
       if (creationDate != null) 'creationDate': creationDate,
+      if (assetType != null) 'assetType': assetType,
+      if (linkedAccountID != null) 'linkedAccountID': linkedAccountID,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2119,6 +2217,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     Value<String>? currencyId,
     Value<double>? initialValue,
     Value<DateTime>? creationDate,
+    Value<AssetType>? assetType,
+    Value<String?>? linkedAccountID,
     Value<int>? rowid,
   }) {
     return AssetsCompanion(
@@ -2128,6 +2228,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
       currencyId: currencyId ?? this.currencyId,
       initialValue: initialValue ?? this.initialValue,
       creationDate: creationDate ?? this.creationDate,
+      assetType: assetType ?? this.assetType,
+      linkedAccountID: linkedAccountID ?? this.linkedAccountID,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2153,6 +2255,14 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     if (creationDate.present) {
       map['creationDate'] = Variable<DateTime>(creationDate.value);
     }
+    if (assetType.present) {
+      map['assetType'] = Variable<String>(
+        Assets.$converterassetType.toSql(assetType.value),
+      );
+    }
+    if (linkedAccountID.present) {
+      map['linkedAccountID'] = Variable<String>(linkedAccountID.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2168,6 +2278,8 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
           ..write('currencyId: $currencyId, ')
           ..write('initialValue: $initialValue, ')
           ..write('creationDate: $creationDate, ')
+          ..write('assetType: $assetType, ')
+          ..write('linkedAccountID: $linkedAccountID, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2230,8 +2342,27 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
+  static const VerificationMeta _deprecatedMeta = const VerificationMeta(
+    'deprecated',
+  );
+  late final GeneratedColumn<bool> deprecated = GeneratedColumn<bool>(
+    'deprecated',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT FALSE',
+    defaultValue: const CustomExpression('FALSE'),
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, accountId, assetId, date, value];
+  List<GeneratedColumn> get $columns => [
+    id,
+    accountId,
+    assetId,
+    date,
+    value,
+    deprecated,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2269,6 +2400,12 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     } else if (isInserting) {
       context.missing(_valueMeta);
     }
+    if (data.containsKey('deprecated')) {
+      context.handle(
+        _deprecatedMeta,
+        deprecated.isAcceptableOrUnknown(data['deprecated']!, _deprecatedMeta),
+      );
+    }
     return context;
   }
 
@@ -2299,6 +2436,10 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
       value: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}value'],
+      )!,
+      deprecated: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}deprecated'],
       )!,
     );
   }
@@ -2332,12 +2473,16 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
 
   /// Value at the time of this snapshot, in the currency of the account or asset
   final double value;
+
+  /// Migrated account valuations kept for history but ignored for balances
+  final bool deprecated;
   const ValuationInDB({
     required this.id,
     this.accountId,
     this.assetId,
     required this.date,
     required this.value,
+    required this.deprecated,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2353,6 +2498,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       map['date'] = Variable<String>(Valuations.$converterdate.toSql(date));
     }
     map['value'] = Variable<double>(value);
+    map['deprecated'] = Variable<bool>(deprecated);
     return map;
   }
 
@@ -2367,6 +2513,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
           : Value(assetId),
       date: Value(date),
       value: Value(value),
+      deprecated: Value(deprecated),
     );
   }
 
@@ -2381,6 +2528,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       assetId: serializer.fromJson<String?>(json['assetId']),
       date: serializer.fromJson<DateTime>(json['date']),
       value: serializer.fromJson<double>(json['value']),
+      deprecated: serializer.fromJson<bool>(json['deprecated']),
     );
   }
   @override
@@ -2392,6 +2540,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       'assetId': serializer.toJson<String?>(assetId),
       'date': serializer.toJson<DateTime>(date),
       'value': serializer.toJson<double>(value),
+      'deprecated': serializer.toJson<bool>(deprecated),
     };
   }
 
@@ -2401,12 +2550,14 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
     Value<String?> assetId = const Value.absent(),
     DateTime? date,
     double? value,
+    bool? deprecated,
   }) => ValuationInDB(
     id: id ?? this.id,
     accountId: accountId.present ? accountId.value : this.accountId,
     assetId: assetId.present ? assetId.value : this.assetId,
     date: date ?? this.date,
     value: value ?? this.value,
+    deprecated: deprecated ?? this.deprecated,
   );
   ValuationInDB copyWithCompanion(ValuationsCompanion data) {
     return ValuationInDB(
@@ -2415,6 +2566,9 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       assetId: data.assetId.present ? data.assetId.value : this.assetId,
       date: data.date.present ? data.date.value : this.date,
       value: data.value.present ? data.value.value : this.value,
+      deprecated: data.deprecated.present
+          ? data.deprecated.value
+          : this.deprecated,
     );
   }
 
@@ -2425,13 +2579,15 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
           ..write('accountId: $accountId, ')
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
-          ..write('value: $value')
+          ..write('value: $value, ')
+          ..write('deprecated: $deprecated')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, accountId, assetId, date, value);
+  int get hashCode =>
+      Object.hash(id, accountId, assetId, date, value, deprecated);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2440,7 +2596,8 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
           other.accountId == this.accountId &&
           other.assetId == this.assetId &&
           other.date == this.date &&
-          other.value == this.value);
+          other.value == this.value &&
+          other.deprecated == this.deprecated);
 }
 
 class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
@@ -2449,6 +2606,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
   final Value<String?> assetId;
   final Value<DateTime> date;
   final Value<double> value;
+  final Value<bool> deprecated;
   final Value<int> rowid;
   const ValuationsCompanion({
     this.id = const Value.absent(),
@@ -2456,6 +2614,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     this.assetId = const Value.absent(),
     this.date = const Value.absent(),
     this.value = const Value.absent(),
+    this.deprecated = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ValuationsCompanion.insert({
@@ -2464,6 +2623,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     this.assetId = const Value.absent(),
     required DateTime date,
     required double value,
+    this.deprecated = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        date = Value(date),
@@ -2474,6 +2634,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     Expression<String>? assetId,
     Expression<String>? date,
     Expression<double>? value,
+    Expression<bool>? deprecated,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2482,6 +2643,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
       if (assetId != null) 'assetId': assetId,
       if (date != null) 'date': date,
       if (value != null) 'value': value,
+      if (deprecated != null) 'deprecated': deprecated,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2492,6 +2654,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     Value<String?>? assetId,
     Value<DateTime>? date,
     Value<double>? value,
+    Value<bool>? deprecated,
     Value<int>? rowid,
   }) {
     return ValuationsCompanion(
@@ -2500,6 +2663,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
       assetId: assetId ?? this.assetId,
       date: date ?? this.date,
       value: value ?? this.value,
+      deprecated: deprecated ?? this.deprecated,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2524,6 +2688,9 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     if (value.present) {
       map['value'] = Variable<double>(value.value);
     }
+    if (deprecated.present) {
+      map['deprecated'] = Variable<bool>(deprecated.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2538,6 +2705,7 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
           ..write('value: $value, ')
+          ..write('deprecated: $deprecated, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3108,8 +3276,21 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         false,
         type: DriftSqlType.string,
         requiredDuringInsert: true,
-        $customConstraints: 'NOT NULL CHECK (type IN (\'E\', \'I\', \'T\'))',
+        $customConstraints:
+            'NOT NULL CHECK (type IN (\'E\', \'I\', \'T\', \'N\'))',
       ).withConverter<TransactionType>(Transactions.$convertertype);
+  static const VerificationMeta _assetIDMeta = const VerificationMeta(
+    'assetID',
+  );
+  late final GeneratedColumn<String> assetID = GeneratedColumn<String>(
+    'assetID',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'REFERENCES assets(id)ON UPDATE CASCADE ON DELETE SET NULL',
+  );
   late final GeneratedColumnWithTypeConverter<TransactionStatus?, String>
   status = GeneratedColumn<String>(
     'status',
@@ -3260,6 +3441,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     title,
     notes,
     type,
+    assetID,
     status,
     categoryID,
     debtId,
@@ -3325,6 +3507,12 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       context.handle(
         _notesMeta,
         notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('assetID')) {
+      context.handle(
+        _assetIDMeta,
+        assetID.isAcceptableOrUnknown(data['assetID']!, _assetIDMeta),
       );
     }
     if (data.containsKey('categoryID')) {
@@ -3450,6 +3638,10 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
           data['${effectivePrefix}type'],
         )!,
       ),
+      assetID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}assetID'],
+      ),
       status: Transactions.$converterstatusn.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -3530,7 +3722,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
   );
   @override
   List<String> get customConstraints => const [
-    'CHECK((receivingAccountID IS NULL)!=(categoryID IS NULL))',
+    'CHECK((type = \'N\' AND assetID IS NOT NULL AND receivingAccountID IS NULL AND categoryID IS NULL AND valueInDestiny IS NULL)OR(type != \'N\' AND((receivingAccountID IS NULL)!=(categoryID IS NULL))))',
     'CHECK((intervalPeriod IS NULL)==(intervalEach IS NULL))',
     'CHECK((intervalPeriod IS NOT NULL)OR(endDate IS NULL))',
     'CHECK((intervalPeriod IS NOT NULL)OR(remainingTransactions IS NULL))',
@@ -3558,8 +3750,11 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
   /// Some description, notes or extra info about the transaction.
   final String? notes;
 
-  /// Whether the transacton is an income, an expense or a transfer
+  /// Income, expense, transfer, or investment (asset cash leg; excluded from I/E stats)
   final TransactionType type;
+
+  /// Optional link to an asset (buy/sell / investment flows)
+  final String? assetID;
   final TransactionStatus? status;
   final String? categoryID;
 
@@ -3603,6 +3798,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     this.title,
     this.notes,
     required this.type,
+    this.assetID,
     this.status,
     this.categoryID,
     this.debtId,
@@ -3632,6 +3828,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     }
     {
       map['type'] = Variable<String>(Transactions.$convertertype.toSql(type));
+    }
+    if (!nullToAbsent || assetID != null) {
+      map['assetID'] = Variable<String>(assetID);
     }
     if (!nullToAbsent || status != null) {
       map['status'] = Variable<String>(
@@ -3690,6 +3889,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ? const Value.absent()
           : Value(notes),
       type: Value(type),
+      assetID: assetID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(assetID),
       status: status == null && nullToAbsent
           ? const Value.absent()
           : Value(status),
@@ -3743,6 +3945,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       title: serializer.fromJson<String?>(json['title']),
       notes: serializer.fromJson<String?>(json['notes']),
       type: serializer.fromJson<TransactionType>(json['type']),
+      assetID: serializer.fromJson<String?>(json['assetID']),
       status: serializer.fromJson<TransactionStatus?>(json['status']),
       categoryID: serializer.fromJson<String?>(json['categoryID']),
       debtId: serializer.fromJson<String?>(json['debtId']),
@@ -3775,6 +3978,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'title': serializer.toJson<String?>(title),
       'notes': serializer.toJson<String?>(notes),
       'type': serializer.toJson<TransactionType>(type),
+      'assetID': serializer.toJson<String?>(assetID),
       'status': serializer.toJson<TransactionStatus?>(status),
       'categoryID': serializer.toJson<String?>(categoryID),
       'debtId': serializer.toJson<String?>(debtId),
@@ -3801,6 +4005,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     Value<String?> title = const Value.absent(),
     Value<String?> notes = const Value.absent(),
     TransactionType? type,
+    Value<String?> assetID = const Value.absent(),
     Value<TransactionStatus?> status = const Value.absent(),
     Value<String?> categoryID = const Value.absent(),
     Value<String?> debtId = const Value.absent(),
@@ -3822,6 +4027,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     title: title.present ? title.value : this.title,
     notes: notes.present ? notes.value : this.notes,
     type: type ?? this.type,
+    assetID: assetID.present ? assetID.value : this.assetID,
     status: status.present ? status.value : this.status,
     categoryID: categoryID.present ? categoryID.value : this.categoryID,
     debtId: debtId.present ? debtId.value : this.debtId,
@@ -3853,6 +4059,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       title: data.title.present ? data.title.value : this.title,
       notes: data.notes.present ? data.notes.value : this.notes,
       type: data.type.present ? data.type.value : this.type,
+      assetID: data.assetID.present ? data.assetID.value : this.assetID,
       status: data.status.present ? data.status.value : this.status,
       categoryID: data.categoryID.present
           ? data.categoryID.value
@@ -3897,6 +4104,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ..write('title: $title, ')
           ..write('notes: $notes, ')
           ..write('type: $type, ')
+          ..write('assetID: $assetID, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('debtId: $debtId, ')
@@ -3915,7 +4123,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     id,
     date,
     accountID,
@@ -3923,6 +4131,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     title,
     notes,
     type,
+    assetID,
     status,
     categoryID,
     debtId,
@@ -3936,7 +4145,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     intervalEach,
     endDate,
     remainingTransactions,
-  );
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3948,6 +4157,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           other.title == this.title &&
           other.notes == this.notes &&
           other.type == this.type &&
+          other.assetID == this.assetID &&
           other.status == this.status &&
           other.categoryID == this.categoryID &&
           other.debtId == this.debtId &&
@@ -3971,6 +4181,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<String?> title;
   final Value<String?> notes;
   final Value<TransactionType> type;
+  final Value<String?> assetID;
   final Value<TransactionStatus?> status;
   final Value<String?> categoryID;
   final Value<String?> debtId;
@@ -3993,6 +4204,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.title = const Value.absent(),
     this.notes = const Value.absent(),
     this.type = const Value.absent(),
+    this.assetID = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.debtId = const Value.absent(),
@@ -4016,6 +4228,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.title = const Value.absent(),
     this.notes = const Value.absent(),
     required TransactionType type,
+    this.assetID = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.debtId = const Value.absent(),
@@ -4043,6 +4256,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Expression<String>? title,
     Expression<String>? notes,
     Expression<String>? type,
+    Expression<String>? assetID,
     Expression<String>? status,
     Expression<String>? categoryID,
     Expression<String>? debtId,
@@ -4066,6 +4280,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       if (title != null) 'title': title,
       if (notes != null) 'notes': notes,
       if (type != null) 'type': type,
+      if (assetID != null) 'assetID': assetID,
       if (status != null) 'status': status,
       if (categoryID != null) 'categoryID': categoryID,
       if (debtId != null) 'debtId': debtId,
@@ -4092,6 +4307,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Value<String?>? title,
     Value<String?>? notes,
     Value<TransactionType>? type,
+    Value<String?>? assetID,
     Value<TransactionStatus?>? status,
     Value<String?>? categoryID,
     Value<String?>? debtId,
@@ -4115,6 +4331,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       title: title ?? this.title,
       notes: notes ?? this.notes,
       type: type ?? this.type,
+      assetID: assetID ?? this.assetID,
       status: status ?? this.status,
       categoryID: categoryID ?? this.categoryID,
       debtId: debtId ?? this.debtId,
@@ -4158,6 +4375,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       map['type'] = Variable<String>(
         Transactions.$convertertype.toSql(type.value),
       );
+    }
+    if (assetID.present) {
+      map['assetID'] = Variable<String>(assetID.value);
     }
     if (status.present) {
       map['status'] = Variable<String>(
@@ -4218,6 +4438,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
           ..write('title: $title, ')
           ..write('notes: $notes, ')
           ..write('type: $type, ')
+          ..write('assetID: $assetID, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('debtId: $debtId, ')
@@ -7905,6 +8126,10 @@ abstract class _$AppDB extends GeneratedDatabase {
         creationDate: row.read<DateTime>('creationDate'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
         description: row.readNullable<String>('description'),
+        assetType: Assets.$converterassetType.fromSql(
+          row.read<String>('assetType'),
+        ),
+        linkedAccountID: row.readNullable<String>('linkedAccountID'),
       ),
     );
   }
@@ -7913,7 +8138,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     required String accountId,
   }) {
     return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 ORDER BY date DESC',
+      'SELECT * FROM valuations WHERE accountId = ?1 AND deprecated = FALSE ORDER BY date DESC',
       variables: [Variable<String>(accountId)],
       readsFrom: {valuations},
     ).asyncMap(valuations.mapFromRow);
@@ -7923,7 +8148,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     required String accountId,
   }) {
     return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 ORDER BY date DESC LIMIT 1',
+      'SELECT * FROM valuations WHERE accountId = ?1 AND deprecated = FALSE ORDER BY date DESC LIMIT 1',
       variables: [Variable<String>(accountId)],
       readsFrom: {valuations},
     ).asyncMap(valuations.mapFromRow);
@@ -7934,7 +8159,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     required DateTime date,
   }) {
     return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 AND date <= ?2 ORDER BY date DESC LIMIT 1',
+      'SELECT * FROM valuations WHERE accountId = ?1 AND date <= ?2 AND deprecated = FALSE ORDER BY date DESC LIMIT 1',
       variables: [Variable<String>(accountId), Variable<DateTime>(date)],
       readsFrom: {valuations},
     ).asyncMap(valuations.mapFromRow);
@@ -8095,6 +8320,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         ),
         remainingTransactions: row.readNullable<int>('remainingTransactions'),
         debtId: row.readNullable<String>('debtId'),
+        assetID: row.readNullable<String>('assetID'),
       ),
     );
   }
@@ -8521,6 +8747,20 @@ abstract class _$AppDB extends GeneratedDatabase {
         'accounts',
         limitUpdateKind: UpdateKind.delete,
       ),
+      result: [TableUpdate('assets', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('assets', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
       result: [TableUpdate('valuations', kind: UpdateKind.delete)],
     ),
     WritePropagation(
@@ -8554,6 +8794,20 @@ abstract class _$AppDB extends GeneratedDatabase {
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'accounts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('transactions', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'assets',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('transactions', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'assets',
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('transactions', kind: UpdateKind.update)],
@@ -9346,6 +9600,24 @@ final class $AccountsReferences
     );
   }
 
+  static MultiTypedResultKey<Assets, List<AssetInDB>> _assetsRefsTable(
+    _$AppDB db,
+  ) => MultiTypedResultKey.fromTable(
+    db.assets,
+    aliasName: $_aliasNameGenerator(db.accounts.id, db.assets.linkedAccountID),
+  );
+
+  $AssetsProcessedTableManager get assetsRefs {
+    final manager = $AssetsTableManager($_db, $_db.assets).filter(
+      (f) => f.linkedAccountID.id.sqlEquals($_itemColumn<String>('id')!),
+    );
+
+    final cache = $_typedResult.readTableOrNull(_assetsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<Valuations, List<ValuationInDB>>
   _valuationsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.valuations,
@@ -9455,6 +9727,31 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
           ),
     );
     return composer;
+  }
+
+  Expression<bool> assetsRefs(
+    Expression<bool> Function($AssetsFilterComposer f) f,
+  ) {
+    final $AssetsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.linkedAccountID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsFilterComposer(
+            $db: $db,
+            $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<bool> valuationsRefs(
@@ -9648,6 +9945,31 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     return composer;
   }
 
+  Expression<T> assetsRefs<T extends Object>(
+    Expression<T> Function($AssetsAnnotationComposer a) f,
+  ) {
+    final $AssetsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.linkedAccountID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsAnnotationComposer(
+            $db: $db,
+            $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> valuationsRefs<T extends Object>(
     Expression<T> Function($ValuationsAnnotationComposer a) f,
   ) {
@@ -9687,7 +10009,11 @@ class $AccountsTableManager
           $AccountsUpdateCompanionBuilder,
           (AccountInDB, $AccountsReferences),
           AccountInDB,
-          PrefetchHooks Function({bool currencyId, bool valuationsRefs})
+          PrefetchHooks Function({
+            bool currencyId,
+            bool assetsRefs,
+            bool valuationsRefs,
+          })
         > {
   $AccountsTableManager(_$AppDB db, Accounts table)
     : super(
@@ -9770,10 +10096,17 @@ class $AccountsTableManager
               )
               .toList(),
           prefetchHooksCallback:
-              ({currencyId = false, valuationsRefs = false}) {
+              ({
+                currencyId = false,
+                assetsRefs = false,
+                valuationsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
-                  explicitlyWatchedTables: [if (valuationsRefs) db.valuations],
+                  explicitlyWatchedTables: [
+                    if (assetsRefs) db.assets,
+                    if (valuationsRefs) db.valuations,
+                  ],
                   addJoins:
                       <
                         T extends TableManagerState<
@@ -9808,6 +10141,24 @@ class $AccountsTableManager
                       },
                   getPrefetchedDataCallback: (items) async {
                     return [
+                      if (assetsRefs)
+                        await $_getPrefetchedData<
+                          AccountInDB,
+                          Accounts,
+                          AssetInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountsReferences._assetsRefsTable(
+                            db,
+                          ),
+                          managerFromTypedResult: (p0) =>
+                              $AccountsReferences(db, table, p0).assetsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.linkedAccountID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (valuationsRefs)
                         await $_getPrefetchedData<
                           AccountInDB,
@@ -9845,7 +10196,11 @@ typedef $AccountsProcessedTableManager =
       $AccountsUpdateCompanionBuilder,
       (AccountInDB, $AccountsReferences),
       AccountInDB,
-      PrefetchHooks Function({bool currencyId, bool valuationsRefs})
+      PrefetchHooks Function({
+        bool currencyId,
+        bool assetsRefs,
+        bool valuationsRefs,
+      })
     >;
 typedef $DebtsCreateCompanionBuilder =
     DebtsCompanion Function({
@@ -10313,6 +10668,8 @@ typedef $AssetsCreateCompanionBuilder =
       required String currencyId,
       Value<double> initialValue,
       required DateTime creationDate,
+      Value<AssetType> assetType,
+      Value<String?> linkedAccountID,
       Value<int> rowid,
     });
 typedef $AssetsUpdateCompanionBuilder =
@@ -10323,6 +10680,8 @@ typedef $AssetsUpdateCompanionBuilder =
       Value<String> currencyId,
       Value<double> initialValue,
       Value<DateTime> creationDate,
+      Value<AssetType> assetType,
+      Value<String?> linkedAccountID,
       Value<int> rowid,
     });
 
@@ -10348,6 +10707,24 @@ final class $AssetsReferences
     );
   }
 
+  static Accounts _linkedAccountIDTable(_$AppDB db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.assets.linkedAccountID, db.accounts.id),
+  );
+
+  $AccountsProcessedTableManager? get linkedAccountID {
+    final $_column = $_itemColumn<String>('linkedAccountID');
+    if ($_column == null) return null;
+    final manager = $AccountsTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_linkedAccountIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
   static MultiTypedResultKey<Valuations, List<ValuationInDB>>
   _valuationsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.valuations,
@@ -10361,6 +10738,24 @@ final class $AssetsReferences
     ).filter((f) => f.assetId.id.sqlEquals($_itemColumn<String>('id')!));
 
     final cache = $_typedResult.readTableOrNull(_valuationsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<Transactions, List<TransactionInDB>>
+  _transactionsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.transactions,
+    aliasName: $_aliasNameGenerator(db.assets.id, db.transactions.assetID),
+  );
+
+  $TransactionsProcessedTableManager get transactionsRefs {
+    final manager = $TransactionsTableManager(
+      $_db,
+      $_db.transactions,
+    ).filter((f) => f.assetID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_transactionsRefsTable($_db));
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -10400,6 +10795,12 @@ class $AssetsFilterComposer extends Composer<_$AppDB, Assets> {
     builder: (column) => ColumnFilters(column),
   );
 
+  ColumnWithTypeConverterFilters<AssetType, AssetType, String> get assetType =>
+      $composableBuilder(
+        column: $table.assetType,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
   $CurrenciesFilterComposer get currencyId {
     final $CurrenciesFilterComposer composer = $composerBuilder(
       composer: this,
@@ -10414,6 +10815,29 @@ class $AssetsFilterComposer extends Composer<_$AppDB, Assets> {
           }) => $CurrenciesFilterComposer(
             $db: $db,
             $table: $db.currencies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $AccountsFilterComposer get linkedAccountID {
+    final $AccountsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.linkedAccountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10439,6 +10863,31 @@ class $AssetsFilterComposer extends Composer<_$AppDB, Assets> {
           }) => $ValuationsFilterComposer(
             $db: $db,
             $table: $db.valuations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> transactionsRefs(
+    Expression<bool> Function($TransactionsFilterComposer f) f,
+  ) {
+    final $TransactionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.assetID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsFilterComposer(
+            $db: $db,
+            $table: $db.transactions,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10482,6 +10931,11 @@ class $AssetsOrderingComposer extends Composer<_$AppDB, Assets> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get assetType => $composableBuilder(
+    column: $table.assetType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $CurrenciesOrderingComposer get currencyId {
     final $CurrenciesOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -10496,6 +10950,29 @@ class $AssetsOrderingComposer extends Composer<_$AppDB, Assets> {
           }) => $CurrenciesOrderingComposer(
             $db: $db,
             $table: $db.currencies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $AccountsOrderingComposer get linkedAccountID {
+    final $AccountsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.linkedAccountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10535,6 +11012,9 @@ class $AssetsAnnotationComposer extends Composer<_$AppDB, Assets> {
     builder: (column) => column,
   );
 
+  GeneratedColumnWithTypeConverter<AssetType, String> get assetType =>
+      $composableBuilder(column: $table.assetType, builder: (column) => column);
+
   $CurrenciesAnnotationComposer get currencyId {
     final $CurrenciesAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -10549,6 +11029,29 @@ class $AssetsAnnotationComposer extends Composer<_$AppDB, Assets> {
           }) => $CurrenciesAnnotationComposer(
             $db: $db,
             $table: $db.currencies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $AccountsAnnotationComposer get linkedAccountID {
+    final $AccountsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.linkedAccountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10582,6 +11085,31 @@ class $AssetsAnnotationComposer extends Composer<_$AppDB, Assets> {
     );
     return f(composer);
   }
+
+  Expression<T> transactionsRefs<T extends Object>(
+    Expression<T> Function($TransactionsAnnotationComposer a) f,
+  ) {
+    final $TransactionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.assetID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsAnnotationComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $AssetsTableManager
@@ -10597,7 +11125,12 @@ class $AssetsTableManager
           $AssetsUpdateCompanionBuilder,
           (AssetInDB, $AssetsReferences),
           AssetInDB,
-          PrefetchHooks Function({bool currencyId, bool valuationsRefs})
+          PrefetchHooks Function({
+            bool currencyId,
+            bool linkedAccountID,
+            bool valuationsRefs,
+            bool transactionsRefs,
+          })
         > {
   $AssetsTableManager(_$AppDB db, Assets table)
     : super(
@@ -10618,6 +11151,8 @@ class $AssetsTableManager
                 Value<String> currencyId = const Value.absent(),
                 Value<double> initialValue = const Value.absent(),
                 Value<DateTime> creationDate = const Value.absent(),
+                Value<AssetType> assetType = const Value.absent(),
+                Value<String?> linkedAccountID = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssetsCompanion(
                 id: id,
@@ -10626,6 +11161,8 @@ class $AssetsTableManager
                 currencyId: currencyId,
                 initialValue: initialValue,
                 creationDate: creationDate,
+                assetType: assetType,
+                linkedAccountID: linkedAccountID,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -10636,6 +11173,8 @@ class $AssetsTableManager
                 required String currencyId,
                 Value<double> initialValue = const Value.absent(),
                 required DateTime creationDate,
+                Value<AssetType> assetType = const Value.absent(),
+                Value<String?> linkedAccountID = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssetsCompanion.insert(
                 id: id,
@@ -10644,16 +11183,26 @@ class $AssetsTableManager
                 currencyId: currencyId,
                 initialValue: initialValue,
                 creationDate: creationDate,
+                assetType: assetType,
+                linkedAccountID: linkedAccountID,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), $AssetsReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback:
-              ({currencyId = false, valuationsRefs = false}) {
+              ({
+                currencyId = false,
+                linkedAccountID = false,
+                valuationsRefs = false,
+                transactionsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
-                  explicitlyWatchedTables: [if (valuationsRefs) db.valuations],
+                  explicitlyWatchedTables: [
+                    if (valuationsRefs) db.valuations,
+                    if (transactionsRefs) db.transactions,
+                  ],
                   addJoins:
                       <
                         T extends TableManagerState<
@@ -10683,6 +11232,19 @@ class $AssetsTableManager
                                   )
                                   as T;
                         }
+                        if (linkedAccountID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.linkedAccountID,
+                                    referencedTable: $AssetsReferences
+                                        ._linkedAccountIDTable(db),
+                                    referencedColumn: $AssetsReferences
+                                        ._linkedAccountIDTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
 
                         return state;
                       },
@@ -10702,6 +11264,23 @@ class $AssetsTableManager
                           referencedItemsForCurrentItem:
                               (item, referencedItems) => referencedItems.where(
                                 (e) => e.assetId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (transactionsRefs)
+                        await $_getPrefetchedData<
+                          AssetInDB,
+                          Assets,
+                          TransactionInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AssetsReferences
+                              ._transactionsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $AssetsReferences(db, table, p0).transactionsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.assetID == item.id,
                               ),
                           typedResults: items,
                         ),
@@ -10725,7 +11304,12 @@ typedef $AssetsProcessedTableManager =
       $AssetsUpdateCompanionBuilder,
       (AssetInDB, $AssetsReferences),
       AssetInDB,
-      PrefetchHooks Function({bool currencyId, bool valuationsRefs})
+      PrefetchHooks Function({
+        bool currencyId,
+        bool linkedAccountID,
+        bool valuationsRefs,
+        bool transactionsRefs,
+      })
     >;
 typedef $ValuationsCreateCompanionBuilder =
     ValuationsCompanion Function({
@@ -10734,6 +11318,7 @@ typedef $ValuationsCreateCompanionBuilder =
       Value<String?> assetId,
       required DateTime date,
       required double value,
+      Value<bool> deprecated,
       Value<int> rowid,
     });
 typedef $ValuationsUpdateCompanionBuilder =
@@ -10743,6 +11328,7 @@ typedef $ValuationsUpdateCompanionBuilder =
       Value<String?> assetId,
       Value<DateTime> date,
       Value<double> value,
+      Value<bool> deprecated,
       Value<int> rowid,
     });
 
@@ -10808,6 +11394,11 @@ class $ValuationsFilterComposer extends Composer<_$AppDB, Valuations> {
 
   ColumnFilters<double> get value => $composableBuilder(
     column: $table.value,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get deprecated => $composableBuilder(
+    column: $table.deprecated,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10881,6 +11472,11 @@ class $ValuationsOrderingComposer extends Composer<_$AppDB, Valuations> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<bool> get deprecated => $composableBuilder(
+    column: $table.deprecated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $AccountsOrderingComposer get accountId {
     final $AccountsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -10944,6 +11540,11 @@ class $ValuationsAnnotationComposer extends Composer<_$AppDB, Valuations> {
 
   GeneratedColumn<double> get value =>
       $composableBuilder(column: $table.value, builder: (column) => column);
+
+  GeneratedColumn<bool> get deprecated => $composableBuilder(
+    column: $table.deprecated,
+    builder: (column) => column,
+  );
 
   $AccountsAnnotationComposer get accountId {
     final $AccountsAnnotationComposer composer = $composerBuilder(
@@ -11025,6 +11626,7 @@ class $ValuationsTableManager
                 Value<String?> assetId = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
                 Value<double> value = const Value.absent(),
+                Value<bool> deprecated = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ValuationsCompanion(
                 id: id,
@@ -11032,6 +11634,7 @@ class $ValuationsTableManager
                 assetId: assetId,
                 date: date,
                 value: value,
+                deprecated: deprecated,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -11041,6 +11644,7 @@ class $ValuationsTableManager
                 Value<String?> assetId = const Value.absent(),
                 required DateTime date,
                 required double value,
+                Value<bool> deprecated = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ValuationsCompanion.insert(
                 id: id,
@@ -11048,6 +11652,7 @@ class $ValuationsTableManager
                 assetId: assetId,
                 date: date,
                 value: value,
+                deprecated: deprecated,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -11475,6 +12080,7 @@ typedef $TransactionsCreateCompanionBuilder =
       Value<String?> title,
       Value<String?> notes,
       required TransactionType type,
+      Value<String?> assetID,
       Value<TransactionStatus?> status,
       Value<String?> categoryID,
       Value<String?> debtId,
@@ -11499,6 +12105,7 @@ typedef $TransactionsUpdateCompanionBuilder =
       Value<String?> title,
       Value<String?> notes,
       Value<TransactionType> type,
+      Value<String?> assetID,
       Value<TransactionStatus?> status,
       Value<String?> categoryID,
       Value<String?> debtId,
@@ -11531,6 +12138,24 @@ final class $TransactionsReferences
       $_db.accounts,
     ).filter((f) => f.id.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Assets _assetIDTable(_$AppDB db) => db.assets.createAlias(
+    $_aliasNameGenerator(db.transactions.assetID, db.assets.id),
+  );
+
+  $AssetsProcessedTableManager? get assetID {
+    final $_column = $_itemColumn<String>('assetID');
+    if ($_column == null) return null;
+    final manager = $AssetsTableManager(
+      $_db,
+      $_db.assets,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_assetIDTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: [item]),
@@ -11724,6 +12349,29 @@ class $TransactionsFilterComposer extends Composer<_$AppDB, Transactions> {
           }) => $AccountsFilterComposer(
             $db: $db,
             $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $AssetsFilterComposer get assetID {
+    final $AssetsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.assetID,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsFilterComposer(
+            $db: $db,
+            $table: $db.assets,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -11939,6 +12587,29 @@ class $TransactionsOrderingComposer extends Composer<_$AppDB, Transactions> {
     return composer;
   }
 
+  $AssetsOrderingComposer get assetID {
+    final $AssetsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.assetID,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsOrderingComposer(
+            $db: $db,
+            $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
   $CategoriesOrderingComposer get categoryID {
     final $CategoriesOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -12103,6 +12774,29 @@ class $TransactionsAnnotationComposer extends Composer<_$AppDB, Transactions> {
     return composer;
   }
 
+  $AssetsAnnotationComposer get assetID {
+    final $AssetsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.assetID,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsAnnotationComposer(
+            $db: $db,
+            $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
   $CategoriesAnnotationComposer get categoryID {
     final $CategoriesAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -12213,6 +12907,7 @@ class $TransactionsTableManager
           TransactionInDB,
           PrefetchHooks Function({
             bool accountID,
+            bool assetID,
             bool categoryID,
             bool debtId,
             bool receivingAccountID,
@@ -12239,6 +12934,7 @@ class $TransactionsTableManager
                 Value<String?> title = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 Value<TransactionType> type = const Value.absent(),
+                Value<String?> assetID = const Value.absent(),
                 Value<TransactionStatus?> status = const Value.absent(),
                 Value<String?> categoryID = const Value.absent(),
                 Value<String?> debtId = const Value.absent(),
@@ -12261,6 +12957,7 @@ class $TransactionsTableManager
                 title: title,
                 notes: notes,
                 type: type,
+                assetID: assetID,
                 status: status,
                 categoryID: categoryID,
                 debtId: debtId,
@@ -12285,6 +12982,7 @@ class $TransactionsTableManager
                 Value<String?> title = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
                 required TransactionType type,
+                Value<String?> assetID = const Value.absent(),
                 Value<TransactionStatus?> status = const Value.absent(),
                 Value<String?> categoryID = const Value.absent(),
                 Value<String?> debtId = const Value.absent(),
@@ -12307,6 +13005,7 @@ class $TransactionsTableManager
                 title: title,
                 notes: notes,
                 type: type,
+                assetID: assetID,
                 status: status,
                 categoryID: categoryID,
                 debtId: debtId,
@@ -12331,6 +13030,7 @@ class $TransactionsTableManager
           prefetchHooksCallback:
               ({
                 accountID = false,
+                assetID = false,
                 categoryID = false,
                 debtId = false,
                 receivingAccountID = false,
@@ -12366,6 +13066,19 @@ class $TransactionsTableManager
                                         ._accountIDTable(db),
                                     referencedColumn: $TransactionsReferences
                                         ._accountIDTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (assetID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.assetID,
+                                    referencedTable: $TransactionsReferences
+                                        ._assetIDTable(db),
+                                    referencedColumn: $TransactionsReferences
+                                        ._assetIDTable(db)
                                         .id,
                                   )
                                   as T;
@@ -12457,6 +13170,7 @@ typedef $TransactionsProcessedTableManager =
       TransactionInDB,
       PrefetchHooks Function({
         bool accountID,
+        bool assetID,
         bool categoryID,
         bool debtId,
         bool receivingAccountID,
