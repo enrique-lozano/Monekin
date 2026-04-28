@@ -46,6 +46,8 @@ class _AssetFormPageState extends State<AssetFormPage> {
   late final Asset? _assetToEdit;
 
   Future<void> submitForm() async {
+    final t = Translations.of(context);
+
     if (_currency == null) {
       MonekinSnackbar.error(
         SnackbarParams.fromError(t.assets.form.select_currency),
@@ -54,6 +56,18 @@ class _AssetFormPageState extends State<AssetFormPage> {
     }
 
     final investmentService = InvestmentService.instance;
+
+    // Check if there are valuations before the creation date of the asset:
+    if (_assetToEdit != null) {
+      if ((await investmentService.getValuationsForAsset(_assetToEdit.id).first)
+          .where((v) => v.date.isBefore(_creationDate))
+          .isNotEmpty) {
+        MonekinSnackbar.warning(
+          SnackbarParams(t.assets.form.valuation_before_creation_date),
+        );
+        return;
+      }
+    }
 
     final initialValue = double.tryParse(_initialValueController.text) ?? 0;
 

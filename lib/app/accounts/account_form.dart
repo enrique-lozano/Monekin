@@ -7,6 +7,7 @@ import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -68,6 +69,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
   DateTime? _closeDate;
 
   Future<void> submitForm() async {
+    final t = Translations.of(context);
     final accountService = AccountService.instance;
 
     double iniValue;
@@ -87,6 +89,18 @@ class _AccountFormPageState extends State<AccountFormPage> {
           SnackbarParams(t.account.form.tr_before_opening_date),
         );
 
+        return;
+      }
+
+      // Check if there are valuations before the creation date of the asset:
+      if ((await InvestmentService.instance
+              .getValuationsForAccount(_accountToEdit.id)
+              .first)
+          .where((v) => v.date.isBefore(_openingDate))
+          .isNotEmpty) {
+        MonekinSnackbar.warning(
+          SnackbarParams(t.account.form.valuation_before_creation_date),
+        );
         return;
       }
 

@@ -516,7 +516,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "Im Nettovermögen einbeziehen",
       "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen",
-      "correct_balance_description": "Das Anpassen des Kontostands ändert den Anfangswert des Kontos. Diese Korrektur wird in deinen Statistiken nicht berücksichtigt."
+      "correct_balance_description": "Das Anpassen des Kontostands ändert den Anfangswert des Kontos. Diese Korrektur wird in deinen Statistiken nicht berücksichtigt.",
+      "valuation_before_creation_date": "Auf diesem Konto liegen Bewertungen vor, deren Datum vor dem Erstellungsdatum liegt"
     },
     "INVESTMENT": {
       "details-header": "Investment",
@@ -906,7 +907,8 @@
       "creation_date": "Erstellungsdatum",
       "edit": "Asset bearbeiten",
       "create": "Asset erstellen",
-      "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten"
+      "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten",
+      "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum"
     },
     "VALUATION": {
       "history": "Bewertungshistorie",

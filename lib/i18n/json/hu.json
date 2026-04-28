@@ -516,7 +516,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "Beleszámítás a nettó vagyonba",
       "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához",
-      "correct_balance_description": "A számlaegyenleg módosítása megváltoztatja a számla kezdeti értékét. Ez a korrekció nem jelenik meg a statisztikákban."
+      "correct_balance_description": "A számlaegyenleg módosítása megváltoztatja a számla kezdeti értékét. Ez a korrekció nem jelenik meg a statisztikákban.",
+      "valuation_before_creation_date": "Ezen a számlán vannak olyan értékelések, amelyek dátuma a létrehozás dátuma előtti"
     },
     "INVESTMENT": {
       "details-header": "Befektetés",
@@ -906,7 +907,8 @@
       "creation_date": "Létrehozás dátuma",
       "edit": "Eszköz szerkesztése",
       "create": "Eszköz létrehozása",
-      "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni"
+      "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni",
+      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti"
     },
     "VALUATION": {
       "history": "Értékelés története",

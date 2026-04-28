@@ -516,7 +516,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "計入淨資產",
       "include-in-net-worth.descr": "將此帳戶納入總淨資產計算",
-      "correct_balance_description": "調整餘額會修改帳戶的初始值。此修正不會反映在統計資料中。"
+      "correct_balance_description": "調整餘額會修改帳戶的初始值。此修正不會反映在統計資料中。",
+      "valuation_before_creation_date": "此帳戶中存在日期早於建立日期的評估"
     },
     "INVESTMENT": {
       "details-header": "投資",
@@ -906,7 +907,8 @@
       "creation_date": "建立日期",
       "edit": "編輯資產",
       "create": "創建資產",
-      "already_exists": "具有此名稱的資產已存在。您可能想要編輯它"
+      "already_exists": "具有此名稱的資產已存在。您可能想要編輯它",
+      "valuation_before_creation_date": "該資產的估值日期早於收購日期"
     },
     "VALUATION": {
       "history": "估值歷史",

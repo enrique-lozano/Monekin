@@ -516,7 +516,8 @@
       "swift": "银行识别码（SWIFT）",
       "include-in-net-worth": "计入净资产",
       "include-in-net-worth.descr": "将此账户纳入总净资产计算",
-      "correct_balance_description": "调整余额会修改账户的初始值。此修正不会反映在统计数据中。"
+      "correct_balance_description": "调整余额会修改账户的初始值。此修正不会反映在统计数据中。",
+      "valuation_before_creation_date": "此帐户中存在日期早于创建日期的评估"
     },
     "INVESTMENT": {
       "details-header": "投资",
@@ -906,7 +907,8 @@
       "creation_date": "创建日期",
       "edit": "编辑资产",
       "create": "创建资产",
-      "already_exists": "具有此名称的资产已存在。您可能想要编辑它"
+      "already_exists": "具有此名称的资产已存在。您可能想要编辑它",
+      "valuation_before_creation_date": "该资产的估值日期早于收购日期"
     },
     "VALUATION": {
       "history": "估值历史",

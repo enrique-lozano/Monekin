@@ -516,7 +516,8 @@
       "swift": "SWIFT",
       "include-in-net-worth": "Include in net worth",
       "include-in-net-worth.descr": "Add this account to the total net worth calculation",
-      "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics."
+      "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics.",
+      "valuation_before_creation_date": "There are valuations in this account with a date before the creation date"
     },
     "INVESTMENT": {
       "details-header": "Investment",
@@ -906,7 +907,8 @@
       "creation_date": "Acquisition date",
       "edit": "Edit asset",
       "create": "Create asset",
-      "already_exists": "An asset with this name already exists. You may want to edit it"
+      "already_exists": "An asset with this name already exists. You may want to edit it",
+      "valuation_before_creation_date": "There are valuations in this asset with a date before the acquisition date"
     },
     "VALUATION": {
       "history": "Valuation history",
