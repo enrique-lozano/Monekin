@@ -84,7 +84,6 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
       assetId: widget.assetId,
       date: _date,
       value: value,
-      deprecated: false,
     );
 
     RouteUtils.popRoute(result);

@@ -195,8 +195,8 @@ class InvestmentService {
 
   /// Portfolio value for charts that still expect “holdings” separate from cash.
   ///
-  /// Prefers linked asset valuations; if none, falls back to non-deprecated
-  /// account valuations, then [getInvestedCapital].
+  /// Prefers linked asset valuations; if none, falls back to account-level
+  /// valuations (legacy non-migrated data), then [getInvestedCapital].
   Stream<double> getInvestmentAccountValue(
     Account account, {
     DateTime? date,
@@ -439,7 +439,6 @@ class InvestmentService {
         assetId: assetId,
         date: date,
         value: newVal,
-        deprecated: false,
       ),
     );
   }

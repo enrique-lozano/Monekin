@@ -151,9 +151,6 @@ CREATE TABLE IF NOT EXISTS valuations (
     -- Value at the time of this snapshot, in the currency of the account or asset
     value REAL NOT NULL,
 
-    -- Migrated account valuations kept for history but ignored for balances
-    deprecated BOOLEAN NOT NULL DEFAULT FALSE,
-
     -- Exactly one of accountId or assetId must be set
     CHECK ((accountId IS NULL) != (assetId IS NULL))
 ) AS ValuationInDB;
