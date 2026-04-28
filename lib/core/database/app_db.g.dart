@@ -2342,27 +2342,8 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
-  static const VerificationMeta _deprecatedMeta = const VerificationMeta(
-    'deprecated',
-  );
-  late final GeneratedColumn<bool> deprecated = GeneratedColumn<bool>(
-    'deprecated',
-    aliasedName,
-    false,
-    type: DriftSqlType.bool,
-    requiredDuringInsert: false,
-    $customConstraints: 'NOT NULL DEFAULT FALSE',
-    defaultValue: const CustomExpression('FALSE'),
-  );
   @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    accountId,
-    assetId,
-    date,
-    value,
-    deprecated,
-  ];
+  List<GeneratedColumn> get $columns => [id, accountId, assetId, date, value];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2400,12 +2381,6 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     } else if (isInserting) {
       context.missing(_valueMeta);
     }
-    if (data.containsKey('deprecated')) {
-      context.handle(
-        _deprecatedMeta,
-        deprecated.isAcceptableOrUnknown(data['deprecated']!, _deprecatedMeta),
-      );
-    }
     return context;
   }
 
@@ -2436,10 +2411,6 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
       value: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}value'],
-      )!,
-      deprecated: attachedDatabase.typeMapping.read(
-        DriftSqlType.bool,
-        data['${effectivePrefix}deprecated'],
       )!,
     );
   }
@@ -2473,16 +2444,12 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
 
   /// Value at the time of this snapshot, in the currency of the account or asset
   final double value;
-
-  /// Migrated account valuations kept for history but ignored for balances
-  final bool deprecated;
   const ValuationInDB({
     required this.id,
     this.accountId,
     this.assetId,
     required this.date,
     required this.value,
-    required this.deprecated,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2498,7 +2465,6 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       map['date'] = Variable<String>(Valuations.$converterdate.toSql(date));
     }
     map['value'] = Variable<double>(value);
-    map['deprecated'] = Variable<bool>(deprecated);
     return map;
   }
 
@@ -2513,7 +2479,6 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
           : Value(assetId),
       date: Value(date),
       value: Value(value),
-      deprecated: Value(deprecated),
     );
   }
 
@@ -2528,7 +2493,6 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       assetId: serializer.fromJson<String?>(json['assetId']),
       date: serializer.fromJson<DateTime>(json['date']),
       value: serializer.fromJson<double>(json['value']),
-      deprecated: serializer.fromJson<bool>(json['deprecated']),
     );
   }
   @override
@@ -2540,7 +2504,6 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       'assetId': serializer.toJson<String?>(assetId),
       'date': serializer.toJson<DateTime>(date),
       'value': serializer.toJson<double>(value),
-      'deprecated': serializer.toJson<bool>(deprecated),
     };
   }
 
@@ -2550,14 +2513,12 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
     Value<String?> assetId = const Value.absent(),
     DateTime? date,
     double? value,
-    bool? deprecated,
   }) => ValuationInDB(
     id: id ?? this.id,
     accountId: accountId.present ? accountId.value : this.accountId,
     assetId: assetId.present ? assetId.value : this.assetId,
     date: date ?? this.date,
     value: value ?? this.value,
-    deprecated: deprecated ?? this.deprecated,
   );
   ValuationInDB copyWithCompanion(ValuationsCompanion data) {
     return ValuationInDB(
@@ -2566,9 +2527,6 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
       assetId: data.assetId.present ? data.assetId.value : this.assetId,
       date: data.date.present ? data.date.value : this.date,
       value: data.value.present ? data.value.value : this.value,
-      deprecated: data.deprecated.present
-          ? data.deprecated.value
-          : this.deprecated,
     );
   }
 
@@ -2579,15 +2537,13 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
           ..write('accountId: $accountId, ')
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
-          ..write('value: $value, ')
-          ..write('deprecated: $deprecated')
+          ..write('value: $value')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, accountId, assetId, date, value, deprecated);
+  int get hashCode => Object.hash(id, accountId, assetId, date, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2596,8 +2552,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
           other.accountId == this.accountId &&
           other.assetId == this.assetId &&
           other.date == this.date &&
-          other.value == this.value &&
-          other.deprecated == this.deprecated);
+          other.value == this.value);
 }
 
 class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
@@ -2606,7 +2561,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
   final Value<String?> assetId;
   final Value<DateTime> date;
   final Value<double> value;
-  final Value<bool> deprecated;
   final Value<int> rowid;
   const ValuationsCompanion({
     this.id = const Value.absent(),
@@ -2614,7 +2568,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     this.assetId = const Value.absent(),
     this.date = const Value.absent(),
     this.value = const Value.absent(),
-    this.deprecated = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ValuationsCompanion.insert({
@@ -2623,7 +2576,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     this.assetId = const Value.absent(),
     required DateTime date,
     required double value,
-    this.deprecated = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        date = Value(date),
@@ -2634,7 +2586,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     Expression<String>? assetId,
     Expression<String>? date,
     Expression<double>? value,
-    Expression<bool>? deprecated,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2643,7 +2594,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
       if (assetId != null) 'assetId': assetId,
       if (date != null) 'date': date,
       if (value != null) 'value': value,
-      if (deprecated != null) 'deprecated': deprecated,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2654,7 +2604,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     Value<String?>? assetId,
     Value<DateTime>? date,
     Value<double>? value,
-    Value<bool>? deprecated,
     Value<int>? rowid,
   }) {
     return ValuationsCompanion(
@@ -2663,7 +2612,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
       assetId: assetId ?? this.assetId,
       date: date ?? this.date,
       value: value ?? this.value,
-      deprecated: deprecated ?? this.deprecated,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2688,9 +2636,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     if (value.present) {
       map['value'] = Variable<double>(value.value);
     }
-    if (deprecated.present) {
-      map['deprecated'] = Variable<bool>(deprecated.value);
-    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2705,7 +2650,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
           ..write('value: $value, ')
-          ..write('deprecated: $deprecated, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -8125,10 +8069,10 @@ abstract class _$AppDB extends GeneratedDatabase {
         initialValue: row.read<double>('initialValue'),
         creationDate: row.read<DateTime>('creationDate'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
-        description: row.readNullable<String>('description'),
         assetType: Assets.$converterassetType.fromSql(
           row.read<String>('assetType'),
         ),
+        description: row.readNullable<String>('description'),
         linkedAccountID: row.readNullable<String>('linkedAccountID'),
       ),
     );
@@ -8138,7 +8082,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     required String accountId,
   }) {
     return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 AND deprecated = FALSE ORDER BY date DESC',
+      'SELECT * FROM valuations WHERE accountId = ?1 ORDER BY date DESC',
       variables: [Variable<String>(accountId)],
       readsFrom: {valuations},
     ).asyncMap(valuations.mapFromRow);
@@ -8148,7 +8092,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     required String accountId,
   }) {
     return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 AND deprecated = FALSE ORDER BY date DESC LIMIT 1',
+      'SELECT * FROM valuations WHERE accountId = ?1 ORDER BY date DESC LIMIT 1',
       variables: [Variable<String>(accountId)],
       readsFrom: {valuations},
     ).asyncMap(valuations.mapFromRow);
@@ -8159,7 +8103,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     required DateTime date,
   }) {
     return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 AND date <= ?2 AND deprecated = FALSE ORDER BY date DESC LIMIT 1',
+      'SELECT * FROM valuations WHERE accountId = ?1 AND date <= ?2 ORDER BY date DESC LIMIT 1',
       variables: [Variable<String>(accountId), Variable<DateTime>(date)],
       readsFrom: {valuations},
     ).asyncMap(valuations.mapFromRow);
@@ -11318,7 +11262,6 @@ typedef $ValuationsCreateCompanionBuilder =
       Value<String?> assetId,
       required DateTime date,
       required double value,
-      Value<bool> deprecated,
       Value<int> rowid,
     });
 typedef $ValuationsUpdateCompanionBuilder =
@@ -11328,7 +11271,6 @@ typedef $ValuationsUpdateCompanionBuilder =
       Value<String?> assetId,
       Value<DateTime> date,
       Value<double> value,
-      Value<bool> deprecated,
       Value<int> rowid,
     });
 
@@ -11394,11 +11336,6 @@ class $ValuationsFilterComposer extends Composer<_$AppDB, Valuations> {
 
   ColumnFilters<double> get value => $composableBuilder(
     column: $table.value,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<bool> get deprecated => $composableBuilder(
-    column: $table.deprecated,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -11472,11 +11409,6 @@ class $ValuationsOrderingComposer extends Composer<_$AppDB, Valuations> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<bool> get deprecated => $composableBuilder(
-    column: $table.deprecated,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   $AccountsOrderingComposer get accountId {
     final $AccountsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -11540,11 +11472,6 @@ class $ValuationsAnnotationComposer extends Composer<_$AppDB, Valuations> {
 
   GeneratedColumn<double> get value =>
       $composableBuilder(column: $table.value, builder: (column) => column);
-
-  GeneratedColumn<bool> get deprecated => $composableBuilder(
-    column: $table.deprecated,
-    builder: (column) => column,
-  );
 
   $AccountsAnnotationComposer get accountId {
     final $AccountsAnnotationComposer composer = $composerBuilder(
@@ -11626,7 +11553,6 @@ class $ValuationsTableManager
                 Value<String?> assetId = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
                 Value<double> value = const Value.absent(),
-                Value<bool> deprecated = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ValuationsCompanion(
                 id: id,
@@ -11634,7 +11560,6 @@ class $ValuationsTableManager
                 assetId: assetId,
                 date: date,
                 value: value,
-                deprecated: deprecated,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -11644,7 +11569,6 @@ class $ValuationsTableManager
                 Value<String?> assetId = const Value.absent(),
                 required DateTime date,
                 required double value,
-                Value<bool> deprecated = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ValuationsCompanion.insert(
                 id: id,
@@ -11652,7 +11576,6 @@ class $ValuationsTableManager
                 assetId: assetId,
                 date: date,
                 value: value,
-                deprecated: deprecated,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

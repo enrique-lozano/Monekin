@@ -2,29 +2,16 @@
 -- v12 Migration: Investment transactions, linked portfolio
 -- assets, and moving legacy account valuations to assets
 -- ============================================================
---
--- Summary:
---   • Extend `assets` with `assetType` and optional `linkedAccountID`
---     (brokerage portfolio row per investment account when needed).
---   • Recreate `transactions` with type `'N'` (investment) and `assetID`.
---   • For each investment account that had account-level valuations, create
---     a linked “funds” asset, copy those snapshots onto the asset, then
---     delete the old account-only rows (no soft-delete flag).
---
 
 -- Step 1: Disable foreign key enforcement during schema changes
 PRAGMA foreign_keys = OFF;
 
--- ---------------------------------------------------------------
 -- Step 2: Extend `assets` for typed holdings and optional link to
 --         an investment account (portfolio rolls into that account).
--- ---------------------------------------------------------------
 ALTER TABLE assets ADD COLUMN assetType TEXT NOT NULL DEFAULT 'other';
 ALTER TABLE assets ADD COLUMN linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE;
 
--- ---------------------------------------------------------------
 -- Step 3: Recreate `transactions` (add investment type + assetID)
--- ---------------------------------------------------------------
 ALTER TABLE transactions RENAME TO transactions_old;
 
 CREATE TABLE transactions (
@@ -69,21 +56,17 @@ FROM transactions_old;
 
 DROP TABLE transactions_old;
 
--- ---------------------------------------------------------------
 -- Step 5: One linked “funds” asset per investment account that
 --         already had account-level valuation history (so charts
 --         and balances can use asset valuations consistently).
--- ---------------------------------------------------------------
 INSERT INTO assets (id, name, description, currencyId, initialValue, creationDate, assetType, linkedAccountID)
 SELECT lower(hex(randomblob(16))), a.name || ' Portfolio', NULL, a.currencyId, 0, a.date, 'funds', a.id
 FROM accounts a
 WHERE a.type = 'investment'
 AND EXISTS (SELECT 1 FROM valuations v WHERE v.accountId = a.id AND v.assetId IS NULL);
 
--- ---------------------------------------------------------------
 -- Step 6: Copy legacy investment account valuations onto the new
 --         linked portfolio asset (accountId cleared on the copy).
--- ---------------------------------------------------------------
 INSERT INTO valuations (id, accountId, assetId, date, value)
 SELECT lower(hex(randomblob(16))), NULL, (
   SELECT ast.id FROM assets ast WHERE ast.linkedAccountID = a.id AND ast.assetType = 'funds' LIMIT 1
@@ -93,10 +76,8 @@ INNER JOIN accounts a ON a.id = v.accountId AND a.type = 'investment'
 WHERE v.accountId IS NOT NULL AND v.assetId IS NULL
 AND EXISTS (SELECT 1 FROM assets ast2 WHERE ast2.linkedAccountID = a.id AND ast2.assetType = 'funds');
 
--- ---------------------------------------------------------------
 -- Step 7: Remove old account-only rows for investment accounts.
 --         Non-investment account valuations are unchanged.
--- ---------------------------------------------------------------
 DELETE FROM valuations
 WHERE accountId IS NOT NULL
   AND assetId IS NULL
