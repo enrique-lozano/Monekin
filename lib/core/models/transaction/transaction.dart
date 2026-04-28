@@ -52,6 +52,7 @@ class MoneyTransaction extends TransactionInDB {
     super.intervalPeriod,
     super.remainingTransactions,
     super.debtId,
+    super.assetID,
   }) : category = category != null
            ? Category.fromDB(category, parentCategory)
            : null,
@@ -79,21 +80,34 @@ class MoneyTransaction extends TransactionInDB {
 
   bool get isTransfer => type.isTransfer;
   bool get isIncomeOrExpense => type.isIncomeOrExpense;
+  bool get isInvestment => type.isInvestment;
 
   /// Display the title of the transaction, or the category in case the title is not specified for this transaction
   String displayName(BuildContext context) {
     final t = Translations.of(context);
 
-    return title ??
-        (isIncomeOrExpense
-            ? category!.name
-            : t.transfer.transfer_to(account: receivingAccount!.name));
+    if (title != null && title!.trim().isNotEmpty) {
+      return title!;
+    }
+    if (isIncomeOrExpense && category != null) {
+      return category!.name;
+    }
+    if (isInvestment) {
+      return t.transaction.types.investment(n: 1);
+    }
+    return t.transfer.transfer_to(account: receivingAccount!.name);
   }
 
   /// Get the color that represent this category. Will be the category color when the transaction is an income or an expense, and the primary color of the app otherwise
-  Color color(BuildContext context) => isIncomeOrExpense
-      ? ColorHex.get(category!.color)
-      : TransactionType.transfer.color(context);
+  Color color(BuildContext context) {
+    if (isIncomeOrExpense && category != null) {
+      return ColorHex.get(category!.color);
+    }
+    if (isInvestment) {
+      return TransactionType.investment.color(context);
+    }
+    return TransactionType.transfer.color(context);
+  }
 
   /// Get the balance (positive or negative) that this transaction cause to the user accounts
   double getCurrentBalanceInPreferredCurrency() {
@@ -119,21 +133,24 @@ class MoneyTransaction extends TransactionInDB {
     BuildContext context, {
     double size = 22,
     double? padding,
-  }) => isIncomeOrExpense
-      ? IconDisplayer.fromCategory(
-          context,
-          category: category!,
-          size: size,
-          padding: padding,
-          borderRadius: 999999,
-        )
-      : IconDisplayer(
-          mainColor: color(context),
-          icon: TransactionType.transfer.icon,
-          size: size,
-          padding: padding,
-          borderRadius: 999999,
-        );
+  }) {
+    if (isIncomeOrExpense && category != null) {
+      return IconDisplayer.fromCategory(
+        context,
+        category: category!,
+        size: size,
+        padding: padding,
+        borderRadius: 999999,
+      );
+    }
+    return IconDisplayer(
+      mainColor: color(context),
+      icon: isInvestment ? TransactionType.investment.icon : TransactionType.transfer.icon,
+      size: size,
+      padding: padding,
+      borderRadius: 999999,
+    );
+  }
 
   NextPayStatus? get nextPayStatus {
     if (recurrentInfo.isNoRecurrent && status != TransactionStatus.pending) {

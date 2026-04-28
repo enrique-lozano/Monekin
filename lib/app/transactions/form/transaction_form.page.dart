@@ -328,6 +328,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       receivingAccountID: transactionType.isTransfer
           ? transferAccount?.id
           : null,
+      assetID: widget.transactionToEdit?.assetID,
     );
 
     Future<int> postCall = TransactionService.instance.updateTransaction(

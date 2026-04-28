@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -46,15 +47,22 @@ class TransactionService {
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
+    await InvestmentService.instance.onTransactionSaved(transaction);
     return toReturn;
   }
 
   Future<int> updateTransaction(TransactionInDB transaction) async {
+    final previous = await (db.select(
+      db.transactions,
+    )..where((t) => t.id.equals(transaction.id))).getSingleOrNull();
+
     final toReturn = await db.update(db.transactions).replace(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
+
+    await InvestmentService.instance.onTransactionUpdated(previous, transaction);
 
     return toReturn ? 1 : 0;
   }
@@ -78,10 +86,21 @@ class TransactionService {
     );
   }
 
-  Future<int> deleteTransaction(String transactionId) {
-    return (db.delete(
+  Future<int> deleteTransaction(String transactionId) async {
+    final previous = await (db.select(
+      db.transactions,
+    )..where((t) => t.id.equals(transactionId))).getSingleOrNull();
+
+    final n = await (db.delete(
       db.transactions,
     )..where((tbl) => tbl.id.equals(transactionId))).go();
+
+    db.markTablesUpdated([db.accounts]);
+
+    if (previous != null) {
+      await InvestmentService.instance.onTransactionDeleted(previous);
+    }
+    return n;
   }
 
   Stream<List<MoneyTransaction>> getTransactionsFromPredicate({

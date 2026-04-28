@@ -6,8 +6,10 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Service for investment accounts, assets, valuations and net worth.
@@ -162,17 +164,39 @@ class InvestmentService {
         .map((netTransfers) => account.iniValue + netTransfers);
   }
 
-  /// Returns the portfolio money/value for an investment account.
+  /// Market value of **linked portfolio assets** (migrated from account valuations).
   ///
-  /// If [date] is provided, returns the value from the **latest valuation
-  /// at or before** that date. Otherwise, returns the latest valuation.
+  /// When [convertToPreferredCurrency] is false, amounts are summed in each
+  /// asset's currency (caller should only use when assets match the account).
+  Stream<double> getLinkedPortfolioMarketValue(
+    Account account, {
+    DateTime? date,
+    bool convertToPreferredCurrency = false,
+  }) {
+    return getAssets(
+      predicate: (a, c) =>
+          a.linkedAccountID.isNotNull() & a.linkedAccountID.equals(account.id),
+    ).switchMap((linked) {
+      if (linked.isEmpty) return Stream.value(0.0);
+      final streams = linked
+          .map(
+            (asset) => getAssetValueAtDate(
+              asset,
+              date: date,
+              convertToPreferredCurrency: convertToPreferredCurrency,
+            ),
+          )
+          .toList();
+      return Rx.combineLatestList(streams).map(
+        (values) => values.fold<double>(0, (sum, v) => sum + v),
+      );
+    });
+  }
+
+  /// Portfolio value for charts that still expect “holdings” separate from cash.
   ///
-  /// If no valuation has been recorded (for the given date), falls back to
-  /// [getInvestedCapital].
-  ///
-  /// If [convertToPreferredCurrency] is not set or `false`, the returned value
-  /// is in the account currency. If `true`, the value is converted to the preferred
-  /// currency using the exchange rate at the given date (or latest if date is null).
+  /// Prefers linked asset valuations; if none, falls back to non-deprecated
+  /// account valuations, then [getInvestedCapital].
   Stream<double> getInvestmentAccountValue(
     Account account, {
     DateTime? date,
@@ -182,29 +206,38 @@ class InvestmentService {
       return Stream.value(0.0);
     }
 
-    return getLatestValuationForAccount(account.id, date: date)
-        .switchMap((valuation) {
-          if (valuation != null) {
-            return Stream.value(valuation.value);
-          }
-
-          return getInvestedCapital(account, date: date);
-        })
-        .switchMap((value) {
-          if (!convertToPreferredCurrency) return Stream.value(value);
-
-          // Convert to preferred currency via exchange rate
-          return ExchangeRateService.instance
-              .calculateExchangeRateToPreferredCurrency(
-                amount: value,
-                fromCurrency: account.currency.code,
-                date: date,
-              );
-        })
-        .map(
-          (converted) =>
-              converted.roundWithDecimals(account.currency.decimalPlaces),
+    return getAssets(
+      predicate: (a, c) =>
+          a.linkedAccountID.isNotNull() & a.linkedAccountID.equals(account.id),
+    ).switchMap((linked) {
+      if (linked.isNotEmpty) {
+        return getLinkedPortfolioMarketValue(
+          account,
+          date: date,
+          convertToPreferredCurrency: convertToPreferredCurrency,
         );
+      }
+
+      return getLatestValuationForAccount(account.id, date: date).switchMap((
+        valuation,
+      ) {
+        if (valuation != null) {
+          return Stream.value(valuation.value);
+        }
+        return getInvestedCapital(account, date: date);
+      }).switchMap((value) {
+        if (!convertToPreferredCurrency) return Stream.value(value);
+        return ExchangeRateService.instance
+            .calculateExchangeRateToPreferredCurrency(
+              amount: value,
+              fromCurrency: account.currency.code,
+              date: date,
+            );
+      });
+    }).map(
+      (converted) =>
+          converted.roundWithDecimals(account.currency.decimalPlaces),
+    );
   }
 
   /// Returns the profit (in the account currency) and the profit percentage
@@ -269,9 +302,11 @@ class InvestmentService {
     });
   }
 
-  /// Returns the total value of all assets at a specific date, converted to the user preferred currency.
+  /// Total value of assets **not** linked to an account (linked assets roll into account totals).
   Stream<double> getTotalAssetsValueAtDate({DateTime? date}) {
-    return getAssets().switchMap((assets) {
+    return getAssets(
+      predicate: (a, c) => a.linkedAccountID.isNull(),
+    ).switchMap((assets) {
       if (assets.isEmpty) {
         return Stream.value(0.0);
       }
@@ -290,6 +325,123 @@ class InvestmentService {
         streams,
       ).map((values) => values.fold(0.0, (sum, value) => sum + value));
     });
+  }
+
+  /// Sum of linked asset market values for an account (0 if none).
+  Stream<double> streamLinkedAssetsTotalForAccount(
+    String accountId, {
+    DateTime? date,
+    bool convertToPreferredCurrency = false,
+  }) {
+    return db
+        .getAccountsWithFullData(
+          predicate: (a, c) => a.id.equals(accountId),
+          limit: (a, c) => Limit(1, 0),
+        )
+        .watch()
+        .switchMap((accounts) {
+          if (accounts.isEmpty) return Stream.value(0.0);
+          final account = accounts.first;
+          return getLinkedPortfolioMarketValue(
+            account,
+            date: date,
+            convertToPreferredCurrency: convertToPreferredCurrency,
+          );
+        });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Valuation adjustments from transactions (cash leg vs holdings snapshot)
+  // ---------------------------------------------------------------------------
+
+  /// How [transaction] should move the asset valuation snapshot (accounting currency).
+  ///
+  /// Uses the same signed `value` stored for cash (expenses negative on outflow, etc.):
+  /// snapshot moves by `-value` so typical buys (negative `value`) increase the asset.
+  static double valuationDeltaForTransaction(TransactionInDB transaction) {
+    if (transaction.assetID == null) return 0;
+    if (transaction.type == TransactionType.transfer) return 0;
+    return -transaction.value;
+  }
+
+  static bool _statusAffectsValuation(TransactionInDB t) {
+    final s = t.status;
+    if (s == TransactionStatus.pending || s == TransactionStatus.voided) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> onTransactionSaved(TransactionInDB inserted) async {
+    if (!_statusAffectsValuation(inserted) || inserted.assetID == null) {
+      return;
+    }
+    await _applyValuationDelta(
+      assetId: inserted.assetID!,
+      date: inserted.date,
+      delta: valuationDeltaForTransaction(inserted),
+    );
+  }
+
+  Future<void> onTransactionUpdated(
+    TransactionInDB? previous,
+    TransactionInDB current,
+  ) async {
+    if (previous != null &&
+        previous.assetID != null &&
+        _statusAffectsValuation(previous)) {
+      await _applyValuationDelta(
+        assetId: previous.assetID!,
+        date: previous.date,
+        delta: -valuationDeltaForTransaction(previous),
+      );
+    }
+    if (_statusAffectsValuation(current) && current.assetID != null) {
+      await _applyValuationDelta(
+        assetId: current.assetID!,
+        date: current.date,
+        delta: valuationDeltaForTransaction(current),
+      );
+    }
+  }
+
+  Future<void> onTransactionDeleted(TransactionInDB removed) async {
+    if (!_statusAffectsValuation(removed) || removed.assetID == null) return;
+    await _applyValuationDelta(
+      assetId: removed.assetID!,
+      date: removed.date,
+      delta: -valuationDeltaForTransaction(removed),
+    );
+  }
+
+  /// `newSnapshot = latestValuationAtOrBefore(date) + delta` (same calendar day row updated in place).
+  ///
+  /// Transaction-driven base uses **0** when there is no prior snapshot (manual
+  /// valuations still “win” for display until a tx touches that day).
+  Future<void> _applyValuationDelta({
+    required String assetId,
+    required DateTime date,
+    required double delta,
+  }) async {
+    if (delta == 0) return;
+
+    final latest = await db
+        .getLatestValuationForAssetAtDate(assetId: assetId, date: date)
+        .getSingleOrNull();
+
+    final base = latest?.value ?? 0.0;
+    final newVal = base + delta;
+
+    await insertOrUpdateValuation(
+      ValuationInDB(
+        id: generateUUID(),
+        accountId: null,
+        assetId: assetId,
+        date: date,
+        value: newVal,
+        deprecated: false,
+      ),
+    );
   }
 
   /// Returns the profit (in the asset currency) and the profit percentage

@@ -4,9 +4,12 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -37,6 +40,8 @@ class _AssetFormPageState extends State<AssetFormPage> {
 
   Currency? _currency;
   DateTime _creationDate = DateTime.now();
+  AssetType _assetType = AssetType.other;
+  Account? _linkedAccount;
 
   late final Asset? _assetToEdit;
 
@@ -61,6 +66,8 @@ class _AssetFormPageState extends State<AssetFormPage> {
       description: _descriptionController.text.isEmpty
           ? null
           : _descriptionController.text,
+      assetType: _assetType,
+      linkedAccountID: _linkedAccount?.id,
     );
 
     // Check for assets with same names before continue:
@@ -121,6 +128,13 @@ class _AssetFormPageState extends State<AssetFormPage> {
     _descriptionController.text = _assetToEdit.description ?? '';
     _initialValueController.text = _assetToEdit.initialValue.toString();
     _creationDate = _assetToEdit.creationDate;
+    _assetType = _assetToEdit.assetType;
+    final linkedId = _assetToEdit.linkedAccountID;
+    if (linkedId != null) {
+      AccountService.instance.getAccountById(linkedId).first.then((acc) {
+        if (mounted) setState(() => _linkedAccount = acc);
+      });
+    }
 
     CurrencyService.instance
         .getCurrencyByCode(_assetToEdit.currency.code)
@@ -192,6 +206,52 @@ class _AssetFormPageState extends State<AssetFormPage> {
                   setState(() {
                     _currency = newCurrency;
                   });
+                },
+              ),
+              const SizedBox(height: 16),
+
+              DropdownButtonFormField<AssetType>(
+                value: _assetType,
+                decoration: InputDecoration(
+                  labelText: t.assets.form.asset_type,
+                ),
+                items: AssetType.values
+                    .map(
+                      (at) => DropdownMenuItem(
+                        value: at,
+                        child: Text(at.displayName(context)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) setState(() => _assetType = v);
+                },
+              ),
+              const SizedBox(height: 16),
+
+              StreamBuilder<List<Account>>(
+                stream: AccountService.instance.getAccounts(),
+                builder: (context, snap) {
+                  final accounts = snap.data ?? [];
+                  return DropdownButtonFormField<Account?>(
+                    value: _linkedAccount,
+                    decoration: InputDecoration(
+                      labelText: t.assets.form.linked_account,
+                    ),
+                    items: [
+                      const DropdownMenuItem<Account?>(
+                        value: null,
+                        child: Text('—'),
+                      ),
+                      ...accounts.map(
+                        (a) => DropdownMenuItem(
+                          value: a,
+                          child: Text(a.name),
+                        ),
+                      ),
+                    ],
+                    onChanged: (a) => setState(() => _linkedAccount = a),
+                  );
                 },
               ),
               const SizedBox(height: 16),

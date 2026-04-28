@@ -445,6 +445,8 @@ class _TransactionFilterFormState extends State<TransactionFilterForm> {
               _transactionTypeFilter(context, TransactionType.expense),
               const SizedBox(width: 6),
               _transactionTypeFilter(context, TransactionType.transfer),
+              const SizedBox(width: 6),
+              _transactionTypeFilter(context, TransactionType.investment),
             ],
           ),
         ),

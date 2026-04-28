@@ -2,9 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -82,46 +85,59 @@ class AccountService {
       AS $columnName ON $accountTableName.currencyId = $columnName.currencyCode
     ''';
 
-  Stream<List<String>> _watchNonInvestmentAccountIds({
+  Stream<List<String>> _watchAccountIdsForBalance({
     Iterable<String>? accountIds,
   }) {
+    if (accountIds == null) {
+      return db.select(db.accounts).watch().map(
+            (rows) => rows.map((r) => r.id).toList(),
+          );
+    }
     final query = db.select(db.accounts)
-      ..where((a) {
-        final notInvestment = a.type.isNotValue(AccountType.investment.name);
-        if (accountIds == null) return notInvestment;
-        return notInvestment & a.id.isIn(accountIds.toList());
-      });
-
+      ..where((a) => a.id.isIn(accountIds.toList()));
     return query.watch().map((rows) => rows.map((r) => r.id).toList());
   }
 
-  Stream<double> _getInvestmentAccountsPortfolioTotal({
+  Stream<List<String>> _watchInvestmentAccountIds({
+    Iterable<String>? accountIds,
+  }) {
+    if (accountIds == null) {
+      return db
+          .select(db.accounts)
+          .watch()
+          .map(
+            (rows) => rows
+                .where((r) => r.type == AccountType.investment.name)
+                .map((r) => r.id)
+                .toList(),
+          );
+    }
+    final query = db.select(db.accounts)
+      ..where(
+        (a) =>
+            a.type.equals(AccountType.investment.name) &
+            a.id.isIn(accountIds.toList()),
+      );
+    return query.watch().map((rows) => rows.map((r) => r.id).toList());
+  }
+
+  Stream<double> _linkedPortfolioMarketAggregate({
     required DateTime date,
     Iterable<String>? accountIds,
     required bool convertToPreferredCurrency,
   }) {
-    return getAccounts(
-      predicate: (a, c) {
-        final isInvestment = a.type.equals(AccountType.investment.name);
-        if (accountIds == null) return isInvestment;
-        return isInvestment & a.id.isIn(accountIds.toList());
-      },
-    ).switchMap((accounts) {
-      if (accounts.isEmpty) return Stream.value(0.0);
-
-      final streams = accounts.map(
-        (account) => account.date.isAfter(date)
-            ? Stream.value(0.0)
-            : InvestmentService.instance.getInvestmentAccountValue(
-                account,
-                date: date,
-                convertToPreferredCurrency: convertToPreferredCurrency,
-              ),
+    return _watchInvestmentAccountIds(accountIds: accountIds).switchMap((ids) {
+      if (ids.isEmpty) return Stream.value(0.0);
+      final streams = ids.map(
+        (id) => InvestmentService.instance.streamLinkedAssetsTotalForAccount(
+          id,
+          date: date,
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        ),
       );
-
-      return Rx.combineLatestList(
-        streams,
-      ).map((values) => values.fold(0.0, (sum, v) => sum + v));
+      return Rx.combineLatestList(streams.toList()).map(
+        (values) => values.fold<double>(0, (a, b) => a + b),
+      );
     });
   }
 
@@ -155,21 +171,56 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
-    // Investment accounts use portfolio value (latest valuation or invested capital)
-    if (account.type == AccountType.investment) {
-      return InvestmentService.instance.getInvestmentAccountValue(
-        account,
-        date: date,
-        convertToPreferredCurrency: convertToPreferredCurrency,
-      );
-    }
+    date ??= DateTime.now();
 
-    return getAccountsMoney(
-      accountIds: [account.id],
-      date: date,
-      trFilters: trFilters,
+    final statusFiltered = trFilters.copyWith(
+      status: TransactionStatus.getStatusThatCountsForStats(trFilters.status),
+    );
+    final baseFilter = statusFiltered.copyWith(
+      accountsIDs: [account.id],
+      maxDate: date,
+    );
+
+    final iniStream = account.date.isAfter(date)
+        ? Stream.value(0.0)
+        : Stream.value(account.iniValue).switchMap((ini) {
+            if (!convertToPreferredCurrency) return Stream.value(ini);
+            return ExchangeRateService.instance
+                .calculateExchangeRateToPreferredCurrency(
+                  amount: ini,
+                  fromCurrency: account.currency.code,
+                  date: date,
+                );
+          });
+
+    final cashTx = TransactionService.instance.getTransactionsValueBalance(
+      filters: baseFilter,
       convertToPreferredCurrency: convertToPreferredCurrency,
-    ).map((result) => result.roundWithDecimals(account.currency.decimalPlaces));
+      exchDate: date,
+    );
+
+    final invTx = TransactionService.instance.getTransactionsValueBalance(
+      filters: baseFilter.copyWith(
+        transactionTypes: [TransactionType.investment],
+      ),
+      convertToPreferredCurrency: convertToPreferredCurrency,
+      exchDate: date,
+    );
+
+    final linked = InvestmentService.instance.streamLinkedAssetsTotalForAccount(
+      account.id,
+      date: date,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+
+    return Rx.combineLatest4(
+      iniStream,
+      cashTx,
+      invTx,
+      linked,
+      (double ini, double cash, double inv, double l) =>
+          (ini + cash + inv + l).roundWithDecimals(account.currency.decimalPlaces),
+    );
   }
 
   /// Get the amount of money that some accounts have in a certain period of time,
@@ -179,9 +230,9 @@ class AccountService {
   /// If the [accountIds] param is not specified, the function will return the money of
   /// all the user accounts (closed or not).
   ///
-  /// Investment accounts are supported by adding their portfolio value:
-  /// latest valuation at/before [date], falling back to invested capital
-  /// (`iniValue + net transfers`) when there is no valuation.
+  /// Each account contributes **cash ledger** (income, expense, transfers, and
+  /// investment-type rows) plus **linked asset** market value (assets whose
+  /// `linkedAccountID` points at that account).
   ///
   /// You can add filters for the transactions that will be taken into account to calculate
   /// this balance, via the [trFilters] param. We will overwrite the accountsIds and the maxDate
@@ -196,8 +247,8 @@ class AccountService {
 
     final hasAccountFilter = accountIds != null;
 
-    // Get the non-investment accounts initial balance (converted to the preferred currency if necessary)
-    final nonInvestmentInitialAmount = db
+    // Sum of opening balances for all accounts in scope (including investment).
+    final allAccountsInitialAmount = db
         .customSelect(
           """
           SELECT COALESCE(
@@ -211,7 +262,7 @@ class AccountService {
           AS balance
           FROM accounts
               ${convertToPreferredCurrency ? _joinAccountAndRate(date) : ''}
-          WHERE accounts.type != '${AccountType.investment.name}'
+          WHERE 1 = 1
               ${hasAccountFilter ? 'AND accounts.id IN (${List.filled(accountIds.length, '?').join(', ')})' : ''} 
           """,
           readsFrom: {
@@ -234,27 +285,46 @@ class AccountService {
           return 0.0;
         });
 
-    final nonInvestmentTransactionsBalance =
-        _watchNonInvestmentAccountIds(accountIds: accountIds).switchMap((ids) {
+    final statusFiltered = trFilters.copyWith(
+      status: TransactionStatus.getStatusThatCountsForStats(trFilters.status),
+    );
+
+    final allAccountsTransactionsBalance =
+        _watchAccountIdsForBalance(accountIds: accountIds).switchMap((ids) {
           if (ids.isEmpty) return Stream.value(0.0);
           return TransactionService.instance.getTransactionsValueBalance(
-            filters: trFilters.copyWith(maxDate: date, accountsIDs: ids),
+            filters: statusFiltered.copyWith(maxDate: date, accountsIDs: ids),
             convertToPreferredCurrency: convertToPreferredCurrency,
             exchDate: date,
           );
         });
 
-    final investmentTotal = _getInvestmentAccountsPortfolioTotal(
+    final investmentTypeCash = _watchAccountIdsForBalance(accountIds: accountIds)
+        .switchMap((ids) {
+          if (ids.isEmpty) return Stream.value(0.0);
+          return TransactionService.instance.getTransactionsValueBalance(
+            filters: statusFiltered.copyWith(
+              maxDate: date,
+              accountsIDs: ids,
+              transactionTypes: [TransactionType.investment],
+            ),
+            convertToPreferredCurrency: convertToPreferredCurrency,
+            exchDate: date,
+          );
+        });
+
+    final linkedPortfolioMarket = _linkedPortfolioMarketAggregate(
       date: date,
       accountIds: accountIds,
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    return Rx.combineLatest3(
-      nonInvestmentInitialAmount,
-      nonInvestmentTransactionsBalance,
-      investmentTotal,
-      (double ini, double tr, double inv) => ini + tr + inv,
+    return Rx.combineLatest4(
+      allAccountsInitialAmount,
+      allAccountsTransactionsBalance,
+      investmentTypeCash,
+      linkedPortfolioMarket,
+      (double ini, double tr, double inv, double linked) => ini + tr + inv + linked,
     );
   }
 

@@ -10,6 +10,7 @@ import './../../../models/transaction/transaction_type.enum.dart';
 import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
+import './../../../models/asset/asset_type.enum.dart';
 import './../../../models/goal/goal.dart';
 import './../../../models/goal/goal_type.enum.dart';
 import './../../../models/debt/debt_direction.enum.dart';
@@ -111,6 +112,52 @@ CREATE TABLE IF NOT EXISTS categories (
     CHECK ((color IS NULL) == (type IS NULL))
 ) AS CategoryInDB;
 
+CREATE TABLE IF NOT EXISTS assets (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- Asset name (unique among user assets)
+    name TEXT UNIQUE NOT NULL,
+
+    -- Optional description
+    description TEXT,
+
+    -- ID of the reference currency for this asset
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Initial/purchase value of the asset
+    initialValue REAL NOT NULL DEFAULT 0,
+
+    -- Date this asset was acquired or created
+    creationDate DATETIME NOT NULL,
+
+    assetType ENUMNAME(AssetType) NOT NULL DEFAULT 'other' CHECK(assetType IN ('stocks', 'funds', 'crypto', 'real_estate', 'vehicle', 'jewelry_art', 'other')),
+
+    -- When set, this asset rolls into the linked account total (e.g. brokerage portfolio)
+    linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE
+) AS AssetInDB;
+
+CREATE TABLE IF NOT EXISTS valuations (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- FK to the account this valuation belongs to (mutually exclusive with assetId)
+    accountId TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- FK to the asset this valuation belongs to (mutually exclusive with accountId)
+    assetId TEXT REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Date of this valuation snapshot
+    date TEXT NOT NULL MAPPED BY `const DateTypeConverter()`,
+
+    -- Value at the time of this snapshot, in the currency of the account or asset
+    value REAL NOT NULL,
+
+    -- Migrated account valuations kept for history but ignored for balances
+    deprecated BOOLEAN NOT NULL DEFAULT FALSE,
+
+    -- Exactly one of accountId or assetId must be set
+    CHECK ((accountId IS NULL) != (assetId IS NULL))
+) AS ValuationInDB;
+
 CREATE TABLE IF NOT EXISTS transactions (
   id TEXT NOT NULL PRIMARY KEY,
   
@@ -128,8 +175,11 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- Some description, notes or extra info about the transaction.
   notes TEXT,
 
-  -- Whether the transacton is an income, an expense or a transfer
-  type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T')) MAPPED BY `CustomEnumConverter(TransactionType.values)`,
+  -- Income, expense, transfer, or investment (asset cash leg; excluded from I/E stats)
+  type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T', 'N')) MAPPED BY `CustomEnumConverter(TransactionType.values)`,
+
+  -- Optional link to an asset (buy/sell / investment flows)
+  assetID TEXT REFERENCES assets(id) ON DELETE SET NULL ON UPDATE CASCADE,
   
   status TEXT CHECK(status IN ('V', 'P', 'R', 'U')) MAPPED BY `CustomEnumConverter(TransactionStatus.values)`,
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -170,8 +220,12 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- Number of payments remaining. This value must dicrease by one in the case a new payment is done within this rule. If this field or the `endDate` field is not specified, the recurring transaction will never end.
   remainingTransactions INTEGER,
 
-  -- Should be Transfer or income/expense (not both). Leaving both to null is also not valid
-  CHECK ((receivingAccountID IS NULL) != (categoryID IS NULL)),
+  -- Transfer/I/E: exactly one of category vs receiving. Investment (N): assetID set, receiving null, category null.
+  CHECK (
+    (type = 'N' AND assetID IS NOT NULL AND receivingAccountID IS NULL AND categoryID IS NULL AND valueInDestiny IS NULL)
+    OR
+    (type != 'N' AND ((receivingAccountID IS NULL) != (categoryID IS NULL)))
+  ),
 
   -- Recurrency data mandatory fields (if the transaction is required)
   CHECK ((intervalPeriod IS NULL) == (intervalEach IS NULL)),
@@ -312,45 +366,6 @@ CREATE TABLE IF NOT EXISTS debts (
     -- The closing date of the debt. After this date, no transactions can exists on it.
     endDate DATETIME
 ) AS DebtInDB;
-
-
-CREATE TABLE IF NOT EXISTS assets (
-    id TEXT NOT NULL PRIMARY KEY,
-
-    -- Asset name (unique among user assets)
-    name TEXT UNIQUE NOT NULL,
-
-    -- Optional description
-    description TEXT,
-
-    -- ID of the reference currency for this asset
-    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
-
-    -- Initial/purchase value of the asset
-    initialValue REAL NOT NULL DEFAULT 0,
-
-    -- Date this asset was acquired or created
-    creationDate DATETIME NOT NULL
-) AS AssetInDB;
-
-CREATE TABLE IF NOT EXISTS valuations (
-    id TEXT NOT NULL PRIMARY KEY,
-
-    -- FK to the account this valuation belongs to (mutually exclusive with assetId)
-    accountId TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
-
-    -- FK to the asset this valuation belongs to (mutually exclusive with accountId)
-    assetId TEXT REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
-
-    -- Date of this valuation snapshot
-    date TEXT NOT NULL MAPPED BY `const DateTypeConverter()`,
-
-    -- Value at the time of this snapshot, in the currency of the account or asset
-    value REAL NOT NULL,
-
-    -- Exactly one of accountId or assetId must be set
-    CHECK ((accountId IS NULL) != (assetId IS NULL))
-) AS ValuationInDB;
 
 CREATE TABLE IF NOT EXISTS userSettings (
   settingKey ENUMNAME(SettingKey) NOT NULL PRIMARY KEY,

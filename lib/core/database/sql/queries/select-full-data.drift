@@ -45,20 +45,20 @@ getAssetsWithFullData($predicate = TRUE) WITH Asset:
 getValuationsForAccount(:accountId AS TEXT):
     SELECT *
     FROM valuations
-    WHERE accountId = :accountId
+    WHERE accountId = :accountId AND deprecated = FALSE
     ORDER BY date DESC;
 
 getLatestValuationForAccount(:accountId AS TEXT):
     SELECT *
     FROM valuations
-    WHERE accountId = :accountId
+    WHERE accountId = :accountId AND deprecated = FALSE
     ORDER BY date DESC
     LIMIT 1;
 
 getLatestValuationForAccountAtDate(:accountId AS TEXT, :date AS DATETIME):
     SELECT *
     FROM valuations
-    WHERE accountId = :accountId AND date <= :date
+    WHERE accountId = :accountId AND date <= :date AND deprecated = FALSE
     ORDER BY date DESC
     LIMIT 1;
 

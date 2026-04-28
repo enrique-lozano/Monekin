@@ -8,7 +8,7 @@ import 'package:monekin/core/database/utils/database_enum.dart';
 ///
 /// Usage example:
 /// ```sql
-/// type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T')) MAPPED BY `CustomEnumConverter(TransactionType.values)`
+/// type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T', 'N')) MAPPED BY `CustomEnumConverter(TransactionType.values)`
 /// ```
 final class CustomEnumConverter<E extends DatabaseEnum<V>, V>
     extends TypeConverter<E, V> {

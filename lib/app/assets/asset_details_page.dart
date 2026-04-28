@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/details/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/assets/asset_form.dart';
+import 'package:monekin/app/assets/asset_trade_sheet.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
@@ -248,6 +249,35 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              FilledButton.tonal(
+                onPressed: () => showAssetTradeSheet(
+                  context: context,
+                  asset: widget.asset,
+                  isBuy: true,
+                ),
+                child: Text(t.assets.details.buy),
+              ),
+              FilledButton.tonal(
+                onPressed: () => showAssetTradeSheet(
+                  context: context,
+                  asset: widget.asset,
+                  isBuy: false,
+                ),
+                child: Text(t.assets.details.sell),
+              ),
+              FilledButton.tonal(
+                onPressed: () => _addValuation(widget.asset),
+                child: Text(t.assets.details.update_value),
+              ),
+            ],
+          ),
+        ),
         StreamBuilder<({double value, double percent})>(
           stream: InvestmentService.instance.getAssetProfit(widget.asset),
           builder: (context, profitSnapshot) {
