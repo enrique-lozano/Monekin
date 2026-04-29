@@ -351,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Tarihleri düzenle",
         "categories": "Kategorileri düzenle",
-        "status": "Durumları düzenle"
+        "status": "Durumları düzenle",
+        "tags": "Etiketleri düzenle"
       }
     },
     "FILTERS": {
@@ -625,6 +626,7 @@
       "all": "Tüm etiketler"
     },
     "empty-list": "Henüz etiket oluşturmadınız. Etiketler ve kategoriler, hareketlerinizi kategorize etmek için harika bir yoldur",
+    "no-tags": "Henüz hiç etiket oluşturmadınız. Etiketi oluşturmak için ayarlara gidin.",
     "without-tags": "Etiketsiz",
     "add": "Etiket ekle",
     "create": "Etiket oluştur",

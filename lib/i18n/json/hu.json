@@ -351,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Dátumok szerkesztése",
         "categories": "Kategóriák szerkesztése",
-        "status": "Állapotok szerkesztése"
+        "status": "Állapotok szerkesztése",
+        "tags": "Címkék szerkesztése"
       }
     },
     "FILTERS": {
@@ -625,6 +626,7 @@
       "all": "Minden címke"
     },
     "empty-list": "Még nem hozott létre címkéket. A címkék és kategóriák nagyszerű lehetőséget kínálnak a pénzmozgások kategorizálására.",
+    "no-tags": "Még nem hozott létre egyetlen címkét sem. A beállításokban hozhat létre címkét.",
     "without-tags": "Címkék nélkül",
     "add": "Hozzáadás",
     "create": "Felirat készítése",
