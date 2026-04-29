@@ -11,6 +11,9 @@ import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/models/tags/tag.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 
 class BulkEditTransactionModal extends StatelessWidget {
   const BulkEditTransactionModal({
@@ -20,7 +23,6 @@ class BulkEditTransactionModal extends StatelessWidget {
   });
 
   final List<MoneyTransaction> transactionsToEdit;
-
   final void Function() onSuccess;
 
   @override
@@ -42,10 +44,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                     context,
                     showTimePickerAfterDate: true,
                   ).then((date) {
-                    if (date == null) {
-                      return;
-                    }
-
+                    if (date == null) return;
                     performUpdates(
                       context,
                       futures: transactionsToEdit.map(
@@ -68,10 +67,7 @@ class BulkEditTransactionModal extends StatelessWidget {
                     categoryType: CategoryType.values,
                   ),
                 ).then((modalRes) {
-                  if (modalRes == null) {
-                    return;
-                  }
-
+                  if (modalRes == null) return;
                   performUpdates(
                     context,
                     futures: transactionsToEdit.map(
@@ -88,13 +84,10 @@ class BulkEditTransactionModal extends StatelessWidget {
               text: t.transaction.list.bulk_edit.status,
               iconData: Icons.fullscreen_rounded,
               onTap: () {
-                showTransactioStatusModal(context, initialStatus: null).then((
+                showTransactionStatusModal(context, initialStatus: null).then((
                   modalRes,
                 ) {
-                  if (modalRes == null) {
-                    return;
-                  }
-
+                  if (modalRes == null) return;
                   performUpdates(
                     context,
                     futures: transactionsToEdit.map(
@@ -102,6 +95,64 @@ class BulkEditTransactionModal extends StatelessWidget {
                         e.copyWith(status: Value(modalRes.result)),
                       ),
                     ),
+                  );
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            _buildSelectOption(
+              text: t.transaction.list.bulk_edit.tags,
+              iconData: Icons.label_rounded,
+              onTap: () {
+                final allTagSets = transactionsToEdit.map((e) => e.tags).toList();
+
+                final selectedTags = allTagSets
+                  .reduce((a, b) => a
+                  .where((tag) => b.any((t) => t.id == tag.id))
+                  .toList())
+                  .cast<Tag?>();
+
+                final indeterminateTags = allTagSets
+                  .expand((tags) => tags)
+                  .toSet()
+                  .where((tag) => !selectedTags.any((s) => s?.id == tag.id))
+                  .cast<Tag?>()
+                  .toList();
+
+                showTagListModal(
+                  context,
+                  modal: TagSelector(
+                    allowEmptySubmit: true,
+                    includeNullTag: false,
+                    selectedTags: selectedTags,
+                    indeterminateTags: indeterminateTags,
+                  ),
+                ).then((modalRes) {
+                  if (modalRes == null) return;
+
+                  final tagsToAdd = modalRes.selectedTags.whereType<Tag>().toList();
+
+                  final tagsToRemove = [
+                    ...selectedTags.whereType<Tag>()
+                      .where((t) => !modalRes.selectedTags
+                      .any((s) => s?.id == t.id)),
+                    ...modalRes.explicitlyRemovedTags.whereType<Tag>(),
+                  ];
+
+                  performUpdates(
+                    context,
+                    futures: transactionsToEdit.map((e) {
+                      final finalTagIds = {
+                        ...e.tags.map((t) => t.id),
+                        ...tagsToAdd.map((t) => t.id),
+                      }..removeAll(tagsToRemove.map((t) => t.id));
+
+                      return TagService.instance.unlinkTagsFromTransaction(transactionId: e.id)
+                        .then((_) =>
+                        TagService.instance.linkTagsToTransaction(transactionId: e.id,
+                        tagIds: finalTagIds.toList(),
+                      ));
+                    }),
                   );
                 });
               },
@@ -131,26 +182,25 @@ class BulkEditTransactionModal extends StatelessWidget {
 
   void performUpdates(
     BuildContext context, {
-    required Iterable<Future<int>> futures,
+    required Iterable<Future> futures,
   }) {
     RouteUtils.popRoute();
 
     Future.wait(futures)
-        .then((value) {
-          MonekinSnackbar.success(
-            transactionsToEdit.length <= 1
-                ? SnackbarParams(t.transaction.edit_success)
-                : SnackbarParams(
-                    t.transaction.edit_multiple_success(
-                      x: transactionsToEdit.length,
-                    ),
-                  ),
-          );
-
-          onSuccess();
-        })
-        .catchError((err) {
-          MonekinSnackbar.error(SnackbarParams.fromError(err));
-        });
+      .then((_) {
+        MonekinSnackbar.success(
+          transactionsToEdit.length <= 1
+            ? SnackbarParams(t.transaction.edit_success)
+            : SnackbarParams(
+              t.transaction.edit_multiple_success(
+                x: transactionsToEdit.length,
+              ),
+            ),
+        );
+        onSuccess();
+      })
+      .catchError((err) {
+        MonekinSnackbar.error(SnackbarParams.fromError(err));
+    });
   }
 }
