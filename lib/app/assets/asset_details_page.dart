@@ -1,12 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/details/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/assets/asset_form.dart';
 import 'package:monekin/app/assets/asset_trade_sheet.dart';
+import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
+import 'package:monekin/app/debts/components/transaction_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -14,7 +19,9 @@ import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_utils.dart';
@@ -130,10 +137,13 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     final t = Translations.of(context);
 
     return StreamBuilder(
-      stream: Rx.combineLatest2(
+      stream: Rx.combineLatest3(
         InvestmentService.instance.getValuationsForAsset(widget.asset.id),
         InvestmentService.instance.getAssetById(widget.asset.id),
-        (a, b) => (valuations: a, asset: b),
+        TransactionService.instance.getTransactions(
+          filters: TransactionFilterSet(assetIds: [widget.asset.id]),
+        ),
+        (a, b, c) => (valuations: a, asset: b, transactions: c),
       ),
       builder: (context, snapshot) {
         final valuations = snapshot.data == null
@@ -157,7 +167,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 if (valuations != null && valuations.isNotEmpty)
                   ListTileActionItem(
                     label: t.assets.valuation.delete_all_valuations,
-                    icon: Icons.delete_rounded,
+                    icon: Icons.restore_rounded,
                     onClick: () => _deleteAllValuations(valuations),
                   ),
                 ListTileActionItem(
@@ -175,12 +185,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
               valuations,
               displayValuation,
               snapshot.data?.asset,
+              snapshot.data?.transactions,
             ),
             child: _buildMobileLayout(
               context,
               valuations,
               displayValuation,
               snapshot.data?.asset,
+              snapshot.data?.transactions,
             ),
           ),
         );
@@ -222,7 +234,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                     ),
                   ),
                   Text(
-                    '(${getMMMdDateFormatBasedOnYear(displayValuation.date).format(displayValuation.date)})',
+                    '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
                   ),
                 ] else
                   DefaultTextStyle.merge(
@@ -249,35 +261,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              FilledButton.tonal(
-                onPressed: () => showAssetTradeSheet(
-                  context: context,
-                  asset: widget.asset,
-                  isBuy: true,
-                ),
-                child: Text(t.assets.details.buy),
-              ),
-              FilledButton.tonal(
-                onPressed: () => showAssetTradeSheet(
-                  context: context,
-                  asset: widget.asset,
-                  isBuy: false,
-                ),
-                child: Text(t.assets.details.sell),
-              ),
-              FilledButton.tonal(
-                onPressed: () => _addValuation(widget.asset),
-                child: Text(t.assets.details.update_value),
-              ),
-            ],
-          ),
-        ),
         StreamBuilder<({double value, double percent})>(
           stream: InvestmentService.instance.getAssetProfit(widget.asset),
           builder: (context, profitSnapshot) {
@@ -316,36 +299,133 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
-      child: TimeSeriesEvolutionChart<ValuationInDB>(
-        data: [
-          ValuationInDB(
-            id: 'INITIAL_VALUE',
-            date: widget.asset.creationDate,
-            value: widget.asset.initialValue,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+          child: TimeSeriesEvolutionChart<ValuationInDB>(
+            data: [
+              ValuationInDB(
+                id: 'INITIAL_VALUE',
+                date: widget.asset.creationDate,
+                value: widget.asset.initialValue,
+              ),
+              ...valuations,
+            ],
+            dateExtractor: (v) => v.date,
+            valueExtractor: (v) => v.value,
+            currency: widget.asset.currency,
+            onHover: (valuation) {
+              setState(() {
+                _hoveredValuation = valuation;
+              });
+            },
           ),
-          ...valuations,
-        ],
-        dateExtractor: (v) => v.date,
-        valueExtractor: (v) => v.value,
-        currency: widget.asset.currency,
-        onHover: (valuation) {
-          setState(() {
-            _hoveredValuation = valuation;
-          });
-        },
-      ),
+        ),
+        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            spacing: 16,
+            children: [
+              if (widget.asset.assetType.isPhysical)
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: () => showTransactionSelectorModal(
+                      context,
+                      onTransactionSelected: (selectedTransaction) {},
+                      subtitle: t.assets.details.link_transaction_description,
+                      initialFilters: TransactionFilterSet(
+                        transactionTypes: [
+                          TransactionType.income,
+                          TransactionType.expense,
+                        ],
+                      ),
+                    ),
+                    icon: const Icon(Icons.add_link_rounded),
+                    label: Text(t.assets.details.link_transaction),
+                  ),
+                ),
+              if (widget.asset.assetType.isFinancial) ...[
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: () => showAssetTradeSheet(
+                      context: context,
+                      asset: widget.asset,
+                      isBuy: true,
+                    ),
+                    icon: const Icon(Icons.add_rounded),
+                    label: Text(t.assets.details.buy),
+                    style: FilledButton.styleFrom(
+                      foregroundColor: Colors.green,
+                      backgroundColor: Colors.green.withOpacity(0.1),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: FilledButton.tonalIcon(
+                    onPressed: () => showAssetTradeSheet(
+                      context: context,
+                      asset: widget.asset,
+                      isBuy: false,
+                    ),
+                    icon: const Icon(Icons.remove_rounded),
+                    label: Text(t.assets.details.sell),
+                    style: FilledButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      backgroundColor: Colors.red.withOpacity(0.1),
+                    ),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildValuationListSection(
     BuildContext context,
     List<ValuationInDB>? valuations,
+    List<MoneyTransaction>? transactions,
     Asset? asset,
   ) {
     final t = Translations.of(context);
     asset ??= widget.asset;
+
+    final itemsToDisplay =
+        valuations?.map((v) {
+          return _AssetHistoricalItem.fromValuationAndType(
+            v,
+            _AssetValuationItemType.update,
+          );
+        }).toList() ??
+        [];
+
+    itemsToDisplay.addAll(
+      transactions?.map((t) {
+            final type = t.type == TransactionType.investment
+                ? t.value < 0
+                      ? _AssetValuationItemType.buy
+                      : _AssetValuationItemType.sell
+                : t.type == TransactionType.expense
+                ? _AssetValuationItemType.sell
+                : _AssetValuationItemType.update;
+
+            return _AssetHistoricalItem.fromValuationAndType(
+              ValuationInDB(
+                id: t.id,
+                accountId: t.accountID,
+                assetId: asset!.id,
+                date: t.date,
+                value: t.value,
+              ),
+              type,
+            );
+          }).toList() ??
+          [],
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -368,11 +448,11 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             ],
           ),
         ),
-        if (valuations != null)
+        if (valuations != null && transactions != null)
           Flexible(
             child: Builder(
               builder: (context) {
-                if (valuations.isEmpty) {
+                if (itemsToDisplay.isEmpty) {
                   return NoResults(
                     title: t.general.empty_warn,
                     description: t.assets.valuation.no_valuations,
@@ -380,18 +460,89 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                   );
                 }
 
-                return EditableTimeSeriesList<ValuationInDB>(
-                  items: valuations,
+                return EditableTimeSeriesList(
+                  items: itemsToDisplay.sorted((a, b) {
+                    final result = b.date.justDay().compareTo(a.date.justDay());
+                    if (result == 0) {
+                      // If two items have the same date, we want to show updates first, then buys, then sells
+                      return a.type.index.compareTo(b.type.index);
+                    }
+                    return result;
+                  }),
                   dateExtractor: (v) => v.date,
-                  subtitleBuilder: (context, item) => DefaultTextStyle.merge(
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    child: CurrencyDisplayer(
-                      amountToConvert: item.value,
-                      currency: widget.asset.currency,
-                    ),
-                  ),
+
+                  titleBuilder: (context, item) {
+                    final dateText = getMMMdDateFormatBasedOnYear(
+                      item.date,
+                    ).text;
+
+                    switch (item.type) {
+                      case _AssetValuationItemType.update:
+                        return Text(
+                          dateText,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        );
+                      case _AssetValuationItemType.buy:
+                        return Text.rich(
+                          TextSpan(
+                            text: '  🟢 Inversion de ',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            children: UINumberFormatter.currency(
+                              amountToConvert: item.value.abs(),
+                              currency: asset?.currency,
+                            ).getTextSpanList(context),
+                          ),
+                        );
+                      case _AssetValuationItemType.sell:
+                        return Text.rich(
+                          TextSpan(
+                            text: '  🔴 Retirada de ',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            children: UINumberFormatter.currency(
+                              amountToConvert: item.value.abs(),
+                              currency: asset?.currency,
+                            ).getTextSpanList(context),
+                          ),
+                        );
+                    }
+                  },
+                  subtitleBuilder: (context, item) =>
+                      item.type != _AssetValuationItemType.update
+                      ? null
+                      : DefaultTextStyle.merge(
+                          style: Theme.of(context).textTheme.titleMedium,
+                          child: Row(
+                            spacing: 16,
+                            children: [
+                              CurrencyDisplayer(
+                                amountToConvert: item.value,
+                                currency: widget.asset.currency,
+                              ),
+                              Chip(
+                                label: Text("Valor acutalizado"),
+                                labelStyle: Theme.of(
+                                  context,
+                                ).textTheme.labelSmall,
+                                padding: EdgeInsets.zero,
+                                labelPadding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                   onEdit: (valuation) => _editValuation(valuation, asset!),
                   onDelete: _deleteValuation,
+                  showActions: (item) =>
+                      item.type == _AssetValuationItemType.update,
+                  onTap: (item) {
+                    if (item.type == _AssetValuationItemType.update) {
+                      return false;
+                    } else {
+                      return true;
+                    }
+                  },
                   scrollController: _scrollController,
                 );
               },
@@ -406,6 +557,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     List<ValuationInDB>? valuations,
     ValuationInDB? displayValuation,
     Asset? asset,
+    List<MoneyTransaction>? transactions,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -416,7 +568,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         if (valuations != null && MediaQuery.of(context).size.height > 550)
           _buildChartSection(context, valuations),
         const SizedBox(height: 16),
-        Expanded(child: _buildValuationListSection(context, valuations, asset)),
+        Expanded(
+          child: _buildValuationListSection(
+            context,
+            valuations,
+            transactions,
+            asset,
+          ),
+        ),
       ],
     );
   }
@@ -426,6 +585,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     List<ValuationInDB>? valuations,
     ValuationInDB? displayValuation,
     Asset? asset,
+    List<MoneyTransaction>? transactions,
   ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,8 +607,44 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             ],
           ),
         ),
-        Flexible(child: _buildValuationListSection(context, valuations, asset)),
+        Flexible(
+          child: _buildValuationListSection(
+            context,
+            valuations,
+            transactions,
+            asset,
+          ),
+        ),
       ],
+    );
+  }
+}
+
+enum _AssetValuationItemType { update, buy, sell }
+
+class _AssetHistoricalItem extends ValuationInDB {
+  final _AssetValuationItemType type;
+
+  _AssetHistoricalItem({
+    required super.id,
+    super.accountId,
+    super.assetId,
+    required super.date,
+    required super.value,
+    required this.type,
+  });
+
+  factory _AssetHistoricalItem.fromValuationAndType(
+    ValuationInDB valuation,
+    _AssetValuationItemType type,
+  ) {
+    return _AssetHistoricalItem(
+      id: valuation.id,
+      accountId: valuation.accountId,
+      assetId: valuation.assetId,
+      date: valuation.date,
+      value: valuation.value,
+      type: type,
     );
   }
 }

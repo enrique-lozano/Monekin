@@ -144,7 +144,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                         : Text(
                             getMMMdDateFormatBasedOnYear(
                               latestValuation.date,
-                            ).format(latestValuation.date),
+                            ).text,
                           ),
                   ),
                 ],

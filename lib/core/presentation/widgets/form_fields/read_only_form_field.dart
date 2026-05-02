@@ -7,6 +7,7 @@ class ReadOnlyTextFormField extends StatelessWidget {
     this.decoration,
     required this.displayValue,
     this.textAlign = TextAlign.start,
+    this.validator,
   });
 
   final void Function()? onTap;
@@ -16,6 +17,7 @@ class ReadOnlyTextFormField extends StatelessWidget {
   final String? displayValue;
 
   final TextAlign textAlign;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class ReadOnlyTextFormField extends StatelessWidget {
       readOnly: true,
       mouseCursor: SystemMouseCursors.click,
       onTap: onTap,
+      validator: validator,
       decoration: decoration,
       textAlign: textAlign,
       controller: TextEditingController(text: displayValue),

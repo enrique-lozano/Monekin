@@ -889,9 +889,17 @@
       "update_value": "更新值",
       "trade_sheet_title_buy": "購買（添加到資產）",
       "trade_sheet_title_sell": "出售（減少資產）",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Withdraw money from this asset to an account. Reduce your investment and its value.",
+      "trade_sheet_update_value_info": "The value will be updated to {{value}} for this asset by adding a valuation on {{date}}.",
+      "trade_sheet_following_valuations_warning": "There are valuations after {{date}}. You can update them too.",
+      "trade_sheet_update_following_valuations": "Update later valuations",
+      "trade_sheet_update_following_valuations_description": "Keep later valuations aligned with this transaction.",
       "trade_valuation_notice": "該日期的估值將更新以反映此金額。",
       "treat_as_investment": "視為投資（僅限現金部分）",
-      "notes_optional": "註釋（可選）"
+      "notes_optional": "註釋（可選）",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
     },
     "FORM": {
       "asset_type": "資產類型",

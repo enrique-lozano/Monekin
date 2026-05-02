@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -15,9 +15,12 @@ class EditableTimeSeriesList<T> extends StatelessWidget {
     super.key,
     required this.items,
     required this.dateExtractor,
+    this.titleBuilder,
     required this.subtitleBuilder,
     required this.onEdit,
     required this.onDelete,
+    this.onTap,
+    this.showActions,
     this.scrollController,
   });
 
@@ -27,14 +30,22 @@ class EditableTimeSeriesList<T> extends StatelessWidget {
   /// Extracts the [DateTime] shown as the tile title.
   final DateTime Function(T) dateExtractor;
 
+  /// Builds the title widget for a given item. By default, the title is the
+  /// date formatted as a string, but this allows for customization.
+  final Widget Function(BuildContext context, T item)? titleBuilder;
+
   /// Builds the subtitle widget for a given item.
-  final Widget Function(BuildContext context, T item) subtitleBuilder;
+  final Widget? Function(BuildContext context, T item) subtitleBuilder;
 
   /// Called when the user taps the edit action for an item.
   final void Function(T item) onEdit;
 
   /// Called when the user taps the delete action for an item.
   final void Function(T item) onDelete;
+
+  final bool Function(T item)? onTap;
+
+  final bool Function(T item)? showActions;
 
   /// Optional scroll controller for the inner [ListView].
   final ScrollController? scrollController;
@@ -52,13 +63,20 @@ class EditableTimeSeriesList<T> extends StatelessWidget {
         final item = items[index];
 
         return ListTile(
-          title: Text(DateFormat.yMMMMd().format(dateExtractor(item))),
+          title: titleBuilder != null
+              ? titleBuilder!(context, item)
+              : Text(getMMMdDateFormatBasedOnYear(dateExtractor(item)).text),
           subtitle: subtitleBuilder(context, item),
           contentPadding: EdgeInsetsDirectional.only(
             start: 16,
             end: isLargeScreen ? 0 : 8,
           ),
-          trailing: isLargeScreen
+          onTap: onTap != null && onTap!(item) != false
+              ? () => onTap!(item)
+              : null,
+          trailing: showActions != null && showActions!(item) == false
+              ? null
+              : isLargeScreen
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -93,7 +111,20 @@ class EditableTimeSeriesList<T> extends StatelessWidget {
                 ),
         );
       },
-      separatorBuilder: (context, index) => const Divider(),
+      separatorBuilder: (context, index) {
+        final item = items[index];
+
+        final nextItemDate = index < items.length - 1
+            ? dateExtractor(items[index + 1])
+            : null;
+
+        if (nextItemDate != null &&
+            DateUtils.isSameDay(dateExtractor(item), nextItemDate)) {
+          return const SizedBox.shrink();
+        }
+
+        return const Divider();
+      },
     );
   }
 }

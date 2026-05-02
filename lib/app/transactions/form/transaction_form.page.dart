@@ -599,6 +599,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           dividerColor: transactionType.color(context).darken(0.3),
           controller: _tabController,
           tabs: TransactionType.values
+              .where((type) => type != TransactionType.investment)
               .map((tType) => Tab(text: tType.displayName(context)))
               .toList(),
           isScrollable: false,

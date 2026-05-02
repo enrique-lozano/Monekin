@@ -250,7 +250,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
 
     while (currentDay.compareTo(timeRange.end) < 0) {
       dates.add(currentDay);
-      labels.add(getMMMdDateFormatBasedOnYear(currentDay).format(currentDay));
+      labels.add(getMMMdDateFormatBasedOnYear(currentDay).text);
 
       balances.add(
         AccountService.instance.getAccountsMoney(

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/details/widgets/valuation_form_dialog.dart';
+import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
@@ -169,7 +169,7 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
                 ),
               ),
               Text(
-                '(${getMMMdDateFormatBasedOnYear(displayValuation.date).format(displayValuation.date)})',
+                '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
               ),
             ] else
               Text(

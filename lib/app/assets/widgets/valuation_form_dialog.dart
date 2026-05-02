@@ -103,24 +103,8 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          spacing: 12,
           children: [
-            TextFormField(
-              controller: _valueController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              decoration: InputDecoration(
-                labelText: '${t.account.investment.portfolio_value} *',
-                suffixText: widget.currencySymbol,
-              ),
-              validator: (value) => fieldValidator(
-                value,
-                isRequired: true,
-                validator: ValidatorType.double,
-              ),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-            const SizedBox(height: 22),
             DateTimeFormField(
               mode: DateTimeFieldPickerMode.date,
               decoration: InputDecoration(
@@ -139,7 +123,23 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
                 });
               },
             ),
-            const SizedBox(height: 16),
+
+            TextFormField(
+              controller: _valueController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: InputDecoration(
+                labelText: '${t.account.investment.portfolio_value} *',
+                suffixText: widget.currencySymbol,
+              ),
+              validator: (value) => fieldValidator(
+                value,
+                isRequired: true,
+                validator: ValidatorType.double,
+              ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+            ),
           ],
         ),
       ),

@@ -887,14 +887,22 @@
     },
     "DETAILS": {
       "select_account": "Seleccione una cuenta",
-      "buy": "Comprar",
-      "sell": "Vender",
+      "buy": "Invertir más",
+      "sell": "Retirar dinero",
       "update_value": "Actualizar valor",
-      "trade_sheet_title_buy": "Comprar (agregar al activo)",
-      "trade_sheet_title_sell": "Vender (reducir activo)",
+      "trade_sheet_title_buy": "Invertir más (agregar al activo)",
+      "trade_sheet_title_sell": "Retirar dinero (reducir activo)",
+      "trade_sheet_description_buy": "Añade dinero a este activo desde una cuenta. Aumenta tu inversión y su valor.",
+      "trade_sheet_description_sell": "Saca dinero de este activo hacia una cuenta. Reduce tu inversión y su valor.",
+      "trade_sheet_update_value_info": "Se va a actualizar el valor de este activo a {{value}}, añadiendo una valoración el día {{date}}.",
+      "trade_sheet_following_valuations_warning": "Hay valoraciones posteriores al {{date}}. Puedes actualizarlas también.",
+      "trade_sheet_update_following_valuations": "Actualizar valoraciones posteriores",
+      "trade_sheet_update_following_valuations_description": "Mantén las valoraciones posteriores alineadas con esta transacción.",
       "trade_valuation_notice": "Se actualizará una valoración para esta fecha para reflejar este monto.",
       "treat_as_investment": "Tratar como inversión (solo tramo de efectivo)",
-      "notes_optional": "Notas (opcional)"
+      "notes_optional": "Notas (opcional)",
+      "link_transaction": "Linkear transacción",
+      "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo"
     },
     "FORM": {
       "asset_type": "Tipo de activo",

@@ -889,9 +889,17 @@
       "update_value": "Wert aktualisieren",
       "trade_sheet_title_buy": "Kaufen (zum Vermögenswert hinzufügen)",
       "trade_sheet_title_sell": "Verkaufen (Vermögenswert reduzieren)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Withdraw money from this asset to an account. Reduce your investment and its value.",
+      "trade_sheet_update_value_info": "The value will be updated to {{value}} for this asset by adding a valuation on {{date}}.",
+      "trade_sheet_following_valuations_warning": "There are valuations after {{date}}. You can update them too.",
+      "trade_sheet_update_following_valuations": "Update later valuations",
+      "trade_sheet_update_following_valuations_description": "Keep later valuations aligned with this transaction.",
       "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
       "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
-      "notes_optional": "Notizen (optional)"
+      "notes_optional": "Notizen (optional)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
     },
     "FORM": {
       "asset_type": "Asset-Typ",
