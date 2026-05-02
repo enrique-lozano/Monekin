@@ -7,7 +7,7 @@
 PRAGMA foreign_keys = OFF;
 
 -- Step 2: Extend `assets` for typed holdings and optional link to
---         an investment account (portfolio rolls into that account).
+--         an investment account (portfolio rolls into that account)
 ALTER TABLE assets ADD COLUMN assetType TEXT NOT NULL DEFAULT 'other';
 ALTER TABLE assets ADD COLUMN linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -49,7 +49,7 @@ CREATE TABLE transactions (
   CHECK (categoryID IS NULL OR valueInDestiny IS NULL)
 );
 
--- Step 4: Copy all existing transactions; `assetID` did not exist before
+-- Step 4: Copy all existing transactions, using NULL for the new `assetID`
 INSERT INTO transactions
 SELECT id, date, accountID, value, title, notes, type, status, categoryID, debtId, receivingAccountID, valueInDestiny, isHidden, locLatitude, locLongitude, locAddress, intervalPeriod, intervalEach, endDate, remainingTransactions, NULL
 FROM transactions_old;
