@@ -37,6 +37,13 @@ class TagService {
     });
   }
 
+  Future<void> unlinkTagsFromTransaction({
+    required String transactionId,
+  }) {
+    return (db.delete(db.transactionTags)
+      ..where((tbl) => tbl.transactionID.equals(transactionId))).go();
+  }
+
   Stream<List<Tag>> getTags({
     Expression<bool> Function(Tags)? filter,
     int? limit,

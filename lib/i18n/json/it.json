@@ -351,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Modifica date",
         "categories": "Modifica categorie",
-        "status": "Modifica stati"
+        "status": "Modifica stati",
+        "tags": "Modifica tag"
       }
     },
     "FILTERS": {
@@ -625,6 +626,7 @@
       "all": "Tutte le etichette"
     },
     "empty-list": "Non hai ancora creato alcuna etichetta. Etichette e categorie sono un ottimo modo per categorizzare i tuoi movimenti",
+    "no-tags": "Non hai ancora creato nessun tag. Vai nelle impostazioni per creare un'etichetta.",
     "without-tags": "Senza etichette",
     "add": "Aggiungi etichetta",
     "create": "Crea etichetta",

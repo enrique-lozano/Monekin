@@ -48,7 +48,7 @@ class TransactionStatusSelector extends StatelessWidget {
       onTap: () {
         unfocusCurrentFocusedItem(context);
 
-        showTransactioStatusModal(context, initialStatus: status).then((
+        showTransactionStatusModal(context, initialStatus: status).then((
           modalRes,
         ) {
           if (modalRes == null) return;
@@ -153,7 +153,7 @@ class TransactionTagsSelector extends StatelessWidget {
           if (value == null) {
             return;
           }
-          onTagsChanged(value.nonNulls.toList());
+          onTagsChanged(value.selectedTags.nonNulls.toList());
         });
       },
       title: tags.isEmpty
