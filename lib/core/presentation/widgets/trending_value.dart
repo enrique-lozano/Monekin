@@ -15,6 +15,7 @@ class TrendingValue extends StatelessWidget {
     this.filled = false,
     this.outlined = false,
     this.markNanAsZero = true,
+    this.padding = const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
   });
 
   final double percentage;
@@ -22,6 +23,8 @@ class TrendingValue extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final bool filled, outlined, markNanAsZero;
+
+  final EdgeInsets padding;
 
   Widget paintTrendValue(BuildContext context) {
     final textColor = _getColorBasedOnPercentage(
@@ -97,7 +100,7 @@ class TrendingValue extends StatelessWidget {
         : null;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      padding: padding,
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(9999),

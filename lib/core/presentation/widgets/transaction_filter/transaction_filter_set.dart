@@ -52,6 +52,8 @@ class TransactionFilterSet {
   /// Useful in transaction selectors to avoid showing already-assigned transactions.
   final String? excludeDebtId;
 
+  /// When set, returns the transactions that have one of the specified assets linked. If an
+  /// empty array is passed, will return the transactions that do not have any asset linked
   final Iterable<String>? assetIds;
 
   const TransactionFilterSet({
@@ -188,7 +190,10 @@ class TransactionFilterSet {
         transaction.debtId.isNull() |
             transaction.debtId.equals(excludeDebtId!).not(),
 
-      if (assetIds != null) transaction.assetID.isIn(assetIds!),
+      if (assetIds != null)
+        assetIds!.isEmpty
+            ? transaction.assetID.isNull()
+            : transaction.assetID.isIn(assetIds!),
 
       if (searchValue != null && searchValue!.isNotEmpty)
         (transaction.notes.contains(searchValue!) |

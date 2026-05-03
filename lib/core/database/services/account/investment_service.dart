@@ -55,6 +55,23 @@ class InvestmentService {
     ).map((res) => res.firstOrNull);
   }
 
+  /// Only the [assetId] column is written; all other transaction data is preserved.
+  Future<int> linkTransactionToAsset({
+    required String transactionId,
+    required String assetId,
+  }) {
+    return (db.update(db.transactions)
+          ..where((tbl) => tbl.id.equals(transactionId)))
+        .write(TransactionsCompanion(assetID: Value(assetId)));
+  }
+
+  /// Removes the debt link from a transaction by setting its [assetId] to null.
+  Future<int> unlinkTransactionFromAsset(String transactionId) {
+    return (db.update(db.transactions)
+          ..where((tbl) => tbl.id.equals(transactionId)))
+        .write(TransactionsCompanion(assetID: Value<String?>(null)));
+  }
+
   // ---------------------------------------------------------------------------
   // Valuation CRUD
   // ---------------------------------------------------------------------------
@@ -187,9 +204,9 @@ class InvestmentService {
             ),
           )
           .toList();
-      return Rx.combineLatestList(streams).map(
-        (values) => values.fold<double>(0, (sum, v) => sum + v),
-      );
+      return Rx.combineLatestList(
+        streams,
+      ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
     });
   }
 
@@ -207,37 +224,40 @@ class InvestmentService {
     }
 
     return getAssets(
-      predicate: (a, c) =>
-          a.linkedAccountID.isNotNull() & a.linkedAccountID.equals(account.id),
-    ).switchMap((linked) {
-      if (linked.isNotEmpty) {
-        return getLinkedPortfolioMarketValue(
-          account,
-          date: date,
-          convertToPreferredCurrency: convertToPreferredCurrency,
-        );
-      }
-
-      return getLatestValuationForAccount(account.id, date: date).switchMap((
-        valuation,
-      ) {
-        if (valuation != null) {
-          return Stream.value(valuation.value);
-        }
-        return getInvestedCapital(account, date: date);
-      }).switchMap((value) {
-        if (!convertToPreferredCurrency) return Stream.value(value);
-        return ExchangeRateService.instance
-            .calculateExchangeRateToPreferredCurrency(
-              amount: value,
-              fromCurrency: account.currency.code,
+          predicate: (a, c) =>
+              a.linkedAccountID.isNotNull() &
+              a.linkedAccountID.equals(account.id),
+        )
+        .switchMap((linked) {
+          if (linked.isNotEmpty) {
+            return getLinkedPortfolioMarketValue(
+              account,
               date: date,
+              convertToPreferredCurrency: convertToPreferredCurrency,
             );
-      });
-    }).map(
-      (converted) =>
-          converted.roundWithDecimals(account.currency.decimalPlaces),
-    );
+          }
+
+          return getLatestValuationForAccount(account.id, date: date)
+              .switchMap((valuation) {
+                if (valuation != null) {
+                  return Stream.value(valuation.value);
+                }
+                return getInvestedCapital(account, date: date);
+              })
+              .switchMap((value) {
+                if (!convertToPreferredCurrency) return Stream.value(value);
+                return ExchangeRateService.instance
+                    .calculateExchangeRateToPreferredCurrency(
+                      amount: value,
+                      fromCurrency: account.currency.code,
+                      date: date,
+                    );
+              });
+        })
+        .map(
+          (converted) =>
+              converted.roundWithDecimals(account.currency.decimalPlaces),
+        );
   }
 
   /// Returns the profit (in the account currency) and the profit percentage
@@ -304,27 +324,27 @@ class InvestmentService {
 
   /// Total value of assets **not** linked to an account (linked assets roll into account totals).
   Stream<double> getTotalAssetsValueAtDate({DateTime? date}) {
-    return getAssets(
-      predicate: (a, c) => a.linkedAccountID.isNull(),
-    ).switchMap((assets) {
-      if (assets.isEmpty) {
-        return Stream.value(0.0);
-      }
+    return getAssets(predicate: (a, c) => a.linkedAccountID.isNull()).switchMap(
+      (assets) {
+        if (assets.isEmpty) {
+          return Stream.value(0.0);
+        }
 
-      final streams = assets
-          .map(
-            (asset) => getAssetValueAtDate(
-              asset,
-              date: date,
-              convertToPreferredCurrency: true,
-            ),
-          )
-          .toList();
+        final streams = assets
+            .map(
+              (asset) => getAssetValueAtDate(
+                asset,
+                date: date,
+                convertToPreferredCurrency: true,
+              ),
+            )
+            .toList();
 
-      return CombineLatestStream.list(
-        streams,
-      ).map((values) => values.fold(0.0, (sum, value) => sum + value));
-    });
+        return CombineLatestStream.list(
+          streams,
+        ).map((values) => values.fold(0.0, (sum, value) => sum + value));
+      },
+    );
   }
 
   /// Sum of linked asset market values for an account (0 if none).
@@ -453,7 +473,9 @@ class InvestmentService {
       final profit = currentValue - asset.initialValue;
       final percent = asset.initialValue != 0
           ? profit / asset.initialValue
-          : 0.0;
+          : currentValue.isNegative
+          ? double.negativeInfinity
+          : double.infinity;
       return (value: profit, percent: percent);
     });
   }

@@ -359,13 +359,8 @@ class _InvestmentHistoryPageState extends State<InvestmentHistoryPage> {
     return EditableTimeSeriesList<ValuationInDB>(
       items: valuations,
       dateExtractor: (v) => v.date,
-      subtitleBuilder: (context, item) => DefaultTextStyle.merge(
-        style: Theme.of(context).textTheme.bodyMedium,
-        child: CurrencyDisplayer(
-          amountToConvert: item.value,
-          currency: widget.account.currency,
-        ),
-      ),
+      valueExtractor: (v) => v.value,
+      currency: account.currency,
       onEdit: _editValuation,
       onDelete: _deleteValuation,
       scrollController: _scrollController,
