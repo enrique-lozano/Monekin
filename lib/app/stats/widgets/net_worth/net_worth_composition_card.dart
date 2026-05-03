@@ -66,7 +66,9 @@ class NetWorthCompositionCard extends StatelessWidget {
       }),
     );
 
-    final assets = await InvestmentService.instance.getAssets().first;
+    final assets = await InvestmentService.instance
+        .getAssets(predicate: (a, curr) => a.linkedAccountID.isNull())
+        .first;
     final assetItems = await Future.wait(
       assets.map((asset) async {
         final value = await InvestmentService.instance

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show DateUtils;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -195,29 +196,34 @@ class InvestmentService {
     });
   }
 
-  /// Total value of assets **not** linked to an account (linked assets roll into account totals).
-  Stream<double> getTotalAssetsValueAtDate({DateTime? date}) {
-    return getAssets(predicate: (a, c) => a.linkedAccountID.isNull()).switchMap(
-      (assets) {
-        if (assets.isEmpty) {
-          return Stream.value(0.0);
-        }
+  /// Returns the total value of all assets at a specific date, converted to the user preferred currency.
+  Stream<double> getTotalAssetsValueAtDate({
+    DateTime? date,
+    bool considerLinkedAccounts = true,
+  }) {
+    return getAssets(
+      predicate: (a, currency) => buildDriftExpr([
+        if (!considerLinkedAccounts) a.linkedAccountID.isNull(),
+      ]),
+    ).switchMap((assets) {
+      if (assets.isEmpty) {
+        return Stream.value(0.0);
+      }
 
-        final streams = assets
-            .map(
-              (asset) => getAssetValueAtDate(
-                asset,
-                date: date,
-                convertToPreferredCurrency: true,
-              ),
-            )
-            .toList();
+      final streams = assets
+          .map(
+            (asset) => getAssetValueAtDate(
+              asset,
+              date: date,
+              convertToPreferredCurrency: true,
+            ),
+          )
+          .toList();
 
-        return CombineLatestStream.list(
-          streams,
-        ).map((values) => values.fold(0.0, (sum, value) => sum + value));
-      },
-    );
+      return CombineLatestStream.list(
+        streams,
+      ).map((values) => values.fold(0.0, (sum, value) => sum + value));
+    });
   }
 
   /// Sum of linked asset market values for an account (0 if none).
