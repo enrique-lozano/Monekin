@@ -95,8 +95,8 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
 
     return ModalContainer(
       title: isEditMode
-          ? t.account.investment.edit_valuation
-          : t.account.investment.add_valuation,
+          ? t.assets.valuation.edit_valuation
+          : t.assets.valuation.add_valuation,
       footer: BottomSheetFooter(onSaved: _onSubmit),
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       body: Form(
@@ -130,7 +130,7 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
                 decimal: true,
               ),
               decoration: InputDecoration(
-                labelText: '${t.account.investment.portfolio_value} *',
+                labelText: '${t.assets.valuation.value} *',
                 suffixText: widget.currencySymbol,
               ),
               validator: (value) => fieldValidator(

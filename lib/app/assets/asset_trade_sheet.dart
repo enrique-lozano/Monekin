@@ -295,17 +295,20 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                     final originalValue =
                         snapshot.data ?? widget.asset.initialValue;
 
-                    final transactionValue = widget.isBuy ? -amount! : amount!;
+                    final transactionValue = widget.isBuy ? -amount : amount;
                     final updatedValue = originalValue - transactionValue;
                     final formattedDate = DateFormat.yMMMd(
                       Localizations.localeOf(context).toString(),
                     ).format(_date);
 
-                    final infoText = t.assets.details
-                        .trade_sheet_update_value_info(
-                          date: formattedDate,
-                          value: _formatCurrency(updatedValue),
-                        );
+                    final infoText = widget.transaction != null
+                        ? t.assets.details
+                              .trade_sheet_update_linked_asset_value_info(
+                                value: _formatCurrency(updatedValue),
+                              )
+                        : t.assets.details.trade_sheet_update_value_info(
+                            value: _formatCurrency(updatedValue),
+                          );
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,

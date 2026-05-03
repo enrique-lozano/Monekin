@@ -108,7 +108,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           children: [
             const SizedBox(height: 16),
             CardWithHeader(
-              title: t.account.investment.details_header,
+              title: t.assets.title,
               bodyPadding: const EdgeInsets.only(top: 4),
               body: Column(
                 children: [
