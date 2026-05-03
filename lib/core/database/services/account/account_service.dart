@@ -7,7 +7,6 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -193,16 +192,8 @@ class AccountService {
                 );
           });
 
-    final cashTx = TransactionService.instance.getTransactionsValueBalance(
+    final ledgerTx = TransactionService.instance.getTransactionsValueBalance(
       filters: baseFilter,
-      convertToPreferredCurrency: convertToPreferredCurrency,
-      exchDate: date,
-    );
-
-    final invTx = TransactionService.instance.getTransactionsValueBalance(
-      filters: baseFilter.copyWith(
-        transactionTypes: [TransactionType.investment],
-      ),
       convertToPreferredCurrency: convertToPreferredCurrency,
       exchDate: date,
     );
@@ -213,13 +204,12 @@ class AccountService {
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    return Rx.combineLatest4(
+    return Rx.combineLatest3(
       iniStream,
-      cashTx,
-      invTx,
+      ledgerTx,
       linked,
-      (double ini, double cash, double inv, double l) =>
-          (ini + cash + inv + l).roundWithDecimals(account.currency.decimalPlaces),
+      (double ini, double ledger, double l) =>
+          (ini + ledger + l).roundWithDecimals(account.currency.decimalPlaces),
     );
   }
 
@@ -299,32 +289,17 @@ class AccountService {
           );
         });
 
-    final investmentTypeCash = _watchAccountIdsForBalance(accountIds: accountIds)
-        .switchMap((ids) {
-          if (ids.isEmpty) return Stream.value(0.0);
-          return TransactionService.instance.getTransactionsValueBalance(
-            filters: statusFiltered.copyWith(
-              maxDate: date,
-              accountsIDs: ids,
-              transactionTypes: [TransactionType.investment],
-            ),
-            convertToPreferredCurrency: convertToPreferredCurrency,
-            exchDate: date,
-          );
-        });
-
     final linkedPortfolioMarket = _linkedPortfolioMarketAggregate(
       date: date,
       accountIds: accountIds,
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    return Rx.combineLatest4(
+    return Rx.combineLatest3(
       allAccountsInitialAmount,
       allAccountsTransactionsBalance,
-      investmentTypeCash,
       linkedPortfolioMarket,
-      (double ini, double tr, double inv, double linked) => ini + tr + inv + linked,
+      (double ini, double tr, double linked) => ini + tr + linked,
     );
   }
 

@@ -197,10 +197,12 @@ class TransactionService {
         predicate.transactionTypes!
             .map((e) => e.index)
             .contains(TransactionType.transfer.index)) {
-      // If we should take into account transfers:
+      // Transfers need origin/destination split; other types use a straight SUM in
+      // `countTransactions`. When types are unspecified, include investment here so
+      // callers get one balance stream (investment was previously easy to omit).
       return Rx.combineLatest(
         [
-          // INCOME AND EXPENSES
+          // INCOME, EXPENSE, AND INVESTMENT (non-transfer ledger)
           db
               .countTransactions(
                 predicate: predicate
@@ -213,7 +215,11 @@ class TransactionService {
                                     TransactionType.transfer.index,
                               )
                               .toList() ??
-                          [TransactionType.income, TransactionType.expense],
+                          [
+                            TransactionType.income,
+                            TransactionType.expense,
+                            TransactionType.investment,
+                          ],
                     )
                     .toTransactionExpression(),
                 date: exchangeDate,
