@@ -1,125 +1,109 @@
 # Balance Formulas
 
-This document describes how account balances and net worth are computed in Monekin from a financial perspective.
+This document describes how account balances, asset values, and net worth are computed in Monekin from a financial perspective.
 
 ---
 
-## 1. Accounts
+## 1. Account balance
 
-How to compute the balance of an account. In financial terms, the **balance** (Spanish: *saldo*) is the net amount available in an account after all transactions.
-
-### 1.1 Normal and Saving Accounts
-
-The balance of account $a$ at a given date $t$ is:
+For every account $a$ (normal, saving, or investment), the **balance** at date $t$ is the sum of three parts: opening balance, **cash ledger** net from transactions, and **linked holdings** market value.
 
 $$
-\text{AccountValue}(a, t) = \text{InitialValue}(a) + \sum \text{Income}(a, t) - \sum \text{Expense}(a, t) + \sum \text{TransfersIn}(a, t) - \sum \text{TransfersOut}(a, t)
+\text{AccountValue}(a,t) = \text{Ini}(a,t) + L(a,t) + H(a,t)
 $$
-
-Where:
 
 | Term | Meaning |
 | --- | --- |
-| $\text{InitialValue}(a)$ | **Opening balance** — the value of the account at the time it was created. |
-| $\sum \text{Income}(a, t)$ | **Total income** — all confirmed income transactions in account $a$ dated on or before $t$. |
-| $\sum \text{Expense}(a, t)$ | **Total expenses** — all confirmed expense transactions in account $a$ dated on or before $t$. |
-| $\sum \text{TransfersIn}(a, t)$ | **Incoming transfers** — the value received from transfers into account $a$, dated on or before $t$. The received amount may differ from the sent amount due to currency conversion. |
-| $\sum \text{TransfersOut}(a, t)$ | **Outgoing transfers** — the value sent from account $a$ to other accounts, dated on or before $t$. |
+| $\text{Ini}(a,t)$ | **Opening balance** at account creation, counted only if the account exists on or before $t$; otherwise $0$. |
+| $L(a,t)$ | **Cash ledger net** — effect of all counted transactions on account $a$ with date $\leq t$ (see below). |
+| $H(a,t)$ | **Linked holdings value** — sum of market values of all assets that belong to account $a$ via a link from asset to account. If there are none, $H(a,t)=0$. |
 
-**Notes:**
+### 1.1 Cash ledger net $L(a,t)$
 
-- Pending and voided transactions are excluded from all sums.
-- When computing balances in a common currency, the result is converted using the exchange rate at time $t$.
-- If the account was opened after date $t$, its balance is $0$.
+Transactions are aggregated with **signed amounts** as stored for the account:
 
-> **Implementation:** `AccountService.getAccountsMoney()`
+- **Income** and **investment (cash leg)** rows use the stored `value` (income is positive in normal use).
+- **Expense** rows use a negative stored `value` for the same magnitude as the expense.
+- **Transfers** reduce the origin account by the outgoing amount and increase the receiving account by the received amount (using destination currency amounts when applicable).
 
-### 1.2 Investment Accounts
+Only statuses that count toward statistics (typically confirmed / reconciled; not pending or voided) are included. When balances are shown in a **reference currency**, each piece is converted using exchange rates as of $t$.
 
-The balance of an investment account equals its **portfolio value** — the current market worth of the holdings:
+> **Implementation:** `TransactionService.getTransactionsValueBalance()` with filters scoped to account $a$ and `maxDate` $t$.
 
-$$
-\text{AccountValue}(a) =
-\begin{cases}
-\text{LatestValuation}(a) & \text{if at least one valuation exists} \\
-\text{InvestedCapital}(a) & \text{otherwise (fallback)}
-\end{cases}
-$$
+### 1.2 Linked holdings $H(a,t)$
 
-A **valuation** is a user-recorded snapshot of the account's market value at a point in time. If no valuation exists, the balance falls back to the invested capital.
-
-> **Implementation:** `InvestmentService.getInvestmentAccountValue()`
-
-#### Invested Capital
-
-Invested capital represents the net amount of money the user has put into the account:
+Each **asset** linked to account $a$ has a market value $\text{AssetValue}(s,t)$ (section 2). Linked holdings are:
 
 $$
-\text{InvestedCapital}(a) = \text{InitialValue}(a) + \sum \text{TransfersIn}(a) - \sum \text{TransfersOut}(a)
+H(a,t) = \sum_{s \,:\, \text{linked}(s)=a} \text{AssetValue}(s,t)
 $$
 
-Where:
+For normal and saving accounts, users typically have no linked assets, so $H(a,t)=0$. For investment accounts, linked assets represent positions (e.g., funds, securities) whose value is tracked separately and added to the cash ledger.
 
-| Term | Meaning |
-| --- | --- |
-| $\text{InitialValue}(a)$ | **Opening balance** at account creation. |
-| $\sum \text{TransfersIn}(a)$ | **Incoming transfers** — money transferred into the investment account. |
-| $\sum \text{TransfersOut}(a)$ | **Outgoing transfers** — money withdrawn from the investment account. |
+> **Implementation:** `InvestmentService.streamLinkedAssetsTotalForAccount()` (internally sums `InvestmentService.getAssetValueAtDate()` per linked asset).
 
-Only confirmed (non-pending, non-voided) transfers are included.
-
-> **Implementation:** `InvestmentService.getInvestedCapital()`
-
-#### Profit & Return
+### 1.3 Combined account stream
 
 $$
-\text{Profit}(a) = \text{PortfolioValue}(a) - \text{InvestedCapital}(a)
+\text{AccountValue}(a,t) = \text{Ini}(a,t) + L(a,t) + H(a,t)
 $$
 
-$$
-\text{Return}(a) = \frac{\text{PortfolioValue}(a) - \text{InvestedCapital}(a)}{\text{InvestedCapital}(a)} \times 100
-$$
+with rounding applied in the account’s display currency when not converting.
 
-A positive profit means the portfolio has gained value beyond what was invested; a negative value indicates a loss.
-
-> **Implementation:** `InvestmentService.getInvestmentProfit()`
+> **Implementation:** `AccountService.getAccountMoney()` for one account; `AccountService.getAccountsMoney()` for many accounts (same structure: sum of openings + pooled ledger net + sum of linked-holdings terms for investment accounts in scope).
 
 ---
 
-## 2. Assets
+## 2. Asset market value
 
-Assets (e.g., real estate, vehicles, collectibles) are tracked independently from accounts. Unlike accounts, they have no transaction ledger — their worth is determined solely by valuations. Their current value is:
+An **asset** $s$ (any type) has a time series of **valuations** (user snapshots of worth). Its value at $t$ is:
 
 $$
-\text{AssetValue}(s) =
+\text{AssetValue}(s,t) =
 \begin{cases}
-\text{LatestValuation}(s) & \text{if at least one valuation exists} \\
+0 & \text{if } t \text{ is before the asset’s creation date} \\
+\text{LatestValuation}(s,t) & \text{if at least one valuation exists on or before } t \\
 \text{InitialValue}(s) & \text{otherwise}
 \end{cases}
 $$
 
-Where $\text{InitialValue}(s)$ is the value assigned to the asset when it was first created.
+$\text{LatestValuation}(s,t)$ is the valuation on the latest date $\leq t$. $\text{InitialValue}(s)$ is the value set when the asset was created.
 
-> **Implementation:** `InvestmentService.getAssetValue()`
+> **Implementation:** `InvestmentService.getAssetValueAtDate()`; current date with no $t$ argument: `InvestmentService.getCurrentAssetValue()`.
 
 ---
 
-## 3. Net Worth
+## 3. Asset gain vs. booked initial
 
-Net worth aggregates all the user's financial positions into a single figure, expressed in the user's preferred currency:
+For reporting on a single asset, the app compares current market value to the asset’s **booked initial** amount (the creation-time initial value, not a full cost-basis reconstruction from every trade):
 
 $$
-\text{NetWorth}(t) = \sum_{a \in A_c} \text{AccountValue}(a, t) \;+\; \sum_{a \in A_i} \text{AccountValue}(a, t) \;+\; \sum_{s \in S} \text{AssetValue}(s, t)
+\text{Gain}(s) = \text{AssetValue}(s,t_{\text{now}}) - \text{InitialValue}(s)
 $$
 
-Where:
+$$
+\text{Gain\%}(s) = \frac{\text{Gain}(s)}{\text{InitialValue}(s)} \quad (\text{when } \text{InitialValue}(s) \neq 0)
+$$
 
-| Set | Description | Included if |
-| --- | --- | --- |
-| $A_c$ | Normal and saving accounts | Account is open and marked *include in net worth* |
-| $A_i$ | Investment accounts | Account is open and marked *include in net worth* |
-| $S$ | Stand-alone assets | Asset is marked *include in net worth* |
+When $\text{InitialValue}(s)=0$, the percentage is undefined; the app uses a sentinel pair of infinities for UI logic (`getAssetProfit`).
 
-- $\text{AccountValue}(a, t)$ refers to the account balance as defined in sections 1.1 and 1.2.
-- $\text{AssetValue}(s, t)$ refers to the asset value as defined in section 2.
-- All values are converted to the user's preferred currency before summing.
+> **Implementation:** `InvestmentService.getAssetProfit()`.
+
+---
+
+## 4. Net worth (assets side)
+
+On the **assets side**, net worth sums **account balances** and **standalone assets**, without double-counting:
+
+$$
+\text{AssetsSide}(t) = \sum_{a \in A^{*}} \text{AccountValue}(a,t) \;+\; \sum_{s \in S_0} \text{AssetValue}(s,t)
+$$
+
+| Set | Description |
+| --- | --- |
+| $A^{*}$ | Open accounts included in net worth. Investment accounts use $\text{AccountValue}$ as in section 1 (cash ledger + linked holdings). |
+| $S_0$ | **Standalone assets** — assets with no linked account. Assets linked to an account are omitted from this sum because their value is already inside that account’s $\text{AccountValue}$. |
+
+All amounts are converted to the user’s preferred currency before summing. Any **debt** subtraction used in net-worth screens is a separate liability term in the app, not part of $\text{AccountValue}$.
+
+> **Implementation:** per-account `AccountService.getAccountMoney()`; standalone-asset total `InvestmentService.getTotalAssetsValueAtDate(considerLinkedAccounts: false)` when aggregating net worth so linked assets are not summed twice.
