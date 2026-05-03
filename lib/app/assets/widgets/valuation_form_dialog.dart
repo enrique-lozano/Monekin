@@ -25,19 +25,13 @@ Future<ValuationInDB?> showValuationFormDialog(
 class ValuationFormDialog extends StatefulWidget {
   const ValuationFormDialog({
     super.key,
-    this.accountId,
-    this.assetId,
+    required this.assetId,
     this.currencySymbol,
     this.valuationToEdit,
     required this.firstDate,
-  }) : assert(
-         (accountId != null && assetId == null) ||
-             (accountId == null && assetId != null),
-         'You must specify either an account or an asset, not both.',
-       );
+  });
 
-  final String? accountId;
-  final String? assetId;
+  final String assetId;
   final String? currencySymbol;
   final ValuationInDB? valuationToEdit;
 
@@ -80,7 +74,6 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
 
     final result = ValuationInDB(
       id: widget.valuationToEdit?.id ?? generateUUID(),
-      accountId: widget.accountId,
       assetId: widget.assetId,
       date: _date,
       value: value,

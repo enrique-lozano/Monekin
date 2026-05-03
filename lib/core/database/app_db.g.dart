@@ -2300,29 +2300,17 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL PRIMARY KEY',
   );
-  static const VerificationMeta _accountIdMeta = const VerificationMeta(
-    'accountId',
-  );
-  late final GeneratedColumn<String> accountId = GeneratedColumn<String>(
-    'accountId',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-    $customConstraints:
-        'REFERENCES accounts(id)ON UPDATE CASCADE ON DELETE CASCADE',
-  );
   static const VerificationMeta _assetIdMeta = const VerificationMeta(
     'assetId',
   );
   late final GeneratedColumn<String> assetId = GeneratedColumn<String>(
     'assetId',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.string,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
     $customConstraints:
-        'REFERENCES assets(id)ON UPDATE CASCADE ON DELETE CASCADE',
+        'NOT NULL REFERENCES assets(id)ON UPDATE CASCADE ON DELETE CASCADE',
   );
   late final GeneratedColumnWithTypeConverter<DateTime, String> date =
       GeneratedColumn<String>(
@@ -2343,7 +2331,7 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     $customConstraints: 'NOT NULL',
   );
   @override
-  List<GeneratedColumn> get $columns => [id, accountId, assetId, date, value];
+  List<GeneratedColumn> get $columns => [id, assetId, date, value];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -2361,17 +2349,13 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
     } else if (isInserting) {
       context.missing(_idMeta);
     }
-    if (data.containsKey('accountId')) {
-      context.handle(
-        _accountIdMeta,
-        accountId.isAcceptableOrUnknown(data['accountId']!, _accountIdMeta),
-      );
-    }
     if (data.containsKey('assetId')) {
       context.handle(
         _assetIdMeta,
         assetId.isAcceptableOrUnknown(data['assetId']!, _assetIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_assetIdMeta);
     }
     if (data.containsKey('value')) {
       context.handle(
@@ -2394,14 +2378,10 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}id'],
       )!,
-      accountId: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}accountId'],
-      ),
       assetId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}assetId'],
-      ),
+      )!,
       date: Valuations.$converterdate.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -2423,21 +2403,14 @@ class Valuations extends Table with TableInfo<Valuations, ValuationInDB> {
   static TypeConverter<DateTime, String> $converterdate =
       const DateTypeConverter();
   @override
-  List<String> get customConstraints => const [
-    'CHECK((accountId IS NULL)!=(assetId IS NULL))',
-  ];
-  @override
   bool get dontWriteConstraints => true;
 }
 
 class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
   final String id;
 
-  /// FK to the account this valuation belongs to (mutually exclusive with assetId)
-  final String? accountId;
-
-  /// FK to the asset this valuation belongs to (mutually exclusive with accountId)
-  final String? assetId;
+  /// ID of the asset this valuation belongs to (mutually exclusive with accountId)
+  final String assetId;
 
   /// Date of this valuation snapshot
   final DateTime date;
@@ -2446,8 +2419,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
   final double value;
   const ValuationInDB({
     required this.id,
-    this.accountId,
-    this.assetId,
+    required this.assetId,
     required this.date,
     required this.value,
   });
@@ -2455,12 +2427,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
-    if (!nullToAbsent || accountId != null) {
-      map['accountId'] = Variable<String>(accountId);
-    }
-    if (!nullToAbsent || assetId != null) {
-      map['assetId'] = Variable<String>(assetId);
-    }
+    map['assetId'] = Variable<String>(assetId);
     {
       map['date'] = Variable<String>(Valuations.$converterdate.toSql(date));
     }
@@ -2471,12 +2438,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
   ValuationsCompanion toCompanion(bool nullToAbsent) {
     return ValuationsCompanion(
       id: Value(id),
-      accountId: accountId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(accountId),
-      assetId: assetId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(assetId),
+      assetId: Value(assetId),
       date: Value(date),
       value: Value(value),
     );
@@ -2489,8 +2451,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ValuationInDB(
       id: serializer.fromJson<String>(json['id']),
-      accountId: serializer.fromJson<String?>(json['accountId']),
-      assetId: serializer.fromJson<String?>(json['assetId']),
+      assetId: serializer.fromJson<String>(json['assetId']),
       date: serializer.fromJson<DateTime>(json['date']),
       value: serializer.fromJson<double>(json['value']),
     );
@@ -2500,8 +2461,7 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
-      'accountId': serializer.toJson<String?>(accountId),
-      'assetId': serializer.toJson<String?>(assetId),
+      'assetId': serializer.toJson<String>(assetId),
       'date': serializer.toJson<DateTime>(date),
       'value': serializer.toJson<double>(value),
     };
@@ -2509,21 +2469,18 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
 
   ValuationInDB copyWith({
     String? id,
-    Value<String?> accountId = const Value.absent(),
-    Value<String?> assetId = const Value.absent(),
+    String? assetId,
     DateTime? date,
     double? value,
   }) => ValuationInDB(
     id: id ?? this.id,
-    accountId: accountId.present ? accountId.value : this.accountId,
-    assetId: assetId.present ? assetId.value : this.assetId,
+    assetId: assetId ?? this.assetId,
     date: date ?? this.date,
     value: value ?? this.value,
   );
   ValuationInDB copyWithCompanion(ValuationsCompanion data) {
     return ValuationInDB(
       id: data.id.present ? data.id.value : this.id,
-      accountId: data.accountId.present ? data.accountId.value : this.accountId,
       assetId: data.assetId.present ? data.assetId.value : this.assetId,
       date: data.date.present ? data.date.value : this.date,
       value: data.value.present ? data.value.value : this.value,
@@ -2534,7 +2491,6 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
   String toString() {
     return (StringBuffer('ValuationInDB(')
           ..write('id: $id, ')
-          ..write('accountId: $accountId, ')
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
           ..write('value: $value')
@@ -2543,13 +2499,12 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
   }
 
   @override
-  int get hashCode => Object.hash(id, accountId, assetId, date, value);
+  int get hashCode => Object.hash(id, assetId, date, value);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ValuationInDB &&
           other.id == this.id &&
-          other.accountId == this.accountId &&
           other.assetId == this.assetId &&
           other.date == this.date &&
           other.value == this.value);
@@ -2557,14 +2512,12 @@ class ValuationInDB extends DataClass implements Insertable<ValuationInDB> {
 
 class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
   final Value<String> id;
-  final Value<String?> accountId;
-  final Value<String?> assetId;
+  final Value<String> assetId;
   final Value<DateTime> date;
   final Value<double> value;
   final Value<int> rowid;
   const ValuationsCompanion({
     this.id = const Value.absent(),
-    this.accountId = const Value.absent(),
     this.assetId = const Value.absent(),
     this.date = const Value.absent(),
     this.value = const Value.absent(),
@@ -2572,17 +2525,16 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
   });
   ValuationsCompanion.insert({
     required String id,
-    this.accountId = const Value.absent(),
-    this.assetId = const Value.absent(),
+    required String assetId,
     required DateTime date,
     required double value,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
+       assetId = Value(assetId),
        date = Value(date),
        value = Value(value);
   static Insertable<ValuationInDB> custom({
     Expression<String>? id,
-    Expression<String>? accountId,
     Expression<String>? assetId,
     Expression<String>? date,
     Expression<double>? value,
@@ -2590,7 +2542,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (accountId != null) 'accountId': accountId,
       if (assetId != null) 'assetId': assetId,
       if (date != null) 'date': date,
       if (value != null) 'value': value,
@@ -2600,15 +2551,13 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
 
   ValuationsCompanion copyWith({
     Value<String>? id,
-    Value<String?>? accountId,
-    Value<String?>? assetId,
+    Value<String>? assetId,
     Value<DateTime>? date,
     Value<double>? value,
     Value<int>? rowid,
   }) {
     return ValuationsCompanion(
       id: id ?? this.id,
-      accountId: accountId ?? this.accountId,
       assetId: assetId ?? this.assetId,
       date: date ?? this.date,
       value: value ?? this.value,
@@ -2621,9 +2570,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<String>(id.value);
-    }
-    if (accountId.present) {
-      map['accountId'] = Variable<String>(accountId.value);
     }
     if (assetId.present) {
       map['assetId'] = Variable<String>(assetId.value);
@@ -2646,7 +2592,6 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
   String toString() {
     return (StringBuffer('ValuationsCompanion(')
           ..write('id: $id, ')
-          ..write('accountId: $accountId, ')
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
           ..write('value: $value, ')
@@ -8078,37 +8023,6 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
   }
 
-  Selectable<ValuationInDB> getValuationsForAccount({
-    required String accountId,
-  }) {
-    return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 ORDER BY date DESC',
-      variables: [Variable<String>(accountId)],
-      readsFrom: {valuations},
-    ).asyncMap(valuations.mapFromRow);
-  }
-
-  Selectable<ValuationInDB> getLatestValuationForAccount({
-    required String accountId,
-  }) {
-    return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 ORDER BY date DESC LIMIT 1',
-      variables: [Variable<String>(accountId)],
-      readsFrom: {valuations},
-    ).asyncMap(valuations.mapFromRow);
-  }
-
-  Selectable<ValuationInDB> getLatestValuationForAccountAtDate({
-    required String accountId,
-    required DateTime date,
-  }) {
-    return customSelect(
-      'SELECT * FROM valuations WHERE accountId = ?1 AND date <= ?2 ORDER BY date DESC LIMIT 1',
-      variables: [Variable<String>(accountId), Variable<DateTime>(date)],
-      readsFrom: {valuations},
-    ).asyncMap(valuations.mapFromRow);
-  }
-
   Selectable<ValuationInDB> getValuationsForAsset({required String assetId}) {
     return customSelect(
       'SELECT * FROM valuations WHERE assetId = ?1 ORDER BY date DESC',
@@ -8699,20 +8613,6 @@ abstract class _$AppDB extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('assets', kind: UpdateKind.update)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'accounts',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('valuations', kind: UpdateKind.delete)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'accounts',
-        limitUpdateKind: UpdateKind.update,
-      ),
-      result: [TableUpdate('valuations', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -9561,24 +9461,6 @@ final class $AccountsReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
-
-  static MultiTypedResultKey<Valuations, List<ValuationInDB>>
-  _valuationsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
-    db.valuations,
-    aliasName: $_aliasNameGenerator(db.accounts.id, db.valuations.accountId),
-  );
-
-  $ValuationsProcessedTableManager get valuationsRefs {
-    final manager = $ValuationsTableManager(
-      $_db,
-      $_db.valuations,
-    ).filter((f) => f.accountId.id.sqlEquals($_itemColumn<String>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(_valuationsRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
 }
 
 class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
@@ -9689,31 +9571,6 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
           }) => $AssetsFilterComposer(
             $db: $db,
             $table: $db.assets,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-
-  Expression<bool> valuationsRefs(
-    Expression<bool> Function($ValuationsFilterComposer f) f,
-  ) {
-    final $ValuationsFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.valuations,
-      getReferencedColumn: (t) => t.accountId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $ValuationsFilterComposer(
-            $db: $db,
-            $table: $db.valuations,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -9913,31 +9770,6 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     );
     return f(composer);
   }
-
-  Expression<T> valuationsRefs<T extends Object>(
-    Expression<T> Function($ValuationsAnnotationComposer a) f,
-  ) {
-    final $ValuationsAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.valuations,
-      getReferencedColumn: (t) => t.accountId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $ValuationsAnnotationComposer(
-            $db: $db,
-            $table: $db.valuations,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 }
 
 class $AccountsTableManager
@@ -9953,11 +9785,7 @@ class $AccountsTableManager
           $AccountsUpdateCompanionBuilder,
           (AccountInDB, $AccountsReferences),
           AccountInDB,
-          PrefetchHooks Function({
-            bool currencyId,
-            bool assetsRefs,
-            bool valuationsRefs,
-          })
+          PrefetchHooks Function({bool currencyId, bool assetsRefs})
         > {
   $AccountsTableManager(_$AppDB db, Accounts table)
     : super(
@@ -10039,91 +9867,60 @@ class $AccountsTableManager
                 (e) => (e.readTable(table), $AccountsReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({
-                currencyId = false,
-                assetsRefs = false,
-                valuationsRefs = false,
-              }) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (assetsRefs) db.assets,
-                    if (valuationsRefs) db.valuations,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (currencyId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.currencyId,
-                                    referencedTable: $AccountsReferences
-                                        ._currencyIdTable(db),
-                                    referencedColumn: $AccountsReferences
-                                        ._currencyIdTable(db)
-                                        .code,
-                                  )
-                                  as T;
-                        }
+          prefetchHooksCallback: ({currencyId = false, assetsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (assetsRefs) db.assets],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (currencyId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.currencyId,
+                                referencedTable: $AccountsReferences
+                                    ._currencyIdTable(db),
+                                referencedColumn: $AccountsReferences
+                                    ._currencyIdTable(db)
+                                    .code,
+                              )
+                              as T;
+                    }
 
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (assetsRefs)
-                        await $_getPrefetchedData<
-                          AccountInDB,
-                          Accounts,
-                          AssetInDB
-                        >(
-                          currentTable: table,
-                          referencedTable: $AccountsReferences._assetsRefsTable(
-                            db,
-                          ),
-                          managerFromTypedResult: (p0) =>
-                              $AccountsReferences(db, table, p0).assetsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.linkedAccountID == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                      if (valuationsRefs)
-                        await $_getPrefetchedData<
-                          AccountInDB,
-                          Accounts,
-                          ValuationInDB
-                        >(
-                          currentTable: table,
-                          referencedTable: $AccountsReferences
-                              ._valuationsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $AccountsReferences(db, table, p0).valuationsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.accountId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
+                    return state;
                   },
-                );
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (assetsRefs)
+                    await $_getPrefetchedData<AccountInDB, Accounts, AssetInDB>(
+                      currentTable: table,
+                      referencedTable: $AccountsReferences._assetsRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $AccountsReferences(db, table, p0).assetsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where(
+                            (e) => e.linkedAccountID == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
               },
+            );
+          },
         ),
       );
 }
@@ -10140,11 +9937,7 @@ typedef $AccountsProcessedTableManager =
       $AccountsUpdateCompanionBuilder,
       (AccountInDB, $AccountsReferences),
       AccountInDB,
-      PrefetchHooks Function({
-        bool currencyId,
-        bool assetsRefs,
-        bool valuationsRefs,
-      })
+      PrefetchHooks Function({bool currencyId, bool assetsRefs})
     >;
 typedef $DebtsCreateCompanionBuilder =
     DebtsCompanion Function({
@@ -11258,8 +11051,7 @@ typedef $AssetsProcessedTableManager =
 typedef $ValuationsCreateCompanionBuilder =
     ValuationsCompanion Function({
       required String id,
-      Value<String?> accountId,
-      Value<String?> assetId,
+      required String assetId,
       required DateTime date,
       required double value,
       Value<int> rowid,
@@ -11267,8 +11059,7 @@ typedef $ValuationsCreateCompanionBuilder =
 typedef $ValuationsUpdateCompanionBuilder =
     ValuationsCompanion Function({
       Value<String> id,
-      Value<String?> accountId,
-      Value<String?> assetId,
+      Value<String> assetId,
       Value<DateTime> date,
       Value<double> value,
       Value<int> rowid,
@@ -11278,31 +11069,13 @@ final class $ValuationsReferences
     extends BaseReferences<_$AppDB, Valuations, ValuationInDB> {
   $ValuationsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Accounts _accountIdTable(_$AppDB db) => db.accounts.createAlias(
-    $_aliasNameGenerator(db.valuations.accountId, db.accounts.id),
-  );
-
-  $AccountsProcessedTableManager? get accountId {
-    final $_column = $_itemColumn<String>('accountId');
-    if ($_column == null) return null;
-    final manager = $AccountsTableManager(
-      $_db,
-      $_db.accounts,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_accountIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
   static Assets _assetIdTable(_$AppDB db) => db.assets.createAlias(
     $_aliasNameGenerator(db.valuations.assetId, db.assets.id),
   );
 
-  $AssetsProcessedTableManager? get assetId {
-    final $_column = $_itemColumn<String>('assetId');
-    if ($_column == null) return null;
+  $AssetsProcessedTableManager get assetId {
+    final $_column = $_itemColumn<String>('assetId')!;
+
     final manager = $AssetsTableManager(
       $_db,
       $_db.assets,
@@ -11338,29 +11111,6 @@ class $ValuationsFilterComposer extends Composer<_$AppDB, Valuations> {
     column: $table.value,
     builder: (column) => ColumnFilters(column),
   );
-
-  $AccountsFilterComposer get accountId {
-    final $AccountsFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.accountId,
-      referencedTable: $db.accounts,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $AccountsFilterComposer(
-            $db: $db,
-            $table: $db.accounts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 
   $AssetsFilterComposer get assetId {
     final $AssetsFilterComposer composer = $composerBuilder(
@@ -11409,29 +11159,6 @@ class $ValuationsOrderingComposer extends Composer<_$AppDB, Valuations> {
     builder: (column) => ColumnOrderings(column),
   );
 
-  $AccountsOrderingComposer get accountId {
-    final $AccountsOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.accountId,
-      referencedTable: $db.accounts,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $AccountsOrderingComposer(
-            $db: $db,
-            $table: $db.accounts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
   $AssetsOrderingComposer get assetId {
     final $AssetsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -11473,29 +11200,6 @@ class $ValuationsAnnotationComposer extends Composer<_$AppDB, Valuations> {
   GeneratedColumn<double> get value =>
       $composableBuilder(column: $table.value, builder: (column) => column);
 
-  $AccountsAnnotationComposer get accountId {
-    final $AccountsAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.accountId,
-      referencedTable: $db.accounts,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $AccountsAnnotationComposer(
-            $db: $db,
-            $table: $db.accounts,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
   $AssetsAnnotationComposer get assetId {
     final $AssetsAnnotationComposer composer = $composerBuilder(
       composer: this,
@@ -11533,7 +11237,7 @@ class $ValuationsTableManager
           $ValuationsUpdateCompanionBuilder,
           (ValuationInDB, $ValuationsReferences),
           ValuationInDB,
-          PrefetchHooks Function({bool accountId, bool assetId})
+          PrefetchHooks Function({bool assetId})
         > {
   $ValuationsTableManager(_$AppDB db, Valuations table)
     : super(
@@ -11549,14 +11253,12 @@ class $ValuationsTableManager
           updateCompanionCallback:
               ({
                 Value<String> id = const Value.absent(),
-                Value<String?> accountId = const Value.absent(),
-                Value<String?> assetId = const Value.absent(),
+                Value<String> assetId = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
                 Value<double> value = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ValuationsCompanion(
                 id: id,
-                accountId: accountId,
                 assetId: assetId,
                 date: date,
                 value: value,
@@ -11565,14 +11267,12 @@ class $ValuationsTableManager
           createCompanionCallback:
               ({
                 required String id,
-                Value<String?> accountId = const Value.absent(),
-                Value<String?> assetId = const Value.absent(),
+                required String assetId,
                 required DateTime date,
                 required double value,
                 Value<int> rowid = const Value.absent(),
               }) => ValuationsCompanion.insert(
                 id: id,
-                accountId: accountId,
                 assetId: assetId,
                 date: date,
                 value: value,
@@ -11584,7 +11284,7 @@ class $ValuationsTableManager
                     (e.readTable(table), $ValuationsReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({accountId = false, assetId = false}) {
+          prefetchHooksCallback: ({assetId = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
@@ -11604,19 +11304,6 @@ class $ValuationsTableManager
                       dynamic
                     >
                   >(state) {
-                    if (accountId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.accountId,
-                                referencedTable: $ValuationsReferences
-                                    ._accountIdTable(db),
-                                referencedColumn: $ValuationsReferences
-                                    ._accountIdTable(db)
-                                    .id,
-                              )
-                              as T;
-                    }
                     if (assetId) {
                       state =
                           state.withJoin(
@@ -11654,7 +11341,7 @@ typedef $ValuationsProcessedTableManager =
       $ValuationsUpdateCompanionBuilder,
       (ValuationInDB, $ValuationsReferences),
       ValuationInDB,
-      PrefetchHooks Function({bool accountId, bool assetId})
+      PrefetchHooks Function({bool assetId})
     >;
 typedef $CategoriesCreateCompanionBuilder =
     CategoriesCompanion Function({

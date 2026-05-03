@@ -6,8 +6,7 @@
 -- Step 1: Disable foreign key enforcement during schema changes
 PRAGMA foreign_keys = OFF;
 
--- Step 2: Extend `assets` for typed holdings and optional link to
---         an investment account (portfolio rolls into that account)
+-- Step 2: Extend `assets` to include the type of the asset and the linked account
 ALTER TABLE assets ADD COLUMN assetType TEXT NOT NULL DEFAULT 'other';
 ALTER TABLE assets ADD COLUMN linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -83,5 +82,20 @@ WHERE accountId IS NOT NULL
   AND assetId IS NULL
   AND accountId IN (SELECT id FROM accounts WHERE type = 'investment');
 
--- Step 8: Re-enable foreign key enforcement
+
+-- Step 8: Remove accountId column
+CREATE TABLE valuations_temp  (
+    id TEXT NOT NULL PRIMARY KEY,
+    assetId TEXT NOT NULL REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    date TEXT NOT NULL,
+    value REAL NOT NULL
+);
+
+INSERT INTO valuations_temp (id, assetId, date, value) 
+  SELECT id, assetId, date, value FROM valuations;
+
+DROP TABLE valuations;
+ALTER TABLE valuations_temp RENAME TO valuations;
+
+-- Step 9: Re-enable foreign key enforcement
 PRAGMA foreign_keys = ON;

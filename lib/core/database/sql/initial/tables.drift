@@ -139,20 +139,14 @@ CREATE TABLE IF NOT EXISTS assets (
 CREATE TABLE IF NOT EXISTS valuations (
     id TEXT NOT NULL PRIMARY KEY,
 
-    -- FK to the account this valuation belongs to (mutually exclusive with assetId)
-    accountId TEXT REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
-
-    -- FK to the asset this valuation belongs to (mutually exclusive with accountId)
-    assetId TEXT REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    -- ID of the asset this valuation belongs to (mutually exclusive with accountId)
+    assetId TEXT NOT NULL REFERENCES assets(id) ON DELETE CASCADE ON UPDATE CASCADE,
 
     -- Date of this valuation snapshot
     date TEXT NOT NULL MAPPED BY `const DateTypeConverter()`,
 
     -- Value at the time of this snapshot, in the currency of the account or asset
     value REAL NOT NULL,
-
-    -- Exactly one of accountId or assetId must be set
-    CHECK ((accountId IS NULL) != (assetId IS NULL))
 ) AS ValuationInDB;
 
 CREATE TABLE IF NOT EXISTS transactions (

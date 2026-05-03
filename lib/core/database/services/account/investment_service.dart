@@ -2,13 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show DateUtils;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
-import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -77,31 +74,17 @@ class InvestmentService {
   // ---------------------------------------------------------------------------
 
   /// Inserts a valuation, or replaces an existing one if there is already
-  /// a valuation for the same account/asset on the same day.
+  /// a valuation for the same asset on the same day.
   Future<int> insertOrUpdateValuation(ValuationInDB valuation) async {
-    // Choose the appropriate existing valuations stream based on whether this
-    // valuation is associated with an account or an asset. This avoids
-    // force-unwrapping a null accountId for asset-only valuations and ensures
-    // we deduplicate within the correct scope.
-    Stream<List<ValuationInDB>>? existingStream;
+    final existing = await getValuationsForAsset(valuation.assetId).first;
 
-    if (valuation.accountId != null) {
-      existingStream = getValuationsForAccount(valuation.accountId!);
-    } else if (valuation.assetId != null) {
-      existingStream = getValuationsForAsset(valuation.assetId!);
-    }
+    final sameDay = existing.where(
+      (v) =>
+          v.id != valuation.id && DateUtils.isSameDay(v.date, valuation.date),
+    );
 
-    if (existingStream != null) {
-      final existing = await existingStream.first;
-
-      final sameDay = existing.where(
-        (v) =>
-            v.id != valuation.id && DateUtils.isSameDay(v.date, valuation.date),
-      );
-
-      if (sameDay.isNotEmpty) {
-        valuation = valuation.copyWith(id: sameDay.first.id);
-      }
+    if (sameDay.isNotEmpty) {
+      valuation = valuation.copyWith(id: sameDay.first.id);
     }
 
     return db
@@ -118,25 +101,6 @@ class InvestmentService {
   // ---------------------------------------------------------------------------
   // Valuation queries
   // ---------------------------------------------------------------------------
-
-  Stream<List<ValuationInDB>> getValuationsForAccount(String accountId) {
-    return db.getValuationsForAccount(accountId: accountId).watch();
-  }
-
-  Stream<ValuationInDB?> getLatestValuationForAccount(
-    String accountId, {
-    DateTime? date,
-  }) {
-    if (date != null) {
-      return db
-          .getLatestValuationForAccountAtDate(accountId: accountId, date: date)
-          .watchSingleOrNull();
-    }
-
-    return db
-        .getLatestValuationForAccount(accountId: accountId)
-        .watchSingleOrNull();
-  }
 
   Stream<List<ValuationInDB>> getValuationsForAsset(String assetId) {
     return db.getValuationsForAsset(assetId: assetId).watch();
@@ -158,28 +122,6 @@ class InvestmentService {
   // ---------------------------------------------------------------------------
   // Investment account metrics
   // ---------------------------------------------------------------------------
-
-  /// Returns the total capital invested into the given investment account.
-  ///
-  /// This is calculated as:
-  ///   iniValue + net transfers (transfersIn - transfersOut) in account currency.
-  ///
-  /// If [date] is provided, only transfers up to that date are included.
-  ///
-  /// Delegates to [TransactionService.getTransactionsValueBalance] filtered to
-  /// transfers only, which already handles valueInDestiny vs value correctly.
-  Stream<double> getInvestedCapital(Account account, {DateTime? date}) {
-    return TransactionService.instance
-        .getTransactionsValueBalance(
-          filters: TransactionFilterSet(
-            accountsIDs: [account.id],
-            transactionTypes: [TransactionType.transfer],
-            maxDate: date,
-          ),
-          convertToPreferredCurrency: false,
-        )
-        .map((netTransfers) => account.iniValue + netTransfers);
-  }
 
   /// Market value of **linked portfolio assets** (migrated from account valuations).
   ///
@@ -208,75 +150,6 @@ class InvestmentService {
         streams,
       ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
     });
-  }
-
-  /// Portfolio value for charts that still expect “holdings” separate from cash.
-  ///
-  /// Prefers linked asset valuations; if none, falls back to account-level
-  /// valuations (legacy non-migrated data), then [getInvestedCapital].
-  Stream<double> getInvestmentAccountValue(
-    Account account, {
-    DateTime? date,
-    bool convertToPreferredCurrency = false,
-  }) {
-    if (date != null && date.isBefore(account.date)) {
-      return Stream.value(0.0);
-    }
-
-    return getAssets(
-          predicate: (a, c) =>
-              a.linkedAccountID.isNotNull() &
-              a.linkedAccountID.equals(account.id),
-        )
-        .switchMap((linked) {
-          if (linked.isNotEmpty) {
-            return getLinkedPortfolioMarketValue(
-              account,
-              date: date,
-              convertToPreferredCurrency: convertToPreferredCurrency,
-            );
-          }
-
-          return getLatestValuationForAccount(account.id, date: date)
-              .switchMap((valuation) {
-                if (valuation != null) {
-                  return Stream.value(valuation.value);
-                }
-                return getInvestedCapital(account, date: date);
-              })
-              .switchMap((value) {
-                if (!convertToPreferredCurrency) return Stream.value(value);
-                return ExchangeRateService.instance
-                    .calculateExchangeRateToPreferredCurrency(
-                      amount: value,
-                      fromCurrency: account.currency.code,
-                      date: date,
-                    );
-              });
-        })
-        .map(
-          (converted) =>
-              converted.roundWithDecimals(account.currency.decimalPlaces),
-        );
-  }
-
-  /// Returns the profit (in the account currency) and the profit percentage
-  /// for an investment account.
-  ///
-  /// Profit = portfolioValue - investedCapital
-  /// Percent = profit / investedCapital  (0 when investedCapital == 0)
-  Stream<({double value, double percent})> getInvestmentProfit(
-    Account account,
-  ) {
-    return Rx.combineLatest2(
-      getInvestmentAccountValue(account),
-      getInvestedCapital(account),
-      (double portfolioValue, double investedCapital) {
-        final profit = portfolioValue - investedCapital;
-        final percent = investedCapital != 0 ? profit / investedCapital : 0.0;
-        return (value: profit, percent: percent);
-      },
-    );
   }
 
   // ---------------------------------------------------------------------------
@@ -455,7 +328,6 @@ class InvestmentService {
     await insertOrUpdateValuation(
       ValuationInDB(
         id: generateUUID(),
-        accountId: null,
         assetId: assetId,
         date: date,
         value: newVal,

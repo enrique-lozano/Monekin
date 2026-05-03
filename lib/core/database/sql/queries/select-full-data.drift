@@ -42,26 +42,6 @@ getAssetsWithFullData($predicate = TRUE) WITH Asset:
     ORDER BY $orderBy
     LIMIT $limit;
 
-getValuationsForAccount(:accountId AS TEXT):
-    SELECT *
-    FROM valuations
-    WHERE accountId = :accountId
-    ORDER BY date DESC;
-
-getLatestValuationForAccount(:accountId AS TEXT):
-    SELECT *
-    FROM valuations
-    WHERE accountId = :accountId
-    ORDER BY date DESC
-    LIMIT 1;
-
-getLatestValuationForAccountAtDate(:accountId AS TEXT, :date AS DATETIME):
-    SELECT *
-    FROM valuations
-    WHERE accountId = :accountId AND date <= :date
-    ORDER BY date DESC
-    LIMIT 1;
-
 getValuationsForAsset(:assetId AS TEXT):
     SELECT *
     FROM valuations

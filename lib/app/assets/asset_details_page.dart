@@ -309,6 +309,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 id: 'INITIAL_VALUE',
                 date: widget.asset.creationDate,
                 value: widget.asset.initialValue,
+                assetId: widget.asset.id,
               ),
               ...valuations,
             ],
@@ -429,6 +430,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           ValuationDisplayItem(
             ValuationInDB(
               id: generateUUID(),
+              assetId: widget.asset.id,
               date: transaction.date,
               value:
                   itemsToDisplay
@@ -584,7 +586,6 @@ class ValuationDisplayItem extends ValuationInDB {
         id: valuation.id,
         date: valuation.date,
         value: valuation.value,
-        accountId: valuation.accountId,
         assetId: valuation.assetId,
       );
 }

@@ -130,9 +130,17 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 2,
                           children: [
-                            AnimatedProgressBar(value: investedPercentage),
+                            AnimatedProgressBar(
+                              value: investedPercentage,
+                              width: 16,
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
                             Text(
-                              "You have the ${UINumberFormatter.percentage(amountToConvert: investedPercentage).getFormattedAmount()} of this account invested",
+                              t.assets.amount_invested(
+                                x: UINumberFormatter.percentage(
+                                  amountToConvert: investedPercentage,
+                                ).getFormattedAmount(),
+                              ),
 
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
