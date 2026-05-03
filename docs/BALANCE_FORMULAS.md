@@ -106,4 +106,4 @@ $$
 
 All amounts are converted to the user’s preferred currency before summing. Any **debt** subtraction used in net-worth screens is a separate liability term in the app, not part of $\text{AccountValue}$.
 
-> **Implementation:** per-account `AccountService.getAccountMoney()`; standalone-asset total `InvestmentService.getTotalAssetsValueAtDate(considerLinkedAccounts: false)` when aggregating net worth so linked assets are not summed twice.
+> **Implementation:** per-account `AccountService.getAccountMoney()`; standalone-asset total `InvestmentService.getStandaloneAssetsValueAtDate()` when aggregating net worth so linked assets are not summed twice. Period balance **trend** UI uses `AccountService.getAccountsBalanceRelativeChange()` (relative change `(B_{\mathrm{end}} - B_{\mathrm{start}}) / B_{\mathrm{start}}` on the same combined balance).

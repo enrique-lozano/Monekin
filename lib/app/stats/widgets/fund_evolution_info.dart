@@ -109,7 +109,7 @@ class FundEvolutionInfo extends StatelessWidget {
                             if (accounts != null)
                               StreamBuilder(
                                 stream: accountService
-                                    .getAccountsMoneyVariation(
+                                    .getAccountsBalanceRelativeChange(
                                       accounts: accounts,
                                       startDate: dateRange.startDate,
                                       endDate: dateRange.endDate,

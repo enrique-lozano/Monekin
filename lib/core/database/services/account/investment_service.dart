@@ -196,7 +196,15 @@ class InvestmentService {
     });
   }
 
-  /// Returns the total value of all assets at a specific date, converted to the user preferred currency.
+  /// Total market value of assets at [date] in the user's preferred currency.
+  ///
+  /// With [considerLinkedAccounts] `true` (default), every asset row is included
+  /// (e.g. useful for an “all rows in the assets table” total).
+  ///
+  /// With `false`, assets linked to an account ([Assets.linkedAccountID] set) are
+  /// omitted — use that next to combined account balances so linked holdings are not
+  /// double-counted. Prefer [getStandaloneAssetsValueAtDate] at call sites that always
+  /// want the latter.
   Stream<double> getTotalAssetsValueAtDate({
     DateTime? date,
     bool considerLinkedAccounts = true,
@@ -224,6 +232,17 @@ class InvestmentService {
         streams,
       ).map((values) => values.fold(0.0, (sum, value) => sum + value));
     });
+  }
+
+  /// Same as [getTotalAssetsValueAtDate] with linked-account assets excluded.
+  ///
+  /// Linked portfolio assets are already counted inside the parent account’s balance;
+  /// summing them again would overstate net worth.
+  Stream<double> getStandaloneAssetsValueAtDate({DateTime? date}) {
+    return getTotalAssetsValueAtDate(
+      date: date,
+      considerLinkedAccounts: false,
+    );
   }
 
   /// Sum of linked asset market values for an account (0 if none).
@@ -341,11 +360,12 @@ class InvestmentService {
     );
   }
 
-  /// Returns the profit (in the asset currency) and the profit percentage
-  /// for an asset.
+  /// Gain vs the asset’s **creation-time initial value** ([AssetInDB.initialValue]),
+  /// not a full cost basis rebuilt from every trade.
   ///
-  /// Profit = currentValue - initialValue
-  /// Percent = profit / initialValue  (0 when initialValue == 0)
+  /// Emits `(value, percent)` where `value` is current market value minus initial,
+  /// and `percent` is `value / initial` when initial ≠ 0; otherwise signed infinities
+  /// for display edge cases.
   Stream<({double value, double percent})> getAssetProfit(Asset asset) {
     return getCurrentAssetValue(asset).map((currentValue) {
       final profit = currentValue - asset.initialValue;

@@ -104,7 +104,7 @@ class NetWorthEvolutionCard extends StatelessWidget {
 
   Future<double> _getPhysicalAssetsTotal(DateTime date) async {
     return await InvestmentService.instance
-        .getTotalAssetsValueAtDate(date: date, considerLinkedAccounts: false)
+        .getStandaloneAssetsValueAtDate(date: date)
         .first;
   }
 

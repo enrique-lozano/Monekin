@@ -303,16 +303,19 @@ class AccountService {
     );
   }
 
-  /// Returns a stream of a double, representing the variation in money for a list of accounts between two dates.
+  /// Relative change in combined account balance between two dates: fraction
+  /// `(end - start) / start` in the same sense as [getAccountsMoney] (e.g. `0.05`
+  /// means +5% when formatted as a percent).
   ///
-  /// If the user does not provide a value for endDate, the function sets it to the
-  /// current date. If the user does not provide a value for startDate, the function
-  /// sets it to the minimum date in the list of accounts.
+  /// If the starting balance is zero (or numerically near zero), returns `0.0`
+  /// when the ending balance is also near zero, otherwise `double.nan`.
   ///
-  /// You can add filters for the transactions that will be taken into account to calculate
-  /// this value, via the [trFilters] param. We will overwrite the accountsIds
-  /// param of this filter, based on the param in this func.
-  Stream<double> getAccountsMoneyVariation({
+  /// If [endDate] is null it defaults to now. If [startDate] is null it defaults
+  /// to the earliest opening date among [accounts].
+  ///
+  /// [trFilters] is applied except [TransactionFilterSet.accountsIDs], which is
+  /// overwritten from [accounts].
+  Stream<double> getAccountsBalanceRelativeChange({
     required List<Account> accounts,
     DateTime? startDate,
     DateTime? endDate,
@@ -350,8 +353,31 @@ class AccountService {
         final startBalance = res[0];
         final finalBalance = res[1];
 
+        const eps = 1e-10;
+        if (startBalance.abs() < eps) {
+          return finalBalance.abs() < eps ? 0.0 : double.nan;
+        }
+
         return (finalBalance - startBalance) / startBalance;
       },
+    );
+  }
+
+  /// Use [getAccountsBalanceRelativeChange] — same implementation; this name was misleading.
+  @Deprecated('Use getAccountsBalanceRelativeChange')
+  Stream<double> getAccountsMoneyVariation({
+    required List<Account> accounts,
+    DateTime? startDate,
+    DateTime? endDate,
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
+    bool convertToPreferredCurrency = true,
+  }) {
+    return getAccountsBalanceRelativeChange(
+      accounts: accounts,
+      startDate: startDate,
+      endDate: endDate,
+      trFilters: trFilters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
     );
   }
 }

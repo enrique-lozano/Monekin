@@ -162,7 +162,7 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                           StreamBuilder(
                             initialData: 0.0,
                             stream: AccountService.instance
-                                .getAccountsMoneyVariation(
+                                .getAccountsBalanceRelativeChange(
                                   accounts: [account],
                                   startDate: dateRangeService.startDate,
                                   endDate: dateRangeService.endDate,

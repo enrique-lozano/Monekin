@@ -119,6 +119,8 @@ class _AssetsListPageState extends State<AssetsListPage> {
           ListTile(
             title: Text(t.assets.total_value),
             subtitle: StreamBuilder(
+              // Includes linked portfolio rows (same economic value is also inside
+              // investment account balances) — intentional for this “all assets” total.
               stream: InvestmentService.instance.getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
