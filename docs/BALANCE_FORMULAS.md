@@ -12,11 +12,11 @@ $$
 \text{AccountValue}(a,t) = \text{Ini}(a,t) + L(a,t) + H(a,t)
 $$
 
-| Term | Meaning |
-| --- | --- |
-| $\text{Ini}(a,t)$ | **Opening balance** at account creation, counted only if the account exists on or before $t$; otherwise $0$. |
-| $L(a,t)$ | **Cash ledger net** — effect of all counted transactions on account $a$ with date $\leq t$ (see below). |
-| $H(a,t)$ | **Linked holdings value** — sum of market values of all assets that belong to account $a$ via a link from asset to account. If there are none, $H(a,t)=0$. |
+| Term              | Meaning                                                                                                                                                    |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| $\text{Ini}(a,t)$ | **Opening balance** at account creation, counted only if the account exists on or before $t$; otherwise $0$.                                               |
+| $L(a,t)$          | **Cash ledger net** — effect of all counted transactions on account $a$ with date $\leq t$ (see below).                                                    |
+| $H(a,t)$          | **Linked holdings value** — sum of market values of all assets that belong to account $a$ via a link from asset to account. If there are none, $H(a,t)=0$. |
 
 ### 1.1 Cash ledger net $L(a,t)$
 
@@ -99,11 +99,11 @@ $$
 \text{AssetsSide}(t) = \sum_{a \in A^{*}} \text{AccountValue}(a,t) \;+\; \sum_{s \in S_0} \text{AssetValue}(s,t)
 $$
 
-| Set | Description |
-| --- | --- |
-| $A^{*}$ | Open accounts included in net worth. Investment accounts use $\text{AccountValue}$ as in section 1 (cash ledger + linked holdings). |
-| $S_0$ | **Standalone assets** — assets with no linked account. Assets linked to an account are omitted from this sum because their value is already inside that account’s $\text{AccountValue}$. |
+| Set     | Description                                                                                                                                                                              |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| $A^{*}$ | Open accounts included in net worth. Investment accounts use $\text{AccountValue}$ as in section 1 (cash ledger + linked holdings).                                                      |
+| $S_0$   | **Standalone assets** — assets with no linked account. Assets linked to an account are omitted from this sum because their value is already inside that account’s $\text{AccountValue}$. |
 
 All amounts are converted to the user’s preferred currency before summing. Any **debt** subtraction used in net-worth screens is a separate liability term in the app, not part of $\text{AccountValue}$.
 
-> **Implementation:** per-account `AccountService.getAccountMoney()`; standalone-asset total `InvestmentService.getStandaloneAssetsValueAtDate()` when aggregating net worth so linked assets are not summed twice. Period balance **trend** UI uses `AccountService.getAccountsBalanceRelativeChange()` (relative change `(B_{\mathrm{end}} - B_{\mathrm{start}}) / B_{\mathrm{start}}` on the same combined balance).
+> **Implementation:** per-account `AccountService.getAccountMoney()`; standalone-asset total `InvestmentService.getStandaloneAssetsValueAtDate()` when aggregating net worth so linked assets are not summed twice.
