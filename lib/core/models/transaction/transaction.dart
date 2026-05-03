@@ -53,29 +53,30 @@ class MoneyTransaction extends TransactionInDB {
     super.remainingTransactions,
     super.debtId,
     super.assetID,
-  })  : category =
-            category != null ? Category.fromDB(category, parentCategory) : null,
-        account = Account.fromDB(account, accountCurrency),
-        receivingAccount =
-            receivingAccount != null && receivingAccountCurrency != null
-                ? Account.fromDB(receivingAccount, receivingAccountCurrency)
-                : null,
-        tags = tags.map((e) => Tag.fromTagInDB(e)).toList(),
-        recurrentInfo = RecurrencyData(
-          intervalEach: intervalEach,
-          intervalPeriod: intervalPeriod,
-          ruleRecurrentLimit: intervalEach != null
-              ? RecurrentRuleLimit(
-                  endDate: endDate,
-                  remainingIterations: remainingTransactions,
-                )
-              : null,
-        ),
-        super(
-          accountID: account.id,
-          categoryID: category?.id,
-          receivingAccountID: receivingAccount?.id,
-        );
+  }) : category = category != null
+           ? Category.fromDB(category, parentCategory)
+           : null,
+       account = Account.fromDB(account, accountCurrency),
+       receivingAccount =
+           receivingAccount != null && receivingAccountCurrency != null
+           ? Account.fromDB(receivingAccount, receivingAccountCurrency)
+           : null,
+       tags = tags.map((e) => Tag.fromTagInDB(e)).toList(),
+       recurrentInfo = RecurrencyData(
+         intervalEach: intervalEach,
+         intervalPeriod: intervalPeriod,
+         ruleRecurrentLimit: intervalEach != null
+             ? RecurrentRuleLimit(
+                 endDate: endDate,
+                 remainingIterations: remainingTransactions,
+               )
+             : null,
+       ),
+       super(
+         accountID: account.id,
+         categoryID: category?.id,
+         receivingAccountID: receivingAccount?.id,
+       );
 
   bool get isTransfer => type.isTransfer;
   bool get isIncomeOrExpense => type.isIncomeOrExpense;
@@ -104,7 +105,9 @@ class MoneyTransaction extends TransactionInDB {
     }
 
     if (isInvestment) {
-      return TransactionType.investment.color(context);
+      return value.isNegative
+          ? TransactionType.income.color(context)
+          : TransactionType.expense.color(context);
     }
 
     return TransactionType.transfer.color(context);
@@ -148,8 +151,8 @@ class MoneyTransaction extends TransactionInDB {
       mainColor: color(context),
       icon: isInvestment
           ? value < 0
-              ? Icons.call_received
-              : Icons.call_made
+                ? Icons.call_received
+                : Icons.call_made
           : TransactionType.transfer.icon,
       size: size,
       padding: padding,
@@ -165,8 +168,8 @@ class MoneyTransaction extends TransactionInDB {
     return daysToPay() < 0
         ? NextPayStatus.delayed
         : daysToPay() <= 10
-            ? NextPayStatus.comingSoon
-            : NextPayStatus.planified;
+        ? NextPayStatus.comingSoon
+        : NextPayStatus.planified;
   }
 
   /// Get the days to the next payment. Will return an error in case of a non-recurrent transactions that is not pending
@@ -187,8 +190,9 @@ class MoneyTransaction extends TransactionInDB {
     required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
   }) {
-    double baseValue =
-        convertToPreferredCurrency ? currentValueInPreferredCurrency : value;
+    double baseValue = convertToPreferredCurrency
+        ? currentValueInPreferredCurrency
+        : value;
 
     if (recurrentInfo.isNoRecurrent) {
       return baseValue;
