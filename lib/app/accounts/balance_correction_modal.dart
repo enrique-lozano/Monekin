@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -36,12 +35,6 @@ class _BalanceCorrectionModalState extends State<BalanceCorrectionModal> {
   }
 
   Future<double> _getCurrentBalance() {
-    if (widget.account.type == AccountType.investment) {
-      return InvestmentService.instance
-          .getInvestedCapital(widget.account)
-          .first;
-    }
-
     return AccountService.instance
         .getAccountMoney(account: widget.account)
         .first;
@@ -78,19 +71,10 @@ class _BalanceCorrectionModalState extends State<BalanceCorrectionModal> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final isInvestment = widget.account.type == AccountType.investment;
-
-    final titleText = isInvestment
-        ? t.account.investment.correct_balance_title
-        : t.account.correct_balance;
-
-    final subtitleText = isInvestment
-        ? t.account.investment.correct_balance_description
-        : t.account.form.correct_balance_description;
 
     return ModalContainer(
-      title: titleText,
-      subtitle: subtitleText,
+      title: t.account.correct_balance,
+      subtitle: t.account.form.correct_balance_description,
       footer: BottomSheetFooter(
         submitText: t.ui_actions.save,
         onSaved: _saveBalance,
@@ -99,8 +83,7 @@ class _BalanceCorrectionModalState extends State<BalanceCorrectionModal> {
       body: TextFormField(
         controller: _balanceController,
         decoration: InputDecoration(
-          labelText:
-              '${widget.account.type == AccountType.investment ? t.account.investment.invested_capital : t.account.balance} *',
+          labelText: t.account.balance,
           hintText: '0.00',
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),

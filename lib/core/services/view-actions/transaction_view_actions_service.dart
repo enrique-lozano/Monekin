@@ -1,12 +1,15 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/assets/asset_trade_sheet.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -31,14 +34,42 @@ class TransactionViewActionService {
       ListTileActionItem(
         label: t.ui_actions.edit,
         icon: Icons.edit,
-        onClick: () => RouteUtils.pushRoute(
-          TransactionFormPage(
-            transactionToEdit: transaction,
-            mode: transaction.type,
-          ),
-        ),
+        onClick: () async {
+          if (transaction.type == TransactionType.investment) {
+            final asset = await InvestmentService.instance
+                .getAssetById(transaction.assetID ?? "")
+                .first;
+
+            if (asset == null) {
+              MonekinSnackbar.error(
+                SnackbarParams.fromError(
+                  "Asset not found for this transaction",
+                ),
+              );
+
+              return;
+            }
+
+            showAssetTradeSheet(
+              context,
+              asset: asset,
+              isBuy: transaction.value.isNegative,
+              transaction: transaction,
+            );
+
+            return;
+          }
+
+          RouteUtils.pushRoute(
+            TransactionFormPage(
+              transactionToEdit: transaction,
+              mode: transaction.type,
+            ),
+          );
+        },
       ),
-      if (transaction.recurrentInfo.isNoRecurrent)
+      if (transaction.recurrentInfo.isNoRecurrent &&
+          transaction.type != TransactionType.investment)
         ListTileActionItem(
           label: t.transaction.duplicate_short,
           icon: Icons.control_point_duplicate_rounded,

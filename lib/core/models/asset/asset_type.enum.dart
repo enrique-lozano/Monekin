@@ -34,4 +34,16 @@ enum AssetType implements DatabaseEnum<String> {
       AssetType.other => t.other,
     };
   }
+
+  IconData icon() {
+    return switch (this) {
+      AssetType.stocks => Icons.show_chart,
+      AssetType.funds => Icons.pie_chart,
+      AssetType.crypto => Icons.currency_bitcoin,
+      AssetType.realEstate => Icons.home,
+      AssetType.vehicle => Icons.directions_car,
+      AssetType.jewelryArt => Icons.diamond,
+      AssetType.other => Icons.category,
+    };
+  }
 }

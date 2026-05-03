@@ -1,10 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
-import 'package:monekin/app/accounts/details/investment_history_page.dart';
+import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/label_value_info_list.dart';
 import 'package:monekin/app/transactions/transactions.page.dart';
@@ -16,11 +17,12 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
+import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -28,10 +30,11 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:rxdart/rxdart.dart';
 
 class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({
@@ -75,82 +78,93 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   Widget _buildInvestmentCard(BuildContext context, Account account) {
     final t = Translations.of(context);
 
-    return StreamBuilder(
-      stream: InvestmentService.instance.getInvestmentProfit(account),
-      builder: (context, profitSnapshot) {
-        return StreamBuilder(
-          stream: InvestmentService.instance.getLatestValuationForAccount(
-            account.id,
-          ),
-          builder: (context, valuationSnapshot) {
-            final profit = profitSnapshot.data;
-            final latestValuation = valuationSnapshot.data;
+    return StreamBuilder<List<(Asset, double)>>(
+      stream: InvestmentService.instance
+          .getAssets(
+            predicate: (a, curr) => a.linkedAccountID.isValue(account.id),
+          )
+          .switchMap((assets) {
+            if (assets.isEmpty) {
+              return Stream.value([]);
+            }
 
-            return CardWithHeader(
+            final streams = assets.map((asset) {
+              return InvestmentService.instance
+                  .getCurrentAssetValue(asset)
+                  .map((value) => (asset, value));
+            }).toList();
+
+            return Rx.combineLatestList(streams);
+          }),
+
+      builder: (context, assetsSnapshot) {
+        final assets = assetsSnapshot.data;
+
+        if (assets == null || assets.isEmpty) {
+          return SizedBox.shrink();
+        }
+
+        return Column(
+          children: [
+            const SizedBox(height: 16),
+            CardWithHeader(
               title: t.account.investment.details_header,
-              footer: CardFooterWithSingleButton(
-                text: t.account.investment.history,
-                onButtonClick: () {
-                  RouteUtils.pushRoute(InvestmentHistoryPage(account: account));
-                },
-              ),
-              body: LabelValueInfoList(
-                items: [
-                  LabelValueInfoListItem(
-                    label: t.account.investment.invested_capital,
-                    value: StreamBuilder(
-                      stream: InvestmentService.instance.getInvestedCapital(
-                        account,
-                      ),
-                      builder: (context, snapshot) {
-                        return CurrencyDisplayer(
-                          amountToConvert: snapshot.data ?? 0,
-                          currency: account.currency,
-                        );
-                      },
+              bodyPadding: const EdgeInsets.only(top: 4),
+              body: Column(
+                children: [
+                  StreamBuilder(
+                    stream: AccountService.instance.getAccountMoney(
+                      account: account,
                     ),
-                  ),
-                  if (profit != null) ...[
-                    LabelValueInfoListItem(
-                      label: t.account.investment.profit,
-                      value: Row(
-                        children: [
-                          CurrencyDisplayer(
-                            amountToConvert: profit.value,
-                            currency: account.currency,
-                            showDecimals: true,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '(${(profit.percent * 100).toStringAsFixed(2)} %)',
-                            style: TextStyle(
-                              color: profit.value >= 0
-                                  ? AppColors.of(context).success
-                                  : AppColors.of(context).danger,
-                              fontWeight: FontWeight.w600,
+                    builder: (context, asyncSnapshot) {
+                      if (!asyncSnapshot.hasData) {
+                        return const SizedBox.shrink();
+                      }
+
+                      final investedPercentage =
+                          assets.map((a) => a.$2).sum / asyncSnapshot.data!;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 2,
+                          children: [
+                            AnimatedProgressBar(value: investedPercentage),
+                            Text(
+                              "You have the ${UINumberFormatter.percentage(amountToConvert: investedPercentage).getFormattedAmount()} of this account invested",
+
+                              style: Theme.of(context).textTheme.bodySmall,
                             ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+
+                  LabelValueInfoList(
+                    items: assets.map((assetData) {
+                      final (asset, value) = assetData;
+
+                      return LabelValueInfoListItem(
+                        value: CurrencyDisplayer(
+                          amountToConvert: value,
+                          currency: asset.currency,
+                        ),
+                        label: asset.name,
+                        trailing: IconButton(
+                          icon: Icon(Icons.open_in_new_rounded),
+                          onPressed: () => RouteUtils.pushRoute(
+                            AssetDetailsPage(asset: asset),
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  LabelValueInfoListItem(
-                    label: t.account.investment.last_valuation,
-                    value: latestValuation == null
-                        ? Text(
-                            t.account.investment.no_valuations,
-                            style: const TextStyle(fontStyle: FontStyle.italic),
-                          )
-                        : Text(
-                            getMMMdDateFormatBasedOnYear(
-                              latestValuation.date,
-                            ).text,
-                          ),
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
-            );
-          },
+            ),
+          ],
         );
       },
     );
@@ -438,11 +452,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                             rowFit: FlexFit.tight,
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              spacing: 16,
                               children: [
-                                if (account.type == AccountType.investment)
-                                  _buildInvestmentCard(context, account),
                                 infoCard,
+                                _buildInvestmentCard(context, account),
                               ],
                             ),
                           ),

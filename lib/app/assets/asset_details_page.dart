@@ -366,7 +366,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 Expanded(
                   child: FilledButton.tonalIcon(
                     onPressed: () => showAssetTradeSheet(
-                      context: context,
+                      context,
                       asset: widget.asset,
                       isBuy: true,
                     ),
@@ -381,7 +381,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 Expanded(
                   child: FilledButton.tonalIcon(
                     onPressed: () => showAssetTradeSheet(
-                      context: context,
+                      context,
                       asset: widget.asset,
                       isBuy: false,
                     ),
