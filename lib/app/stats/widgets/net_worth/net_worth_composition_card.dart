@@ -40,6 +40,7 @@ class NetWorthCompositionCard extends StatelessWidget {
               account: account,
               date: date,
               convertToPreferredCurrency: true,
+              trFilters: filters,
             )
             .first;
         return _BreakdownItem(title: account.name, amount: amount);
@@ -60,6 +61,7 @@ class NetWorthCompositionCard extends StatelessWidget {
               account: account,
               date: date,
               convertToPreferredCurrency: true,
+              trFilters: filters,
             )
             .first;
         return _BreakdownItem(title: account.name, amount: amount);

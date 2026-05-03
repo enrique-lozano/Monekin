@@ -237,7 +237,7 @@ class InvestmentService {
   /// Same as [getTotalAssetsValueAtDate] with linked-account assets excluded.
   ///
   /// Linked portfolio assets are already counted inside the parent account’s balance;
-  /// summing them again would overstate net worth.
+  /// summing them again would overstate net worth (see `NetWorthService.getGrossAssetsAtDate`).
   Stream<double> getStandaloneAssetsValueAtDate({DateTime? date}) {
     return getTotalAssetsValueAtDate(
       date: date,
