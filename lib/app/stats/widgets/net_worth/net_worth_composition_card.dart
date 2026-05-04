@@ -40,6 +40,7 @@ class NetWorthCompositionCard extends StatelessWidget {
               account: account,
               date: date,
               convertToPreferredCurrency: true,
+              trFilters: filters,
             )
             .first;
         return _BreakdownItem(title: account.name, amount: amount);
@@ -60,13 +61,16 @@ class NetWorthCompositionCard extends StatelessWidget {
               account: account,
               date: date,
               convertToPreferredCurrency: true,
+              trFilters: filters,
             )
             .first;
         return _BreakdownItem(title: account.name, amount: amount);
       }),
     );
 
-    final assets = await InvestmentService.instance.getAssets().first;
+    final assets = await InvestmentService.instance
+        .getAssets(predicate: (a, curr) => a.linkedAccountID.isNull())
+        .first;
     final assetItems = await Future.wait(
       assets.map((asset) async {
         final value = await InvestmentService.instance

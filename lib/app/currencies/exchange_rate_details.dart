@@ -485,12 +485,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     return EditableTimeSeriesList<ExchangeRate>(
       items: _currentRates!,
       dateExtractor: (r) => r.date,
-      subtitleBuilder: (context, item) => Text(
-        NumberFormat.currency(
-          symbol: '',
-          decimalDigits: 4,
-        ).format(item.exchangeRate),
-      ),
+      valueExtractor: (r) => r.exchangeRate,
+      currency: _currency,
       onEdit: _editRate,
       onDelete: _deleteRate,
       scrollController: scrollController,

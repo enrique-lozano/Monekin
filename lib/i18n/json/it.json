@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Trasferimento",
         "other": "Trasferimenti"
+      },
+      "investment": {
+        "one": "Investimento",
+        "other": "Investimenti"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Aggiungi questo conto al calcolo del patrimonio netto totale",
       "correct_balance_description": "Regolare il saldo modifica il valore iniziale del conto. Questa correzione non sarà riflessa nelle statistiche.",
       "valuation_before_creation_date": "In questo conto sono presenti valutazioni con una data precedente alla data di creazione"
-    },
-    "INVESTMENT": {
-      "details-header": "Investimento",
-      "correct_balance_title": "Correggi il capitale investito",
-      "correct_balance_description": "Questo conto utilizza valutazioni manuali per il valore del portafoglio. Questa azione aggiorna solo il capitale investito (valore iniziale) e non modificherà le valutazioni registrate né le statistiche sugli investimenti.",
-      "invested-capital": "Capitale investito",
-      "portfolio-value": "Valore del portafoglio",
-      "profit": "Profitto",
-      "last-valuation": "Ultima valutazione",
-      "no-valuations": "Nessuna valutazione registrata",
-      "update-value": "Aggiorna valore",
-      "update-value.descr": "Registra il valore attuale del portafoglio",
-      "update-value.success": "Valutazione registrata con successo",
-      "history": "Storico valutazioni",
-      "history-empty": "Nessuna valutazione registrata per questo conto",
-      "add-valuation": "Aggiungi valutazione",
-      "edit-valuation": "Modifica valutazione",
-      "edit-valuation.success": "Valutazione modificata con successo",
-      "delete-valuation.success": "Valutazione eliminata con successo",
-      "delete-all-valuations": "Elimina tutte le valutazioni",
-      "delete-all-valuations.success": "Tutte le valutazioni eliminate con successo"
     },
     "DELETE": {
       "warning-header": "Eliminare conto?",
@@ -871,7 +854,41 @@
     "profit": "Profitto",
     "profit_percent": "Ritorno %",
     "total_value": "Valore totale delle attività",
+    "amount_invested": "Hai investito il {{ X }} di questo conto",
+    "TYPES": {
+      "stocks": "Azioni",
+      "funds": "Fondi",
+      "crypto": "Criptovaluta",
+      "real_estate": "Immobiliare",
+      "vehicle": "Veicolo",
+      "jewelry_art": "Gioielli e arte",
+      "other": "Altro"
+    },
+    "DETAILS": {
+      "select_account": "Seleziona un conto",
+      "buy": "Acquistare",
+      "sell": "Vendere",
+      "update_value": "Aggiorna valore",
+      "trade_sheet_title_buy": "Acquista (aggiungi alla risorsa)",
+      "trade_sheet_title_sell": "Vendere (ridurre l'asset)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Prelevare denaro da questa risorsa su un conto. Riduci il tuo investimento e il suo valore.",
+      "trade_sheet_update_value_info": "Il valore di questa risorsa verrà aggiornato a {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "Il valore della risorsa collegata a questa transazione verrà aggiornato a {{ value }}",
+      "trade_sheet_following_valuations_warning": "Sono presenti valutazioni dopo il {{date}}. Puoi anche aggiornarli.",
+      "trade_sheet_update_following_valuations": "Aggiornare le valutazioni successive",
+      "trade_sheet_update_following_valuations_description": "Mantieni le valutazioni successive allineate a questa transazione.",
+      "trade_sheet_full_form": "Tutti i campi",
+      "trade_form_asset_column": "Asset",
+      "trade_valuation_notice": "Una valutazione verrà aggiornata per questa data per riflettere questo importo.",
+      "treat_as_investment": "Trattare come investimento (solo gamba contante)",
+      "notes_optional": "Note (facoltativo)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "Tipo di risorsa",
+      "linked_account": "Account collegato (facoltativo)",
       "name": "Nome della risorsa",
       "name_required": "Inserisci il nome di una risorsa",
       "description": "Descrizione",

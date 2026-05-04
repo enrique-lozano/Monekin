@@ -119,6 +119,8 @@ class _AssetsListPageState extends State<AssetsListPage> {
           ListTile(
             title: Text(t.assets.total_value),
             subtitle: StreamBuilder(
+              // Includes linked portfolio rows (same economic value is also inside
+              // investment account balances) — intentional for this “all assets” total.
               stream: InvestmentService.instance.getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -240,16 +242,20 @@ class _AssetsListPageState extends State<AssetsListPage> {
                       padding: const EdgeInsets.only(bottom: 8),
                       child: ListTile(
                         title: Text(asset.name),
-                        subtitle: asset.description != null
-                            ? Text(
-                                asset.description!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : null,
+                        subtitle: Row(
+                          spacing: 4,
+                          children: [
+                            Icon(asset.assetType.icon(), size: 14),
+                            Text(asset.assetType.displayName(context)),
+                          ],
+                        ),
+                        minVerticalPadding: 0,
                         trailing: CurrencyDisplayer(
                           amountToConvert: value,
                           currency: asset.currency,
+                          integerStyle: Theme.of(
+                            context,
+                          ).textTheme.titleMedium!,
                         ),
                         leadingAndTrailingTextStyle: Theme.of(
                           context,

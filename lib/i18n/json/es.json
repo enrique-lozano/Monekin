@@ -440,6 +440,10 @@
       "transfer": {
         "one": "Transferencia",
         "other": "Transferencias"
+      },
+      "investment": {
+        "one": "Inversión",
+        "other": "Inversiones"
       }
     }
   },
@@ -518,27 +522,6 @@
       "include-in-net-worth.descr": "Añadir esta cuenta al cálculo del patrimonio neto total",
       "correct_balance_description": "Ajustar el saldo modifica el valor inicial de la cuenta. Esta corrección no se reflejará en tus estadísticas.",
       "valuation_before_creation_date": "Hay valoraciones en esta cuenta con fecha anterior a la fecha de creación"
-    },
-    "INVESTMENT": {
-      "details-header": "Inversión",
-      "correct_balance_title": "Corregir capital invertido",
-      "correct_balance_description": "Esta cuenta utiliza valoraciones manuales para el valor de la cartera. Esta acción solo actualiza el capital invertido (valor inicial) y no cambiará las valoraciones registradas ni las estadísticas de inversión.",
-      "invested-capital": "Capital invertido",
-      "portfolio-value": "Valor de la cartera",
-      "profit": "Beneficio",
-      "last-valuation": "Última valoración",
-      "no-valuations": "Aún no hay valoraciones registradas",
-      "update-value": "Actualizar valor",
-      "update-value.descr": "Registrar el valor actual de la cartera",
-      "update-value.success": "Valoración registrada correctamente",
-      "history": "Historial de valoraciones",
-      "history-empty": "No hay valoraciones registradas para esta cuenta",
-      "add-valuation": "Añadir valoración",
-      "edit-valuation": "Editar valoración",
-      "edit-valuation.success": "Valoración editada correctamente",
-      "delete-valuation.success": "Valoración eliminada correctamente",
-      "delete-all-valuations": "Eliminar todas las valoraciones",
-      "delete-all-valuations.success": "Todas las valoraciones eliminadas correctamente"
     },
     "DELETE": {
       "warning-header": "¿Eliminar cuenta?",
@@ -874,7 +857,41 @@
     "profit": "Ganancia",
     "profit_percent": "Devolver %",
     "total_value": "Valor total de los activos",
+    "amount_invested": "Tienes el {{ X }} de esta cuenta invertido",
+    "TYPES": {
+      "stocks": "Cepo",
+      "funds": "Fondos",
+      "crypto": "Cripto",
+      "real_estate": "Bienes raíces",
+      "vehicle": "Vehículo",
+      "jewelry_art": "Joyería y arte",
+      "other": "Otro"
+    },
+    "DETAILS": {
+      "select_account": "Seleccione una cuenta",
+      "buy": "Invertir más",
+      "sell": "Retirar dinero",
+      "update_value": "Actualizar valor",
+      "trade_sheet_title_buy": "Invertir más (agregar al activo)",
+      "trade_sheet_title_sell": "Retirar dinero (reducir activo)",
+      "trade_sheet_description_buy": "Añade dinero a este activo desde una cuenta. Aumenta tu inversión y su valor.",
+      "trade_sheet_description_sell": "Saca dinero de este activo hacia una cuenta. Reduce tu inversión y su valor.",
+      "trade_sheet_update_value_info": "El valor de este activo se actualizará a {{ value }} para el día seleccionado",
+      "trade_sheet_update_linked_asset_value_info": "El valor del activo vinculado a esta transacción se actualizará a {{ value }} para el dia seleccionado",
+      "trade_sheet_following_valuations_warning": "Hay valoraciones posteriores al {{date}}. Puedes actualizarlas también.",
+      "trade_sheet_update_following_valuations": "Actualizar valoraciones posteriores",
+      "trade_sheet_update_following_valuations_description": "Mantén las valoraciones posteriores alineadas con esta transacción.",
+      "trade_sheet_full_form": "Todos los campos",
+      "trade_form_asset_column": "Activo",
+      "trade_valuation_notice": "Se actualizará una valoración para esta fecha para reflejar este monto.",
+      "treat_as_investment": "Tratar como inversión (solo tramo de efectivo)",
+      "notes_optional": "Notas (opcional)",
+      "link_transaction": "Linkear transacción",
+      "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo"
+    },
     "FORM": {
+      "asset_type": "Tipo de activo",
+      "linked_account": "Cuenta vinculada (opcional)",
       "name": "Nombre del activo",
       "name_required": "Por favor ingrese un nombre de activo",
       "description": "Descripción",

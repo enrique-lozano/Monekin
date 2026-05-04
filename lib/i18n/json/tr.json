@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Transfer",
         "other": "Transferler"
+      },
+      "investment": {
+        "one": "Yatırım",
+        "other": "Yatırımlar"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Bu hesabı toplam net değer hesaplamasına dahil et",
       "correct_balance_description": "Bakiyeyi düzeltmek, hesabın başlangıç değerini değiştirir. Bu düzeltme istatistiklere yansımayacaktır.",
       "valuation_before_creation_date": "Bu hesapta oluşturulma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
-    },
-    "INVESTMENT": {
-      "details-header": "Yatırım",
-      "correct_balance_title": "Yatırılan sermayeyi düzelt",
-      "correct_balance_description": "Bu hesap, portföy değerini manuel değerlemelerle takip eder. Bu işlem yalnızca yatırılan sermayeyi (başlangıç değeri) günceller ve kaydedilmiş değerlemeleri veya yatırım istatistiklerini değiştirmez.",
-      "invested-capital": "Yatırılan sermaye",
-      "portfolio-value": "Portföy değeri",
-      "profit": "Kâr",
-      "last-valuation": "Son değerleme",
-      "no-valuations": "Henüz değerleme kaydedilmedi",
-      "update-value": "Değeri güncelle",
-      "update-value.descr": "Mevcut portföy değerini kaydet",
-      "update-value.success": "Değerleme başarıyla kaydedildi",
-      "history": "Değerleme geçmişi",
-      "history-empty": "Bu hesap için henüz değerleme kaydedilmedi",
-      "add-valuation": "Değerleme ekle",
-      "edit-valuation": "Değerlemeyi düzenle",
-      "edit-valuation.success": "Değerleme başarıyla düzenlendi",
-      "delete-valuation.success": "Değerleme başarıyla silindi",
-      "delete-all-valuations": "Tüm değerlemeleri sil",
-      "delete-all-valuations.success": "Tüm değerlemeler başarıyla silindi"
     },
     "DELETE": {
       "warning-header": "Hesap silinsin mi?",
@@ -871,7 +854,41 @@
     "profit": "Kâr",
     "profit_percent": "Geri dönmek %",
     "total_value": "Varlıkların toplam değeri",
+    "amount_invested": "Bu hesaba ait {{ X }} tutarında yatırım yaptınız",
+    "TYPES": {
+      "stocks": "Hisse senetleri",
+      "funds": "Fonlar",
+      "crypto": "Kripto",
+      "real_estate": "Gayrimenkul",
+      "vehicle": "Araç",
+      "jewelry_art": "Takı ve sanat",
+      "other": "Diğer"
+    },
+    "DETAILS": {
+      "select_account": "Bir hesap seçin",
+      "buy": "Satın almak",
+      "sell": "Satmak",
+      "update_value": "Değeri güncelle",
+      "trade_sheet_title_buy": "Satın al (varlığa ekle)",
+      "trade_sheet_title_sell": "Sat (varlığı azalt)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Bu varlıktan bir hesaba para çekin. Yatırımınızı ve değerini azaltın.",
+      "trade_sheet_update_value_info": "Bu varlığın değeri {{ value }} olarak güncellenecek",
+      "trade_sheet_update_linked_asset_value_info": "Bu işleme bağlı varlığın değeri {{ value }} olarak güncellenecek",
+      "trade_sheet_following_valuations_warning": "{{date}} tarihinden sonra değerlemeler var. Bunları da güncelleyebilirsiniz.",
+      "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
+      "trade_sheet_update_following_valuations_description": "Daha sonraki değerlemeleri bu işlemle uyumlu tutun.",
+      "trade_sheet_full_form": "Tüm alanlar",
+      "trade_form_asset_column": "Varlık",
+      "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
+      "treat_as_investment": "Yatırım olarak değerlendirin (yalnızca nakit ayağı)",
+      "notes_optional": "Notlar (isteğe bağlı)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "Varlık türü",
+      "linked_account": "Bağlı hesap (isteğe bağlı)",
       "name": "Öğe adı",
       "name_required": "Lütfen bir varlık adı girin",
       "description": "Tanım",

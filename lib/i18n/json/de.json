@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Überweisen",
         "other": "Überweisungen"
+      },
+      "investment": {
+        "one": "Investition",
+        "other": "Investitionen"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen",
       "correct_balance_description": "Das Anpassen des Kontostands ändert den Anfangswert des Kontos. Diese Korrektur wird in deinen Statistiken nicht berücksichtigt.",
       "valuation_before_creation_date": "Auf diesem Konto liegen Bewertungen vor, deren Datum vor dem Erstellungsdatum liegt"
-    },
-    "INVESTMENT": {
-      "details-header": "Investment",
-      "correct_balance_title": "Investiertes Kapital korrigieren",
-      "correct_balance_description": "Dieses Konto verwendet manuelle Bewertungen für den Portfoliowert. Diese Aktion aktualisiert nur das investierte Kapital (Anfangswert) und ändert nicht die aufgezeichneten Bewertungen oder Investitionsstatistiken.",
-      "invested-capital": "Investiertes Kapital",
-      "portfolio-value": "Portfoliowert",
-      "profit": "Gewinn",
-      "last-valuation": "Letzte Bewertung",
-      "no-valuations": "Noch keine Bewertungen vorhanden",
-      "update-value": "Wert aktualisieren",
-      "update-value.descr": "Den aktuellen Portfoliowert erfassen",
-      "update-value.success": "Bewertung erfolgreich gespeichert",
-      "history": "Bewertungsverlauf",
-      "history-empty": "Noch keine Bewertungen für dieses Konto",
-      "add-valuation": "Bewertung hinzufügen",
-      "edit-valuation": "Bewertung bearbeiten",
-      "edit-valuation.success": "Bewertung erfolgreich bearbeitet",
-      "delete-valuation.success": "Bewertung erfolgreich gelöscht",
-      "delete-all-valuations": "Alle Bewertungen löschen",
-      "delete-all-valuations.success": "Alle Bewertungen erfolgreich gelöscht"
     },
     "DELETE": {
       "warning-header": "Konto löschen?",
@@ -871,7 +854,41 @@
     "profit": "Profitieren",
     "profit_percent": "Zurückkehren %",
     "total_value": "Gesamtwert der Vermögenswerte",
+    "amount_invested": "Sie haben die {{ X }} dieses Kontos investiert",
+    "TYPES": {
+      "stocks": "Aktien",
+      "funds": "Mittel",
+      "crypto": "Krypto",
+      "real_estate": "Immobilie",
+      "vehicle": "Fahrzeug",
+      "jewelry_art": "Schmuck & Kunst",
+      "other": "Andere"
+    },
+    "DETAILS": {
+      "select_account": "Wählen Sie ein Konto aus",
+      "buy": "Kaufen",
+      "sell": "Verkaufen",
+      "update_value": "Wert aktualisieren",
+      "trade_sheet_title_buy": "Kaufen (zum Vermögenswert hinzufügen)",
+      "trade_sheet_title_sell": "Verkaufen (Vermögenswert reduzieren)",
+      "trade_sheet_description_buy": "Fügen Sie Geld von einem Konto zu diesem Vermögenswert hinzu. Steigern Sie Ihre Investition und deren Wert.",
+      "trade_sheet_description_sell": "Heben Sie Geld von diesem Vermögenswert auf ein Konto ab. Reduzieren Sie Ihre Investition und ihren Wert.",
+      "trade_sheet_update_value_info": "Der Wert dieses Vermögenswerts wird auf {{ value }} aktualisiert",
+      "trade_sheet_update_linked_asset_value_info": "Der Wert des Vermögenswerts, der mit dieser Transaktion verknüpft ist, wird auf {{ value }} aktualisiert.",
+      "trade_sheet_following_valuations_warning": "Es liegen Bewertungen nach dem {{date}} vor. Sie können sie auch aktualisieren.",
+      "trade_sheet_update_following_valuations": "Aktualisieren Sie spätere Bewertungen",
+      "trade_sheet_update_following_valuations_description": "Keep later valuations aligned with this transaction.",
+      "trade_sheet_full_form": "Alle Felder",
+      "trade_form_asset_column": "Anlage",
+      "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
+      "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
+      "notes_optional": "Notizen (optional)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "Asset-Typ",
+      "linked_account": "Verknüpftes Konto (optional)",
       "name": "Asset-Name",
       "name_required": "Bitte geben Sie einen Asset-Namen ein",
       "description": "Beschreibung",

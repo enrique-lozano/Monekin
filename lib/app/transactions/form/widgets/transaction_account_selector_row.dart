@@ -19,6 +19,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     required this.onCategoryTap,
     required this.shakeKey,
     this.mainContainerRadius = 12.0,
+    this.investmentAssetColumnTitle,
+    this.investmentAssetName,
+    this.investmentAssetLeading,
+    this.rowAccentColor,
   });
 
   final TransactionType transactionType;
@@ -31,14 +35,26 @@ class TransactionAccountSelectorRow extends StatelessWidget {
   final GlobalKey<ShakeWidgetState> shakeKey;
   final double mainContainerRadius;
 
+  /// When set with [TransactionType.investment], shows a read-only second column
+  /// instead of the category picker (e.g. linked asset for a trade).
+  final String? investmentAssetColumnTitle;
+  final String? investmentAssetName;
+
+  /// Optional leading for the asset column only (assets have no default icon).
+  final Widget? investmentAssetLeading;
+
+  /// When set, tints the row (e.g. buy vs sell for locked asset trades).
+  final Color? rowAccentColor;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final borderRadius = Radius.circular(mainContainerRadius);
+    final accent = rowAccentColor ?? transactionType.color(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: transactionType.color(context).withOpacity(0.35),
+        color: accent.withOpacity(0.35),
         borderRadius: BorderRadius.only(
           bottomLeft: borderRadius,
           bottomRight: borderRadius,
@@ -55,7 +71,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   title: t.general.account,
                   inputValue: fromAccount?.name,
                   borderRadius: BorderRadius.only(bottomLeft: borderRadius),
-                  icon:
+                  leading:
                       fromAccount?.displayIcon(context) ??
                       IconDisplayer(
                         displayMode: IconDisplayMode.polygon,
@@ -66,7 +82,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                 ),
               ),
               VerticalDivider(
-                color: transactionType.color(context).withOpacity(0.85),
+                color: accent.withOpacity(0.85),
                 thickness: 2,
               ),
             ],
@@ -82,7 +98,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     title: t.transfer.form.to,
                     inputValue: transferAccount?.name,
                     borderRadius: BorderRadius.only(bottomRight: borderRadius),
-                    icon:
+                    leading:
                         transferAccount?.displayIcon(context) ??
                         IconDisplayer(
                           displayMode: IconDisplayMode.polygon,
@@ -96,25 +112,38 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             if (!transactionType.isTransfer)
               Expanded(
                 flex: 1,
-                child: ShakeWidget(
-                  duration: const Duration(milliseconds: 200),
-                  shakeCount: 1,
-                  shakeOffset: 10,
-                  key: shakeKey,
-                  child: _Selector(
-                    title: t.general.category,
-                    inputValue: selectedCategory?.name,
-                    borderRadius: BorderRadius.only(bottomRight: borderRadius),
-                    icon: IconDisplayer.fromCategory(
-                      context,
-                      category:
-                          selectedCategory ??
-                          Category.fromDB(Category.unkown(), null),
-                      size: 24,
-                    ),
-                    onClick: onCategoryTap,
-                  ),
-                ),
+                child: transactionType.isInvestment &&
+                        investmentAssetName != null
+                    ? _Selector(
+                        title:
+                            investmentAssetColumnTitle ??
+                            t.assets.details.trade_form_asset_column,
+                        inputValue: investmentAssetName,
+                        borderRadius: BorderRadius.only(bottomRight: borderRadius),
+                        leading: investmentAssetLeading,
+                        onClick: () {},
+                      )
+                    : ShakeWidget(
+                        duration: const Duration(milliseconds: 200),
+                        shakeCount: 1,
+                        shakeOffset: 10,
+                        key: shakeKey,
+                        child: _Selector(
+                          title: t.general.category,
+                          inputValue: selectedCategory?.name,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: borderRadius,
+                          ),
+                          leading: IconDisplayer.fromCategory(
+                            context,
+                            category:
+                                selectedCategory ??
+                                Category.fromDB(Category.unkown(), null),
+                            size: 24,
+                          ),
+                          onClick: onCategoryTap,
+                        ),
+                      ),
               ),
           ],
         ),
@@ -127,14 +156,14 @@ class _Selector extends StatelessWidget {
   const _Selector({
     required this.title,
     required this.inputValue,
-    required this.icon,
     required this.onClick,
     required this.borderRadius,
+    this.leading,
   });
 
   final String title;
   final String? inputValue;
-  final Widget icon;
+  final Widget? leading;
   final VoidCallback onClick;
   final BorderRadius? borderRadius;
 
@@ -154,8 +183,10 @@ class _Selector extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            icon,
-            const SizedBox(width: 12),
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: 12),
+            ],
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

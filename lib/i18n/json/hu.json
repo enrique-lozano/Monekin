@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Áthelyezés",
         "other": "Áthelyezések"
+      },
+      "investment": {
+        "one": "Beruházás",
+        "other": "Beruházások"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához",
       "correct_balance_description": "A számlaegyenleg módosítása megváltoztatja a számla kezdeti értékét. Ez a korrekció nem jelenik meg a statisztikákban.",
       "valuation_before_creation_date": "Ezen a számlán vannak olyan értékelések, amelyek dátuma a létrehozás dátuma előtti"
-    },
-    "INVESTMENT": {
-      "details-header": "Befektetés",
-      "correct_balance_title": "Befektetett tőke korrigálása",
-      "correct_balance_description": "Ez a számla kézi értékeléseket használ a portfólió értékének nyomon követésére. Ez a művelet csak a befektetett tőkét (kezdőérték) frissíti, és nem módosítja a rögzített értékeléseket vagy a befektetési statisztikákat.",
-      "invested-capital": "Befektetett tőke",
-      "portfolio-value": "Portfólió értéke",
-      "profit": "Nyereség",
-      "last-valuation": "Utolsó értékelés",
-      "no-valuations": "Még nincs értékelés rögzítve",
-      "update-value": "Érték frissítése",
-      "update-value.descr": "A portfólió aktuális értékének rögzítése",
-      "update-value.success": "Értékelés sikeresen rögzítve",
-      "history": "Értékelési előzmények",
-      "history-empty": "Még nincs értékelés ehhez a számlához",
-      "add-valuation": "Értékelés hozzáadása",
-      "edit-valuation": "Értékelés szerkesztése",
-      "edit-valuation.success": "Értékelés sikeresen szerkesztve",
-      "delete-valuation.success": "Értékelés sikeresen törölve",
-      "delete-all-valuations": "Összes értékelés törlése",
-      "delete-all-valuations.success": "Összes értékelés sikeresen törölve"
     },
     "DELETE": {
       "warning-header": "Törli a számlát?",
@@ -871,7 +854,41 @@
     "profit": "Nyereség",
     "profit_percent": "hozam %",
     "total_value": "Az eszközök összértéke",
+    "amount_invested": "A számla {{ X }} összegét befektette",
+    "TYPES": {
+      "stocks": "Készletek",
+      "funds": "Alapok",
+      "crypto": "Crypto",
+      "real_estate": "Ingatlan",
+      "vehicle": "Jármű",
+      "jewelry_art": "Ékszer és művészet",
+      "other": "Más"
+    },
+    "DETAILS": {
+      "select_account": "Válasszon egy fiókot",
+      "buy": "Vétel",
+      "sell": "Elad",
+      "update_value": "Frissítse az értéket",
+      "trade_sheet_title_buy": "Vásárlás (hozzáadás az eszközhöz)",
+      "trade_sheet_title_sell": "Eladás (vagyon csökkentése)",
+      "trade_sheet_description_buy": "Adjon hozzá pénzt ehhez az eszközhöz egy számláról. Növelje befektetését és értékét.",
+      "trade_sheet_description_sell": "Vegyen ki pénzt ebből az eszközből egy számlára. Csökkentse befektetését és annak értékét.",
+      "trade_sheet_update_value_info": "Ennek az elemnek az értéke a következőre módosul: {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "A tranzakcióhoz kapcsolódó eszköz értéke {{ value }} értékre frissül",
+      "trade_sheet_following_valuations_warning": "{{date}} után vannak értékelések. Ezeket is frissítheted.",
+      "trade_sheet_update_following_valuations": "Frissítse a későbbi értékeléseket",
+      "trade_sheet_update_following_valuations_description": "A későbbi értékeléseket igazítsa ehhez a tranzakcióhoz.",
+      "trade_sheet_full_form": "Minden mező",
+      "trade_form_asset_column": "Eszköz",
+      "trade_valuation_notice": "Az erre a dátumra vonatkozó értékelést frissítjük, hogy tükrözze ezt az összeget.",
+      "treat_as_investment": "Befektetésként kezelve (csak készpénzes láb)",
+      "notes_optional": "Megjegyzések (nem kötelező)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "Eszköz típusa",
+      "linked_account": "Kapcsolt fiók (opcionális)",
       "name": "Eszköz neve",
       "name_required": "Kérjük, adjon meg egy elemnevet",
       "description": "Leírás",

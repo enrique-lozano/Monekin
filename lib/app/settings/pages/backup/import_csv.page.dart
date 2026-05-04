@@ -20,6 +20,7 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -113,14 +114,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     icon ??= SupportedIconService.instance.defaultSupportedIcon;
     iconColor ??= Theme.of(context).colorScheme.primary;
 
-    return TextFormField(
-      controller: TextEditingController(
-        text: inputValue ?? t.general.unspecified,
-      ),
-      readOnly: true,
+    return ReadOnlyTextFormField(
+      displayValue: inputValue ?? t.general.unspecified,
       validator: (_) => fieldValidator(inputValue, isRequired: isRequired),
       onTap: () => onClick(),
-      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         labelText: title,
         suffixIcon: const Icon(Icons.arrow_drop_down),

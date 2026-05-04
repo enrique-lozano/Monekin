@@ -62,9 +62,7 @@ abstract class AccountDetailsActions {
     final List<ListTileActionItem> menu = [];
 
     final correctBalanceAction = ListTileActionItem(
-      label: account.type == AccountType.investment
-          ? t.account.investment.correct_balance_title
-          : t.account.correct_balance,
+      label: t.account.correct_balance,
       icon: Icons.balance_rounded,
       onClick: account.isClosed
           ? null

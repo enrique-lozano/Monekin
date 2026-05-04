@@ -25,19 +25,13 @@ Future<ValuationInDB?> showValuationFormDialog(
 class ValuationFormDialog extends StatefulWidget {
   const ValuationFormDialog({
     super.key,
-    this.accountId,
-    this.assetId,
+    required this.assetId,
     this.currencySymbol,
     this.valuationToEdit,
     required this.firstDate,
-  }) : assert(
-         (accountId != null && assetId == null) ||
-             (accountId == null && assetId != null),
-         'You must specify either an account or an asset, not both.',
-       );
+  });
 
-  final String? accountId;
-  final String? assetId;
+  final String assetId;
   final String? currencySymbol;
   final ValuationInDB? valuationToEdit;
 
@@ -80,7 +74,6 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
 
     final result = ValuationInDB(
       id: widget.valuationToEdit?.id ?? generateUUID(),
-      accountId: widget.accountId,
       assetId: widget.assetId,
       date: _date,
       value: value,
@@ -95,32 +88,16 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
 
     return ModalContainer(
       title: isEditMode
-          ? t.account.investment.edit_valuation
-          : t.account.investment.add_valuation,
+          ? t.assets.valuation.edit_valuation
+          : t.assets.valuation.add_valuation,
       footer: BottomSheetFooter(onSaved: _onSubmit),
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       body: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          spacing: 12,
           children: [
-            TextFormField(
-              controller: _valueController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              decoration: InputDecoration(
-                labelText: '${t.account.investment.portfolio_value} *',
-                suffixText: widget.currencySymbol,
-              ),
-              validator: (value) => fieldValidator(
-                value,
-                isRequired: true,
-                validator: ValidatorType.double,
-              ),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-            const SizedBox(height: 22),
             DateTimeFormField(
               mode: DateTimeFieldPickerMode.date,
               decoration: InputDecoration(
@@ -139,7 +116,23 @@ class _ValuationFormDialogState extends State<ValuationFormDialog> {
                 });
               },
             ),
-            const SizedBox(height: 16),
+
+            TextFormField(
+              controller: _valueController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: InputDecoration(
+                labelText: '${t.assets.valuation.value} *',
+                suffixText: widget.currencySymbol,
+              ),
+              validator: (value) => fieldValidator(
+                value,
+                isRequired: true,
+                validator: ValidatorType.double,
+              ),
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+            ),
           ],
         ),
       ),

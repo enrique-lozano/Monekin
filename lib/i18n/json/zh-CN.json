@@ -437,6 +437,10 @@
       "transfer": {
         "one": "转账",
         "other": "转账"
+      },
+      "investment": {
+        "one": "投资",
+        "other": "投资"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "将此账户纳入总净资产计算",
       "correct_balance_description": "调整余额会修改账户的初始值。此修正不会反映在统计数据中。",
       "valuation_before_creation_date": "此帐户中存在日期早于创建日期的评估"
-    },
-    "INVESTMENT": {
-      "details-header": "投资",
-      "correct_balance_title": "更正已投资本金",
-      "correct_balance_description": "此账户使用手动估值来跟踪投资组合价值。此操作仅更新已投资本金（初始值），不会更改已记录的估值或投资统计信息。",
-      "invested-capital": "已投资本金",
-      "portfolio-value": "投资组合价值",
-      "profit": "收益",
-      "last-valuation": "最近估值",
-      "no-valuations": "暂无估值记录",
-      "update-value": "更新价值",
-      "update-value.descr": "记录当前投资组合价值",
-      "update-value.success": "估值记录成功",
-      "history": "估值历史",
-      "history-empty": "此账户暂无估值记录",
-      "add-valuation": "添加估值",
-      "edit-valuation": "编辑估值",
-      "edit-valuation.success": "估值编辑成功",
-      "delete-valuation.success": "估值删除成功",
-      "delete-all-valuations": "删除所有估值",
-      "delete-all-valuations.success": "所有估值已成功删除"
     },
     "DELETE": {
       "warning-header": "删除账户？",
@@ -871,7 +854,41 @@
     "profit": "利润",
     "profit_percent": "返回 ％",
     "total_value": "资产总值",
+    "amount_invested": "您已投资该账户的 {{ X }}",
+    "TYPES": {
+      "stocks": "股票",
+      "funds": "资金",
+      "crypto": "加密货币",
+      "real_estate": "房地产",
+      "vehicle": "车辆",
+      "jewelry_art": "珠宝与艺术品",
+      "other": "其他"
+    },
+    "DETAILS": {
+      "select_account": "选择一个帐户",
+      "buy": "买",
+      "sell": "卖",
+      "update_value": "更新值",
+      "trade_sheet_title_buy": "购买（添加到资产）",
+      "trade_sheet_title_sell": "出售（减少资产）",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "从该资产中提取资金到账户。减少您的投资及其价值。",
+      "trade_sheet_update_value_info": "该资产的价值将更新为 {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "与此交易关联的资产的价值将更新为 {{ value }}",
+      "trade_sheet_following_valuations_warning": "{{date}}之后有估价。您也可以更新它们。",
+      "trade_sheet_update_following_valuations": "稍后更新估值",
+      "trade_sheet_update_following_valuations_description": "让以后的估值与本次交易保持一致。",
+      "trade_sheet_full_form": "完整表单",
+      "trade_form_asset_column": "资产",
+      "trade_valuation_notice": "该日期的估值将更新以反映这一金额。",
+      "treat_as_investment": "视为投资（仅限现金部分）",
+      "notes_optional": "注释（可选）",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "资产类型",
+      "linked_account": "关联帐户（可选）",
       "name": "资产名称",
       "name_required": "请输入资产名称",
       "description": "描述",

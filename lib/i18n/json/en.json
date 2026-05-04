@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Transfer",
         "other": "Transfers"
+      },
+      "investment": {
+        "one": "Investment",
+        "other": "Investments"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Add this account to the total net worth calculation",
       "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics.",
       "valuation_before_creation_date": "There are valuations in this account with a date before the creation date"
-    },
-    "INVESTMENT": {
-      "details-header": "Investment",
-      "correct_balance_title": "Correct invested capital",
-      "correct_balance_description": "This account uses manual valuations for portfolio value. This action only updates the invested capital (initial value) and will not change recorded valuations or investment statistics.",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully",
-      "history": "Valuation history",
-      "history-empty": "No valuations recorded yet for this account",
-      "add-valuation": "Add valuation",
-      "edit-valuation": "Edit valuation",
-      "edit-valuation.success": "Valuation edited successfully",
-      "delete-valuation.success": "Valuation deleted successfully",
-      "delete-all-valuations": "Delete all valuations",
-      "delete-all-valuations.success": "All valuations deleted successfully"
     },
     "DELETE": {
       "warning-header": "Delete account?",
@@ -871,7 +854,41 @@
     "profit": "Profit",
     "profit_percent": "Return %",
     "total_value": "Assets total value",
+    "amount_invested": "You have the {{ X }} of this account invested",
+    "TYPES": {
+      "stocks": "Stocks",
+      "funds": "Funds",
+      "crypto": "Crypto",
+      "real_estate": "Real estate",
+      "vehicle": "Vehicle",
+      "jewelry_art": "Jewelry & art",
+      "other": "Other"
+    },
+    "DETAILS": {
+      "select_account": "Select an account",
+      "buy": "Buy",
+      "sell": "Sell",
+      "update_value": "Update value",
+      "trade_sheet_title_buy": "Buy (add to asset)",
+      "trade_sheet_title_sell": "Sell (reduce asset)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Withdraw money from this asset to an account. Reduce your investment and its value.",
+      "trade_sheet_update_value_info": "The value of this asset will be updated to {{ value }} for the selected date",
+      "trade_sheet_update_linked_asset_value_info": "The value of the asset that is linked to this transaction will be updated to {{ value }} for the selected date",
+      "trade_sheet_following_valuations_warning": "There are valuations after {{date}}. You can update them too.",
+      "trade_sheet_update_following_valuations": "Update later valuations",
+      "trade_sheet_update_following_valuations_description": "Keep later valuations aligned with this transaction.",
+      "trade_sheet_full_form": "All fields",
+      "trade_form_asset_column": "Asset",
+      "trade_valuation_notice": "A valuation will be updated for this date to reflect this amount.",
+      "treat_as_investment": "Treat as investment (cash leg only)",
+      "notes_optional": "Notes (optional)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "Asset type",
+      "linked_account": "Linked account (optional)",
       "name": "Asset name",
       "name_required": "Please enter an asset name",
       "description": "Description",

@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Переказ",
         "other": "Перекази"
+      },
+      "investment": {
+        "one": "Інвестиції",
+        "other": "Інвестиції"
       }
     }
   },
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Додати цей рахунок до розрахунку загальних чистих активів",
       "correct_balance_description": "Коригування балансу змінює початкове значення рахунку. Це коригування не відобразиться у статистиці.",
       "valuation_before_creation_date": "У цьому обліковому записі є оцінки з датою, що передує даті створення"
-    },
-    "INVESTMENT": {
-      "details-header": "Інвестиція",
-      "correct_balance_title": "Відкоригувати інвестований капітал",
-      "correct_balance_description": "Цей рахунок використовує ручні оцінки для відстеження вартості портфеля. Ця дія лише оновлює інвестований капітал (початкове значення) і не змінює записані оцінки або інвестиційну статистику.",
-      "invested-capital": "Інвестований капітал",
-      "portfolio-value": "Вартість портфеля",
-      "profit": "Прибуток",
-      "last-valuation": "Остання оцінка",
-      "no-valuations": "Оцінок ще не записано",
-      "update-value": "Оновити вартість",
-      "update-value.descr": "Записати поточну вартість портфеля",
-      "update-value.success": "Оцінку успішно збережено",
-      "history": "Історія оцінок",
-      "history-empty": "Для цього рахунку ще немає оцінок",
-      "add-valuation": "Додати оцінку",
-      "edit-valuation": "Редагувати оцінку",
-      "edit-valuation.success": "Оцінку успішно відредаговано",
-      "delete-valuation.success": "Оцінку успішно видалено",
-      "delete-all-valuations": "Видалити всі оцінки",
-      "delete-all-valuations.success": "Усі оцінки успішно видалено"
     },
     "DELETE": {
       "warning-header": "Видалити рахунок?",
@@ -871,7 +854,41 @@
     "profit": "Прибуток",
     "profit_percent": "Повернення %",
     "total_value": "Загальна вартість активів",
+    "amount_invested": "Ви інвестували {{ X }} цього облікового запису",
+    "TYPES": {
+      "stocks": "Акції",
+      "funds": "кошти",
+      "crypto": "Крипто",
+      "real_estate": "Нерухомість",
+      "vehicle": "транспортний засіб",
+      "jewelry_art": "Ювелірні вироби та мистецтво",
+      "other": "інше"
+    },
+    "DETAILS": {
+      "select_account": "Виберіть обліковий запис",
+      "buy": "купити",
+      "sell": "Продати",
+      "update_value": "Оновити значення",
+      "trade_sheet_title_buy": "Купити (додати в актив)",
+      "trade_sheet_title_sell": "Продати (зменшити актив)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Вивести гроші з цього активу на рахунок. Зменште свої інвестиції та їх вартість.",
+      "trade_sheet_update_value_info": "Вартість цього активу буде оновлено до {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "Вартість активу, пов’язаного з цією трансакцією, буде оновлено до {{ value }}",
+      "trade_sheet_following_valuations_warning": "Є оцінки після {{date}}. Ви також можете оновити їх.",
+      "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
+      "trade_sheet_update_following_valuations_description": "Тримайте пізніші оцінки у відповідності з цією трансакцією.",
+      "trade_sheet_full_form": "Усі поля",
+      "trade_form_asset_column": "Актив",
+      "trade_valuation_notice": "Оцінку буде оновлено на цю дату, щоб відобразити цю суму.",
+      "treat_as_investment": "Вважати інвестицією (лише готівкова нога)",
+      "notes_optional": "Примітки (необов'язково)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+    },
     "FORM": {
+      "asset_type": "Тип активу",
+      "linked_account": "Пов’язаний обліковий запис (необов’язково)",
       "name": "Назва активу",
       "name_required": "Введіть назву активу",
       "description": "опис",

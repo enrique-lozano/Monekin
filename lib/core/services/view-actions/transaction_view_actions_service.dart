@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -31,14 +32,17 @@ class TransactionViewActionService {
       ListTileActionItem(
         label: t.ui_actions.edit,
         icon: Icons.edit,
-        onClick: () => RouteUtils.pushRoute(
-          TransactionFormPage(
-            transactionToEdit: transaction,
-            mode: transaction.type,
-          ),
-        ),
+        onClick: () {
+          RouteUtils.pushRoute(
+            TransactionFormPage(
+              transactionToEdit: transaction,
+              mode: transaction.type,
+            ),
+          );
+        },
       ),
-      if (transaction.recurrentInfo.isNoRecurrent)
+      if (transaction.recurrentInfo.isNoRecurrent &&
+          transaction.type != TransactionType.investment)
         ListTileActionItem(
           label: t.transaction.duplicate_short,
           icon: Icons.control_point_duplicate_rounded,

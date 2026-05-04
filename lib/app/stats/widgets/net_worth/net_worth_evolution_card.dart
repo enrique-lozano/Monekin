@@ -5,13 +5,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/debts/debt_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/database/services/net_worth/net_worth_service.dart';
+import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -27,7 +23,7 @@ class NetWorthEvolutionCard extends StatelessWidget {
   final TransactionFilterSet filters;
   final DatePeriodState dateRangeService;
 
-  Future<(List<_NetWorthPoint>, CurrencyInDB?)> _loadEvolutionData() async {
+  Future<(List<_NetWorthPoint>, Currency?)> _loadEvolutionData() async {
     final now = DateTime.now();
     final endDate = dateRangeService.endDate ?? now;
     final startDate =
@@ -70,97 +66,15 @@ class NetWorthEvolutionCard extends StatelessWidget {
   }
 
   Future<double> _getTotalAssets(DateTime date) async {
-    final cashAccounts = await _getCashAccountsTotal(date);
-    final investmentAccounts = await _getInvestmentAccountsTotal(date);
-    final physicalAssets = await _getPhysicalAssetsTotal(date);
-
-    return cashAccounts + investmentAccounts + physicalAssets;
-  }
-
-  Future<double> _getInvestmentAccountsTotal(DateTime date) async {
-    final accounts = await AccountService.instance
-        .getAccounts(
-          predicate: (account, currency) =>
-              account.type.equals(AccountType.investment.name),
-        )
+    return NetWorthService.instance
+        .getGrossAssetsAtDate(date, trFilters: filters)
         .first;
-
-    if (accounts.isEmpty) return 0.0;
-
-    final values = await Future.wait<double>(
-      accounts.map<Future<double>>((account) async {
-        return await AccountService.instance
-            .getAccountMoney(
-              account: account,
-              date: date,
-              convertToPreferredCurrency: true,
-            )
-            .first;
-      }),
-    );
-
-    return values.fold<double>(0.0, (sum, value) => sum + value);
-  }
-
-  Future<double> _getPhysicalAssetsTotal(DateTime date) async {
-    return await InvestmentService.instance
-        .getTotalAssetsValueAtDate(date: date)
-        .first;
-  }
-
-  Future<double> _getCashAccountsTotal(DateTime date) async {
-    final accounts = await AccountService.instance
-        .getAccounts(
-          predicate: (account, currency) =>
-              account.type.isNotValue(AccountType.investment.name),
-        )
-        .first;
-
-    if (accounts.isEmpty) return 0.0;
-
-    final values = await Future.wait<double>(
-      accounts.map<Future<double>>((account) async {
-        return await AccountService.instance
-            .getAccountMoney(
-              account: account,
-              date: date,
-              convertToPreferredCurrency: true,
-            )
-            .first;
-      }),
-    );
-
-    return values.fold<double>(0.0, (sum, value) => sum + value);
   }
 
   Future<double> _getDebtsTotal(DateTime date) async {
-    final preferredCurrency = await CurrencyService.instance
-        .ensureAndGetPreferredCurrency()
+    return NetWorthService.instance
+        .getTotalDebtsInPreferredCurrency(exchangeRateAsOf: date)
         .first;
-
-    final debts = await DebtService.instance.getDebts().first;
-    if (debts.isEmpty) return 0.0;
-
-    final values = await Future.wait<double>(
-      debts.map<Future<double>>((debt) async {
-        final remaining = await DebtService.instance
-            .getDebtRemainingAmount(debt)
-            .first;
-        if (debt.currency.code == preferredCurrency.code) {
-          return remaining;
-        }
-
-        return await ExchangeRateService.instance
-            .calculateExchangeRateToPreferredCurrency(
-              fromCurrency: debt.currency.code,
-              amount: remaining,
-              date: date,
-            )
-            .first;
-      }),
-    );
-
-    return values.fold<double>(0.0, (sum, value) => sum + value);
   }
 
   @override
@@ -189,9 +103,6 @@ class NetWorthEvolutionCard extends StatelessWidget {
         ].reduce(max);
 
         final yMax = max(maxY * 1.15, 10.0);
-        final byX = {
-          for (final point in data) point.date.millisecondsSinceEpoch: point,
-        };
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
