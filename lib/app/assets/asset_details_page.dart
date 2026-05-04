@@ -292,38 +292,39 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     BuildContext context,
     List<ValuationInDB>? valuations,
   ) {
-    if (valuations == null) {
-      return const SizedBox(
-        height: 120,
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Column(
+      spacing: 16,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
-          child: TimeSeriesEvolutionChart<ValuationInDB>(
-            data: [
-              ValuationInDB(
-                id: 'INITIAL_VALUE',
-                date: widget.asset.creationDate,
-                value: widget.asset.initialValue,
-                assetId: widget.asset.id,
-              ),
-              ...valuations,
-            ],
-            dateExtractor: (v) => v.date,
-            valueExtractor: (v) => v.value,
-            currency: widget.asset.currency,
-            onHover: (valuation) {
-              setState(() {
-                _hoveredValuation = valuation;
-              });
-            },
+        if (valuations != null)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+            child: TimeSeriesEvolutionChart<ValuationInDB>(
+              data: [
+                ValuationInDB(
+                  id: 'INITIAL_VALUE',
+                  date: widget.asset.creationDate,
+                  value: widget.asset.initialValue,
+                  assetId: widget.asset.id,
+                ),
+                ...valuations,
+              ],
+              dateExtractor: (v) => v.date,
+              valueExtractor: (v) => v.value,
+              currency: widget.asset.currency,
+              onHover: (valuation) {
+                setState(() {
+                  _hoveredValuation = valuation;
+                });
+              },
+            ),
           ),
-        ),
-        const SizedBox(height: 16),
+
+        if (valuations == null)
+          const SizedBox(
+            height: 120,
+            child: Center(child: CircularProgressIndicator()),
+          ),
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
