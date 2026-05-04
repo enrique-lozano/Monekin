@@ -53,7 +53,11 @@ class AssetValuationImpactSection extends StatelessWidget {
         ),
         builder: (context, snapshot) {
           final originalValue = snapshot.data ?? asset.initialValue;
-          final transactionValue = isBuy ? -amount! : amount!;
+          final transactionValue = amount == null
+              ? 0
+              : isBuy
+              ? -amount
+              : amount;
           final updatedValue = originalValue - transactionValue;
           final formattedDate = DateFormat.yMMMd(
             Localizations.localeOf(context).toString(),
@@ -108,7 +112,10 @@ class AssetValuationImpactSection extends StatelessWidget {
                       SwitchListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(
-                          t.assets.details.trade_sheet_update_following_valuations,
+                          t
+                              .assets
+                              .details
+                              .trade_sheet_update_following_valuations,
                         ),
                         subtitle: Text(
                           t
