@@ -39,6 +39,8 @@ class TransactionAccountSelectorRow extends StatelessWidget {
   /// instead of the category picker (e.g. linked asset for a trade).
   final String? investmentAssetColumnTitle;
   final String? investmentAssetName;
+
+  /// Optional leading for the asset column only (assets have no default icon).
   final Widget? investmentAssetLeading;
 
   /// When set, tints the row (e.g. buy vs sell for locked asset trades).
@@ -69,7 +71,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   title: t.general.account,
                   inputValue: fromAccount?.name,
                   borderRadius: BorderRadius.only(bottomLeft: borderRadius),
-                  icon:
+                  leading:
                       fromAccount?.displayIcon(context) ??
                       IconDisplayer(
                         displayMode: IconDisplayMode.polygon,
@@ -96,7 +98,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     title: t.transfer.form.to,
                     inputValue: transferAccount?.name,
                     borderRadius: BorderRadius.only(bottomRight: borderRadius),
-                    icon:
+                    leading:
                         transferAccount?.displayIcon(context) ??
                         IconDisplayer(
                           displayMode: IconDisplayMode.polygon,
@@ -118,13 +120,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                             t.assets.details.trade_form_asset_column,
                         inputValue: investmentAssetName,
                         borderRadius: BorderRadius.only(bottomRight: borderRadius),
-                        icon:
-                            investmentAssetLeading ??
-                            IconDisplayer(
-                              displayMode: IconDisplayMode.polygon,
-                              icon: Icons.pie_chart_outline_rounded,
-                              mainColor: Theme.of(context).colorScheme.primary,
-                            ),
+                        leading: investmentAssetLeading,
                         onClick: () {},
                       )
                     : ShakeWidget(
@@ -138,7 +134,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                           borderRadius: BorderRadius.only(
                             bottomRight: borderRadius,
                           ),
-                          icon: IconDisplayer.fromCategory(
+                          leading: IconDisplayer.fromCategory(
                             context,
                             category:
                                 selectedCategory ??
@@ -160,14 +156,14 @@ class _Selector extends StatelessWidget {
   const _Selector({
     required this.title,
     required this.inputValue,
-    required this.icon,
     required this.onClick,
     required this.borderRadius,
+    this.leading,
   });
 
   final String title;
   final String? inputValue;
-  final Widget icon;
+  final Widget? leading;
   final VoidCallback onClick;
   final BorderRadius? borderRadius;
 
@@ -187,8 +183,10 @@ class _Selector extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            icon,
-            const SizedBox(width: 12),
+            if (leading != null) ...[
+              leading!,
+              const SizedBox(width: 12),
+            ],
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

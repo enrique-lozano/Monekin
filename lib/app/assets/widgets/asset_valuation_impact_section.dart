@@ -41,15 +41,15 @@ class AssetValuationImpactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final amount = tradeAmountAbs;
-    final hasAmount = amount != null && amount > 0;
 
-    if (!hasAmount) {
+    if (amount == null || amount <= 0) {
       return const SizedBox.shrink();
     }
 
-    final absAmount = amount ?? 0;
+    final absAmount = amount;
 
-    return RepaintBoundary(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: StreamBuilder<double>(
         stream: InvestmentService.instance.getAssetValueAtDate(
           asset,
@@ -77,56 +77,61 @@ class AssetValuationImpactSection extends StatelessWidget {
               InlineInfoCard(
                 mode: InlineInfoCardMode.info,
                 text: infoText,
-                margin: const EdgeInsets.only(bottom: 12),
+                margin: const EdgeInsets.only(bottom: 16),
               ),
-              RepaintBoundary(
-                child: StreamBuilder(
-                  stream: InvestmentService.instance.getValuationsForAsset(
-                    asset.id,
-                  ),
-                  builder: (context, valuationsSnap) {
-                    final laterValuations = (valuationsSnap.data ?? [])
-                        .where(
-                          (valuation) => isTradeDateAfterCalendarDay(
-                            valuation.date,
-                            tradeDate,
-                          ),
-                        )
-                        .toList();
-                    if (laterValuations.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
-
-                    final warningText = t.assets.details
-                        .trade_sheet_following_valuations_warning(
-                      date: formattedDate,
-                    );
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        InlineInfoCard(
-                          mode: InlineInfoCardMode.warn,
-                          text: warningText,
-                          margin: const EdgeInsets.only(bottom: 12),
+              StreamBuilder(
+                stream: InvestmentService.instance.getValuationsForAsset(
+                  asset.id,
+                ),
+                builder: (context, valuationsSnap) {
+                  final laterValuations = (valuationsSnap.data ?? [])
+                      .where(
+                        (valuation) => isTradeDateAfterCalendarDay(
+                          valuation.date,
+                          tradeDate,
                         ),
-                        SwitchListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            t.assets.details
-                                .trade_sheet_update_following_valuations,
-                          ),
-                          subtitle: Text(
+                      )
+                      .toList();
+                  if (laterValuations.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+
+                  final warningText = t.assets.details
+                      .trade_sheet_following_valuations_warning(
+                    date: formattedDate,
+                  );
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SwitchListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        title: Text(
+                          t.assets.details
+                              .trade_sheet_update_following_valuations,
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(
                             t.assets.details
                                 .trade_sheet_update_following_valuations_description,
                           ),
-                          value: updateLaterValuations,
-                          onChanged: onUpdateLaterValuationsChanged,
                         ),
-                      ],
-                    );
-                  },
-                ),
+                        value: updateLaterValuations,
+                        onChanged: onUpdateLaterValuationsChanged,
+                      ),
+                      const SizedBox(height: 12),
+                      InlineInfoCard(
+                        mode: InlineInfoCardMode.warn,
+                        text: warningText,
+                        margin: const EdgeInsets.only(top: 4, bottom: 8),
+                      ),
+                    ],
+                  );
+                },
               ),
             ],
           );

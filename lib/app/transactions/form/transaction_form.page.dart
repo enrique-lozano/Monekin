@@ -592,71 +592,24 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
   Widget _buildHeader(BuildContext context) {
     final t = Translations.of(context);
-    return RepaintBoundary(
-      child: Column(
-        children: [
-          if (_isLockedInvestmentAssetForm) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 0, 4, 10),
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: _lockedAssetTradeAccent(context).withOpacity(0.22),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: _lockedAssetTradeAccent(context).withOpacity(0.55),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _assetTradeIsBuy
-                              ? Icons.add_circle_outline
-                              : Icons.remove_circle_outline,
-                          size: 18,
-                          color: _lockedAssetTradeAccent(context),
-                        ),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            _assetTradeIsBuy
-                                ? t.assets.details.buy
-                                : t.assets.details.sell,
-                            style: Theme.of(context).textTheme.titleSmall
-                                ?.copyWith(
-                                  color: _lockedAssetTradeAccent(context),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-          TransactionAmountDisplay(
-            transactionType: transactionType,
-            transactionValue: transactionValue,
-            fromAccount: fromAccount,
-            displayCurrencyOverride: _isLockedInvestmentAssetForm
-                ? _lockedAsset?.currency
-                : null,
-            accentColor: _isLockedInvestmentAssetForm
-                ? _lockedAssetTradeAccent(context)
-                : null,
-            mathIconOverride: _isLockedInvestmentAssetForm
-                ? (_assetTradeIsBuy ? Icons.add : Icons.remove)
-                : null,
-            onTap: () {
+    return Column(
+      children: [
+        TransactionAmountDisplay(
+          transactionType: transactionType,
+          transactionValue: transactionValue,
+          fromAccount: fromAccount,
+          displayCurrencyOverride: _isLockedInvestmentAssetForm
+              ? _lockedAsset?.currency
+              : null,
+          accentColor: _isLockedInvestmentAssetForm
+              ? _lockedAssetTradeAccent(context)
+              : null,
+          mathIconOverride: _isLockedInvestmentAssetForm
+              ? (_assetTradeIsBuy
+                  ? TransactionType.income.icon
+                  : TransactionType.expense.icon)
+              : null,
+          onTap: () {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -717,7 +670,6 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           ),
         ],
       ],
-    ),
     );
   }
 
