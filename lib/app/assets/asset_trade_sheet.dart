@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_trade_valuation.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
@@ -57,6 +58,7 @@ class _AssetTradeSheet extends StatefulWidget {
 }
 
 class _AssetTradeSheetState extends State<_AssetTradeSheet> {
+  final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   DateTime _date = DateTime.now();
   Account? _account;
@@ -94,10 +96,28 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
     }
 
     final linkedId = widget.asset.linkedAccountID;
-    if (linkedId == null) return;
+    if (linkedId != null) {
+      final linkedAcc =
+          await AccountService.instance.getAccountById(linkedId).first;
+      if (linkedAcc != null && mounted) {
+        setState(() => _account = linkedAcc);
+        return;
+      }
+    }
 
-    final acc = await AccountService.instance.getAccountById(linkedId).first;
-    if (mounted) setState(() => _account = acc);
+    final accounts = await AccountService.instance
+        .getAccounts(
+          predicate: (acc, curr) => buildDriftExpr([
+            acc.type.equalsValue(AccountType.saving).not(),
+            acc.closingDate.isNull(),
+          ]),
+          limit: 1,
+        )
+        .first;
+
+    if (accounts.isNotEmpty && mounted) {
+      setState(() => _account = accounts.first);
+    }
   }
 
   Future<void> _prefillExpenseCategory() async {
@@ -141,17 +161,17 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
   Future<void> _submit() async {
     final t = Translations.of(context);
 
-    final abs = double.tryParse(_amountController.text.replaceAll(',', '.'));
-    if (abs == null || abs <= 0) {
+    if (_formKey.currentState?.validate() != true) {
       MonekinSnackbar.error(
-        SnackbarParams.fromError(t.assets.form.initial_value_invalid),
+        SnackbarParams(t.general.validations.form_error),
       );
       return;
     }
 
-    if (_account == null) {
+    final abs = double.tryParse(_amountController.text.replaceAll(',', '.'));
+    if (abs == null || abs <= 0) {
       MonekinSnackbar.error(
-        SnackbarParams.fromError(t.assets.details.select_account),
+        SnackbarParams.fromError(t.assets.form.initial_value_invalid),
       );
       return;
     }
@@ -233,19 +253,21 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
           ? t.assets.details.trade_sheet_description_buy
           : t.assets.details.trade_sheet_description_sell,
       bodyPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TextField(
-            controller: _amountController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: decimalDigitFormatter(
-              widget.asset.currency.decimalPlaces,
+      body: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: _amountController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: decimalDigitFormatter(
+                widget.asset.currency.decimalPlaces,
+              ),
+              decoration: InputDecoration(labelText: t.transaction.form.value),
+              onChanged: (_) => setState(() {}),
             ),
-            decoration: InputDecoration(labelText: t.transaction.form.value),
-            onChanged: (_) => setState(() {}),
-          ),
           const SizedBox(height: 12),
 
           DateTimeFormField(
@@ -275,19 +297,63 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
             stream: AccountService.instance.getAccounts(),
             builder: (context, snap) {
               final accounts = snap.data ?? [];
-              return DropdownButtonFormField<Account>(
-                value: _account,
+              if (_account != null &&
+                  accounts.isNotEmpty &&
+                  !accounts.any((a) => a.id == _account!.id)) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) setState(() => _account = null);
+                });
+              }
+
+              final valueInList =
+                  _account != null &&
+                      accounts.any((a) => a.id == _account!.id)
+                  ? _account
+                  : null;
+
+              final items = accounts.isEmpty
+                  ? <DropdownMenuItem<Account?>>[
+                      DropdownMenuItem<Account?>(
+                        value: null,
+                        child: Text(t.general.unspecified),
+                      ),
+                    ]
+                  : accounts
+                      .map(
+                        (a) => DropdownMenuItem<Account?>(
+                          value: a,
+                          child: Text(a.name),
+                        ),
+                      )
+                      .toList();
+
+              return DropdownButtonFormField<Account?>(
+                value: accounts.isEmpty ? null : valueInList,
                 decoration: InputDecoration(
                   labelText: t.general.account,
                   prefixIcon: Container(
                     margin: const EdgeInsets.only(left: 16, right: 4),
-                    child: _account?.displayIcon(context),
+                    child:
+                        valueInList?.displayIcon(context) ??
+                        Icon(
+                          Icons.account_balance_wallet_outlined,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                 ),
-                items: accounts
-                    .map((a) => DropdownMenuItem(value: a, child: Text(a.name)))
-                    .toList(),
-                onChanged: (a) => setState(() => _account = a),
+                hint: accounts.isNotEmpty && valueInList == null
+                    ? Text(t.general.unspecified)
+                    : null,
+                items: items,
+                validator: (value) {
+                  if (accounts.isEmpty || value == null) {
+                    return t.general.validations.required;
+                  }
+                  return null;
+                },
+                onChanged: accounts.isEmpty
+                    ? null
+                    : (a) => setState(() => _account = a),
               );
             },
           ),
@@ -323,6 +389,7 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
 
           const SizedBox(height: 16),
         ],
+        ),
       ),
 
       footer: BottomSheetFooter(
