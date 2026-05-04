@@ -9,13 +9,13 @@ import 'package:monekin/app/assets/asset_trade_valuation.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_account_selector_row.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
-import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -121,10 +121,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
   bool get _isLockedInvestmentAssetForm {
     if (widget.assetTradeContext != null) return true;
-    final edit = widget.transactionToEdit;
-    return edit != null &&
-        edit.type == TransactionType.investment &&
-        edit.assetID != null;
+
+    final trToEdit = widget.transactionToEdit;
+
+    return trToEdit != null &&
+        trToEdit.type == TransactionType.investment &&
+        trToEdit.assetID != null;
   }
 
   @override
@@ -141,6 +143,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         unawaited(_loadLockedAssetForEdit());
         return;
       }
+
       if (widget.assetTradeContext != null) {
         _lockedAsset = widget.assetTradeContext!.asset;
         _assetTradeIsBuy = widget.assetTradeContext!.isBuy;
@@ -151,9 +154,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               ? tr.assets.details.buy
               : tr.assets.details.sell;
           await _initializeFormValues();
-          if (mounted) setState(() {});
         });
       }
+
       return;
     }
 
@@ -587,8 +590,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       ? TransactionType.income.color(context)
       : TransactionType.expense.color(context);
 
-  CurrencyInDB? get _amountDisplayCurrency =>
-      _isLockedInvestmentAssetForm ? _lockedAsset?.currency : fromAccount?.currency;
+  CurrencyInDB? get _amountDisplayCurrency => _isLockedInvestmentAssetForm
+      ? _lockedAsset?.currency
+      : fromAccount?.currency;
 
   Widget _buildHeader(BuildContext context) {
     final t = Translations.of(context);
@@ -606,8 +610,8 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               : null,
           mathIconOverride: _isLockedInvestmentAssetForm
               ? (_assetTradeIsBuy
-                  ? TransactionType.income.icon
-                  : TransactionType.expense.icon)
+                    ? TransactionType.income.icon
+                    : TransactionType.expense.icon)
               : null,
           onTap: () {
             showModalBottomSheet(
@@ -664,10 +668,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         if (widget.linkedDebt != null &&
             BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
           const SizedBox(height: 24),
-          DebtLinkBanner(
-            debt: widget.linkedDebt!,
-            padding: EdgeInsets.zero,
-          ),
+          DebtLinkBanner(debt: widget.linkedDebt!, padding: EdgeInsets.zero),
         ],
       ],
     );
@@ -760,10 +761,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
       child: PageFramework(
         title: _resolveFrameworkTitle(t),
-        appBarBackgroundColor: (_isLockedInvestmentAssetForm
-                ? _lockedAssetTradeAccent(context)
-                : transactionType.color(context))
-            .withOpacity(0.85),
+        appBarBackgroundColor:
+            (_isLockedInvestmentAssetForm
+                    ? _lockedAssetTradeAccent(context)
+                    : transactionType.color(context))
+                .withOpacity(0.85),
         appBarForegroundColor: foregroundColor,
         tabBar: _tabController == null
             ? null
