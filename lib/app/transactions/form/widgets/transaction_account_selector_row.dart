@@ -22,6 +22,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     this.investmentAssetColumnTitle,
     this.investmentAssetName,
     this.investmentAssetLeading,
+    this.rowAccentColor,
   });
 
   final TransactionType transactionType;
@@ -40,14 +41,18 @@ class TransactionAccountSelectorRow extends StatelessWidget {
   final String? investmentAssetName;
   final Widget? investmentAssetLeading;
 
+  /// When set, tints the row (e.g. buy vs sell for locked asset trades).
+  final Color? rowAccentColor;
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final borderRadius = Radius.circular(mainContainerRadius);
+    final accent = rowAccentColor ?? transactionType.color(context);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: transactionType.color(context).withOpacity(0.35),
+        color: accent.withOpacity(0.35),
         borderRadius: BorderRadius.only(
           bottomLeft: borderRadius,
           bottomRight: borderRadius,
@@ -75,7 +80,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                 ),
               ),
               VerticalDivider(
-                color: transactionType.color(context).withOpacity(0.85),
+                color: accent.withOpacity(0.85),
                 thickness: 2,
               ),
             ],

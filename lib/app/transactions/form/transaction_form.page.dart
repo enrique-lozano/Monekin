@@ -577,24 +577,86 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   }
 
   Color get foregroundColor {
+    if (_isLockedInvestmentAssetForm) {
+      return _lockedAssetTradeAccent(context).getContrastColor();
+    }
     return transactionType.color(context).getContrastColor();
   }
+
+  Color _lockedAssetTradeAccent(BuildContext context) => _assetTradeIsBuy
+      ? TransactionType.income.color(context)
+      : TransactionType.expense.color(context);
 
   CurrencyInDB? get _amountDisplayCurrency =>
       _isLockedInvestmentAssetForm ? _lockedAsset?.currency : fromAccount?.currency;
 
   Widget _buildHeader(BuildContext context) {
     final t = Translations.of(context);
-    return Column(
-      children: [
-        TransactionAmountDisplay(
-          transactionType: transactionType,
-          transactionValue: transactionValue,
-          fromAccount: fromAccount,
-          displayCurrencyOverride: _isLockedInvestmentAssetForm
-              ? _lockedAsset?.currency
-              : null,
-          onTap: () {
+    return RepaintBoundary(
+      child: Column(
+        children: [
+          if (_isLockedInvestmentAssetForm) ...[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 0, 4, 10),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: _lockedAssetTradeAccent(context).withOpacity(0.22),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: _lockedAssetTradeAccent(context).withOpacity(0.55),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          _assetTradeIsBuy
+                              ? Icons.add_circle_outline
+                              : Icons.remove_circle_outline,
+                          size: 18,
+                          color: _lockedAssetTradeAccent(context),
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            _assetTradeIsBuy
+                                ? t.assets.details.buy
+                                : t.assets.details.sell,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(
+                                  color: _lockedAssetTradeAccent(context),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+          TransactionAmountDisplay(
+            transactionType: transactionType,
+            transactionValue: transactionValue,
+            fromAccount: fromAccount,
+            displayCurrencyOverride: _isLockedInvestmentAssetForm
+                ? _lockedAsset?.currency
+                : null,
+            accentColor: _isLockedInvestmentAssetForm
+                ? _lockedAssetTradeAccent(context)
+                : null,
+            mathIconOverride: _isLockedInvestmentAssetForm
+                ? (_assetTradeIsBuy ? Icons.add : Icons.remove)
+                : null,
+            onTap: () {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -622,6 +684,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           transferAccount: transferAccount,
           selectedCategory: selectedCategory,
           shakeKey: _shakeKey,
+          rowAccentColor: _isLockedInvestmentAssetForm
+              ? _lockedAssetTradeAccent(context)
+              : null,
           investmentAssetName: _isLockedInvestmentAssetForm
               ? (_lockedAsset?.name ?? '…')
               : null,
@@ -652,6 +717,7 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           ),
         ],
       ],
+    ),
     );
   }
 
@@ -742,7 +808,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
       child: PageFramework(
         title: _resolveFrameworkTitle(t),
-        appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
+        appBarBackgroundColor: (_isLockedInvestmentAssetForm
+                ? _lockedAssetTradeAccent(context)
+                : transactionType.color(context))
+            .withOpacity(0.85),
         appBarForegroundColor: foregroundColor,
         tabBar: _tabController == null
             ? null

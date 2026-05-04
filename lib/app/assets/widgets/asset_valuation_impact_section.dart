@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/assets/asset_trade_valuation.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -44,8 +43,13 @@ class AssetValuationImpactSection extends StatelessWidget {
     final amount = tradeAmountAbs;
     final hasAmount = amount != null && amount > 0;
 
-    return AnimatedExpanded(
-      expand: hasAmount,
+    if (!hasAmount) {
+      return const SizedBox.shrink();
+    }
+
+    final absAmount = amount ?? 0;
+
+    return RepaintBoundary(
       child: StreamBuilder<double>(
         stream: InvestmentService.instance.getAssetValueAtDate(
           asset,
@@ -53,11 +57,7 @@ class AssetValuationImpactSection extends StatelessWidget {
         ),
         builder: (context, snapshot) {
           final originalValue = snapshot.data ?? asset.initialValue;
-          final transactionValue = amount == null
-              ? 0
-              : isBuy
-              ? -amount
-              : amount;
+          final transactionValue = isBuy ? -absAmount : absAmount;
           final updatedValue = originalValue - transactionValue;
           final formattedDate = DateFormat.yMMMd(
             Localizations.localeOf(context).toString(),
@@ -79,56 +79,54 @@ class AssetValuationImpactSection extends StatelessWidget {
                 text: infoText,
                 margin: const EdgeInsets.only(bottom: 12),
               ),
-              StreamBuilder(
-                stream: InvestmentService.instance.getValuationsForAsset(
-                  asset.id,
+              RepaintBoundary(
+                child: StreamBuilder(
+                  stream: InvestmentService.instance.getValuationsForAsset(
+                    asset.id,
+                  ),
+                  builder: (context, valuationsSnap) {
+                    final laterValuations = (valuationsSnap.data ?? [])
+                        .where(
+                          (valuation) => isTradeDateAfterCalendarDay(
+                            valuation.date,
+                            tradeDate,
+                          ),
+                        )
+                        .toList();
+                    if (laterValuations.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final warningText = t.assets.details
+                        .trade_sheet_following_valuations_warning(
+                      date: formattedDate,
+                    );
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        InlineInfoCard(
+                          mode: InlineInfoCardMode.warn,
+                          text: warningText,
+                          margin: const EdgeInsets.only(bottom: 12),
+                        ),
+                        SwitchListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(
+                            t.assets.details
+                                .trade_sheet_update_following_valuations,
+                          ),
+                          subtitle: Text(
+                            t.assets.details
+                                .trade_sheet_update_following_valuations_description,
+                          ),
+                          value: updateLaterValuations,
+                          onChanged: onUpdateLaterValuationsChanged,
+                        ),
+                      ],
+                    );
+                  },
                 ),
-                builder: (context, valuationsSnap) {
-                  final laterValuations = (valuationsSnap.data ?? [])
-                      .where(
-                        (valuation) => isTradeDateAfterCalendarDay(
-                          valuation.date,
-                          tradeDate,
-                        ),
-                      )
-                      .toList();
-                  if (laterValuations.isEmpty) {
-                    return const SizedBox.shrink();
-                  }
-
-                  final warningText = t.assets.details
-                      .trade_sheet_following_valuations_warning(
-                        date: formattedDate,
-                      );
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      InlineInfoCard(
-                        mode: InlineInfoCardMode.warn,
-                        text: warningText,
-                        margin: const EdgeInsets.only(bottom: 12),
-                      ),
-                      SwitchListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          t
-                              .assets
-                              .details
-                              .trade_sheet_update_following_valuations,
-                        ),
-                        subtitle: Text(
-                          t
-                              .assets
-                              .details
-                              .trade_sheet_update_following_valuations_description,
-                        ),
-                        value: updateLaterValuations,
-                        onChanged: onUpdateLaterValuationsChanged,
-                      ),
-                    ],
-                  );
-                },
               ),
             ],
           );

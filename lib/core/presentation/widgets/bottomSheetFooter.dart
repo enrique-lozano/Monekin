@@ -11,7 +11,6 @@ class BottomSheetFooter extends StatelessWidget {
     this.submitText,
     this.submitIcon = Icons.save,
     this.extraActions = const [],
-    this.beforeSave,
   });
 
   /// The text inside the submiit button. Defaults to "save" in the current language
@@ -25,9 +24,6 @@ class BottomSheetFooter extends StatelessWidget {
   final void Function()? onSaved;
 
   final List<ListTileActionItem> extraActions;
-
-  /// Optional control shown to the left of the main save button (e.g. “Full form”).
-  final Widget? beforeSave;
 
   @override
   Widget build(BuildContext context) {
@@ -99,15 +95,6 @@ class BottomSheetFooter extends StatelessWidget {
                   ),
                 ],
               ),
-              if (beforeSave != null)
-                Expanded(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: beforeSave,
-                  ),
-                )
-              else
-                const Spacer(),
               confirmButton,
             ],
           ),

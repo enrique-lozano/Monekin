@@ -15,6 +15,7 @@ import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -325,10 +326,13 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
       ),
 
       footer: BottomSheetFooter(
-        beforeSave: TextButton(
-          onPressed: _openFullForm,
-          child: Text(t.assets.details.trade_sheet_full_form),
-        ),
+        extraActions: [
+          ListTileActionItem(
+            label: t.assets.details.trade_sheet_full_form,
+            icon: Icons.article_outlined,
+            onClick: _openFullForm,
+          ),
+        ],
         onSaved: _submit,
       ),
     );

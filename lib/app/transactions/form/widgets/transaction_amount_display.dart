@@ -19,6 +19,8 @@ class TransactionAmountDisplay extends StatelessWidget {
     required this.onTap,
     this.mainContainerRadius = 12.0,
     this.displayCurrencyOverride,
+    this.accentColor,
+    this.mathIconOverride,
   });
 
   final TransactionType transactionType;
@@ -30,12 +32,19 @@ class TransactionAmountDisplay extends StatelessWidget {
   /// When set (e.g. asset trade in asset currency), overrides [fromAccount] currency for display.
   final CurrencyInDB? displayCurrencyOverride;
 
+  /// When set, overrides [TransactionType.color] for the amount block (e.g. buy vs sell).
+  final Color? accentColor;
+
+  /// Optional icon instead of [transactionType.mathIcon] (e.g. add vs remove for asset trades).
+  final IconData? mathIconOverride;
+
   @override
   Widget build(BuildContext context) {
-    final fgColor = transactionType.color(context).getContrastColor();
+    final baseColor = accentColor ?? transactionType.color(context);
+    final fgColor = baseColor.getContrastColor();
 
     return Tappable(
-      bgColor: transactionType.color(context).withOpacity(0.85),
+      bgColor: baseColor.withOpacity(0.85),
       onTap: onTap,
       borderRadius: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
           ? BorderRadius.only(
@@ -53,46 +62,41 @@ class TransactionAmountDisplay extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    child: IconDisplayer(
-                      key: ValueKey(transactionType.mathIcon.toString()),
-                      mainColor: transactionType.color(context),
-                      secondaryColor: fgColor,
-                      padding: 2,
-                      borderRadius: 4,
-                      icon: transactionType.mathIcon,
+                  IconDisplayer(
+                    key: ValueKey<int>(
+                      Object.hash(mathIconOverride, accentColor),
                     ),
+                    mainColor: baseColor,
+                    secondaryColor: fgColor,
+                    padding: 2,
+                    borderRadius: 4,
+                    icon: mathIconOverride ?? transactionType.mathIcon,
                   ),
                   const SizedBox(width: 12),
                   Flexible(
-                    child: AnimatedDefaultTextStyle(
-                      style: Theme.of(context).textTheme.headlineLarge!
-                          .copyWith(
-                            fontSize: transactionValue >= 1000
-                                ? transactionValue >= 1000000
-                                      ? 28
-                                      : 34
-                                : 38,
-                          ),
-                      duration: const Duration(milliseconds: 200),
-                      child: Builder(
-                        builder: (context) {
-                          final bigTextStyle = TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: fgColor,
-                          );
+                    child: Builder(
+                      builder: (context) {
+                        final fontSize = transactionValue >= 1000
+                            ? transactionValue >= 1000000
+                                  ? 28.0
+                                  : 34.0
+                            : 38.0;
+                        final bigTextStyle = TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: fgColor,
+                          fontSize: fontSize,
+                        );
 
-                          return CurrencyDisplayer(
-                            amountToConvert: transactionValue,
-                            currency:
-                                displayCurrencyOverride ?? fromAccount?.currency,
-                            currencyStyle: bigTextStyle,
-                            integerStyle: bigTextStyle,
-                            followPrivateMode: false,
-                          );
-                        },
-                      ),
+                        return CurrencyDisplayer(
+                          amountToConvert: transactionValue,
+                          currency:
+                              displayCurrencyOverride ??
+                              fromAccount?.currency,
+                          currencyStyle: bigTextStyle,
+                          integerStyle: bigTextStyle,
+                          followPrivateMode: false,
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -134,7 +138,8 @@ class TransactionAmountDisplay extends StatelessWidget {
                     );
 
                     return AnimatedSizeSwitcher(
-                      duration: const Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 200),
+                      enabled: false,
                       child: !shouldHide
                           ? valueInPrefCurrencyIndicator
                           : const SizedBox.shrink(),
