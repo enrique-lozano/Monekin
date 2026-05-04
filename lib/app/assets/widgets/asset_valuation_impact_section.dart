@@ -98,8 +98,8 @@ class AssetValuationImpactSection extends StatelessWidget {
 
                   final warningText = t.assets.details
                       .trade_sheet_following_valuations_warning(
-                    date: formattedDate,
-                  );
+                        date: formattedDate,
+                      );
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -110,13 +110,17 @@ class AssetValuationImpactSection extends StatelessWidget {
                           vertical: 4,
                         ),
                         title: Text(
-                          t.assets.details
+                          t
+                              .assets
+                              .details
                               .trade_sheet_update_following_valuations,
                         ),
                         subtitle: Padding(
                           padding: const EdgeInsets.only(top: 4),
                           child: Text(
-                            t.assets.details
+                            t
+                                .assets
+                                .details
                                 .trade_sheet_update_following_valuations_description,
                           ),
                         ),

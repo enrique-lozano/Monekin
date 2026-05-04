@@ -72,9 +72,9 @@ class NetWorthService {
         });
       }).toList();
 
-      return Rx.combineLatestList(streams).map(
-        (values) => values.fold<double>(0, (a, b) => a + b),
-      );
+      return Rx.combineLatestList(
+        streams,
+      ).map((values) => values.fold<double>(0, (a, b) => a + b));
     });
   }
 

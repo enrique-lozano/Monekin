@@ -81,10 +81,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   onClick: onFromAccountTap,
                 ),
               ),
-              VerticalDivider(
-                color: accent.withOpacity(0.85),
-                thickness: 2,
-              ),
+              VerticalDivider(color: accent.withOpacity(0.85), thickness: 2),
             ],
             if (transactionType.isTransfer)
               Expanded(
@@ -112,14 +109,16 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             if (!transactionType.isTransfer)
               Expanded(
                 flex: 1,
-                child: transactionType.isInvestment &&
-                        investmentAssetName != null
+                child:
+                    transactionType.isInvestment && investmentAssetName != null
                     ? _Selector(
                         title:
                             investmentAssetColumnTitle ??
                             t.assets.details.trade_form_asset_column,
                         inputValue: investmentAssetName,
-                        borderRadius: BorderRadius.only(bottomRight: borderRadius),
+                        borderRadius: BorderRadius.only(
+                          bottomRight: borderRadius,
+                        ),
                         leading: investmentAssetLeading,
                         onClick: () {},
                       )
@@ -183,10 +182,7 @@ class _Selector extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (leading != null) ...[
-              leading!,
-              const SizedBox(width: 12),
-            ],
+            if (leading != null) ...[leading!, const SizedBox(width: 12)],
             Flexible(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -239,10 +239,7 @@ class InvestmentService {
   /// Linked portfolio assets are already counted inside the parent account’s balance;
   /// summing them again would overstate net worth (see `NetWorthService.getGrossAssetsAtDate`).
   Stream<double> getStandaloneAssetsValueAtDate({DateTime? date}) {
-    return getTotalAssetsValueAtDate(
-      date: date,
-      considerLinkedAccounts: false,
-    );
+    return getTotalAssetsValueAtDate(date: date, considerLinkedAccounts: false);
   }
 
   /// Sum of linked asset market values for an account (0 if none).

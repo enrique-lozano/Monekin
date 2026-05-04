@@ -88,9 +88,10 @@ class AccountService {
     Iterable<String>? accountIds,
   }) {
     if (accountIds == null) {
-      return db.select(db.accounts).watch().map(
-            (rows) => rows.map((r) => r.id).toList(),
-          );
+      return db
+          .select(db.accounts)
+          .watch()
+          .map((rows) => rows.map((r) => r.id).toList());
     }
     final query = db.select(db.accounts)
       ..where((a) => a.id.isIn(accountIds.toList()));
@@ -134,9 +135,9 @@ class AccountService {
           convertToPreferredCurrency: convertToPreferredCurrency,
         ),
       );
-      return Rx.combineLatestList(streams.toList()).map(
-        (values) => values.fold<double>(0, (a, b) => a + b),
-      );
+      return Rx.combineLatestList(
+        streams.toList(),
+      ).map((values) => values.fold<double>(0, (a, b) => a + b));
     });
   }
 

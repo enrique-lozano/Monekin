@@ -20,8 +20,9 @@ Future<void> shiftFollowingValuationsForTradeEdit({
 
   final delta = -(newSignedValue - previousSignedValue);
 
-  final valuations =
-      await InvestmentService.instance.getValuationsForAsset(assetId).first;
+  final valuations = await InvestmentService.instance
+      .getValuationsForAsset(assetId)
+      .first;
 
   final laterValuations = valuations
       .where((v) => isTradeDateAfterCalendarDay(v.date, tradeDate))

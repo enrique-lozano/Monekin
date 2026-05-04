@@ -37,11 +37,10 @@ class TagService {
     });
   }
 
-  Future<void> unlinkTagsFromTransaction({
-    required String transactionId,
-  }) {
-    return (db.delete(db.transactionTags)
-      ..where((tbl) => tbl.transactionID.equals(transactionId))).go();
+  Future<void> unlinkTagsFromTransaction({required String transactionId}) {
+    return (db.delete(
+      db.transactionTags,
+    )..where((tbl) => tbl.transactionID.equals(transactionId))).go();
   }
 
   Stream<List<Tag>> getTags({

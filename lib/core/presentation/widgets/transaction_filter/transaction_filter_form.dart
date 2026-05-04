@@ -218,7 +218,9 @@ class _TransactionFilterFormState extends State<TransactionFilterForm> {
 
                     widget.onChanged(
                       filtersToReturn.copyWith(
-                        tagsIDs: selection.selectedTags.length == snapshot.data!.length + 1
+                        tagsIDs:
+                            selection.selectedTags.length ==
+                                snapshot.data!.length + 1
                             ? null
                             : selection.selectedTags.map((e) => e?.id).toList(),
                       ),

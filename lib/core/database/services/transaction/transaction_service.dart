@@ -62,7 +62,10 @@ class TransactionService {
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
 
-    await InvestmentService.instance.onTransactionUpdated(previous, transaction);
+    await InvestmentService.instance.onTransactionUpdated(
+      previous,
+      transaction,
+    );
 
     return toReturn ? 1 : 0;
   }
