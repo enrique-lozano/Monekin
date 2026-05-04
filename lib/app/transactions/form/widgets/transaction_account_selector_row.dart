@@ -19,6 +19,9 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     required this.onCategoryTap,
     required this.shakeKey,
     this.mainContainerRadius = 12.0,
+    this.investmentAssetColumnTitle,
+    this.investmentAssetName,
+    this.investmentAssetLeading,
   });
 
   final TransactionType transactionType;
@@ -30,6 +33,12 @@ class TransactionAccountSelectorRow extends StatelessWidget {
   final VoidCallback onCategoryTap;
   final GlobalKey<ShakeWidgetState> shakeKey;
   final double mainContainerRadius;
+
+  /// When set with [TransactionType.investment], shows a read-only second column
+  /// instead of the category picker (e.g. linked asset for a trade).
+  final String? investmentAssetColumnTitle;
+  final String? investmentAssetName;
+  final Widget? investmentAssetLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -96,25 +105,44 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             if (!transactionType.isTransfer)
               Expanded(
                 flex: 1,
-                child: ShakeWidget(
-                  duration: const Duration(milliseconds: 200),
-                  shakeCount: 1,
-                  shakeOffset: 10,
-                  key: shakeKey,
-                  child: _Selector(
-                    title: t.general.category,
-                    inputValue: selectedCategory?.name,
-                    borderRadius: BorderRadius.only(bottomRight: borderRadius),
-                    icon: IconDisplayer.fromCategory(
-                      context,
-                      category:
-                          selectedCategory ??
-                          Category.fromDB(Category.unkown(), null),
-                      size: 24,
-                    ),
-                    onClick: onCategoryTap,
-                  ),
-                ),
+                child: transactionType.isInvestment &&
+                        investmentAssetName != null
+                    ? _Selector(
+                        title:
+                            investmentAssetColumnTitle ??
+                            t.assets.details.trade_form_asset_column,
+                        inputValue: investmentAssetName,
+                        borderRadius: BorderRadius.only(bottomRight: borderRadius),
+                        icon:
+                            investmentAssetLeading ??
+                            IconDisplayer(
+                              displayMode: IconDisplayMode.polygon,
+                              icon: Icons.pie_chart_outline_rounded,
+                              mainColor: Theme.of(context).colorScheme.primary,
+                            ),
+                        onClick: () {},
+                      )
+                    : ShakeWidget(
+                        duration: const Duration(milliseconds: 200),
+                        shakeCount: 1,
+                        shakeOffset: 10,
+                        key: shakeKey,
+                        child: _Selector(
+                          title: t.general.category,
+                          inputValue: selectedCategory?.name,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: borderRadius,
+                          ),
+                          icon: IconDisplayer.fromCategory(
+                            context,
+                            category:
+                                selectedCategory ??
+                                Category.fromDB(Category.unkown(), null),
+                            size: 24,
+                          ),
+                          onClick: onCategoryTap,
+                        ),
+                      ),
               ),
           ],
         ),

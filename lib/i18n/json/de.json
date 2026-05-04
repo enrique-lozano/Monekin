@@ -878,6 +878,8 @@
       "trade_sheet_following_valuations_warning": "Es liegen Bewertungen nach dem {{date}} vor. Sie können sie auch aktualisieren.",
       "trade_sheet_update_following_valuations": "Aktualisieren Sie spätere Bewertungen",
       "trade_sheet_update_following_valuations_description": "Keep later valuations aligned with this transaction.",
+      "trade_sheet_full_form": "Alle Felder",
+      "trade_form_asset_column": "Anlage",
       "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
       "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
       "notes_optional": "Notizen (optional)",

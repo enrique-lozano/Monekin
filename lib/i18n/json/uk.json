@@ -878,6 +878,8 @@
       "trade_sheet_following_valuations_warning": "Є оцінки після {{date}}. Ви також можете оновити їх.",
       "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
       "trade_sheet_update_following_valuations_description": "Тримайте пізніші оцінки у відповідності з цією трансакцією.",
+      "trade_sheet_full_form": "Усі поля",
+      "trade_form_asset_column": "Актив",
       "trade_valuation_notice": "Оцінку буде оновлено на цю дату, щоб відобразити цю суму.",
       "treat_as_investment": "Вважати інвестицією (лише готівкова нога)",
       "notes_optional": "Примітки (необов'язково)",

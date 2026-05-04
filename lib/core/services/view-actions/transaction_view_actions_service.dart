@@ -1,9 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/assets/asset_trade_sheet.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -34,32 +32,7 @@ class TransactionViewActionService {
       ListTileActionItem(
         label: t.ui_actions.edit,
         icon: Icons.edit,
-        onClick: () async {
-          if (transaction.type == TransactionType.investment) {
-            final asset = await InvestmentService.instance
-                .getAssetById(transaction.assetID ?? "")
-                .first;
-
-            if (asset == null) {
-              MonekinSnackbar.error(
-                SnackbarParams.fromError(
-                  "Asset not found for this transaction",
-                ),
-              );
-
-              return;
-            }
-
-            showAssetTradeSheet(
-              context,
-              asset: asset,
-              isBuy: transaction.value.isNegative,
-              transaction: transaction,
-            );
-
-            return;
-          }
-
+        onClick: () {
           RouteUtils.pushRoute(
             TransactionFormPage(
               transactionToEdit: transaction,

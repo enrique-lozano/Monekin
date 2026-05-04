@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
+import 'package:monekin/app/assets/asset_trade_valuation.dart';
+import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
@@ -10,9 +15,11 @@ import 'package:monekin/app/transactions/form/widgets/transaction_account_select
 import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
+import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -21,6 +28,7 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/tags/tag.dart';
@@ -47,6 +55,7 @@ class TransactionFormPage extends StatefulWidget {
     this.toAccount,
     this.transactionToEdit,
     this.linkedDebt,
+    this.assetTradeContext,
   });
 
   final TransactionType? mode;
@@ -63,6 +72,9 @@ class TransactionFormPage extends StatefulWidget {
   /// this debt. A banner indicator is shown inside the form.
   final Debt? linkedDebt;
 
+  /// Opens the form in locked investment mode for a new buy/sell on [asset].
+  final AssetTradeFormContext? assetTradeContext;
+
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
 }
@@ -71,7 +83,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _shakeKey = GlobalKey<ShakeWidgetState>();
-  late TabController _tabController;
+  TabController? _tabController;
+
+  Asset? _lockedAsset;
+  bool _assetTradeIsBuy = true;
+  bool _updateLaterValuations = false;
 
   // --- Form Fields ---
 
@@ -103,9 +119,43 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
   late TransactionType transactionType;
 
+  bool get _isLockedInvestmentAssetForm {
+    if (widget.assetTradeContext != null) return true;
+    final edit = widget.transactionToEdit;
+    return edit != null &&
+        edit.type == TransactionType.investment &&
+        edit.assetID != null;
+  }
+
   @override
   void initState() {
     super.initState();
+    assert(
+      widget.assetTradeContext == null || widget.transactionToEdit == null,
+    );
+
+    if (_isLockedInvestmentAssetForm) {
+      transactionType = TransactionType.investment;
+      if (widget.transactionToEdit != null) {
+        _fillForm(widget.transactionToEdit!);
+        unawaited(_loadLockedAssetForEdit());
+        return;
+      }
+      if (widget.assetTradeContext != null) {
+        _lockedAsset = widget.assetTradeContext!.asset;
+        _assetTradeIsBuy = widget.assetTradeContext!.isBuy;
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          if (!mounted) return;
+          final tr = Translations.of(context);
+          titleController.text = _assetTradeIsBuy
+              ? tr.assets.details.buy
+              : tr.assets.details.sell;
+          await _initializeFormValues();
+          if (mounted) setState(() {});
+        });
+      }
+      return;
+    }
 
     if (widget.transactionToEdit != null) {
       transactionType = widget.transactionToEdit!.type;
@@ -128,11 +178,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     _tabController = TabController(
       length: 3,
-      initialIndex: transactionType.index,
+      initialIndex: math.min(transactionType.index, 2),
       vsync: this,
     );
 
-    _tabController.addListener(_onTabSelectionChanged);
+    _tabController!.addListener(_onTabSelectionChanged);
 
     if (widget.transactionToEdit != null) {
       _fillForm(widget.transactionToEdit!);
@@ -142,14 +192,23 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     _initializeFormValues();
   }
 
+  Future<void> _loadLockedAssetForEdit() async {
+    final id = widget.transactionToEdit?.assetID;
+    if (id == null) return;
+    final asset = await InvestmentService.instance.getAssetById(id).first;
+    if (mounted) setState(() => _lockedAsset = asset);
+  }
+
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
   void _onTabSelectionChanged() {
-    transactionType = TransactionType.values.elementAt(_tabController.index);
+    final c = _tabController;
+    if (c == null || c.indexIsChanging) return;
+    transactionType = TransactionType.values.elementAt(c.index);
 
     // Function to execute when the transaction mode change:
     if (transactionType.isTransfer && transactionValue.isNegative) {
@@ -179,6 +238,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     // 1. Account
     if (widget.fromAccount != null) {
       fromAccount = widget.fromAccount;
+    } else if (_isLockedInvestmentAssetForm &&
+        _lockedAsset?.linkedAccountID != null) {
+      final acc = await AccountService.instance
+          .getAccountById(_lockedAsset!.linkedAccountID!)
+          .first;
+      if (acc != null) fromAccount = acc;
     } else if (useLast(TransactionFormField.account)) {
       final acc = await AccountService.instance
           .getAccountById(lastTr!.transaction.accountID)
@@ -210,22 +275,26 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       transferAccount = widget.toAccount;
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _displayAmountModal(context);
-    });
-
-    // 2. Category
-    String? categoryIdToLoad;
-    if (useLast(TransactionFormField.category)) {
-      categoryIdToLoad = lastTr!.transaction.categoryID;
-    } else {
-      categoryIdToLoad = settings.values.categoryId;
+    if (!_isLockedInvestmentAssetForm) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _displayAmountModal(context);
+      });
     }
 
-    if (categoryIdToLoad != null) {
-      selectedCategory = await CategoryService.instance
-          .getCategoryById(categoryIdToLoad)
-          .first;
+    // 2. Category
+    if (!_isLockedInvestmentAssetForm) {
+      String? categoryIdToLoad;
+      if (useLast(TransactionFormField.category)) {
+        categoryIdToLoad = lastTr!.transaction.categoryID;
+      } else {
+        categoryIdToLoad = settings.values.categoryId;
+      }
+
+      if (categoryIdToLoad != null) {
+        selectedCategory = await CategoryService.instance
+            .getCategoryById(categoryIdToLoad)
+            .first;
+      }
     }
 
     // 3. Status
@@ -263,13 +332,20 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   }
 
   void submitForm() {
-    if (transactionType.isIncomeOrExpense && selectedCategory == null ||
-        transactionType.isTransfer && transferAccount == null) {
+    if ((transactionType.isIncomeOrExpense && selectedCategory == null) ||
+        (transactionType.isTransfer && transferAccount == null)) {
       _shakeKey.currentState?.shake();
       return;
     }
 
     final t = Translations.of(context);
+
+    if (_isLockedInvestmentAssetForm && _lockedAsset == null) {
+      MonekinSnackbar.error(
+        SnackbarParams.fromError(t.general.validations.form_error),
+      );
+      return;
+    }
 
     if (transactionValue == 0) {
       MonekinSnackbar.warning(
@@ -299,25 +375,51 @@ class _TransactionFormPageState extends State<TransactionFormPage>
 
     final newTrID = widget.transactionToEdit?.id ?? generateUUID();
 
+    final double signedValue;
+    if (transactionType == TransactionType.expense) {
+      signedValue = transactionValue * -1;
+    } else if (transactionType == TransactionType.investment &&
+        _isLockedInvestmentAssetForm) {
+      final abs = transactionValue.abs();
+      signedValue = _assetTradeIsBuy ? -abs : abs;
+    } else {
+      signedValue = transactionValue;
+    }
+
+    final titleTrim = titleController.text.trim();
+    final String? resolvedTitle;
+    if (titleTrim.isEmpty) {
+      resolvedTitle = _isLockedInvestmentAssetForm
+          ? (_assetTradeIsBuy ? t.assets.details.buy : t.assets.details.sell)
+          : null;
+    } else {
+      resolvedTitle = titleTrim;
+    }
+
     final transactionToPost = TransactionInDB(
       id: newTrID,
       date: date,
       type: transactionType,
       accountID: fromAccount!.id,
-      value: transactionType == TransactionType.expense
-          ? transactionValue * -1
-          : transactionValue,
+      value: signedValue,
       isHidden: false,
       status: date.compareTo(DateTime.now()) > 0
           ? TransactionStatus.pending
           : status,
       notes: notesController.text.isEmpty ? null : notesController.text,
-      title: titleController.text.isEmpty ? null : titleController.text,
-      intervalEach: recurrentRule.intervalEach,
-      intervalPeriod: recurrentRule.intervalPeriod,
-      endDate: recurrentRule.ruleRecurrentLimit?.endDate,
-      remainingTransactions:
-          recurrentRule.ruleRecurrentLimit?.remainingIterations,
+      title: resolvedTitle,
+      intervalEach: _isLockedInvestmentAssetForm
+          ? null
+          : recurrentRule.intervalEach,
+      intervalPeriod: _isLockedInvestmentAssetForm
+          ? null
+          : recurrentRule.intervalPeriod,
+      endDate: _isLockedInvestmentAssetForm
+          ? null
+          : recurrentRule.ruleRecurrentLimit?.endDate,
+      remainingTransactions: _isLockedInvestmentAssetForm
+          ? null
+          : recurrentRule.ruleRecurrentLimit?.remainingIterations,
       valueInDestiny: transactionType.isTransfer
           ? valueInDestinyToNumber
           : null,
@@ -328,7 +430,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       receivingAccountID: transactionType.isTransfer
           ? transferAccount?.id
           : null,
-      assetID: widget.transactionToEdit?.assetID,
+      assetID: _isLockedInvestmentAssetForm
+          ? _lockedAsset!.id
+          : widget.transactionToEdit?.assetID,
     );
 
     Future<int> postCall = TransactionService.instance.updateTransaction(
@@ -380,6 +484,16 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               transactionId: newTrID,
               tagIds: tagsToAdd.map((t) => t.id).toList(),
             );
+
+            if (_isLockedInvestmentAssetForm && _lockedAsset != null) {
+              await shiftFollowingValuationsForTradeEdit(
+                assetId: _lockedAsset!.id,
+                tradeDate: date,
+                previousSignedValue: widget.transactionToEdit?.value ?? 0,
+                newSignedValue: signedValue,
+                applyShift: _updateLaterValuations,
+              );
+            }
 
             DefaultTransactionValuesService.lastCreatedTransaction.value = (
               transaction: transactionToPost,
@@ -449,7 +563,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     transactionValue = transaction.value;
     transactionType = transaction.type;
 
-    if (transactionType == TransactionType.expense) {
+    if (transactionType == TransactionType.investment) {
+      transactionValue = transaction.value.abs();
+      _assetTradeIsBuy = transaction.value.isNegative;
+    } else if (transactionType == TransactionType.expense) {
       transactionValue = transactionValue * -1;
     }
 
@@ -463,6 +580,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
     return transactionType.color(context).getContrastColor();
   }
 
+  CurrencyInDB? get _amountDisplayCurrency =>
+      _isLockedInvestmentAssetForm ? _lockedAsset?.currency : fromAccount?.currency;
+
   Widget _buildHeader(BuildContext context) {
     final t = Translations.of(context);
     return Column(
@@ -471,6 +591,9 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           transactionType: transactionType,
           transactionValue: transactionValue,
           fromAccount: fromAccount,
+          displayCurrencyOverride: _isLockedInvestmentAssetForm
+              ? _lockedAsset?.currency
+              : null,
           onTap: () {
             showModalBottomSheet(
               context: context,
@@ -480,10 +603,12 @@ class _TransactionFormPageState extends State<TransactionFormPage>
                 title: t.transaction.form.value,
                 initialAmount: transactionValue,
                 enableSignToggleButton: transactionType.isIncomeOrExpense,
-                currency: fromAccount?.currency,
+                currency: _amountDisplayCurrency ?? fromAccount?.currency,
                 onSubmit: (amount) {
                   setState(() {
-                    transactionValue = amount;
+                    transactionValue = _isLockedInvestmentAssetForm
+                        ? amount.abs()
+                        : amount;
                     RouteUtils.popRoute();
                   });
                 },
@@ -497,8 +622,11 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           transferAccount: transferAccount,
           selectedCategory: selectedCategory,
           shakeKey: _shakeKey,
+          investmentAssetName: _isLockedInvestmentAssetForm
+              ? (_lockedAsset?.name ?? '…')
+              : null,
           onFromAccountTap: () async {
-            final modalRes = await showAccountSelector(fromAccount!);
+            final modalRes = await showAccountSelector(fromAccount);
             if (modalRes != null && modalRes.isNotEmpty) {
               setState(() {
                 fromAccount = modalRes.first;
@@ -520,11 +648,29 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           const SizedBox(height: 24),
           DebtLinkBanner(
             debt: widget.linkedDebt!,
-            padding: EdgeInsetsGeometry.zero,
+            padding: EdgeInsets.zero,
           ),
         ],
       ],
     );
+  }
+
+  String _resolveFrameworkTitle(Translations t) {
+    if (isEditMode) {
+      return t.transaction.edit;
+    }
+    if (_isLockedInvestmentAssetForm) {
+      return _assetTradeIsBuy
+          ? t.assets.details.trade_sheet_title_buy
+          : t.assets.details.trade_sheet_title_sell;
+    }
+    if (transactionType == TransactionType.transfer) {
+      return t.transfer.create;
+    }
+    if (transactionType == TransactionType.expense) {
+      return t.transaction.new_expense;
+    }
+    return t.transaction.new_income;
   }
 
   @override
@@ -545,12 +691,27 @@ class _TransactionFormPageState extends State<TransactionFormPage>
         onDateChanged: (newDate) => setState(() => date = newDate),
       ),
       const Divider(),
-      TransactionRecurrencySelector(
-        recurrentRule: recurrentRule,
-        onRecurrencyChanged: (newRule) =>
-            setState(() => recurrentRule = newRule),
-      ),
-      const Divider(),
+      if (_lockedAsset != null && _isLockedInvestmentAssetForm) ...[
+        AssetValuationImpactSection(
+          asset: _lockedAsset!,
+          isBuy: _assetTradeIsBuy,
+          tradeDate: date,
+          tradeAmountAbs: transactionValue.abs(),
+          isEditingExistingTransaction: isEditMode,
+          updateLaterValuations: _updateLaterValuations,
+          onUpdateLaterValuationsChanged: (v) =>
+              setState(() => _updateLaterValuations = v),
+        ),
+        const Divider(),
+      ],
+      if (!_isLockedInvestmentAssetForm) ...[
+        TransactionRecurrencySelector(
+          recurrentRule: recurrentRule,
+          onRecurrencyChanged: (newRule) =>
+              setState(() => recurrentRule = newRule),
+        ),
+        const Divider(),
+      ],
       TransactionStatusSelector(
         date: date,
         status: status,
@@ -580,30 +741,28 @@ class _TransactionFormPageState extends State<TransactionFormPage>
       right: false,
       top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
       child: PageFramework(
-        title: isEditMode
-            ? t.transaction.edit
-            : transactionType == TransactionType.transfer
-            ? t.transfer.create
-            : transactionType == TransactionType.expense
-            ? t.transaction.new_expense
-            : t.transaction.new_income,
+        title: _resolveFrameworkTitle(t),
         appBarBackgroundColor: transactionType.color(context).withOpacity(0.85),
         appBarForegroundColor: foregroundColor,
-        tabBar: TabBar(
-          indicatorColor: foregroundColor,
-          labelColor: foregroundColor,
-          labelStyle: const TextStyle(fontWeight: FontWeight.bold),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
-          unselectedLabelColor: foregroundColor.withOpacity(0.8),
-          tabAlignment: TabAlignment.fill,
-          dividerColor: transactionType.color(context).darken(0.3),
-          controller: _tabController,
-          tabs: TransactionType.values
-              .where((type) => type != TransactionType.investment)
-              .map((tType) => Tab(text: tType.displayName(context)))
-              .toList(),
-          isScrollable: false,
-        ),
+        tabBar: _tabController == null
+            ? null
+            : TabBar(
+                indicatorColor: foregroundColor,
+                labelColor: foregroundColor,
+                labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+                unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.normal,
+                ),
+                unselectedLabelColor: foregroundColor.withOpacity(0.8),
+                tabAlignment: TabAlignment.fill,
+                dividerColor: transactionType.color(context).darken(0.3),
+                controller: _tabController!,
+                tabs: TransactionType.values
+                    .where((type) => type != TransactionType.investment)
+                    .map((tType) => Tab(text: tType.displayName(context)))
+                    .toList(),
+                isScrollable: false,
+              ),
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(
@@ -671,18 +830,21 @@ class _TransactionFormPageState extends State<TransactionFormPage>
   }
 
   void _displayAmountModal(BuildContext context) {
+    final tr = Translations.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (context) => AmountSelector(
-        title: t.transaction.form.value,
+        title: tr.transaction.form.value,
         initialAmount: transactionValue,
         enableSignToggleButton: transactionType.isIncomeOrExpense,
-        currency: fromAccount?.currency,
+        currency: _amountDisplayCurrency ?? fromAccount?.currency,
         onSubmit: (amount) {
           setState(() {
-            transactionValue = amount;
+            transactionValue = _isLockedInvestmentAssetForm
+                ? amount.abs()
+                : amount;
             RouteUtils.popRoute();
           });
         },

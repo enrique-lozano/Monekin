@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -17,6 +18,7 @@ class TransactionAmountDisplay extends StatelessWidget {
     required this.fromAccount,
     required this.onTap,
     this.mainContainerRadius = 12.0,
+    this.displayCurrencyOverride,
   });
 
   final TransactionType transactionType;
@@ -24,6 +26,9 @@ class TransactionAmountDisplay extends StatelessWidget {
   final Account? fromAccount;
   final VoidCallback onTap;
   final double mainContainerRadius;
+
+  /// When set (e.g. asset trade in asset currency), overrides [fromAccount] currency for display.
+  final CurrencyInDB? displayCurrencyOverride;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +85,8 @@ class TransactionAmountDisplay extends StatelessWidget {
 
                           return CurrencyDisplayer(
                             amountToConvert: transactionValue,
-                            currency: fromAccount?.currency,
+                            currency:
+                                displayCurrencyOverride ?? fromAccount?.currency,
                             currencyStyle: bigTextStyle,
                             integerStyle: bigTextStyle,
                             followPrivateMode: false,
@@ -91,7 +97,7 @@ class TransactionAmountDisplay extends StatelessWidget {
                   ),
                 ],
               ),
-              if (fromAccount != null)
+              if (fromAccount != null && displayCurrencyOverride == null)
                 StreamBuilder(
                   stream: ExchangeRateService.instance
                       .calculateExchangeRateToPreferredCurrency(

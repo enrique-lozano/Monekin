@@ -878,6 +878,8 @@
       "trade_sheet_following_valuations_warning": "{{date}} után vannak értékelések. Ezeket is frissítheted.",
       "trade_sheet_update_following_valuations": "Frissítse a későbbi értékeléseket",
       "trade_sheet_update_following_valuations_description": "A későbbi értékeléseket igazítsa ehhez a tranzakcióhoz.",
+      "trade_sheet_full_form": "Minden mező",
+      "trade_form_asset_column": "Eszköz",
       "trade_valuation_notice": "Az erre a dátumra vonatkozó értékelést frissítjük, hogy tükrözze ezt az összeget.",
       "treat_as_investment": "Befektetésként kezelve (csak készpénzes láb)",
       "notes_optional": "Megjegyzések (nem kötelező)",

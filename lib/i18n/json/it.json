@@ -878,6 +878,8 @@
       "trade_sheet_following_valuations_warning": "Sono presenti valutazioni dopo il {{date}}. Puoi anche aggiornarli.",
       "trade_sheet_update_following_valuations": "Aggiornare le valutazioni successive",
       "trade_sheet_update_following_valuations_description": "Mantieni le valutazioni successive allineate a questa transazione.",
+      "trade_sheet_full_form": "Tutti i campi",
+      "trade_form_asset_column": "Asset",
       "trade_valuation_notice": "Una valutazione verrà aggiornata per questa data per riflettere questo importo.",
       "treat_as_investment": "Trattare come investimento (solo gamba contante)",
       "notes_optional": "Note (facoltativo)",

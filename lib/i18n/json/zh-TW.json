@@ -878,6 +878,8 @@
       "trade_sheet_following_valuations_warning": "{{date}} 之後有估價。您也可以更新它們。",
       "trade_sheet_update_following_valuations": "稍後更新估值",
       "trade_sheet_update_following_valuations_description": "讓以後的估值與本次交易保持一致。",
+      "trade_sheet_full_form": "完整表單",
+      "trade_form_asset_column": "資產",
       "trade_valuation_notice": "該日期的估值將更新以反映此金額。",
       "treat_as_investment": "視為投資（僅限現金部分）",
       "notes_optional": "註釋（可選）",

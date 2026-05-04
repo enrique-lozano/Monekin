@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:monekin/app/assets/asset_trade_valuation.dart';
+import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
+import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
+import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
@@ -11,14 +13,13 @@ import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
-import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -129,27 +130,6 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
     return abs != null && abs > 0 ? abs : null;
   }
 
-  String _formatCurrency(double amount) {
-    return NumberFormat.currency(
-      symbol: widget.asset.currency.symbol,
-      decimalDigits: widget.asset.currency.decimalPlaces,
-    ).format(amount);
-  }
-
-  bool _isAfterCalendarDay(DateTime candidate, DateTime reference) {
-    final candidateDate = DateTime(
-      candidate.year,
-      candidate.month,
-      candidate.day,
-    );
-    final referenceDate = DateTime(
-      reference.year,
-      reference.month,
-      reference.day,
-    );
-    return candidateDate.isAfter(referenceDate);
-  }
-
   TransactionType _resolvedType() {
     if (widget.asset.assetType.isFinancial || _treatAsInvestment) {
       return TransactionType.investment;
@@ -206,34 +186,31 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
       await TransactionService.instance.insertTransaction(tr);
     }
 
-    // * Important: valuation delta fix when editing
-    if (_updateLaterValuations) {
-      final previousValue = widget.transaction?.value ?? 0;
-      final delta = -(value - previousValue);
-
-      final valuations = await InvestmentService.instance
-          .getValuationsForAsset(widget.asset.id)
-          .first;
-
-      final laterValuations = valuations
-          .where((v) => _isAfterCalendarDay(v.date, _date))
-          .toList();
-
-      if (laterValuations.isNotEmpty) {
-        await Future.wait(
-          laterValuations.map(
-            (valuation) => InvestmentService.instance.insertOrUpdateValuation(
-              valuation.copyWith(value: valuation.value + delta),
-            ),
-          ),
-        );
-      }
-    }
+    await shiftFollowingValuationsForTradeEdit(
+      assetId: widget.asset.id,
+      tradeDate: _date,
+      previousSignedValue: widget.transaction?.value ?? 0,
+      newSignedValue: value,
+      applyShift: _updateLaterValuations,
+    );
 
     if (mounted) Navigator.of(context).pop();
 
     MonekinSnackbar.success(
       SnackbarParams(isEditing ? t.ui_actions.edit : t.ui_actions.save),
+    );
+  }
+
+  void _openFullForm() {
+    Navigator.of(context).pop();
+    RouteUtils.pushRoute(
+      TransactionFormPage(
+        assetTradeContext: AssetTradeFormContext(
+          asset: widget.asset,
+          isBuy: widget.isBuy,
+        ),
+        fromAccount: _account,
+      ),
     );
   }
 
@@ -281,101 +258,15 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
             },
           ),
           const SizedBox(height: 12),
-          Builder(
-            builder: (context) {
-              final amount = _parsedTradeAmount ?? 0;
-              return AnimatedExpanded(
-                expand: _parsedTradeAmount != null,
-                child: StreamBuilder(
-                  stream: InvestmentService.instance.getAssetValueAtDate(
-                    widget.asset,
-                    date: _date,
-                  ),
-                  builder: (context, snapshot) {
-                    final originalValue =
-                        snapshot.data ?? widget.asset.initialValue;
-
-                    final transactionValue = widget.isBuy ? -amount : amount;
-                    final updatedValue = originalValue - transactionValue;
-                    final formattedDate = DateFormat.yMMMd(
-                      Localizations.localeOf(context).toString(),
-                    ).format(_date);
-
-                    final infoText = widget.transaction != null
-                        ? t.assets.details
-                              .trade_sheet_update_linked_asset_value_info(
-                                value: _formatCurrency(updatedValue),
-                              )
-                        : t.assets.details.trade_sheet_update_value_info(
-                            value: _formatCurrency(updatedValue),
-                          );
-
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        InlineInfoCard(
-                          mode: InlineInfoCardMode.info,
-                          text: infoText,
-                          margin: const EdgeInsets.only(bottom: 12),
-                        ),
-                        StreamBuilder(
-                          stream: InvestmentService.instance
-                              .getValuationsForAsset(widget.asset.id),
-                          builder: (context, valuationsSnap) {
-                            final laterValuations = (valuationsSnap.data ?? [])
-                                .where(
-                                  (valuation) => _isAfterCalendarDay(
-                                    valuation.date,
-                                    _date,
-                                  ),
-                                )
-                                .toList();
-                            if (laterValuations.isEmpty) {
-                              return const SizedBox.shrink();
-                            }
-
-                            final warningText = t.assets.details
-                                .trade_sheet_following_valuations_warning(
-                                  date: formattedDate,
-                                );
-
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                InlineInfoCard(
-                                  mode: InlineInfoCardMode.warn,
-                                  text: warningText,
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                ),
-                                SwitchListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    t
-                                        .assets
-                                        .details
-                                        .trade_sheet_update_following_valuations,
-                                  ),
-                                  subtitle: Text(
-                                    t
-                                        .assets
-                                        .details
-                                        .trade_sheet_update_following_valuations_description,
-                                  ),
-                                  value: _updateLaterValuations,
-                                  onChanged: (value) => setState(
-                                    () => _updateLaterValuations = value,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              );
-            },
+          AssetValuationImpactSection(
+            asset: widget.asset,
+            isBuy: widget.isBuy,
+            tradeDate: _date,
+            tradeAmountAbs: _parsedTradeAmount,
+            isEditingExistingTransaction: widget.transaction != null,
+            updateLaterValuations: _updateLaterValuations,
+            onUpdateLaterValuationsChanged: (v) =>
+                setState(() => _updateLaterValuations = v),
           ),
           const SizedBox(height: 12),
 
@@ -384,7 +275,7 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
             builder: (context, snap) {
               final accounts = snap.data ?? [];
               return DropdownButtonFormField<Account>(
-                initialValue: _account,
+                value: _account,
                 decoration: InputDecoration(
                   labelText: t.general.account,
                   prefixIcon: Container(
@@ -417,7 +308,7 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
               builder: (context, snap) {
                 final cats = snap.data ?? [];
                 return DropdownButtonFormField<Category>(
-                  initialValue: _expenseCategory,
+                  value: _expenseCategory,
                   decoration: InputDecoration(labelText: t.general.category),
                   items: cats
                       .map(
@@ -433,7 +324,13 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
         ],
       ),
 
-      footer: BottomSheetFooter(onSaved: _submit),
+      footer: BottomSheetFooter(
+        beforeSave: TextButton(
+          onPressed: _openFullForm,
+          child: Text(t.assets.details.trade_sheet_full_form),
+        ),
+        onSaved: _submit,
+      ),
     );
   }
 }

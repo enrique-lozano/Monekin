@@ -878,6 +878,8 @@
       "trade_sheet_following_valuations_warning": "{{date}} tarihinden sonra değerlemeler var. Bunları da güncelleyebilirsiniz.",
       "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
       "trade_sheet_update_following_valuations_description": "Daha sonraki değerlemeleri bu işlemle uyumlu tutun.",
+      "trade_sheet_full_form": "Tüm alanlar",
+      "trade_form_asset_column": "Varlık",
       "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
       "treat_as_investment": "Yatırım olarak değerlendirin (yalnızca nakit ayağı)",
       "notes_optional": "Notlar (isteğe bağlı)",
