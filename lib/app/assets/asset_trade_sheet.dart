@@ -151,6 +151,9 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
     return abs != null && abs > 0 ? abs : null;
   }
 
+  bool get _showsAssetValuationImpact =>
+      _parsedTradeAmount != null && _parsedTradeAmount! > 0;
+
   TransactionType _resolvedType() {
     if (widget.asset.assetType.isFinancial || _treatAsInvestment) {
       return TransactionType.investment;
@@ -281,17 +284,19 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
             },
           ),
           const SizedBox(height: 12),
-          AssetValuationImpactSection(
-            asset: widget.asset,
-            isBuy: widget.isBuy,
-            tradeDate: _date,
-            tradeAmountAbs: _parsedTradeAmount,
-            isEditingExistingTransaction: widget.transaction != null,
-            updateLaterValuations: _updateLaterValuations,
-            onUpdateLaterValuationsChanged: (v) =>
-                setState(() => _updateLaterValuations = v),
-          ),
-          const SizedBox(height: 12),
+          if (_showsAssetValuationImpact) ...[
+            AssetValuationImpactSection(
+              asset: widget.asset,
+              isBuy: widget.isBuy,
+              tradeDate: _date,
+              tradeAmountAbs: _parsedTradeAmount,
+              isEditingExistingTransaction: widget.transaction != null,
+              updateLaterValuations: _updateLaterValuations,
+              onUpdateLaterValuationsChanged: (v) =>
+                  setState(() => _updateLaterValuations = v),
+            ),
+            const SizedBox(height: 12),
+          ],
 
           StreamBuilder<List<Account>>(
             stream: AccountService.instance.getAccounts(),
