@@ -126,6 +126,7 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16,
           children: [
             CardWithHeader(
               title: t.stats.balance_by_account,
@@ -184,7 +185,6 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
                       shrinkWrap: true,
                     ),
             ),
-            const SizedBox(height: 16),
             CardWithHeader(
               title: t.stats.balance_by_currency,
               subtitle: t.stats.balance_by_currency_subtitle,

@@ -50,7 +50,7 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
-    "empty-warn": "Ops! This is very empty",
+    "empty-warn": "Oops! This is very empty",
     "search-no-results": "No items match your search criteria",
     "insufficient-data": "Insufficient data",
     "show-more-fields": "Show more fields",
@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "How much money do I have in foreign currency?",
     "balance-evolution": "Balance trend",
     "balance-evolution-subtitle": "Do I have more money than before?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Compared to the previous period",
     "cash-flow": "Cash flow",
     "cash-flow-subtitle": "Am I spending less than I earn?",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Edit dates",
         "categories": "Edit categories",
-        "status": "Edit statuses"
+        "status": "Edit statuses",
+        "tags": "Edit tags"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "Number of transactions",
     "add_money": "Add money",
     "withdraw_money": "Withdraw money",
+    "correct_balance": "Correct balance",
     "no-accounts": "No accounts found to display here. Add an account by clicking the '+' button at the bottom",
     "TYPES": {
       "title": "Account type",
@@ -487,7 +493,9 @@
       "normal": "Normal account",
       "normal.descr": "Useful to record your day-to-day finances. It is the most common account, it allows you to add expenses, income...",
       "saving": "Savings account",
-      "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money"
+      "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money",
+      "investment": "Investment account",
+      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
     },
     "FORM": {
       "name": "Account name",
@@ -502,7 +510,32 @@
       "already-exists": "There is already another one with the same name, please write another",
       "tr-before-opening-date": "There are transactions in this account with a date before the opening date",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Include in net worth",
+      "include-in-net-worth.descr": "Add this account to the total net worth calculation",
+      "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics.",
+      "valuation_before_creation_date": "There are valuations in this account with a date before the creation date"
+    },
+    "INVESTMENT": {
+      "details-header": "Investment",
+      "correct_balance_title": "Correct invested capital",
+      "correct_balance_description": "This account uses manual valuations for portfolio value. This action only updates the invested capital (initial value) and will not change recorded valuations or investment statistics.",
+      "invested-capital": "Invested capital",
+      "portfolio-value": "Portfolio value",
+      "profit": "Profit",
+      "last-valuation": "Last valuation",
+      "no-valuations": "No valuations recorded yet",
+      "update-value": "Update value",
+      "update-value.descr": "Record the current portfolio value",
+      "update-value.success": "Valuation recorded successfully",
+      "history": "Valuation history",
+      "history-empty": "No valuations recorded yet for this account",
+      "add-valuation": "Add valuation",
+      "edit-valuation": "Edit valuation",
+      "edit-valuation.success": "Valuation edited successfully",
+      "delete-valuation.success": "Valuation deleted successfully",
+      "delete-all-valuations": "Delete all valuations",
+      "delete-all-valuations.success": "All valuations deleted successfully"
     },
     "DELETE": {
       "warning-header": "Delete account?",
@@ -591,6 +624,7 @@
       "all": "All the tags"
     },
     "empty-list": "You haven't created any tags yet. Tags and categories are a great way to categorize your movements",
+    "no-tags": "You haven't created any tags yet. Go to the settings to create a tag.",
     "without-tags": "Without tags",
     "add": "Add tag",
     "create": "Create label",
@@ -827,6 +861,54 @@
       }
     }
   },
+  "ASSETS": {
+    "title": "Assets",
+    "empty_description": "You haven't created any assets yet. Assets like real estate, vehicles, or collectibles can be tracked with their valuations",
+    "create": "Add asset",
+    "create_success": "Asset created successfully",
+    "edit_success": "Asset edited successfully",
+    "delete": "Delete asset",
+    "delete_success": "Asset deleted successfully",
+    "delete_confirmation": "This action cannot be undone. All valuations for this asset will also be deleted.",
+    "profit": "Profit",
+    "profit_percent": "Return %",
+    "total_value": "Assets total value",
+    "FORM": {
+      "name": "Asset name",
+      "name_required": "Please enter an asset name",
+      "description": "Description",
+      "initial_value": "Initial value",
+      "initial_value_required": "Please enter an initial value",
+      "initial_value_invalid": "Please enter a valid number",
+      "currency": "Currency",
+      "select_currency": "Please select a currency",
+      "creation_date": "Acquisition date",
+      "edit": "Edit asset",
+      "create": "Create asset",
+      "already_exists": "An asset with this name already exists. You may want to edit it",
+      "valuation_before_creation_date": "There are valuations in this asset with a date before the acquisition date"
+    },
+    "VALUATION": {
+      "history": "Valuation history",
+      "no_valuations": "No valuations recorded yet. Start by adding the first valuation",
+      "add_valuation": "Add valuation",
+      "edit_valuation": "Edit valuation",
+      "value": "Value",
+      "value_required": "Please enter a value",
+      "value_invalid": "Please enter a valid number",
+      "update_value_success": "Valuation added successfully",
+      "edit_valuation_success": "Valuation updated successfully",
+      "delete_valuation_success": "Valuation deleted successfully",
+      "delete_all_valuations": "Delete all valuations",
+      "delete_all_valuations_success": "All valuations deleted successfully"
+    },
+    "SORT": {
+      "name_asc": "Name (A-Z)",
+      "name_desc": "Name (Z-A)",
+      "value_asc": "Value (lowest first)",
+      "value_desc": "Value (highest first)"
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Active",
     "past": "Finished",
@@ -930,6 +1012,13 @@
         "first_day_of_week": "First day of week"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "App structures",
+      "tags": "Define tags to achieve better organization of your transactions",
+      "categories": "Categories and subcategories organization",
+      "accounts": "Manage and edit your accounts",
+      "filters": "Configure global filters that you can use for transactions and statistics"
+    },
     "SECURITY": {
       "title": "Security",
       "private_mode_at_launch": "Private mode at launch",
@@ -941,7 +1030,7 @@
     },
     "TRANSACTIONS": {
       "menu_title": "Transactions",
-      "menu_descr": "Configure the behavior of your transactions",
+      "menu_descr": "Configure the behavior and appearance of all transaction-related features",
       "title": "Transactions Settings",
       "STYLE": {
         "title": "Transaction style",
@@ -981,7 +1070,7 @@
     },
     "APPEARANCE": {
       "menu_title": "Theme & Style",
-      "menu_descr": "Theme selection, colors and other things related to the app appearance",
+      "menu_descr": "Color schemes, fonts and other global visual settings",
       "theme_and_colors": "Theme and colors",
       "THEME": {
         "title": "Theme",

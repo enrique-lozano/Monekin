@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Wie viel Geld habe ich in Fremdwährung?",
     "balance-evolution": "Trend",
     "balance-evolution-subtitle": "Habe ich mehr Geld als vorher?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Im Vergleich zur Vorperiode",
     "cash-flow": "Cashflow",
     "cash-flow-subtitle": "Gebe ich weniger aus, als ich verdiene?",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Daten bearbeiten",
         "categories": "Kategorien bearbeiten",
-        "status": "Status bearbeiten"
+        "status": "Status bearbeiten",
+        "tags": "Tags bearbeiten"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "Anzahl der Transaktionen",
     "add_money": "Geld hinzufügen",
     "withdraw_money": "Geld abheben",
+    "correct_balance": "Kontostand korrigieren",
     "no-accounts": "Es wurden keine Transaktionen gefunden, die hier angezeigt werden könnten. Füge eine Transaktion hinzu, indem Du auf die Schaltfläche „+“ am unteren Rand klickst.",
     "TYPES": {
       "title": "Kontotyp",
@@ -487,7 +493,9 @@
       "normal": "Normales Konto",
       "normal.descr": "Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen",
       "saving": "Sparkonto",
-      "saving.descr": "Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen"
+      "saving.descr": "Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen",
+      "investment": "Investmentkonto",
+      "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto. Erfasse Dein investiertes Kapital und aktualisiere den Wert manuell über Bewertungen"
     },
     "FORM": {
       "name": "Kontoname",
@@ -502,7 +510,32 @@
       "already-exists": "Es gibt bereits ein Konto mit demselben Namen, bitte nutze einen anderen",
       "tr-before-opening-date": "Auf diesem Konto liegen Transaktionen vor, deren Datum vor dem Eröffnungsdatum liegt",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Im Nettovermögen einbeziehen",
+      "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen",
+      "correct_balance_description": "Das Anpassen des Kontostands ändert den Anfangswert des Kontos. Diese Korrektur wird in deinen Statistiken nicht berücksichtigt.",
+      "valuation_before_creation_date": "Auf diesem Konto liegen Bewertungen vor, deren Datum vor dem Erstellungsdatum liegt"
+    },
+    "INVESTMENT": {
+      "details-header": "Investment",
+      "correct_balance_title": "Investiertes Kapital korrigieren",
+      "correct_balance_description": "Dieses Konto verwendet manuelle Bewertungen für den Portfoliowert. Diese Aktion aktualisiert nur das investierte Kapital (Anfangswert) und ändert nicht die aufgezeichneten Bewertungen oder Investitionsstatistiken.",
+      "invested-capital": "Investiertes Kapital",
+      "portfolio-value": "Portfoliowert",
+      "profit": "Gewinn",
+      "last-valuation": "Letzte Bewertung",
+      "no-valuations": "Noch keine Bewertungen vorhanden",
+      "update-value": "Wert aktualisieren",
+      "update-value.descr": "Den aktuellen Portfoliowert erfassen",
+      "update-value.success": "Bewertung erfolgreich gespeichert",
+      "history": "Bewertungsverlauf",
+      "history-empty": "Noch keine Bewertungen für dieses Konto",
+      "add-valuation": "Bewertung hinzufügen",
+      "edit-valuation": "Bewertung bearbeiten",
+      "edit-valuation.success": "Bewertung erfolgreich bearbeitet",
+      "delete-valuation.success": "Bewertung erfolgreich gelöscht",
+      "delete-all-valuations": "Alle Bewertungen löschen",
+      "delete-all-valuations.success": "Alle Bewertungen erfolgreich gelöscht"
     },
     "DELETE": {
       "warning-header": "Konto löschen?",
@@ -591,6 +624,7 @@
       "all": "Alle Schlagworte"
     },
     "empty-list": "Du hast noch keine Schlagworte erstellt. Schlagworte und Kategorien sind eine gute Möglichkeit, Deine Bewegungen zu kategorisieren",
+    "no-tags": "Sie haben noch keine Tags erstellt. Gehen Sie zu den Einstellungen, um ein Label zu erstellen.",
     "without-tags": "Ohne Schlagworte",
     "add": "Schlagwort hinzufügen",
     "create": "Label erstellen",
@@ -783,7 +817,6 @@
       "due_today": "Heute fällig",
       "days_ago": "Vor {{x}} Tagen",
       "overdue_by": "Um {{x}} Tage überfällig",
-
       "per_day": "/ Tag",
       "no_transactions": "Für diese Schuld wurden keine Transaktionen gefunden"
     },
@@ -826,6 +859,54 @@
         "title": "Schulden machen",
         "success": "Schulden erfolgreich erstellt"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Vermögenswerte",
+    "empty_description": "Sie haben noch keine Assets erstellt. Vermögenswerte wie Immobilien, Fahrzeuge oder Sammlerstücke können mit ihren Bewertungen verfolgt werden",
+    "create": "Asset hinzufügen",
+    "create_success": "Asset erfolgreich erstellt",
+    "edit_success": "Asset erfolgreich bearbeitet",
+    "delete": "Asset löschen",
+    "delete_success": "Asset erfolgreich gelöscht",
+    "delete_confirmation": "Diese Aktion kann nicht rückgängig gemacht werden. Alle Bewertungen für diesen Vermögenswert werden ebenfalls gelöscht.",
+    "profit": "Profitieren",
+    "profit_percent": "Zurückkehren %",
+    "total_value": "Gesamtwert der Vermögenswerte",
+    "FORM": {
+      "name": "Asset-Name",
+      "name_required": "Bitte geben Sie einen Asset-Namen ein",
+      "description": "Beschreibung",
+      "initial_value": "Anfangswert",
+      "initial_value_required": "Bitte geben Sie einen Anfangswert ein",
+      "initial_value_invalid": "Bitte geben Sie eine gültige Nummer ein",
+      "currency": "Währung",
+      "select_currency": "Bitte wählen Sie eine Währung aus",
+      "creation_date": "Erstellungsdatum",
+      "edit": "Asset bearbeiten",
+      "create": "Asset erstellen",
+      "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten",
+      "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum"
+    },
+    "VALUATION": {
+      "history": "Bewertungshistorie",
+      "no_valuations": "Es wurden noch keine Bewertungen erfasst. Beginnen Sie mit dem Hinzufügen der ersten Bewertung",
+      "add_valuation": "Bewertung hinzufügen",
+      "edit_valuation": "Bewertung bearbeiten",
+      "value": "Wert",
+      "value_required": "Bitte geben Sie einen Wert ein",
+      "value_invalid": "Bitte geben Sie eine gültige Nummer ein",
+      "update_value_success": "Bewertung erfolgreich hinzugefügt",
+      "edit_valuation_success": "Bewertung erfolgreich aktualisiert",
+      "delete_valuation_success": "Bewertung erfolgreich gelöscht",
+      "delete_all_valuations": "Alle Bewertungen löschen",
+      "delete_all_valuations_success": "Alle Bewertungen erfolgreich gelöscht"
+    },
+    "SORT": {
+      "name_asc": "Name (A-Z)",
+      "name_desc": "Name (Z-A)",
+      "value_asc": "Wert (niedrigster zuerst)",
+      "value_desc": "Wert (höchster zuerst)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -932,6 +1013,13 @@
         "warn": "Wenn Du die Region änderst, wird die App aktualisiert",
         "first_day_of_week": "Erster Tag der Woche"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "App-Strukturen",
+      "tags": "Definieren Sie Tags, um Ihre Transaktionen besser zu organisieren",
+      "categories": "Organisation von Kategorien und Unterkategorien",
+      "accounts": "Verwalten und bearbeiten Sie Ihre Konten",
+      "filters": "Konfigurieren Sie globale Filter, die Sie für Transaktionen und Statistiken verwenden können"
     },
     "SECURITY": {
       "title": "Sicherheit",

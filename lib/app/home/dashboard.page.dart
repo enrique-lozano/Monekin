@@ -55,14 +55,7 @@ class _DashboardPageState extends State<DashboardPage> {
       _setSmallHeaderVisible();
     });
 
-    _balanceVariationStream = AccountService.instance.getAccounts().switchMap(
-      (accounts) => AccountService.instance.getAccountsMoneyVariation(
-        accounts: accounts,
-        startDate: dateRangeService.startDate,
-        endDate: dateRangeService.endDate,
-        convertToPreferredCurrency: true,
-      ),
-    );
+    _balanceVariationStream = _getBalanceVariationStream();
   }
 
   @override
@@ -70,6 +63,17 @@ class _DashboardPageState extends State<DashboardPage> {
     _scrollController.removeListener(_setSmallHeaderVisible);
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Stream<double> _getBalanceVariationStream() {
+    return AccountService.instance.getAccounts().switchMap(
+      (accounts) => AccountService.instance.getAccountsMoneyVariation(
+        accounts: accounts,
+        startDate: dateRangeService.startDate,
+        endDate: dateRangeService.endDate,
+        convertToPreferredCurrency: true,
+      ),
+    );
   }
 
   void _setSmallHeaderVisible() {
@@ -275,6 +279,8 @@ class _DashboardPageState extends State<DashboardPage> {
               periodModifier: 0,
               datePeriod: value,
             );
+
+            _balanceVariationStream = _getBalanceVariationStream();
           });
         });
       },

@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Mennyi pénzem van devizában?",
     "balance-evolution": "Egyenleg alakulása",
     "balance-evolution-subtitle": "Több pénzem van, mint korábban?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Az előző időszakhoz képest",
     "cash-flow": "Pénzforgalom",
     "cash-flow-subtitle": "Kevesebbet költök, mint amennyit megkeresek?",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Dátumok szerkesztése",
         "categories": "Kategóriák szerkesztése",
-        "status": "Állapotok szerkesztése"
+        "status": "Állapotok szerkesztése",
+        "tags": "Címkék szerkesztése"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "Tranzakciók száma",
     "add_money": "Hozzáadás",
     "withdraw_money": "Pénzfelvétel",
+    "correct_balance": "Egyenleg javítás",
     "no-accounts": "Nem található itt megjeleníthető tranzakció. Adjon hozzá egy tranzakciót az alul található „+” gombra kattintva.",
     "TYPES": {
       "title": "Számlatípus",
@@ -487,7 +493,9 @@
       "normal": "Normál számla",
       "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...",
       "saving": "Megtakarítási számla",
-      "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez."
+      "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.",
+      "investment": "Befektetési számla",
+      "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla. Kövesse nyomon befektetett tőkéjét és frissítse az értékét manuálisan értékeléseken keresztül"
     },
     "FORM": {
       "name": "Számla neve",
@@ -502,7 +510,32 @@
       "already-exists": "Ugyanezzel a névvel már van egy másik is. Kérjük, adjon meg egy másikat.",
       "tr-before-opening-date": "A számlán a nyitási dátumot megelőző dátumú tranzakciók vannak.",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Beleszámítás a nettó vagyonba",
+      "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához",
+      "correct_balance_description": "A számlaegyenleg módosítása megváltoztatja a számla kezdeti értékét. Ez a korrekció nem jelenik meg a statisztikákban.",
+      "valuation_before_creation_date": "Ezen a számlán vannak olyan értékelések, amelyek dátuma a létrehozás dátuma előtti"
+    },
+    "INVESTMENT": {
+      "details-header": "Befektetés",
+      "correct_balance_title": "Befektetett tőke korrigálása",
+      "correct_balance_description": "Ez a számla kézi értékeléseket használ a portfólió értékének nyomon követésére. Ez a művelet csak a befektetett tőkét (kezdőérték) frissíti, és nem módosítja a rögzített értékeléseket vagy a befektetési statisztikákat.",
+      "invested-capital": "Befektetett tőke",
+      "portfolio-value": "Portfólió értéke",
+      "profit": "Nyereség",
+      "last-valuation": "Utolsó értékelés",
+      "no-valuations": "Még nincs értékelés rögzítve",
+      "update-value": "Érték frissítése",
+      "update-value.descr": "A portfólió aktuális értékének rögzítése",
+      "update-value.success": "Értékelés sikeresen rögzítve",
+      "history": "Értékelési előzmények",
+      "history-empty": "Még nincs értékelés ehhez a számlához",
+      "add-valuation": "Értékelés hozzáadása",
+      "edit-valuation": "Értékelés szerkesztése",
+      "edit-valuation.success": "Értékelés sikeresen szerkesztve",
+      "delete-valuation.success": "Értékelés sikeresen törölve",
+      "delete-all-valuations": "Összes értékelés törlése",
+      "delete-all-valuations.success": "Összes értékelés sikeresen törölve"
     },
     "DELETE": {
       "warning-header": "Törli a számlát?",
@@ -591,6 +624,7 @@
       "all": "Minden címke"
     },
     "empty-list": "Még nem hozott létre címkéket. A címkék és kategóriák nagyszerű lehetőséget kínálnak a pénzmozgások kategorizálására.",
+    "no-tags": "Még nem hozott létre egyetlen címkét sem. A beállításokban hozhat létre címkét.",
     "without-tags": "Címkék nélkül",
     "add": "Hozzáadás",
     "create": "Felirat készítése",
@@ -783,7 +817,6 @@
       "due_today": "Ma esedékes",
       "days_ago": "{{x}} napja",
       "overdue_by": "{{x}} napot késik",
-
       "per_day": "/ nap",
       "no_transactions": "Nem található tranzakció ehhez az adóssághoz"
     },
@@ -826,6 +859,54 @@
         "title": "Adósság létrehozása",
         "success": "Az adósság sikeresen létrehozva"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Eszközök",
+    "empty_description": "Még nem hozott létre tartalmat. Az olyan vagyontárgyak, mint az ingatlanok, járművek vagy gyűjtemények nyomon követhetők értékelésükkel",
+    "create": "Eszköz hozzáadása",
+    "create_success": "Az elem sikeresen létrehozva",
+    "edit_success": "A tartalom sikeresen szerkesztve",
+    "delete": "Eszköz törlése",
+    "delete_success": "Az elem sikeresen törölve",
+    "delete_confirmation": "Ez a művelet nem vonható vissza. Az eszköz összes értékelése szintén törlődik.",
+    "profit": "Nyereség",
+    "profit_percent": "hozam %",
+    "total_value": "Az eszközök összértéke",
+    "FORM": {
+      "name": "Eszköz neve",
+      "name_required": "Kérjük, adjon meg egy elemnevet",
+      "description": "Leírás",
+      "initial_value": "Kezdeti érték",
+      "initial_value_required": "Adjon meg egy kezdeti értéket",
+      "initial_value_invalid": "Kérjük, adjon meg egy érvényes számot",
+      "currency": "Valuta",
+      "select_currency": "Kérjük, válasszon egy pénznemet",
+      "creation_date": "Létrehozás dátuma",
+      "edit": "Eszköz szerkesztése",
+      "create": "Eszköz létrehozása",
+      "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni",
+      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti"
+    },
+    "VALUATION": {
+      "history": "Értékelés története",
+      "no_valuations": "Még nem rögzítettek értékelést. Kezdje az első értékelés hozzáadásával",
+      "add_valuation": "Értékelés hozzáadása",
+      "edit_valuation": "Értékelés szerkesztése",
+      "value": "Érték",
+      "value_required": "Adjon meg egy értéket",
+      "value_invalid": "Kérjük, adjon meg egy érvényes számot",
+      "update_value_success": "Az értékelés sikeresen hozzáadva",
+      "edit_valuation_success": "Az értékelés sikeresen frissítve",
+      "delete_valuation_success": "Az értékelés sikeresen törölve",
+      "delete_all_valuations": "Törölje az összes értékelést",
+      "delete_all_valuations_success": "Az összes értékelés sikeresen törölve"
+    },
+    "SORT": {
+      "name_asc": "Név (A-Z)",
+      "name_desc": "Név (Z-A)",
+      "value_asc": "Érték (a legalacsonyabb először)",
+      "value_desc": "Érték (a legmagasabb először)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -932,6 +1013,13 @@
         "warn": "Régióváltáskor az alkalmazás frissülni fog",
         "first_day_of_week": "A hét első napja"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Alkalmazásstruktúrák",
+      "tags": "Határozzon meg címkéket a tranzakciók jobb megszervezéséhez",
+      "categories": "Kategóriák és alkategóriák szervezése",
+      "accounts": "Kezelje és szerkessze fiókjait",
+      "filters": "Konfiguráljon globális szűrőket, amelyeket tranzakciókhoz és statisztikákhoz használhat"
     },
     "SECURITY": {
       "title": "Biztonság",

@@ -33,6 +33,7 @@ class DashboardCards extends StatelessWidget {
           rowFit: FlexFit.tight,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            spacing: 16,
             children: [
               CardWithHeader(
                 title: t.financial_health.display,
@@ -65,7 +66,6 @@ class DashboardCards extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 16),
               CardWithHeader(
                 title: t.stats.by_categories,
                 body: PieChartByCategories(datePeriodState: dateRangeService),

@@ -93,7 +93,10 @@ class TagStats extends StatelessWidget {
                     '${dataTag.transactions.length} ${t.transaction.display(n: dataTag.transactions.length)}'
                         .toLowerCase(),
                   ),
-                  trailing: CurrencyDisplayer(amountToConvert: dataTag.value),
+                  trailing: CurrencyDisplayer(
+                    amountToConvert: dataTag.value,
+                    integerStyle: Theme.of(context).textTheme.labelLarge!,
+                  ),
                   leading: dataTag.category.displayIcon(),
                 );
               },

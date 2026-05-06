@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -23,9 +22,7 @@ class TransactionDateSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final dateFormat = date.year == currentYear
-        ? DateFormat.MMMMd().add_jm()
-        : DateFormat.yMMMd().add_jm();
+    final dateFormat = getMMMdDateFormatBasedOnYear(date);
 
     return Column(
       children: [

@@ -44,6 +44,7 @@ class TransactionFormPage extends StatefulWidget {
     super.key,
     this.mode,
     this.fromAccount,
+    this.toAccount,
     this.transactionToEdit,
     this.linkedDebt,
   });
@@ -53,6 +54,10 @@ class TransactionFormPage extends StatefulWidget {
   final MoneyTransaction? transactionToEdit;
 
   final Account? fromAccount;
+
+  /// When non-null, the transfer receiving account will be pre-filled
+  /// with this account.
+  final Account? toAccount;
 
   /// When non-null, the created transaction will be automatically linked to
   /// this debt. A banner indicator is shown inside the form.
@@ -199,6 +204,10 @@ class _TransactionFormPageState extends State<TransactionFormPage>
           transferAccount = accounts[1];
         }
       }
+    }
+
+    if (widget.toAccount != null) {
+      transferAccount = widget.toAccount;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

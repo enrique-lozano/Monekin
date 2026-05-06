@@ -32,10 +32,19 @@ class AmountAndCurrencyFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
     return Column(
       children: [
+        CurrencyFormField(
+          currency: currency,
+          onCurrencySelected: onCurrencySelected,
+          border: appInputBorder.copyWith(
+            borderRadius: BorderRadius.only(
+              topLeft: inputBorderRadius,
+              topRight: inputBorderRadius,
+            ),
+          ),
+        ),
+        const Divider(),
         TextFormField(
           controller: amountController,
           decoration: InputDecoration(
@@ -44,8 +53,8 @@ class AmountAndCurrencyFormField extends StatelessWidget {
             suffixText: currency?.symbol,
             border: appInputBorder.copyWith(
               borderRadius: BorderRadius.only(
-                topLeft: inputBorderRadius,
-                topRight: inputBorderRadius,
+                bottomLeft: inputBorderRadius,
+                bottomRight: inputBorderRadius,
               ),
             ),
             // Disable the error text by setting empty error style
@@ -62,48 +71,61 @@ class AmountAndCurrencyFormField extends StatelessWidget {
           autovalidateMode: AutovalidateMode.onUserInteraction,
           textInputAction: TextInputAction.next,
         ),
-        const Divider(),
-        ReadOnlyTextFormField(
-          displayValue: currency != null
-              ? currency!.name
-              : t.general.unspecified,
-          onTap: () {
-            if (currency == null) return;
-
-            showCurrencySelectorModal(
-              context,
-              CurrencySelectorModal(
-                preselectedCurrency: currency!,
-                onCurrencySelected: onCurrencySelected,
-              ),
-            );
-          },
-          decoration: InputDecoration(
-            labelText: t.currencies.currency,
-            suffixIcon: const Icon(Icons.arrow_drop_down),
-            prefixIcon: currency != null
-                ? Container(
-                    margin: const EdgeInsets.all(10),
-                    clipBehavior: Clip.hardEdge,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: SvgPicture.asset(
-                      currency!.currencyIconPath,
-                      height: 25,
-                      width: 25,
-                    ),
-                  )
-                : null,
-            border: appInputBorder.copyWith(
-              borderRadius: BorderRadius.only(
-                bottomLeft: inputBorderRadius,
-                bottomRight: inputBorderRadius,
-              ),
-            ),
-          ),
-        ),
       ],
+    );
+  }
+}
+
+class CurrencyFormField extends StatelessWidget {
+  const CurrencyFormField({
+    super.key,
+    required this.onCurrencySelected,
+    this.currency,
+    this.border,
+  });
+
+  final void Function(Currency) onCurrencySelected;
+  final Currency? currency;
+
+  final InputBorder? border;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return ReadOnlyTextFormField(
+      displayValue: currency != null ? currency!.name : t.general.unspecified,
+      onTap: () {
+        if (currency == null) return;
+
+        showCurrencySelectorModal(
+          context,
+          CurrencySelectorModal(
+            preselectedCurrency: currency!,
+            onCurrencySelected: onCurrencySelected,
+          ),
+        );
+      },
+      decoration: InputDecoration(
+        labelText: t.currencies.currency,
+
+        suffixIcon: const Icon(Icons.arrow_drop_down),
+        prefixIcon: currency != null
+            ? Container(
+                margin: const EdgeInsets.all(10),
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: SvgPicture.asset(
+                  currency!.currencyIconPath,
+                  height: 25,
+                  width: 25,
+                ),
+              )
+            : null,
+        border: border ?? appInputBorder,
+      ),
     );
   }
 }

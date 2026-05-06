@@ -1,4 +1,4 @@
-﻿{
+{
   "UI-ACTIONS": {
     "cancel": "Annuler",
     "confirm": "Confirmer",
@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Combien d'argent ai-je en devise étrangère ?",
     "balance-evolution": "Évolution du solde",
     "balance-evolution-subtitle": "Ai-je plus d'argent qu'avant ?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Par rapport à la période précédente",
     "cash-flow": "Flux de trésorerie",
     "cash-flow-subtitle": "Est-ce que je dépense moins que ce que je gagne ?",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Modifier les dates",
         "categories": "Modifier les catégories",
-        "status": "Modifier les statuts"
+        "status": "Modifier les statuts",
+        "tags": "Modifier les tags"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "Nombre de transactions",
     "add_money": "Ajouter de l'argent",
     "withdraw_money": "Retirer de l'argent",
+    "correct_balance": "Corriger le solde",
     "no-accounts": "Aucun compte trouvé à afficher ici. Ajoutez un compte en cliquant sur le bouton « + » en bas",
     "TYPES": {
       "title": "Type de compte",
@@ -487,7 +493,9 @@
       "normal": "Compte normal",
       "normal.descr": "Utile pour enregistrer vos finances du quotidien. C'est le type de compte le plus courant, il vous permet d'ajouter des dépenses, des recettes...",
       "saving": "Compte d'épargne",
-      "saving.descr": "Vous ne pourrez y ajouter et y retirer de l'argent qu'à partir d'autres comptes. Parfait pour commencer à économiser"
+      "saving.descr": "Vous ne pourrez y ajouter et y retirer de l'argent qu'à partir d'autres comptes. Parfait pour commencer à économiser",
+      "investment": "Compte d'investissement",
+      "investment.descr": "Un compte de courtier, d'échange de cryptomonnaies ou un portefeuille. Suivez votre capital investi et mettez à jour sa valeur manuellement via des évaluations"
     },
     "FORM": {
       "name": "Nom du compte",
@@ -502,7 +510,32 @@
       "already-exists": "Un autre compte avec le même nom existe déjà, veuillez en choisir un autre",
       "tr-before-opening-date": "Il existe des transactions sur ce compte avec une date antérieure à la date d'ouverture",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Inclure dans le patrimoine net",
+      "include-in-net-worth.descr": "Ajouter ce compte au calcul du patrimoine net total",
+      "correct_balance_description": "Ajuster le solde modifie la valeur initiale du compte. Cette correction ne sera pas reflétée dans vos statistiques.",
+      "valuation_before_creation_date": "Il y a des valorisations dans ce compte avec une date antérieure à la date de création"
+    },
+    "INVESTMENT": {
+      "details-header": "Investissement",
+      "correct_balance_title": "Corriger le capital investi",
+      "correct_balance_description": "Ce compte utilise des évaluations manuelles pour la valeur du portefeuille. Cette action met à jour uniquement le capital investi (valeur initiale) et ne modifiera pas les évaluations enregistrées ni les statistiques d'investissement.",
+      "invested-capital": "Capital investi",
+      "portfolio-value": "Valeur du portefeuille",
+      "profit": "Profit",
+      "last-valuation": "Dernière évaluation",
+      "no-valuations": "Aucune évaluation enregistrée",
+      "update-value": "Mettre à jour la valeur",
+      "update-value.descr": "Enregistrer la valeur actuelle du portefeuille",
+      "update-value.success": "Évaluation enregistrée avec succès",
+      "history": "Historique des évaluations",
+      "history-empty": "Aucune évaluation enregistrée pour ce compte",
+      "add-valuation": "Ajouter une évaluation",
+      "edit-valuation": "Modifier l'évaluation",
+      "edit-valuation.success": "Évaluation modifiée avec succès",
+      "delete-valuation.success": "Évaluation supprimée avec succès",
+      "delete-all-valuations": "Supprimer toutes les évaluations",
+      "delete-all-valuations.success": "Toutes les évaluations supprimées avec succès"
     },
     "DELETE": {
       "warning-header": "Supprimer le compte ?",
@@ -591,6 +624,7 @@
       "all": "Tous les tags"
     },
     "empty-list": "Vous n'avez encore créé aucun tag. Les tags et catégories sont un excellent moyen de catégoriser vos mouvements",
+    "no-tags": "Vous n'avez pas encore créé de tags. Allez dans les paramètres pour créer un label.",
     "without-tags": "Sans tag",
     "add": "Ajouter un tag",
     "create": "Créer une étiquette",
@@ -827,6 +861,54 @@
       }
     }
   },
+  "ASSETS": {
+    "title": "Actifs",
+    "empty_description": "Vous n'avez pas encore créé d'éléments. Les actifs tels que l'immobilier, les véhicules ou les objets de collection peuvent être suivis grâce à leurs évaluations",
+    "create": "Ajouter un actif",
+    "create_success": "Actif créé avec succès",
+    "edit_success": "Élément modifié avec succès",
+    "delete": "Supprimer l'élément",
+    "delete_success": "Élément supprimé avec succès",
+    "delete_confirmation": "Cette action ne peut pas être annulée. Toutes les évaluations de cet actif seront également supprimées.",
+    "profit": "Profit",
+    "profit_percent": "Retour %",
+    "total_value": "Valeur totale des actifs",
+    "FORM": {
+      "name": "Nom de l'actif",
+      "name_required": "Veuillez saisir un nom d'actif",
+      "description": "Description",
+      "initial_value": "Valeur initiale",
+      "initial_value_required": "Veuillez saisir une valeur initiale",
+      "initial_value_invalid": "Veuillez entrer un numéro valide",
+      "currency": "Devise",
+      "select_currency": "Veuillez sélectionner une devise",
+      "creation_date": "Date de création",
+      "edit": "Modifier l'élément",
+      "create": "Créer un actif",
+      "already_exists": "Un actif portant ce nom existe déjà. Vous voudrez peut-être le modifier",
+      "valuation_before_creation_date": "Il existe des évaluations pour cet actif antérieures à la date de création"
+    },
+    "VALUATION": {
+      "history": "Historique d'évaluation",
+      "no_valuations": "Aucune évaluation enregistrée pour le moment. Commencez par ajouter la première évaluation",
+      "add_valuation": "Ajouter une évaluation",
+      "edit_valuation": "Modifier l'évaluation",
+      "value": "Valeur",
+      "value_required": "Veuillez saisir une valeur",
+      "value_invalid": "Veuillez entrer un numéro valide",
+      "update_value_success": "Évaluation ajoutée avec succès",
+      "edit_valuation_success": "Valorisation mise à jour avec succès",
+      "delete_valuation_success": "Évaluation supprimée avec succès",
+      "delete_all_valuations": "Supprimer toutes les évaluations",
+      "delete_all_valuations_success": "Toutes les évaluations ont été supprimées avec succès"
+    },
+    "SORT": {
+      "name_asc": "Nom (A-Z)",
+      "name_desc": "Nom (Z-A)",
+      "value_asc": "Valeur (la plus basse en premier)",
+      "value_desc": "Valeur (la plus élevée en premier)"
+    }
+  },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Actif",
     "past": "Terminé",
@@ -929,6 +1011,13 @@
         "warn": "Lors du changement de région, l'application va se mettre à jour",
         "first_day_of_week": "Premier jour de la semaine"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Structures d'applications",
+      "tags": "Définir des balises pour une meilleure organisation de vos transactions",
+      "categories": "Organisation des catégories et sous-catégories",
+      "accounts": "Gérer et modifier vos comptes",
+      "filters": "Configurez des filtres globaux que vous pouvez utiliser pour les transactions et les statistiques"
     },
     "SECURITY": {
       "title": "Sécurité",

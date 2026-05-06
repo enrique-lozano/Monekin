@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Quanti soldi ho in valuta estera?",
     "balance-evolution": "Andamento del saldo",
     "balance-evolution-subtitle": "Ho più soldi di prima?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Rispetto al periodo precedente",
     "cash-flow": "Flusso di cassa",
     "cash-flow-subtitle": "Sto spendendo meno di quanto guadagno?",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Modifica date",
         "categories": "Modifica categorie",
-        "status": "Modifica stati"
+        "status": "Modifica stati",
+        "tags": "Modifica tag"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "Numero di transazioni",
     "add_money": "Aggiungi denaro",
     "withdraw_money": "Preleva denaro",
+    "correct_balance": "Correggi saldo",
     "no-accounts": "Nessuna transazione trovata da mostrare qui. Aggiungi una transazione cliccando sul pulsante '+' in basso",
     "TYPES": {
       "title": "Tipo di conto",
@@ -487,7 +493,9 @@
       "normal": "Conto normale",
       "normal.descr": "Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...",
       "saving": "Conto risparmio",
-      "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro"
+      "saving.descr": "Potrai solo aggiungere e prelevare denaro da esso da altri conti. Perfetto per iniziare a risparmiare denaro",
+      "investment": "Conto investimento",
+      "investment.descr": "Un conto broker, exchange di criptovalute o portafoglio. Tieni traccia del tuo capitale investito e aggiorna il suo valore manualmente tramite valutazioni"
     },
     "FORM": {
       "name": "Nome conto",
@@ -502,7 +510,32 @@
       "already-exists": "Ne esiste già un altro con lo stesso nome, per favore scrivine un altro",
       "tr-before-opening-date": "Ci sono transazioni in questo conto con una data precedente alla data di apertura",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Includi nel patrimonio netto",
+      "include-in-net-worth.descr": "Aggiungi questo conto al calcolo del patrimonio netto totale",
+      "correct_balance_description": "Regolare il saldo modifica il valore iniziale del conto. Questa correzione non sarà riflessa nelle statistiche.",
+      "valuation_before_creation_date": "In questo conto sono presenti valutazioni con una data precedente alla data di creazione"
+    },
+    "INVESTMENT": {
+      "details-header": "Investimento",
+      "correct_balance_title": "Correggi il capitale investito",
+      "correct_balance_description": "Questo conto utilizza valutazioni manuali per il valore del portafoglio. Questa azione aggiorna solo il capitale investito (valore iniziale) e non modificherà le valutazioni registrate né le statistiche sugli investimenti.",
+      "invested-capital": "Capitale investito",
+      "portfolio-value": "Valore del portafoglio",
+      "profit": "Profitto",
+      "last-valuation": "Ultima valutazione",
+      "no-valuations": "Nessuna valutazione registrata",
+      "update-value": "Aggiorna valore",
+      "update-value.descr": "Registra il valore attuale del portafoglio",
+      "update-value.success": "Valutazione registrata con successo",
+      "history": "Storico valutazioni",
+      "history-empty": "Nessuna valutazione registrata per questo conto",
+      "add-valuation": "Aggiungi valutazione",
+      "edit-valuation": "Modifica valutazione",
+      "edit-valuation.success": "Valutazione modificata con successo",
+      "delete-valuation.success": "Valutazione eliminata con successo",
+      "delete-all-valuations": "Elimina tutte le valutazioni",
+      "delete-all-valuations.success": "Tutte le valutazioni eliminate con successo"
     },
     "DELETE": {
       "warning-header": "Eliminare conto?",
@@ -591,6 +624,7 @@
       "all": "Tutte le etichette"
     },
     "empty-list": "Non hai ancora creato alcuna etichetta. Etichette e categorie sono un ottimo modo per categorizzare i tuoi movimenti",
+    "no-tags": "Non hai ancora creato nessun tag. Vai nelle impostazioni per creare un'etichetta.",
     "without-tags": "Senza etichette",
     "add": "Aggiungi etichetta",
     "create": "Crea etichetta",
@@ -783,7 +817,6 @@
       "due_today": "Due today",
       "days_ago": "{{x}} giorni fa",
       "overdue_by": "In ritardo di {{x}} giorni",
-
       "per_day": "/ giorno",
       "no_transactions": "Nessuna transazione trovata per questo debito"
     },
@@ -826,6 +859,54 @@
         "title": "Creare debito",
         "success": "Debito creato con successo"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Attività",
+    "empty_description": "Non hai ancora creato alcuna risorsa. Beni come immobili, veicoli o oggetti da collezione possono essere monitorati con le loro valutazioni",
+    "create": "Aggiungi risorsa",
+    "create_success": "Risorsa creata con successo",
+    "edit_success": "Risorsa modificata correttamente",
+    "delete": "Elimina risorsa",
+    "delete_success": "Risorsa eliminata correttamente",
+    "delete_confirmation": "Questa azione non può essere annullata. Verranno eliminate anche tutte le valutazioni per questo asset.",
+    "profit": "Profitto",
+    "profit_percent": "Ritorno %",
+    "total_value": "Valore totale delle attività",
+    "FORM": {
+      "name": "Nome della risorsa",
+      "name_required": "Inserisci il nome di una risorsa",
+      "description": "Descrizione",
+      "initial_value": "Valore iniziale",
+      "initial_value_required": "Inserisci un valore iniziale",
+      "initial_value_invalid": "Inserisci un numero valido",
+      "currency": "Valuta",
+      "select_currency": "Seleziona una valuta",
+      "creation_date": "Data di creazione",
+      "edit": "Modifica risorsa",
+      "create": "Crea risorsa",
+      "already_exists": "Esiste già una risorsa con questo nome. Potresti volerlo modificare",
+      "valuation_before_creation_date": "Sono presenti valutazioni in questo bene con una data antecedente alla data di acquisizione"
+    },
+    "VALUATION": {
+      "history": "Storia della valutazione",
+      "no_valuations": "Nessuna valutazione ancora registrata. Inizia aggiungendo la prima valutazione",
+      "add_valuation": "Aggiungi valutazione",
+      "edit_valuation": "Modifica valutazione",
+      "value": "Valore",
+      "value_required": "Inserisci un valore",
+      "value_invalid": "Inserisci un numero valido",
+      "update_value_success": "Valutazione aggiunta con successo",
+      "edit_valuation_success": "Valutazione aggiornata con successo",
+      "delete_valuation_success": "Valutazione eliminata correttamente",
+      "delete_all_valuations": "Elimina tutte le valutazioni",
+      "delete_all_valuations_success": "Tutte le valutazioni sono state eliminate correttamente"
+    },
+    "SORT": {
+      "name_asc": "Nome (A-Z)",
+      "name_desc": "Nome (Z-A)",
+      "value_asc": "Valore (prima il più basso)",
+      "value_desc": "Valore (prima il più alto)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -932,6 +1013,13 @@
         "warn": "Quando cambi regione l'app si aggiornerà",
         "first_day_of_week": "Primo giorno della settimana"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Strutture dell'app",
+      "tags": "Definisci i tag per ottenere una migliore organizzazione delle tue transazioni",
+      "categories": "Organizzazione di categorie e sottocategorie",
+      "accounts": "Gestisci e modifica i tuoi account",
+      "filters": "Configura filtri globali che puoi utilizzare per transazioni e statistiche"
     },
     "SECURITY": {
       "title": "Sicurezza",

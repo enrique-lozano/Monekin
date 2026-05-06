@@ -351,7 +351,7 @@ class TransactionsPageState extends State<TransactionsPage> {
                     return BulkEditTransactionModal(
                       transactionsToEdit: selectedTransactions,
                       onSuccess: () {
-                        selectedTransactions = [];
+                        cleanSelectedTransactions();
                       },
                     );
                   },

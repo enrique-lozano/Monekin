@@ -5,7 +5,7 @@ import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-Future<ModalResult<TransactionStatus>?> showTransactioStatusModal(
+Future<ModalResult<TransactionStatus>?> showTransactionStatusModal(
   BuildContext context, {
   required TransactionStatus? initialStatus,
 }) {

@@ -20,9 +20,9 @@ enum AppMenuDestinationsID {
   transactions,
   recurrentTransactions,
   accounts,
+  assets,
   stats,
   settings,
-  categories,
 }
 
 class MainMenuDestination {

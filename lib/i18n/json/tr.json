@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "Yabancı para biriminde ne kadar param var?",
     "balance-evolution": "Bakiye trendi",
     "balance-evolution-subtitle": "Eskisinden daha çok param var mı?",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "Önceki döneme göre",
     "cash-flow": "Nakit akışı",
     "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "Tarihleri düzenle",
         "categories": "Kategorileri düzenle",
-        "status": "Durumları düzenle"
+        "status": "Durumları düzenle",
+        "tags": "Etiketleri düzenle"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "İşlem sayısı",
     "add_money": "Para ekle",
     "withdraw_money": "Para çek",
+    "correct_balance": "Bakiye düzelt",
     "no-accounts": "Burada görüntülenecek işlem bulunamadı. Alttaki '+' düğmesine tıklayarak bir işlem ekleyin",
     "TYPES": {
       "title": "Hesap türü",
@@ -487,7 +493,9 @@
       "normal": "Normal hesap",
       "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
       "saving": "Tasarruf hesabı",
-      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel"
+      "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel",
+      "investment": "Yatırım hesabı",
+      "investment.descr": "Bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve değerini değerlemeler aracılığıyla manuel olarak güncelleyin"
     },
     "FORM": {
       "name": "Hesap adı",
@@ -502,7 +510,32 @@
       "already-exists": "Aynı ada sahip başka bir hesap zaten var, lütfen başka bir tane yazın",
       "tr-before-opening-date": "Bu hesapta açılış tarihinden önce bir tarihe sahip işlemler var",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Net değere dahil et",
+      "include-in-net-worth.descr": "Bu hesabı toplam net değer hesaplamasına dahil et",
+      "correct_balance_description": "Bakiyeyi düzeltmek, hesabın başlangıç değerini değiştirir. Bu düzeltme istatistiklere yansımayacaktır.",
+      "valuation_before_creation_date": "Bu hesapta oluşturulma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
+    },
+    "INVESTMENT": {
+      "details-header": "Yatırım",
+      "correct_balance_title": "Yatırılan sermayeyi düzelt",
+      "correct_balance_description": "Bu hesap, portföy değerini manuel değerlemelerle takip eder. Bu işlem yalnızca yatırılan sermayeyi (başlangıç değeri) günceller ve kaydedilmiş değerlemeleri veya yatırım istatistiklerini değiştirmez.",
+      "invested-capital": "Yatırılan sermaye",
+      "portfolio-value": "Portföy değeri",
+      "profit": "Kâr",
+      "last-valuation": "Son değerleme",
+      "no-valuations": "Henüz değerleme kaydedilmedi",
+      "update-value": "Değeri güncelle",
+      "update-value.descr": "Mevcut portföy değerini kaydet",
+      "update-value.success": "Değerleme başarıyla kaydedildi",
+      "history": "Değerleme geçmişi",
+      "history-empty": "Bu hesap için henüz değerleme kaydedilmedi",
+      "add-valuation": "Değerleme ekle",
+      "edit-valuation": "Değerlemeyi düzenle",
+      "edit-valuation.success": "Değerleme başarıyla düzenlendi",
+      "delete-valuation.success": "Değerleme başarıyla silindi",
+      "delete-all-valuations": "Tüm değerlemeleri sil",
+      "delete-all-valuations.success": "Tüm değerlemeler başarıyla silindi"
     },
     "DELETE": {
       "warning-header": "Hesap silinsin mi?",
@@ -591,6 +624,7 @@
       "all": "Tüm etiketler"
     },
     "empty-list": "Henüz etiket oluşturmadınız. Etiketler ve kategoriler, hareketlerinizi kategorize etmek için harika bir yoldur",
+    "no-tags": "Henüz hiç etiket oluşturmadınız. Etiketi oluşturmak için ayarlara gidin.",
     "without-tags": "Etiketsiz",
     "add": "Etiket ekle",
     "create": "Etiket oluştur",
@@ -783,7 +817,6 @@
       "due_today": "Bugün vadesi doluyor",
       "days_ago": "{{x}} gün önce",
       "overdue_by": "{{x}} gün gecikti",
-
       "per_day": "/ gün",
       "no_transactions": "Bu borç için işlem bulunamadı"
     },
@@ -826,6 +859,54 @@
         "title": "Borç oluştur",
         "success": "Borç başarıyla oluşturuldu"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Varlıklar",
+    "empty_description": "Henüz herhangi bir öğe oluşturmadınız. Gayrimenkul, araç veya koleksiyon gibi varlıklar değerlemeleriyle takip edilebilir",
+    "create": "Öğe ekle",
+    "create_success": "Öğe başarıyla oluşturuldu",
+    "edit_success": "Öğe başarıyla düzenlendi",
+    "delete": "Öğeyi sil",
+    "delete_success": "Öğe başarıyla silindi",
+    "delete_confirmation": "Bu eylem geri alınamaz. Bu varlığa ilişkin tüm değerlemeler de silinecek.",
+    "profit": "Kâr",
+    "profit_percent": "Geri dönmek %",
+    "total_value": "Varlıkların toplam değeri",
+    "FORM": {
+      "name": "Öğe adı",
+      "name_required": "Lütfen bir varlık adı girin",
+      "description": "Tanım",
+      "initial_value": "Başlangıç ​​değeri",
+      "initial_value_required": "Lütfen bir başlangıç ​​değeri girin",
+      "initial_value_invalid": "Lütfen geçerli bir numara girin",
+      "currency": "Para birimi",
+      "select_currency": "Lütfen bir para birimi seçin",
+      "creation_date": "Oluşturulma tarihi",
+      "edit": "Öğeyi düzenle",
+      "create": "Öğe oluştur",
+      "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz",
+      "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
+    },
+    "VALUATION": {
+      "history": "Değerleme geçmişi",
+      "no_valuations": "Henüz değerleme kaydedilmedi. İlk değerlemeyi ekleyerek başlayın",
+      "add_valuation": "Değerleme ekle",
+      "edit_valuation": "Değerlemeyi düzenle",
+      "value": "Değer",
+      "value_required": "Lütfen bir değer girin",
+      "value_invalid": "Lütfen geçerli bir numara girin",
+      "update_value_success": "Değerleme başarıyla eklendi",
+      "edit_valuation_success": "Değerleme başarıyla güncellendi",
+      "delete_valuation_success": "Değerleme başarıyla silindi",
+      "delete_all_valuations": "Tüm değerlemeleri sil",
+      "delete_all_valuations_success": "Tüm değerlemeler başarıyla silindi"
+    },
+    "SORT": {
+      "name_asc": "İsim (A'dan Z'ye)",
+      "name_desc": "İsim (Z-A)",
+      "value_asc": "Değer (önce en düşük)",
+      "value_desc": "Değer (önce en yüksek)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -932,6 +1013,13 @@
         "warn": "Bölge değiştirildiğinde uygulama güncellenecektir",
         "first_day_of_week": "Haftanın ilk günü"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "Uygulama yapıları",
+      "tags": "İşlemlerinizi daha iyi organize etmek için etiketleri tanımlayın",
+      "categories": "Kategoriler ve alt kategorilerin organizasyonu",
+      "accounts": "Hesaplarınızı yönetin ve düzenleyin",
+      "filters": "İşlemler ve istatistikler için kullanabileceğiniz genel filtreleri yapılandırın"
     },
     "SECURITY": {
       "title": "Güvenlik",

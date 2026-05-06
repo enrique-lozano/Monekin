@@ -1,75 +1,130 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 
-class ExchangeRateEvolutionChart extends StatelessWidget {
-  const ExchangeRateEvolutionChart({
+/// A generic time-series line chart that displays data points over time
+/// with an optional gradient fill, hover interaction, and an
+/// "insufficient data" overlay when there are too few points.
+///
+/// This widget is used by both the exchange-rate evolution chart and the
+/// investment-valuation evolution chart.
+class TimeSeriesEvolutionChart<T> extends StatelessWidget {
+  const TimeSeriesEvolutionChart({
     super.key,
-    required this.exchangeRates,
+    required this.data,
+    required this.dateExtractor,
+    required this.valueExtractor,
+    this.currency,
+    this.tooltipTitleBuilder,
+    this.minY,
+    this.maxY,
+    this.extraLinesData,
     this.onHover,
   });
 
-  final List<ExchangeRate> exchangeRates;
-  final void Function(ExchangeRate?)? onHover;
+  /// The raw data items to plot.
+  final List<T> data;
+
+  /// Extracts the [DateTime] (x-axis) from a data item.
+  final DateTime Function(T) dateExtractor;
+
+  /// Extracts the numeric value (y-axis) from a data item.
+  final double Function(T) valueExtractor;
+
+  /// Optional currency used to format tooltip values.
+  /// When null, tooltips show a plain numeric value.
+  final CurrencyInDB? currency;
+
+  /// Optional tooltip title builder. When provided, it overrides the default
+  /// date-based title.
+  final String Function(T item)? tooltipTitleBuilder;
+
+  /// Optional Y-axis overrides. When null, the widget auto-computes them.
+  final double? minY;
+  final double? maxY;
+
+  /// Optional extra lines (e.g. budget limits).
+  final ExtraLinesData? extraLinesData;
+
+  /// Called when the user hovers/touches a data point, or `null` when the
+  /// touch ends. The callback receives the original data item.
+  final void Function(T?)? onHover;
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final lineColor = Theme.of(context).colorScheme.primary;
 
-    // Sort by date
-    final sortedRates = List<ExchangeRate>.from(exchangeRates)
-      ..sort((a, b) => a.date.compareTo(b.date));
+    final sortedData = List<T>.from(data)
+      ..sort((a, b) => dateExtractor(a).compareTo(dateExtractor(b)));
 
-    final isNotEnoughData = sortedRates.length <= 2;
+    final byX = <int, T>{
+      for (final item in sortedData)
+        dateExtractor(item).millisecondsSinceEpoch: item,
+    };
 
-    List<double> balances = [];
-    double? effectiveMaxY;
-    double? effectiveMinY;
-
-    if (!isNotEnoughData) {
-      balances = sortedRates.map((e) => e.exchangeRate).toList();
-
-      final maxY = balances.reduce(max);
-      final minY = balances.reduce(min);
-
-      // Add some padding to Y axis
-      final yRange = maxY - minY;
-      final yPadding = yRange == 0 ? maxY * 0.1 : yRange * 0.1;
-
-      effectiveMaxY = maxY + yPadding;
-      effectiveMinY = max(0.0, minY - yPadding);
-    }
+    final isNotEnoughData = sortedData.length <= 2;
 
     final chart = LineChart(
       LineChartData(
+        minY: minY,
+        maxY: maxY,
         gridData: const FlGridData(show: true, drawVerticalLine: false),
+        extraLinesData: extraLinesData,
         lineTouchData: isNotEnoughData
             ? const LineTouchData(enabled: false)
             : LineTouchData(
                 touchTooltipData: LineTouchTooltipData(
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
+                  getTooltipColor: (spot) =>
+                      Theme.of(context).colorScheme.surface,
                   tooltipPadding: const EdgeInsets.symmetric(
                     vertical: 4,
                     horizontal: 8,
                   ),
                   getTooltipItems: (touchedSpots) {
                     return touchedSpots.map((spot) {
+                      final item = byX[spot.x.toInt()];
                       final date = DateTime.fromMillisecondsSinceEpoch(
                         spot.x.toInt(),
                       );
 
+                      final title = item != null && tooltipTitleBuilder != null
+                          ? tooltipTitleBuilder!(item)
+                          : DateFormat.yMMMd().format(date);
+
+                      final valueSpans = currency != null
+                          ? UINumberFormatter.currency(
+                              currency: currency,
+                              amountToConvert: spot.y,
+                              integerStyle: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ).getTextSpanList(context)
+                          : <TextSpan>[
+                              TextSpan(
+                                text: spot.y.toStringAsFixed(2),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ];
+
                       return LineTooltipItem(
-                        DateFormat.yMMMd().format(date),
-                        Theme.of(context).textTheme.labelMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        '$title \n',
+                        const TextStyle(fontSize: 12),
+                        textAlign: TextAlign.start,
+                        children: valueSpans,
                       );
                     }).toList();
                   },
@@ -89,12 +144,7 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
                           touchResponse.lineBarSpots != null &&
                           touchResponse.lineBarSpots!.isNotEmpty) {
                         final spot = touchResponse.lineBarSpots!.first;
-                        final rate = sortedRates.firstWhere(
-                          (element) =>
-                              element.date.millisecondsSinceEpoch ==
-                              spot.x.toInt(),
-                        );
-                        onHover!(rate);
+                        onHover!(byX[spot.x.toInt()]);
                         return;
                       }
 
@@ -103,15 +153,12 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
               ),
         titlesData: FlTitlesData(
           show: true,
-          leftTitles: noAxisTitles,
-          topTitles: noAxisTitles,
-          bottomTitles: noAxisTitles,
-          rightTitles: isNotEnoughData
+          leftTitles: isNotEnoughData
               ? noAxisTitles
               : AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 46,
+                    reservedSize: 28,
                     getTitlesWidget: (value, meta) {
                       if (value == meta.max || value == meta.min) {
                         return Container();
@@ -121,16 +168,21 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
                         meta: meta,
                         child: Text(
                           meta.formattedValue,
+                          maxLines: 1,
+                          textAlign: TextAlign.end,
+                          softWrap: false,
+                          overflow: TextOverflow.visible,
                           style: smallAxisTitleStyle(context),
                         ),
                       );
                     },
                   ),
                 ),
+          topTitles: noAxisTitles,
+          bottomTitles: noAxisTitles,
+          rightTitles: noAxisTitles,
         ),
         borderData: FlBorderData(show: false),
-        minY: effectiveMinY,
-        maxY: effectiveMaxY,
         lineBarsData: [
           LineChartBarData(
             spots: isNotEnoughData
@@ -141,16 +193,16 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
                     FlSpot(3, 2),
                     FlSpot(4, 5),
                   ]
-                : sortedRates
+                : sortedData
                       .map(
                         (e) => FlSpot(
-                          e.date.millisecondsSinceEpoch.toDouble(),
-                          e.exchangeRate,
+                          dateExtractor(e).millisecondsSinceEpoch.toDouble(),
+                          valueExtractor(e),
                         ),
                       )
                       .toList(),
             isCurved: true,
-            curveSmoothness: 0.2,
+            curveSmoothness: 0.05,
             color: isNotEnoughData
                 ? Theme.of(context).colorScheme.outlineVariant
                 : lineColor,
@@ -160,7 +212,7 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
             belowBarData: BarAreaData(
               show: true,
               applyCutOffY: !isNotEnoughData,
-              cutOffY: effectiveMinY ?? 0,
+              cutOffY: minY ?? 0,
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -168,10 +220,10 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
                     ? [
                         Theme.of(
                           context,
-                        ).colorScheme.outlineVariant.withOpacity(0.5),
+                        ).colorScheme.outlineVariant.withAlpha(128),
                         Theme.of(
                           context,
-                        ).colorScheme.outlineVariant.withOpacity(0.01),
+                        ).colorScheme.outlineVariant.withAlpha(3),
                       ]
                     : [lineColor.withAlpha(100), lineColor.withAlpha(1)],
               ),
@@ -202,7 +254,7 @@ class ExchangeRateEvolutionChart extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              "Not enough data to display chart",
+              t.general.insufficient_data,
               style: Theme.of(context).textTheme.labelMedium,
             ),
           ),

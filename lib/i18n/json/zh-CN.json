@@ -261,6 +261,10 @@
     "balance-by-currency-subtitle": "我有多少的外币？",
     "balance-evolution": "余额趋势",
     "balance-evolution-subtitle": "我是否比之前更有钱了？",
+    "net-worth": "Net worth",
+    "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-composition": "Net worth composition",
+    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "compared-to-previous-period": "与上一段时间相比",
     "cash-flow": "现金流",
     "cash-flow-subtitle": "我的支出是否少于我的收入？",
@@ -347,7 +351,8 @@
       "BULK_EDIT": {
         "dates": "批量编辑日期",
         "categories": "批量编辑类别",
-        "status": "批量编辑状态"
+        "status": "批量编辑状态",
+        "tags": "编辑标签"
       }
     },
     "FILTERS": {
@@ -480,6 +485,7 @@
     "n_transactions": "交易数量",
     "add_money": "增加金额",
     "withdraw_money": "减少金额",
+    "correct_balance": "修正余额",
     "no-accounts": "未发现应当显示的交易。请点击底部的 '+' 按钮新增一个交易",
     "TYPES": {
       "title": "账户类型",
@@ -487,7 +493,9 @@
       "normal": "普通账户",
       "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
       "saving": "储蓄账户",
-      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱"
+      "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱",
+      "investment": "投资账户",
+      "investment.descr": "券商、加密货币交易所或投资组合账户。跟踪您的投资资本，并通过估值手动更新其价值"
     },
     "FORM": {
       "name": "账户名称",
@@ -502,7 +510,32 @@
       "already-exists": "此账户名已存在，请起一个新的账户名",
       "tr-before-opening-date": "此账户中有早于开户日期的交易",
       "iban": "国际银行账户号码（IBAN）",
-      "swift": "银行识别码（SWIFT）"
+      "swift": "银行识别码（SWIFT）",
+      "include-in-net-worth": "计入净资产",
+      "include-in-net-worth.descr": "将此账户纳入总净资产计算",
+      "correct_balance_description": "调整余额会修改账户的初始值。此修正不会反映在统计数据中。",
+      "valuation_before_creation_date": "此帐户中存在日期早于创建日期的评估"
+    },
+    "INVESTMENT": {
+      "details-header": "投资",
+      "correct_balance_title": "更正已投资本金",
+      "correct_balance_description": "此账户使用手动估值来跟踪投资组合价值。此操作仅更新已投资本金（初始值），不会更改已记录的估值或投资统计信息。",
+      "invested-capital": "已投资本金",
+      "portfolio-value": "投资组合价值",
+      "profit": "收益",
+      "last-valuation": "最近估值",
+      "no-valuations": "暂无估值记录",
+      "update-value": "更新价值",
+      "update-value.descr": "记录当前投资组合价值",
+      "update-value.success": "估值记录成功",
+      "history": "估值历史",
+      "history-empty": "此账户暂无估值记录",
+      "add-valuation": "添加估值",
+      "edit-valuation": "编辑估值",
+      "edit-valuation.success": "估值编辑成功",
+      "delete-valuation.success": "估值删除成功",
+      "delete-all-valuations": "删除所有估值",
+      "delete-all-valuations.success": "所有估值已成功删除"
     },
     "DELETE": {
       "warning-header": "删除账户？",
@@ -591,6 +624,7 @@
       "all": "所有标签"
     },
     "empty-list": "您还没有创建任何标签。标签和类别是对您的动作进行分类的好方法",
+    "no-tags": "您还没有创建任何标签。请前往设置创建标签。",
     "without-tags": "没有标签",
     "add": "添加标签",
     "create": "创建标签",
@@ -783,7 +817,6 @@
       "due_today": "今天到期",
       "days_ago": "{{x}}天前",
       "overdue_by": "逾期 {{x}} 天",
-
       "per_day": "/ 天",
       "no_transactions": "未找到该债务的交易"
     },
@@ -826,6 +859,54 @@
         "title": "创造债务",
         "success": "债务创建成功"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "资产",
+    "empty_description": "您还没有创建任何资产。可以跟踪房地产、车辆或收藏品等资产的估值",
+    "create": "添加资产",
+    "create_success": "资产创建成功",
+    "edit_success": "资产编辑成功",
+    "delete": "删除资产",
+    "delete_success": "资产删除成功",
+    "delete_confirmation": "此操作无法撤消。该资产的所有估值也将被删除。",
+    "profit": "利润",
+    "profit_percent": "返回 ％",
+    "total_value": "资产总值",
+    "FORM": {
+      "name": "资产名称",
+      "name_required": "请输入资产名称",
+      "description": "描述",
+      "initial_value": "初始值",
+      "initial_value_required": "请输入初始值",
+      "initial_value_invalid": "请输入有效号码",
+      "currency": "货币",
+      "select_currency": "请选择货币",
+      "creation_date": "创建日期",
+      "edit": "编辑资产",
+      "create": "创建资产",
+      "already_exists": "具有此名称的资产已存在。您可能想要编辑它",
+      "valuation_before_creation_date": "该资产的估值日期早于收购日期"
+    },
+    "VALUATION": {
+      "history": "估值历史",
+      "no_valuations": "尚未记录估值。首先添加第一个估值",
+      "add_valuation": "添加估价",
+      "edit_valuation": "编辑估值",
+      "value": "价值",
+      "value_required": "请输入一个值",
+      "value_invalid": "请输入有效号码",
+      "update_value_success": "估价添加成功",
+      "edit_valuation_success": "估值更新成功",
+      "delete_valuation_success": "评估删除成功",
+      "delete_all_valuations": "删除所有估价",
+      "delete_all_valuations_success": "所有估价已成功删除"
+    },
+    "SORT": {
+      "name_asc": "姓名（A-Z）",
+      "name_desc": "姓名（Z-A）",
+      "value_asc": "值（最低的在前）",
+      "value_desc": "值（最高的在前）"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -932,6 +1013,13 @@
         "warn": "更改区域时应用将更新",
         "first_day_of_week": "一周的第一天"
       }
+    },
+    "APP_STRUCTURES": {
+      "title": "应用程序结构",
+      "tags": "定义标签以更好地组织您的交易",
+      "categories": "类别和子类别组织",
+      "accounts": "管理和编辑您的帐户",
+      "filters": "配置可用于事务和统计的全局过滤器"
     },
     "SECURITY": {
       "title": "安全",
