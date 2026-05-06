@@ -41,17 +41,33 @@ class TransactionService {
     AppDB.instance,
   );
 
-  Future<int> insertTransaction(TransactionInDB transaction) async {
+  Future<int> insertTransaction(
+    TransactionInDB transaction, {
+    bool updateAssetValuations = true,
+    bool updateFutureAssetValuations = false,
+  }) async {
     final toReturn = await db.into(db.transactions).insert(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
-    await InvestmentService.instance.onTransactionSaved(transaction);
+    if (updateAssetValuations) {
+      if (updateFutureAssetValuations) {
+        await InvestmentService.instance.onTransactionSavedAndFutureValuations(
+          transaction,
+        );
+      } else {
+        await InvestmentService.instance.onTransactionSaved(transaction);
+      }
+    }
     return toReturn;
   }
 
-  Future<int> updateTransaction(TransactionInDB transaction) async {
+  Future<int> updateTransaction(
+    TransactionInDB transaction, {
+    bool updateAssetValuations = true,
+    bool updateFutureAssetValuations = false,
+  }) async {
     final previous = await (db.select(
       db.transactions,
     )..where((t) => t.id.equals(transaction.id))).getSingleOrNull();
@@ -62,10 +78,19 @@ class TransactionService {
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
 
-    await InvestmentService.instance.onTransactionUpdated(
-      previous,
-      transaction,
-    );
+    if (updateAssetValuations) {
+      if (updateFutureAssetValuations) {
+        await InvestmentService.instance.onTransactionUpdatedAndFutureValuations(
+          previous,
+          transaction,
+        );
+      } else {
+        await InvestmentService.instance.onTransactionUpdated(
+          previous,
+          transaction,
+        );
+      }
+    }
 
     return toReturn ? 1 : 0;
   }

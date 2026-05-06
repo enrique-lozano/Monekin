@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/assets/asset_trade_valuation.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
 import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
@@ -16,11 +15,11 @@ import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -30,7 +29,6 @@ Future<void> showAssetTradeSheet(
   BuildContext context, {
   required Asset asset,
   required bool isBuy,
-
   TransactionInDB? transaction,
 }) async {
   await showModalBottomSheet<void>(
@@ -64,7 +62,7 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
   Account? _account;
   Category? _expenseCategory;
   bool _treatAsInvestment = false;
-  bool _updateLaterValuations = false;
+  bool _updateValuations = false;
 
   @override
   void initState() {
@@ -97,9 +95,8 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
 
     final linkedId = widget.asset.linkedAccountID;
     if (linkedId != null) {
-      final linkedAcc = await AccountService.instance
-          .getAccountById(linkedId)
-          .first;
+      final linkedAcc =
+          await AccountService.instance.getAccountById(linkedId).first;
       if (linkedAcc != null && mounted) {
         setState(() => _account = linkedAcc);
         return;
@@ -148,7 +145,8 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
   }
 
   double? get _parsedTradeAmount {
-    return double.tryParse(_amountController.text.replaceAll(',', '.'));
+    final abs = double.tryParse(_amountController.text.replaceAll(',', '.'));
+    return abs != null && abs > 0 ? abs : null;
   }
 
   bool get _showsAssetValuationImpact =>
@@ -165,11 +163,13 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
     final t = Translations.of(context);
 
     if (_formKey.currentState?.validate() != true) {
-      MonekinSnackbar.error(SnackbarParams(t.general.validations.form_error));
+      MonekinSnackbar.error(
+        SnackbarParams(t.general.validations.form_error),
+      );
       return;
     }
 
-    final abs = _parsedTradeAmount;
+    final abs = double.tryParse(_amountController.text.replaceAll(',', '.'));
     if (abs == null || abs <= 0) {
       MonekinSnackbar.error(
         SnackbarParams.fromError(t.assets.form.initial_value_invalid),
@@ -203,18 +203,18 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
     );
 
     if (isEditing) {
-      await TransactionService.instance.updateTransaction(tr);
+      await TransactionService.instance.updateTransaction(
+        tr,
+        updateAssetValuations: _updateValuations,
+        updateFutureAssetValuations: _updateValuations,
+      );
     } else {
-      await TransactionService.instance.insertTransaction(tr);
+      await TransactionService.instance.insertTransaction(
+        tr,
+        updateAssetValuations: _updateValuations,
+        updateFutureAssetValuations: _updateValuations,
+      );
     }
-
-    await shiftFollowingValuationsForTradeEdit(
-      assetId: widget.asset.id,
-      tradeDate: _date,
-      previousSignedValue: widget.transaction?.value ?? 0,
-      newSignedValue: value,
-      applyShift: _updateLaterValuations,
-    );
 
     if (mounted) Navigator.of(context).pop();
 
@@ -224,16 +224,12 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
   }
 
   void _openFullForm() {
-    final trValue = _parsedTradeAmount ?? 0;
-    final value = widget.isBuy ? -trValue : trValue;
-
     Navigator.of(context).pop();
     RouteUtils.pushRoute(
       TransactionFormPage(
         assetTradeContext: AssetTradeFormContext(
           asset: widget.asset,
           isBuy: widget.isBuy,
-          initialValue: value,
         ),
         fromAccount: _account,
       ),
@@ -266,9 +262,8 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
           children: [
             TextField(
               controller: _amountController,
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: decimalDigitFormatter(
                 widget.asset.currency.decimalPlaces,
               ),
@@ -276,7 +271,6 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
               onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 12),
-
             DateTimeFormField(
               mode: DateTimeFieldPickerMode.date,
               decoration: InputDecoration(labelText: t.general.time.date),
@@ -294,14 +288,14 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                 isBuy: widget.isBuy,
                 tradeDate: _date,
                 tradeAmountAbs: _parsedTradeAmount,
-                isEditingExistingTransaction: widget.transaction != null,
-                updateLaterValuations: _updateLaterValuations,
-                onUpdateLaterValuationsChanged: (v) =>
-                    setState(() => _updateLaterValuations = v),
+                previousSignedValue: widget.transaction?.value,
+                previousTradeDate: widget.transaction?.date,
+                updateValuations: _updateValuations,
+                onUpdateValuationsChanged: (v) =>
+                    setState(() => _updateValuations = v),
               ),
               const SizedBox(height: 12),
             ],
-
             StreamBuilder<List<Account>>(
               stream: AccountService.instance.getAccounts(),
               builder: (context, snap) {
@@ -314,8 +308,7 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                   });
                 }
 
-                final valueInList =
-                    _account != null &&
+                final valueInList = _account != null &&
                         accounts.any((a) => a.id == _account!.id)
                     ? _account
                     : null;
@@ -328,13 +321,13 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                         ),
                       ]
                     : accounts
-                          .map(
-                            (a) => DropdownMenuItem<Account?>(
-                              value: a,
-                              child: Text(a.name),
-                            ),
-                          )
-                          .toList();
+                        .map(
+                          (a) => DropdownMenuItem<Account?>(
+                            value: a,
+                            child: Text(a.name),
+                          ),
+                        )
+                        .toList();
 
                 return DropdownButtonFormField<Account?>(
                   value: accounts.isEmpty ? null : valueInList,
@@ -342,13 +335,11 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                     labelText: t.general.account,
                     prefixIcon: Container(
                       margin: const EdgeInsets.only(left: 16, right: 4),
-                      child:
-                          valueInList?.displayIcon(context) ??
+                      child: valueInList?.displayIcon(context) ??
                           Icon(
                             Icons.account_balance_wallet_outlined,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.onSurfaceVariant,
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ),
@@ -399,12 +390,10 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                   );
                 },
               ),
-
             const SizedBox(height: 16),
           ],
         ),
       ),
-
       footer: BottomSheetFooter(
         extraActions: [
           ListTileActionItem(

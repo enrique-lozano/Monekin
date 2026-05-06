@@ -90,7 +90,8 @@ class TransactionAmountDisplay extends StatelessWidget {
                         return CurrencyDisplayer(
                           amountToConvert: transactionValue,
                           currency:
-                              displayCurrencyOverride ?? fromAccount?.currency,
+                              displayCurrencyOverride ??
+                              fromAccount?.currency,
                           currencyStyle: bigTextStyle,
                           integerStyle: bigTextStyle,
                           followPrivateMode: false,

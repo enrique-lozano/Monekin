@@ -279,7 +279,7 @@ class InvestmentService {
     return -transaction.value;
   }
 
-  static bool _statusAffectsValuation(TransactionInDB t) {
+  static bool statusAffectsValuation(TransactionInDB t) {
     final s = t.status;
     if (s == TransactionStatus.pending || s == TransactionStatus.voided) {
       return false;
@@ -288,7 +288,7 @@ class InvestmentService {
   }
 
   Future<void> onTransactionSaved(TransactionInDB inserted) async {
-    if (!_statusAffectsValuation(inserted) || inserted.assetID == null) {
+    if (!statusAffectsValuation(inserted) || inserted.assetID == null) {
       return;
     }
     await _applyValuationDelta(
@@ -304,14 +304,14 @@ class InvestmentService {
   ) async {
     if (previous != null &&
         previous.assetID != null &&
-        _statusAffectsValuation(previous)) {
+        statusAffectsValuation(previous)) {
       await _applyValuationDelta(
         assetId: previous.assetID!,
         date: previous.date,
         delta: -valuationDeltaForTransaction(previous),
       );
     }
-    if (_statusAffectsValuation(current) && current.assetID != null) {
+    if (statusAffectsValuation(current) && current.assetID != null) {
       await _applyValuationDelta(
         assetId: current.assetID!,
         date: current.date,
@@ -321,12 +321,69 @@ class InvestmentService {
   }
 
   Future<void> onTransactionDeleted(TransactionInDB removed) async {
-    if (!_statusAffectsValuation(removed) || removed.assetID == null) return;
+    if (!statusAffectsValuation(removed) || removed.assetID == null) return;
     await _applyValuationDelta(
       assetId: removed.assetID!,
       date: removed.date,
       delta: -valuationDeltaForTransaction(removed),
     );
+  }
+
+  /// Same as [onTransactionSaved], but also shifts all later valuations by the
+  /// same delta to keep historical snapshots aligned.
+  Future<void> onTransactionSavedAndFutureValuations(
+    TransactionInDB inserted,
+  ) async {
+    if (!statusAffectsValuation(inserted) || inserted.assetID == null) return;
+
+    final delta = valuationDeltaForTransaction(inserted);
+    await _applyValuationDelta(
+      assetId: inserted.assetID!,
+      date: inserted.date,
+      delta: delta,
+    );
+    await _shiftFutureValuations(
+      assetId: inserted.assetID!,
+      date: inserted.date,
+      delta: delta,
+    );
+  }
+
+  /// Same as [onTransactionUpdated], but also shifts all later valuations by
+  /// the reverted/applied deltas.
+  Future<void> onTransactionUpdatedAndFutureValuations(
+    TransactionInDB? previous,
+    TransactionInDB current,
+  ) async {
+    if (previous != null &&
+        previous.assetID != null &&
+        statusAffectsValuation(previous)) {
+      final revertDelta = -valuationDeltaForTransaction(previous);
+      await _applyValuationDelta(
+        assetId: previous.assetID!,
+        date: previous.date,
+        delta: revertDelta,
+      );
+      await _shiftFutureValuations(
+        assetId: previous.assetID!,
+        date: previous.date,
+        delta: revertDelta,
+      );
+    }
+
+    if (current.assetID != null && statusAffectsValuation(current)) {
+      final currentDelta = valuationDeltaForTransaction(current);
+      await _applyValuationDelta(
+        assetId: current.assetID!,
+        date: current.date,
+        delta: currentDelta,
+      );
+      await _shiftFutureValuations(
+        assetId: current.assetID!,
+        date: current.date,
+        delta: currentDelta,
+      );
+    }
   }
 
   /// `newSnapshot = latestValuationAtOrBefore(date) + delta` (same calendar day row updated in place).
@@ -353,6 +410,32 @@ class InvestmentService {
         assetId: assetId,
         date: date,
         value: newVal,
+      ),
+    );
+  }
+
+  Future<void> _shiftFutureValuations({
+    required String assetId,
+    required DateTime date,
+    required double delta,
+  }) async {
+    if (delta == 0) return;
+
+    final valuations = await getValuationsForAsset(assetId).first;
+
+    final toShift = valuations.where((valuation) {
+      final valuationDay = DateUtils.dateOnly(valuation.date);
+      final tradeDay = DateUtils.dateOnly(date);
+      return valuationDay.isAfter(tradeDay);
+    }).toList();
+
+    if (toShift.isEmpty) return;
+
+    await Future.wait(
+      toShift.map(
+        (valuation) => insertOrUpdateValuation(
+          valuation.copyWith(value: valuation.value + delta),
+        ),
       ),
     );
   }
