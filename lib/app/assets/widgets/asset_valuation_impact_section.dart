@@ -17,6 +17,7 @@ class AssetValuationImpactSection extends StatelessWidget {
     required this.onUpdateValuationsChanged,
     this.previousSignedValue,
     this.previousTradeDate,
+    this.cardMargin = const EdgeInsets.all(0),
   });
 
   final Asset asset;
@@ -25,6 +26,8 @@ class AssetValuationImpactSection extends StatelessWidget {
   final double? tradeAmountAbs;
   final double? previousSignedValue;
   final DateTime? previousTradeDate;
+
+  final EdgeInsets cardMargin;
 
   final bool updateValuations;
   final ValueChanged<bool> onUpdateValuationsChanged;
@@ -41,9 +44,7 @@ class AssetValuationImpactSection extends StatelessWidget {
     DateTime tradeDate,
   ) {
     final tradeDay = DateUtils.dateOnly(tradeDate);
-    return valuations.any(
-      (v) => DateUtils.dateOnly(v.date).isAfter(tradeDay),
-    );
+    return valuations.any((v) => DateUtils.dateOnly(v.date).isAfter(tradeDay));
   }
 
   @override
@@ -63,10 +64,7 @@ class AssetValuationImpactSection extends StatelessWidget {
         // Until valuations load, assume future rows may exist (copy matches insert logic).
         final hasFutureValuations = valuationsSnap.data == null
             ? true
-            : _hasValuationsStrictlyAfterDate(
-                valuationsSnap.data!,
-                tradeDate,
-              );
+            : _hasValuationsStrictlyAfterDate(valuationsSnap.data!, tradeDate);
 
         return StreamBuilder<double>(
           stream: InvestmentService.instance.getAssetValueAtDate(
@@ -78,9 +76,9 @@ class AssetValuationImpactSection extends StatelessWidget {
             final hasPreviousImpactAtSelectedDate =
                 previousSignedValue != null &&
                 previousTradeDate != null &&
-                !DateUtils.dateOnly(previousTradeDate!).isAfter(
-                  DateUtils.dateOnly(tradeDate),
-                );
+                !DateUtils.dateOnly(
+                  previousTradeDate!,
+                ).isAfter(DateUtils.dateOnly(tradeDate));
             final nextValue = hasPreviousImpactAtSelectedDate
                 ? currentValue - (signedValue - previousSignedValue!)
                 : currentValue - signedValue;
@@ -93,7 +91,10 @@ class AssetValuationImpactSection extends StatelessWidget {
                 : t.assets.details.trade_sheet_valuation_create_new_title;
             final switchSubtitle = hasFutureValuations
                 ? '${t.assets.details.trade_sheet_update_following_valuations_description}\n$dateLabel'
-                : t.assets.details.trade_sheet_valuation_adjust_current_description;
+                : t
+                      .assets
+                      .details
+                      .trade_sheet_valuation_adjust_current_description;
 
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
@@ -113,7 +114,9 @@ class AssetValuationImpactSection extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _ValuePreviewColumn(
-                            title: t.assets.details
+                            title: t
+                                .assets
+                                .details
                                 .trade_sheet_valuation_current_value_label,
                             value: _formatCurrency(currentValue),
                           ),
@@ -124,7 +127,9 @@ class AssetValuationImpactSection extends StatelessWidget {
                         ),
                         Expanded(
                           child: _ValuePreviewColumn(
-                            title: t.assets.details
+                            title: t
+                                .assets
+                                .details
                                 .trade_sheet_valuation_new_value_label,
                             value: _formatCurrency(nextValue),
                           ),
