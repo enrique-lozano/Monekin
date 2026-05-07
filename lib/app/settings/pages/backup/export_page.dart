@@ -103,7 +103,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
   }
 
   Future<void> downloadFile() async {
-    if (_isDownloading) return;
+    if (_isDownloading) return; // Prevent multiple concurrent operations
 
     setState(() {
       _isDownloading = true;
