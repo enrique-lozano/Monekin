@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
@@ -14,9 +12,10 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:saf_stream/saf_stream.dart';
+import 'package:saf_util/saf_util.dart';
 import 'package:share_plus/share_plus.dart';
-
-import '../../../../core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/database/backup/backup_database_service.dart';
 
 enum _ExportFormats { csv, db }
 
@@ -104,32 +103,57 @@ class _ExportDataPageState extends State<ExportDataPage> {
   }
 
   Future<void> downloadFile() async {
-    if (_isDownloading) return; // Prevent multiple concurrent operations
+    if (_isDownloading) return;
 
     setState(() {
       _isDownloading = true;
     });
 
     try {
-      String? path;
+      final safUtil = SafUtil();
 
-      try {
-        path = await FilePicker.platform.getDirectoryPath();
-      } catch (e) {
-        // Platform doesn't support directory picker, use documents directory as fallback
-        path = (await getApplicationDocumentsDirectory()).path;
-      }
+      final directory = await safUtil.pickDirectory(
+        writePermission: true,
+        persistablePermission: true,
+      );
 
-      if (path == null) {
-        MonekinSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
-
+      if (directory == null) {
+        MonekinSnackbar.info(
+          SnackbarParams(t.backup.no_directory_selected),
+        );
         return;
       }
 
-      final file = await _generateExportFile(path);
+      final directoryUri = directory.uri;
+
+      final tempDir = await getTemporaryDirectory();
+      final exportedFile = await _generateExportFile(tempDir.path);
+
+      final safStream = SafStream();
+
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+      final fileName = selectedExportFormat == _ExportFormats.csv
+          ? 'monekin_export_$timestamp.csv'
+          : 'monekin_export_$timestamp.db';
+
+      final mimeType = selectedExportFormat == _ExportFormats.csv
+          ? 'text/csv'
+          : 'application/octet-stream';
+
+      await safStream.pasteLocalFile(
+        exportedFile.path,
+        directoryUri,
+        fileName,
+        mimeType,
+      );
+
+      try {
+        await exportedFile.delete();
+      } catch (_) {}
 
       MonekinSnackbar.success(
-        SnackbarParams(t.backup.export.success(x: file.parent.path)),
+        SnackbarParams(t.backup.export.success(x: directory.name)),
       );
     } catch (err) {
       _showErrorSnackBar('$err');
