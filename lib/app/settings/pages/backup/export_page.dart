@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
@@ -103,65 +104,103 @@ class _ExportDataPageState extends State<ExportDataPage> {
   }
 
   Future<void> downloadFile() async {
-    if (_isDownloading) return; // Prevent multiple concurrent operations
+    if (Platform.isAndroid) {
+      if (_isDownloading) return; // Prevent multiple concurrent operations
 
-    setState(() {
-      _isDownloading = true;
-    });
-
-    try {
-      final safUtil = SafUtil();
-
-      final directory = await safUtil.pickDirectory(
-        writePermission: true,
-        persistablePermission: true,
-      );
-
-      if (directory == null) {
-        MonekinSnackbar.info(
-          SnackbarParams(t.backup.no_directory_selected),
-        );
-        return;
-      }
-
-      final directoryUri = directory.uri;
-
-      final tempDir = await getTemporaryDirectory();
-      final exportedFile = await _generateExportFile(tempDir.path);
-
-      final safStream = SafStream();
-
-      final timestamp = DateTime.now().millisecondsSinceEpoch;
-
-      final fileName = selectedExportFormat == _ExportFormats.csv
-          ? 'monekin_export_$timestamp.csv'
-          : 'monekin_export_$timestamp.db';
-
-      final mimeType = selectedExportFormat == _ExportFormats.csv
-          ? 'text/csv'
-          : 'application/octet-stream';
-
-      await safStream.pasteLocalFile(
-        exportedFile.path,
-        directoryUri,
-        fileName,
-        mimeType,
-      );
+      setState(() {
+        _isDownloading = true;
+      });
 
       try {
-        await exportedFile.delete();
-      } catch (_) {}
+        final safUtil = SafUtil();
 
-      MonekinSnackbar.success(
-        SnackbarParams(t.backup.export.success(x: directory.name)),
-      );
-    } catch (err) {
-      _showErrorSnackBar('$err');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isDownloading = false;
-        });
+        final directory = await safUtil.pickDirectory(
+          writePermission: true,
+          persistablePermission: true,
+        );
+
+        if (directory == null) {
+          MonekinSnackbar.info(
+            SnackbarParams(t.backup.no_directory_selected),
+          );
+          return;
+        }
+
+        final directoryUri = directory.uri;
+
+        final tempDir = await getTemporaryDirectory();
+        final exportedFile = await _generateExportFile(tempDir.path);
+
+        final safStream = SafStream();
+
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+
+        final fileName = selectedExportFormat == _ExportFormats.csv
+            ? 'monekin_export_$timestamp.csv'
+            : 'monekin_export_$timestamp.db';
+
+        final mimeType = selectedExportFormat == _ExportFormats.csv
+            ? 'text/csv'
+            : 'application/octet-stream';
+
+        await safStream.pasteLocalFile(
+          exportedFile.path,
+          directoryUri,
+          fileName,
+          mimeType,
+        );
+
+        try {
+          await exportedFile.delete();
+        } catch (_) {}
+
+        MonekinSnackbar.success(
+          SnackbarParams(t.backup.export.success(x: directory.name)),
+        );
+      } catch (err) {
+        _showErrorSnackBar('$err');
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isDownloading = false;
+          });
+        }
+      }
+    } else {
+      if (_isDownloading) return; // Prevent multiple concurrent operations
+
+      setState(() {
+        _isDownloading = true;
+      });
+
+      try {
+        String? path;
+
+        try {
+          path = await FilePicker.platform.getDirectoryPath();
+        } catch (e) {
+          // Platform doesn't support directory picker, use documents directory as fallback
+          path = (await getApplicationDocumentsDirectory()).path;
+        }
+
+        if (path == null) {
+          MonekinSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
+          return;
+        }
+
+        final file = await _generateExportFile(path);
+
+        MonekinSnackbar.success(
+          SnackbarParams(t.backup.export.success(x: file.parent.path)),
+        );
+      } catch (err) {
+        _showErrorSnackBar('$err');
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isDownloading = false;
+          });
+        }
       }
     }
   }
