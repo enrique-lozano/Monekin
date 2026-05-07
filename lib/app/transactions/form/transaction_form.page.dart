@@ -171,6 +171,20 @@ class _TransactionFormPageState extends State<TransactionFormPage>
               ? tr.assets.details.buy
               : tr.assets.details.sell;
           await _initializeFormValues();
+          final tradeCtx = widget.assetTradeContext;
+          if (tradeCtx != null && mounted) {
+            if (tradeCtx.prefillDate != null) {
+              date = tradeCtx.prefillDate!;
+            }
+            final prefillAmt = tradeCtx.prefillTradeAmountAbs;
+            if (prefillAmt != null && prefillAmt > 0) {
+              transactionValue = prefillAmt;
+            }
+            final prefillUv = tradeCtx.prefillUpdateValuations;
+            if (prefillUv != null) {
+              _updateValuations = prefillUv;
+            }
+          }
           if (mounted) setState(() {});
         });
       }

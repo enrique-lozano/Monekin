@@ -230,6 +230,9 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
         assetTradeContext: AssetTradeFormContext(
           asset: widget.asset,
           isBuy: widget.isBuy,
+          prefillDate: _date,
+          prefillTradeAmountAbs: _parsedTradeAmount,
+          prefillUpdateValuations: _updateValuations,
         ),
         fromAccount: _account,
       ),

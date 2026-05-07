@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -35,6 +36,16 @@ class AssetValuationImpactSection extends StatelessWidget {
     ).format(amount);
   }
 
+  static bool _hasValuationsStrictlyAfterDate(
+    List<ValuationInDB> valuations,
+    DateTime tradeDate,
+  ) {
+    final tradeDay = DateUtils.dateOnly(tradeDate);
+    return valuations.any(
+      (v) => DateUtils.dateOnly(v.date).isAfter(tradeDay),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -46,67 +57,85 @@ class AssetValuationImpactSection extends StatelessWidget {
 
     final signedValue = isBuy ? -amount : amount;
 
-    return StreamBuilder<double>(
-      stream: InvestmentService.instance.getAssetValueAtDate(
-        asset,
-        date: tradeDate,
-      ),
-      builder: (context, snapshot) {
-        final currentValue = snapshot.data ?? asset.initialValue;
-        final hasPreviousImpactAtSelectedDate =
-            previousSignedValue != null &&
-            previousTradeDate != null &&
-            !DateUtils.dateOnly(previousTradeDate!).isAfter(
-              DateUtils.dateOnly(tradeDate),
-            );
-        final nextValue = hasPreviousImpactAtSelectedDate
-            ? currentValue - (signedValue - previousSignedValue!)
-            : currentValue - signedValue;
-        final dateLabel = DateFormat.yMMMd(
-          Localizations.localeOf(context).toString(),
-        ).format(tradeDate);
+    return StreamBuilder<List<ValuationInDB>>(
+      stream: InvestmentService.instance.getValuationsForAsset(asset.id),
+      builder: (context, valuationsSnap) {
+        // Until valuations load, assume future rows may exist (copy matches insert logic).
+        final hasFutureValuations = valuationsSnap.data == null
+            ? true
+            : _hasValuationsStrictlyAfterDate(
+                valuationsSnap.data!,
+                tradeDate,
+              );
 
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-            child: Column(
-              children: [
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    t.assets.details.trade_sheet_update_following_valuations,
-                  ),
-                  subtitle: Text(
-                    '${t.assets.details.trade_sheet_update_following_valuations_description}\n$dateLabel',
-                  ),
-                  value: updateValuations,
-                  onChanged: onUpdateValuationsChanged,
-                ),
-                const Divider(height: 20),
-                Row(
+        return StreamBuilder<double>(
+          stream: InvestmentService.instance.getAssetValueAtDate(
+            asset,
+            date: tradeDate,
+          ),
+          builder: (context, snapshot) {
+            final currentValue = snapshot.data ?? asset.initialValue;
+            final hasPreviousImpactAtSelectedDate =
+                previousSignedValue != null &&
+                previousTradeDate != null &&
+                !DateUtils.dateOnly(previousTradeDate!).isAfter(
+                  DateUtils.dateOnly(tradeDate),
+                );
+            final nextValue = hasPreviousImpactAtSelectedDate
+                ? currentValue - (signedValue - previousSignedValue!)
+                : currentValue - signedValue;
+            final dateLabel = DateFormat.yMMMd(
+              Localizations.localeOf(context).toString(),
+            ).format(tradeDate);
+
+            final switchTitle = hasFutureValuations
+                ? t.assets.details.trade_sheet_update_following_valuations
+                : t.assets.details.trade_sheet_valuation_create_new_title;
+            final switchSubtitle = hasFutureValuations
+                ? '${t.assets.details.trade_sheet_update_following_valuations_description}\n$dateLabel'
+                : t.assets.details.trade_sheet_valuation_adjust_current_description;
+
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
+                child: Column(
                   children: [
-                    Expanded(
-                      child: _ValuePreviewColumn(
-                        title: t.general.balance,
-                        value: _formatCurrency(currentValue),
-                      ),
+                    SwitchListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(switchTitle),
+                      subtitle: Text(switchSubtitle),
+                      value: updateValuations,
+                      onChanged: onUpdateValuationsChanged,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Icon(Icons.arrow_forward_rounded),
-                    ),
-                    Expanded(
-                      child: _ValuePreviewColumn(
-                        title: t.assets.details.update_value,
-                        value: _formatCurrency(nextValue),
-                      ),
+                    const Divider(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _ValuePreviewColumn(
+                            title: t.assets.details
+                                .trade_sheet_valuation_current_value_label,
+                            value: _formatCurrency(currentValue),
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Icon(Icons.arrow_forward_rounded),
+                        ),
+                        Expanded(
+                          child: _ValuePreviewColumn(
+                            title: t.assets.details
+                                .trade_sheet_valuation_new_value_label,
+                            value: _formatCurrency(nextValue),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
