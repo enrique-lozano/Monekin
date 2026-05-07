@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Toggle and preview card for valuation updates caused by an asset trade.
@@ -79,65 +81,86 @@ class AssetValuationImpactSection extends StatelessWidget {
                 !DateUtils.dateOnly(
                   previousTradeDate!,
                 ).isAfter(DateUtils.dateOnly(tradeDate));
+
             final nextValue = hasPreviousImpactAtSelectedDate
                 ? currentValue - (signedValue - previousSignedValue!)
                 : currentValue - signedValue;
-            final dateLabel = DateFormat.yMMMd(
-              Localizations.localeOf(context).toString(),
-            ).format(tradeDate);
+
+            /// Section translations abbreviation
+            final sectionTr = t.assets.details;
 
             final switchTitle = hasFutureValuations
-                ? t.assets.details.trade_sheet_update_following_valuations
-                : t.assets.details.trade_sheet_valuation_create_new_title;
+                ? sectionTr.trade_sheet_update_following_valuations
+                : sectionTr.trade_sheet_valuation_create_new_title;
+
             final switchSubtitle = hasFutureValuations
-                ? '${t.assets.details.trade_sheet_update_following_valuations_description}\n$dateLabel'
-                : t
-                      .assets
-                      .details
-                      .trade_sheet_valuation_adjust_current_description;
+                ? sectionTr.trade_sheet_update_following_valuations_description
+                : sectionTr.trade_sheet_valuation_adjust_current_description;
 
             return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 4, 12, 12),
-                child: Column(
-                  children: [
-                    SwitchListTile(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(switchTitle),
-                      subtitle: Text(switchSubtitle),
-                      value: updateValuations,
-                      onChanged: onUpdateValuationsChanged,
-                    ),
-                    const Divider(height: 20),
-                    Row(
+              margin: cardMargin,
+              clipBehavior: Clip.antiAlias,
+              color: InputDecorationTheme.of(context).filled
+                  ? InputDecorationTheme.of(context).fillColor
+                  : null,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(inputBorderRadius),
+              ),
+              child: Column(
+                children: [
+                  SwitchListTile(
+                    title: Text(switchTitle),
+                    subtitle: Text(switchSubtitle),
+                    value: nextValue == currentValue ? false : updateValuations,
+
+                    onChanged: nextValue == currentValue
+                        ? null
+                        : (value) {
+                            onUpdateValuationsChanged(value);
+                          },
+                  ),
+                  AnimatedExpanded(
+                    expand: updateValuations,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 12,
                       children: [
-                        Expanded(
-                          child: _ValuePreviewColumn(
-                            title: t
-                                .assets
-                                .details
-                                .trade_sheet_valuation_current_value_label,
-                            value: _formatCurrency(currentValue),
+                        const Divider(height: 2),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              _ValuePreviewColumn(
+                                title: t
+                                    .assets
+                                    .details
+                                    .trade_sheet_valuation_current_value_label,
+                                value: _formatCurrency(currentValue),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 10,
+                                ),
+                                child: Icon(Icons.arrow_forward_rounded),
+                              ),
+                              Expanded(
+                                child: _ValuePreviewColumn(
+                                  title: t
+                                      .assets
+                                      .details
+                                      .trade_sheet_valuation_new_value_label,
+                                  value: _formatCurrency(nextValue),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Icon(Icons.arrow_forward_rounded),
-                        ),
-                        Expanded(
-                          child: _ValuePreviewColumn(
-                            title: t
-                                .assets
-                                .details
-                                .trade_sheet_valuation_new_value_label,
-                            value: _formatCurrency(nextValue),
-                          ),
-                        ),
+                        const SizedBox(height: 0),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },

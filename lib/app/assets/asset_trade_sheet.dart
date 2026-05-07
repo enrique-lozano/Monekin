@@ -13,13 +13,14 @@ import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -95,8 +96,9 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
 
     final linkedId = widget.asset.linkedAccountID;
     if (linkedId != null) {
-      final linkedAcc =
-          await AccountService.instance.getAccountById(linkedId).first;
+      final linkedAcc = await AccountService.instance
+          .getAccountById(linkedId)
+          .first;
       if (linkedAcc != null && mounted) {
         setState(() => _account = linkedAcc);
         return;
@@ -163,9 +165,7 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
     final t = Translations.of(context);
 
     if (_formKey.currentState?.validate() != true) {
-      MonekinSnackbar.error(
-        SnackbarParams(t.general.validations.form_error),
-      );
+      MonekinSnackbar.error(SnackbarParams(t.general.validations.form_error));
       return;
     }
 
@@ -265,8 +265,9 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
           children: [
             TextField(
               controller: _amountController,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: decimalDigitFormatter(
                 widget.asset.currency.decimalPlaces,
               ),
@@ -285,20 +286,26 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
               },
             ),
             const SizedBox(height: 12),
-            if (_showsAssetValuationImpact) ...[
-              AssetValuationImpactSection(
-                asset: widget.asset,
-                isBuy: widget.isBuy,
-                tradeDate: _date,
-                tradeAmountAbs: _parsedTradeAmount,
-                previousSignedValue: widget.transaction?.value,
-                previousTradeDate: widget.transaction?.date,
-                updateValuations: _updateValuations,
-                onUpdateValuationsChanged: (v) =>
-                    setState(() => _updateValuations = v),
+            AnimatedExpanded(
+              expand: _showsAssetValuationImpact,
+              axis: Axis.vertical,
+              child: Column(
+                children: [
+                  AssetValuationImpactSection(
+                    asset: widget.asset,
+                    isBuy: widget.isBuy,
+                    tradeDate: _date,
+                    tradeAmountAbs: _parsedTradeAmount,
+                    previousSignedValue: widget.transaction?.value,
+                    previousTradeDate: widget.transaction?.date,
+                    updateValuations: _updateValuations,
+                    onUpdateValuationsChanged: (v) =>
+                        setState(() => _updateValuations = v),
+                  ),
+                  const SizedBox(height: 12),
+                ],
               ),
-              const SizedBox(height: 12),
-            ],
+            ),
             StreamBuilder<List<Account>>(
               stream: AccountService.instance.getAccounts(),
               builder: (context, snap) {
@@ -311,7 +318,8 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                   });
                 }
 
-                final valueInList = _account != null &&
+                final valueInList =
+                    _account != null &&
                         accounts.any((a) => a.id == _account!.id)
                     ? _account
                     : null;
@@ -324,13 +332,13 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                         ),
                       ]
                     : accounts
-                        .map(
-                          (a) => DropdownMenuItem<Account?>(
-                            value: a,
-                            child: Text(a.name),
-                          ),
-                        )
-                        .toList();
+                          .map(
+                            (a) => DropdownMenuItem<Account?>(
+                              value: a,
+                              child: Text(a.name),
+                            ),
+                          )
+                          .toList();
 
                 return DropdownButtonFormField<Account?>(
                   value: accounts.isEmpty ? null : valueInList,
@@ -338,11 +346,13 @@ class _AssetTradeSheetState extends State<_AssetTradeSheet> {
                     labelText: t.general.account,
                     prefixIcon: Container(
                       margin: const EdgeInsets.only(left: 16, right: 4),
-                      child: valueInList?.displayIcon(context) ??
+                      child:
+                          valueInList?.displayIcon(context) ??
                           Icon(
                             Icons.account_balance_wallet_outlined,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                     ),
                   ),
