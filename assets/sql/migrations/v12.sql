@@ -97,5 +97,9 @@ INSERT INTO valuations_temp (id, assetId, date, value)
 DROP TABLE valuations;
 ALTER TABLE valuations_temp RENAME TO valuations;
 
--- Step 9: Re-enable foreign key enforcement
+-- Improve query performance for fetching valuations by asset and date
+CREATE INDEX idx_valuations_assetId_date ON valuations(assetId, date DESC);
+CREATE INDEX idx_exchangeRates_currencyCode_date ON exchangeRates(currencyCode, date DESC);
+
+-- Step 10: Re-enable foreign key enforcement
 PRAGMA foreign_keys = ON;
