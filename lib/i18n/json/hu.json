@@ -856,11 +856,11 @@
     "total_value": "Az eszközök összértéke",
     "amount_invested": "A számla {{ X }} összegét befektette",
     "TYPES": {
-      "stocks": "Készletek",
-      "funds": "Alapok",
-      "crypto": "Crypto",
+      "stocks": "Részvények",
+      "funds": "Befektetési alapok",
+      "crypto": "Kriptovaluta",
       "real_estate": "Ingatlan",
-      "vehicle": "Jármű",
+      "vehicle": "Járművek",
       "jewelry_art": "Ékszer és művészet",
       "other": "Más"
     },

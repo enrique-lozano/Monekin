@@ -857,7 +857,7 @@
     "amount_invested": "您已投資該帳戶的 {{ X }}",
     "TYPES": {
       "stocks": "股票",
-      "funds": "資金",
+      "funds": "基金",
       "crypto": "加密貨幣",
       "real_estate": "房地產",
       "vehicle": "車輛",

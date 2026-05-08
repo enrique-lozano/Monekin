@@ -857,10 +857,10 @@
     "amount_invested": "Sie haben die {{ X }} dieses Kontos investiert",
     "TYPES": {
       "stocks": "Aktien",
-      "funds": "Mittel",
+      "funds": "Fonds",
       "crypto": "Krypto",
       "real_estate": "Immobilie",
-      "vehicle": "Fahrzeug",
+      "vehicle": "Fahrzeuge",
       "jewelry_art": "Schmuck & Kunst",
       "other": "Andere"
     },

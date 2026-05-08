@@ -859,11 +859,11 @@
     "total_value": "Valor total de los activos",
     "amount_invested": "Tienes el {{ X }} de esta cuenta invertido",
     "TYPES": {
-      "stocks": "Cepo",
+      "stocks": "Acciones",
       "funds": "Fondos",
-      "crypto": "Cripto",
-      "real_estate": "Bienes raíces",
-      "vehicle": "Vehículo",
+      "crypto": "Criptomonedas",
+      "real_estate": "Bienes raíces ",
+      "vehicle": "Vehículos",
       "jewelry_art": "Joyería y arte",
       "other": "Otro"
     },
