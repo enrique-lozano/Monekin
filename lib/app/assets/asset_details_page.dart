@@ -15,6 +15,7 @@ import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
@@ -41,6 +42,7 @@ class AssetDetailsPage extends StatefulWidget {
 
 class _AssetDetailsPageState extends State<AssetDetailsPage> {
   ValuationInDB? _hoveredValuation;
+  ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -48,6 +50,33 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  List<ValuationInDB> _buildFilteredChartData(List<ValuationInDB> valuations) {
+    final allValuations = [
+      ValuationInDB(
+        id: 'INITIAL_VALUE',
+        date: widget.asset.creationDate,
+        value: widget.asset.initialValue,
+        assetId: widget.asset.id,
+      ),
+      ...valuations,
+    ];
+
+    final sortedValuations = List<ValuationInDB>.from(allValuations)
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    final oldestDate = sortedValuations.first.date;
+    final periodToUse =
+        _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
+        ? _selectedChartPeriod
+        : ChartTimePeriod.max;
+
+    return filterTimeSeriesByPeriod(
+      data: sortedValuations,
+      dateExtractor: (valuation) => valuation.date,
+      period: periodToUse,
+    );
   }
 
   Future<void> _addValuation(Asset asset) async {
@@ -292,22 +321,52 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     BuildContext context,
     List<ValuationInDB>? valuations,
   ) {
+    final allChartData = valuations == null
+        ? null
+        : ([
+            ValuationInDB(
+              id: 'INITIAL_VALUE',
+              date: widget.asset.creationDate,
+              value: widget.asset.initialValue,
+              assetId: widget.asset.id,
+            ),
+            ...valuations,
+          ]..sort((a, b) => a.date.compareTo(b.date)));
+
+    final chartData = valuations == null
+        ? null
+        : _buildFilteredChartData(valuations);
+
     return Column(
       spacing: 16,
       children: [
-        if (valuations != null)
+        if (allChartData != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: ChartTimePeriodSelector(
+                selectedPeriod:
+                    _selectedChartPeriod.isRangeAvailable(
+                      oldestDate: allChartData.first.date,
+                    )
+                    ? _selectedChartPeriod
+                    : ChartTimePeriod.max,
+                oldestDate: allChartData.first.date,
+                onSelected: (period) {
+                  setState(() {
+                    _selectedChartPeriod = period;
+                    _hoveredValuation = null;
+                  });
+                },
+              ),
+            ),
+          ),
+        if (chartData != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
             child: TimeSeriesEvolutionChart<ValuationInDB>(
-              data: [
-                ValuationInDB(
-                  id: 'INITIAL_VALUE',
-                  date: widget.asset.creationDate,
-                  value: widget.asset.initialValue,
-                  assetId: widget.asset.id,
-                ),
-                ...valuations,
-              ],
+              data: chartData,
               dateExtractor: (v) => v.date,
               valueExtractor: (v) => v.value,
               currency: widget.asset.currency,
