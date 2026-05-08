@@ -912,6 +912,7 @@
       "add_valuation": "Değerleme ekle",
       "edit_valuation": "Değerlemeyi düzenle",
       "value": "Değer",
+      "net_contribution": "Net katkı",
       "value_required": "Lütfen bir değer girin",
       "value_invalid": "Lütfen geçerli bir numara girin",
       "update_value_success": "Değerleme başarıyla eklendi",

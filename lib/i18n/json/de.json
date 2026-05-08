@@ -912,6 +912,7 @@
       "add_valuation": "Bewertung hinzufügen",
       "edit_valuation": "Bewertung bearbeiten",
       "value": "Wert",
+      "net_contribution": "Nettoeinlage",
       "value_required": "Bitte geben Sie einen Wert ein",
       "value_invalid": "Bitte geben Sie eine gültige Nummer ein",
       "update_value_success": "Bewertung erfolgreich hinzugefügt",

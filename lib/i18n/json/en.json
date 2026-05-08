@@ -912,6 +912,7 @@
       "add_valuation": "Add valuation",
       "edit_valuation": "Edit valuation",
       "value": "Value",
+      "net_contribution": "Net contribution",
       "value_required": "Please enter a value",
       "value_invalid": "Please enter a valid number",
       "update_value_success": "Valuation added successfully",

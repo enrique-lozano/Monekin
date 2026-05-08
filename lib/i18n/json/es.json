@@ -910,11 +910,12 @@
       "valuation_before_creation_date": "Hay valoraciones en este activo con una fecha anterior a la fecha de adquisición"
     },
     "VALUATION": {
-      "history": "Historial de valoración",
+      "history": "Historial de valoraciones",
       "no_valuations": "Aún no se han registrado valoraciones. Comience agregando la primera valoración.",
       "add_valuation": "Añadir valoración",
       "edit_valuation": "Editar valoración",
       "value": "Valor",
+      "net_contribution": "Aportación neta",
       "value_required": "Por favor introduce un valor",
       "value_invalid": "Por favor ingresa un número válido",
       "update_value_success": "Valoración agregada exitosamente",

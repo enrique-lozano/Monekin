@@ -912,6 +912,7 @@
       "add_valuation": "Értékelés hozzáadása",
       "edit_valuation": "Értékelés szerkesztése",
       "value": "Érték",
+      "net_contribution": "Nettó hozzájárulás",
       "value_required": "Adjon meg egy értéket",
       "value_invalid": "Kérjük, adjon meg egy érvényes számot",
       "update_value_success": "Az értékelés sikeresen hozzáadva",

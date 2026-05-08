@@ -912,6 +912,7 @@
       "add_valuation": "Aggiungi valutazione",
       "edit_valuation": "Modifica valutazione",
       "value": "Valore",
+      "net_contribution": "Apporto netto",
       "value_required": "Inserisci un valore",
       "value_invalid": "Inserisci un numero valido",
       "update_value_success": "Valutazione aggiunta con successo",

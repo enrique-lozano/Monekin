@@ -912,6 +912,7 @@
       "add_valuation": "添加估价",
       "edit_valuation": "编辑估值",
       "value": "价值",
+      "net_contribution": "净投入",
       "value_required": "请输入一个值",
       "value_invalid": "请输入有效号码",
       "update_value_success": "估价添加成功",

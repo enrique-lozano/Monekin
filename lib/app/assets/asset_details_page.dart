@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_form.dart';
 import 'package:monekin/app/assets/asset_trade_sheet.dart';
+import 'package:monekin/app/assets/widgets/asset_valuation_contribution_chart.dart';
 import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/debts/components/transaction_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -20,7 +21,6 @@ import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -77,6 +77,60 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       dateExtractor: (valuation) => valuation.date,
       period: periodToUse,
     );
+  }
+
+  List<AssetValuationContributionPoint> _buildChartPoints({
+    required List<ValuationInDB> valuations,
+    required List<MoneyTransaction> transactions,
+  }) {
+    final allValuations = [
+      ValuationInDB(
+        id: 'INITIAL_VALUE',
+        date: widget.asset.creationDate,
+        value: widget.asset.initialValue,
+        assetId: widget.asset.id,
+      ),
+      ...valuations,
+    ]..sort((a, b) => a.date.compareTo(b.date));
+
+    final filteredValuations = _buildFilteredChartData(valuations);
+    if (filteredValuations.isEmpty) {
+      return const [];
+    }
+
+    final firstVisibleDate = filteredValuations.first.date;
+    final txSorted = transactions
+        .where((tx) => InvestmentService.statusAffectsValuation(tx))
+        .toList()
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    var txIndex = 0;
+    var netContribution = widget.asset.initialValue;
+
+    for (final tx in txSorted) {
+      if (tx.date.isAfter(firstVisibleDate)) break;
+      netContribution += InvestmentService.valuationDeltaForTransaction(tx);
+      txIndex++;
+    }
+
+    return allValuations
+        .where((valuation) => !valuation.date.isBefore(firstVisibleDate))
+        .map((valuation) {
+          while (txIndex < txSorted.length &&
+              !txSorted[txIndex].date.isAfter(valuation.date)) {
+            netContribution += InvestmentService.valuationDeltaForTransaction(
+              txSorted[txIndex],
+            );
+            txIndex++;
+          }
+
+          return AssetValuationContributionPoint(
+            date: valuation.date,
+            valuation: valuation.value,
+            netContribution: netContribution,
+          );
+        })
+        .toList();
   }
 
   Future<void> _addValuation(Asset asset) async {
@@ -288,8 +342,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   }
 
   Widget _buildTrendSection(BuildContext context) {
-    final t = Translations.of(context);
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,6 +365,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   Widget _buildChartSection(
     BuildContext context,
     List<ValuationInDB>? valuations,
+    List<MoneyTransaction>? transactions,
   ) {
     final allChartData = valuations == null
         ? null
@@ -328,7 +381,10 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
     final chartData = valuations == null
         ? null
-        : _buildFilteredChartData(valuations);
+        : _buildChartPoints(
+            valuations: valuations,
+            transactions: transactions ?? const [],
+          );
 
     return Column(
       spacing: 16,
@@ -358,14 +414,21 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         if (chartData != null)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
-            child: TimeSeriesEvolutionChart<ValuationInDB>(
-              data: chartData,
-              dateExtractor: (v) => v.date,
-              valueExtractor: (v) => v.value,
+            child: AssetValuationContributionChart(
+              points: chartData,
               currency: widget.asset.currency,
-              onHover: (valuation) {
+              valuationLabel: t.assets.valuation.value,
+              netContributionLabel: t.assets.valuation.net_contribution,
+              onHover: (point) {
                 setState(() {
-                  _hoveredValuation = valuation;
+                  _hoveredValuation = point == null
+                      ? null
+                      : ValuationInDB(
+                          id: 'HOVERED_VALUE',
+                          date: point.date,
+                          value: point.valuation,
+                          assetId: widget.asset.id,
+                        );
                 });
               },
             ),
@@ -577,7 +640,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         _buildCurrentValueTile(context, valuations, displayValuation, asset),
         if (valuations != null && MediaQuery.of(context).size.height > 550) ...[
           const SizedBox(height: 16),
-          _buildChartSection(context, valuations),
+          _buildChartSection(context, valuations, transactions),
         ],
         const SizedBox(height: 16),
         Expanded(
@@ -615,7 +678,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 asset,
               ),
               const SizedBox(height: 16),
-              _buildChartSection(context, valuations),
+              _buildChartSection(context, valuations, transactions),
             ],
           ),
         ),

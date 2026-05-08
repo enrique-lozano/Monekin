@@ -912,6 +912,7 @@
       "add_valuation": "Додайте оцінку",
       "edit_valuation": "Редагувати оцінку",
       "value": "Значення",
+      "net_contribution": "Чистий внесок",
       "value_required": "Будь ласка, введіть значення",
       "value_invalid": "Введіть дійсний номер",
       "update_value_success": "Оцінку успішно додано",
