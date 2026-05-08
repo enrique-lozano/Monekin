@@ -14,8 +14,8 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
+import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
@@ -183,7 +183,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         final displayValuation = _hoveredValuation ?? valuations?.firstOrNull;
 
         return PageFramework(
-          title: '',
+          title: widget.asset.name,
           appBarActions: [
             MonekinPopupMenuButton(
               actionItems: [
@@ -237,53 +237,57 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   ) {
     asset ??= widget.asset;
 
-    return Skeletonizer(
-      enabled: valuations == null,
-      child: StreamBuilder<double>(
-        stream: InvestmentService.instance.getCurrentAssetValue(asset),
-        builder: (context, valueSnapshot) {
-          final value = valueSnapshot.data ?? asset!.initialValue;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Skeletonizer(
+            enabled: valuations == null,
+            child: StreamBuilder<double>(
+              stream: InvestmentService.instance.getCurrentAssetValue(asset),
+              builder: (context, valueSnapshot) {
+                final value = valueSnapshot.data ?? asset!.initialValue;
 
-          return ListTile(
-            title: Text(asset!.name),
-            titleTextStyle: Theme.of(context).textTheme.headlineMedium,
-            subtitle: Row(
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                if (displayValuation != null) ...[
-                  DefaultTextStyle.merge(
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: CurrencyDisplayer(
-                      amountToConvert: displayValuation.value,
-                      currency: asset.currency,
-                    ),
-                  ),
-                  Text(
-                    '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
-                  ),
-                ] else
-                  DefaultTextStyle.merge(
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: CurrencyDisplayer(
-                      amountToConvert: value,
-                      currency: asset.currency,
-                    ),
-                  ),
-              ],
+                return Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    if (displayValuation != null) ...[
+                      DefaultTextStyle.merge(
+                        style: Theme.of(context).textTheme.titleLarge,
+                        child: CurrencyDisplayer(
+                          amountToConvert: displayValuation.value,
+                          currency: asset?.currency ?? widget.asset.currency,
+                        ),
+                      ),
+                      Text(
+                        '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
+                      ),
+                    ] else
+                      DefaultTextStyle.merge(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        child: CurrencyDisplayer(
+                          amountToConvert: value,
+                          currency: asset?.currency ?? widget.asset.currency,
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
-          );
-        },
+          ),
+          _buildTrendSection(context),
+        ],
       ),
     );
   }
 
-  Widget _buildSummarySection(BuildContext context) {
+  Widget _buildTrendSection(BuildContext context) {
     final t = Translations.of(context);
 
     return Column(
@@ -296,20 +300,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             final profitData = profitSnapshot.data;
             final percent = profitData?.percent ?? 0;
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    t.assets.profit,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelSmall?.copyWith(color: Colors.grey),
-                  ),
-                  TrendingValue(percentage: percent),
-                ],
-              ),
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [TrendingValue(percentage: percent)],
             );
           },
         ),
@@ -582,9 +575,10 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       children: [
         const SizedBox(height: 8),
         _buildCurrentValueTile(context, valuations, displayValuation, asset),
-        _buildSummarySection(context),
-        if (valuations != null && MediaQuery.of(context).size.height > 550)
+        if (valuations != null && MediaQuery.of(context).size.height > 550) ...[
+          const SizedBox(height: 16),
           _buildChartSection(context, valuations),
+        ],
         const SizedBox(height: 16),
         Expanded(
           child: _buildValuationListSection(
@@ -620,7 +614,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 displayValuation,
                 asset,
               ),
-              _buildSummarySection(context),
+              const SizedBox(height: 16),
               _buildChartSection(context, valuations),
             ],
           ),

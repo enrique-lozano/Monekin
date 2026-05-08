@@ -14,6 +14,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 enum AssetsSortOption { nameAsc, nameDesc, valueAsc, valueDesc }
 
@@ -123,15 +124,14 @@ class _AssetsListPageState extends State<AssetsListPage> {
               // investment account balances) — intentional for this “all assets” total.
               stream: InvestmentService.instance.getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-
-                final totalValue = snapshot.data!;
-                return CurrencyDisplayer(
-                  amountToConvert: totalValue,
-                  currency: null, // You can set a default currency if needed
-                  integerStyle: Theme.of(context).textTheme.headlineMedium!,
+                final totalValue = snapshot.data;
+                return Skeletonizer(
+                  enabled: !snapshot.hasData,
+                  child: CurrencyDisplayer(
+                    amountToConvert: totalValue ?? 10000,
+                    currency: null, // You can set a default currency if needed
+                    integerStyle: Theme.of(context).textTheme.headlineMedium!,
+                  ),
                 );
               },
             ),
@@ -238,30 +238,24 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     final asset = assets[index].$1;
                     final value = assets[index].$2;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: ListTile(
-                        title: Text(asset.name),
-                        subtitle: Row(
-                          spacing: 4,
-                          children: [
-                            Icon(asset.assetType.icon(), size: 14),
-                            Text(asset.assetType.displayName(context)),
-                          ],
-                        ),
-                        minVerticalPadding: 0,
-                        trailing: CurrencyDisplayer(
-                          amountToConvert: value,
-                          currency: asset.currency,
-                          integerStyle: Theme.of(
-                            context,
-                          ).textTheme.titleMedium!,
-                        ),
-                        leadingAndTrailingTextStyle: Theme.of(
-                          context,
-                        ).textTheme.labelLarge,
-                        onTap: () => _goToDetails(asset),
+                    return ListTile(
+                      title: Text(asset.name),
+                      subtitle: Row(
+                        spacing: 4,
+                        children: [
+                          Icon(asset.assetType.icon(), size: 14),
+                          Text(asset.assetType.displayName(context)),
+                        ],
                       ),
+                      trailing: CurrencyDisplayer(
+                        amountToConvert: value,
+                        currency: asset.currency,
+                        integerStyle: Theme.of(context).textTheme.titleMedium!,
+                      ),
+                      leadingAndTrailingTextStyle: Theme.of(
+                        context,
+                      ).textTheme.labelLarge,
+                      onTap: () => _goToDetails(asset),
                     );
                   },
                 );
