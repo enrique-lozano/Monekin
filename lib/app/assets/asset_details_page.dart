@@ -14,6 +14,7 @@ import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
@@ -167,7 +168,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     double periodReturnFraction,
     double periodBenefitMoney,
     DateTime rangeStartDate,
-  })? _periodPerformance({
+  })?
+  _periodPerformance({
     required List<AssetValuationContributionPoint>? points,
     required double currentValue,
     required double netContributionNow,
@@ -184,7 +186,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     if (basis.abs() < 1e-9) {
       periodReturnFraction = periodBenefitMoney == 0
           ? 0
-          : (periodBenefitMoney > 0 ? double.infinity : double.negativeInfinity);
+          : (periodBenefitMoney > 0
+                ? double.infinity
+                : double.negativeInfinity);
     } else {
       periodReturnFraction = periodBenefitMoney / basis;
     }
@@ -370,32 +374,12 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      spacing: 8,
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        if (displayValuation != null) ...[
-                          DefaultTextStyle.merge(
-                            style: Theme.of(context).textTheme.titleLarge,
-                            child: CurrencyDisplayer(
-                              amountToConvert: displayValuation.value,
-                              currency: asset?.currency ?? widget.asset.currency,
-                            ),
-                          ),
-                          Text(
-                            '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
-                          ),
-                        ] else
-                          DefaultTextStyle.merge(
-                            style: Theme.of(context).textTheme.bodyLarge
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                            child: CurrencyDisplayer(
-                              amountToConvert: value,
-                              currency: asset?.currency ?? widget.asset.currency,
-                            ),
-                          ),
-                      ],
+                    DefaultTextStyle.merge(
+                      style: Theme.of(context).textTheme.titleLarge,
+                      child: CurrencyDisplayer(
+                        amountToConvert: displayValuation?.value ?? value,
+                        currency: asset?.currency ?? widget.asset.currency,
+                      ),
                     ),
                     _buildTrendSection(
                       context,
@@ -422,7 +406,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     required double currentValue,
   }) {
     final resolvedAsset = asset ?? widget.asset;
-    final scheme = Theme.of(context).colorScheme;
 
     if (valuations == null || transactions == null) {
       return const Padding(
@@ -461,62 +444,74 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         : clampAssetPerformanceTrendFraction(period.periodReturnFraction);
     final periodSnapshot = period;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: StreamBuilder<({double value, double percent})>(
-        stream: InvestmentService.instance.getAssetProfit(resolvedAsset),
-        builder: (context, profitSnapshot) {
-          final lifetime = profitSnapshot.data;
-          final pr = periodSnapshot;
+    final trendValue = StreamBuilder<({double value, double percent})>(
+      stream: InvestmentService.instance.getAssetProfit(resolvedAsset),
+      builder: (context, profitSnapshot) {
+        final lifetime = profitSnapshot.data;
+        final pr = periodSnapshot;
 
-          return Semantics(
-            button: true,
-            label: Translations.of(context).assets.details.performance_sheet_title,
-            child: Material(
-              color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
-              borderRadius: BorderRadius.circular(14),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: points.isEmpty || lifetime == null || pr == null
-                    ? null
-                    : () {
-                        if (!mounted) return;
-                        showAssetPerformanceBottomSheet(
-                          context: context,
-                          asset: resolvedAsset,
-                          effectivePeriod: effectivePeriod,
-                          rangeStartDate: pr.rangeStartDate,
-                          lifetimeProfit: lifetime,
-                          periodReturnFraction: pr.periodReturnFraction,
-                          periodBenefitMoney: pr.periodBenefitMoney,
-                          netInvestedNow: netNow,
-                        );
-                      },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    children: [
-                      TrendingValue(
-                        percentage: periodFraction,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const Spacer(),
-                      Icon(
-                        Icons.chevron_right_rounded,
-                        color: scheme.onSurfaceVariant,
-                        size: 22,
-                      ),
-                    ],
-                  ),
+        return Semantics(
+          button: true,
+          label: Translations.of(
+            context,
+          ).assets.details.performance_sheet_title,
+          child: InkWell(
+            onTap: points.isEmpty || lifetime == null || pr == null
+                ? null
+                : () {
+                    if (!mounted) return;
+
+                    showAssetPerformanceBottomSheet(
+                      context: context,
+                      asset: resolvedAsset,
+                      effectivePeriod: effectivePeriod,
+                      rangeStartDate: pr.rangeStartDate,
+                      lifetimeProfit: lifetime,
+                      periodReturnFraction: pr.periodReturnFraction,
+                      periodBenefitMoney: pr.periodBenefitMoney,
+                      netInvestedNow: netNow,
+                    );
+                  },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.ideographic,
+              spacing: 6,
+              children: [
+                TrendingValue(
+                  percentage: periodFraction,
+                  fontWeight: FontWeight.w600,
                 ),
-              ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 2,
+                  children: [
+                    Text(
+                      _selectedChartPeriod.localizedLabel(context),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.of(context).textBody,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
+    );
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      child: _hoveredValuation == null
+          ? trendValue
+          : Text(
+              getMMMdDateFormatBasedOnYear(_hoveredValuation!.date).text,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
     );
   }
 
