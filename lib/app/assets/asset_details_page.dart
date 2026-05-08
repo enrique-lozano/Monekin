@@ -99,10 +99,11 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     }
 
     final firstVisibleDate = filteredValuations.first.date;
-    final txSorted = transactions
-        .where((tx) => InvestmentService.statusAffectsValuation(tx))
-        .toList()
-      ..sort((a, b) => a.date.compareTo(b.date));
+    final txSorted =
+        transactions
+            .where((tx) => InvestmentService.statusAffectsValuation(tx))
+            .toList()
+          ..sort((a, b) => a.date.compareTo(b.date));
 
     var txIndex = 0;
     var netContribution = widget.asset.initialValue;

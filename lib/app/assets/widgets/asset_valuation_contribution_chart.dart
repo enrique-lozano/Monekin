@@ -1,9 +1,11 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
@@ -109,24 +111,46 @@ class _AssetValuationContributionChartState
                     if (point == null) {
                       return const [];
                     }
+                    final date = DateTime.fromMillisecondsSinceEpoch(
+                      touchedSpots.first.x.toInt(),
+                    );
 
-                    final valuation = UINumberFormatter.currency(
-                      currency: widget.currency,
-                      amountToConvert: point.valuation,
-                    ).getFormattedAmount();
-                    final netContribution = UINumberFormatter.currency(
-                      currency: widget.currency,
-                      amountToConvert: point.netContribution,
-                    ).getFormattedAmount();
+                    final dataTextStyle = const TextStyle(
+                      fontSize: 12,
+                      height: 1.25,
+                    );
 
-                    return touchedSpots.map((_) {
-                      return LineTooltipItem(
-                        '${DateFormat.yMMMd().format(point.date)}\n'
-                        '${widget.valuationLabel}: $valuation\n'
-                        '${widget.netContributionLabel}: $netContribution',
-                        const TextStyle(fontSize: 12),
-                      );
-                    }).toList();
+                    return [
+                      ...touchedSpots.mapIndexed((index, spot) {
+                        final label = _lineLabel(context, spot.barIndex);
+                        return LineTooltipItem(
+                          index == 0
+                              ? '${DateFormat.MMMd().format(date)}\n'
+                              : '',
+
+                          const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            height: 2,
+                          ),
+
+                          children: [
+                            TextSpan(
+                              text: '◉ ',
+                              style: dataTextStyle.copyWith(
+                                color: spot.bar.color,
+                              ),
+                            ),
+                            TextSpan(text: '$label: ', style: dataTextStyle),
+                            ...UINumberFormatter.currency(
+                              currency: widget.currency,
+                              amountToConvert: spot.y,
+                              integerStyle: dataTextStyle,
+                            ).getTextSpanList(context),
+                          ],
+                        );
+                      }),
+                    ];
                   },
                 ),
                 touchCallback: (event, touchResponse) {
@@ -156,12 +180,12 @@ class _AssetValuationContributionChartState
                   widget.onHover?.call(pointsByX[currentX]);
                 },
               ),
-        titlesData: const FlTitlesData(
+        titlesData: FlTitlesData(
           show: true,
-          leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: noAxisTitles,
+          topTitles: noAxisTitles,
+          bottomTitles: noAxisTitles,
+          rightTitles: noAxisTitles,
         ),
         borderData: FlBorderData(show: false),
         lineBarsData: [
@@ -177,22 +201,7 @@ class _AssetValuationContributionChartState
             barWidth: 2,
             isStrokeCapRound: true,
             dotData: const FlDotData(show: false),
-            belowBarData: BarAreaData(
-              show: true,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: isNotEnoughData
-                    ? [
-                        colorScheme.outlineVariant.withAlpha(80),
-                        colorScheme.outlineVariant.withAlpha(5),
-                      ]
-                    : [
-                        netContributionColor.withAlpha(70),
-                        netContributionColor.withAlpha(3),
-                      ],
-              ),
-            ),
+            belowBarData: BarAreaData(show: true, color: netContributionColor),
           ),
           LineChartBarData(
             spots: isNotEnoughData
@@ -280,6 +289,17 @@ class _AssetValuationContributionChartState
         ),
       ],
     );
+  }
+
+  String _lineLabel(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        return widget.netContributionLabel;
+      case 1:
+        return widget.valuationLabel;
+      default:
+        return '';
+    }
   }
 }
 
