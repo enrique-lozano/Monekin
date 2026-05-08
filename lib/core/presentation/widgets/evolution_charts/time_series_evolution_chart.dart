@@ -2,13 +2,12 @@ import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A generic time-series line chart that displays data points over time
 /// with an optional gradient fill, hover interaction, and an
@@ -64,27 +63,20 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
 }
 
 class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T>> {
-  int? _lastHoveredX;
+  final EvolutionDateHoverHaptics _dateHaptics = EvolutionDateHoverHaptics();
 
   void _resetHover() {
-    _lastHoveredX = null;
+    _dateHaptics.reset();
     widget.onHover?.call(null);
   }
 
   void _handleHoverSpot(FlSpot spot, Map<int, T> byX) {
-    final currentX = spot.x.toInt();
-
-    if (_lastHoveredX != currentX) {
-      HapticFeedback.selectionClick();
-      _lastHoveredX = currentX;
-    }
-
-    widget.onHover?.call(byX[currentX]);
+    _dateHaptics.onHoveredXMs(spot.x.toInt());
+    widget.onHover?.call(byX[spot.x.toInt()]);
   }
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final lineColor = Theme.of(context).colorScheme.primary;
 
     final sortedData = List<T>.from(widget.data)
@@ -156,9 +148,7 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
                 ),
                 touchCallback:
                     (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                      if (event is FlPanEndEvent ||
-                          event is FlLongPressEnd ||
-                          event is FlTapUpEvent) {
+                      if (evolutionChartTouchEnded(event)) {
                         _resetHover();
                         return;
                       }
@@ -277,17 +267,7 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
         alignment: Alignment.center,
         children: [
           interactiveChartContainer,
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              t.general.insufficient_data,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-          ),
+          const EvolutionChartInsufficientDataOverlay(),
         ],
       );
     }
