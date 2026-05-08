@@ -175,7 +175,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     double valueDiffMoney,
     double valueDiffFraction,
     DateTime rangeStartDate,
-  })? _assetRangePerformanceMetrics({
+  })?
+  _assetRangePerformanceMetrics({
     required List<AssetValuationContributionPoint>? points,
     required double currentValue,
     required double netContributionNow,
@@ -489,54 +490,32 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                       netInvestedNow: netNow,
                     );
                   },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.ideographic,
-                    spacing: 8,
-                    children: [
-                      TrendingValue(
-                        percentage: returnFraction,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        spacing: 2,
-                        children: [
-                          Text(
-                            _selectedChartPeriod.localizedLabel(context),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                          Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.of(context).textBody,
-                            size: 16,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (pr != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 2),
-                      child: CurrencyDisplayer(
-                        amountToConvert: pr.performanceReturnMoney,
-                        currency: resolvedAsset.currency,
-                        integerStyle: Theme.of(context).textTheme.bodySmall!
-                            .copyWith(
-                              color: AppColors.of(context).textBody,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.ideographic,
+              spacing: 8,
+              children: [
+                TrendingValue(
+                  percentage: returnFraction,
+                  fontWeight: FontWeight.w600,
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 2,
+                  children: [
+                    Text(
+                      _selectedChartPeriod.localizedLabel(context),
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
-                ],
-              ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.of(context).textBody,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         );

@@ -62,7 +62,8 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
       _TimeSeriesEvolutionChartState<T>();
 }
 
-class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T>> {
+class _TimeSeriesEvolutionChartState<T>
+    extends State<TimeSeriesEvolutionChart<T>> {
   final EvolutionDateHoverHaptics _dateHaptics = EvolutionDateHoverHaptics();
 
   void _resetHover() {
@@ -80,7 +81,9 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
     final lineColor = Theme.of(context).colorScheme.primary;
 
     final sortedData = List<T>.from(widget.data)
-      ..sort((a, b) => widget.dateExtractor(a).compareTo(widget.dateExtractor(b)));
+      ..sort(
+        (a, b) => widget.dateExtractor(a).compareTo(widget.dateExtractor(b)),
+      );
 
     final byX = <int, T>{
       for (final item in sortedData)
@@ -114,7 +117,8 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
                         spot.x.toInt(),
                       );
 
-                      final title = item != null && widget.tooltipTitleBuilder != null
+                      final title =
+                          item != null && widget.tooltipTitleBuilder != null
                           ? widget.tooltipTitleBuilder!(item)
                           : DateFormat.yMMMd().format(date);
 
@@ -209,7 +213,10 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
                 : sortedData
                       .map(
                         (e) => FlSpot(
-                          widget.dateExtractor(e).millisecondsSinceEpoch.toDouble(),
+                          widget
+                              .dateExtractor(e)
+                              .millisecondsSinceEpoch
+                              .toDouble(),
                           widget.valueExtractor(e),
                         ),
                       )
@@ -257,10 +264,7 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
 
     final interactiveChartContainer = widget.onHover == null
         ? chartContainer
-        : MouseRegion(
-            onExit: (_) => _resetHover(),
-            child: chartContainer,
-          );
+        : MouseRegion(onExit: (_) => _resetHover(), child: chartContainer);
 
     if (isNotEnoughData) {
       return EvolutionChartInsufficientDataOverlay(

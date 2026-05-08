@@ -80,10 +80,8 @@ class TransactionService {
 
     if (updateAssetValuations) {
       if (updateFutureAssetValuations) {
-        await InvestmentService.instance.onTransactionUpdatedAndFutureValuations(
-          previous,
-          transaction,
-        );
+        await InvestmentService.instance
+            .onTransactionUpdatedAndFutureValuations(previous, transaction);
       } else {
         await InvestmentService.instance.onTransactionUpdated(
           previous,

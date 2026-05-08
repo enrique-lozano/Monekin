@@ -54,62 +54,62 @@ Future<void> showAssetPerformanceBottomSheet({
             spacing: 12,
             mainAxisSize: MainAxisSize.min,
             children: [
-            AssetPerformanceStatTile(
-              icon: Icons.trending_up_rounded,
-              label: t.assets.details.performance_return,
-              helpText: t.assets.details.performance_return_help,
-              value: Row(
-                spacing: 6,
-                children: [
-                  CurrencyDisplayer(
-                    amountToConvert: performanceReturnMoney,
-                    currency: asset.currency,
-                    integerStyle: statValueStyle,
-                  ),
-                  Text('·', style: statValueStyle),
-                  TrendingValue(
-                    percentage: clampAssetPerformanceTrendFraction(
-                      performanceReturnFraction,
+              AssetPerformanceStatTile(
+                icon: Icons.trending_up_rounded,
+                label: t.assets.details.performance_return,
+                helpText: t.assets.details.performance_return_help,
+                value: Row(
+                  spacing: 6,
+                  children: [
+                    CurrencyDisplayer(
+                      amountToConvert: performanceReturnMoney,
+                      currency: asset.currency,
+                      integerStyle: statValueStyle,
                     ),
-                    fontWeight: statValueStyle.fontWeight ?? FontWeight.w600,
-                    fontSize: statValueStyle.fontSize ?? 18,
-                  ),
-                ],
-              ),
-            ),
-            AssetPerformanceStatTile(
-              icon: Icons.savings_outlined,
-              label: t.assets.details.performance_invested_value,
-              helpText: t.assets.details.performance_invested_value_caption,
-              value: CurrencyDisplayer(
-                amountToConvert: netInvestedNow,
-                currency: asset.currency,
-                integerStyle: statValueStyle,
-              ),
-            ),
-            AssetPerformanceStatTile(
-              icon: Icons.history_rounded,
-              label: t.assets.details.performance_value_diff,
-              helpText: t.assets.details.performance_value_diff_caption,
-              value: Row(
-                spacing: 6,
-                children: [
-                  CurrencyDisplayer(
-                    amountToConvert: valueDiffMoney,
-                    currency: asset.currency,
-                    integerStyle: statValueStyle,
-                  ),
-                  Text('·', style: statValueStyle),
-                  TrendingValue(
-                    percentage: clampAssetPerformanceTrendFraction(
-                      valueDiffFraction,
+                    Text('·', style: statValueStyle),
+                    TrendingValue(
+                      percentage: clampAssetPerformanceTrendFraction(
+                        performanceReturnFraction,
+                      ),
+                      fontWeight: statValueStyle.fontWeight ?? FontWeight.w600,
+                      fontSize: statValueStyle.fontSize ?? 18,
                     ),
-                    fontWeight: statValueStyle.fontWeight ?? FontWeight.w600,
-                    fontSize: statValueStyle.fontSize ?? 18,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+              AssetPerformanceStatTile(
+                icon: Icons.savings_outlined,
+                label: t.assets.details.performance_invested_value,
+                helpText: t.assets.details.performance_invested_value_caption,
+                value: CurrencyDisplayer(
+                  amountToConvert: netInvestedNow,
+                  currency: asset.currency,
+                  integerStyle: statValueStyle,
+                ),
+              ),
+              AssetPerformanceStatTile(
+                icon: Icons.history_rounded,
+                label: t.assets.details.performance_value_diff,
+                helpText: t.assets.details.performance_value_diff_caption,
+                value: Row(
+                  spacing: 6,
+                  children: [
+                    CurrencyDisplayer(
+                      amountToConvert: valueDiffMoney,
+                      currency: asset.currency,
+                      integerStyle: statValueStyle,
+                    ),
+                    Text('·', style: statValueStyle),
+                    TrendingValue(
+                      percentage: clampAssetPerformanceTrendFraction(
+                        valueDiffFraction,
+                      ),
+                      fontWeight: statValueStyle.fontWeight ?? FontWeight.w600,
+                      fontSize: statValueStyle.fontSize ?? 18,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
