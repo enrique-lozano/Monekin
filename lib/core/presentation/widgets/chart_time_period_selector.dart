@@ -113,16 +113,35 @@ class ChartTimePeriodSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        spacing: 8,
+        spacing: 6,
         children: ChartTimePeriod.values.map((period) {
           final isEnabled = period.isRangeAvailable(oldestDate: oldestDate);
+          final isSelected = selectedPeriod == period;
 
           return ChoiceChip(
             label: Text(period.localizedLabel(context)),
-            selected: selectedPeriod == period,
+            labelStyle: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: isSelected
+                  ? colorScheme.primary
+                  : colorScheme.onSurfaceVariant,
+            ),
+            selected: isSelected,
+            showCheckmark: false,
+            side: BorderSide.none,
+            shape: const StadiumBorder(),
+            backgroundColor: colorScheme.surfaceContainerHighest.withAlpha(90),
+            selectedColor: colorScheme.primary.withAlpha(32),
+            disabledColor: colorScheme.surfaceContainerHighest.withAlpha(50),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             onSelected: isEnabled ? (_) => onSelected(period) : null,
           );
         }).toList(),
