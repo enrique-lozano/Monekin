@@ -292,9 +292,35 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
 
     if (confirmed == true) {
-      await InvestmentService.instance.deleteAsset(widget.asset.id);
-      MonekinSnackbar.success(SnackbarParams(t.assets.delete_success));
-      RouteUtils.popRoute();
+      await InvestmentService.instance
+          .deleteAsset(widget.asset.id)
+          .then((_) {
+            MonekinSnackbar.success(SnackbarParams(t.assets.delete_success));
+
+            RouteUtils.popRoute();
+          })
+          .catchError((error) async {
+            final linkedTxs = await TransactionService.instance
+                .countTransactions(
+                  filters: TransactionFilterSet(
+                    assetIds: [widget.asset.id],
+                    transactionTypes: [TransactionType.investment],
+                  ),
+                )
+                .first;
+
+            if (linkedTxs > 0) {
+              MonekinSnackbar.error(
+                SnackbarParams.fromError(
+                  'There are investment transactions linked to this asset. Please delete or unlink them before deleting the asset.',
+                ),
+              );
+
+              return;
+            }
+
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
+          });
     }
   }
 
@@ -319,8 +345,10 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
         final displayValuation = _hoveredValuation ?? valuations?.firstOrNull;
 
+        final asset = snapshot.data?.asset ?? widget.asset;
+
         return PageFramework(
-          title: widget.asset.name,
+          title: asset.name,
           appBarActions: [
             MonekinPopupMenuButton(
               actionItems: [
@@ -328,7 +356,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                   label: t.ui_actions.edit,
                   icon: Icons.edit_rounded,
                   onClick: () =>
-                      RouteUtils.pushRoute(AssetFormPage(asset: widget.asset)),
+                      RouteUtils.pushRoute(AssetFormPage(asset: asset)),
                 ),
                 if (valuations != null && valuations.isNotEmpty)
                   ListTileActionItem(
@@ -350,14 +378,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
               context,
               valuations,
               displayValuation,
-              snapshot.data?.asset,
+              asset,
               snapshot.data?.transactions,
             ),
             child: _buildMobileLayout(
               context,
               valuations,
               displayValuation,
-              snapshot.data?.asset,
+              asset,
               snapshot.data?.transactions,
             ),
           ),

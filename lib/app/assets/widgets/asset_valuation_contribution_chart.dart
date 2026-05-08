@@ -138,7 +138,7 @@ class _AssetValuationContributionChartState
         lineBarsData: [
           LineChartBarData(
             spots: isNotEnoughData
-                ? const [FlSpot(0, 2), FlSpot(1, 3), FlSpot(2, 2.6)]
+                ? const [FlSpot(0, 2), FlSpot(1, 2.5), FlSpot(2, 2.6)]
                 : contributionSpots,
             isCurved: true,
             curveSmoothness: 0.05,
@@ -148,7 +148,12 @@ class _AssetValuationContributionChartState
             barWidth: 2,
             isStrokeCapRound: true,
             dotData: const FlDotData(show: false),
-            belowBarData: BarAreaData(show: true, color: netContributionColor),
+            belowBarData: BarAreaData(
+              show: true,
+              color: isNotEnoughData
+                  ? colorScheme.outlineVariant.withAlpha(10)
+                  : netContributionColor,
+            ),
           ),
           LineChartBarData(
             spots: isNotEnoughData
