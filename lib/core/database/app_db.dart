@@ -68,12 +68,14 @@ class AppDB extends _$AppDB {
         'assets/sql/migrations/v$i.sql',
       );
 
-      for (final sqlStatement in splitSQLStatements(initialSQL)) {
-        Logger.printDebug(
-          'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
-        );
-        await customStatement(sqlStatement);
-      }
+      await transaction(() async {
+        for (final sqlStatement in splitSQLStatements(initialSQL)) {
+          Logger.printDebug(
+            'Running migration statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
+          );
+          await customStatement(sqlStatement);
+        }
+      });
 
       await AppDataService.instance.setItem(
         AppDataKey.dbVersion,
