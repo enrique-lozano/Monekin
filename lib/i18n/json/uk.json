@@ -889,12 +889,12 @@
       "link_transaction": "Link transaction",
       "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
-      "performance_lifetime_return": "All-time return",
-      "performance_lifetime_return_help": "Current value minus initial acquisition value, as a return percentage—the same idea as before under the balance.\n\nThe same benefit in money (current value minus initial value).",
+      "performance_return": "Period return",
+      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
       "performance_invested_value": "Invested value",
       "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
-      "performance_value_diff": "Value difference",
-      "performance_value_diff_caption": "Return for the chart range you selected—from the first visible point to today."
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
     },
     "FORM": {
       "asset_type": "Тип активу",

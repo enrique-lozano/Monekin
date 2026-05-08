@@ -889,12 +889,12 @@
       "link_transaction": "Link transaction",
       "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "表現",
-      "performance_lifetime_return": "累積報酬",
-      "performance_lifetime_return_help": "目前市值相對初始購置價的報酬率——與先前餘額下方含義一致。\n\n同樣的收益，以金額表示（目前市值減初始值）。",
+      "performance_return": "區間報酬",
+      "performance_return_help": "剔除期間新增或撤出資金後的價值變化：（期末估值 − 期初估值）−（期末淨投入 − 期初淨投入）。若市值上漲僅因等額入金，此項應接近零。",
       "performance_invested_value": "投入金額",
       "performance_invested_value_caption": "截至目前淨投入（初始值與關聯流水）。",
-      "performance_value_diff": "價值差異",
-      "performance_value_diff_caption": "所選圖表區間（從可見的第一個點至今）的報酬。"
+      "performance_value_diff": "估值變動",
+      "performance_value_diff_caption": "目前帳面市值與所選圖表區間首日估值之差（僅價格變動，不按投入現金流調整）。"
     },
     "FORM": {
       "asset_type": "資產類型",

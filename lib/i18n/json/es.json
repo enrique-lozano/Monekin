@@ -892,12 +892,12 @@
       "link_transaction": "Linkear transacción",
       "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo",
       "performance_sheet_title": "Rendimiento",
-      "performance_lifetime_return": "Rentabilidad total",
-      "performance_lifetime_return_help": "Valor actual menos el valor inicial de adquisición, como porcentaje de rentabilidad—la misma idea que antes bajo el saldo.\n\nEl mismo beneficio en dinero (valor actual menos valor inicial).",
+      "performance_return": "Rentabilidad del periodo",
+      "performance_return_help": "Cuánto cambió el valor más allá del dinero nuevo entrado o salido: (valoración final − inicial) − (inversión neta final − inicial). Si el valor solo subió porque ingresaste la misma cantidad, esto queda cerca de cero.",
       "performance_invested_value": "Valor invertido",
       "performance_invested_value_caption": "Efectivo neto en el activo hasta ahora (valor inicial más flujos vinculados).",
-      "performance_value_diff": "Diferencia de valor",
-      "performance_value_diff_caption": "Rentabilidad del intervalo del gráfico que elegiste—desde el primer punto visible hasta hoy."
+      "performance_value_diff": "Cambio de valoración",
+      "performance_value_diff_caption": "Diferencia entre la valoración contable actual y la del primer día del intervalo del gráfico (solo precio de mercado, sin descontar flujos invertidos)."
     },
     "FORM": {
       "asset_type": "Tipo de activo",

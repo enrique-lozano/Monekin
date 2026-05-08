@@ -889,12 +889,12 @@
       "link_transaction": "Link transaction",
       "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
-      "performance_lifetime_return": "Gesamtrendite",
-      "performance_lifetime_return_help": "Aktueller Wert minus Anfangserwerbswert als Rendite—dieselbe Logik wie zuvor unter dem Saldo.\n\nDerselbe Nutzen in Geld (aktueller Wert minus Anfangswert).",
+      "performance_return": "Periodenrendite",
+      "performance_return_help": "Wie stark sich der Wert über neue Ein- oder Auszahlungen hinaus geändert hat: (Endbewertung − Anfangsbewertung) − (End-Nettoinvest − Anfang-Nettoinvest). Steigt der Wert nur, weil du denselben Betrag eingezahlt hast, liegt dies nahe null.",
       "performance_invested_value": "Investierter Wert",
       "performance_invested_value_caption": "Bisheriger Netto-Cash im Asset (Anfangswert plus verknüpfte Zuflüsse).",
-      "performance_value_diff": "Wertdifferenz",
-      "performance_value_diff_caption": "Rendite für den gewählten Diagrammbereich—vom ersten sichtbaren Punkt bis heute."
+      "performance_value_diff": "Bewertungsänderung",
+      "performance_value_diff_caption": "Differenz zwischen der aktuellen gebuchten Bewertung und der am ersten Tag des gewählten Diagrammbereichs (nur Marktwert, unabhängig von Investitionsströmen)."
     },
     "FORM": {
       "asset_type": "Asset-Typ",

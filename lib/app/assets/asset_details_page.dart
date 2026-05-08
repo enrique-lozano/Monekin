@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_form.dart';
@@ -162,39 +164,53 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     return net;
   }
 
-  /// Change in unrealized P/L (value − net contribution) from the first
-  /// visible chart point to now, and a return ratio vs basis at that point.
+  /// Metrics for the visible chart range vs now.
+  ///
+  /// [performanceReturnMoney] = (V₁−V₀) − (C₁−C₀): period gain after netting
+  /// new invested flows (0 when valuation change is fully explained by cash in).
+  /// [valueDiffMoney] = V₁−V₀: raw valuation change over the range.
   ({
-    double periodReturnFraction,
-    double periodBenefitMoney,
+    double performanceReturnMoney,
+    double performanceReturnFraction,
+    double valueDiffMoney,
+    double valueDiffFraction,
     DateTime rangeStartDate,
-  })?
-  _periodPerformance({
+  })? _assetRangePerformanceMetrics({
     required List<AssetValuationContributionPoint>? points,
     required double currentValue,
     required double netContributionNow,
   }) {
     if (points == null || points.isEmpty) return null;
     final p0 = points.first;
-    final benefitStart = p0.valuation - p0.netContribution;
-    final benefitNow = currentValue - netContributionNow;
-    final periodBenefitMoney = benefitNow - benefitStart;
-    final basis = p0.netContribution.abs() < 1e-9
-        ? p0.valuation
-        : p0.netContribution;
-    double periodReturnFraction;
-    if (basis.abs() < 1e-9) {
-      periodReturnFraction = periodBenefitMoney == 0
-          ? 0
-          : (periodBenefitMoney > 0
-                ? double.infinity
-                : double.negativeInfinity);
+    final v0 = p0.valuation;
+    final c0 = p0.netContribution;
+    final v1 = currentValue;
+    final c1 = netContributionNow;
+
+    final performanceReturnMoney = (v1 - v0) - (c1 - c0);
+    final valueDiffMoney = v1 - v0;
+
+    double performanceReturnFraction;
+    if (performanceReturnMoney.abs() < 1e-9) {
+      performanceReturnFraction = 0;
     } else {
-      periodReturnFraction = periodBenefitMoney / basis;
+      final basis = c0.abs() >= 1e-9 ? c0.abs() : math.max(v0.abs(), 1e-9);
+      performanceReturnFraction = performanceReturnMoney / basis;
     }
+
+    double valueDiffFraction;
+    if (valueDiffMoney.abs() < 1e-9) {
+      valueDiffFraction = 0;
+    } else {
+      final vBasis = v0.abs() >= 1e-9 ? v0.abs() : 1e-9;
+      valueDiffFraction = valueDiffMoney / vBasis;
+    }
+
     return (
-      periodReturnFraction: periodReturnFraction,
-      periodBenefitMoney: periodBenefitMoney,
+      performanceReturnMoney: performanceReturnMoney,
+      performanceReturnFraction: performanceReturnFraction,
+      valueDiffMoney: valueDiffMoney,
+      valueDiffFraction: valueDiffFraction,
       rangeStartDate: p0.date,
     );
   }
@@ -434,21 +450,21 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       asset: resolvedAsset,
       transactions: transactions,
     );
-    final period = _periodPerformance(
+    final rangeMetrics = _assetRangePerformanceMetrics(
       points: points.isEmpty ? null : points,
       currentValue: currentValue,
       netContributionNow: netNow,
     );
-    final periodFraction = period == null
+    final returnFraction = rangeMetrics == null
         ? 0.0
-        : clampAssetPerformanceTrendFraction(period.periodReturnFraction);
-    final periodSnapshot = period;
+        : clampAssetPerformanceTrendFraction(
+            rangeMetrics.performanceReturnFraction,
+          );
+    final rangeSnapshot = rangeMetrics;
 
-    final trendValue = StreamBuilder<({double value, double percent})>(
-      stream: InvestmentService.instance.getAssetProfit(resolvedAsset),
-      builder: (context, profitSnapshot) {
-        final lifetime = profitSnapshot.data;
-        final pr = periodSnapshot;
+    final trendValue = Builder(
+      builder: (context) {
+        final pr = rangeSnapshot;
 
         return Semantics(
           button: true,
@@ -456,7 +472,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             context,
           ).assets.details.performance_sheet_title,
           child: InkWell(
-            onTap: points.isEmpty || lifetime == null || pr == null
+            onTap: points.isEmpty || pr == null
                 ? null
                 : () {
                     if (!mounted) return;
@@ -466,38 +482,61 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                       asset: resolvedAsset,
                       effectivePeriod: effectivePeriod,
                       rangeStartDate: pr.rangeStartDate,
-                      lifetimeProfit: lifetime,
-                      periodReturnFraction: pr.periodReturnFraction,
-                      periodBenefitMoney: pr.periodBenefitMoney,
+                      performanceReturnMoney: pr.performanceReturnMoney,
+                      performanceReturnFraction: pr.performanceReturnFraction,
+                      valueDiffMoney: pr.valueDiffMoney,
+                      valueDiffFraction: pr.valueDiffFraction,
                       netInvestedNow: netNow,
                     );
                   },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.ideographic,
-              spacing: 6,
-              children: [
-                TrendingValue(
-                  percentage: periodFraction,
-                  fontWeight: FontWeight.w600,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 2,
-                  children: [
-                    Text(
-                      _selectedChartPeriod.localizedLabel(context),
-                      style: Theme.of(context).textTheme.bodySmall,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.ideographic,
+                    spacing: 8,
+                    children: [
+                      TrendingValue(
+                        percentage: returnFraction,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 2,
+                        children: [
+                          Text(
+                            _selectedChartPeriod.localizedLabel(context),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppColors.of(context).textBody,
+                            size: 16,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (pr != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: CurrencyDisplayer(
+                        amountToConvert: pr.performanceReturnMoney,
+                        currency: resolvedAsset.currency,
+                        integerStyle: Theme.of(context).textTheme.bodySmall!
+                            .copyWith(
+                              color: AppColors.of(context).textBody,
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
                     ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: AppColors.of(context).textBody,
-                      size: 16,
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

@@ -889,12 +889,12 @@
       "link_transaction": "Link transaction",
       "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
-      "performance_lifetime_return": "Rendimento complessivo",
-      "performance_lifetime_return_help": "Valore attuale meno il valore iniziale di acquisizione come rendimento percentuale—come prima sotto il saldo.\n\nLo stesso beneficio in denaro (valore attuale meno valore iniziale).",
+      "performance_return": "Rendimento di periodo",
+      "performance_return_help": "Quanto è cambiato il valore oltre i nuovi versamenti o prelievi: (valorizzazione finale − iniziale) − (investito netto finale − iniziale). Se il valore è salito solo perché hai versato la stessa cifra, questo resta vicino a zero.",
       "performance_invested_value": "Valore investito",
       "performance_invested_value_caption": "Contanti netti nell’asset finora (valore iniziale più flussi collegati).",
-      "performance_value_diff": "Differenza di valore",
-      "performance_value_diff_caption": "Rendimento sull’intervallo del grafico selezionato—dal primo punto visibile a oggi."
+      "performance_value_diff": "Variazione di valorizzazione",
+      "performance_value_diff_caption": "Differenza tra la valorizzazione contabile attuale e quella alla prima data dell’intervallo del grafico (solo prezzo di mercato, indipendentemente dai flussi investiti)."
     },
     "FORM": {
       "asset_type": "Tipo di risorsa",

@@ -18,15 +18,16 @@ double clampAssetPerformanceTrendFraction(double fraction) {
   return fraction;
 }
 
-/// Bottom sheet with lifetime and chart-range performance for an asset.
+/// Bottom sheet with period return, invested amount, and raw valuation change.
 Future<void> showAssetPerformanceBottomSheet({
   required BuildContext context,
   required Asset asset,
   required ChartTimePeriod effectivePeriod,
   required DateTime rangeStartDate,
-  required ({double value, double percent}) lifetimeProfit,
-  required double periodReturnFraction,
-  required double periodBenefitMoney,
+  required double performanceReturnMoney,
+  required double performanceReturnFraction,
+  required double valueDiffMoney,
+  required double valueDiffFraction,
   required double netInvestedNow,
 }) async {
   final t = Translations.of(context);
@@ -48,25 +49,28 @@ Future<void> showAssetPerformanceBottomSheet({
         showTitleDivider: true,
         responseToKeyboard: false,
         bodyPadding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-        body: Column(
-          spacing: 12,
-          mainAxisSize: MainAxisSize.min,
-          children: [
+        body: SingleChildScrollView(
+          child: Column(
+            spacing: 12,
+            mainAxisSize: MainAxisSize.min,
+            children: [
             AssetPerformanceStatTile(
               icon: Icons.trending_up_rounded,
-              label: t.assets.details.performance_lifetime_return,
-              helpText: t.assets.details.performance_lifetime_return_help,
+              label: t.assets.details.performance_return,
+              helpText: t.assets.details.performance_return_help,
               value: Row(
                 spacing: 6,
                 children: [
                   CurrencyDisplayer(
-                    amountToConvert: lifetimeProfit.value,
+                    amountToConvert: performanceReturnMoney,
                     currency: asset.currency,
                     integerStyle: statValueStyle,
                   ),
                   Text('·', style: statValueStyle),
                   TrendingValue(
-                    percentage: lifetimeProfit.percent,
+                    percentage: clampAssetPerformanceTrendFraction(
+                      performanceReturnFraction,
+                    ),
                     fontWeight: statValueStyle.fontWeight ?? FontWeight.w600,
                     fontSize: statValueStyle.fontSize ?? 18,
                   ),
@@ -91,16 +95,14 @@ Future<void> showAssetPerformanceBottomSheet({
                 spacing: 6,
                 children: [
                   CurrencyDisplayer(
-                    amountToConvert: periodBenefitMoney,
+                    amountToConvert: valueDiffMoney,
                     currency: asset.currency,
                     integerStyle: statValueStyle,
                   ),
-
                   Text('·', style: statValueStyle),
-
                   TrendingValue(
                     percentage: clampAssetPerformanceTrendFraction(
-                      periodReturnFraction,
+                      valueDiffFraction,
                     ),
                     fontWeight: statValueStyle.fontWeight ?? FontWeight.w600,
                     fontSize: statValueStyle.fontSize ?? 18,
@@ -108,7 +110,8 @@ Future<void> showAssetPerformanceBottomSheet({
                 ],
               ),
             ),
-          ],
+            ],
+          ),
         ),
       );
     },
