@@ -48,30 +48,31 @@ Future<void> showAssetPerformanceBottomSheet({
             children: [
               AssetPerformanceStatTile(
                 icon: Icons.trending_up_rounded,
-                label: t.assets.details.performance_benefit,
-                caption: t.assets.details.performance_benefit_caption,
-                value: TrendingValue(
-                  percentage: lifetimeProfit.percent,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                ),
-              ),
-              AssetPerformanceStatTile(
-                icon: Icons.payments_outlined,
-                label: t.assets.details.performance_monetary_diff,
-                caption: t.assets.details.performance_monetary_diff_caption,
-                value: CurrencyDisplayer(
-                  amountToConvert: lifetimeProfit.value,
-                  currency: asset.currency,
-                  integerStyle: Theme.of(ctx).textTheme.titleLarge!.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                label: t.assets.details.performance_lifetime_return,
+                helpText: t.assets.details.performance_lifetime_return_help,
+                value: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TrendingValue(
+                      percentage: lifetimeProfit.percent,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
+                    const SizedBox(height: 6),
+                    CurrencyDisplayer(
+                      amountToConvert: lifetimeProfit.value,
+                      currency: asset.currency,
+                      integerStyle: Theme.of(ctx).textTheme.titleLarge!.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               AssetPerformanceStatTile(
                 icon: Icons.savings_outlined,
                 label: t.assets.details.performance_invested_value,
-                caption: t.assets.details.performance_invested_value_caption,
+                helpText: t.assets.details.performance_invested_value_caption,
                 value: CurrencyDisplayer(
                   amountToConvert: netInvestedNow,
                   currency: asset.currency,
@@ -83,7 +84,7 @@ Future<void> showAssetPerformanceBottomSheet({
               AssetPerformanceStatTile(
                 icon: Icons.history_rounded,
                 label: t.assets.details.performance_value_diff,
-                caption: t.assets.details.performance_value_diff_caption,
+                helpText: t.assets.details.performance_value_diff_caption,
                 value: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -119,14 +120,34 @@ class AssetPerformanceStatTile extends StatelessWidget {
     super.key,
     required this.icon,
     required this.label,
-    required this.caption,
+    this.helpText,
     required this.value,
   });
 
   final IconData icon;
   final String label;
-  final String caption;
+  final String? helpText;
   final Widget value;
+
+  void _showHelpDialog(BuildContext context) {
+    final t = Translations.of(context);
+    final text = helpText;
+    if (text == null || text.isEmpty) return;
+
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(label),
+        content: SingleChildScrollView(child: Text(text)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(t.general.understood),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,27 +175,40 @@ class AssetPerformanceStatTile extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(10),
-                child: Icon(icon, color: colorScheme.onPrimaryContainer, size: 22),
+                child: Icon(
+                  icon,
+                  color: colorScheme.onPrimaryContainer,
+                  size: 22,
+                ),
               ),
             ),
             const SizedBox(width: 14),
             Expanded(
-              child: Column(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    label,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    caption,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
+                  if (helpText != null && helpText!.isNotEmpty)
+                    IconButton(
+                      onPressed: () => _showHelpDialog(context),
+                      icon: Icon(
+                        Icons.info_outline_rounded,
+                        size: 22,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      visualDensity: VisualDensity.compact,
+                      style: IconButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      tooltip: label,
                     ),
-                  ),
                 ],
               ),
             ),

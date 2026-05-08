@@ -889,15 +889,12 @@
       "link_transaction": "Link transaction",
       "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "表现",
-      "performance_benefit": "收益",
-      "performance_benefit_caption": "当前市值相对初始购置价的回报率——与此前余额下方含义一致。",
-      "performance_monetary_diff": "金额变化",
-      "performance_monetary_diff_caption": "同样的收益，以金额表示（当前市值减初始值）。",
+      "performance_lifetime_return": "累计回报",
+      "performance_lifetime_return_help": "当前市值相对初始购置价的回报率——与此前余额下方含义一致。\n\n同样的收益，以金额表示（当前市值减初始值）。",
       "performance_invested_value": "投入金额",
       "performance_invested_value_caption": "截至目前净投入（初始值与关联流水）。",
       "performance_value_diff": "价值差异",
-      "performance_value_diff_caption": "所选图表区间（从可见的第一个点至今）的回报。",
-      "performance_trend_hint": "区间回报 · 点击查看明细"
+      "performance_value_diff_caption": "所选图表区间（从可见的第一个点至今）的回报。"
     },
     "FORM": {
       "asset_type": "资产类型",

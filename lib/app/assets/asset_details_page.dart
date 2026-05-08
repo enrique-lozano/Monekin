@@ -421,7 +421,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     required Asset? asset,
     required double currentValue,
   }) {
-    final t = Translations.of(context);
     final resolvedAsset = asset ?? widget.asset;
     final scheme = Theme.of(context).colorScheme;
 
@@ -470,48 +469,48 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           final lifetime = profitSnapshot.data;
           final pr = periodSnapshot;
 
-          return Material(
-            color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
-            borderRadius: BorderRadius.circular(14),
-            clipBehavior: Clip.antiAlias,
-            child: InkWell(
-              onTap: points.isEmpty || lifetime == null || pr == null
-                  ? null
-                  : () {
-                      if (!mounted) return;
-                      showAssetPerformanceBottomSheet(
-                        context: context,
-                        asset: resolvedAsset,
-                        effectivePeriod: effectivePeriod,
-                        rangeStartDate: pr.rangeStartDate,
-                        lifetimeProfit: lifetime,
-                        periodReturnFraction: pr.periodReturnFraction,
-                        periodBenefitMoney: pr.periodBenefitMoney,
-                        netInvestedNow: netNow,
-                      );
-                    },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                child: Row(
-                  children: [
-                    TrendingValue(
-                      percentage: periodFraction,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        t.assets.details.performance_trend_hint,
-                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                        ),
+          return Semantics(
+            button: true,
+            label: Translations.of(context).assets.details.performance_sheet_title,
+            child: Material(
+              color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
+              borderRadius: BorderRadius.circular(14),
+              clipBehavior: Clip.antiAlias,
+              child: InkWell(
+                onTap: points.isEmpty || lifetime == null || pr == null
+                    ? null
+                    : () {
+                        if (!mounted) return;
+                        showAssetPerformanceBottomSheet(
+                          context: context,
+                          asset: resolvedAsset,
+                          effectivePeriod: effectivePeriod,
+                          rangeStartDate: pr.rangeStartDate,
+                          lifetimeProfit: lifetime,
+                          periodReturnFraction: pr.periodReturnFraction,
+                          periodBenefitMoney: pr.periodBenefitMoney,
+                          netInvestedNow: netNow,
+                        );
+                      },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      TrendingValue(
+                        percentage: periodFraction,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_right_rounded,
-                      color: scheme.onSurfaceVariant,
-                    ),
-                  ],
+                      const Spacer(),
+                      Icon(
+                        Icons.chevron_right_rounded,
+                        color: scheme.onSurfaceVariant,
+                        size: 22,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

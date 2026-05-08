@@ -889,15 +889,12 @@
       "link_transaction": "Link transaction",
       "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
-      "performance_benefit": "Bénéfice",
-      "performance_benefit_caption": "Valeur actuelle moins la valeur d’acquisition initiale, en pourcentage de rendement—comme auparavant sous le solde.",
-      "performance_monetary_diff": "Écart monétaire",
-      "performance_monetary_diff_caption": "Le même bénéfice en argent (valeur actuelle moins valeur initiale).",
+      "performance_lifetime_return": "Rendement depuis l’acquisition",
+      "performance_lifetime_return_help": "Valeur actuelle moins la valeur d’acquisition initiale, en pourcentage de rendement—comme auparavant sous le solde.\n\nLe même bénéfice en argent (valeur actuelle moins valeur initiale).",
       "performance_invested_value": "Valeur investie",
       "performance_invested_value_caption": "Cash net dans l’actif jusqu’ici (valeur initiale plus flux liés).",
       "performance_value_diff": "Écart de valeur",
-      "performance_value_diff_caption": "Rendement sur la plage du graphique choisie—du premier point visible à aujourd’hui.",
-      "performance_trend_hint": "Rendement de période · appuyez pour le détail"
+      "performance_value_diff_caption": "Rendement sur la plage du graphique choisie—du premier point visible à aujourd’hui."
     },
     "FORM": {
       "asset_type": "Type d'actif",
