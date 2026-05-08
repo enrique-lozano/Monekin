@@ -263,12 +263,8 @@ class _TimeSeriesEvolutionChartState<T> extends State<TimeSeriesEvolutionChart<T
           );
 
     if (isNotEnoughData) {
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          interactiveChartContainer,
-          const EvolutionChartInsufficientDataOverlay(),
-        ],
+      return EvolutionChartInsufficientDataOverlay(
+        child: interactiveChartContainer,
       );
     }
 

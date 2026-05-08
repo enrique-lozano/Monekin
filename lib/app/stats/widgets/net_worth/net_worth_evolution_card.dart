@@ -290,11 +290,8 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
                 horizontal: 8,
               ),
               getTooltipItems: (touchedSpots) {
-                if (touchedSpots.isEmpty) {
-                  return const [];
-                }
                 return buildMultiLineCurrencyLineTooltipItems(
-                  context: context,
+                  context,
                   touchedSpots: touchedSpots,
                   currency: widget.currency,
                   lineLabel: (barIndex) => _lineLabel(context, barIndex),

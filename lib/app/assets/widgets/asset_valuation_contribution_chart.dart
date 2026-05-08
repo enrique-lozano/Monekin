@@ -98,17 +98,8 @@ class _AssetValuationContributionChartState
                     horizontal: 10,
                   ),
                   getTooltipItems: (touchedSpots) {
-                    if (touchedSpots.isEmpty) {
-                      return const [];
-                    }
-
-                    final point = pointsByX[touchedSpots.first.x.toInt()];
-                    if (point == null) {
-                      return const [];
-                    }
-
                     return buildMultiLineCurrencyLineTooltipItems(
-                      context: context,
+                      context,
                       touchedSpots: touchedSpots,
                       currency: widget.currency,
                       lineLabel: (barIndex) => _lineLabel(context, barIndex),
@@ -204,13 +195,7 @@ class _AssetValuationContributionChartState
         : MouseRegion(onExit: (_) => _resetHover(), child: chartContainer);
 
     final chartWithOverlay = isNotEnoughData
-        ? Stack(
-            alignment: Alignment.center,
-            children: [
-              interactiveChart,
-              const EvolutionChartInsufficientDataOverlay(),
-            ],
-          )
+        ? EvolutionChartInsufficientDataOverlay(child: interactiveChart)
         : interactiveChart;
 
     return Column(

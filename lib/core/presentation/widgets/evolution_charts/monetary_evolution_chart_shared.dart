@@ -21,9 +21,7 @@ class TimeSeriesLabeledPoint {
 }
 
 bool evolutionChartTouchEnded(FlTouchEvent event) =>
-    event is FlPanEndEvent ||
-    event is FlLongPressEnd ||
-    event is FlTapUpEvent;
+    event is FlPanEndEvent || event is FlLongPressEnd || event is FlTapUpEvent;
 
 /// Tracks the last hovered X (epoch ms) and fires haptic feedback when it changes.
 final class EvolutionDateHoverHaptics {
@@ -41,8 +39,8 @@ final class EvolutionDateHoverHaptics {
   }
 }
 
-List<LineTooltipItem> buildMultiLineCurrencyLineTooltipItems({
-  required BuildContext context,
+List<LineTooltipItem> buildMultiLineCurrencyLineTooltipItems(
+  BuildContext context, {
   required List<LineBarSpot> touchedSpots,
   required CurrencyInDB? currency,
   required String Function(int barIndex) lineLabel,
@@ -51,32 +49,22 @@ List<LineTooltipItem> buildMultiLineCurrencyLineTooltipItems({
     return const [];
   }
 
-  final date = DateTime.fromMillisecondsSinceEpoch(
-    touchedSpots.first.x.toInt(),
-  );
-  const dataTextStyle = TextStyle(
-    fontSize: 12,
-    height: 1.25,
-  );
+  final point = touchedSpots.first.x.toInt();
+
+  final date = DateTime.fromMillisecondsSinceEpoch(point);
+  const dataTextStyle = TextStyle(fontSize: 12, height: 1.25);
 
   return [
     ...touchedSpots.mapIndexed((index, spot) {
       return LineTooltipItem(
         index == 0 ? '${DateFormat.MMMd().format(date)}\n' : '',
-        const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          height: 2,
-        ),
+        const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, height: 2),
         children: [
           TextSpan(
             text: '◉ ',
             style: dataTextStyle.copyWith(color: spot.bar.color),
           ),
-          TextSpan(
-            text: '${lineLabel(spot.barIndex)}: ',
-            style: dataTextStyle,
-          ),
+          TextSpan(text: '${lineLabel(spot.barIndex)}: ', style: dataTextStyle),
           ...UINumberFormatter.currency(
             currency: currency,
             amountToConvert: spot.y,
@@ -116,22 +104,32 @@ class EvolutionChartLegendItem extends StatelessWidget {
   }
 }
 
+/// Centers [child] and places the “insufficient data” chip on top (same layout
+/// for single- and multi-line evolution charts).
 class EvolutionChartInsufficientDataOverlay extends StatelessWidget {
-  const EvolutionChartInsufficientDataOverlay({super.key});
+  const EvolutionChartInsufficientDataOverlay({super.key, required this.child});
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Text(
-        t.general.insufficient_data,
-        style: Theme.of(context).textTheme.labelMedium,
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Text(
+            t.general.insufficient_data,
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+        ),
+      ],
     );
   }
 }
