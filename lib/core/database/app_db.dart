@@ -75,12 +75,12 @@ class AppDB extends _$AppDB {
           );
           await customStatement(sqlStatement);
         }
-      });
 
-      await AppDataService.instance.setItem(
-        AppDataKey.dbVersion,
-        i.toStringAsFixed(0),
-      );
+        await AppDataService.instance.setItem(
+          AppDataKey.dbVersion,
+          i.toStringAsFixed(0),
+        );
+      });
     }
 
     Logger.printDebug('Migration completed!');
