@@ -1,8 +1,10 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
+import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -16,7 +18,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:saf_stream/saf_stream.dart';
 import 'package:saf_util/saf_util.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:monekin/core/database/backup/backup_database_service.dart';
 
 enum _ExportFormats { csv, db }
 
@@ -104,13 +105,13 @@ class _ExportDataPageState extends State<ExportDataPage> {
   }
 
   Future<void> downloadFile() async {
+    if (_isDownloading) return; // Prevent multiple concurrent operations
+
+    setState(() {
+      _isDownloading = true;
+    });
+
     if (Platform.isAndroid) {
-      if (_isDownloading) return; // Prevent multiple concurrent operations
-
-      setState(() {
-        _isDownloading = true;
-      });
-
       try {
         final safUtil = SafUtil();
 
@@ -120,9 +121,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
         );
 
         if (directory == null) {
-          MonekinSnackbar.info(
-            SnackbarParams(t.backup.no_directory_selected),
-          );
+          MonekinSnackbar.info(SnackbarParams(t.backup.no_directory_selected));
           return;
         }
 
@@ -167,12 +166,6 @@ class _ExportDataPageState extends State<ExportDataPage> {
         }
       }
     } else {
-      if (_isDownloading) return; // Prevent multiple concurrent operations
-
-      setState(() {
-        _isDownloading = true;
-      });
-
       try {
         String? path;
 
