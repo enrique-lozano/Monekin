@@ -890,7 +890,17 @@
       "treat_as_investment": "Tratar como inversión (solo tramo de efectivo)",
       "notes_optional": "Notas (opcional)",
       "link_transaction": "Linkear transacción",
-      "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo"
+      "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo",
+      "performance_sheet_title": "Rendimiento",
+      "performance_benefit": "Beneficio",
+      "performance_benefit_caption": "Valor actual menos el valor inicial de adquisición, como porcentaje de rentabilidad—la misma idea que antes bajo el saldo.",
+      "performance_monetary_diff": "Diferencia monetaria",
+      "performance_monetary_diff_caption": "El mismo beneficio en dinero (valor actual menos valor inicial).",
+      "performance_invested_value": "Valor invertido",
+      "performance_invested_value_caption": "Efectivo neto en el activo hasta ahora (valor inicial más flujos vinculados).",
+      "performance_value_diff": "Diferencia de valor",
+      "performance_value_diff_caption": "Rentabilidad del intervalo del gráfico que elegiste—desde el primer punto visible hasta hoy.",
+      "performance_trend_hint": "Rentabilidad del periodo · toca para detalles"
     },
     "FORM": {
       "asset_type": "Tipo de activo",

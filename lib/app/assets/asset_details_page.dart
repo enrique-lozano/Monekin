@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_form.dart';
 import 'package:monekin/app/assets/asset_trade_sheet.dart';
+import 'package:monekin/app/assets/widgets/asset_performance_bottom_sheet.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_contribution_chart.dart';
 import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/debts/components/transaction_selector.dart';
@@ -132,6 +133,66 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           );
         })
         .toList();
+  }
+
+  ChartTimePeriod _effectiveChartPeriod(DateTime oldestDate) {
+    return _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
+        ? _selectedChartPeriod
+        : ChartTimePeriod.max;
+  }
+
+  double _netContributionNow({
+    required Asset asset,
+    required List<MoneyTransaction> transactions,
+  }) {
+    var net = asset.initialValue;
+    final sorted =
+        transactions
+            .where(
+              (tx) =>
+                  tx.assetID == asset.id &&
+                  InvestmentService.statusAffectsValuation(tx),
+            )
+            .toList()
+          ..sort((a, b) => a.date.compareTo(b.date));
+    for (final tx in sorted) {
+      net += InvestmentService.valuationDeltaForTransaction(tx);
+    }
+    return net;
+  }
+
+  /// Change in unrealized P/L (value − net contribution) from the first
+  /// visible chart point to now, and a return ratio vs basis at that point.
+  ({
+    double periodReturnFraction,
+    double periodBenefitMoney,
+    DateTime rangeStartDate,
+  })? _periodPerformance({
+    required List<AssetValuationContributionPoint>? points,
+    required double currentValue,
+    required double netContributionNow,
+  }) {
+    if (points == null || points.isEmpty) return null;
+    final p0 = points.first;
+    final benefitStart = p0.valuation - p0.netContribution;
+    final benefitNow = currentValue - netContributionNow;
+    final periodBenefitMoney = benefitNow - benefitStart;
+    final basis = p0.netContribution.abs() < 1e-9
+        ? p0.valuation
+        : p0.netContribution;
+    double periodReturnFraction;
+    if (basis.abs() < 1e-9) {
+      periodReturnFraction = periodBenefitMoney == 0
+          ? 0
+          : (periodBenefitMoney > 0 ? double.infinity : double.negativeInfinity);
+    } else {
+      periodReturnFraction = periodBenefitMoney / basis;
+    }
+    return (
+      periodReturnFraction: periodReturnFraction,
+      periodBenefitMoney: periodBenefitMoney,
+      rangeStartDate: p0.date,
+    );
   }
 
   Future<void> _addValuation(Asset asset) async {
@@ -289,6 +350,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     List<ValuationInDB>? valuations,
     ValuationInDB? displayValuation,
     Asset? asset,
+    List<MoneyTransaction>? transactions,
   ) {
     asset ??= widget.asset;
 
@@ -305,61 +367,157 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
               builder: (context, valueSnapshot) {
                 final value = valueSnapshot.data ?? asset!.initialValue;
 
-                return Row(
-                  spacing: 8,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (displayValuation != null) ...[
-                      DefaultTextStyle.merge(
-                        style: Theme.of(context).textTheme.titleLarge,
-                        child: CurrencyDisplayer(
-                          amountToConvert: displayValuation.value,
-                          currency: asset?.currency ?? widget.asset.currency,
-                        ),
-                      ),
-                      Text(
-                        '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
-                      ),
-                    ] else
-                      DefaultTextStyle.merge(
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        child: CurrencyDisplayer(
-                          amountToConvert: value,
-                          currency: asset?.currency ?? widget.asset.currency,
-                        ),
-                      ),
+                    Row(
+                      spacing: 8,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        if (displayValuation != null) ...[
+                          DefaultTextStyle.merge(
+                            style: Theme.of(context).textTheme.titleLarge,
+                            child: CurrencyDisplayer(
+                              amountToConvert: displayValuation.value,
+                              currency: asset?.currency ?? widget.asset.currency,
+                            ),
+                          ),
+                          Text(
+                            '(${getMMMdDateFormatBasedOnYear(displayValuation.date).text})',
+                          ),
+                        ] else
+                          DefaultTextStyle.merge(
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                            child: CurrencyDisplayer(
+                              amountToConvert: value,
+                              currency: asset?.currency ?? widget.asset.currency,
+                            ),
+                          ),
+                      ],
+                    ),
+                    _buildTrendSection(
+                      context,
+                      valuations: valuations,
+                      transactions: transactions,
+                      asset: asset,
+                      currentValue: value,
+                    ),
                   ],
                 );
               },
             ),
           ),
-          _buildTrendSection(context),
         ],
       ),
     );
   }
 
-  Widget _buildTrendSection(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        StreamBuilder<({double value, double percent})>(
-          stream: InvestmentService.instance.getAssetProfit(widget.asset),
-          builder: (context, profitSnapshot) {
-            final profitData = profitSnapshot.data;
-            final percent = profitData?.percent ?? 0;
+  Widget _buildTrendSection(
+    BuildContext context, {
+    required List<ValuationInDB>? valuations,
+    required List<MoneyTransaction>? transactions,
+    required Asset? asset,
+    required double currentValue,
+  }) {
+    final t = Translations.of(context);
+    final resolvedAsset = asset ?? widget.asset;
+    final scheme = Theme.of(context).colorScheme;
 
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [TrendingValue(percentage: percent)],
-            );
-          },
-        ),
-      ],
+    if (valuations == null || transactions == null) {
+      return const Padding(
+        padding: EdgeInsets.only(top: 8),
+        child: Row(children: [Bone(width: 88, height: 24)]),
+      );
+    }
+
+    final allSorted = [
+      ValuationInDB(
+        id: 'INITIAL_VALUE',
+        date: widget.asset.creationDate,
+        value: widget.asset.initialValue,
+        assetId: widget.asset.id,
+      ),
+      ...valuations,
+    ]..sort((a, b) => a.date.compareTo(b.date));
+    final oldestDate = allSorted.first.date;
+    final effectivePeriod = _effectiveChartPeriod(oldestDate);
+
+    final points = _buildChartPoints(
+      valuations: valuations,
+      transactions: transactions,
+    );
+    final netNow = _netContributionNow(
+      asset: resolvedAsset,
+      transactions: transactions,
+    );
+    final period = _periodPerformance(
+      points: points.isEmpty ? null : points,
+      currentValue: currentValue,
+      netContributionNow: netNow,
+    );
+    final periodFraction = period == null
+        ? 0.0
+        : clampAssetPerformanceTrendFraction(period.periodReturnFraction);
+    final periodSnapshot = period;
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 8),
+      child: StreamBuilder<({double value, double percent})>(
+        stream: InvestmentService.instance.getAssetProfit(resolvedAsset),
+        builder: (context, profitSnapshot) {
+          final lifetime = profitSnapshot.data;
+          final pr = periodSnapshot;
+
+          return Material(
+            color: scheme.surfaceContainerHighest.withValues(alpha: 0.45),
+            borderRadius: BorderRadius.circular(14),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: points.isEmpty || lifetime == null || pr == null
+                  ? null
+                  : () {
+                      if (!mounted) return;
+                      showAssetPerformanceBottomSheet(
+                        context: context,
+                        asset: resolvedAsset,
+                        effectivePeriod: effectivePeriod,
+                        rangeStartDate: pr.rangeStartDate,
+                        lifetimeProfit: lifetime,
+                        periodReturnFraction: pr.periodReturnFraction,
+                        periodBenefitMoney: pr.periodBenefitMoney,
+                        netInvestedNow: netNow,
+                      );
+                    },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: Row(
+                  children: [
+                    TrendingValue(
+                      percentage: periodFraction,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        t.assets.details.performance_trend_hint,
+                        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.keyboard_arrow_right_rounded,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -368,6 +526,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     List<ValuationInDB>? valuations,
     List<MoneyTransaction>? transactions,
   ) {
+    final t = Translations.of(context);
     final allChartData = valuations == null
         ? null
         : ([
@@ -638,7 +797,13 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 8),
-        _buildCurrentValueTile(context, valuations, displayValuation, asset),
+        _buildCurrentValueTile(
+          context,
+          valuations,
+          displayValuation,
+          asset,
+          transactions,
+        ),
         if (valuations != null && MediaQuery.of(context).size.height > 550) ...[
           const SizedBox(height: 16),
           _buildChartSection(context, valuations, transactions),
@@ -677,6 +842,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 valuations,
                 displayValuation,
                 asset,
+                transactions,
               ),
               const SizedBox(height: 16),
               _buildChartSection(context, valuations, transactions),

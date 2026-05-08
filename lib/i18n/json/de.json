@@ -887,7 +887,17 @@
       "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
       "notes_optional": "Notizen (optional)",
       "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+      "performance_sheet_title": "Performance",
+      "performance_benefit": "Nutzen",
+      "performance_benefit_caption": "Aktueller Wert minus Anfangserwerbswert als Rendite—dieselbe Logik wie zuvor unter dem Saldo.",
+      "performance_monetary_diff": "Geldwerte Differenz",
+      "performance_monetary_diff_caption": "Derselbe Nutzen in Geld (aktueller Wert minus Anfangswert).",
+      "performance_invested_value": "Investierter Wert",
+      "performance_invested_value_caption": "Bisheriger Netto-Cash im Asset (Anfangswert plus verknüpfte Zuflüsse).",
+      "performance_value_diff": "Wertdifferenz",
+      "performance_value_diff_caption": "Rendite für den gewählten Diagrammbereich—vom ersten sichtbaren Punkt bis heute.",
+      "performance_trend_hint": "Periodenrendite · tippen für Details"
     },
     "FORM": {
       "asset_type": "Asset-Typ",

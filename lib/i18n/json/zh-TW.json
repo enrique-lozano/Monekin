@@ -887,7 +887,17 @@
       "treat_as_investment": "視為投資（僅限現金部分）",
       "notes_optional": "註釋（可選）",
       "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value."
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+      "performance_sheet_title": "表現",
+      "performance_benefit": "收益",
+      "performance_benefit_caption": "目前市值相對初始購置價的報酬率——與先前餘額下方含義一致。",
+      "performance_monetary_diff": "金額變化",
+      "performance_monetary_diff_caption": "同樣的收益，以金額表示（目前市值減初始值）。",
+      "performance_invested_value": "投入金額",
+      "performance_invested_value_caption": "截至目前淨投入（初始值與關聯流水）。",
+      "performance_value_diff": "價值差異",
+      "performance_value_diff_caption": "所選圖表區間（從可見的第一個點至今）的報酬。",
+      "performance_trend_hint": "區間報酬 · 點選查看明細"
     },
     "FORM": {
       "asset_type": "資產類型",
