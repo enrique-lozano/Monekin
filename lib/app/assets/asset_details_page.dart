@@ -585,7 +585,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           ),
         if (chartData != null)
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: AssetValuationContributionChart(
               points: chartData,
               currency: widget.asset.currency,
@@ -611,81 +611,81 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             height: 120,
             child: Center(child: CircularProgressIndicator()),
           ),
+      ],
+    );
+  }
 
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            spacing: 16,
-            children: [
-              if (widget.asset.assetType.isPhysical)
-                Expanded(
-                  child: FilledButton.tonalIcon(
-                    onPressed: () => showTransactionSelectorModal(
-                      context,
-                      onTransactionSelected: (selectedTransaction) async {
-                        try {
-                          await InvestmentService.instance
-                              .linkTransactionToAsset(
-                                transactionId: selectedTransaction.id,
-                                assetId: widget.asset.id,
-                              );
-                          MonekinSnackbar.success(
-                            SnackbarParams("Transaction linked with success"),
-                          );
-                        } catch (e) {
-                          MonekinSnackbar.error(
-                            SnackbarParams.fromError(e, showAtTop: true),
-                          );
-                        }
-                      },
-                      subtitle: t.assets.details.link_transaction_description,
-                      initialFilters: TransactionFilterSet(
-                        transactionTypes: [
-                          TransactionType.income,
-                          TransactionType.expense,
-                        ],
-                        assetIds: [],
-                      ),
-                    ),
-                    icon: const Icon(Icons.add_link_rounded),
-                    label: Text(t.assets.details.link_transaction),
-                  ),
+  Row _registerTransactionActionButtons(BuildContext context) {
+    final t = Translations.of(context);
+
+    return Row(
+      spacing: 16,
+      children: [
+        if (widget.asset.assetType.isPhysical)
+          Expanded(
+            child: FilledButton.tonalIcon(
+              onPressed: () => showTransactionSelectorModal(
+                context,
+                onTransactionSelected: (selectedTransaction) async {
+                  try {
+                    await InvestmentService.instance.linkTransactionToAsset(
+                      transactionId: selectedTransaction.id,
+                      assetId: widget.asset.id,
+                    );
+                    MonekinSnackbar.success(
+                      SnackbarParams("Transaction linked with success"),
+                    );
+                  } catch (e) {
+                    MonekinSnackbar.error(
+                      SnackbarParams.fromError(e, showAtTop: true),
+                    );
+                  }
+                },
+                subtitle: t.assets.details.link_transaction_description,
+                initialFilters: TransactionFilterSet(
+                  transactionTypes: [
+                    TransactionType.income,
+                    TransactionType.expense,
+                  ],
+                  assetIds: [],
                 ),
-              if (widget.asset.assetType.isFinancial) ...[
-                Expanded(
-                  child: FilledButton.tonalIcon(
-                    onPressed: () => showAssetTradeSheet(
-                      context,
-                      asset: widget.asset,
-                      isBuy: true,
-                    ),
-                    icon: const Icon(Icons.add_rounded),
-                    label: Text(t.assets.details.buy),
-                    style: FilledButton.styleFrom(
-                      foregroundColor: Colors.green,
-                      backgroundColor: Colors.green.withOpacity(0.1),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: FilledButton.tonalIcon(
-                    onPressed: () => showAssetTradeSheet(
-                      context,
-                      asset: widget.asset,
-                      isBuy: false,
-                    ),
-                    icon: const Icon(Icons.remove_rounded),
-                    label: Text(t.assets.details.sell),
-                    style: FilledButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      backgroundColor: Colors.red.withOpacity(0.1),
-                    ),
-                  ),
-                ),
-              ],
-            ],
+              ),
+              icon: const Icon(Icons.add_link_rounded),
+              label: Text(t.assets.details.link_transaction),
+            ),
           ),
-        ),
+        if (widget.asset.assetType.isFinancial) ...[
+          Expanded(
+            child: FilledButton.tonalIcon(
+              onPressed: () => showAssetTradeSheet(
+                context,
+                asset: widget.asset,
+                isBuy: true,
+              ),
+              icon: const Icon(Icons.add_rounded),
+              label: Text(t.assets.details.buy),
+              style: FilledButton.styleFrom(
+                foregroundColor: Colors.green,
+                backgroundColor: Colors.green.withOpacity(0.1),
+              ),
+            ),
+          ),
+          Expanded(
+            child: FilledButton.tonalIcon(
+              onPressed: () => showAssetTradeSheet(
+                context,
+                asset: widget.asset,
+                isBuy: false,
+              ),
+              icon: const Icon(Icons.remove_rounded),
+              label: Text(t.assets.details.sell),
+              style: FilledButton.styleFrom(
+                foregroundColor: Colors.red,
+                backgroundColor: Colors.red.withOpacity(0.1),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -807,8 +807,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 16,
       children: [
-        const SizedBox(height: 8),
         _buildCurrentValueTile(
           context,
           valuations,
@@ -816,11 +816,13 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           asset,
           transactions,
         ),
-        if (valuations != null && MediaQuery.of(context).size.height > 550) ...[
-          const SizedBox(height: 16),
+        if (valuations != null && MediaQuery.of(context).size.height > 620) ...[
           _buildChartSection(context, valuations, transactions),
         ],
-        const SizedBox(height: 16),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _registerTransactionActionButtons(context),
+        ),
         Expanded(
           child: _buildValuationListSection(
             context,

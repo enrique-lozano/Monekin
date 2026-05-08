@@ -184,9 +184,9 @@ class _AssetValuationContributionChartState
     final chartContainer = SizedBox(
       height:
           (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
-              ? 180
-              : 140) *
-          clampDouble(MediaQuery.of(context).size.height / 800, 0.25, 1),
+              ? 280
+              : 100) *
+          clampDouble(MediaQuery.of(context).size.height / 800, 0.2, 1),
       child: chart,
     );
 
@@ -201,22 +201,25 @@ class _AssetValuationContributionChartState
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 6,
       children: [
         chartWithOverlay,
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 12,
-          runSpacing: 6,
-          children: [
-            EvolutionChartLegendItem(
-              color: valuationColor,
-              label: widget.valuationLabel,
-            ),
-            EvolutionChartLegendItem(
-              color: netContributionColor,
-              label: widget.netContributionLabel,
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Wrap(
+            spacing: 12,
+            runSpacing: 6,
+            children: [
+              EvolutionChartLegendItem(
+                color: valuationColor,
+                label: widget.valuationLabel,
+              ),
+              EvolutionChartLegendItem(
+                color: netContributionColor,
+                label: widget.netContributionLabel,
+              ),
+            ],
+          ),
         ),
       ],
     );
