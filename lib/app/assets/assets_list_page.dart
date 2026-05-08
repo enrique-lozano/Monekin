@@ -6,7 +6,6 @@ import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -103,18 +102,15 @@ class _AssetsListPageState extends State<AssetsListPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final isTablet = BreakPoint.of(context).isLargerThan(BreakpointID.sm);
 
     return PageFramework(
       title: t.assets.title,
-      floatingActionButton: !isTablet
-          ? AnimatedFloatingButtonBasedOnScroll(
-              onPressed: _goToCreate,
-              icon: const Icon(Icons.add_rounded),
-              scrollController: _scrollController,
-              text: t.assets.create,
-            )
-          : null,
+      floatingActionButton: AnimatedFloatingButtonBasedOnScroll(
+        onPressed: _goToCreate,
+        icon: const Icon(Icons.add_rounded),
+        scrollController: _scrollController,
+        text: t.assets.create,
+      ),
       body: Column(
         children: [
           ListTile(
