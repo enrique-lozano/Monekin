@@ -997,7 +997,7 @@
         "success": "已成功導入{{x}}筆交易"
       },
       "success": "導入成功",
-      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。",
+      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。"
     },
     "ABOUT": {
       "title": "有關您的資料庫的資訊",
