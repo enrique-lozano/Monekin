@@ -678,7 +678,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     : defaultTags?.map((t) => t?.name).join(', '),
                 isRequired: false,
                 onClick: () async {
-                  final modalRes = await showTagListModal(
+                  final selected = await showTagListModal(
                     context,
                     modal: TagSelector(
                       selectedTags: defaultTags ?? [],
@@ -687,9 +687,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     ),
                   );
 
-                  if (modalRes != null) {
+                  if (selected != null) {
                     setState(() {
-                      defaultTags = modalRes;
+                      defaultTags = selected.selectedTags.whereType<Tag>().toList();
                     });
                   }
                 },
