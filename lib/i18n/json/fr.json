@@ -999,7 +999,7 @@
           "Sélectionnez la colonne où la valeur de chaque transaction est spécifiée. Utilisez des valeurs négatives pour les dépenses et positives pour les recettes.",
           "Sélectionnez la colonne où est spécifié le compte auquel appartient chaque transaction. Vous pouvez également sélectionner un compte par défaut au cas où nous ne pourrions pas trouver le compte souhaité. Si aucun compte par défaut n'est spécifié, nous en créerons un avec le même nom.",
           "Indiquez la colonne où se trouve le nom de la catégorie de la transaction. Vous devez spécifier une catégorie par défaut pour que nous l'assignions aux transactions si la catégorie ne peut pas être trouvée.",
-          "Specifica la colonna in cui si trovano i tag delle transazioni. Se non specificata, le transazioni verranno create con i tag predefiniti.",
+          "Sélectionnez la colonne où se trouvent les étiquettes des transactions. Si elle n'est pas spécifiée, les transactions seront créées avec les étiquettes par défaut.",
           "Sélectionnez la colonne où la date de chaque transaction est spécifiée. Si elle n'est pas indiquée, les transactions seront créées avec la date actuelle.",
           "Indiquez les colonnes pour les autres attributs optionnels de la transaction."
         ],

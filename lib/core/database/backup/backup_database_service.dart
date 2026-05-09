@@ -103,7 +103,9 @@ class BackupDatabaseService {
         processedData.add(toAdd);
       }
     }
-    final csvData = ListToCsvConverter().convert(processedData);
+    final csvData = ListToCsvConverter(
+      fieldDelimiter: fieldSeparator,
+    ).convert(processedData);
     return csvData;
   }
 

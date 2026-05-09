@@ -49,8 +49,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   List<List<String>>? csvData;
   List<String>? get csvHeaders {
     final List<String>? header = csvData?.firstOrNull;
-    header?.removeWhere((item) => item.isEmpty);
-    return header;
+    if (header == null) {
+      return null;
+    }
+    return header.where((item) => item.isNotEmpty).toList();
   }
 
   int? amountColumn;
