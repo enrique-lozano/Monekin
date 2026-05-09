@@ -318,7 +318,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             : row[tagsColumn!]
                   .toString()
                   .toLowerCase()
-                  .split(_csvListSeparatorController.text)
+                  .split(_csvListSeparatorController.text.trim())
                   .map((t) => t.trim())
                   .where((t) => t.isNotEmpty);
 

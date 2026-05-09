@@ -30,10 +30,10 @@ String? fieldValidator(
   bool isRequired = false,
   ValidatorType validator = ValidatorType.text,
 }) {
-  if (!isRequired && (value == null || value.isEmpty)) {
+  if (!isRequired && (value == null || value.trim().isEmpty)) {
     // If the field is not required and is empty, we don't return any error
     return null;
-  } else if (value == null || value.isEmpty) {
+  } else if (value == null || value.trim().isEmpty) {
     return t.general.validations.required;
   }
 
