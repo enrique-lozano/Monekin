@@ -63,7 +63,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     text: 'yyyy-MM-dd HH:mm:ss',
   );
   // Character used to separate list of values (e.g., tags) in the CSV.
-  final _csvListSeparatorController = TextEditingController(text: ';');
+  final _csvListSeparatorController = TextEditingController(text: '|');
 
   bool nextButtonDisabled = false;
 
