@@ -52,6 +52,10 @@ class TransactionFilterSet {
   /// Useful in transaction selectors to avoid showing already-assigned transactions.
   final String? excludeDebtId;
 
+  /// When set, returns the transactions that have one of the specified assets linked. If an
+  /// empty array is passed, will return the transactions that do not have any asset linked
+  final Iterable<String>? assetIds;
+
   const TransactionFilterSet({
     this.minDate,
     this.maxDate,
@@ -68,6 +72,7 @@ class TransactionFilterSet {
     this.tagsIDs,
     this.debtId,
     this.excludeDebtId,
+    this.assetIds,
   });
 
   /// Factory constructor to create a [TransactionFilterSet] from a [TransactionFilterSetInDB]
@@ -84,6 +89,7 @@ class TransactionFilterSet {
       status: dbModel.status,
       tagsIDs: dbModel.tagsIDs,
       // debtId is not stored in DB filter sets for now
+      // assetIds is not stored in DB filter sets for now
     );
   }
 
@@ -116,6 +122,7 @@ class TransactionFilterSet {
     status,
     tagsIDs,
     debtId,
+    assetIds,
   ].any((element) => element != null);
 
   Stream<List<Account>> accounts() => accountsIDs != null
@@ -182,6 +189,12 @@ class TransactionFilterSet {
       if (excludeDebtId != null)
         transaction.debtId.isNull() |
             transaction.debtId.equals(excludeDebtId!).not(),
+
+      if (assetIds != null)
+        assetIds!.isEmpty
+            ? transaction.assetID.isNull()
+            : transaction.assetID.isIn(assetIds!),
+
       if (searchValue != null && searchValue!.isNotEmpty)
         (transaction.notes.contains(searchValue!) |
             transaction.title.contains(searchValue!) |

@@ -12,7 +12,10 @@ enum TransactionType implements DatabaseEnum<String> {
   expense('E'),
 
   /// A transfer transaction
-  transfer('T');
+  transfer('T'),
+
+  /// Cash flow for asset buy/sell (excluded from income/expense stats).
+  investment('N');
 
   const TransactionType(this.id);
 
@@ -21,22 +24,17 @@ enum TransactionType implements DatabaseEnum<String> {
   @override
   String get databaseValue => id;
 
-  /// Wheter the type is `income` or `expense`.
+  /// Whether the type is `income` or `expense`.
   bool get isIncomeOrExpense {
-    if (this == transfer) {
-      return false;
-    }
-
-    return true;
+    return this == income || this == expense;
   }
 
-  /// Wheter the type is of type `transfer`.
-  ///
-  /// This is an alias, so instead of doing `myType == TransactionType.transfer`, we can do
-  /// `myType.isTransfer`, which is equivalent
+  /// Whether the type is `transfer`.
   bool get isTransfer {
-    return !isIncomeOrExpense;
+    return this == transfer;
   }
+
+  bool get isInvestment => this == investment;
 
   String displayName(BuildContext context, {bool plural = false}) {
     if (this == income) {
@@ -45,6 +43,8 @@ enum TransactionType implements DatabaseEnum<String> {
       return t.transaction.types.expense(n: plural ? 10 : 1);
     } else if (this == transfer) {
       return t.transaction.types.transfer(n: plural ? 10 : 1);
+    } else if (this == investment) {
+      return t.transaction.types.investment(n: plural ? 10 : 1);
     }
 
     return '';
@@ -55,6 +55,8 @@ enum TransactionType implements DatabaseEnum<String> {
       return Icons.south_east_rounded;
     } else if (this == expense) {
       return Icons.north_east_rounded;
+    } else if (this == investment) {
+      return Icons.pie_chart_outline_rounded;
     }
 
     return Icons.swap_vert_rounded;
@@ -66,6 +68,8 @@ enum TransactionType implements DatabaseEnum<String> {
       return Icons.add;
     } else if (this == expense) {
       return Icons.remove;
+    } else if (this == investment) {
+      return Icons.pie_chart_outline_rounded;
     }
 
     return icon;
@@ -76,6 +80,8 @@ enum TransactionType implements DatabaseEnum<String> {
       return AppColors.of(context).success;
     } else if (this == expense) {
       return AppColors.of(context).danger;
+    } else if (this == investment) {
+      return AppColors.of(context).brand;
     }
 
     return AppColors.of(context).brand;

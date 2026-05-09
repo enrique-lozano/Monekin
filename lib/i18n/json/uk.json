@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Переказ",
         "other": "Перекази"
+      },
+      "investment": {
+        "one": "Інвестиції",
+        "other": "Інвестиції"
       }
     }
   },
@@ -495,7 +499,7 @@
       "saving": "Зберігаючий рахунок",
       "saving.descr": "З нього можна тільки додавати та знімати гроші з інших рахунків. Ідеально підходить для початку збереження грошей",
       "investment": "Інвестиційний рахунок",
-      "investment.descr": "Рахунок брокера, криптобіржі або портфеля. Відстежуйте свій інвестований капітал та оновлюйте його вартість вручну через оцінки"
+      "investment.descr": "Рахунок брокера, криптобіржі або портфеля, який може містити активи. Відстежуйте інвестований капітал та оновлюйте вартість кожного активу вручну через оцінки"
     },
     "FORM": {
       "name": "Назва рахунку",
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Додати цей рахунок до розрахунку загальних чистих активів",
       "correct_balance_description": "Коригування балансу змінює початкове значення рахунку. Це коригування не відобразиться у статистиці.",
       "valuation_before_creation_date": "У цьому обліковому записі є оцінки з датою, що передує даті створення"
-    },
-    "INVESTMENT": {
-      "details-header": "Інвестиція",
-      "correct_balance_title": "Відкоригувати інвестований капітал",
-      "correct_balance_description": "Цей рахунок використовує ручні оцінки для відстеження вартості портфеля. Ця дія лише оновлює інвестований капітал (початкове значення) і не змінює записані оцінки або інвестиційну статистику.",
-      "invested-capital": "Інвестований капітал",
-      "portfolio-value": "Вартість портфеля",
-      "profit": "Прибуток",
-      "last-valuation": "Остання оцінка",
-      "no-valuations": "Оцінок ще не записано",
-      "update-value": "Оновити вартість",
-      "update-value.descr": "Записати поточну вартість портфеля",
-      "update-value.success": "Оцінку успішно збережено",
-      "history": "Історія оцінок",
-      "history-empty": "Для цього рахунку ще немає оцінок",
-      "add-valuation": "Додати оцінку",
-      "edit-valuation": "Редагувати оцінку",
-      "edit-valuation.success": "Оцінку успішно відредаговано",
-      "delete-valuation.success": "Оцінку успішно видалено",
-      "delete-all-valuations": "Видалити всі оцінки",
-      "delete-all-valuations.success": "Усі оцінки успішно видалено"
     },
     "DELETE": {
       "warning-header": "Видалити рахунок?",
@@ -873,7 +856,51 @@
     "profit": "Прибуток",
     "profit_percent": "Повернення %",
     "total_value": "Загальна вартість активів",
+    "amount_invested": "Ви інвестували {{ X }} цього облікового запису",
+    "TYPES": {
+      "stocks": "Акції",
+      "funds": "Фонди",
+      "crypto": "Криптовалюта",
+      "real_estate": "Нерухомість",
+      "vehicle": "Транспортні засоби",
+      "jewelry_art": "Ювелірні вироби та мистецтво",
+      "other": "Інше"
+    },
+    "DETAILS": {
+      "select_account": "Виберіть обліковий запис",
+      "buy": "купити",
+      "sell": "Продати",
+      "update_value": "Оновити значення",
+      "trade_sheet_title_buy": "Купити (додати в актив)",
+      "trade_sheet_title_sell": "Продати (зменшити актив)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Вивести гроші з цього активу на рахунок. Зменште свої інвестиції та їх вартість.",
+      "trade_sheet_update_value_info": "Вартість цього активу буде оновлено до {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "Вартість активу, пов’язаного з цією трансакцією, буде оновлено до {{ value }}",
+      "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
+      "trade_sheet_update_following_valuations_description": "Вирівняйте оцінки активу після обраної дати.",
+      "trade_sheet_valuation_current_value_label": "Поточне значення",
+      "trade_sheet_valuation_new_value_label": "Нове значення",
+      "trade_sheet_valuation_create_new_title": "Створити нову оцінку",
+      "trade_sheet_valuation_adjust_current_description": "Скоригувати поточну вартість активу",
+      "trade_sheet_full_form": "Усі поля",
+      "trade_form_asset_column": "Актив",
+      "trade_valuation_notice": "Оцінку буде оновлено на цю дату, щоб відобразити цю суму.",
+      "treat_as_investment": "Вважати інвестицією (лише готівкова нога)",
+      "notes_optional": "Примітки (необов'язково)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Period return",
+      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_invested_value": "Invested value",
+      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+    },
     "FORM": {
+      "asset_type": "Тип активу",
+      "linked_account": "Пов’язаний обліковий запис (необов’язково)",
       "name": "Назва активу",
       "name_required": "Введіть назву активу",
       "description": "опис",
@@ -894,6 +921,7 @@
       "add_valuation": "Додайте оцінку",
       "edit_valuation": "Редагувати оцінку",
       "value": "Значення",
+      "net_contribution": "Чистий внесок",
       "value_required": "Будь ласка, введіть значення",
       "value_invalid": "Введіть дійсний номер",
       "update_value_success": "Оцінку успішно додано",

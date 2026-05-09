@@ -43,6 +43,8 @@ abstract class _$TransactionFilterSetCWProxy {
 
   TransactionFilterSet excludeDebtId(String? excludeDebtId);
 
+  TransactionFilterSet assetIds(Iterable<String>? assetIds);
+
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
@@ -66,6 +68,7 @@ abstract class _$TransactionFilterSetCWProxy {
     Iterable<String?>? tagsIDs,
     String? debtId,
     String? excludeDebtId,
+    Iterable<String>? assetIds,
   });
 }
 
@@ -139,6 +142,10 @@ class _$TransactionFilterSetCWProxyImpl
       call(excludeDebtId: excludeDebtId);
 
   @override
+  TransactionFilterSet assetIds(Iterable<String>? assetIds) =>
+      call(assetIds: assetIds);
+
+  @override
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
@@ -163,6 +170,7 @@ class _$TransactionFilterSetCWProxyImpl
     Object? tagsIDs = const $CopyWithPlaceholder(),
     Object? debtId = const $CopyWithPlaceholder(),
     Object? excludeDebtId = const $CopyWithPlaceholder(),
+    Object? assetIds = const $CopyWithPlaceholder(),
   }) {
     return TransactionFilterSet(
       minDate: minDate == const $CopyWithPlaceholder()
@@ -230,6 +238,10 @@ class _$TransactionFilterSetCWProxyImpl
           ? _value.excludeDebtId
           // ignore: cast_nullable_to_non_nullable
           : excludeDebtId as String?,
+      assetIds: assetIds == const $CopyWithPlaceholder()
+          ? _value.assetIds
+          // ignore: cast_nullable_to_non_nullable
+          : assetIds as Iterable<String>?,
     );
   }
 }
@@ -262,6 +274,7 @@ extension $TransactionFilterSetCopyWith on TransactionFilterSet {
     bool tagsIDs = false,
     bool debtId = false,
     bool excludeDebtId = false,
+    bool assetIds = false,
   }) {
     return TransactionFilterSet(
       minDate: minDate == true ? null : this.minDate,
@@ -280,6 +293,7 @@ extension $TransactionFilterSetCopyWith on TransactionFilterSet {
       tagsIDs: tagsIDs == true ? null : this.tagsIDs,
       debtId: debtId == true ? null : this.debtId,
       excludeDebtId: excludeDebtId == true ? null : this.excludeDebtId,
+      assetIds: assetIds == true ? null : this.assetIds,
     );
   }
 }

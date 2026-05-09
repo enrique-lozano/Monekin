@@ -297,7 +297,10 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
     if (selected != null) {
       DefaultTransactionValuesService.instance.updateValues(
         values.copyWith(
-          tagIds: selected.selectedTags.whereType<Tag>().map((e) => e.id).toList(),
+          tagIds: selected.selectedTags
+              .whereType<Tag>()
+              .map((e) => e.id)
+              .toList(),
         ),
       );
     }

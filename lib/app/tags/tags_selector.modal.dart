@@ -82,16 +82,16 @@ class _TagSelectorState extends State<TagSelector>
         return ModalContainer(
           title: t.tags.select.title,
           titleBuilder: selectedTags.isEmpty
-            ? null
-            : (title) {
-            return Row(
-              children: [
-                Text(title),
-                const SizedBox(width: 12),
-                CountIndicator(selectedTags.length),
-              ],
-            );
-          },
+              ? null
+              : (title) {
+                  return Row(
+                    children: [
+                      Text(title),
+                      const SizedBox(width: 12),
+                      CountIndicator(selectedTags.length),
+                    ],
+                  );
+                },
           body: StreamBuilder(
             stream: TagService.instance.getTags(
               filter: (p0) => p0.name.contains(searchValue),
@@ -122,11 +122,13 @@ class _TagSelectorState extends State<TagSelector>
           ),
           footer: BottomSheetFooter(
             onSaved: selectedTags.isNotEmpty || widget.allowEmptySubmit
-              ? () => RouteUtils.popRoute(TagSelectorResult(
-              selectedTags: selectedTags,
-              explicitlyRemovedTags: explicitlyRemovedTags,
-            ))
-              : null,
+                ? () => RouteUtils.popRoute(
+                    TagSelectorResult(
+                      selectedTags: selectedTags,
+                      explicitlyRemovedTags: explicitlyRemovedTags,
+                    ),
+                  )
+                : null,
           ),
         );
       },
@@ -191,10 +193,11 @@ class _TagSelectorState extends State<TagSelector>
                 (element) => element != null && element.id == tag.id,
               );
 
-              final isIndeterminate = !isSelected &&
-                indeterminateTags.any(
-                  (element) => element != null && element.id == tag.id,
-                );
+              final isIndeterminate =
+                  !isSelected &&
+                  indeterminateTags.any(
+                    (element) => element != null && element.id == tag.id,
+                  );
 
               return CheckboxListTile.adaptive(
                 value: isIndeterminate ? null : isSelected,
@@ -202,8 +205,8 @@ class _TagSelectorState extends State<TagSelector>
                 secondary: tag.displayIcon(),
                 title: Text(tag.name),
                 subtitle: !tag.description.isNullOrEmpty
-                  ? Text(tag.description!)
-                  : null,
+                    ? Text(tag.description!)
+                    : null,
                 onChanged: (newValue) {
                   setState(() {
                     final isIndeterminate = indeterminateTags.any(
@@ -253,12 +256,12 @@ class _TagSelectorState extends State<TagSelector>
     ];
 
     final filteredSelectedTags = selectedTags
-      .where(
-        (selAcc) =>
-          selAcc == null ||
-          filteredTags.nonNulls.map((e) => e.id).contains(selAcc.id),
+        .where(
+          (selAcc) =>
+              selAcc == null ||
+              filteredTags.nonNulls.map((e) => e.id).contains(selAcc.id),
         )
-      .toList();
+        .toList();
 
     return CheckboxListTile(
       value: filteredSelectedTags.isEmpty

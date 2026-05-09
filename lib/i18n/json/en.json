@@ -437,6 +437,10 @@
       "transfer": {
         "one": "Transfer",
         "other": "Transfers"
+      },
+      "investment": {
+        "one": "Investment",
+        "other": "Investments"
       }
     }
   },
@@ -495,7 +499,7 @@
       "saving": "Savings account",
       "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money",
       "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment.descr": "A broker, crypto exchange, or portfolio account that can hold assets. Track your invested capital and update each asset's value manually via valuations"
     },
     "FORM": {
       "name": "Account name",
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "Add this account to the total net worth calculation",
       "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics.",
       "valuation_before_creation_date": "There are valuations in this account with a date before the creation date"
-    },
-    "INVESTMENT": {
-      "details-header": "Investment",
-      "correct_balance_title": "Correct invested capital",
-      "correct_balance_description": "This account uses manual valuations for portfolio value. This action only updates the invested capital (initial value) and will not change recorded valuations or investment statistics.",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully",
-      "history": "Valuation history",
-      "history-empty": "No valuations recorded yet for this account",
-      "add-valuation": "Add valuation",
-      "edit-valuation": "Edit valuation",
-      "edit-valuation.success": "Valuation edited successfully",
-      "delete-valuation.success": "Valuation deleted successfully",
-      "delete-all-valuations": "Delete all valuations",
-      "delete-all-valuations.success": "All valuations deleted successfully"
     },
     "DELETE": {
       "warning-header": "Delete account?",
@@ -873,7 +856,51 @@
     "profit": "Profit",
     "profit_percent": "Return %",
     "total_value": "Assets total value",
+    "amount_invested": "You have the {{ X }} of this account invested",
+    "TYPES": {
+      "stocks": "Stocks",
+      "funds": "Funds",
+      "crypto": "Crypto",
+      "real_estate": "Real estate",
+      "vehicle": "Vehicles",
+      "jewelry_art": "Jewelry & art",
+      "other": "Other"
+    },
+    "DETAILS": {
+      "select_account": "Select an account",
+      "buy": "Buy",
+      "sell": "Sell",
+      "update_value": "Update value",
+      "trade_sheet_title_buy": "Buy (add to asset)",
+      "trade_sheet_title_sell": "Sell (reduce asset)",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "Withdraw money from this asset to an account. Reduce your investment and its value.",
+      "trade_sheet_update_value_info": "The value of this asset will be updated to {{ value }} for the selected date",
+      "trade_sheet_update_linked_asset_value_info": "The value of the asset that is linked to this transaction will be updated to {{ value }} for the selected date",
+      "trade_sheet_update_following_valuations": "Update later valuations",
+      "trade_sheet_update_following_valuations_description": "Adjust valuations for this asset dated after the selected date.",
+      "trade_sheet_valuation_current_value_label": "Current value",
+      "trade_sheet_valuation_new_value_label": "New value",
+      "trade_sheet_valuation_create_new_title": "Create new valuation",
+      "trade_sheet_valuation_adjust_current_description": "Adjust the asset's current value",
+      "trade_sheet_full_form": "All fields",
+      "trade_form_asset_column": "Asset",
+      "trade_valuation_notice": "A valuation will be updated for this date to reflect this amount.",
+      "treat_as_investment": "Treat as investment (cash leg only)",
+      "notes_optional": "Notes (optional)",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Period return",
+      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_invested_value": "Invested value",
+      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked buy/sell flows).",
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+    },
     "FORM": {
+      "asset_type": "Asset type",
+      "linked_account": "Linked account (optional)",
       "name": "Asset name",
       "name_required": "Please enter an asset name",
       "description": "Description",
@@ -894,6 +921,7 @@
       "add_valuation": "Add valuation",
       "edit_valuation": "Edit valuation",
       "value": "Value",
+      "net_contribution": "Net contribution",
       "value_required": "Please enter a value",
       "value_invalid": "Please enter a valid number",
       "update_value_success": "Valuation added successfully",

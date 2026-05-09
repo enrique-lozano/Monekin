@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -40,21 +41,54 @@ class TransactionService {
     AppDB.instance,
   );
 
-  Future<int> insertTransaction(TransactionInDB transaction) async {
+  Future<int> insertTransaction(
+    TransactionInDB transaction, {
+    bool updateAssetValuations = true,
+    bool updateFutureAssetValuations = false,
+  }) async {
     final toReturn = await db.into(db.transactions).insert(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
+    if (updateAssetValuations) {
+      if (updateFutureAssetValuations) {
+        await InvestmentService.instance.onTransactionSavedAndFutureValuations(
+          transaction,
+        );
+      } else {
+        await InvestmentService.instance.onTransactionSaved(transaction);
+      }
+    }
     return toReturn;
   }
 
-  Future<int> updateTransaction(TransactionInDB transaction) async {
+  Future<int> updateTransaction(
+    TransactionInDB transaction, {
+    bool updateAssetValuations = true,
+    bool updateFutureAssetValuations = false,
+  }) async {
+    final previous = await (db.select(
+      db.transactions,
+    )..where((t) => t.id.equals(transaction.id))).getSingleOrNull();
+
     final toReturn = await db.update(db.transactions).replace(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
+
+    if (updateAssetValuations) {
+      if (updateFutureAssetValuations) {
+        await InvestmentService.instance
+            .onTransactionUpdatedAndFutureValuations(previous, transaction);
+      } else {
+        await InvestmentService.instance.onTransactionUpdated(
+          previous,
+          transaction,
+        );
+      }
+    }
 
     return toReturn ? 1 : 0;
   }
@@ -78,10 +112,21 @@ class TransactionService {
     );
   }
 
-  Future<int> deleteTransaction(String transactionId) {
-    return (db.delete(
+  Future<int> deleteTransaction(String transactionId) async {
+    final previous = await (db.select(
+      db.transactions,
+    )..where((t) => t.id.equals(transactionId))).getSingleOrNull();
+
+    final n = await (db.delete(
       db.transactions,
     )..where((tbl) => tbl.id.equals(transactionId))).go();
+
+    db.markTablesUpdated([db.accounts]);
+
+    if (previous != null) {
+      await InvestmentService.instance.onTransactionDeleted(previous);
+    }
+    return n;
   }
 
   Stream<List<MoneyTransaction>> getTransactionsFromPredicate({
@@ -178,10 +223,12 @@ class TransactionService {
         predicate.transactionTypes!
             .map((e) => e.index)
             .contains(TransactionType.transfer.index)) {
-      // If we should take into account transfers:
+      // Transfers need origin/destination split; other types use a straight SUM in
+      // `countTransactions`. When types are unspecified, include investment here so
+      // callers get one balance stream (investment was previously easy to omit).
       return Rx.combineLatest(
         [
-          // INCOME AND EXPENSES
+          // INCOME, EXPENSE, AND INVESTMENT (non-transfer ledger)
           db
               .countTransactions(
                 predicate: predicate
@@ -194,7 +241,11 @@ class TransactionService {
                                     TransactionType.transfer.index,
                               )
                               .toList() ??
-                          [TransactionType.income, TransactionType.expense],
+                          [
+                            TransactionType.income,
+                            TransactionType.expense,
+                            TransactionType.investment,
+                          ],
                     )
                     .toTransactionExpression(),
                 date: exchangeDate,

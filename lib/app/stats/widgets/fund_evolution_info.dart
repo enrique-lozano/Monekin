@@ -5,26 +5,15 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
-class _FundEvolutionPoint {
-  final DateTime date;
-  final double value;
-  final String label;
-
-  _FundEvolutionPoint({
-    required this.date,
-    required this.value,
-    required this.label,
-  });
-}
 
 class FundEvolutionInfo extends StatelessWidget {
   const FundEvolutionInfo({
@@ -109,7 +98,7 @@ class FundEvolutionInfo extends StatelessWidget {
                             if (accounts != null)
                               StreamBuilder(
                                 stream: accountService
-                                    .getAccountsMoneyVariation(
+                                    .getAccountsBalanceRelativeChange(
                                       accounts: accounts,
                                       startDate: dateRange.startDate,
                                       endDate: dateRange.endDate,
@@ -208,7 +197,7 @@ class FundEvolutionLineChart extends StatefulWidget {
 }
 
 class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
-  late Stream<List<_FundEvolutionPoint>?> _dataStream;
+  late Stream<List<TimeSeriesLabeledPoint>?> _dataStream;
 
   @override
   void initState() {
@@ -227,7 +216,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     }
   }
 
-  Stream<List<_FundEvolutionPoint>?> _createDataStream() {
+  Stream<List<TimeSeriesLabeledPoint>?> _createDataStream() {
     final timeRange = widget.timeRange;
 
     if (timeRange == null) {
@@ -237,7 +226,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     return _buildEvolutionData(timeRange);
   }
 
-  Stream<List<_FundEvolutionPoint>> _buildEvolutionData(
+  Stream<List<TimeSeriesLabeledPoint>> _buildEvolutionData(
     DateTimeRange timeRange,
   ) {
     final dates = <DateTime>[];
@@ -250,7 +239,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
 
     while (currentDay.compareTo(timeRange.end) < 0) {
       dates.add(currentDay);
-      labels.add(getMMMdDateFormatBasedOnYear(currentDay).format(currentDay));
+      labels.add(getMMMdDateFormatBasedOnYear(currentDay).text);
 
       balances.add(
         AccountService.instance.getAccountsMoney(
@@ -263,11 +252,11 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
       currentDay = currentDay.add(Duration(days: dayRange));
     }
 
-    return Rx.combineLatest<double, List<_FundEvolutionPoint>>(
+    return Rx.combineLatest<double, List<TimeSeriesLabeledPoint>>(
       balances,
       (values) => List.generate(
         values.length,
-        (i) => _FundEvolutionPoint(
+        (i) => TimeSeriesLabeledPoint(
           date: dates[i],
           value: values[i],
           label: labels[i],
@@ -278,14 +267,14 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<_FundEvolutionPoint>?>(
+    return StreamBuilder<List<TimeSeriesLabeledPoint>?>(
       stream: _dataStream,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return widget.loadingWidget;
         }
 
-        final points = snapshot.data ?? const <_FundEvolutionPoint>[];
+        final points = snapshot.data ?? const <TimeSeriesLabeledPoint>[];
 
         return StreamBuilder(
           stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
@@ -297,7 +286,10 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     );
   }
 
-  Widget _buildChart(List<_FundEvolutionPoint> points, CurrencyInDB? currency) {
+  Widget _buildChart(
+    List<TimeSeriesLabeledPoint> points,
+    CurrencyInDB? currency,
+  ) {
     // Handle edge case: when all values are the same or very close,
     // add padding to the min/max values to ensure proper axis rendering
     double? minY;
@@ -316,7 +308,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
       }
     }
 
-    return TimeSeriesEvolutionChart<_FundEvolutionPoint>(
+    return TimeSeriesEvolutionChart<TimeSeriesLabeledPoint>(
       data: points,
       dateExtractor: (p) => p.date,
       valueExtractor: (p) => p.value,

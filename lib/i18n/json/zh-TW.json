@@ -437,6 +437,10 @@
       "transfer": {
         "one": "轉移",
         "other": "轉移"
+      },
+      "investment": {
+        "one": "投資",
+        "other": "投資"
       }
     }
   },
@@ -495,7 +499,7 @@
       "saving": "儲蓄帳戶",
       "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢",
       "investment": "投資帳戶",
-      "investment.descr": "券商、加密貨幣交易所或投資組合帳戶。追蹤您的投資本金，並透過估值手動更新其價值"
+      "investment.descr": "可包含資產的券商、加密貨幣交易所或投資組合帳戶。追蹤投資本金，並透過估值手動更新每個資產的價值"
     },
     "FORM": {
       "name": "帳戶名稱",
@@ -515,27 +519,6 @@
       "include-in-net-worth.descr": "將此帳戶納入總淨資產計算",
       "correct_balance_description": "調整餘額會修改帳戶的初始值。此修正不會反映在統計資料中。",
       "valuation_before_creation_date": "此帳戶中存在日期早於建立日期的評估"
-    },
-    "INVESTMENT": {
-      "details-header": "投資",
-      "correct_balance_title": "更正已投資本金",
-      "correct_balance_description": "此帳戶使用手動估值來追蹤投資組合價值。此操作僅會更新已投資本金（初始值），不會更改已記錄的估值或投資統計資訊。",
-      "invested-capital": "已投資本金",
-      "portfolio-value": "投資組合價值",
-      "profit": "收益",
-      "last-valuation": "最近估值",
-      "no-valuations": "尚無估值記錄",
-      "update-value": "更新價值",
-      "update-value.descr": "記錄當前投資組合價值",
-      "update-value.success": "估值記錄成功",
-      "history": "估值歷史",
-      "history-empty": "此帳戶尚無估值記錄",
-      "add-valuation": "新增估值",
-      "edit-valuation": "編輯估值",
-      "edit-valuation.success": "估值編輯成功",
-      "delete-valuation.success": "估值刪除成功",
-      "delete-all-valuations": "刪除所有估值",
-      "delete-all-valuations.success": "所有估值已成功刪除"
     },
     "DELETE": {
       "warning-header": "刪除帳戶？",
@@ -873,7 +856,51 @@
     "profit": "利潤",
     "profit_percent": "返回 %",
     "total_value": "資產總值",
+    "amount_invested": "您已投資該帳戶的 {{ X }}",
+    "TYPES": {
+      "stocks": "股票",
+      "funds": "基金",
+      "crypto": "加密貨幣",
+      "real_estate": "房地產",
+      "vehicle": "車輛",
+      "jewelry_art": "珠寶與藝術品",
+      "other": "其他"
+    },
+    "DETAILS": {
+      "select_account": "選擇一個帳戶",
+      "buy": "買",
+      "sell": "賣",
+      "update_value": "更新值",
+      "trade_sheet_title_buy": "購買（添加到資產）",
+      "trade_sheet_title_sell": "出售（減少資產）",
+      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
+      "trade_sheet_description_sell": "從該資產提取資金到帳戶。減少您的投資及其價值。",
+      "trade_sheet_update_value_info": "該資產的價值將會更新為 {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "與此交易關聯的資產的價值將更新為 {{ value }}",
+      "trade_sheet_update_following_valuations": "稍後更新估值",
+      "trade_sheet_update_following_valuations_description": "調整所選日期之後的資產估價。",
+      "trade_sheet_valuation_current_value_label": "目前價值",
+      "trade_sheet_valuation_new_value_label": "新價值",
+      "trade_sheet_valuation_create_new_title": "建立新估價",
+      "trade_sheet_valuation_adjust_current_description": "調整資產的目前價值",
+      "trade_sheet_full_form": "完整表單",
+      "trade_form_asset_column": "資產",
+      "trade_valuation_notice": "該日期的估值將更新以反映此金額。",
+      "treat_as_investment": "視為投資（僅限現金部分）",
+      "notes_optional": "註釋（可選）",
+      "link_transaction": "Link transaction",
+      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+      "performance_sheet_title": "表現",
+      "performance_return": "區間報酬",
+      "performance_return_help": "剔除期間新增或撤出資金後的價值變化：（期末估值 − 期初估值）−（期末淨投入 − 期初淨投入）。若市值上漲僅因等額入金，此項應接近零。",
+      "performance_invested_value": "投入金額",
+      "performance_invested_value_caption": "截至目前淨投入（初始值與關聯流水）。",
+      "performance_value_diff": "估值變動",
+      "performance_value_diff_caption": "目前帳面市值與所選圖表區間首日估值之差（僅價格變動，不按投入現金流調整）。"
+    },
     "FORM": {
+      "asset_type": "資產類型",
+      "linked_account": "關聯帳戶（可選）",
       "name": "資產名稱",
       "name_required": "請輸入資產名稱",
       "description": "描述",
@@ -894,6 +921,7 @@
       "add_valuation": "新增估價",
       "edit_valuation": "編輯估值",
       "value": "價值",
+      "net_contribution": "淨投入",
       "value_required": "請輸入一個值",
       "value_invalid": "請輸入有效號碼",
       "update_value_success": "估價添加成功",
@@ -978,7 +1006,7 @@
         "success": "已成功導入{{x}}筆交易"
       },
       "success": "導入成功",
-      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。",
+      "error": "匯入檔案時發生錯誤。請透過 lozin.technologies@gmail.com 聯絡開發人員。"
     },
     "ABOUT": {
       "title": "有關您的資料庫的資訊",

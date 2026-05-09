@@ -14,13 +14,14 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -45,6 +46,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
   final GlobalKey<CurrencyEditFieldsState> _currencyFormKey = GlobalKey();
 
   ExchangeRate? _selectedRate;
+  ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
   late TabController _tabController;
 
   /// The currency passed to the page, but with the updated info if edited.
@@ -101,6 +103,26 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
             _deletedRateIds.clear();
           });
         });
+  }
+
+  List<ExchangeRate> _buildFilteredChartRates() {
+    final rates = _currentRates ?? const <ExchangeRate>[];
+    final sortedRates = List<ExchangeRate>.from(rates)
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    if (sortedRates.isEmpty) return sortedRates;
+
+    final oldestDate = sortedRates.first.date;
+    final periodToUse =
+        _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
+        ? _selectedChartPeriod
+        : ChartTimePeriod.max;
+
+    return filterTimeSeriesByPeriod(
+      data: sortedRates,
+      dateExtractor: (rate) => rate.date,
+      period: periodToUse,
+    );
   }
 
   void deleteAllRates() {
@@ -282,8 +304,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     ExchangeRate? displayRate,
     Text emptyTextWidget,
   ) {
-    final t = Translations.of(context);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,7 +328,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     ExchangeRate? displayRate,
     Text emptyTextWidget,
   ) {
-    final t = Translations.of(context);
     return Column(
       children: [
         const SizedBox(height: 8),
@@ -365,16 +384,47 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
 
   Widget secondTabContent(BuildContext context) {
     final t = Translations.of(context);
+    final sortedRates = _currentRates == null
+        ? null
+        : (List<ExchangeRate>.from(_currentRates!)
+            ..sort((a, b) => a.date.compareTo(b.date)));
+    final chartRates = _currentRates == null
+        ? null
+        : _buildFilteredChartRates();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_currentRates != null && MediaQuery.of(context).size.height > 550)
+        if (sortedRates != null &&
+            sortedRates.isNotEmpty &&
+            MediaQuery.of(context).size.height > 550)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: ChartTimePeriodSelector(
+                selectedPeriod:
+                    _selectedChartPeriod.isRangeAvailable(
+                      oldestDate: sortedRates.first.date,
+                    )
+                    ? _selectedChartPeriod
+                    : ChartTimePeriod.max,
+                oldestDate: sortedRates.first.date,
+                onSelected: (period) {
+                  setState(() {
+                    _selectedChartPeriod = period;
+                    _selectedRate = null;
+                  });
+                },
+              ),
+            ),
+          ),
+        if (chartRates != null && MediaQuery.of(context).size.height > 550)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 24, 0, 8),
             child: TimeSeriesEvolutionChart<ExchangeRate>(
-              data: _currentRates!,
+              data: chartRates,
               dateExtractor: (r) => r.date,
               valueExtractor: (r) => r.exchangeRate,
               onHover: (rate) {
@@ -485,12 +535,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     return EditableTimeSeriesList<ExchangeRate>(
       items: _currentRates!,
       dateExtractor: (r) => r.date,
-      subtitleBuilder: (context, item) => Text(
-        NumberFormat.currency(
-          symbol: '',
-          decimalDigits: 4,
-        ).format(item.exchangeRate),
-      ),
+      valueExtractor: (r) => r.exchangeRate,
+      currency: _currency,
       onEdit: _editRate,
       onDelete: _deleteRate,
       scrollController: scrollController,
