@@ -118,7 +118,7 @@ class BackupDatabaseService {
     final file = createAndReturnFile(
       exportPath: exportPath,
       fileName:
-          "Transactions-${DateFormat('yyyyMMdd-HHmmss').format(DateTime.now())}.csv",
+          "Transactions-${DateFormat('yyyyMMdd-Hms').format(DateTime.now())}.csv",
     );
 
     return file.writeAsString(csvData, mode: FileMode.writeOnly);

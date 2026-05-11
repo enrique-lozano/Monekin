@@ -13,14 +13,14 @@ import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
@@ -47,13 +47,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   int currentStep = 0;
 
   List<List<String>>? csvData;
-  List<String>? get csvHeaders {
-    final List<String>? header = csvData?.firstOrNull;
-    if (header == null) {
-      return null;
-    }
-    return header.where((item) => item.isNotEmpty).toList();
-  }
+
+  List<String>? get csvHeaders => csvData?.firstOrNull;
 
   int? amountColumn;
   int? accountColumn;
@@ -111,29 +106,20 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         csvString,
       );
 
-      if (parsedCSV.length > 1) {
-        // All rows must have exactly the same length as the header
-        final int columnCount = parsedCSV[0].length;
+      int maxColumns = parsedCSV.fold(
+        0,
+        (prev, element) => element.length > prev ? element.length : prev,
+      );
 
-        parsedCSV = parsedCSV
-            .map(
-              (row) => row.length != columnCount
-                  ? row.length < columnCount
-                        // Too few values => Add missing values
-                        ? row + List.filled(columnCount - row.length, '')
-                        : row.length > columnCount
-                        // Too many values => Truncate at header's length
-                        ? row.sublist(0, columnCount)
-                        : row
-                  : row,
-            )
-            .toList();
+      // Add missing values to rows with fewer columns
+      parsedCSV = parsedCSV
+          .map((row) => row + List.filled(maxColumns - row.length, ''))
+          .toList();
 
-        // Remove blank rows
-        parsedCSV.removeWhere(
-          (list) => list.every((element) => element.trim().isEmpty),
-        );
-      }
+      // Remove blank rows
+      parsedCSV = parsedCSV
+          .where((list) => list.any((element) => element.trim().isNotEmpty))
+          .toList();
 
       setState(() {
         csvData = parsedCSV;
@@ -689,7 +675,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
                   if (selected != null) {
                     setState(() {
-                      defaultTags = selected.selectedTags.whereType<Tag>().toList();
+                      defaultTags = selected.selectedTags
+                          .whereType<Tag>()
+                          .toList();
                     });
                   }
                 },
