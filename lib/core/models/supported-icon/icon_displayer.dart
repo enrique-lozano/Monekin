@@ -31,7 +31,7 @@ class IconDisplayer extends StatelessWidget {
     this.displayMode = IconDisplayMode.decoratedBox,
   }) : assert(
          icon == null || supportedIcon == null,
-         'Only one of icon or supportedIcon must be defined',
+         'At most one of icon or supportedIcon may be defined',
        );
 
   factory IconDisplayer.fromCategory(

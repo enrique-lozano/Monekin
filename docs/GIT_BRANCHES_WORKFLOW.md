@@ -31,7 +31,7 @@ As a rule, you as a project collaborator should create working branches (fix/XXX
   </tbody>
 </table>
 
-### Branch main
+### Branch `main`
 
 The default branch of the app. Contains the code of the latest version of the application displayed in the application stores and in the launch section. It is only updated under two circumstances:
 
@@ -40,7 +40,7 @@ The default branch of the app. Contains the code of the latest version of the ap
 
 This is a protected branch, so no external code can enter it without the administrators' approval.
 
-### Branch develop
+### Branch `develop`
 
 Contains code ready to be deployed to the <code>main</code> branch. Changes to this branch are only accepted via Pull Request from the working branches. Administrators will also take care of keeping this branch updated with <code>main</code> branch
 

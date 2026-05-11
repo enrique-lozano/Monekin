@@ -48,7 +48,7 @@ class BackupDatabaseService {
     List<MoneyTransaction> data, {
     String format = 'csv',
     String fieldSeparator = ',',
-    String listSeparator = ';',
+    String listSeparator = '|',
   }) {
     final dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     final processedData = <List<String?>>[
@@ -103,7 +103,9 @@ class BackupDatabaseService {
         processedData.add(toAdd);
       }
     }
-    final csvData = ListToCsvConverter().convert(processedData);
+    final csvData = ListToCsvConverter(
+      fieldDelimiter: fieldSeparator,
+    ).convert(processedData);
     return csvData;
   }
 

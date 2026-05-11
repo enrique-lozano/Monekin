@@ -49,8 +49,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   List<List<String>>? csvData;
   List<String>? get csvHeaders {
     final List<String>? header = csvData?.firstOrNull;
-    header?.removeWhere((item) => item.isEmpty);
-    return header;
+    if (header == null) {
+      return null;
+    }
+    return header.where((item) => item.isNotEmpty).toList();
   }
 
   int? amountColumn;
@@ -61,7 +63,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     text: 'yyyy-MM-dd HH:mm:ss',
   );
   // Character used to separate list of values (e.g., tags) in the CSV.
-  final _csvListSeparatorController = TextEditingController(text: ';');
+  final _csvListSeparatorController = TextEditingController(text: '|');
 
   bool nextButtonDisabled = false;
 
@@ -316,7 +318,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             : row[tagsColumn!]
                   .toString()
                   .toLowerCase()
-                  .split(_csvListSeparatorController.text)
+                  .split(_csvListSeparatorController.text.trim())
                   .map((t) => t.trim())
                   .where((t) => t.isNotEmpty);
 
@@ -676,7 +678,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     : defaultTags?.map((t) => t?.name).join(', '),
                 isRequired: false,
                 onClick: () async {
-                  final modalRes = await showTagListModal(
+                  final selected = await showTagListModal(
                     context,
                     modal: TagSelector(
                       selectedTags: defaultTags ?? [],
@@ -685,9 +687,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     ),
                   );
 
-                  if (modalRes != null) {
+                  if (selected != null) {
                     setState(() {
-                      defaultTags = modalRes;
+                      defaultTags = selected.selectedTags.whereType<Tag>().toList();
                     });
                   }
                 },

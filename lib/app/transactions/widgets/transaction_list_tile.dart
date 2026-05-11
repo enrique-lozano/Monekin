@@ -285,7 +285,7 @@ class TransactionListTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Wrap(
                       spacing: 4,
-                      runSpacing: -8,
+                      runSpacing: 4,
                       children: transaction.tags
                           .map(
                             (tag) => TransactionTagChip(
