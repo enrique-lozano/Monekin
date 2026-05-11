@@ -2,7 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../presentation/app_colors.dart';
 
-enum ListTileActionRole { delete, warn, checkbox }
+/// An enum representing the role of a [ListTileActionItem]. This can be used to
+/// indicate the nature of the action (e.g., whether it's a destructive action
+/// like delete, a warning action, etc.).
+///
+/// If no role is specified,
+/// the action is considered neutral and should be displayed with default colors.
+enum ListTileActionRole {
+  /// Usually refers to a destructive action, such as deleting something.
+  /// The UI should indicate this role by using red colors.
+  delete,
+
+  /// Usually refers to a warning action, such as a cautionary step.
+  /// The UI should indicate this role by using amber colors.
+  warn,
+
+  /// Usually refers to a selectable action, such as a checkbox.
+  /// The UI should indicate this role by using the default colors.
+  checkbox,
+}
 
 class ListTileActionItem {
   final String label;

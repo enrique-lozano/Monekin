@@ -7,18 +7,27 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
+/// An enum representing the type of an account.
 enum AccountType {
-  /// A normal type of account The default type
+  // * Do not modify the names of the elements of this enums. These are used in the DB //
+
+  /// A normal type of account. The default type
   normal,
 
-  /// This type of accounts can not have transactions. You only can add and withdraw money from it from other accounts
-  saving;
+  /// Similar to a normal account but with some differences in the UI
+  saving,
+
+  /// An investment account (broker, crypto exchange, ETF portfolio, etc.).
+  /// Its current value is tracked via manual valuations rather than individual transactions.
+  investment;
 
   IconData get icon {
     if (this == normal) {
       return Icons.wallet;
     } else if (this == saving) {
       return Icons.savings;
+    } else if (this == investment) {
+      return Icons.trending_up_rounded;
     }
 
     return Icons.question_mark;
@@ -31,6 +40,8 @@ enum AccountType {
       return t.account.types.normal;
     } else if (this == saving) {
       return t.account.types.saving;
+    } else if (this == investment) {
+      return t.account.types.investment;
     }
 
     return '';
@@ -43,6 +54,8 @@ enum AccountType {
       return t.account.types.normal_descr;
     } else if (this == saving) {
       return t.account.types.saving_descr;
+    } else if (this == investment) {
+      return t.account.types.investment_descr;
     }
 
     return '';

@@ -264,6 +264,10 @@
     "balance-by-currency-subtitle": "¿Cuanto dinero tengo en moneda extranjera?",
     "balance-evolution": "Tendencia de saldo",
     "balance-evolution-subtitle": "¿Tengo más dinero que antes?",
+    "net-worth": "Patrimonio",
+    "net-worth-subtitle": "La diferencia entre lo que tienes y lo que debes.",
+    "net-worth-composition": "Composición del patrimonio",
+    "net-worth-composition-subtitle": "Reparto entre cuentas, inversiones y deudas.",
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
     "cash-flow-subtitle": "¿Estoy gastando menos de lo que gano?",
@@ -350,7 +354,8 @@
       "BULK_EDIT": {
         "dates": "Editar fechas",
         "categories": "Editar categorías",
-        "status": "Editar estados"
+        "status": "Editar estados",
+        "tags": "Editar etiquetas"
       }
     },
     "FILTERS": {
@@ -435,6 +440,10 @@
       "transfer": {
         "one": "Transferencia",
         "other": "Transferencias"
+      },
+      "investment": {
+        "one": "Inversión",
+        "other": "Inversiones"
       }
     }
   },
@@ -483,6 +492,7 @@
     "n_transactions": "Número de transacciones",
     "add_money": "Añadir dinero",
     "withdraw_money": "Retirar dinero",
+    "correct_balance": "Corregir saldo",
     "no-accounts": "No se han encontrado cuentas que mostrar aquí. Añade una cuenta pulsando el botón '+' de la parte inferior",
     "TYPES": {
       "title": "Tipo de cuenta",
@@ -490,7 +500,9 @@
       "normal": "Cuenta corriente",
       "normal.descr": "Útil para registrar tus finanzas del día a día. Es la cuenta mas común, permite añadir gastos, ingresos...",
       "saving": "Cuenta de ahorros",
-      "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar"
+      "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
+      "investment": "Cuenta de inversión",
+      "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones"
     },
     "FORM": {
       "name": "Nombre de la cuenta",
@@ -505,7 +517,11 @@
       "already-exists": "Ya existe otra cuenta con el mismo nombre. Por favor, escriba otro",
       "tr-before-opening-date": "Existen transacciones en esta cuenta con fecha anterior a la fecha de apertura",
       "iban": "IBAN",
-      "swift": "SWIFT"
+      "swift": "SWIFT",
+      "include-in-net-worth": "Incluir en el patrimonio neto",
+      "include-in-net-worth.descr": "Añadir esta cuenta al cálculo del patrimonio neto total",
+      "correct_balance_description": "Ajustar el saldo modifica el valor inicial de la cuenta. Esta corrección no se reflejará en tus estadísticas.",
+      "valuation_before_creation_date": "Hay valoraciones en esta cuenta con fecha anterior a la fecha de creación"
     },
     "DELETE": {
       "warning-header": "¿Eliminar cuenta?",
@@ -594,6 +610,7 @@
       "all": "Todas las etiquetas"
     },
     "empty-list": "No has creado ninguna etiqueta aun. Las etiquetas y las categorías son una gran forma de categorizar tus movimientos",
+    "no-tags": "Aún no has creado ninguna etiqueta. Ve a la configuración para crear una etiqueta.",
     "without-tags": "Sin etiquetas",
     "add": "Añadir etiqueta",
     "create": "Crear etiqueta",
@@ -786,7 +803,6 @@
       "due_today": "Vencimiento hoy",
       "days_ago": "Hace {{x}} días",
       "overdue_by": "Vencido por {{x}} días",
-
       "per_day": "/ día",
       "no_transactions": "No se encontraron transacciones para esta deuda"
     },
@@ -829,6 +845,99 @@
         "title": "Crear deuda",
         "success": "Deuda creada exitosamente"
       }
+    }
+  },
+  "ASSETS": {
+    "title": "Activos",
+    "empty_description": "Aún no has creado ningún activo. Se puede realizar un seguimiento de activos como bienes raíces, vehículos o objetos de colección con sus valoraciones.",
+    "create": "Agregar activo",
+    "create_success": "Activo creado exitosamente",
+    "edit_success": "Recurso editado correctamente",
+    "delete": "Eliminar activo",
+    "delete_success": "Activo eliminado correctamente",
+    "delete_confirmation": "Esta acción no se puede deshacer. También se eliminarán todas las valoraciones de este activo.",
+    "profit": "Ganancia",
+    "profit_percent": "Devolver %",
+    "total_value": "Valor total de los activos",
+    "amount_invested": "Tienes el {{ X }} de esta cuenta invertido",
+    "TYPES": {
+      "stocks": "Acciones",
+      "funds": "Fondos",
+      "crypto": "Criptomonedas",
+      "real_estate": "Bienes raíces",
+      "vehicle": "Vehículos",
+      "jewelry_art": "Joyería y arte",
+      "other": "Otro"
+    },
+    "DETAILS": {
+      "select_account": "Seleccione una cuenta",
+      "buy": "Invertir más",
+      "sell": "Retirar dinero",
+      "update_value": "Actualizar valor",
+      "trade_sheet_title_buy": "Invertir más (agregar al activo)",
+      "trade_sheet_title_sell": "Retirar dinero (reducir activo)",
+      "trade_sheet_description_buy": "Añade dinero a este activo desde una cuenta. Aumenta tu inversión y su valor.",
+      "trade_sheet_description_sell": "Saca dinero de este activo hacia una cuenta. Reduce tu inversión y su valor.",
+      "trade_sheet_update_value_info": "El valor de este activo se actualizará a {{ value }} para el día seleccionado",
+      "trade_sheet_update_linked_asset_value_info": "El valor del activo vinculado a esta transacción se actualizará a {{ value }} para el dia seleccionado",
+      "trade_sheet_update_following_valuations": "Actualizar valoraciones posteriores",
+      "trade_sheet_update_following_valuations_description": "Ajusta las valoraciones del asset posteriores a la fecha seleccionada",
+      "trade_sheet_valuation_current_value_label": "Valor actual",
+      "trade_sheet_valuation_new_value_label": "Nuevo valor",
+      "trade_sheet_valuation_create_new_title": "Crear nueva valoración",
+      "trade_sheet_valuation_adjust_current_description": "Ajustar el valor actual del asset",
+      "trade_sheet_full_form": "Todos los campos",
+      "trade_form_asset_column": "Activo",
+      "trade_valuation_notice": "Se actualizará una valoración para esta fecha para reflejar este monto.",
+      "treat_as_investment": "Tratar como inversión (solo tramo de efectivo)",
+      "notes_optional": "Notas (opcional)",
+      "link_transaction": "Linkear transacción",
+      "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo",
+      "performance_sheet_title": "Rendimiento",
+      "performance_return": "Rentabilidad del periodo",
+      "performance_return_help": "Cuánto cambió el valor más allá del dinero nuevo entrado o salido: (valoración final − inicial) − (inversión neta final − inicial). Si el valor solo subió porque ingresaste la misma cantidad, esto queda cerca de cero.",
+      "performance_invested_value": "Valor invertido",
+      "performance_invested_value_caption": "Efectivo neto en el activo hasta ahora (valor inicial más flujos vinculados).",
+      "performance_value_diff": "Cambio de valoración",
+      "performance_value_diff_caption": "Diferencia entre la valoración contable actual y la del primer día del intervalo del gráfico (solo precio de mercado, sin descontar flujos invertidos)."
+    },
+    "FORM": {
+      "asset_type": "Tipo de activo",
+      "linked_account": "Cuenta vinculada (opcional)",
+      "name": "Nombre del activo",
+      "name_required": "Por favor ingrese un nombre de activo",
+      "description": "Descripción",
+      "initial_value": "Valor inicial",
+      "initial_value_required": "Por favor ingrese un valor inicial",
+      "initial_value_invalid": "Por favor ingresa un número válido",
+      "currency": "Divisa",
+      "select_currency": "Por favor seleccione una moneda",
+      "creation_date": "Fecha de adquisición",
+      "edit": "Editar activo",
+      "create": "Crear activo",
+      "already_exists": "Ya existe un activo con este nombre. Quizás quieras editarlo",
+      "valuation_before_creation_date": "Hay valoraciones en este activo con una fecha anterior a la fecha de adquisición"
+    },
+    "VALUATION": {
+      "history": "Historial de valoraciones",
+      "no_valuations": "Aún no se han registrado valoraciones. Comience agregando la primera valoración.",
+      "add_valuation": "Añadir valoración",
+      "edit_valuation": "Editar valoración",
+      "value": "Valor",
+      "net_contribution": "Aportación neta",
+      "value_required": "Por favor introduce un valor",
+      "value_invalid": "Por favor ingresa un número válido",
+      "update_value_success": "Valoración agregada exitosamente",
+      "edit_valuation_success": "Valoración actualizada con éxito",
+      "delete_valuation_success": "Valoración eliminada con éxito",
+      "delete_all_valuations": "Eliminar todas las valoraciones",
+      "delete_all_valuations_success": "Todas las valoraciones se eliminaron correctamente"
+    },
+    "SORT": {
+      "name_asc": "Nombre (A-Z)",
+      "name_desc": "Nombre (Z-A)",
+      "value_asc": "Valor (el más bajo primero)",
+      "value_desc": "Valor (el más alto primero)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -936,6 +1045,13 @@
         "first_day_of_week": "Primer día de la semana"
       }
     },
+    "APP_STRUCTURES": {
+      "title": "Estructuras de la app",
+      "tags": "Defina etiquetas para lograr una mejor organización de sus transacciones",
+      "categories": "Organización de categorías y subcategorías.",
+      "accounts": "Administra y edita tus cuentas",
+      "filters": "Configura filtros globales que puedes usar para transacciones y estadísticas"
+    },
     "SECURITY": {
       "title": "Seguridad",
       "private_mode_at_launch": "Modo privado al arrancar",
@@ -947,7 +1063,7 @@
     },
     "TRANSACTIONS": {
       "menu_title": "Transacciones",
-      "menu_descr": "Configura el comportamiento de tus transacciones",
+      "menu_descr": "Configura el comportamiento y la apariencia de todo lo relacionado con tus transacciones",
       "title": "Ajustes de transacciones",
       "STYLE": {
         "title": "Estilo de transacción",

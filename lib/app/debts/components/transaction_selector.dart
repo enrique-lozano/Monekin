@@ -11,6 +11,7 @@ void showTransactionSelectorModal(
   BuildContext context, {
   required void Function(MoneyTransaction) onTransactionSelected,
   TransactionFilterSet initialFilters = const TransactionFilterSet(),
+  String? subtitle,
 }) {
   showModalBottomSheet(
     context: context,
@@ -20,6 +21,7 @@ void showTransactionSelectorModal(
     builder: (context) => TransactionSelectorModal(
       onTransactionSelected: onTransactionSelected,
       initialFilters: initialFilters,
+      subtitle: subtitle,
     ),
   );
 }
@@ -29,10 +31,12 @@ class TransactionSelectorModal extends StatefulWidget {
     super.key,
     required this.onTransactionSelected,
     this.initialFilters = const TransactionFilterSet(),
+    this.subtitle,
   });
 
   final void Function(MoneyTransaction) onTransactionSelected;
   final TransactionFilterSet initialFilters;
+  final String? subtitle;
 
   @override
   State<TransactionSelectorModal> createState() =>
@@ -58,6 +62,7 @@ class _TransactionSelectorModalState extends State<TransactionSelectorModal> {
       builder: (context, scrollController) {
         return ModalContainer(
           title: t.transaction.select,
+          subtitle: widget.subtitle,
           body: Column(
             children: [
               TextField(

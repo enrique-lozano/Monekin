@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:monekin/core/utils/constants.dart';
 
 /// Given a datetime to check and a valid daterange, calculate the percent of the
 /// date to check inside this range.
@@ -17,4 +19,23 @@ double getPercentBetweenDates(DateTimeRange timeRange, DateTime timeToCheck) {
       millisecondDifference;
 
   return percent * 100;
+}
+
+/// Get a date format that will display the month and day,
+/// and the year only if it's different from the current year
+({DateFormat dateFormat, String text}) getMMMdDateFormatBasedOnYear(
+  DateTime date, {
+  shortenMonthInPrevYears = true,
+}) {
+  DateFormat dateFormat;
+
+  if (date.year == currentYear) {
+    dateFormat = DateFormat.MMMMd();
+  } else {
+    dateFormat = shortenMonthInPrevYears
+        ? DateFormat.yMMMd()
+        : DateFormat.yMMMMd();
+  }
+
+  return (text: dateFormat.format(date), dateFormat: dateFormat);
 }

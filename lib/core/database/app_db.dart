@@ -8,9 +8,12 @@ import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/sql/initial/seed.dart';
-import 'package:monekin/core/database/utils/database_enum.dart';
-import 'package:monekin/core/database/utils/list_converters.dart';
+import 'package:monekin/core/database/utils/converters/custom_enum_converter.dart';
+import 'package:monekin/core/database/utils/converters/date_converters.dart';
+import 'package:monekin/core/database/utils/converters/list_converters.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
@@ -66,24 +69,26 @@ class AppDB extends _$AppDB {
         'assets/sql/migrations/v$i.sql',
       );
 
-      for (final sqlStatement in splitSQLStatements(initialSQL)) {
-        Logger.printDebug(
-          'Running custom statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
-        );
-        await customStatement(sqlStatement);
-      }
+      await transaction(() async {
+        for (final sqlStatement in splitSQLStatements(initialSQL)) {
+          Logger.printDebug(
+            'Running migration statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
+          );
+          await customStatement(sqlStatement);
+        }
 
-      await AppDataService.instance.setItem(
-        AppDataKey.dbVersion,
-        i.toStringAsFixed(0),
-      );
+        await AppDataService.instance.setItem(
+          AppDataKey.dbVersion,
+          i.toStringAsFixed(0),
+        );
+      });
     }
 
     Logger.printDebug('Migration completed!');
   }
 
   @override
-  int get schemaVersion => 10;
+  int get schemaVersion => 12;
 
   @override
   MigrationStrategy get migration {

@@ -211,7 +211,12 @@ class TransactionsSettingsPage extends StatelessWidget {
                                   .transactions
                                   .default_type
                                   .modal_title,
-                              items: TransactionType.values,
+                              items: TransactionType.values
+                                  .where(
+                                    (type) =>
+                                        type != TransactionType.investment,
+                                  )
+                                  .toList(),
                               selectedValue: displayType,
                               displayNameGetter: (t) => t.displayName(context),
                               valueGetter: (t) => t,

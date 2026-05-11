@@ -74,9 +74,13 @@ So, I decided to create one myself. After months of development and hard work, M
 - **Powerful Analytics & Visualizations**  
   Understand your finances with comprehensive statistics, stunning charts, and customizable insights that help you plan smarter and save better.  
 - **Recurring Transactions**  
-  Seamlessly manage your recurring bills and subscriptions (like streaming services or utilities) with built-in automation tools.  
-- **Custom Categories & Budgets**  
-  Tailor the app to your needs with customizable and unlimited categories, subcategories, and budgets. Choose from hundreds of beautiful icons to make it truly yours.  
+  Seamlessly manage your recurring bills and subscriptions (like streaming services or utilities) with built-in automation tools.
+- **Net Worth & Asset Tracking**
+  Get a 360-degree view of your financial health. Beyond daily spending, you can now track your properties, investments, and total net worth to see how your wealth grows over time.
+- **Investment & Debt Management**
+  Stay on top of your financial obligations and growth. Manage dedicated investment accounts and track your debts with ease, ensuring nothing slips through the cracks of your financial plan.
+- **Custom Categories, Budgets and Goals**  
+  Tailor the app to your needs with customizable and unlimited categories, subcategories, budgets and goals. Choose from hundreds of beautiful icons to make your categories truly yours.  
 - **Multi-Currency Support**  
   Support for over 50 currencies, with exchange rates that you can customize.
 - **Local Backups & Data Control**  
@@ -90,7 +94,7 @@ So, I decided to create one myself. After months of development and hard work, M
 
 ### 🛠 Tech Stack
 
-At the beggining the app was developed in Ionic and Angular. In 2023, in order to make our app better, we migrate the app to Flutter, which allow us to have a much more modern and faster application while maintaining compatibility with a large number of operating systems and platforms.
+At the beginning the app was developed in Ionic and Angular. In 2023, in order to make our app better, we migrated the app to Flutter, which allow us to have a much more modern and faster application while maintaining compatibility with a large number of operating systems and platforms.
 
 To store and persist your data in the app we store a SQLite database directly in your device, thanks to an opensource package called [drift](https://github.com/simolus3/drift)
 

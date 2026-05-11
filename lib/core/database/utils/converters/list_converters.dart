@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:drift/drift.dart';
+import 'package:monekin/core/database/utils/converters/custom_enum_converter.dart';
 import 'package:monekin/core/database/utils/database_enum.dart';
 
 /// Converter to store a list of strings as a JSON-encoded string in the database

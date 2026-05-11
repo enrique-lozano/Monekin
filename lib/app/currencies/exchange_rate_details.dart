@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
 import 'package:monekin/app/currencies/widgets/currency_edit_fields.dart';
-import 'package:monekin/app/currencies/widgets/exchange_rate_evolution_chart.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -15,7 +14,10 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
@@ -44,6 +46,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
   final GlobalKey<CurrencyEditFieldsState> _currencyFormKey = GlobalKey();
 
   ExchangeRate? _selectedRate;
+  ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
   late TabController _tabController;
 
   /// The currency passed to the page, but with the updated info if edited.
@@ -100,6 +103,26 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
             _deletedRateIds.clear();
           });
         });
+  }
+
+  List<ExchangeRate> _buildFilteredChartRates() {
+    final rates = _currentRates ?? const <ExchangeRate>[];
+    final sortedRates = List<ExchangeRate>.from(rates)
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    if (sortedRates.isEmpty) return sortedRates;
+
+    final oldestDate = sortedRates.first.date;
+    final periodToUse =
+        _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
+        ? _selectedChartPeriod
+        : ChartTimePeriod.max;
+
+    return filterTimeSeriesByPeriod(
+      data: sortedRates,
+      dateExtractor: (rate) => rate.date,
+      period: periodToUse,
+    );
   }
 
   void deleteAllRates() {
@@ -281,8 +304,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     ExchangeRate? displayRate,
     Text emptyTextWidget,
   ) {
-    final t = Translations.of(context);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +328,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     ExchangeRate? displayRate,
     Text emptyTextWidget,
   ) {
-    final t = Translations.of(context);
     return Column(
       children: [
         const SizedBox(height: 8),
@@ -364,16 +384,49 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
 
   Widget secondTabContent(BuildContext context) {
     final t = Translations.of(context);
+    final sortedRates = _currentRates == null
+        ? null
+        : (List<ExchangeRate>.from(_currentRates!)
+            ..sort((a, b) => a.date.compareTo(b.date)));
+    final chartRates = _currentRates == null
+        ? null
+        : _buildFilteredChartRates();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (_currentRates != null && MediaQuery.of(context).size.height > 550)
+        if (sortedRates != null &&
+            sortedRates.isNotEmpty &&
+            MediaQuery.of(context).size.height > 550)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: ChartTimePeriodSelector(
+                selectedPeriod:
+                    _selectedChartPeriod.isRangeAvailable(
+                      oldestDate: sortedRates.first.date,
+                    )
+                    ? _selectedChartPeriod
+                    : ChartTimePeriod.max,
+                oldestDate: sortedRates.first.date,
+                onSelected: (period) {
+                  setState(() {
+                    _selectedChartPeriod = period;
+                    _selectedRate = null;
+                  });
+                },
+              ),
+            ),
+          ),
+        if (chartRates != null && MediaQuery.of(context).size.height > 550)
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 24, 0, 8),
-            child: ExchangeRateEvolutionChart(
-              exchangeRates: _currentRates!,
+            child: TimeSeriesEvolutionChart<ExchangeRate>(
+              data: chartRates,
+              dateExtractor: (r) => r.date,
+              valueExtractor: (r) => r.exchangeRate,
               onHover: (rate) {
                 setState(() {
                   _selectedRate = rate;
@@ -478,67 +531,15 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
     });
   }
 
-  ListView buildExchangeRateList() {
-    final t = Translations.of(context);
-    final isLargeScreen = BreakPoint.of(context).isLargerThan(BreakpointID.md);
-
-    return ListView.separated(
-      shrinkWrap: true,
-      controller: scrollController,
-      itemCount: _currentRates!.length,
-      itemBuilder: (context, index) {
-        final item = _currentRates![index];
-
-        return ListTile(
-          title: Text(DateFormat.yMMMMd().format(item.date)),
-          subtitle: Text(
-            NumberFormat.currency(
-              symbol: '',
-              decimalDigits: 4,
-            ).format(item.exchangeRate),
-          ),
-          contentPadding: EdgeInsetsDirectional.only(
-            start: 16,
-            end: isLargeScreen ? 0 : 8,
-          ),
-          trailing: isLargeScreen
-              ? Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      iconSize: 18,
-                      icon: const Icon(Icons.edit_rounded),
-                      onPressed: () => _editRate(item),
-                      tooltip: t.ui_actions.edit,
-                    ),
-                    IconButton(
-                      iconSize: 18,
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _deleteRate(item),
-                      tooltip: t.ui_actions.delete,
-                    ),
-                  ],
-                )
-              : MonekinPopupMenuButton(
-                  actionItems: [
-                    ListTileActionItem(
-                      label: t.ui_actions.edit,
-                      icon: Icons.edit_rounded,
-                      onClick: () => _editRate(item),
-                    ),
-                    ListTileActionItem(
-                      label: t.ui_actions.delete,
-                      icon: Icons.delete,
-                      role: ListTileActionRole.delete,
-                      onClick: () => _deleteRate(item),
-                    ),
-                  ],
-                ),
-        );
-      },
-      separatorBuilder: (context, index) {
-        return const Divider();
-      },
+  Widget buildExchangeRateList() {
+    return EditableTimeSeriesList<ExchangeRate>(
+      items: _currentRates!,
+      dateExtractor: (r) => r.date,
+      valueExtractor: (r) => r.exchangeRate,
+      currency: _currency,
+      onEdit: _editRate,
+      onDelete: _deleteRate,
+      scrollController: scrollController,
     );
   }
 

@@ -90,6 +90,7 @@ class BackupDatabaseService {
               : transaction.category!.name),
         // Subcategory
         if (transaction.isTransfer) 'TRANSFER',
+        if (transaction.isInvestment) 'INVESTMENT',
         (transaction.category?.parentCategory != null
             ? transaction.category?.name
             : ''),
