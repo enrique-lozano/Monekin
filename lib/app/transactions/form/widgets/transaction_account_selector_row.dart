@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -18,11 +20,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     required this.onTransferAccountTap,
     required this.onCategoryTap,
     required this.shakeKey,
-    this.mainContainerRadius = 12.0,
     this.investmentAssetColumnTitle,
     this.investmentAssetName,
     this.investmentAssetLeading,
-    this.rowAccentColor,
+    this.onSwapTransferAccounts,
   });
 
   final TransactionType transactionType;
@@ -33,179 +34,227 @@ class TransactionAccountSelectorRow extends StatelessWidget {
   final VoidCallback onTransferAccountTap;
   final VoidCallback onCategoryTap;
   final GlobalKey<ShakeWidgetState> shakeKey;
-  final double mainContainerRadius;
 
-  /// When set with [TransactionType.investment], shows a read-only second column
-  /// instead of the category picker (e.g. linked asset for a trade).
   final String? investmentAssetColumnTitle;
   final String? investmentAssetName;
-
-  /// Optional leading for the asset column only (assets have no default icon).
   final Widget? investmentAssetLeading;
 
-  /// When set, tints the row (e.g. buy vs sell for locked asset trades).
-  final Color? rowAccentColor;
+  /// When [transactionType] is transfer, swaps origin and destination accounts.
+  final VoidCallback? onSwapTransferAccounts;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final borderRadius = Radius.circular(mainContainerRadius);
-    final accent = rowAccentColor ?? transactionType.color(context);
+    final theme = Theme.of(context);
+    final cardShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+    );
 
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: accent.withOpacity(0.35),
-        borderRadius: BorderRadius.only(
-          bottomLeft: borderRadius,
-          bottomRight: borderRadius,
-        ),
-      ),
-      child: SizedBox(
-        height: 74,
-        child: Row(
-          children: [
-            ...[
-              Expanded(
-                flex: 1,
-                child: _Selector(
-                  title: t.general.account,
-                  inputValue: fromAccount?.name,
-                  borderRadius: BorderRadius.only(bottomLeft: borderRadius),
-                  leading:
-                      fromAccount?.displayIcon(context) ??
-                      IconDisplayer(
-                        displayMode: IconDisplayMode.polygon,
-                        icon: Icons.question_mark_rounded,
-                        mainColor: Theme.of(context).colorScheme.primary,
-                      ),
-                  onClick: onFromAccountTap,
+    if (transactionType.isTransfer) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _AccountCard(
+            shape: cardShape,
+            title: t.transfer.form.from,
+            value: fromAccount?.name,
+            leading:
+                fromAccount?.displayIcon(context) ??
+                IconDisplayer(
+                  displayMode: IconDisplayMode.polygon,
+                  icon: Icons.question_mark_rounded,
+                  mainColor: theme.colorScheme.primary,
                 ),
-              ),
-              VerticalDivider(color: accent.withOpacity(0.85), thickness: 2),
-            ],
-            if (transactionType.isTransfer)
-              Expanded(
-                flex: 1,
-                child: ShakeWidget(
+            account: fromAccount,
+            onTap: onFromAccountTap,
+          ),
+          Center(
+            child: IconButton.filledTonal(
+              onPressed: onSwapTransferAccounts,
+              icon: const Icon(Icons.swap_vert_rounded),
+              tooltip: t.transfer.display,
+            ),
+          ),
+          ShakeWidget(
+            duration: const Duration(milliseconds: 200),
+            shakeCount: 1,
+            shakeOffset: 10,
+            key: shakeKey,
+            child: _AccountCard(
+              shape: cardShape,
+              title: t.transfer.form.to,
+              value: transferAccount?.name,
+              leading:
+                  transferAccount?.displayIcon(context) ??
+                  IconDisplayer(
+                    displayMode: IconDisplayMode.polygon,
+                    icon: Icons.question_mark_rounded,
+                    mainColor: theme.colorScheme.primary,
+                  ),
+              account: transferAccount,
+              onTap: onTransferAccountTap,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: _AccountCard(
+            shape: cardShape,
+            title: t.general.account,
+            value: fromAccount?.name,
+            leading:
+                fromAccount?.displayIcon(context) ??
+                IconDisplayer(
+                  displayMode: IconDisplayMode.polygon,
+                  icon: Icons.question_mark_rounded,
+                  mainColor: theme.colorScheme.primary,
+                ),
+            account: fromAccount,
+            onTap: onFromAccountTap,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: transactionType.isInvestment && investmentAssetName != null
+              ? _AccountCard(
+                  shape: cardShape,
+                  title:
+                      investmentAssetColumnTitle ??
+                      t.assets.details.trade_form_asset_column,
+                  value: investmentAssetName,
+                  leading: investmentAssetLeading,
+                  account: null,
+                  onTap: () {},
+                  showChevron: false,
+                )
+              : ShakeWidget(
                   duration: const Duration(milliseconds: 200),
                   shakeCount: 1,
                   shakeOffset: 10,
                   key: shakeKey,
-                  child: _Selector(
-                    title: t.transfer.form.to,
-                    inputValue: transferAccount?.name,
-                    borderRadius: BorderRadius.only(bottomRight: borderRadius),
-                    leading:
-                        transferAccount?.displayIcon(context) ??
-                        IconDisplayer(
-                          displayMode: IconDisplayMode.polygon,
-                          icon: Icons.question_mark_rounded,
-                          mainColor: Theme.of(context).colorScheme.primary,
-                        ),
-                    onClick: onTransferAccountTap,
+                  child: _AccountCard(
+                    shape: cardShape,
+                    title: t.general.category,
+                    value: selectedCategory?.name,
+                    leading: IconDisplayer.fromCategory(
+                      context,
+                      category:
+                          selectedCategory ??
+                          Category.fromDB(Category.unkown(), null),
+                      size: 24,
+                    ),
+                    account: null,
+                    onTap: onCategoryTap,
                   ),
                 ),
-              ),
-            if (!transactionType.isTransfer)
-              Expanded(
-                flex: 1,
-                child:
-                    transactionType.isInvestment && investmentAssetName != null
-                    ? _Selector(
-                        title:
-                            investmentAssetColumnTitle ??
-                            t.assets.details.trade_form_asset_column,
-                        inputValue: investmentAssetName,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: borderRadius,
-                        ),
-                        leading: investmentAssetLeading,
-                        onClick: () {},
-                      )
-                    : ShakeWidget(
-                        duration: const Duration(milliseconds: 200),
-                        shakeCount: 1,
-                        shakeOffset: 10,
-                        key: shakeKey,
-                        child: _Selector(
-                          title: t.general.category,
-                          inputValue: selectedCategory?.name,
-                          borderRadius: BorderRadius.only(
-                            bottomRight: borderRadius,
-                          ),
-                          leading: IconDisplayer.fromCategory(
-                            context,
-                            category:
-                                selectedCategory ??
-                                Category.fromDB(Category.unkown(), null),
-                            size: 24,
-                          ),
-                          onClick: onCategoryTap,
-                        ),
-                      ),
-              ),
-          ],
         ),
-      ),
+      ],
     );
   }
 }
 
-class _Selector extends StatelessWidget {
-  const _Selector({
+class _AccountCard extends StatelessWidget {
+  const _AccountCard({
+    required this.shape,
     required this.title,
-    required this.inputValue,
-    required this.onClick,
-    required this.borderRadius,
+    required this.value,
+    required this.onTap,
     this.leading,
+    this.account,
+    this.showChevron = true,
   });
 
+  final ShapeBorder shape;
   final String title;
-  final String? inputValue;
+  final String? value;
   final Widget? leading;
-  final VoidCallback onClick;
-  final BorderRadius? borderRadius;
+  final Account? account;
+  final VoidCallback onTap;
+  final bool showChevron;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final theme = Theme.of(context);
+    final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
 
-    return InkWell(
-      onTap: () {
-        unfocusCurrentFocusedItem(context);
-        onClick();
-      },
-      borderRadius: borderRadius,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (leading != null) ...[leading!, const SizedBox(width: 12)],
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelMedium,
-                  ),
-                  Text(
-                    inputValue ?? t.general.unspecified,
-                    softWrap: false,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.w500,
+    return Material(
+      color: theme.colorScheme.surface,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      shape: shape,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          unfocusCurrentFocusedItem(context);
+          onTap();
+        },
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (leading != null) ...[leading!, const SizedBox(width: 10)],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: onSurfaceVariant,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      value ?? t.general.unspecified,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if (account != null) ...[
+                      const SizedBox(height: 6),
+                      StreamBuilder<double>(
+                        initialData: 0,
+                        stream: AccountService.instance.getAccountMoney(
+                          account: account!,
+                        ),
+                        builder: (context, snapshot) {
+                          return CurrencyDisplayer(
+                            amountToConvert: snapshot.data ?? 0,
+                            currency: account!.currency,
+                            compactView: (snapshot.data ?? 0).abs() >= 10000000,
+                            integerStyle: theme.textTheme.bodySmall!.copyWith(
+                              color: onSurfaceVariant,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            decimalsStyle: theme.textTheme.bodySmall!.copyWith(
+                              color: onSurfaceVariant,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            currencyStyle: theme.textTheme.bodySmall!.copyWith(
+                              color: onSurfaceVariant,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              if (showChevron)
+                Icon(Icons.expand_more_rounded, color: onSurfaceVariant),
+            ],
+          ),
         ),
       ),
     );

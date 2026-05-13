@@ -13,20 +13,36 @@ class TransactionTitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    return ListTile(
-      leading: const Icon(Icons.title_rounded),
-      title: TextFormField(
-        controller: controller,
-        maxLength: maxLabelLenghtForDisplayNames,
-        decoration: InputDecoration(
-          isDense: false,
-          filled: false,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8),
-          counterText: '',
-          border: InputBorder.none,
-          hintText: t.transaction.form.title,
-        ),
-      ),
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, _) {
+        return ListTile(
+          leading: const Icon(Icons.title_rounded),
+          title: TextFormField(
+            controller: controller,
+            maxLength: maxLabelLenghtForDisplayNames,
+            decoration: InputDecoration(
+              isDense: false,
+              filled: false,
+              contentPadding: const EdgeInsets.symmetric(vertical: 8),
+              counterText: '',
+              border: InputBorder.none,
+              hintText: t.transaction.form.title,
+            ),
+          ),
+          trailing: value.text.isEmpty
+              ? null
+              : IconButton(
+                  icon: const Icon(Icons.close_rounded),
+                  onPressed: () {
+                    controller.clear();
+                  },
+                  tooltip: MaterialLocalizations.of(
+                    context,
+                  ).deleteButtonTooltip,
+                ),
+        );
+      },
     );
   }
 }
@@ -47,6 +63,22 @@ class TransactionDescriptionField extends StatelessWidget {
         controller: controller,
         minLines: 2,
         maxLines: 10,
+        maxLength: 300,
+        buildCounter:
+            (context, {required currentLength, required isFocused, maxLength}) {
+              return Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    '$currentLength/${maxLength ?? 300}',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              );
+            },
         decoration: InputDecoration(
           isDense: false,
           filled: false,
