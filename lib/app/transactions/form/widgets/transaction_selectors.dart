@@ -42,7 +42,6 @@ class TransactionStatusSelector extends StatelessWidget {
           color: selectedStatus.color.withOpacity(isSelectorDisabled ? 0.3 : 1),
         ),
       ),
-      minTileHeight: 64,
       title: Text(selectedStatus.displayName(context)),
       enabled: !isSelectorDisabled,
       onTap: () {
@@ -76,7 +75,6 @@ class TransactionRecurrencySelector extends StatelessWidget {
       leading: Icon(
         recurrentRule.isRecurrent ? Icons.repeat_rounded : Icons.repeat_one,
       ),
-      minTileHeight: 64,
       title: Text(recurrentRule.formText(context)),
       onTap: () {
         showDynamicSelectorBottomSheet(
@@ -140,7 +138,6 @@ class TransactionTagsSelector extends StatelessWidget {
 
     return ListTile(
       leading: Icon(Tag.icon),
-      minTileHeight: 64,
       onTap: () {
         showTagListModal(
           context,

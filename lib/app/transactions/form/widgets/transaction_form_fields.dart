@@ -18,6 +18,8 @@ class TransactionTitleField extends StatelessWidget {
       builder: (context, value, _) {
         return ListTile(
           leading: const Icon(Icons.title_rounded),
+          minVerticalPadding: 0,
+          contentPadding: const EdgeInsets.only(left: 16, right: 12),
           title: TextFormField(
             controller: controller,
             maxLength: maxLabelLenghtForDisplayNames,
@@ -32,14 +34,20 @@ class TransactionTitleField extends StatelessWidget {
           ),
           trailing: value.text.isEmpty
               ? null
-              : IconButton(
-                  icon: const Icon(Icons.close_rounded),
-                  onPressed: () {
-                    controller.clear();
-                  },
-                  tooltip: MaterialLocalizations.of(
-                    context,
-                  ).deleteButtonTooltip,
+              : SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: IconButton(
+                    icon: const Icon(Icons.close_rounded, size: 14),
+                    iconSize: 14,
+                    padding: const EdgeInsets.all(0),
+                    onPressed: () {
+                      controller.clear();
+                    },
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).deleteButtonTooltip,
+                  ),
                 ),
         );
       },

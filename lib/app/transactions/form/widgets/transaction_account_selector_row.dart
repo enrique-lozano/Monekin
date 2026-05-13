@@ -5,6 +5,7 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -47,7 +48,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     final t = Translations.of(context);
     final theme = Theme.of(context);
     final cardShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.all(inputBorderRadius),
     );
 
     if (transactionType.isTransfer) {
@@ -118,7 +119,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             onTap: onFromAccountTap,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 2),
         Expanded(
           child: transactionType.isInvestment && investmentAssetName != null
               ? _AccountCard(
@@ -184,7 +185,7 @@ class _AccountCard extends StatelessWidget {
     final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
 
     return Material(
-      color: theme.colorScheme.surface,
+      color: theme.colorScheme.surfaceContainerHigh,
       elevation: 0,
       shadowColor: Colors.transparent,
       shape: shape,

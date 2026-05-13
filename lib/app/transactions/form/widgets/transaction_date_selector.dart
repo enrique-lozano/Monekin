@@ -28,7 +28,6 @@ class TransactionDateSelector extends StatelessWidget {
       children: [
         ListTile(
           leading: Icon(TransactionFormField.date.icon),
-          minTileHeight: 64,
           title: Text(dateFormat.format(date)),
           onTap: () async {
             unfocusCurrentFocusedItem(context);

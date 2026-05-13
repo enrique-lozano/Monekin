@@ -22,7 +22,6 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -42,7 +41,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -678,14 +677,14 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   }
 
   PreferredSizeWidget _buildStandardTransactionAppBar(Translations t) {
-    final accent = transactionType.color(context).withOpacity(0.85);
+    final accent = transactionType.color(context);
     return AppBar(
       title: Text(_resolveFrameworkTitle(t)),
-      centerTitle: true,
+      centerTitle: false,
       backgroundColor: accent,
       foregroundColor: foregroundColor,
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(156),
+        preferredSize: const Size.fromHeight(124),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
           child: Column(
@@ -694,8 +693,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
               _buildTransactionTypeSegmented(context),
               const SizedBox(height: 10),
               _buildAmountInputRow(context),
-              const SizedBox(height: 4),
-              _buildCurrencyAndFxRow(context),
             ],
           ),
         ),
@@ -746,33 +743,33 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   Widget _buildAmountInputRow(BuildContext context) {
     final baseColor = transactionType.color(context);
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Material(
-          color: foregroundColor.withOpacity(0.95),
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: IconButton(
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-            icon: Icon(transactionType.mathIcon, color: baseColor, size: 22),
-            onPressed: _openAmountSelectorSheet,
-            tooltip: Translations.of(context).transaction.form.value,
+        const SizedBox(width: 4),
+        Container(
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: foregroundColor,
+            borderRadius: BorderRadius.circular(4),
           ),
+          child: Icon(transactionType.mathIcon, color: baseColor, size: 22),
         ),
+        const SizedBox(width: 12),
         Expanded(
           child: TextField(
             controller: _amountTextController,
             textAlign: TextAlign.center,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: twoDecimalDigitFormatter,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
               color: foregroundColor,
               fontWeight: FontWeight.bold,
             ),
             decoration: InputDecoration(
               isDense: true,
+              fillColor: baseColor,
               border: InputBorder.none,
               hintText: '0',
               hintStyle: TextStyle(
@@ -782,76 +779,16 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
             ),
           ),
         ),
-        const SizedBox(width: 40),
-      ],
-    );
-  }
-
-  Widget _buildCurrencyAndFxRow(BuildContext context) {
-    final fg = foregroundColor;
-    final currency = _amountDisplayCurrency ?? fromAccount?.currency;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        InkWell(
-          onTap: _openAmountSelectorSheet,
-          borderRadius: BorderRadius.circular(8),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  currency?.code ?? '—',
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: fg.withOpacity(0.92),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Icon(Icons.expand_more_rounded, color: fg.withOpacity(0.85)),
-              ],
-            ),
+        const SizedBox(width: 24),
+        IconButton.outlined(
+          color: foregroundColor,
+          style: IconButton.styleFrom(
+            side: BorderSide(color: foregroundColor),
+            foregroundColor: foregroundColor,
           ),
+          onPressed: _openAmountSelectorSheet,
+          icon: Icon(Icons.calculate),
         ),
-        if (fromAccount != null && currency != null)
-          StreamBuilder<double>(
-            stream: ExchangeRateService.instance
-                .calculateExchangeRateToPreferredCurrency(
-                  fromCurrency: fromAccount!.currency.code,
-                  amount: transactionValue,
-                ),
-            builder: (context, exchangeRateSnapshot) {
-              final converted = exchangeRateSnapshot.data;
-              final shouldHide =
-                  !exchangeRateSnapshot.hasData ||
-                  converted == null ||
-                  converted == transactionValue;
-              if (shouldHide) return const SizedBox.shrink();
-              return Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.swap_horizontal_circle_rounded,
-                      size: 14,
-                      color: fg.withOpacity(0.85),
-                    ),
-                    const SizedBox(width: 4),
-                    CurrencyDisplayer(
-                      amountToConvert: converted,
-                      integerStyle: TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: fg.withOpacity(0.9),
-                      ),
-                      followPrivateMode: false,
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
       ],
     );
   }
@@ -879,8 +816,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     return Card(
       margin: EdgeInsets.zero,
       elevation: 0,
-      color: scheme.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: scheme.surfaceContainerHigh,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(inputBorderRadius),
+        side: BorderSide(color: scheme.surfaceContainerHighest),
+      ),
       clipBehavior: Clip.antiAlias,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1157,11 +1097,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         color: pageBg,
         child: PageFramework(
           title: _resolveFrameworkTitle(t),
-          appBarBackgroundColor:
-              (_isAssetTradeInvestment
-                      ? _investmentAccent(context)
-                      : transactionType.color(context))
-                  .withOpacity(0.85),
+          appBarBackgroundColor: (_isAssetTradeInvestment
+              ? _investmentAccent(context)
+              : transactionType.color(context)),
           appBarForegroundColor: foregroundColor,
           appBarBuilder: _isAssetTradeInvestment
               ? null
