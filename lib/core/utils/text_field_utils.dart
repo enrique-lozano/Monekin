@@ -7,12 +7,17 @@ List<FilteringTextInputFormatter> get twoDecimalDigitFormatter =>
     decimalDigitFormatter(2);
 
 /// A text input formatter that allows up to N decimal places,
-/// replacing or disabling any invalid symbols
-List<FilteringTextInputFormatter> decimalDigitFormatter(int decimalPlaces) {
+/// replacing or disabling any invalid symbols.
+List<FilteringTextInputFormatter> decimalDigitFormatter(
+  int decimalPlaces, {
+  bool allowNegative = false,
+}) {
+  final negativePart = allowNegative ? r'-?' : '';
+
   return [
     FilteringTextInputFormatter.deny(',', replacementString: '.'),
     FilteringTextInputFormatter.allow(
-      RegExp(r'(^\d*\.?\d{0,' + decimalPlaces.toString() + r'})'),
+      RegExp('^$negativePart\\d*\\.?\\d{0,$decimalPlaces}'),
     ),
   ];
 }

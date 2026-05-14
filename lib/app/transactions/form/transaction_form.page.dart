@@ -36,11 +36,13 @@ import 'package:monekin/core/models/transaction/recurrency_data.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -198,6 +200,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       return;
     }
 
+    // Get transaction type
+
     if (widget.transactionToEdit != null) {
       transactionType = widget.transactionToEdit!.type;
     } else if (widget.mode != null) {
@@ -216,6 +220,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         transactionType = TransactionType.expense;
       }
     }
+
+    // Fill/Initialize form values:
 
     if (widget.transactionToEdit != null) {
       _fillForm(widget.transactionToEdit!);
@@ -254,9 +260,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     } catch (_) {
       return;
     }
-    if (parsed != transactionValue) {
-      setState(() => transactionValue = parsed);
-    }
+
+    setState(() => transactionValue = parsed);
   }
 
   void _syncAmountFieldFromTransactionValue() {
@@ -348,12 +353,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
     if (widget.toAccount != null) {
       transferAccount = widget.toAccount;
-    }
-
-    if (!_isAssetTradeInvestment) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) _displayAmountModal(context);
-      });
     }
 
     // 2. Category
@@ -676,66 +675,52 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     return t.transaction.create;
   }
 
-  PreferredSizeWidget _buildStandardTransactionAppBar(Translations t) {
-    final accent = transactionType.color(context);
-    return AppBar(
-      title: Text(_resolveFrameworkTitle(t)),
-      centerTitle: false,
-      backgroundColor: accent,
-      foregroundColor: foregroundColor,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(124),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildTransactionTypeSegmented(context),
-              const SizedBox(height: 10),
-              _buildAmountInputRow(context),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildTransactionTypeSegmented(BuildContext context) {
+    final selectedColor = transactionType.color(context);
     final fg = foregroundColor;
     final types = [
       TransactionType.income,
       TransactionType.expense,
       TransactionType.transfer,
     ];
-    return SegmentedButton<TransactionType>(
-      segments: types
-          .map(
-            (e) => ButtonSegment<TransactionType>(
-              value: e,
-              label: Text(
-                e.displayName(context),
-                overflow: TextOverflow.ellipsis,
+
+    return SizedBox(
+      width: double.infinity,
+      child: SegmentedButton<TransactionType>(
+        segments: types
+            .map(
+              (e) => ButtonSegment<TransactionType>(
+                value: e,
+                label: Text(
+                  e.displayName(context),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          )
-          .toList(),
-      selected: {transactionType},
-      onSelectionChanged: (next) {
-        final v = next.firstOrNull;
-        if (v != null) _onTransactionTypeChanged(v);
-      },
-      showSelectedIcon: false,
-      style: ButtonStyle(
-        visualDensity: VisualDensity.compact,
-        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-        side: WidgetStateProperty.all(BorderSide(color: fg.withOpacity(0.35))),
-        foregroundColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected) ? fg : fg.withOpacity(0.85),
-        ),
-        backgroundColor: WidgetStateProperty.resolveWith(
-          (s) => s.contains(WidgetState.selected)
-              ? fg.withOpacity(0.22)
-              : Colors.transparent,
+            )
+            .toList(),
+        selected: {transactionType},
+        onSelectionChanged: (next) {
+          final v = next.firstOrNull;
+          if (v != null) _onTransactionTypeChanged(v);
+        },
+        showSelectedIcon: false,
+
+        style: ButtonStyle(
+          animationDuration: const Duration(milliseconds: 250),
+
+          side: WidgetStateProperty.resolveWith(
+            (s) => BorderSide(style: BorderStyle.none, width: 0),
+          ),
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.selected)
+                ? selectedColor.getContrastColor()
+                : fg.withOpacity(0.85),
+          ),
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (s) => s.contains(WidgetState.selected)
+                ? selectedColor
+                : Theme.of(context).colorScheme.surfaceContainerHigh,
+          ),
         ),
       ),
     );
@@ -744,52 +729,81 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Widget _buildAmountInputRow(BuildContext context) {
     final baseColor = transactionType.color(context);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(width: 4),
-        Container(
-          padding: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: foregroundColor,
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Icon(transactionType.mathIcon, color: baseColor, size: 22),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: TextField(
-            controller: _amountTextController,
-            textAlign: TextAlign.center,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: twoDecimalDigitFormatter,
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+    double fontSize = 48;
+
+    switch (_amountTextController.text.length) {
+      case > 8:
+        fontSize = 24;
+        break;
+      case > 6:
+        fontSize = 28;
+        break;
+      case > 4:
+        fontSize = 36;
+    }
+
+    return AnimatedSizeSwitcher(
+      duration: const Duration(milliseconds: 1250),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(4),
+            margin: const EdgeInsets.only(left: 6, right: 2),
+            decoration: BoxDecoration(
               color: foregroundColor,
-              fontWeight: FontWeight.bold,
+              borderRadius: BorderRadius.circular(4),
             ),
-            decoration: InputDecoration(
-              isDense: true,
-              fillColor: baseColor,
-              border: InputBorder.none,
-              hintText: '0',
-              hintStyle: TextStyle(
-                color: foregroundColor.withOpacity(0.35),
-                fontWeight: FontWeight.bold,
+            child: Icon(transactionType.mathIcon, color: baseColor, size: 24),
+          ),
+          Flexible(
+            child: IntrinsicWidth(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: TextField(
+                  controller: _amountTextController,
+                  textAlign: TextAlign.center,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: decimalDigitFormatter(
+                    fromAccount?.currency.decimalPlaces ?? 2,
+                    allowNegative: true,
+                  ),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    color: foregroundColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: fontSize,
+                  ),
+                  decoration: InputDecoration(
+                    isDense: true,
+                    fillColor: Colors.transparent,
+                    hoverColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHigh.withOpacity(0.05),
+                    border: InputBorder.none,
+                    hintText: '0',
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    prefixText: fromAccount?.currency.symbol,
+                    suffixText: _amountTextController.text.endsWith(".")
+                        ? '00'
+                        : null,
+                    hintStyle: TextStyle(
+                      color: foregroundColor.withOpacity(0.35),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-        const SizedBox(width: 24),
-        IconButton.outlined(
-          color: foregroundColor,
-          style: IconButton.styleFrom(
-            side: BorderSide(color: foregroundColor),
-            foregroundColor: foregroundColor,
+          IconButton.outlined(
+            color: foregroundColor,
+            onPressed: _openAmountSelectorSheet,
+            icon: Icon(Icons.calculate),
           ),
-          onPressed: _openAmountSelectorSheet,
-          icon: Icon(Icons.calculate),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -860,47 +874,27 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.only(bottom: 4),
           child: Row(
+            spacing: 6,
             children: [
-              if (tags.isEmpty)
-                ActionChip(
-                  avatar: Icon(
-                    Icons.label_outline_rounded,
-                    size: 18,
-                    color: hint,
-                  ),
-                  label: Text(
-                    t.tags.select.title,
-                    style: TextStyle(color: hint),
-                  ),
-                  onPressed: _openTagPicker,
-                )
-              else ...[
-                ...tags.map(
-                  (tag) => Padding(
-                    padding: const EdgeInsets.only(right: 6),
-                    child: FilterChip(
-                      label: Text(
-                        tag.name,
-                        style: TextStyle(color: tag.colorData),
-                      ),
-                      selected: true,
-                      onSelected: (_) {
-                        setState(() {
-                          tags = [...tags]..removeWhere((e) => e.id == tag.id);
-                        });
-                      },
-                      showCheckmark: false,
-                      selectedColor: tag.colorData.lighten(0.8),
-                      avatar: tag.displayIcon(),
-                    ),
-                  ),
+              ActionChip(
+                avatar: Icon(Icons.new_label_rounded, size: 18, color: hint),
+                label: Text(t.tags.add, style: TextStyle(color: hint)),
+                onPressed: _openTagPicker,
+              ),
+              ...tags.map(
+                (tag) => FilterChip(
+                  label: Text(tag.name, style: TextStyle(color: tag.colorData)),
+                  selected: true,
+                  onSelected: (_) {
+                    setState(() {
+                      tags = [...tags]..removeWhere((e) => e.id == tag.id);
+                    });
+                  },
+                  showCheckmark: false,
+                  selectedColor: tag.colorData.lighten(0.8),
+                  avatar: tag.displayIcon(),
                 ),
-                IconButton.filledTonal(
-                  onPressed: _openTagPicker,
-                  icon: const Icon(Icons.add_rounded),
-                  tooltip: t.ui_actions.add,
-                ),
-              ],
+              ),
             ],
           ),
         ),
@@ -1003,7 +997,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         TransactionValueInDestinyField(
           controller: valueInDestinyController,
           transferAccount: transferAccount,
-          onChanged: () => setState(() {}),
         ),
       TransactionDescriptionField(controller: notesController),
     ];
@@ -1014,8 +1007,25 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       const SizedBox(height: 4),
       _buildTagsStrip(context),
       const SizedBox(height: 8),
+      _formSectionHeader(context, "Extra info"),
       _buildFormCard(context, children: extraChildren),
     ];
+  }
+
+  Widget _amountAndTypeSection() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        spacing: 24,
+        children: [
+          _buildTransactionTypeSegmented(context),
+          _buildAmountInputRow(context),
+        ],
+      ),
+    );
   }
 
   Widget _paddedScrollableColumn({
@@ -1035,10 +1045,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final scheme = Theme.of(context).colorScheme;
-    final pageBg = Color.alphaBlend(
-      scheme.surfaceTint.withOpacity(0.04),
-      scheme.surface,
-    );
 
     final showValueIndicator =
         _asset != null && _isAssetTradeInvestment && transactionValue.abs() > 0;
@@ -1052,6 +1058,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
     final mdLeadingColumn = _paddedScrollableColumn(
       children: [
+        _amountAndTypeSection(),
         if (_isAssetTradeInvestment) _buildInvestmentAmountHeader(context),
         accountBlock,
         if (widget.linkedDebt != null &&
@@ -1068,6 +1075,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     );
 
     final mobileScrollChildren = <Widget>[
+      _amountAndTypeSection(),
       if (_isAssetTradeInvestment) _buildInvestmentAmountHeader(context),
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -1093,65 +1101,60 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       left: false,
       right: false,
       top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
-      child: ColoredBox(
-        color: pageBg,
-        child: PageFramework(
-          title: _resolveFrameworkTitle(t),
-          appBarBackgroundColor: (_isAssetTradeInvestment
-              ? _investmentAccent(context)
-              : transactionType.color(context)),
-          appBarForegroundColor: foregroundColor,
-          appBarBuilder: _isAssetTradeInvestment
-              ? null
-              : (
-                  String title,
-                  TabBar? unusedTab,
-                  List<Widget>? unusedActions,
-                ) => _buildStandardTransactionAppBar(t),
-          persistentFooterButtons: [
-            PersistentFooterButton(
-              child: FilledButton.icon(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+      child: PageFramework(
+        title: _resolveFrameworkTitle(t),
+        persistentFooterButtons: [
+          PersistentFooterButton(
+            child: FilledButton.icon(
+              style: getBigButtonStyle(context).copyWith(
+                backgroundColor: WidgetStatePropertyAll(
+                  transactionType.color(context),
+                ),
+                foregroundColor: WidgetStatePropertyAll(
+                  transactionType.color(context).getContrastColor(),
+                ),
+                fixedSize: const WidgetStatePropertyAll(Size.fromHeight(42)),
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  _formKey.currentState!.save();
 
-                    submitForm();
-                  } else {
-                    MonekinSnackbar.error(
-                      SnackbarParams(t.general.validations.form_error),
-                    );
-                  }
-                },
-                icon: const Icon(Icons.save),
-                label: Text(saveLabel),
-              ),
+                  submitForm();
+                } else {
+                  MonekinSnackbar.error(
+                    SnackbarParams(t.general.validations.form_error),
+                  );
+                }
+              },
+              icon: const Icon(Icons.save),
+              label: Text(saveLabel),
             ),
-          ],
-          body: Form(
-            key: _formKey,
-            child: BreakpointContainer(
-              mdChild: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(child: mdLeadingColumn),
-                  VerticalDivider(
-                    width: 1,
-                    thickness: 1,
-                    color: scheme.outlineVariant,
+          ),
+        ],
+        body: Form(
+          key: _formKey,
+          child: BreakpointContainer(
+            mdChild: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: mdLeadingColumn),
+                VerticalDivider(
+                  width: 1,
+                  thickness: 1,
+                  color: scheme.outlineVariant,
+                ),
+                Expanded(child: mdTrailingColumn),
+              ],
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: _paddedScrollableColumn(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
+                    children: mobileScrollChildren,
                   ),
-                  Expanded(child: mdTrailingColumn),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: _paddedScrollableColumn(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
-                      children: mobileScrollChildren,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -1181,9 +1184,5 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         },
       ),
     );
-  }
-
-  void _displayAmountModal(BuildContext context) {
-    _openAmountSelectorSheet();
   }
 }

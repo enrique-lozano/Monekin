@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const bigButtonStyleHeight = 52.0;
 
-getBigButtonStyle(BuildContext context) {
+ButtonStyle getBigButtonStyle(BuildContext context) {
   return ButtonStyle(
     textStyle: WidgetStatePropertyAll(Theme.of(context).textTheme.titleMedium!),
     iconSize: const WidgetStatePropertyAll(20),

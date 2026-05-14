@@ -10,6 +10,8 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
+enum _CardPosition { single, left, right }
+
 class TransactionAccountSelectorRow extends StatelessWidget {
   const TransactionAccountSelectorRow({
     super.key,
@@ -47,6 +49,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
+
     final cardShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(inputBorderRadius),
     );
@@ -56,9 +59,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _AccountCard(
-            shape: cardShape,
+            position: _CardPosition.single,
             title: t.transfer.form.from,
             value: fromAccount?.name,
+            subtitle: _buildAccountSubtitle(fromAccount),
             leading:
                 fromAccount?.displayIcon(context) ??
                 IconDisplayer(
@@ -66,7 +70,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   icon: Icons.question_mark_rounded,
                   mainColor: theme.colorScheme.primary,
                 ),
-            account: fromAccount,
             onTap: onFromAccountTap,
           ),
           Center(
@@ -82,9 +85,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             shakeOffset: 10,
             key: shakeKey,
             child: _AccountCard(
-              shape: cardShape,
+              position: _CardPosition.single,
               title: t.transfer.form.to,
               value: transferAccount?.name,
+              subtitle: _buildAccountSubtitle(transferAccount),
               leading:
                   transferAccount?.displayIcon(context) ??
                   IconDisplayer(
@@ -92,7 +96,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     icon: Icons.question_mark_rounded,
                     mainColor: theme.colorScheme.primary,
                   ),
-              account: transferAccount,
               onTap: onTransferAccountTap,
             ),
           ),
@@ -105,9 +108,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
       children: [
         Expanded(
           child: _AccountCard(
-            shape: cardShape,
+            position: _CardPosition.left,
             title: t.general.account,
             value: fromAccount?.name,
+            subtitle: _buildAccountSubtitle(fromAccount),
             leading:
                 fromAccount?.displayIcon(context) ??
                 IconDisplayer(
@@ -115,7 +119,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   icon: Icons.question_mark_rounded,
                   mainColor: theme.colorScheme.primary,
                 ),
-            account: fromAccount,
             onTap: onFromAccountTap,
           ),
         ),
@@ -123,13 +126,13 @@ class TransactionAccountSelectorRow extends StatelessWidget {
         Expanded(
           child: transactionType.isInvestment && investmentAssetName != null
               ? _AccountCard(
-                  shape: cardShape,
+                  position: _CardPosition.right,
                   title:
                       investmentAssetColumnTitle ??
                       t.assets.details.trade_form_asset_column,
                   value: investmentAssetName,
+                  subtitle: Text("Ujkdjkdskj"),
                   leading: investmentAssetLeading,
-                  account: null,
                   onTap: () {},
                   showChevron: false,
                 )
@@ -139,9 +142,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   shakeOffset: 10,
                   key: shakeKey,
                   child: _AccountCard(
-                    shape: cardShape,
+                    position: _CardPosition.right,
                     title: t.general.category,
                     value: selectedCategory?.name,
+                    subtitle: Text("Ujkdjkdskj"),
                     leading: IconDisplayer.fromCategory(
                       context,
                       category:
@@ -149,7 +153,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                           Category.fromDB(Category.unkown(), null),
                       size: 24,
                     ),
-                    account: null,
                     onTap: onCategoryTap,
                   ),
                 ),
@@ -157,26 +160,61 @@ class TransactionAccountSelectorRow extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildAccountSubtitle(Account? account) {
+    if (account == null) return const SizedBox.shrink();
+
+    return StreamBuilder<double>(
+      initialData: 0,
+      stream: AccountService.instance.getAccountMoney(account: account),
+      builder: (context, snapshot) {
+        return CurrencyDisplayer(
+          amountToConvert: snapshot.data ?? 0,
+          currency: account.currency,
+          compactView: (snapshot.data ?? 0).abs() >= 10000000,
+        );
+      },
+    );
+  }
 }
 
 class _AccountCard extends StatelessWidget {
   const _AccountCard({
-    required this.shape,
     required this.title,
     required this.value,
     required this.onTap,
+    this.subtitle,
     this.leading,
-    this.account,
     this.showChevron = true,
+    this.position = _CardPosition.single,
   });
 
-  final ShapeBorder shape;
   final String title;
   final String? value;
+  final Widget? subtitle;
   final Widget? leading;
-  final Account? account;
   final VoidCallback onTap;
   final bool showChevron;
+  final _CardPosition position;
+
+  BorderRadius get _borderRadius {
+    switch (position) {
+      case _CardPosition.left:
+        return BorderRadius.only(
+          topLeft: inputBorderRadius,
+          bottomLeft: inputBorderRadius,
+        );
+
+      case _CardPosition.right:
+        return BorderRadius.only(
+          topRight: inputBorderRadius,
+          bottomRight: inputBorderRadius,
+        );
+
+      case _CardPosition.single:
+        return BorderRadius.all(inputBorderRadius);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +226,7 @@ class _AccountCard extends StatelessWidget {
       color: theme.colorScheme.surfaceContainerHigh,
       elevation: 0,
       shadowColor: Colors.transparent,
-      shape: shape,
+      shape: RoundedRectangleBorder(borderRadius: _borderRadius),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () {
@@ -205,55 +243,47 @@ class _AccountCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: onSurfaceVariant,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          title,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: onSurfaceVariant,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
+
+                        if (showChevron)
+                          Icon(
+                            Icons.expand_more_rounded,
+                            color: onSurfaceVariant,
+                            size: 16,
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 2),
                     Text(
                       value ?? t.general.unspecified,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    if (account != null) ...[
+                    if (subtitle != null) ...[
                       const SizedBox(height: 6),
-                      StreamBuilder<double>(
-                        initialData: 0,
-                        stream: AccountService.instance.getAccountMoney(
-                          account: account!,
-                        ),
-                        builder: (context, snapshot) {
-                          return CurrencyDisplayer(
-                            amountToConvert: snapshot.data ?? 0,
-                            currency: account!.currency,
-                            compactView: (snapshot.data ?? 0).abs() >= 10000000,
-                            integerStyle: theme.textTheme.bodySmall!.copyWith(
-                              color: onSurfaceVariant,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            decimalsStyle: theme.textTheme.bodySmall!.copyWith(
-                              color: onSurfaceVariant,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            currencyStyle: theme.textTheme.bodySmall!.copyWith(
-                              color: onSurfaceVariant,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          );
-                        },
+                      DefaultTextStyle(
+                        style: theme.textTheme.bodySmall!,
+                        child: subtitle!,
                       ),
                     ],
                   ],
                 ),
               ),
-              if (showChevron)
-                Icon(Icons.expand_more_rounded, color: onSurfaceVariant),
             ],
           ),
         ),

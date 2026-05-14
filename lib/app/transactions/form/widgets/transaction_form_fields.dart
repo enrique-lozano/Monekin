@@ -65,8 +65,9 @@ class TransactionDescriptionField extends StatelessWidget {
     final t = Translations.of(context);
     return ListTile(
       leading: Icon(TransactionFormField.note.icon),
-      minTileHeight: 64,
       titleAlignment: ListTileTitleAlignment.titleHeight,
+      minVerticalPadding: 0,
+      contentPadding: const EdgeInsets.only(left: 16, right: 12),
       title: TextFormField(
         controller: controller,
         minLines: 2,
@@ -77,12 +78,10 @@ class TransactionDescriptionField extends StatelessWidget {
               return Align(
                 alignment: Alignment.centerRight,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 4),
+                  padding: const EdgeInsets.only(top: 4, bottom: 4),
                   child: Text(
                     '$currentLength/${maxLength ?? 300}',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),
               );
@@ -91,7 +90,7 @@ class TransactionDescriptionField extends StatelessWidget {
           isDense: false,
           filled: false,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
           hintText: t.transaction.form.description_info,
         ),
       ),
@@ -104,25 +103,27 @@ class TransactionValueInDestinyField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.transferAccount,
-    required this.onChanged,
+    this.onChanged,
   });
 
   final TextEditingController controller;
   final Account? transferAccount;
-  final VoidCallback onChanged;
+  final VoidCallback? onChanged;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     return ListTile(
       leading: const Icon(Icons.trending_flat_rounded),
-      minTileHeight: 64,
+      minVerticalPadding: 0,
+      contentPadding: const EdgeInsets.only(left: 16, right: 12),
       title: TextFormField(
         controller: controller,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: t.transfer.form.value_in_destiny.title,
           suffixText: transferAccount?.currency.symbol,
+          contentPadding: const EdgeInsets.symmetric(vertical: 8),
           filled: false,
           isDense: false,
         ),
@@ -144,7 +145,7 @@ class TransactionValueInDestinyField extends StatelessWidget {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         textInputAction: TextInputAction.next,
         onChanged: (value) {
-          onChanged();
+          onChanged?.call();
         },
       ),
     );
