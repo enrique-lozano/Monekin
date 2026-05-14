@@ -395,7 +395,8 @@
       "description": "Description",
       "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
-      "exchange-to-preferred-in-date": "On transaction date"
+      "exchange-to-preferred-in-date": "On transaction date",
+      "extra-info-section": "Extra info"
     },
     "REVERSED": {
       "title": "Inverse transaction",

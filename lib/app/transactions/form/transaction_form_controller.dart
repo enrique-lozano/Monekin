@@ -62,11 +62,21 @@ class TransactionFormController extends ChangeNotifier {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ShakeWidgetState> shakeKey = GlobalKey<ShakeWidgetState>();
 
+  final FocusNode amountFocusNode = FocusNode(debugLabel: 'transactionAmount');
+  final FocusNode titleFocusNode = FocusNode(debugLabel: 'transactionTitle');
+  final FocusNode valueInDestinyFocusNode = FocusNode(
+    debugLabel: 'transactionValueInDestiny',
+  );
+  final FocusNode notesFocusNode = FocusNode(debugLabel: 'transactionNotes');
+
+  Future<void>? _formDefaultsFuture;
+
   final TextEditingController _amountTextController = TextEditingController();
   bool _amountFieldSyncGuard = false;
 
   double transactionValue = 0;
-  final TextEditingController valueInDestinyController = TextEditingController();
+  final TextEditingController valueInDestinyController =
+      TextEditingController();
   double? get valueInDestinyToNumber =>
       double.tryParse(valueInDestinyController.text);
 
@@ -132,49 +142,61 @@ class TransactionFormController extends ChangeNotifier {
 
     if (isAssetTradeInvestment) {
       transactionType = TransactionType.investment;
-      final toEdit = _transactionToEdit;
-      if (toEdit != null) {
-        _fillForm(toEdit);
+      final edit = _transactionToEdit;
+      if (edit != null) {
+        _fillForm(edit);
         unawaited(_loadInvestmentAsset());
         return;
       }
-      final tradeOpenCtx = _assetTradeContext;
-      if (tradeOpenCtx != null) {
-        _asset = tradeOpenCtx.asset;
-      }
+      _asset = _assetTradeContext?.asset;
       return;
     }
 
-    final toEdit = _transactionToEdit;
-    if (toEdit != null) {
-      transactionType = toEdit.type;
-    } else {
-      final mode = _mode;
-      if (mode != null) {
-        transactionType = mode;
-      } else {
-        final defaultTypeStr =
-            appStateSettings[SettingKey.defaultTransactionType];
-        if (defaultTypeStr != null) {
-          transactionType =
-              TransactionType.values.firstWhereOrNull(
-                (e) => e.name == defaultTypeStr,
-              ) ??
-              TransactionType.expense;
-        } else {
-          transactionType = TransactionType.expense;
-        }
-      }
-    }
-
-    final toEditAfterType = _transactionToEdit;
-    if (toEditAfterType != null) {
-      _fillForm(toEditAfterType);
+    final edit = _transactionToEdit;
+    transactionType =
+        edit?.type ?? _mode ?? _defaultTransactionTypeFromSettings();
+    if (edit != null) {
+      _fillForm(edit);
       return;
     }
 
-    unawaited(_initializeFormValues());
+    _formDefaultsFuture = _initializeFormValues();
   }
+
+  TransactionType _defaultTransactionTypeFromSettings() {
+    final raw = appStateSettings[SettingKey.defaultTransactionType];
+    if (raw == null) return TransactionType.expense;
+    return TransactionType.values.firstWhereOrNull((e) => e.name == raw) ??
+        TransactionType.expense;
+  }
+
+  Future<void> waitForFormDefaults() async {
+    await (_formDefaultsFuture ?? Future.value());
+  }
+
+  /// After create-mode defaults (and optional category sheet), moves focus to amount.
+  Future<void> bootstrapCreateCategoryAndFocusAmount(
+    BuildContext context,
+  ) async {
+    if (isEditMode) return;
+    if (isAssetTradeInvestment) return;
+    if (!transactionType.isIncomeOrExpense) {
+      _requestAmountFocusSoon();
+      return;
+    }
+    await selectCategory(context);
+    if (_disposed || !context.mounted) return;
+    _requestAmountFocusSoon();
+  }
+
+  void _requestAmountFocusSoon() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_disposed) return;
+      amountFocusNode.requestFocus();
+    });
+  }
+
+  void requestAmountFocusAfterFrame() => _requestAmountFocusSoon();
 
   Future<void> completeAssetTradeBootstrap(BuildContext context) async {
     final tradeCtx = _assetTradeContext;
@@ -216,6 +238,10 @@ class TransactionFormController extends ChangeNotifier {
     valueInDestinyController.dispose();
     notesController.dispose();
     titleController.dispose();
+    amountFocusNode.dispose();
+    titleFocusNode.dispose();
+    valueInDestinyFocusNode.dispose();
+    notesFocusNode.dispose();
     super.dispose();
   }
 
@@ -444,8 +470,9 @@ class TransactionFormController extends ChangeNotifier {
       notes: notesController.text.isEmpty ? null : notesController.text,
       title: resolvedTitle,
       intervalEach: isAssetTradeInvestment ? null : recurrentRule.intervalEach,
-      intervalPeriod:
-          isAssetTradeInvestment ? null : recurrentRule.intervalPeriod,
+      intervalPeriod: isAssetTradeInvestment
+          ? null
+          : recurrentRule.intervalPeriod,
       endDate: isAssetTradeInvestment
           ? null
           : recurrentRule.ruleRecurrentLimit?.endDate,

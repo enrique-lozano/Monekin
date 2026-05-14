@@ -6,9 +6,18 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionTitleField extends StatelessWidget {
-  const TransactionTitleField({super.key, required this.controller});
+  const TransactionTitleField({
+    super.key,
+    required this.controller,
+    this.focusNode,
+    this.textInputAction,
+    this.onFieldSubmitted,
+  });
 
   final TextEditingController controller;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(String value)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +31,9 @@ class TransactionTitleField extends StatelessWidget {
           contentPadding: const EdgeInsets.only(left: 16, right: 12),
           title: TextFormField(
             controller: controller,
+            focusNode: focusNode,
+            textInputAction: textInputAction ?? TextInputAction.next,
+            onFieldSubmitted: onFieldSubmitted,
             maxLength: maxLabelLenghtForDisplayNames,
             decoration: InputDecoration(
               isDense: false,
@@ -56,9 +68,18 @@ class TransactionTitleField extends StatelessWidget {
 }
 
 class TransactionDescriptionField extends StatelessWidget {
-  const TransactionDescriptionField({super.key, required this.controller});
+  const TransactionDescriptionField({
+    super.key,
+    required this.controller,
+    this.focusNode,
+    this.textInputAction,
+    this.onFieldSubmitted,
+  });
 
   final TextEditingController controller;
+  final FocusNode? focusNode;
+  final TextInputAction? textInputAction;
+  final void Function(String value)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +91,9 @@ class TransactionDescriptionField extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 16, right: 12),
       title: TextFormField(
         controller: controller,
+        focusNode: focusNode,
+        textInputAction: textInputAction ?? TextInputAction.newline,
+        onFieldSubmitted: onFieldSubmitted,
         minLines: 2,
         maxLines: 10,
         maxLength: 300,
@@ -104,11 +128,15 @@ class TransactionValueInDestinyField extends StatelessWidget {
     required this.controller,
     required this.transferAccount,
     this.onChanged,
+    this.focusNode,
+    this.onFieldSubmitted,
   });
 
   final TextEditingController controller;
   final Account? transferAccount;
   final VoidCallback? onChanged;
+  final FocusNode? focusNode;
+  final void Function(String value)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +147,8 @@ class TransactionValueInDestinyField extends StatelessWidget {
       contentPadding: const EdgeInsets.only(left: 16, right: 12),
       title: TextFormField(
         controller: controller,
+        focusNode: focusNode,
+        onFieldSubmitted: onFieldSubmitted,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: t.transfer.form.value_in_destiny.title,

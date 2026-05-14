@@ -50,10 +50,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     final t = Translations.of(context);
     final theme = Theme.of(context);
 
-    final cardShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(inputBorderRadius),
-    );
-
     if (transactionType.isTransfer) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -72,32 +68,51 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                 ),
             onTap: onFromAccountTap,
           ),
-          Center(
-            child: IconButton.filledTonal(
-              onPressed: onSwapTransferAccounts,
-              icon: const Icon(Icons.swap_vert_rounded),
-              tooltip: t.transfer.display,
-            ),
-          ),
-          ShakeWidget(
-            duration: const Duration(milliseconds: 200),
-            shakeCount: 1,
-            shakeOffset: 10,
-            key: shakeKey,
-            child: _AccountCard(
-              position: _CardPosition.single,
-              title: t.transfer.form.to,
-              value: transferAccount?.name,
-              subtitle: _buildAccountSubtitle(transferAccount),
-              leading:
-                  transferAccount?.displayIcon(context) ??
-                  IconDisplayer(
-                    displayMode: IconDisplayMode.polygon,
-                    icon: Icons.question_mark_rounded,
-                    mainColor: theme.colorScheme.primary,
+          Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.topCenter,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: ShakeWidget(
+                  duration: const Duration(milliseconds: 200),
+                  shakeCount: 1,
+                  shakeOffset: 10,
+                  key: shakeKey,
+                  child: _AccountCard(
+                    position: _CardPosition.single,
+                    title: t.transfer.form.to,
+                    value: transferAccount?.name,
+                    subtitle: _buildAccountSubtitle(transferAccount),
+                    leading:
+                        transferAccount?.displayIcon(context) ??
+                        IconDisplayer(
+                          displayMode: IconDisplayMode.polygon,
+                          icon: Icons.question_mark_rounded,
+                          mainColor: theme.colorScheme.primary,
+                        ),
+                    onTap: onTransferAccountTap,
                   ),
-              onTap: onTransferAccountTap,
-            ),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                child: Material(
+                  elevation: 3,
+                  shape: const CircleBorder(),
+                  clipBehavior: Clip.antiAlias,
+                  color: theme.colorScheme.secondaryContainer,
+                  child: IconButton.filledTonal(
+                    style: IconButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: onSwapTransferAccounts,
+                    icon: const Icon(Icons.swap_vert_rounded),
+                    tooltip: t.transfer.display,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       );
@@ -131,7 +146,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                       investmentAssetColumnTitle ??
                       t.assets.details.trade_form_asset_column,
                   value: investmentAssetName,
-                  subtitle: Text("Ujkdjkdskj"),
+                  subtitle: null,
                   leading: investmentAssetLeading,
                   onTap: () {},
                   showChevron: false,
@@ -145,7 +160,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     position: _CardPosition.right,
                     title: t.general.category,
                     value: selectedCategory?.name,
-                    subtitle: Text("Ujkdjkdskj"),
+                    subtitle: null,
                     leading: IconDisplayer.fromCategory(
                       context,
                       category:

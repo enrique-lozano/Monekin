@@ -33,7 +33,9 @@ class TransactionFormScaffold extends StatelessWidget {
     return Consumer<TransactionFormController>(
       builder: (context, c, _) {
         final showValueIndicator =
-            c.asset != null && c.isAssetTradeInvestment && c.transactionValue.abs() > 0;
+            c.asset != null &&
+            c.isAssetTradeInvestment &&
+            c.transactionValue.abs() > 0;
 
         final formSections = _formFieldSections(context, c, showValueIndicator);
         final accountBlock = _accountBlock(context, c);
@@ -57,8 +59,8 @@ class TransactionFormScaffold extends StatelessWidget {
           children: formSections,
         );
 
-        final mobileScrollChildren = <Widget>[
-          _amountAndTypeSection(context, c),
+        final mobileScrollInner = <Widget>[
+          _amountOnlySection(context, c),
           if (c.isAssetTradeInvestment) _investmentAmountHeader(context, c),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -96,7 +98,9 @@ class TransactionFormScaffold extends StatelessWidget {
                     foregroundColor: WidgetStatePropertyAll(
                       c.transactionType.color(context).getContrastColor(),
                     ),
-                    fixedSize: const WidgetStatePropertyAll(Size.fromHeight(42)),
+                    fixedSize: const WidgetStatePropertyAll(
+                      Size.fromHeight(42),
+                    ),
                   ),
                   onPressed: () => c.onSavePressed(context),
                   icon: const Icon(Icons.save),
@@ -120,11 +124,19 @@ class TransactionFormScaffold extends StatelessWidget {
                   ],
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                      child: _typeSegmented(context, c),
+                    ),
                     Expanded(
-                      child: _paddedColumn(
-                        padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
-                        children: mobileScrollChildren,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: mobileScrollInner,
+                        ),
                       ),
                     ),
                   ],
@@ -134,6 +146,20 @@ class TransactionFormScaffold extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  /// Amount row only (used on mobile where type tabs sit above the scroll view).
+  static Widget _amountOnlySection(
+    BuildContext context,
+    TransactionFormController c,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      child: ListenableBuilder(
+        listenable: c.amountTextController,
+        builder: (context, _) => _amountInputRow(context, c),
+      ),
     );
   }
 
@@ -165,7 +191,10 @@ class TransactionFormScaffold extends StatelessWidget {
     );
   }
 
-  static Widget _formCard(BuildContext context, {required List<Widget> children}) {
+  static Widget _formCard(
+    BuildContext context, {
+    required List<Widget> children,
+  }) {
     final scheme = Theme.of(context).colorScheme;
     return Card(
       margin: EdgeInsets.zero,
@@ -195,7 +224,17 @@ class TransactionFormScaffold extends StatelessWidget {
   ) {
     final t = Translations.of(context);
     final detailsChildren = <Widget>[
-      TransactionTitleField(controller: c.titleController),
+      TransactionTitleField(
+        controller: c.titleController,
+        focusNode: c.titleFocusNode,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (_) {
+          (c.transactionType.isTransfer
+                  ? c.valueInDestinyFocusNode
+                  : c.notesFocusNode)
+              .requestFocus();
+        },
+      ),
       if (c.linkedDebt != null &&
           BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm))
         DebtLinkBanner(debt: c.linkedDebt!),
@@ -233,8 +272,15 @@ class TransactionFormScaffold extends StatelessWidget {
         TransactionValueInDestinyField(
           controller: c.valueInDestinyController,
           transferAccount: c.transferAccount,
+          focusNode: c.valueInDestinyFocusNode,
+          onFieldSubmitted: (_) => c.notesFocusNode.requestFocus(),
         ),
-      TransactionDescriptionField(controller: c.notesController),
+      TransactionDescriptionField(
+        controller: c.notesController,
+        focusNode: c.notesFocusNode,
+        textInputAction: TextInputAction.done,
+        onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+      ),
     ];
 
     return [
@@ -243,7 +289,7 @@ class TransactionFormScaffold extends StatelessWidget {
       const SizedBox(height: 4),
       _tagsStrip(context, c),
       const SizedBox(height: 8),
-      _formSectionHeader(context, 'Extra info'),
+      _formSectionHeader(context, t.transaction.form.extra_info_section),
       _formCard(context, children: extraChildren),
     ];
   }
@@ -300,17 +346,22 @@ class TransactionFormScaffold extends StatelessWidget {
     );
   }
 
-  static Widget _accountBlock(BuildContext context, TransactionFormController c) {
+  static Widget _accountBlock(
+    BuildContext context,
+    TransactionFormController c,
+  ) {
     return TransactionAccountSelectorRow(
       transactionType: c.transactionType,
       fromAccount: c.fromAccount,
       transferAccount: c.transferAccount,
       selectedCategory: c.selectedCategory,
       shakeKey: c.shakeKey,
-      investmentAssetName:
-          c.isAssetTradeInvestment ? (c.asset?.name ?? '…') : null,
-      onSwapTransferAccounts:
-          c.transactionType.isTransfer ? c.swapTransferAccounts : null,
+      investmentAssetName: c.isAssetTradeInvestment
+          ? (c.asset?.name ?? '…')
+          : null,
+      onSwapTransferAccounts: c.transactionType.isTransfer
+          ? c.swapTransferAccounts
+          : null,
       onFromAccountTap: () async {
         final modalRes = await c.showAccountSelector(context, c.fromAccount);
         if (modalRes != null && modalRes.isNotEmpty) {
@@ -318,8 +369,10 @@ class TransactionFormScaffold extends StatelessWidget {
         }
       },
       onTransferAccountTap: () async {
-        final modalRes =
-            await c.showAccountSelector(context, c.transferAccount);
+        final modalRes = await c.showAccountSelector(
+          context,
+          c.transferAccount,
+        );
         if (modalRes != null && modalRes.isNotEmpty) {
           c.setTransferAccount(modalRes.first);
         }
@@ -350,7 +403,10 @@ class TransactionFormScaffold extends StatelessWidget {
     );
   }
 
-  static Widget _typeSegmented(BuildContext context, TransactionFormController c) {
+  static Widget _typeSegmented(
+    BuildContext context,
+    TransactionFormController c,
+  ) {
     final selectedColor = c.transactionType.color(context);
     final fg = c.foregroundColor(context);
     final types = [
@@ -399,7 +455,10 @@ class TransactionFormScaffold extends StatelessWidget {
     );
   }
 
-  static Widget _amountInputRow(BuildContext context, TransactionFormController c) {
+  static Widget _amountInputRow(
+    BuildContext context,
+    TransactionFormController c,
+  ) {
     final baseColor = c.transactionType.color(context);
     final ctrl = c.amountTextController;
     double fontSize = 48;
@@ -433,33 +492,41 @@ class TransactionFormScaffold extends StatelessWidget {
             child: IntrinsicWidth(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: TextField(
-                  controller: ctrl,
-                  textAlign: TextAlign.center,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  inputFormatters: decimalDigitFormatter(
-                    c.fromAccount?.currency.decimalPlaces ?? 2,
-                    allowNegative: true,
-                  ),
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: c.foregroundColor(context),
-                    fontWeight: FontWeight.bold,
-                    fontSize: fontSize,
-                  ),
-                  decoration: InputDecoration(
-                    isDense: true,
-                    fillColor: Colors.transparent,
-                    hoverColor: Theme.of(context)
-                        .colorScheme
-                        .surfaceContainerHigh
-                        .withOpacity(0.05),
-                    border: InputBorder.none,
-                    hintText: '0',
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    prefixText: c.fromAccount?.currency.symbol,
-                    suffixText: ctrl.text.endsWith('.') ? '00' : null,
-                    hintStyle: TextStyle(
-                      color: c.foregroundColor(context).withOpacity(0.35),
+                child: Semantics(
+                  label: Translations.of(context).transaction.form.value,
+                  textField: true,
+                  child: TextField(
+                    controller: ctrl,
+                    focusNode: c.amountFocusNode,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (_) => c.titleFocusNode.requestFocus(),
+                    textAlign: TextAlign.center,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    inputFormatters: decimalDigitFormatter(
+                      c.fromAccount?.currency.decimalPlaces ?? 2,
+                      allowNegative: true,
+                    ),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color: c.foregroundColor(context),
+                      fontWeight: FontWeight.bold,
+                      fontSize: fontSize,
+                    ),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      fillColor: Colors.transparent,
+                      hoverColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHigh.withOpacity(0.05),
+                      border: InputBorder.none,
+                      hintText: '0',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      prefixText: c.fromAccount?.currency.symbol,
+                      suffixText: ctrl.text.endsWith('.') ? '00' : null,
+                      hintStyle: TextStyle(
+                        color: c.foregroundColor(context).withOpacity(0.35),
+                      ),
                     ),
                   ),
                 ),

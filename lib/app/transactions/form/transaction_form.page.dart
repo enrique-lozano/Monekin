@@ -47,15 +47,30 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       assetTradeContext: widget.assetTradeContext,
     )..initialize();
 
-    final needsAssetBootstrap = _controller.isAssetTradeInvestment &&
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      unawaited(_runPostMountBootstrap());
+    });
+  }
+
+  Future<void> _runPostMountBootstrap() async {
+    final c = _controller;
+    if (c.isEditMode) return;
+
+    final assetNew =
+        c.isAssetTradeInvestment &&
         widget.transactionToEdit == null &&
         widget.assetTradeContext != null;
-    if (needsAssetBootstrap) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        unawaited(_controller.completeAssetTradeBootstrap(context));
-      });
+    if (assetNew) {
+      await c.completeAssetTradeBootstrap(context);
+      if (!mounted) return;
+      c.requestAmountFocusAfterFrame();
+      return;
     }
+
+    await c.waitForFormDefaults();
+    if (!mounted) return;
+    await c.bootstrapCreateCategoryAndFocusAmount(context);
   }
 
   @override

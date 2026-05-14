@@ -395,7 +395,8 @@
       "description": "Опис",
       "description-info": "Натисніть тут, щоб ввести детальніший опис цієї транзакції",
       "exchange-to-preferred-title": "Обмінний курс на {{ currency }}",
-      "exchange-to-preferred-in-date": "На дату транзакції"
+      "exchange-to-preferred-in-date": "На дату транзакції",
+      "extra-info-section": "Додаткова інформація"
     },
     "REVERSED": {
       "title": "Скасована транзакція",

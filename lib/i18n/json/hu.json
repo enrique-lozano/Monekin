@@ -395,7 +395,8 @@
       "description": "Leírás",
       "description-info": "Koppintson ide a tranzakció részletesebb leírásának megadásához.",
       "exchange-to-preferred-title": "{{ currency }} átváltási árfolyam",
-      "exchange-to-preferred-in-date": "A tranzakció napján"
+      "exchange-to-preferred-in-date": "A tranzakció napján",
+      "extra-info-section": "További információk"
     },
     "REVERSED": {
       "title": "Megfordított tranzakció",

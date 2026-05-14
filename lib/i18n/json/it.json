@@ -395,7 +395,8 @@
       "description": "Descrizione",
       "description-info": "Tocca qui per inserire una descrizione più dettagliata su questa transazione",
       "exchange-to-preferred-title": "Tasso di cambio per {{ currency }}",
-      "exchange-to-preferred-in-date": "Alla data della transazione"
+      "exchange-to-preferred-in-date": "Alla data della transazione",
+      "extra-info-section": "Informazioni extra"
     },
     "REVERSED": {
       "title": "Transazione inversa",

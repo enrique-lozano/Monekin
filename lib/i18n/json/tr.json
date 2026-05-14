@@ -395,7 +395,8 @@
       "description": "Açıklama",
       "description-info": "Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun",
       "exchange-to-preferred-title": "{{ currency }} için kur",
-      "exchange-to-preferred-in-date": "İşlem tarihinde"
+      "exchange-to-preferred-in-date": "İşlem tarihinde",
+      "extra-info-section": "Ek bilgi"
     },
     "REVERSED": {
       "title": "Ters işlem",
