@@ -53,8 +53,6 @@ class TransactionFormScaffold extends StatelessWidget {
                 ),
               ],
             ),
-            if (c.isAssetTradeInvestment)
-              transactionFormInvestmentAmountHeader(context, c),
             accountBlock,
             if (c.linkedDebt != null &&
                 BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
@@ -71,8 +69,6 @@ class TransactionFormScaffold extends StatelessWidget {
 
         final mobileScrollInner = <Widget>[
           TransactionFormAmountBlock(controller: c),
-          if (c.isAssetTradeInvestment)
-            transactionFormInvestmentAmountHeader(context, c),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
             child: accountBlock,
