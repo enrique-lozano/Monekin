@@ -36,10 +36,19 @@ class TransactionFormScaffold extends StatelessWidget {
         );
 
         final accountBlock = TransactionAccountCategorySelector(form: c);
+        final dualHorizontalPadding =
+            BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
+            ? 0.0
+            : 16.0;
         final amountOrDual = c.usesDualLegAmountLayout
             ? TransactionFormDualLegAmountSection(
                 controller: c,
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: EdgeInsets.fromLTRB(
+                  dualHorizontalPadding,
+                  0,
+                  dualHorizontalPadding,
+                  12,
+                ),
               )
             : TransactionFormAmountBlock(
                 controller: c,

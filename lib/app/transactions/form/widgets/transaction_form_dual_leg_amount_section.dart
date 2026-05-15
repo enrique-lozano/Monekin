@@ -14,12 +14,12 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-/// Transfer / asset trade: two bordered legs with per-leg amount entry.
+/// Transfer / asset trade: one bordered card with both legs, swap, and FX.
 class TransactionFormDualLegAmountSection extends StatelessWidget {
   const TransactionFormDualLegAmountSection({
     super.key,
     required this.controller,
-    this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 12),
+    this.padding = EdgeInsets.zero,
   });
 
   final TransactionFormController controller;
@@ -44,12 +44,37 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
                 _TransferDualLegBody(controller: c)
               else
                 _InvestmentDualLegBody(controller: c),
-              TransactionFormAmountBlock.preferredCurrencyHint(context, c),
-              TransactionFormAmountBlock.insufficientBalanceWarning(context, c),
+              TransactionFormAmountBlock.insufficientBalanceWarning(
+                context,
+                c,
+              ),
             ],
           );
         },
       ),
+    );
+  }
+}
+
+class _OutlinedFlowCard extends StatelessWidget {
+  const _OutlinedFlowCard({
+    required this.borderColor,
+    required this.child,
+  });
+
+  final Color borderColor;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        borderRadius: BorderRadius.all(inputBorderRadius),
+        border: Border.all(color: borderColor.withOpacity(0.65), width: 1.2),
+      ),
+      child: child,
     );
   }
 }
@@ -65,35 +90,41 @@ class _TransferDualLegBody extends StatelessWidget {
     final from = c.fromAccount;
     final to = c.transferAccount;
     final scheme = Theme.of(context).colorScheme;
+    final dividerColor = scheme.outlineVariant.withOpacity(0.45);
 
     if (from == null || to == null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _LegCard(
-            borderColor: scheme.primary,
-            child: _AccountLegHeader(
-              account: from,
-              onTapAccount: () => c.pickFromAccount(context),
-            ),
-          ),
-          const SizedBox(height: 8),
-          ShakeWidget(
-            duration: const Duration(milliseconds: 200),
-            shakeCount: 1,
-            shakeOffset: 10,
-            key: c.shakeKey,
-            child: _LegCard(
-              borderColor: scheme.primary,
+      return _OutlinedFlowCard(
+        borderColor: scheme.primary,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               child: _AccountLegHeader(
-                account: to,
-                onTapAccount: () => c.pickTransferAccount(context),
+                account: from,
+                onTapAccount: () => c.pickFromAccount(context),
               ),
             ),
-          ),
-        ],
+            Divider(height: 1, thickness: 1, color: dividerColor),
+            ShakeWidget(
+              duration: const Duration(milliseconds: 200),
+              shakeCount: 1,
+              shakeOffset: 10,
+              key: c.shakeKey,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+                child: _AccountLegHeader(
+                  account: to,
+                  onTapAccount: () => c.pickTransferAccount(context),
+                ),
+              ),
+            ),
+          ],
+        ),
       );
     }
+
+    final differentCurrency = from.currency.code != to.currency.code;
 
     return StreamBuilder<double>(
       stream: ExchangeRateService.instance.calculateExchangeRate(
@@ -118,90 +149,97 @@ class _TransferDualLegBody extends StatelessWidget {
           defaultDest,
         );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _LegCard(
-              borderColor: scheme.primary,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _AccountLegHeader(
-                    account: from,
-                    onTapAccount: () => c.pickFromAccount(context),
-                  ),
-                  const SizedBox(height: 10),
-                  _LegAmountRow(
-                    isOutflow: true,
-                    currency: from.currency,
-                    amount: c.transactionValue.abs(),
-                    onTapAmount: () =>
-                        c.openTransferSourceAmountSelector(context),
-                    showReset: sourceMismatch,
-                    onReset: sourceMismatch
-                        ? () => c.alignTransferSourceFromInverseConverted(
-                            expectedSource,
-                          )
-                        : null,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
-              child: Row(
-                children: [
-                  IconButton.filledTonal(
-                    style: IconButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: c.swapTransferAccounts,
-                    icon: const Icon(Icons.arrow_downward_rounded),
-                    tooltip: Translations.of(context).transfer.display,
-                  ),
-                  const Spacer(),
-                  _FxChip(
-                    fromCode: from.currency.code,
-                    toCode: to.currency.code,
-                    date: c.date,
-                  ),
-                ],
-              ),
-            ),
-            ShakeWidget(
-              duration: const Duration(milliseconds: 200),
-              shakeCount: 1,
-              shakeOffset: 10,
-              key: c.shakeKey,
-              child: _LegCard(
-                borderColor: scheme.primary,
+        return _OutlinedFlowCard(
+          borderColor: scheme.primary,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _AccountLegHeader(
-                      account: to,
-                      onTapAccount: () => c.pickTransferAccount(context),
+                      account: from,
+                      onTapAccount: () => c.pickFromAccount(context),
                     ),
                     const SizedBox(height: 10),
                     _LegAmountRow(
-                      isOutflow: false,
-                      currency: to.currency,
-                      amount: destDisplay,
+                      isOutflow: true,
+                      currency: from.currency,
+                      amount: c.transactionValue.abs(),
                       onTapAmount: () =>
-                          c.openTransferDestinationAmountSelector(
-                            context,
-                            defaultDestinationAmount: defaultDest,
-                          ),
-                      showReset: destMismatch,
-                      onReset: destMismatch
-                          ? c.clearTransferDestinationOverride
+                          c.openTransferSourceAmountSelector(context),
+                      showReset: sourceMismatch,
+                      onReset: sourceMismatch
+                          ? () => c.alignTransferSourceFromInverseConverted(
+                              expectedSource,
+                            )
                           : null,
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              Divider(height: 1, thickness: 1, color: dividerColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                child: Row(
+                  children: [
+                    IconButton.filledTonal(
+                      style: IconButton.styleFrom(
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: c.swapTransferAccounts,
+                      icon: const Icon(Icons.arrow_downward_rounded),
+                      tooltip: Translations.of(context).transfer.display,
+                    ),
+                    if (differentCurrency) ...[
+                      const Spacer(),
+                      _FxChip(
+                        fromCode: from.currency.code,
+                        toCode: to.currency.code,
+                        date: c.date,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              Divider(height: 1, thickness: 1, color: dividerColor),
+              ShakeWidget(
+                duration: const Duration(milliseconds: 200),
+                shakeCount: 1,
+                shakeOffset: 10,
+                key: c.shakeKey,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _AccountLegHeader(
+                        account: to,
+                        onTapAccount: () => c.pickTransferAccount(context),
+                      ),
+                      const SizedBox(height: 10),
+                      _LegAmountRow(
+                        isOutflow: false,
+                        currency: to.currency,
+                        amount: destDisplay,
+                        onTapAmount: () =>
+                            c.openTransferDestinationAmountSelector(
+                              context,
+                              defaultDestinationAmount: defaultDest,
+                            ),
+                        showReset: destMismatch,
+                        onReset: destMismatch
+                            ? c.clearTransferDestinationOverride
+                            : null,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
@@ -219,89 +257,86 @@ class _InvestmentDualLegBody extends StatelessWidget {
     final from = c.fromAccount;
     final asset = c.asset;
     final scheme = Theme.of(context).colorScheme;
+    final accent = c.investmentAccent(context);
     final topOut = c.investmentIsBuy;
     final displayCurrency =
         c.amountDisplayCurrency ?? from?.currency ?? asset?.currency;
+    final dividerColor = scheme.outlineVariant.withOpacity(0.45);
 
-    final middle =
-        (from != null &&
-            asset != null &&
-            from.currency.code != asset.currency.code)
-        ? Padding(
-            padding: const EdgeInsets.fromLTRB(4, 6, 4, 6),
+    final differentCurrency = from != null &&
+        asset != null &&
+        from.currency.code != asset.currency.code;
+
+    return _OutlinedFlowCard(
+      borderColor: accent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _AccountLegHeader(
+                  account: from,
+                  onTapAccount: () => c.pickFromAccount(context),
+                ),
+                const SizedBox(height: 10),
+                _LegAmountRow(
+                  isOutflow: topOut,
+                  currency: from?.currency,
+                  amount: c.transactionValue.abs(),
+                  onTapAmount: () => c.openInvestmentAmountSelector(context),
+                  showReset: false,
+                  onReset: null,
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1, thickness: 1, color: dividerColor),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(
               children: [
                 Icon(
                   Icons.arrow_downward_rounded,
                   color: scheme.onSurfaceVariant,
                 ),
-                const Spacer(),
-                _FxChip(
-                  fromCode: from.currency.code,
-                  toCode: asset.currency.code,
-                  date: c.date,
+                if (differentCurrency) ...[
+                  const Spacer(),
+                  _FxChip(
+                    fromCode: from.currency.code,
+                    toCode: asset.currency.code,
+                    date: c.date,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          Divider(height: 1, thickness: 1, color: dividerColor),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _AssetLegHeader(
+                  assetName: asset?.name,
+                  currency: asset?.currency,
+                ),
+                const SizedBox(height: 10),
+                _LegAmountRow(
+                  isOutflow: !topOut,
+                  currency: displayCurrency,
+                  amount: c.transactionValue.abs(),
+                  onTapAmount: () => c.openInvestmentAmountSelector(context),
+                  showReset: false,
+                  onReset: null,
                 ),
               ],
             ),
-          )
-        : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Icon(
-                Icons.arrow_downward_rounded,
-                color: scheme.onSurfaceVariant,
-              ),
-            ),
-          );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _LegCard(
-          borderColor: c.investmentAccent(context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _AccountLegHeader(
-                account: from,
-                onTapAccount: () => c.pickFromAccount(context),
-              ),
-              const SizedBox(height: 10),
-              _LegAmountRow(
-                isOutflow: topOut,
-                currency: from?.currency,
-                amount: c.transactionValue.abs(),
-                onTapAmount: () => c.openInvestmentAmountSelector(context),
-                showReset: false,
-                onReset: null,
-              ),
-            ],
           ),
-        ),
-        middle,
-        _LegCard(
-          borderColor: c.investmentAccent(context),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _AssetLegHeader(
-                assetName: asset?.name,
-                currency: asset?.currency,
-              ),
-              const SizedBox(height: 10),
-              _LegAmountRow(
-                isOutflow: !topOut,
-                currency: displayCurrency,
-                amount: c.transactionValue.abs(),
-                onTapAmount: () => c.openInvestmentAmountSelector(context),
-                showReset: false,
-                onReset: null,
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -351,29 +386,6 @@ class _FxChip extends StatelessWidget {
   }
 }
 
-class _LegCard extends StatelessWidget {
-  const _LegCard({required this.borderColor, required this.child});
-
-  final Color borderColor;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: scheme.surface,
-        borderRadius: BorderRadius.all(inputBorderRadius),
-        border: Border.all(color: borderColor.withOpacity(0.65), width: 1.2),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-        child: child,
-      ),
-    );
-  }
-}
-
 class _AccountLegHeader extends StatelessWidget {
   const _AccountLegHeader({required this.account, required this.onTapAccount});
 
@@ -392,9 +404,9 @@ class _AccountLegHeader extends StatelessWidget {
         onTapAccount();
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      bgColor: scheme.surfaceContainerHigh.withOpacity(0.35),
+      bgColor: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -443,7 +455,7 @@ class _AssetLegHeader extends StatelessWidget {
     final curLabel = currency?.symbol ?? '';
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
           IconDisplayer(

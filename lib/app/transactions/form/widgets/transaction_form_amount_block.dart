@@ -153,7 +153,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _amountInputRow(context, c),
-              preferredCurrencyHint(context, c),
+              _preferredCurrencyHint(context, c),
               insufficientBalanceWarning(context, c),
             ],
           );
@@ -162,7 +162,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
     );
   }
 
-  static Widget preferredCurrencyHint(
+  static Widget _preferredCurrencyHint(
     BuildContext context,
     TransactionFormController c,
   ) {
@@ -216,6 +216,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
     );
   }
 
+  /// Shared with [TransactionFormDualLegAmountSection] for transfer / investment.
   static Widget insufficientBalanceWarning(
     BuildContext context,
     TransactionFormController c,
