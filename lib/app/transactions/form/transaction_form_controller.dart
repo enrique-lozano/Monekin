@@ -839,8 +839,7 @@ class TransactionFormController extends ChangeNotifier {
     required double defaultDestinationAmount,
   }) {
     final tr = Translations.of(context);
-    final initial =
-        valueInDestinyToNumber ?? defaultDestinationAmount;
+    final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,

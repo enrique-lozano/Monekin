@@ -45,10 +45,7 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
               else
                 _InvestmentDualLegBody(controller: c),
               TransactionFormAmountBlock.preferredCurrencyHint(context, c),
-              TransactionFormAmountBlock.insufficientBalanceWarning(
-                context,
-                c,
-              ),
+              TransactionFormAmountBlock.insufficientBalanceWarning(context, c),
             ],
           );
         },
@@ -226,7 +223,8 @@ class _InvestmentDualLegBody extends StatelessWidget {
     final displayCurrency =
         c.amountDisplayCurrency ?? from?.currency ?? asset?.currency;
 
-    final middle = (from != null &&
+    final middle =
+        (from != null &&
             asset != null &&
             from.currency.code != asset.currency.code)
         ? Padding(
@@ -343,9 +341,9 @@ class _FxChip extends StatelessWidget {
           ),
           child: Text(
             label,
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600),
           ),
         );
       },
@@ -354,10 +352,7 @@ class _FxChip extends StatelessWidget {
 }
 
 class _LegCard extends StatelessWidget {
-  const _LegCard({
-    required this.borderColor,
-    required this.child,
-  });
+  const _LegCard({required this.borderColor, required this.child});
 
   final Color borderColor;
   final Widget child;
@@ -380,10 +375,7 @@ class _LegCard extends StatelessWidget {
 }
 
 class _AccountLegHeader extends StatelessWidget {
-  const _AccountLegHeader({
-    required this.account,
-    required this.onTapAccount,
-  });
+  const _AccountLegHeader({required this.account, required this.onTapAccount});
 
   final Account? account;
   final VoidCallback onTapAccount;
@@ -438,10 +430,7 @@ class _AccountLegHeader extends StatelessWidget {
 }
 
 class _AssetLegHeader extends StatelessWidget {
-  const _AssetLegHeader({
-    required this.assetName,
-    required this.currency,
-  });
+  const _AssetLegHeader({required this.assetName, required this.currency});
 
   final String? assetName;
   final CurrencyInDB? currency;
@@ -549,9 +538,9 @@ class _LegAmountRow extends StatelessWidget {
                     size: 26,
                   ),
                   Theme(
-                    data: Theme.of(context).copyWith(
-                      dividerColor: Colors.transparent,
-                    ),
+                    data: Theme.of(
+                      context,
+                    ).copyWith(dividerColor: Colors.transparent),
                     child: TappableTextEntry(
                       title: label,
                       placeholder: '0',
@@ -566,8 +555,7 @@ class _LegAmountRow extends StatelessWidget {
                         color: accent,
                       ),
                       padding: EdgeInsetsDirectional.zero,
-                      internalPadding:
-                          const EdgeInsetsDirectional.symmetric(
+                      internalPadding: const EdgeInsetsDirectional.symmetric(
                         horizontal: 4,
                         vertical: 2,
                       ),
