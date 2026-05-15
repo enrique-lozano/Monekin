@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
@@ -31,28 +32,15 @@ class TransactionAccountCategorySelector extends StatelessWidget {
         : null;
 
     if (transactionType.isTransfer) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      return Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
         children: [
-          _AccountCard(
-            position: _CardPosition.single,
-            title: t.transfer.form.from,
-            value: fromAccount?.name,
-            leading:
-                fromAccount?.displayIcon(context) ??
-                IconDisplayer(
-                  displayMode: IconDisplayMode.polygon,
-                  icon: Icons.question_mark_rounded,
-                  mainColor: theme.colorScheme.primary,
-                ),
-            onTap: () => form.pickFromAccount(context),
-          ),
-          Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.topCenter,
+          Column(
             children: [
+              _buildFromAccountCard(context, fromAccount, _CardPosition.single),
               Padding(
-                padding: const EdgeInsets.only(top: 4),
+                padding: const EdgeInsets.only(top: 8),
                 child: ShakeWidget(
                   duration: const Duration(milliseconds: 200),
                   shakeCount: 1,
@@ -73,26 +61,19 @@ class TransactionAccountCategorySelector extends StatelessWidget {
                   ),
                 ),
               ),
-              Positioned(
-                top: -16,
-                child: Material(
-                  elevation: 3,
-                  shape: const CircleBorder(),
-                  clipBehavior: Clip.antiAlias,
-                  color: theme.colorScheme.secondaryContainer,
-                  child: IconButton.filledTonal(
-                    style: IconButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: transactionType.isTransfer
-                        ? form.swapTransferAccounts
-                        : null,
-                    icon: const Icon(Icons.swap_vert_rounded),
-                    tooltip: t.transfer.display,
-                  ),
-                ),
-              ),
             ],
+          ),
+          Positioned(
+            child: IconButton.filledTonal(
+              style: IconButton.styleFrom(
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              onPressed: transactionType.isTransfer
+                  ? form.swapTransferAccounts
+                  : null,
+              icon: const Icon(Icons.arrow_downward_rounded),
+              tooltip: t.transfer.display,
+            ),
           ),
         ],
       );
@@ -103,18 +84,10 @@ class TransactionAccountCategorySelector extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: _AccountCard(
-              position: _CardPosition.left,
-              title: t.general.account,
-              value: fromAccount?.name,
-              leading:
-                  fromAccount?.displayIcon(context) ??
-                  IconDisplayer(
-                    displayMode: IconDisplayMode.polygon,
-                    icon: Icons.question_mark_rounded,
-                    mainColor: theme.colorScheme.primary,
-                  ),
-              onTap: () => form.pickFromAccount(context),
+            child: _buildFromAccountCard(
+              context,
+              fromAccount,
+              _CardPosition.left,
             ),
           ),
           const SizedBox(width: 2),
@@ -149,6 +122,29 @@ class TransactionAccountCategorySelector extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  _AccountCard _buildFromAccountCard(
+    BuildContext context,
+    Account? fromAccount,
+    _CardPosition position,
+  ) {
+    final t = Translations.of(context);
+    final theme = Theme.of(context);
+
+    return _AccountCard(
+      position: position,
+      title: t.general.account,
+      value: fromAccount?.name,
+      leading:
+          fromAccount?.displayIcon(context) ??
+          IconDisplayer(
+            displayMode: IconDisplayMode.polygon,
+            icon: Icons.question_mark_rounded,
+            mainColor: theme.colorScheme.primary,
+          ),
+      onTap: () => form.pickFromAccount(context),
     );
   }
 }
@@ -205,7 +201,7 @@ class _AccountCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
       bgColor: theme.colorScheme.surfaceContainerHigh,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 8, 8),
+        padding: const EdgeInsets.fromLTRB(12, 16, 8, 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -244,7 +240,7 @@ class _AccountCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: subtitle != null ? 2 : 6),
+                  SizedBox(height: subtitle != null ? 2 : 8),
                   if (subtitle != null)
                     SizedBox(
                       width: double.infinity,

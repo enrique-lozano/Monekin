@@ -70,7 +70,7 @@ class TransactionFormScaffold extends StatelessWidget {
         final mobileScrollInner = <Widget>[
           TransactionFormAmountBlock(controller: c),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
             child: accountBlock,
           ),
           Padding(
@@ -142,7 +142,7 @@ class TransactionFormScaffold extends StatelessWidget {
                     ),
                     Expanded(
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
+                        padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: mobileScrollInner,
