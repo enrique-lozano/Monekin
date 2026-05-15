@@ -153,8 +153,8 @@ class TransactionFormAmountBlock extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _amountInputRow(context, c),
-              _preferredCurrencyHint(context, c),
-              _insufficientBalanceWarning(context, c),
+              preferredCurrencyHint(context, c),
+              insufficientBalanceWarning(context, c),
             ],
           );
         },
@@ -162,7 +162,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
     );
   }
 
-  static Widget _preferredCurrencyHint(
+  static Widget preferredCurrencyHint(
     BuildContext context,
     TransactionFormController c,
   ) {
@@ -216,7 +216,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
     );
   }
 
-  static Widget _insufficientBalanceWarning(
+  static Widget insufficientBalanceWarning(
     BuildContext context,
     TransactionFormController c,
   ) {

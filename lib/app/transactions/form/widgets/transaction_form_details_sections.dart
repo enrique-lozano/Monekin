@@ -58,13 +58,6 @@ List<Widget> transactionFormDetailsSections(
   ];
 
   final extraChildren = <Widget>[
-    if (c.transactionType.isTransfer)
-      TransactionValueInDestinyField(
-        controller: c.valueInDestinyController,
-        transferAccount: c.transferAccount,
-        focusNode: c.valueInDestinyFocusNode,
-        onFieldSubmitted: c.onValueInDestinyFieldSubmitted,
-      ),
     TransactionDescriptionField(
       controller: c.notesController,
       focusNode: c.notesFocusNode,

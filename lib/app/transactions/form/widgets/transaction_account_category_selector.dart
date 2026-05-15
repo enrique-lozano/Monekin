@@ -20,6 +20,10 @@ class TransactionAccountCategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (form.usesDualLegAmountLayout) {
+      return const SizedBox.shrink();
+    }
+
     final t = Translations.of(context);
     final theme = Theme.of(context);
     final transactionType = form.transactionType;

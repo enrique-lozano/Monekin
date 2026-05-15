@@ -50,6 +50,7 @@ class TransactionFormController extends ChangeNotifier {
        _linkedDebt = linkedDebt,
        _assetTradeContext = assetTradeContext {
     _amountTextController.addListener(_onAmountFieldTextChanged);
+    valueInDestinyController.addListener(_onValueInDestinyTextChanged);
   }
 
   final TransactionType? _mode;
@@ -64,9 +65,6 @@ class TransactionFormController extends ChangeNotifier {
 
   final FocusNode amountFocusNode = FocusNode(debugLabel: 'transactionAmount');
   final FocusNode titleFocusNode = FocusNode(debugLabel: 'transactionTitle');
-  final FocusNode valueInDestinyFocusNode = FocusNode(
-    debugLabel: 'transactionValueInDestiny',
-  );
   final FocusNode notesFocusNode = FocusNode(debugLabel: 'transactionNotes');
 
   Future<void>? _formDefaultsFuture;
@@ -101,6 +99,11 @@ class TransactionFormController extends ChangeNotifier {
   bool get isEditMode => _transactionToEdit != null;
 
   late TransactionType transactionType;
+
+  /// Transfer / asset trade: combined account + amount cards replace the
+  /// classic amount row and account selector layout.
+  bool get usesDualLegAmountLayout =>
+      transactionType.isTransfer || isAssetTradeInvestment;
 
   bool get isAssetTradeInvestment {
     if (_assetTradeContext != null) return true;
@@ -184,6 +187,7 @@ class TransactionFormController extends ChangeNotifier {
     if (isEditMode) return;
     if (isAssetTradeInvestment) return;
     if (!transactionType.isIncomeOrExpense) {
+      if (usesDualLegAmountLayout) return;
       _requestAmountFocusSoon();
       return;
     }
@@ -199,7 +203,10 @@ class TransactionFormController extends ChangeNotifier {
     });
   }
 
-  void requestAmountFocusAfterFrame() => _requestAmountFocusSoon();
+  void requestAmountFocusAfterFrame() {
+    if (usesDualLegAmountLayout) return;
+    _requestAmountFocusSoon();
+  }
 
   Future<void> completeAssetTradeBootstrap(BuildContext context) async {
     final tradeCtx = _assetTradeContext;
@@ -239,14 +246,18 @@ class TransactionFormController extends ChangeNotifier {
     _disposed = true;
     _amountTextController.removeListener(_onAmountFieldTextChanged);
     _amountTextController.dispose();
+    valueInDestinyController.removeListener(_onValueInDestinyTextChanged);
     valueInDestinyController.dispose();
     notesController.dispose();
     titleController.dispose();
     amountFocusNode.dispose();
     titleFocusNode.dispose();
-    valueInDestinyFocusNode.dispose();
     notesFocusNode.dispose();
     super.dispose();
+  }
+
+  void _onValueInDestinyTextChanged() {
+    _safeNotify();
   }
 
   void _onAmountFieldTextChanged() {
@@ -303,6 +314,7 @@ class TransactionFormController extends ChangeNotifier {
     final tmp = fromAccount;
     fromAccount = transferAccount;
     transferAccount = tmp;
+    valueInDestinyController.clear();
     _safeNotify();
   }
 
@@ -744,11 +756,6 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void onTitleFieldSubmitted(BuildContext context, String _) {
-    (transactionType.isTransfer ? valueInDestinyFocusNode : notesFocusNode)
-        .requestFocus();
-  }
-
-  void onValueInDestinyFieldSubmitted(String _) {
     notesFocusNode.requestFocus();
   }
 
@@ -760,6 +767,117 @@ class TransactionFormController extends ChangeNotifier {
     transactionValue = isAssetTradeInvestment ? amount.abs() : amount;
     syncAmountFieldFromTransactionValue();
     _safeNotify();
+  }
+
+  static bool nearlyEqualMoney(double a, double b) => (a - b).abs() < 0.005;
+
+  /// Plain positive amount string for [valueInDestinyController].
+  String formatMoneyAmountPlain(double v) {
+    final rounded = double.parse(v.abs().toStringAsFixed(2));
+    final isInt = rounded == rounded.roundToDouble();
+    return isInt ? rounded.toInt().toString() : rounded.toString();
+  }
+
+  void applyTransferSourceAmount(double amount) {
+    transactionValue = amount.abs();
+    syncAmountFieldFromTransactionValue();
+    _safeNotify();
+  }
+
+  /// Sets an explicit destination amount, or clears the override when it
+  /// matches [defaultDestinationAmount] (same currency or converted default).
+  void applyTransferDestinationAmount(
+    double amount, {
+    required double defaultDestinationAmount,
+  }) {
+    final a = amount.abs();
+    if (nearlyEqualMoney(a, defaultDestinationAmount)) {
+      valueInDestinyController.clear();
+    } else {
+      valueInDestinyController.text = formatMoneyAmountPlain(a);
+    }
+    _safeNotify();
+  }
+
+  void clearTransferDestinationOverride() {
+    if (valueInDestinyController.text.isEmpty) return;
+    valueInDestinyController.clear();
+    _safeNotify();
+  }
+
+  /// Sets the source debit to [inverseConvertedSource] (already in the origin
+  /// account currency) and clears an explicit destiny amount so the pair is
+  /// consistent again.
+  void alignTransferSourceFromInverseConverted(double inverseConvertedSource) {
+    transactionValue = inverseConvertedSource.abs();
+    syncAmountFieldFromTransactionValue();
+    valueInDestinyController.clear();
+    _safeNotify();
+  }
+
+  void openTransferSourceAmountSelector(BuildContext context) {
+    final tr = Translations.of(context);
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) => AmountSelector(
+        title: tr.transaction.form.value,
+        initialAmount: transactionValue.abs(),
+        enableSignToggleButton: false,
+        currency: fromAccount?.currency,
+        onSubmit: (amount) {
+          applyTransferSourceAmount(amount);
+          RouteUtils.popRoute();
+        },
+      ),
+    );
+  }
+
+  void openTransferDestinationAmountSelector(
+    BuildContext context, {
+    required double defaultDestinationAmount,
+  }) {
+    final tr = Translations.of(context);
+    final initial =
+        valueInDestinyToNumber ?? defaultDestinationAmount;
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) => AmountSelector(
+        title: tr.transfer.form.value_in_destiny.title,
+        initialAmount: initial,
+        enableSignToggleButton: false,
+        currency: transferAccount?.currency,
+        onSubmit: (amount) {
+          applyTransferDestinationAmount(
+            amount,
+            defaultDestinationAmount: defaultDestinationAmount,
+          );
+          RouteUtils.popRoute();
+        },
+      ),
+    );
+  }
+
+  void openInvestmentAmountSelector(BuildContext context) {
+    final tr = Translations.of(context);
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) => AmountSelector(
+        title: tr.transaction.form.value,
+        initialAmount: transactionValue.abs(),
+        enableSignToggleButton: false,
+        currency: amountDisplayCurrency ?? fromAccount?.currency,
+        onSubmit: (amount) {
+          applyAmountFromSelector(amount);
+          RouteUtils.popRoute();
+        },
+      ),
+    );
   }
 
   void onSavePressed(BuildContext context) {

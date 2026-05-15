@@ -4,6 +4,7 @@ import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_account_category_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_dual_leg_amount_section.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_details_sections.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
@@ -35,6 +36,15 @@ class TransactionFormScaffold extends StatelessWidget {
         );
 
         final accountBlock = TransactionAccountCategorySelector(form: c);
+        final amountOrDual = c.usesDualLegAmountLayout
+            ? TransactionFormDualLegAmountSection(
+                controller: c,
+                padding: const EdgeInsets.only(bottom: 12),
+              )
+            : TransactionFormAmountBlock(
+                controller: c,
+                padding: const EdgeInsets.only(bottom: 12),
+              );
 
         final mdLeadingColumn = _paddedColumn(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
@@ -47,13 +57,10 @@ class TransactionFormScaffold extends StatelessWidget {
                   controller: c,
                   padding: EdgeInsets.zero,
                 ),
-                TransactionFormAmountBlock(
-                  controller: c,
-                  padding: const EdgeInsets.only(bottom: 12),
-                ),
+                amountOrDual,
               ],
             ),
-            accountBlock,
+            if (!c.usesDualLegAmountLayout) accountBlock,
             if (c.linkedDebt != null &&
                 BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
               const SizedBox(height: 16),
@@ -68,11 +75,12 @@ class TransactionFormScaffold extends StatelessWidget {
         );
 
         final mobileScrollInner = <Widget>[
-          TransactionFormAmountBlock(controller: c),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
-            child: accountBlock,
-          ),
+          amountOrDual,
+          if (!c.usesDualLegAmountLayout)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+              child: accountBlock,
+            ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
