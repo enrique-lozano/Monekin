@@ -133,7 +133,7 @@ Widget _formCard(BuildContext context, {required List<Widget> children}) {
       mainAxisSize: MainAxisSize.min,
       children: [
         for (int i = 0; i < children.length; i++) ...[
-          if (i != 0) Divider(height: 1, color: scheme.outlineVariant),
+          if (i != 0) Divider(height: 1, color: scheme.surface),
           children[i],
         ],
       ],

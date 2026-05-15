@@ -6,6 +6,7 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -66,7 +67,7 @@ class TransactionFormTypeSegmented extends StatelessWidget {
             foregroundColor: WidgetStateProperty.resolveWith(
               (s) => s.contains(WidgetState.selected)
                   ? selectedColor.getContrastColor()
-                  : fg.withOpacity(0.85),
+                  : AppColors.of(context).textBody,
             ),
             backgroundColor: WidgetStateProperty.resolveWith(
               (s) => s.contains(WidgetState.selected)
@@ -257,7 +258,6 @@ class TransactionFormAmountBlock extends StatelessWidget {
                       allowNegative: true,
                     ),
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: c.foregroundColor(context),
                       fontWeight: FontWeight.bold,
                       fontSize: fontSize,
                     ),
@@ -272,9 +272,6 @@ class TransactionFormAmountBlock extends StatelessWidget {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       prefixText: c.fromAccount?.currency.symbol,
                       suffixText: ctrl.text.endsWith('.') ? '00' : null,
-                      hintStyle: TextStyle(
-                        color: c.foregroundColor(context).withOpacity(0.35),
-                      ),
                     ),
                   ),
                 ),
@@ -282,7 +279,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
             ),
           ),
           IconButton.outlined(
-            color: c.foregroundColor(context),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             onPressed: () => c.openAmountSelectorSheet(context),
             icon: const Icon(Icons.calculate),
           ),
