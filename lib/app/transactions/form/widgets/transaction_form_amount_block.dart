@@ -4,10 +4,13 @@ import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -133,9 +136,6 @@ class TransactionFormAmountBlock extends StatelessWidget {
         if (!snap.hasData) return const SizedBox.shrink();
 
         final converted = snap.data!;
-        if (converted == c.transactionValue) {
-          //   return const SizedBox.shrink();
-        }
         final hintColor = c.foregroundColor(context).withOpacity(0.75);
 
         return AnimatedExpanded(
@@ -207,6 +207,9 @@ class TransactionFormAmountBlock extends StatelessWidget {
     BuildContext context,
     TransactionFormController c,
   ) {
+    if (c.isAssetTradeInvestment) {
+      return _investmentAmountSurface(context, c);
+    }
     final baseColor = c.transactionType.color(context);
     final ctrl = c.amountTextController;
     double fontSize = 48;
@@ -287,6 +290,129 @@ class TransactionFormAmountBlock extends StatelessWidget {
             icon: const Icon(Icons.calculate),
           ),
         ],
+      ),
+    );
+  }
+
+  /// Tappable summary for asset buy/sell (amount is edited via sheet, not the text field).
+  static Widget _investmentAmountSurface(
+    BuildContext context,
+    TransactionFormController c, {
+    double mainContainerRadius = 12,
+  }) {
+    final baseColor = c.investmentAccent(context);
+    final fgColor = baseColor.getContrastColor();
+    final transactionValue = c.transactionValue;
+    final fromAccount = c.fromAccount;
+    final displayCurrencyOverride = c.asset?.currency;
+
+    return Tappable(
+      bgColor: baseColor.withOpacity(0.85),
+      onTap: () => c.openAmountSelectorSheet(context),
+      borderRadius: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
+          ? BorderRadius.only(
+              topLeft: Radius.circular(mainContainerRadius),
+              topRight: Radius.circular(mainContainerRadius),
+            )
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        child: DefaultTextStyle(
+          style: TextStyle(color: fgColor),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconDisplayer(
+                    key: ValueKey<int>(
+                      Object.hash(c.investmentIsBuy, baseColor),
+                    ),
+                    mainColor: baseColor,
+                    secondaryColor: fgColor,
+                    padding: 2,
+                    borderRadius: 4,
+                    icon: c.investmentIsBuy
+                        ? TransactionType.income.icon
+                        : TransactionType.expense.icon,
+                  ),
+                  const SizedBox(width: 12),
+                  Flexible(
+                    child: Builder(
+                      builder: (context) {
+                        final fontSize = transactionValue >= 1000
+                            ? transactionValue >= 1000000
+                                  ? 28.0
+                                  : 34.0
+                            : 38.0;
+                        final bigTextStyle = TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: fgColor,
+                          fontSize: fontSize,
+                        );
+
+                        return CurrencyDisplayer(
+                          amountToConvert: transactionValue,
+                          currency:
+                              displayCurrencyOverride ?? fromAccount?.currency,
+                          currencyStyle: bigTextStyle,
+                          integerStyle: bigTextStyle,
+                          followPrivateMode: false,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              if (fromAccount != null && displayCurrencyOverride == null)
+                StreamBuilder<double>(
+                  stream: ExchangeRateService.instance
+                      .calculateExchangeRateToPreferredCurrency(
+                        fromCurrency: fromAccount.currency.code,
+                        amount: transactionValue,
+                      ),
+                  builder: (context, exchangeRateSnapshot) {
+                    final shouldHide =
+                        !exchangeRateSnapshot.hasData ||
+                        exchangeRateSnapshot.data! == transactionValue;
+
+                    final valueInPrefCurrencyIndicator = Column(
+                      children: [
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Icon(
+                              Icons.swap_horizontal_circle_rounded,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 4),
+                            CurrencyDisplayer(
+                              amountToConvert: exchangeRateSnapshot.data ?? 0,
+                              integerStyle: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                color: fgColor,
+                              ),
+                              followPrivateMode: false,
+                            ),
+                          ],
+                        ),
+                      ],
+                    );
+
+                    return AnimatedSizeSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      enabled: false,
+                      child: !shouldHide
+                          ? valueInPrefCurrencyIndicator
+                          : const SizedBox.shrink(),
+                    );
+                  },
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

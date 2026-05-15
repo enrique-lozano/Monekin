@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
 import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
@@ -84,23 +82,6 @@ List<Widget> transactionFormDetailsSections(
     _formSectionHeader(context, t.transaction.form.extra_info_section),
     _formCard(context, children: extraChildren),
   ];
-}
-
-Widget transactionFormInvestmentAmountHeader(
-  BuildContext context,
-  TransactionFormController c,
-) {
-  return TransactionAmountDisplay(
-    transactionType: c.transactionType,
-    transactionValue: c.transactionValue,
-    fromAccount: c.fromAccount,
-    displayCurrencyOverride: c.asset?.currency,
-    accentColor: c.investmentAccent(context),
-    mathIconOverride: c.investmentIsBuy
-        ? TransactionType.income.icon
-        : TransactionType.expense.icon,
-    onTap: () => c.openAmountSelectorSheet(context),
-  );
 }
 
 Widget _formSectionHeader(BuildContext context, String label) {
