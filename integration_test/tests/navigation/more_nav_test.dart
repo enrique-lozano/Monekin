@@ -17,7 +17,7 @@ import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/tags/tag_form_page.dart';
 import 'package:monekin/app/tags/tag_list.page.dart';
-import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
+import 'package:monekin/app/transactions/list/recurrent_transactions_page.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 import '../helpers.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';

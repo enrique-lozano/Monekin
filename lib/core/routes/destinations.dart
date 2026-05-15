@@ -3,7 +3,7 @@ import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/settings/more_actions.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
+import 'package:monekin/app/transactions/list/transactions.page.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 

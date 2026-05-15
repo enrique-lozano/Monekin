@@ -4,9 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/label_value_info_table.dart';
-import 'package:monekin/app/transactions/utils/show_pay_modal.dart';
-import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
+import 'package:monekin/core/presentation/widgets/label_value_info_table.dart';
+import 'package:monekin/app/transactions/details/utils/show_pay_modal.dart';
+import 'package:monekin/app/transactions/details/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
@@ -34,8 +34,8 @@ import 'package:monekin/core/services/view-actions/transaction_view_actions_serv
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../core/models/transaction/transaction_type.enum.dart';
-import '../../core/presentation/app_colors.dart';
+import '../../../core/models/transaction/transaction_type.enum.dart';
+import '../../../core/presentation/app_colors.dart';
 
 class TransactionDetailAction {
   final String label;

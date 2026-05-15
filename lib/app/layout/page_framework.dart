@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/animate_fab.dart';
+import 'package:monekin/core/presentation/animations/animate_fab.dart';
 import 'package:monekin/core/presentation/helpers/empty_app_bar.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/app/transactions/transaction_details.page.dart';
+import 'package:monekin/app/transactions/details/transaction_details.page.dart';
 import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -20,7 +20,7 @@ import 'package:monekin/core/services/view-actions/transaction_view_actions_serv
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../../core/presentation/app_colors.dart';
+import '../../../../core/presentation/app_colors.dart';
 
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile({
