@@ -93,6 +93,9 @@ class TransactionFormController extends ChangeNotifier {
   Asset? _asset;
   bool _updateValuations = false;
 
+  /// Buy vs sell for asset trades (editable in the form; seeded from [AssetTradeFormContext] or the row being edited).
+  bool _investmentIsBuy = true;
+
   TextEditingController get amountTextController => _amountTextController;
 
   bool get isEditMode => _transactionToEdit != null;
@@ -108,16 +111,14 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   bool get investmentIsBuy {
-    final ctx = _assetTradeContext;
-    if (ctx != null) return ctx.isBuy;
-    final edit = _transactionToEdit;
-    if (edit != null &&
-        edit.type == TransactionType.investment &&
-        edit.assetID != null &&
-        edit.assetID!.isNotEmpty) {
-      return edit.value.isNegative;
-    }
-    return true;
+    if (!isAssetTradeInvestment) return true;
+    return _investmentIsBuy;
+  }
+
+  void setInvestmentIsBuy(bool buy) {
+    if (!isAssetTradeInvestment || buy == _investmentIsBuy) return;
+    _investmentIsBuy = buy;
+    _safeNotify();
   }
 
   Asset? get asset => _asset;
@@ -144,11 +145,13 @@ class TransactionFormController extends ChangeNotifier {
       transactionType = TransactionType.investment;
       final edit = _transactionToEdit;
       if (edit != null) {
+        _investmentIsBuy = edit.value.isNegative;
         _fillForm(edit);
         unawaited(_loadInvestmentAsset());
         return;
       }
       _asset = _assetTradeContext?.asset;
+      _investmentIsBuy = _assetTradeContext?.isBuy ?? true;
       return;
     }
 
@@ -218,6 +221,7 @@ class TransactionFormController extends ChangeNotifier {
     if (prefillUv != null) {
       _updateValuations = prefillUv;
     }
+    syncAmountFieldFromTransactionValue();
     _safeNotify();
   }
 
@@ -246,7 +250,7 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void _onAmountFieldTextChanged() {
-    if (isAssetTradeInvestment || _amountFieldSyncGuard) return;
+    if (_amountFieldSyncGuard) return;
     final raw = _amountTextController.text.trim().replaceAll(',', '.');
     if (raw.isEmpty) {
       if (transactionValue != 0) {
@@ -266,7 +270,6 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void syncAmountFieldFromTransactionValue() {
-    if (isAssetTradeInvestment) return;
     _amountFieldSyncGuard = true;
     final v = transactionValue.abs();
     if (v == 0) {
@@ -755,9 +758,7 @@ class TransactionFormController extends ChangeNotifier {
 
   void applyAmountFromSelector(double amount) {
     transactionValue = isAssetTradeInvestment ? amount.abs() : amount;
-    if (!isAssetTradeInvestment) {
-      syncAmountFieldFromTransactionValue();
-    }
+    syncAmountFieldFromTransactionValue();
     _safeNotify();
   }
 

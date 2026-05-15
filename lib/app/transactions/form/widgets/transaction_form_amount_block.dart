@@ -4,13 +4,11 @@ import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
-import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -27,12 +25,61 @@ class TransactionFormTypeSegmented extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (controller.isAssetTradeInvestment) {
-      return const SizedBox.shrink();
-    }
     final c = controller;
+    if (c.isAssetTradeInvestment) {
+      final t = Translations.of(context);
+      final accent = c.investmentAccent(context);
+      final onAccent = accent.getContrastColor();
+      return Padding(
+        padding: padding,
+        child: SizedBox(
+          width: double.infinity,
+          child: SegmentedButton<bool>(
+            segments: [
+              ButtonSegment<bool>(
+                value: true,
+                label: Text(t.assets.details.buy),
+              ),
+              ButtonSegment<bool>(
+                value: false,
+                label: Text(t.assets.details.sell),
+              ),
+            ],
+            selected: {c.investmentIsBuy},
+            onSelectionChanged: (next) {
+              final v = next.firstOrNull;
+              if (v == null) return;
+              final t = Translations.of(context);
+              final buyL = t.assets.details.buy;
+              final sellL = t.assets.details.sell;
+              final cur = c.titleController.text.trim();
+              if (cur.isEmpty || cur == buyL || cur == sellL) {
+                c.titleController.text = v ? buyL : sellL;
+              }
+              c.setInvestmentIsBuy(v);
+            },
+            showSelectedIcon: false,
+            style: ButtonStyle(
+              animationDuration: const Duration(milliseconds: 250),
+              side: WidgetStateProperty.resolveWith(
+                (s) => const BorderSide(style: BorderStyle.none, width: 0),
+              ),
+              foregroundColor: WidgetStateProperty.resolveWith(
+                (s) => s.contains(WidgetState.selected)
+                    ? onAccent
+                    : AppColors.of(context).textBody,
+              ),
+              backgroundColor: WidgetStateProperty.resolveWith(
+                (s) => s.contains(WidgetState.selected)
+                    ? accent
+                    : Theme.of(context).colorScheme.surfaceContainerHigh,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
     final selectedColor = c.transactionType.color(context);
-    final fg = c.foregroundColor(context);
     final types = [
       TransactionType.income,
       TransactionType.expense,
@@ -207,11 +254,13 @@ class TransactionFormAmountBlock extends StatelessWidget {
     BuildContext context,
     TransactionFormController c,
   ) {
-    if (c.isAssetTradeInvestment) {
-      return _investmentAmountSurface(context, c);
-    }
-    final baseColor = c.transactionType.color(context);
+    final inv = c.isAssetTradeInvestment;
+    final baseColor = inv
+        ? c.investmentAccent(context)
+        : c.transactionType.color(context);
     final ctrl = c.amountTextController;
+    final cur = c.amountDisplayCurrency ?? c.fromAccount?.currency;
+    final decimals = cur?.decimalPlaces ?? 2;
     double fontSize = 48;
     switch (ctrl.text.length) {
       case > 8:
@@ -237,7 +286,15 @@ class TransactionFormAmountBlock extends StatelessWidget {
               color: c.foregroundColor(context),
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Icon(c.transactionType.mathIcon, color: baseColor, size: 24),
+            child: Icon(
+              inv
+                  ? (c.investmentIsBuy
+                        ? TransactionType.income.mathIcon
+                        : TransactionType.expense.mathIcon)
+                  : c.transactionType.mathIcon,
+              color: baseColor,
+              size: 24,
+            ),
           ),
           Flexible(
             child: IntrinsicWidth(
@@ -256,7 +313,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
                       decimal: true,
                     ),
                     inputFormatters: decimalDigitFormatter(
-                      c.fromAccount?.currency.decimalPlaces ?? 2,
+                      decimals,
                       allowNegative: true,
                     ),
                     style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -272,7 +329,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
                       border: InputBorder.none,
                       hintText: '0',
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      prefixText: c.fromAccount?.currency.symbol,
+                      prefixText: cur?.symbol,
                       suffixText: ctrl.text.endsWith('.') ? '00' : null,
                     ),
                   ),
@@ -286,129 +343,6 @@ class TransactionFormAmountBlock extends StatelessWidget {
             icon: const Icon(Icons.calculate),
           ),
         ],
-      ),
-    );
-  }
-
-  /// Tappable summary for asset buy/sell (amount is edited via sheet, not the text field).
-  static Widget _investmentAmountSurface(
-    BuildContext context,
-    TransactionFormController c, {
-    double mainContainerRadius = 12,
-  }) {
-    final baseColor = c.investmentAccent(context);
-    final fgColor = baseColor.getContrastColor();
-    final transactionValue = c.transactionValue;
-    final fromAccount = c.fromAccount;
-    final displayCurrencyOverride = c.asset?.currency;
-
-    return Tappable(
-      bgColor: baseColor.withOpacity(0.85),
-      onTap: () => c.openAmountSelectorSheet(context),
-      borderRadius: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
-          ? BorderRadius.only(
-              topLeft: Radius.circular(mainContainerRadius),
-              topRight: Radius.circular(mainContainerRadius),
-            )
-          : null,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-        child: DefaultTextStyle(
-          style: TextStyle(color: fgColor),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconDisplayer(
-                    key: ValueKey<int>(
-                      Object.hash(c.investmentIsBuy, baseColor),
-                    ),
-                    mainColor: baseColor,
-                    secondaryColor: fgColor,
-                    padding: 2,
-                    borderRadius: 4,
-                    icon: c.investmentIsBuy
-                        ? TransactionType.income.icon
-                        : TransactionType.expense.icon,
-                  ),
-                  const SizedBox(width: 12),
-                  Flexible(
-                    child: Builder(
-                      builder: (context) {
-                        final fontSize = transactionValue >= 1000
-                            ? transactionValue >= 1000000
-                                  ? 28.0
-                                  : 34.0
-                            : 38.0;
-                        final bigTextStyle = TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: fgColor,
-                          fontSize: fontSize,
-                        );
-
-                        return CurrencyDisplayer(
-                          amountToConvert: transactionValue,
-                          currency:
-                              displayCurrencyOverride ?? fromAccount?.currency,
-                          currencyStyle: bigTextStyle,
-                          integerStyle: bigTextStyle,
-                          followPrivateMode: false,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              if (fromAccount != null && displayCurrencyOverride == null)
-                StreamBuilder<double>(
-                  stream: ExchangeRateService.instance
-                      .calculateExchangeRateToPreferredCurrency(
-                        fromCurrency: fromAccount.currency.code,
-                        amount: transactionValue,
-                      ),
-                  builder: (context, exchangeRateSnapshot) {
-                    final shouldHide =
-                        !exchangeRateSnapshot.hasData ||
-                        exchangeRateSnapshot.data! == transactionValue;
-
-                    final valueInPrefCurrencyIndicator = Column(
-                      children: [
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const Icon(
-                              Icons.swap_horizontal_circle_rounded,
-                              size: 14,
-                            ),
-                            const SizedBox(width: 4),
-                            CurrencyDisplayer(
-                              amountToConvert: exchangeRateSnapshot.data ?? 0,
-                              integerStyle: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                color: fgColor,
-                              ),
-                              followPrivateMode: false,
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-
-                    return AnimatedSizeSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      enabled: false,
-                      child: !shouldHide
-                          ? valueInPrefCurrencyIndicator
-                          : const SizedBox.shrink(),
-                    );
-                  },
-                ),
-            ],
-          ),
-        ),
       ),
     );
   }
