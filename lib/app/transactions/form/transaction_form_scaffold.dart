@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_account_selector_row.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_account_category_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_details_sections.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -34,7 +34,7 @@ class TransactionFormScaffold extends StatelessWidget {
           showValueIndicator,
         );
 
-        final accountBlock = TransactionAccountSelectorRow(form: c);
+        final accountBlock = TransactionAccountCategorySelector(form: c);
 
         final mdLeadingColumn = _paddedColumn(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),

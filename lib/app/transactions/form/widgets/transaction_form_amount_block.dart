@@ -118,6 +118,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
   ) {
     final from = c.fromAccount;
     final displayCurrency = c.amountDisplayCurrency ?? from?.currency;
+
     if (from == null || displayCurrency == null) {
       return const SizedBox.shrink();
     }

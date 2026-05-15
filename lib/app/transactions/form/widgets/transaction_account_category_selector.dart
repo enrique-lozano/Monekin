@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 enum _CardPosition { single, left, right }
 
-class TransactionAccountSelectorRow extends StatelessWidget {
-  const TransactionAccountSelectorRow({super.key, required this.form});
+/// Account and category selector for the transaction form.
+/// Displays differently for transfer vs other transaction types.
+class TransactionAccountCategorySelector extends StatelessWidget {
+  const TransactionAccountCategorySelector({super.key, required this.form});
 
   final TransactionFormController form;
 
@@ -38,7 +38,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             position: _CardPosition.single,
             title: t.transfer.form.from,
             value: fromAccount?.name,
-            subtitle: _buildAccountSubtitle(fromAccount),
             leading:
                 fromAccount?.displayIcon(context) ??
                 IconDisplayer(
@@ -63,7 +62,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     position: _CardPosition.single,
                     title: t.transfer.form.to,
                     value: transferAccount?.name,
-                    subtitle: _buildAccountSubtitle(transferAccount),
                     leading:
                         transferAccount?.displayIcon(context) ??
                         IconDisplayer(
@@ -109,7 +107,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
               position: _CardPosition.left,
               title: t.general.account,
               value: fromAccount?.name,
-              subtitle: _buildAccountSubtitle(fromAccount),
               leading:
                   fromAccount?.displayIcon(context) ??
                   IconDisplayer(
@@ -127,8 +124,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     position: _CardPosition.right,
                     title: t.assets.details.trade_form_asset_column,
                     value: investmentAssetName,
-                    subtitle: null,
-                    leading: null,
                     onTap: () {},
                     showChevron: false,
                   )
@@ -141,7 +136,6 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                       position: _CardPosition.right,
                       title: t.general.category,
                       value: selectedCategory?.name,
-                      subtitle: null,
                       leading: IconDisplayer.fromCategory(
                         context,
                         category:
@@ -157,25 +151,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
       ),
     );
   }
-
-  Widget _buildAccountSubtitle(Account? account) {
-    if (account == null) return const SizedBox.shrink();
-
-    return StreamBuilder<double>(
-      initialData: 0,
-      stream: AccountService.instance.getAccountMoney(account: account),
-      builder: (context, snapshot) {
-        return CurrencyDisplayer(
-          amountToConvert: snapshot.data ?? 0,
-          currency: account.currency,
-          compactView: (snapshot.data ?? 0).abs() >= 10000000,
-        );
-      },
-    );
-  }
 }
-
-const _kSubtitleSlotHeight = 24.0;
 
 class _AccountCard extends StatelessWidget {
   const _AccountCard({
@@ -221,61 +197,56 @@ class _AccountCard extends StatelessWidget {
     final theme = Theme.of(context);
     final onSurfaceVariant = theme.colorScheme.onSurfaceVariant;
 
-    return Material(
-      color: theme.colorScheme.surfaceContainerHigh,
-      elevation: 0,
-      shadowColor: Colors.transparent,
+    return Tappable(
+      onTap: () {
+        unfocusCurrentFocusedItem(context);
+        onTap();
+      },
       shape: RoundedRectangleBorder(borderRadius: _borderRadius),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {
-          unfocusCurrentFocusedItem(context);
-          onTap();
-        },
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (leading != null) ...[leading!, const SizedBox(width: 10)],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          title,
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: onSurfaceVariant,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+      bgColor: theme.colorScheme.surfaceContainerHigh,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 12, 8, 8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (leading != null) ...[leading!, const SizedBox(width: 10)],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: onSurfaceVariant,
+                          fontWeight: FontWeight.w500,
                         ),
-
-                        if (showChevron)
-                          Icon(
-                            Icons.expand_more_rounded,
-                            color: onSurfaceVariant,
-                            size: 16,
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      value ?? t.general.unspecified,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
+
+                      if (showChevron)
+                        Icon(
+                          Icons.expand_more_rounded,
+                          color: onSurfaceVariant,
+                          size: 16,
+                        ),
+                    ],
+                  ),
+                  Text(
+                    value ?? t.general.unspecified,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 6),
+                  ),
+                  SizedBox(height: subtitle != null ? 2 : 6),
+                  if (subtitle != null)
                     SizedBox(
-                      height: _kSubtitleSlotHeight,
                       width: double.infinity,
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -287,11 +258,10 @@ class _AccountCard extends StatelessWidget {
                             : const SizedBox.shrink(),
                       ),
                     ),
-                  ],
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
