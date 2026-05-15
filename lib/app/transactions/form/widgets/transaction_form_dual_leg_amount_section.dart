@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
@@ -14,7 +17,8 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-/// Transfer / asset trade: one bordered card with both legs, swap, and FX.
+/// Transfer / asset trade: two bordered cards (source / destination) with
+/// amounts, optional FX between them, and insufficient-balance warning.
 class TransactionFormDualLegAmountSection extends StatelessWidget {
   const TransactionFormDualLegAmountSection({
     super.key,
@@ -56,8 +60,8 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
   }
 }
 
-class _OutlinedFlowCard extends StatelessWidget {
-  const _OutlinedFlowCard({
+class _DualLegCard extends StatelessWidget {
+  const _DualLegCard({
     required this.borderColor,
     required this.child,
   });
@@ -74,7 +78,10 @@ class _OutlinedFlowCard extends StatelessWidget {
         borderRadius: BorderRadius.all(inputBorderRadius),
         border: Border.all(color: borderColor.withOpacity(0.65), width: 1.2),
       ),
-      child: child,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        child: child,
+      ),
     );
   }
 }
@@ -90,37 +97,33 @@ class _TransferDualLegBody extends StatelessWidget {
     final from = c.fromAccount;
     final to = c.transferAccount;
     final scheme = Theme.of(context).colorScheme;
-    final dividerColor = scheme.outlineVariant.withOpacity(0.45);
 
     if (from == null || to == null) {
-      return _OutlinedFlowCard(
-        borderColor: scheme.primary,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _DualLegCard(
+            borderColor: scheme.primary,
+            child: _AccountLegHeader(
+              account: from,
+              onTapAccount: () => c.pickFromAccount(context),
+            ),
+          ),
+          const SizedBox(height: 8),
+          ShakeWidget(
+            duration: const Duration(milliseconds: 200),
+            shakeCount: 1,
+            shakeOffset: 10,
+            key: c.shakeKey,
+            child: _DualLegCard(
+              borderColor: scheme.primary,
               child: _AccountLegHeader(
-                account: from,
-                onTapAccount: () => c.pickFromAccount(context),
+                account: to,
+                onTapAccount: () => c.pickTransferAccount(context),
               ),
             ),
-            Divider(height: 1, thickness: 1, color: dividerColor),
-            ShakeWidget(
-              duration: const Duration(milliseconds: 200),
-              shakeCount: 1,
-              shakeOffset: 10,
-              key: c.shakeKey,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
-                child: _AccountLegHeader(
-                  account: to,
-                  onTapAccount: () => c.pickTransferAccount(context),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
@@ -149,97 +152,94 @@ class _TransferDualLegBody extends StatelessWidget {
           defaultDest,
         );
 
-        return _OutlinedFlowCard(
-          borderColor: scheme.primary,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _DualLegCard(
+              borderColor: scheme.primary,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _AccountLegHeader(
+                    account: from,
+                    onTapAccount: () => c.pickFromAccount(context),
+                    subtitle: _AccountCurrentBalanceSubtitle(account: from),
+                  ),
+                  const SizedBox(height: 10),
+                  _LegAmountRow(
+                    isOutflow: true,
+                    currency: from.currency,
+                    amount: c.transactionValue.abs(),
+                    onTapAmount: () =>
+                        c.openTransferSourceAmountSelector(context),
+                    showReset: sourceMismatch,
+                    onReset: sourceMismatch
+                        ? () => c.alignTransferSourceFromInverseConverted(
+                            expectedSource,
+                          )
+                        : null,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  IconButton.filledTonal(
+                    style: IconButton.styleFrom(
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: c.swapTransferAccounts,
+                    icon: const Icon(Icons.arrow_downward_rounded),
+                    tooltip: Translations.of(context).transfer.display,
+                  ),
+                  if (differentCurrency) ...[
+                    const Spacer(),
+                    _FxChip(
+                      fromCode: from.currency.code,
+                      toCode: to.currency.code,
+                      date: c.date,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            ShakeWidget(
+              duration: const Duration(milliseconds: 200),
+              shakeCount: 1,
+              shakeOffset: 10,
+              key: c.shakeKey,
+              child: _DualLegCard(
+                borderColor: scheme.primary,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _AccountLegHeader(
-                      account: from,
-                      onTapAccount: () => c.pickFromAccount(context),
+                      account: to,
+                      onTapAccount: () => c.pickTransferAccount(context),
+                      subtitle: _AccountCurrentBalanceSubtitle(account: to),
                     ),
                     const SizedBox(height: 10),
                     _LegAmountRow(
-                      isOutflow: true,
-                      currency: from.currency,
-                      amount: c.transactionValue.abs(),
+                      isOutflow: false,
+                      currency: to.currency,
+                      amount: destDisplay,
                       onTapAmount: () =>
-                          c.openTransferSourceAmountSelector(context),
-                      showReset: sourceMismatch,
-                      onReset: sourceMismatch
-                          ? () => c.alignTransferSourceFromInverseConverted(
-                              expectedSource,
-                            )
+                          c.openTransferDestinationAmountSelector(
+                            context,
+                            defaultDestinationAmount: defaultDest,
+                          ),
+                      showReset: destMismatch,
+                      onReset: destMismatch
+                          ? c.clearTransferDestinationOverride
                           : null,
                     ),
                   ],
                 ),
               ),
-              Divider(height: 1, thickness: 1, color: dividerColor),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Row(
-                  children: [
-                    IconButton.filledTonal(
-                      style: IconButton.styleFrom(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      onPressed: c.swapTransferAccounts,
-                      icon: const Icon(Icons.arrow_downward_rounded),
-                      tooltip: Translations.of(context).transfer.display,
-                    ),
-                    if (differentCurrency) ...[
-                      const Spacer(),
-                      _FxChip(
-                        fromCode: from.currency.code,
-                        toCode: to.currency.code,
-                        date: c.date,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              Divider(height: 1, thickness: 1, color: dividerColor),
-              ShakeWidget(
-                duration: const Duration(milliseconds: 200),
-                shakeCount: 1,
-                shakeOffset: 10,
-                key: c.shakeKey,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _AccountLegHeader(
-                        account: to,
-                        onTapAccount: () => c.pickTransferAccount(context),
-                      ),
-                      const SizedBox(height: 10),
-                      _LegAmountRow(
-                        isOutflow: false,
-                        currency: to.currency,
-                        amount: destDisplay,
-                        onTapAmount: () =>
-                            c.openTransferDestinationAmountSelector(
-                              context,
-                              defaultDestinationAmount: defaultDest,
-                            ),
-                        showReset: destMismatch,
-                        onReset: destMismatch
-                            ? c.clearTransferDestinationOverride
-                            : null,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -261,82 +261,168 @@ class _InvestmentDualLegBody extends StatelessWidget {
     final topOut = c.investmentIsBuy;
     final displayCurrency =
         c.amountDisplayCurrency ?? from?.currency ?? asset?.currency;
-    final dividerColor = scheme.outlineVariant.withOpacity(0.45);
 
     final differentCurrency = from != null &&
         asset != null &&
         from.currency.code != asset.currency.code;
 
-    return _OutlinedFlowCard(
-      borderColor: accent,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _AccountLegHeader(
-                  account: from,
-                  onTapAccount: () => c.pickFromAccount(context),
-                ),
-                const SizedBox(height: 10),
-                _LegAmountRow(
-                  isOutflow: topOut,
-                  currency: from?.currency,
-                  amount: c.transactionValue.abs(),
-                  onTapAmount: () => c.openInvestmentAmountSelector(context),
-                  showReset: false,
-                  onReset: null,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _DualLegCard(
+          borderColor: accent,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _AccountLegHeader(
+                account: from,
+                onTapAccount: () => c.pickFromAccount(context),
+                subtitle: from != null
+                    ? _AccountCurrentBalanceSubtitle(account: from)
+                    : null,
+              ),
+              const SizedBox(height: 10),
+              _LegAmountRow(
+                isOutflow: topOut,
+                currency: from?.currency,
+                amount: c.transactionValue.abs(),
+                onTapAmount: () => c.openInvestmentAmountSelector(context),
+                showReset: false,
+                onReset: null,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
+            children: [
+              Icon(
+                Icons.arrow_downward_rounded,
+                color: scheme.onSurfaceVariant,
+              ),
+              if (differentCurrency) ...[
+                const Spacer(),
+                _FxChip(
+                  fromCode: from.currency.code,
+                  toCode: asset.currency.code,
+                  date: c.date,
                 ),
               ],
+            ],
+          ),
+        ),
+        _DualLegCard(
+          borderColor: accent,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _AssetLegHeader(
+                assetName: asset?.name,
+                subtitle: asset != null
+                    ? _AssetBookedValueSubtitle(
+                        asset: asset,
+                        date: c.date,
+                      )
+                    : null,
+              ),
+              const SizedBox(height: 10),
+              _LegAmountRow(
+                isOutflow: !topOut,
+                currency: displayCurrency,
+                amount: c.transactionValue.abs(),
+                onTapAmount: () => c.openInvestmentAmountSelector(context),
+                showReset: false,
+                onReset: null,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AccountCurrentBalanceSubtitle extends StatelessWidget {
+  const _AccountCurrentBalanceSubtitle({required this.account});
+
+  final Account account;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final theme = Theme.of(context);
+    final muted = theme.colorScheme.onSurfaceVariant;
+
+    return StreamBuilder<double>(
+      initialData: 0,
+      stream: AccountService.instance.getAccountMoney(account: account),
+      builder: (context, snap) {
+        final bal = snap.data ?? 0;
+        final formatted = UINumberFormatter.currency(
+          amountToConvert: bal,
+          currency: account.currency,
+          showDecimals: true,
+        ).getFormattedAmount();
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            '${t.account.form.current_balance}: $formatted',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: muted,
+              fontWeight: FontWeight.w500,
             ),
           ),
-          Divider(height: 1, thickness: 1, color: dividerColor),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.arrow_downward_rounded,
-                  color: scheme.onSurfaceVariant,
-                ),
-                if (differentCurrency) ...[
-                  const Spacer(),
-                  _FxChip(
-                    fromCode: from.currency.code,
-                    toCode: asset.currency.code,
-                    date: c.date,
-                  ),
-                ],
-              ],
-            ),
-          ),
-          Divider(height: 1, thickness: 1, color: dividerColor),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _AssetLegHeader(
-                  assetName: asset?.name,
-                  currency: asset?.currency,
-                ),
-                const SizedBox(height: 10),
-                _LegAmountRow(
-                  isOutflow: !topOut,
-                  currency: displayCurrency,
-                  amount: c.transactionValue.abs(),
-                  onTapAmount: () => c.openInvestmentAmountSelector(context),
-                  showReset: false,
-                  onReset: null,
-                ),
-              ],
-            ),
-          ),
-        ],
+        );
+      },
+    );
+  }
+}
+
+class _AssetBookedValueSubtitle extends StatelessWidget {
+  const _AssetBookedValueSubtitle({
+    required this.asset,
+    required this.date,
+  });
+
+  final Asset asset;
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final theme = Theme.of(context);
+    final muted = theme.colorScheme.onSurfaceVariant;
+
+    return StreamBuilder<double>(
+      stream: InvestmentService.instance.getAssetValueAtDate(
+        asset,
+        date: date,
       ),
+      builder: (context, snap) {
+        final value = snap.data ?? asset.initialValue;
+        final formatted = UINumberFormatter.currency(
+          amountToConvert: value,
+          currency: asset.currency,
+          showDecimals: true,
+        ).getFormattedAmount();
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            '${t.assets.details.trade_sheet_valuation_current_value_label}: $formatted',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: muted,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -387,10 +473,15 @@ class _FxChip extends StatelessWidget {
 }
 
 class _AccountLegHeader extends StatelessWidget {
-  const _AccountLegHeader({required this.account, required this.onTapAccount});
+  const _AccountLegHeader({
+    required this.account,
+    required this.onTapAccount,
+    this.subtitle,
+  });
 
   final Account? account;
   final VoidCallback onTapAccount;
+  final Widget? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -406,7 +497,7 @@ class _AccountLegHeader extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       bgColor: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 2),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -418,21 +509,32 @@ class _AccountLegHeader extends StatelessWidget {
                 ),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(
-                account != null
-                    ? '${account!.name} • ${account!.currency.symbol}'
-                    : t.general.unspecified,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          account?.name ?? t.general.unspecified,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.expand_more_rounded,
+                        color: scheme.onSurfaceVariant,
+                        size: 20,
+                      ),
+                    ],
+                  ),
+                  if (subtitle != null) subtitle!,
+                ],
               ),
-            ),
-            Icon(
-              Icons.expand_more_rounded,
-              color: scheme.onSurfaceVariant,
-              size: 20,
             ),
           ],
         ),
@@ -442,21 +544,24 @@ class _AccountLegHeader extends StatelessWidget {
 }
 
 class _AssetLegHeader extends StatelessWidget {
-  const _AssetLegHeader({required this.assetName, required this.currency});
+  const _AssetLegHeader({
+    required this.assetName,
+    this.subtitle,
+  });
 
   final String? assetName;
-  final CurrencyInDB? currency;
+  final Widget? subtitle;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final name = assetName ?? '…';
-    final curLabel = currency?.symbol ?? '';
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           IconDisplayer(
             displayMode: IconDisplayMode.polygon,
@@ -465,13 +570,19 @@ class _AssetLegHeader extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Expanded(
-            child: Text(
-              curLabel.isEmpty ? name : '$name • $curLabel',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.titleSmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (subtitle != null) subtitle!,
+              ],
             ),
           ),
         ],
