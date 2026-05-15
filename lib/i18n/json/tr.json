@@ -396,7 +396,8 @@
       "description-info": "Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun",
       "exchange-to-preferred-title": "{{ currency }} için kur",
       "exchange-to-preferred-in-date": "İşlem tarihinde",
-      "extra-info-section": "Ek bilgi"
+      "extra-info-section": "Ek bilgi",
+      "negative-balance-warning": "Bu tutar, seçilen hesabın güncel bakiyesinden yüksek. Kaydettiğinizde bakiye negatife dönebilir ve istatistikler etkilenebilir."
     },
     "REVERSED": {
       "title": "Ters işlem",

@@ -396,7 +396,8 @@
       "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date",
-      "extra-info-section": "Extra info"
+      "extra-info-section": "Extra info",
+      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics."
     },
     "REVERSED": {
       "title": "Inverse transaction",

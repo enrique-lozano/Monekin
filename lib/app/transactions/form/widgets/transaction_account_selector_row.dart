@@ -72,31 +72,34 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: ShakeWidget(
-                  duration: const Duration(milliseconds: 200),
-                  shakeCount: 1,
-                  shakeOffset: 10,
-                  key: shakeKey,
-                  child: _AccountCard(
-                    position: _CardPosition.single,
-                    title: t.transfer.form.to,
-                    value: transferAccount?.name,
-                    subtitle: _buildAccountSubtitle(transferAccount),
-                    leading:
-                        transferAccount?.displayIcon(context) ??
-                        IconDisplayer(
-                          displayMode: IconDisplayMode.polygon,
-                          icon: Icons.question_mark_rounded,
-                          mainColor: theme.colorScheme.primary,
-                        ),
-                    onTap: onTransferAccountTap,
+              Transform.translate(
+                offset: const Offset(0, -10),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: ShakeWidget(
+                    duration: const Duration(milliseconds: 200),
+                    shakeCount: 1,
+                    shakeOffset: 10,
+                    key: shakeKey,
+                    child: _AccountCard(
+                      position: _CardPosition.single,
+                      title: t.transfer.form.to,
+                      value: transferAccount?.name,
+                      subtitle: _buildAccountSubtitle(transferAccount),
+                      leading:
+                          transferAccount?.displayIcon(context) ??
+                          IconDisplayer(
+                            displayMode: IconDisplayMode.polygon,
+                            icon: Icons.question_mark_rounded,
+                            mainColor: theme.colorScheme.primary,
+                          ),
+                      onTap: onTransferAccountTap,
+                    ),
                   ),
                 ),
               ),
               Positioned(
-                top: 0,
+                top: -4,
                 child: Material(
                   elevation: 3,
                   shape: const CircleBorder(),
@@ -118,61 +121,63 @@ class TransactionAccountSelectorRow extends StatelessWidget {
       );
     }
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: _AccountCard(
-            position: _CardPosition.left,
-            title: t.general.account,
-            value: fromAccount?.name,
-            subtitle: _buildAccountSubtitle(fromAccount),
-            leading:
-                fromAccount?.displayIcon(context) ??
-                IconDisplayer(
-                  displayMode: IconDisplayMode.polygon,
-                  icon: Icons.question_mark_rounded,
-                  mainColor: theme.colorScheme.primary,
-                ),
-            onTap: onFromAccountTap,
-          ),
-        ),
-        const SizedBox(width: 2),
-        Expanded(
-          child: transactionType.isInvestment && investmentAssetName != null
-              ? _AccountCard(
-                  position: _CardPosition.right,
-                  title:
-                      investmentAssetColumnTitle ??
-                      t.assets.details.trade_form_asset_column,
-                  value: investmentAssetName,
-                  subtitle: null,
-                  leading: investmentAssetLeading,
-                  onTap: () {},
-                  showChevron: false,
-                )
-              : ShakeWidget(
-                  duration: const Duration(milliseconds: 200),
-                  shakeCount: 1,
-                  shakeOffset: 10,
-                  key: shakeKey,
-                  child: _AccountCard(
-                    position: _CardPosition.right,
-                    title: t.general.category,
-                    value: selectedCategory?.name,
-                    subtitle: null,
-                    leading: IconDisplayer.fromCategory(
-                      context,
-                      category:
-                          selectedCategory ??
-                          Category.fromDB(Category.unkown(), null),
-                      size: 24,
-                    ),
-                    onTap: onCategoryTap,
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: _AccountCard(
+              position: _CardPosition.left,
+              title: t.general.account,
+              value: fromAccount?.name,
+              subtitle: _buildAccountSubtitle(fromAccount),
+              leading:
+                  fromAccount?.displayIcon(context) ??
+                  IconDisplayer(
+                    displayMode: IconDisplayMode.polygon,
+                    icon: Icons.question_mark_rounded,
+                    mainColor: theme.colorScheme.primary,
                   ),
-                ),
-        ),
-      ],
+              onTap: onFromAccountTap,
+            ),
+          ),
+          const SizedBox(width: 2),
+          Expanded(
+            child: transactionType.isInvestment && investmentAssetName != null
+                ? _AccountCard(
+                    position: _CardPosition.right,
+                    title:
+                        investmentAssetColumnTitle ??
+                        t.assets.details.trade_form_asset_column,
+                    value: investmentAssetName,
+                    subtitle: null,
+                    leading: investmentAssetLeading,
+                    onTap: () {},
+                    showChevron: false,
+                  )
+                : ShakeWidget(
+                    duration: const Duration(milliseconds: 200),
+                    shakeCount: 1,
+                    shakeOffset: 10,
+                    key: shakeKey,
+                    child: _AccountCard(
+                      position: _CardPosition.right,
+                      title: t.general.category,
+                      value: selectedCategory?.name,
+                      subtitle: null,
+                      leading: IconDisplayer.fromCategory(
+                        context,
+                        category:
+                            selectedCategory ??
+                            Category.fromDB(Category.unkown(), null),
+                        size: 24,
+                      ),
+                      onTap: onCategoryTap,
+                    ),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -192,6 +197,8 @@ class TransactionAccountSelectorRow extends StatelessWidget {
     );
   }
 }
+
+const _kSubtitleSlotHeight = 24.0;
 
 class _AccountCard extends StatelessWidget {
   const _AccountCard({
@@ -289,13 +296,20 @@ class _AccountCard extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    if (subtitle != null) ...[
-                      const SizedBox(height: 6),
-                      DefaultTextStyle(
-                        style: theme.textTheme.bodySmall!,
-                        child: subtitle!,
+                    const SizedBox(height: 6),
+                    SizedBox(
+                      height: _kSubtitleSlotHeight,
+                      width: double.infinity,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: subtitle != null
+                            ? DefaultTextStyle(
+                                style: theme.textTheme.bodySmall!,
+                                child: subtitle!,
+                              )
+                            : const SizedBox.shrink(),
                       ),
-                    ],
+                    ),
                   ],
                 ),
               ),

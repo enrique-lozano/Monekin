@@ -396,7 +396,8 @@
       "description-info": "點擊此處輸入有關此交易的更詳細描述",
       "exchange-to-preferred-title": "匯率為{{currency}}",
       "exchange-to-preferred-in-date": "交易日",
-      "extra-info-section": "附加資訊"
+      "extra-info-section": "附加資訊",
+      "negative-balance-warning": "此金額高於所選帳戶的目前餘額。儲存後餘額將為負數，並可能影響統計。"
     },
     "REVERSED": {
       "title": "反向交易",

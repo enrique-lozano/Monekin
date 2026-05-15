@@ -399,7 +399,8 @@
       "description-info": "Toca aquí para escribir una descripción mas detallada sobre esta transacción",
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción",
-      "extra-info-section": "Información adicional"
+      "extra-info-section": "Información adicional",
+      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas."
     },
     "REVERSED": {
       "title": "Transacción invertida",

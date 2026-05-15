@@ -396,7 +396,8 @@
       "description-info": "Koppintson ide a tranzakció részletesebb leírásának megadásához.",
       "exchange-to-preferred-title": "{{ currency }} átváltási árfolyam",
       "exchange-to-preferred-in-date": "A tranzakció napján",
-      "extra-info-section": "További információk"
+      "extra-info-section": "További információk",
+      "negative-balance-warning": "Ez az összeg meghaladja a kiválasztott számla egyenlegét. Mentéskor negatív egyenleg keletkezhet, ami torzíthatja a statisztikákat."
     },
     "REVERSED": {
       "title": "Megfordított tranzakció",

@@ -396,7 +396,8 @@
       "description-info": "Touchez ici pour saisir une description plus détaillée de cette transaction",
       "exchange-to-preferred-title": "Taux de change vers {{ currency }}",
       "exchange-to-preferred-in-date": "À la date de la transaction",
-      "extra-info-section": "Informations complémentaires"
+      "extra-info-section": "Informations complémentaires",
+      "negative-balance-warning": "Ce montant dépasse le solde actuel du compte sélectionné. L’enregistrement produira un solde négatif et peut fausser les statistiques."
     },
     "REVERSED": {
       "title": "Transaction inversée",

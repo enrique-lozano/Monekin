@@ -395,6 +395,34 @@ class TransactionFormController extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
+  /// Net ledger effect of the draft on [fromAccount] (matches how balances aggregate rows).
+  double draftEffectOnFromAccountLedger() {
+    if (transactionType == TransactionType.expense) {
+      return transactionValue * -1;
+    }
+    if (transactionType == TransactionType.investment &&
+        isAssetTradeInvestment) {
+      final abs = transactionValue.abs();
+      return investmentIsBuy ? -abs : abs;
+    }
+    if (transactionType == TransactionType.transfer) {
+      return -transactionValue.abs();
+    }
+    return transactionValue;
+  }
+
+  /// Ledger effect of the row being edited on [fromAccount], if it matches the edited row's account.
+  double? get oldEffectOnFromAccountLedgerForEdit {
+    final edit = _transactionToEdit;
+    final from = fromAccount;
+    if (edit == null || from == null) return null;
+    if (edit.account.id != from.id) return null;
+    if (edit.type == TransactionType.transfer) {
+      return -edit.value;
+    }
+    return edit.value;
+  }
+
   void submitForm(BuildContext context) {
     if ((transactionType.isIncomeOrExpense && selectedCategory == null) ||
         (transactionType.isTransfer && transferAccount == null)) {

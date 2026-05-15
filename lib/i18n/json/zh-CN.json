@@ -396,7 +396,8 @@
       "description-info": "点击此处输入有关此交易的详细描述",
       "exchange-to-preferred-title": "汇率为{{currency}}",
       "exchange-to-preferred-in-date": "交易日",
-      "extra-info-section": "附加信息"
+      "extra-info-section": "附加信息",
+      "negative-balance-warning": "该金额高于所选账户的当前余额。保存后余额将为负，并可能影响统计数据。"
     },
     "REVERSED": {
       "title": "逆向交易",

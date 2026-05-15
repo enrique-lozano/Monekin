@@ -396,7 +396,8 @@
       "description-info": "Tippe hier, um eine detailliertere Beschreibung dieser Transaktion einzugeben",
       "exchange-to-preferred-title": "Wechselkurs zu {{ currency }}",
       "exchange-to-preferred-in-date": "Am Transaktionsdatum",
-      "extra-info-section": "Zusätzliche Infos"
+      "extra-info-section": "Zusätzliche Infos",
+      "negative-balance-warning": "Dieser Betrag übersteigt das aktuelle Guthaben des gewählten Kontos. Beim Speichern entsteht ein negatives Saldo, was die Statistiken verzerren kann."
     },
     "REVERSED": {
       "title": "Umgekehrte Transaktion",

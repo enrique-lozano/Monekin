@@ -6,19 +6,17 @@ import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_account_selector_row.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_amount_display.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
-import 'package:collection/collection.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/big_button_style.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +41,20 @@ class TransactionFormScaffold extends StatelessWidget {
         final mdLeadingColumn = _paddedColumn(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
           children: [
-            _amountAndTypeSection(context, c),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 24,
+              children: [
+                TransactionFormTypeSegmented(
+                  controller: c,
+                  padding: EdgeInsets.zero,
+                ),
+                TransactionFormAmountBlock(
+                  controller: c,
+                  padding: const EdgeInsets.only(bottom: 12),
+                ),
+              ],
+            ),
             if (c.isAssetTradeInvestment) _investmentAmountHeader(context, c),
             accountBlock,
             if (c.linkedDebt != null &&
@@ -60,7 +71,7 @@ class TransactionFormScaffold extends StatelessWidget {
         );
 
         final mobileScrollInner = <Widget>[
-          _amountOnlySection(context, c),
+          TransactionFormAmountBlock(controller: c),
           if (c.isAssetTradeInvestment) _investmentAmountHeader(context, c),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -127,8 +138,11 @@ class TransactionFormScaffold extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                      child: _typeSegmented(context, c),
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+                      child: TransactionFormTypeSegmented(
+                        controller: c,
+                        padding: EdgeInsets.zero,
+                      ),
                     ),
                     Expanded(
                       child: SingleChildScrollView(
@@ -146,20 +160,6 @@ class TransactionFormScaffold extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  /// Amount row only (used on mobile where type tabs sit above the scroll view).
-  static Widget _amountOnlySection(
-    BuildContext context,
-    TransactionFormController c,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-      child: ListenableBuilder(
-        listenable: c.amountTextController,
-        builder: (context, _) => _amountInputRow(context, c),
-      ),
     );
   }
 
@@ -378,168 +378,6 @@ class TransactionFormScaffold extends StatelessWidget {
         }
       },
       onCategoryTap: () => c.selectCategory(context),
-    );
-  }
-
-  static Widget _amountAndTypeSection(
-    BuildContext context,
-    TransactionFormController c,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        spacing: 24,
-        children: [
-          _typeSegmented(context, c),
-          ListenableBuilder(
-            listenable: c.amountTextController,
-            builder: (context, _) => _amountInputRow(context, c),
-          ),
-        ],
-      ),
-    );
-  }
-
-  static Widget _typeSegmented(
-    BuildContext context,
-    TransactionFormController c,
-  ) {
-    final selectedColor = c.transactionType.color(context);
-    final fg = c.foregroundColor(context);
-    final types = [
-      TransactionType.income,
-      TransactionType.expense,
-      TransactionType.transfer,
-    ];
-
-    return SizedBox(
-      width: double.infinity,
-      child: SegmentedButton<TransactionType>(
-        segments: types
-            .map(
-              (e) => ButtonSegment<TransactionType>(
-                value: e,
-                label: Text(
-                  e.displayName(context),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            )
-            .toList(),
-        selected: {c.transactionType},
-        onSelectionChanged: (next) {
-          final v = next.firstOrNull;
-          if (v != null) c.onTransactionTypeChanged(v);
-        },
-        showSelectedIcon: false,
-        style: ButtonStyle(
-          animationDuration: const Duration(milliseconds: 250),
-          side: WidgetStateProperty.resolveWith(
-            (s) => const BorderSide(style: BorderStyle.none, width: 0),
-          ),
-          foregroundColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected)
-                ? selectedColor.getContrastColor()
-                : fg.withOpacity(0.85),
-          ),
-          backgroundColor: WidgetStateProperty.resolveWith(
-            (s) => s.contains(WidgetState.selected)
-                ? selectedColor
-                : Theme.of(context).colorScheme.surfaceContainerHigh,
-          ),
-        ),
-      ),
-    );
-  }
-
-  static Widget _amountInputRow(
-    BuildContext context,
-    TransactionFormController c,
-  ) {
-    final baseColor = c.transactionType.color(context);
-    final ctrl = c.amountTextController;
-    double fontSize = 48;
-    switch (ctrl.text.length) {
-      case > 8:
-        fontSize = 24;
-        break;
-      case > 6:
-        fontSize = 28;
-        break;
-      case > 4:
-        fontSize = 36;
-    }
-
-    return AnimatedSizeSwitcher(
-      duration: const Duration(milliseconds: 1250),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(4),
-            margin: const EdgeInsets.only(left: 6, right: 2),
-            decoration: BoxDecoration(
-              color: c.foregroundColor(context),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Icon(c.transactionType.mathIcon, color: baseColor, size: 24),
-          ),
-          Flexible(
-            child: IntrinsicWidth(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Semantics(
-                  label: Translations.of(context).transaction.form.value,
-                  textField: true,
-                  child: TextField(
-                    controller: ctrl,
-                    focusNode: c.amountFocusNode,
-                    textInputAction: TextInputAction.next,
-                    onSubmitted: (_) => c.titleFocusNode.requestFocus(),
-                    textAlign: TextAlign.center,
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                    inputFormatters: decimalDigitFormatter(
-                      c.fromAccount?.currency.decimalPlaces ?? 2,
-                      allowNegative: true,
-                    ),
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: c.foregroundColor(context),
-                      fontWeight: FontWeight.bold,
-                      fontSize: fontSize,
-                    ),
-                    decoration: InputDecoration(
-                      isDense: true,
-                      fillColor: Colors.transparent,
-                      hoverColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHigh.withOpacity(0.05),
-                      border: InputBorder.none,
-                      hintText: '0',
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      prefixText: c.fromAccount?.currency.symbol,
-                      suffixText: ctrl.text.endsWith('.') ? '00' : null,
-                      hintStyle: TextStyle(
-                        color: c.foregroundColor(context).withOpacity(0.35),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          IconButton.outlined(
-            color: c.foregroundColor(context),
-            onPressed: () => c.openAmountSelectorSheet(context),
-            icon: const Icon(Icons.calculate),
-          ),
-        ],
-      ),
     );
   }
 }
