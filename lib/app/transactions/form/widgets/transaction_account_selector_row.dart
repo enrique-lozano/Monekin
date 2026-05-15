@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -13,42 +13,22 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 enum _CardPosition { single, left, right }
 
 class TransactionAccountSelectorRow extends StatelessWidget {
-  const TransactionAccountSelectorRow({
-    super.key,
-    required this.transactionType,
-    required this.fromAccount,
-    required this.transferAccount,
-    required this.selectedCategory,
-    required this.onFromAccountTap,
-    required this.onTransferAccountTap,
-    required this.onCategoryTap,
-    required this.shakeKey,
-    this.investmentAssetColumnTitle,
-    this.investmentAssetName,
-    this.investmentAssetLeading,
-    this.onSwapTransferAccounts,
-  });
+  const TransactionAccountSelectorRow({super.key, required this.form});
 
-  final TransactionType transactionType;
-  final Account? fromAccount;
-  final Account? transferAccount;
-  final Category? selectedCategory;
-  final VoidCallback onFromAccountTap;
-  final VoidCallback onTransferAccountTap;
-  final VoidCallback onCategoryTap;
-  final GlobalKey<ShakeWidgetState> shakeKey;
-
-  final String? investmentAssetColumnTitle;
-  final String? investmentAssetName;
-  final Widget? investmentAssetLeading;
-
-  /// When [transactionType] is transfer, swaps origin and destination accounts.
-  final VoidCallback? onSwapTransferAccounts;
+  final TransactionFormController form;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
+    final transactionType = form.transactionType;
+    final fromAccount = form.fromAccount;
+    final transferAccount = form.transferAccount;
+    final selectedCategory = form.selectedCategory;
+    final shakeKey = form.shakeKey;
+    final investmentAssetName = form.isAssetTradeInvestment
+        ? (form.asset?.name ?? '…')
+        : null;
 
     if (transactionType.isTransfer) {
       return Column(
@@ -66,7 +46,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                   icon: Icons.question_mark_rounded,
                   mainColor: theme.colorScheme.primary,
                 ),
-            onTap: onFromAccountTap,
+            onTap: () => form.pickFromAccount(context),
           ),
           Stack(
             clipBehavior: Clip.none,
@@ -91,7 +71,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                           icon: Icons.question_mark_rounded,
                           mainColor: theme.colorScheme.primary,
                         ),
-                    onTap: onTransferAccountTap,
+                    onTap: () => form.pickTransferAccount(context),
                   ),
                 ),
               ),
@@ -106,7 +86,9 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     style: IconButton.styleFrom(
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    onPressed: onSwapTransferAccounts,
+                    onPressed: transactionType.isTransfer
+                        ? form.swapTransferAccounts
+                        : null,
                     icon: const Icon(Icons.swap_vert_rounded),
                     tooltip: t.transfer.display,
                   ),
@@ -135,7 +117,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                     icon: Icons.question_mark_rounded,
                     mainColor: theme.colorScheme.primary,
                   ),
-              onTap: onFromAccountTap,
+              onTap: () => form.pickFromAccount(context),
             ),
           ),
           const SizedBox(width: 2),
@@ -143,12 +125,10 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             child: transactionType.isInvestment && investmentAssetName != null
                 ? _AccountCard(
                     position: _CardPosition.right,
-                    title:
-                        investmentAssetColumnTitle ??
-                        t.assets.details.trade_form_asset_column,
+                    title: t.assets.details.trade_form_asset_column,
                     value: investmentAssetName,
                     subtitle: null,
-                    leading: investmentAssetLeading,
+                    leading: null,
                     onTap: () {},
                     showChevron: false,
                   )
@@ -169,7 +149,7 @@ class TransactionAccountSelectorRow extends StatelessWidget {
                             Category.fromDB(Category.unkown(), null),
                         size: 24,
                       ),
-                      onTap: onCategoryTap,
+                      onTap: () => form.selectCategory(context),
                     ),
                   ),
           ),

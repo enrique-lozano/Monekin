@@ -726,6 +726,33 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
+  Future<void> pickFromAccount(BuildContext context) async {
+    final modalRes = await showAccountSelector(context, fromAccount);
+    if (modalRes != null && modalRes.isNotEmpty) {
+      setFromAccount(modalRes.first);
+    }
+  }
+
+  Future<void> pickTransferAccount(BuildContext context) async {
+    final modalRes = await showAccountSelector(context, transferAccount);
+    if (modalRes != null && modalRes.isNotEmpty) {
+      setTransferAccount(modalRes.first);
+    }
+  }
+
+  void onTitleFieldSubmitted(BuildContext context, String _) {
+    (transactionType.isTransfer ? valueInDestinyFocusNode : notesFocusNode)
+        .requestFocus();
+  }
+
+  void onValueInDestinyFieldSubmitted(String _) {
+    notesFocusNode.requestFocus();
+  }
+
+  void onNotesFieldSubmitted(BuildContext context, String _) {
+    FocusScope.of(context).unfocus();
+  }
+
   void applyAmountFromSelector(double amount) {
     transactionValue = isAssetTradeInvestment ? amount.abs() : amount;
     if (!isAssetTradeInvestment) {
