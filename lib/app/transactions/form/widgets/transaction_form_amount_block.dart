@@ -130,33 +130,38 @@ class TransactionFormAmountBlock extends StatelessWidget {
           ),
       builder: (context, snap) {
         if (!snap.hasData) return const SizedBox.shrink();
+
         final converted = snap.data!;
         if (converted == c.transactionValue) {
-          return const SizedBox.shrink();
+          //   return const SizedBox.shrink();
         }
         final hintColor = c.foregroundColor(context).withOpacity(0.75);
-        return Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.swap_horizontal_circle_rounded,
-                size: 16,
-                color: hintColor,
-              ),
-              const SizedBox(width: 6),
-              CurrencyDisplayer(
-                amountToConvert: converted,
-                integerStyle:
-                    Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: hintColor,
-                      fontWeight: FontWeight.w500,
-                    ) ??
-                    TextStyle(color: hintColor, fontWeight: FontWeight.w500),
-                followPrivateMode: false,
-              ),
-            ],
+
+        return AnimatedExpanded(
+          expand: converted != c.transactionValue,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.swap_horizontal_circle_rounded,
+                  size: 16,
+                  color: hintColor,
+                ),
+                const SizedBox(width: 6),
+                CurrencyDisplayer(
+                  amountToConvert: converted,
+                  integerStyle:
+                      Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: hintColor,
+                        fontWeight: FontWeight.w500,
+                      ) ??
+                      TextStyle(color: hintColor, fontWeight: FontWeight.w500),
+                  followPrivateMode: false,
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -181,6 +186,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
         final balance = snap.data ?? 0;
         final oldEffect = c.oldEffectOnFromAccountLedgerForEdit ?? 0;
         final projected = balance + newEffect - oldEffect;
+
         if (projected >= -1e-6) return const SizedBox.shrink();
 
         final t = Translations.of(context);

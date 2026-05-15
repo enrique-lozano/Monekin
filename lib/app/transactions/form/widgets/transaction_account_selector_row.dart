@@ -72,34 +72,31 @@ class TransactionAccountSelectorRow extends StatelessWidget {
             clipBehavior: Clip.none,
             alignment: Alignment.topCenter,
             children: [
-              Transform.translate(
-                offset: const Offset(0, -10),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: ShakeWidget(
-                    duration: const Duration(milliseconds: 200),
-                    shakeCount: 1,
-                    shakeOffset: 10,
-                    key: shakeKey,
-                    child: _AccountCard(
-                      position: _CardPosition.single,
-                      title: t.transfer.form.to,
-                      value: transferAccount?.name,
-                      subtitle: _buildAccountSubtitle(transferAccount),
-                      leading:
-                          transferAccount?.displayIcon(context) ??
-                          IconDisplayer(
-                            displayMode: IconDisplayMode.polygon,
-                            icon: Icons.question_mark_rounded,
-                            mainColor: theme.colorScheme.primary,
-                          ),
-                      onTap: onTransferAccountTap,
-                    ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: ShakeWidget(
+                  duration: const Duration(milliseconds: 200),
+                  shakeCount: 1,
+                  shakeOffset: 10,
+                  key: shakeKey,
+                  child: _AccountCard(
+                    position: _CardPosition.single,
+                    title: t.transfer.form.to,
+                    value: transferAccount?.name,
+                    subtitle: _buildAccountSubtitle(transferAccount),
+                    leading:
+                        transferAccount?.displayIcon(context) ??
+                        IconDisplayer(
+                          displayMode: IconDisplayMode.polygon,
+                          icon: Icons.question_mark_rounded,
+                          mainColor: theme.colorScheme.primary,
+                        ),
+                    onTap: onTransferAccountTap,
                   ),
                 ),
               ),
               Positioned(
-                top: -4,
+                top: -16,
                 child: Material(
                   elevation: 3,
                   shape: const CircleBorder(),
