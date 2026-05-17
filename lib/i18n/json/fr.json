@@ -885,11 +885,11 @@
       "notes_optional": "Remarques (facultatif)",
       "performance_sheet_title": "Performance",
       "performance_return": "Rendement sur la période",
-      "performance_return_help": "Variation de valeur au-delà des entrées ou sorties de cash : (valorisation finale − initiale) − (investi net final − initial). Si la valeur n’a augmenté que parce que vous avez versé le même montant, cela reste proche de zéro.",
+      "performance_return_help": "Gain ou perte lié au marché, pas aux dépôts ou retraits. Si la valeur n'a monté que parce que vous avez versé plus, cela reste proche de zéro.",
       "performance_invested_value": "Valeur investie",
-      "performance_invested_value_caption": "Cash net dans l’actif jusqu’ici (valeur initiale plus flux liés).",
+      "performance_invested_value_caption": "Argent total dans cet actif : valeur initiale plus achats et ventes liés.",
       "performance_value_diff": "Variation de valorisation",
-      "performance_value_diff_caption": "Écart entre la valorisation comptable actuelle et celle du premier jour de la plage du graphique (prix de marché seul, indépendamment des flux investis)."
+      "performance_value_diff_caption": "Évolution de la valeur de l'actif du début de la période choisie à aujourd'hui."
     },
     "FORM": {
       "asset_type": "Type d'actif",

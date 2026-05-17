@@ -885,11 +885,11 @@
       "notes_optional": "Megjegyzések (nem kötelező)",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
-      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_return_help": "Piac vagy veszteség a piactól, nem a befizetésektől vagy kivételektől. Ha az érték csak azért nőtt, mert többet fizettél be, ez közel nulla marad.",
       "performance_invested_value": "Invested value",
-      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
+      "performance_invested_value_caption": "Összes pénz ebben az eszközben: kezdőérték plusz kapcsolt vétel és eladás.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+      "performance_value_diff_caption": "Mennyit változott az eszköz értéke a kiválasztott időszak elejétől máig."
     },
     "FORM": {
       "asset_type": "Eszköz típusa",

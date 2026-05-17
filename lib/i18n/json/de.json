@@ -885,11 +885,11 @@
       "notes_optional": "Notizen (optional)",
       "performance_sheet_title": "Performance",
       "performance_return": "Periodenrendite",
-      "performance_return_help": "Wie stark sich der Wert über neue Ein- oder Auszahlungen hinaus geändert hat: (Endbewertung − Anfangsbewertung) − (End-Nettoinvest − Anfang-Nettoinvest). Steigt der Wert nur, weil du denselben Betrag eingezahlt hast, liegt dies nahe null.",
+      "performance_return_help": "Gewinn oder Verlust durch Kursbewegungen, nicht durch Ein- oder Auszahlungen. Steigt der Wert nur, weil du mehr eingezahlt hast, bleibt dies nahe null.",
       "performance_invested_value": "Investierter Wert",
-      "performance_invested_value_caption": "Bisheriger Netto-Cash im Asset (Anfangswert plus verknüpfte Zuflüsse).",
+      "performance_invested_value_caption": "Gesamtes Geld in diesem Asset: Startwert plus verknüpfte Käufe und Verkäufe.",
       "performance_value_diff": "Bewertungsänderung",
-      "performance_value_diff_caption": "Differenz zwischen der aktuellen gebuchten Bewertung und der am ersten Tag des gewählten Diagrammbereichs (nur Marktwert, unabhängig von Investitionsströmen)."
+      "performance_value_diff_caption": "Wie sich der Wert des Assets vom Beginn des gewählten Zeitraums bis heute verändert hat."
     },
     "FORM": {
       "asset_type": "Asset-Typ",

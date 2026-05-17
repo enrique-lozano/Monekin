@@ -885,11 +885,11 @@
       "notes_optional": "Note (facoltativo)",
       "performance_sheet_title": "Performance",
       "performance_return": "Rendimento di periodo",
-      "performance_return_help": "Quanto è cambiato il valore oltre i nuovi versamenti o prelievi: (valorizzazione finale − iniziale) − (investito netto finale − iniziale). Se il valore è salito solo perché hai versato la stessa cifra, questo resta vicino a zero.",
+      "performance_return_help": "Guadagno o perdita da movimenti di mercato, non da soldi che versi o ritiri. Se il valore è salito solo perché hai depositato di più, resta vicino a zero.",
       "performance_invested_value": "Valore investito",
-      "performance_invested_value_caption": "Contanti netti nell’asset finora (valore iniziale più flussi collegati).",
+      "performance_invested_value_caption": "Denaro totale in questo asset: valore iniziale più acquisti e vendite collegati.",
       "performance_value_diff": "Variazione di valorizzazione",
-      "performance_value_diff_caption": "Differenza tra la valorizzazione contabile attuale e quella alla prima data dell’intervallo del grafico (solo prezzo di mercato, indipendentemente dai flussi investiti)."
+      "performance_value_diff_caption": "Quanto è cambiato il valore dell'asset dall'inizio del periodo selezionato a oggi."
     },
     "FORM": {
       "asset_type": "Tipo di risorsa",

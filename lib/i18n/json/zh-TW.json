@@ -885,11 +885,11 @@
       "notes_optional": "註釋（可選）",
       "performance_sheet_title": "表現",
       "performance_return": "區間報酬",
-      "performance_return_help": "剔除期間新增或撤出資金後的價值變化：（期末估值 − 期初估值）−（期末淨投入 − 期初淨投入）。若市值上漲僅因等額入金，此項應接近零。",
+      "performance_return_help": "來自市場漲跌的收益或虧損，不包括你存入或取出的錢。若市值上漲只是因為多存了錢，此項會接近零。",
       "performance_invested_value": "投入金額",
-      "performance_invested_value_caption": "截至目前淨投入（初始值與關聯流水）。",
+      "performance_invested_value_caption": "該資產中的資金總額：初始價值加上已關聯的買賣。",
       "performance_value_diff": "估值變動",
-      "performance_value_diff_caption": "目前帳面市值與所選圖表區間首日估值之差（僅價格變動，不按投入現金流調整）。"
+      "performance_value_diff_caption": "從所選週期開始至今，資產價值的變化幅度。"
     },
     "FORM": {
       "asset_type": "資產類型",

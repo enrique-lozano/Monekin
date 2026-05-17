@@ -885,11 +885,11 @@
       "notes_optional": "Notlar (isteğe bağlı)",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
-      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_return_help": "Piyasadan gelen kâr veya zarar; yatırdığınız veya çektiğiniz paradan değil. Değer sadece daha fazla yatırdığınız için arttıysa, bu sıfıra yakın kalır.",
       "performance_invested_value": "Invested value",
-      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
+      "performance_invested_value_caption": "Bu varlıktaki toplam para: başlangıç değeri artı bağlı alım ve satımlar.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+      "performance_value_diff_caption": "Varlığın değerinin seçilen dönemin başından bugüne ne kadar değiştiği."
     },
     "FORM": {
       "asset_type": "Varlık türü",

@@ -904,11 +904,11 @@
       "notes_optional": "Notas (opcional)",
       "performance_sheet_title": "Rendimiento",
       "performance_return": "Rentabilidad del periodo",
-      "performance_return_help": "Cuánto cambió el valor más allá del dinero nuevo entrado o salido: (valoración final − inicial) − (inversión neta final − inicial). Si el valor solo subió porque ingresaste la misma cantidad, esto queda cerca de cero.",
+      "performance_return_help": "Ganancia o pérdida por el mercado, no por el dinero que ingresas o retiras. Si el valor solo subió porque depositaste más, esto queda cerca de cero.",
       "performance_invested_value": "Valor invertido",
-      "performance_invested_value_caption": "Efectivo neto en el activo hasta ahora (valor inicial más flujos vinculados).",
+      "performance_invested_value_caption": "Dinero total en este activo: valor inicial más compras y ventas vinculadas.",
       "performance_value_diff": "Cambio de valoración",
-      "performance_value_diff_caption": "Diferencia entre la valoración contable actual y la del primer día del intervalo del gráfico (solo precio de mercado, sin descontar flujos invertidos)."
+      "performance_value_diff_caption": "Cuánto cambió el valor del activo desde el inicio del periodo seleccionado hasta hoy."
     },
     "FORM": {
       "asset_type": "Tipo de activo",
