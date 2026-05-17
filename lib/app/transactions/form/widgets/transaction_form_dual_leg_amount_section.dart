@@ -30,12 +30,11 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.read<TransactionFormController>();
+    final c = context.watch<TransactionFormController>();
     return Padding(
       padding: padding,
       child: ListenableBuilder(
         listenable: Listenable.merge([
-          c,
           c.amountTextController,
           c.valueInDestinyController,
         ]),
@@ -43,7 +42,7 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const _DualLegBody(),
+              _DualLegBody(),
               TransactionFormAmountBlock.insufficientBalanceWarning(context),
             ],
           );
@@ -77,11 +76,9 @@ class _DualLegCard extends StatelessWidget {
 }
 
 class _DualLegBody extends StatelessWidget {
-  const _DualLegBody();
-
   @override
   Widget build(BuildContext context) {
-    final c = context.read<TransactionFormController>();
+    final c = context.watch<TransactionFormController>();
     final isTransfer = c.transactionType.isTransfer;
     final from = c.fromAccount;
     final to = c.transferAccount;
