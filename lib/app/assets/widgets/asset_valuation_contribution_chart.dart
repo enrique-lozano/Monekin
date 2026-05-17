@@ -152,7 +152,7 @@ class _AssetValuationContributionChartState
               show: true,
               color: isNotEnoughData
                   ? colorScheme.outlineVariant.withAlpha(10)
-                  : netContributionColor,
+                  : netContributionColor.withAlpha(50),
             ),
           ),
           LineChartBarData(
