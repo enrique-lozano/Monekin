@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -27,6 +28,8 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
     this.maxY,
     this.extraLinesData,
     this.onHover,
+    this.timeRange,
+    this.fillMissingDatesWithPreviousValue = true,
   });
 
   /// The raw data items to plot.
@@ -57,6 +60,13 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
   /// touch ends. The callback receives the original data item.
   final void Function(T?)? onHover;
 
+  /// Range used to fill missing dates. When null and [fillMissingDatesWithPreviousValue]
+  /// is true, it defaults from the first data point through today.
+  final DateTimeRange? timeRange;
+
+  /// When true, missing dates in [timeRange] are filled with the previous value.
+  final bool fillMissingDatesWithPreviousValue;
+
   @override
   State<TimeSeriesEvolutionChart<T>> createState() =>
       _TimeSeriesEvolutionChartState<T>();
@@ -76,6 +86,64 @@ class _TimeSeriesEvolutionChartState<T>
     widget.onHover?.call(byX[spot.x.toInt()]);
   }
 
+  DateTimeRange? _effectiveTimeRange(List<T> sortedData) {
+    if (widget.timeRange != null) return widget.timeRange;
+    if (!widget.fillMissingDatesWithPreviousValue || sortedData.isEmpty) {
+      return null;
+    }
+
+    final start = widget.dateExtractor(sortedData.first).justDay();
+    final end = DateTime.now().justDay().add(const Duration(days: 1));
+
+    return DateTimeRange(start: start, end: end);
+  }
+
+  ({
+    List<FlSpot> spots,
+    Map<int, T> byX,
+  }) _buildChartSeries(List<T> sortedData) {
+    final timeRange = _effectiveTimeRange(sortedData);
+
+    if (!widget.fillMissingDatesWithPreviousValue || timeRange == null) {
+      return (
+        spots: sortedData
+            .map(
+              (e) => FlSpot(
+                widget.dateExtractor(e).millisecondsSinceEpoch.toDouble(),
+                widget.valueExtractor(e),
+              ),
+            )
+            .toList(),
+        byX: {
+          for (final item in sortedData)
+            widget.dateExtractor(item).millisecondsSinceEpoch: item,
+        },
+      );
+    }
+
+    final filledSamples = fillTimeSeriesWithPreviousValue<T>(
+      data: sortedData,
+      dateExtractor: widget.dateExtractor,
+      valueExtractor: widget.valueExtractor,
+      timeRange: timeRange,
+    );
+
+    return (
+      spots: filledSamples
+          .map(
+            (sample) => FlSpot(
+              sample.date.millisecondsSinceEpoch.toDouble(),
+              sample.value,
+            ),
+          )
+          .toList(),
+      byX: {
+        for (final sample in filledSamples)
+          sample.date.millisecondsSinceEpoch: sample.source,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final lineColor = Theme.of(context).colorScheme.primary;
@@ -85,10 +153,9 @@ class _TimeSeriesEvolutionChartState<T>
         (a, b) => widget.dateExtractor(a).compareTo(widget.dateExtractor(b)),
       );
 
-    final byX = <int, T>{
-      for (final item in sortedData)
-        widget.dateExtractor(item).millisecondsSinceEpoch: item,
-    };
+    final chartSeries = _buildChartSeries(sortedData);
+    final byX = chartSeries.byX;
+    final spots = chartSeries.spots;
 
     final isNotEnoughData = sortedData.length <= 2;
 
@@ -210,17 +277,7 @@ class _TimeSeriesEvolutionChartState<T>
                     FlSpot(3, 2),
                     FlSpot(4, 5),
                   ]
-                : sortedData
-                      .map(
-                        (e) => FlSpot(
-                          widget
-                              .dateExtractor(e)
-                              .millisecondsSinceEpoch
-                              .toDouble(),
-                          widget.valueExtractor(e),
-                        ),
-                      )
-                      .toList(),
+                : spots,
             isCurved: true,
             curveSmoothness: 0.05,
             color: isNotEnoughData

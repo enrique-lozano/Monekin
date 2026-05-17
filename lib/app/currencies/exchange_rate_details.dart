@@ -8,6 +8,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -122,6 +123,27 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
       data: sortedRates,
       dateExtractor: (rate) => rate.date,
       period: periodToUse,
+    );
+  }
+
+  DateTimeRange? _chartTimeRange(List<ExchangeRate> sortedRates) {
+    if (sortedRates.isEmpty) return null;
+
+    final now = DateTime.now();
+    final oldestDate = sortedRates.first.date;
+    final period =
+        _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
+        ? _selectedChartPeriod
+        : ChartTimePeriod.max;
+    final periodStart = period.startDateFrom(now);
+    final start = (periodStart ?? oldestDate).justDay();
+    final effectiveStart = start.isBefore(oldestDate.justDay())
+        ? oldestDate.justDay()
+        : start;
+
+    return DateTimeRange(
+      start: effectiveStart,
+      end: now.justDay().add(const Duration(days: 1)),
     );
   }
 
@@ -425,6 +447,9 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
             padding: const EdgeInsets.fromLTRB(16, 24, 0, 8),
             child: TimeSeriesEvolutionChart<ExchangeRate>(
               data: chartRates,
+              timeRange: sortedRates == null
+                  ? null
+                  : _chartTimeRange(sortedRates),
               dateExtractor: (r) => r.date,
               valueExtractor: (r) => r.exchangeRate,
               onHover: (rate) {

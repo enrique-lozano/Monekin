@@ -143,6 +143,21 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         : ChartTimePeriod.max;
   }
 
+  DateTimeRange? _chartTimeRange(DateTime oldestDate) {
+    final now = DateTime.now();
+    final period = _effectiveChartPeriod(oldestDate);
+    final periodStart = period.startDateFrom(now);
+    final start = (periodStart ?? oldestDate).justDay();
+    final effectiveStart = start.isBefore(oldestDate.justDay())
+        ? oldestDate.justDay()
+        : start;
+
+    return DateTimeRange(
+      start: effectiveStart,
+      end: now.justDay().add(const Duration(days: 1)),
+    );
+  }
+
   double _netContributionNow({
     required Asset asset,
     required List<MoneyTransaction> transactions,
@@ -615,6 +630,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
             child: AssetValuationContributionChart(
               points: chartData,
+              timeRange: allChartData == null || allChartData.isEmpty
+                  ? null
+                  : _chartTimeRange(allChartData.first.date),
               currency: widget.asset.currency,
               valuationLabel: t.assets.valuation.value,
               netContributionLabel: t.assets.valuation.net_contribution,
