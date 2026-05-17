@@ -1,134 +1,13 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-
-/// Segmented control for income / expense / transfer (hidden for locked asset trade flows).
-class TransactionFormTypeSegmented extends StatelessWidget {
-  const TransactionFormTypeSegmented({
-    super.key,
-    required this.controller,
-    this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 12),
-  });
-
-  final TransactionFormController controller;
-  final EdgeInsetsGeometry padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = controller;
-    if (c.isAssetTradeInvestment) {
-      final t = Translations.of(context);
-      final accent = c.investmentAccent(context);
-      final onAccent = accent.getContrastColor();
-      return Padding(
-        padding: padding,
-        child: SizedBox(
-          width: double.infinity,
-          child: SegmentedButton<bool>(
-            segments: [
-              ButtonSegment<bool>(
-                value: true,
-                label: Text(t.assets.details.buy),
-              ),
-              ButtonSegment<bool>(
-                value: false,
-                label: Text(t.assets.details.sell),
-              ),
-            ],
-            selected: {c.investmentIsBuy},
-            onSelectionChanged: (next) {
-              final v = next.firstOrNull;
-              if (v == null) return;
-              final t = Translations.of(context);
-              final buyL = t.assets.details.buy;
-              final sellL = t.assets.details.sell;
-              final cur = c.titleController.text.trim();
-              if (cur.isEmpty || cur == buyL || cur == sellL) {
-                c.titleController.text = v ? buyL : sellL;
-              }
-              c.setInvestmentIsBuy(v);
-            },
-            showSelectedIcon: false,
-            style: ButtonStyle(
-              animationDuration: const Duration(milliseconds: 250),
-              side: WidgetStateProperty.resolveWith(
-                (s) => const BorderSide(style: BorderStyle.none, width: 0),
-              ),
-              foregroundColor: WidgetStateProperty.resolveWith(
-                (s) => s.contains(WidgetState.selected)
-                    ? onAccent
-                    : AppColors.of(context).textBody,
-              ),
-              backgroundColor: WidgetStateProperty.resolveWith(
-                (s) => s.contains(WidgetState.selected)
-                    ? accent
-                    : Theme.of(context).colorScheme.surfaceContainerHigh,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-    final selectedColor = c.transactionType.color(context);
-    final types = [
-      TransactionType.income,
-      TransactionType.expense,
-      TransactionType.transfer,
-    ];
-
-    return Padding(
-      padding: padding,
-      child: SizedBox(
-        width: double.infinity,
-        child: SegmentedButton<TransactionType>(
-          segments: types
-              .map(
-                (e) => ButtonSegment<TransactionType>(
-                  value: e,
-                  label: Text(
-                    e.displayName(context),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              )
-              .toList(),
-          selected: {c.transactionType},
-          onSelectionChanged: (next) {
-            final v = next.firstOrNull;
-            if (v != null) c.onTransactionTypeChanged(v);
-          },
-          showSelectedIcon: false,
-          style: ButtonStyle(
-            animationDuration: const Duration(milliseconds: 250),
-            side: WidgetStateProperty.resolveWith(
-              (s) => const BorderSide(style: BorderStyle.none, width: 0),
-            ),
-            foregroundColor: WidgetStateProperty.resolveWith(
-              (s) => s.contains(WidgetState.selected)
-                  ? selectedColor.getContrastColor()
-                  : AppColors.of(context).textBody,
-            ),
-            backgroundColor: WidgetStateProperty.resolveWith(
-              (s) => s.contains(WidgetState.selected)
-                  ? selectedColor
-                  : Theme.of(context).colorScheme.surfaceContainerHigh,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 /// Amount field, optional preferred-currency hint, and insufficient-balance warning.
 class TransactionFormAmountBlock extends StatelessWidget {
@@ -232,6 +111,10 @@ class TransactionFormAmountBlock extends StatelessWidget {
       initialData: 0,
       stream: AccountService.instance.getAccountMoney(account: from),
       builder: (context, snap) {
+        if (!snap.hasData || snap.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
         final balance = snap.data ?? 0;
         final oldEffect = c.oldEffectOnFromAccountLedgerForEdit ?? 0;
         final projected = balance + newEffect - oldEffect;

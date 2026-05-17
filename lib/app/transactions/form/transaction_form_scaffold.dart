@@ -6,6 +6,7 @@ import 'package:monekin/app/transactions/form/widgets/transaction_account_catego
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_details_sections.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_dual_leg_amount_section.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_type_selector.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -40,6 +41,7 @@ class TransactionFormScaffold extends StatelessWidget {
             BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
             ? 0.0
             : 16.0;
+
         final amountOrDual = c.usesDualLegAmountLayout
             ? TransactionFormDualLegAmountSection(
                 controller: c,
@@ -52,7 +54,7 @@ class TransactionFormScaffold extends StatelessWidget {
               )
             : TransactionFormAmountBlock(
                 controller: c,
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
               );
 
         final mdLeadingColumn = _paddedColumn(
@@ -62,7 +64,7 @@ class TransactionFormScaffold extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 24,
               children: [
-                TransactionFormTypeSegmented(
+                TransactionFormTypeSelector(
                   controller: c,
                   padding: EdgeInsets.zero,
                 ),
@@ -152,7 +154,7 @@ class TransactionFormScaffold extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
-                      child: TransactionFormTypeSegmented(
+                      child: TransactionFormTypeSelector(
                         controller: c,
                         padding: EdgeInsets.zero,
                       ),

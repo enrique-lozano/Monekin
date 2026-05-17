@@ -48,10 +48,7 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
                 _TransferDualLegBody(controller: c)
               else
                 _InvestmentDualLegBody(controller: c),
-              TransactionFormAmountBlock.insufficientBalanceWarning(
-                context,
-                c,
-              ),
+              TransactionFormAmountBlock.insufficientBalanceWarning(context, c),
             ],
           );
         },
@@ -61,10 +58,7 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
 }
 
 class _DualLegCard extends StatelessWidget {
-  const _DualLegCard({
-    required this.borderColor,
-    required this.child,
-  });
+  const _DualLegCard({required this.borderColor, required this.child});
 
   final Color borderColor;
   final Widget child;
@@ -79,7 +73,7 @@ class _DualLegCard extends StatelessWidget {
         border: Border.all(color: borderColor.withOpacity(0.65), width: 1.2),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
         child: child,
       ),
     );
@@ -98,44 +92,18 @@ class _TransferDualLegBody extends StatelessWidget {
     final to = c.transferAccount;
     final scheme = Theme.of(context).colorScheme;
 
-    if (from == null || to == null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _DualLegCard(
-            borderColor: scheme.primary,
-            child: _AccountLegHeader(
-              account: from,
-              onTapAccount: () => c.pickFromAccount(context),
-            ),
-          ),
-          const SizedBox(height: 8),
-          ShakeWidget(
-            duration: const Duration(milliseconds: 200),
-            shakeCount: 1,
-            shakeOffset: 10,
-            key: c.shakeKey,
-            child: _DualLegCard(
-              borderColor: scheme.primary,
-              child: _AccountLegHeader(
-                account: to,
-                onTapAccount: () => c.pickTransferAccount(context),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
+    final differentCurrency = from?.currency.code != to?.currency.code;
 
-    final differentCurrency = from.currency.code != to.currency.code;
+    return StreamBuilder(
+      stream: from != null && to != null
+          ? ExchangeRateService.instance.calculateExchangeRate(
+              fromCurrency: from.currency.code,
+              toCurrency: to.currency.code,
+              amount: c.transactionValue.abs(),
+              date: c.date,
+            )
+          : Stream.value(null),
 
-    return StreamBuilder<double>(
-      stream: ExchangeRateService.instance.calculateExchangeRate(
-        fromCurrency: from.currency.code,
-        toCurrency: to.currency.code,
-        amount: c.transactionValue.abs(),
-        date: c.date,
-      ),
       builder: (context, snap) {
         final defaultDest = snap.data ?? c.transactionValue.abs();
         final destDisplay = c.valueInDestinyToNumber ?? defaultDest;
@@ -159,26 +127,29 @@ class _TransferDualLegBody extends StatelessWidget {
               borderColor: scheme.primary,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 10,
                 children: [
                   _AccountLegHeader(
                     account: from,
                     onTapAccount: () => c.pickFromAccount(context),
-                    subtitle: _AccountCurrentBalanceSubtitle(account: from),
+                    subtitle: from == null
+                        ? null
+                        : _AccountCurrentBalanceSubtitle(account: from),
                   ),
-                  const SizedBox(height: 10),
-                  _LegAmountRow(
-                    isOutflow: true,
-                    currency: from.currency,
-                    amount: c.transactionValue.abs(),
-                    onTapAmount: () =>
-                        c.openTransferSourceAmountSelector(context),
-                    showReset: sourceMismatch,
-                    onReset: sourceMismatch
-                        ? () => c.alignTransferSourceFromInverseConverted(
-                            expectedSource,
-                          )
-                        : null,
-                  ),
+                  if (from != null)
+                    _LegAmountRow(
+                      isOutflow: true,
+                      currency: from.currency,
+                      amount: c.transactionValue.abs(),
+                      onTapAmount: () =>
+                          c.openTransferSourceAmountSelector(context),
+                      showReset: sourceMismatch,
+                      onReset: sourceMismatch
+                          ? () => c.alignTransferSourceFromInverseConverted(
+                              expectedSource,
+                            )
+                          : null,
+                    ),
                 ],
               ),
             ),
@@ -194,7 +165,7 @@ class _TransferDualLegBody extends StatelessWidget {
                     icon: const Icon(Icons.arrow_downward_rounded),
                     tooltip: Translations.of(context).transfer.display,
                   ),
-                  if (differentCurrency) ...[
+                  if (differentCurrency && from != null && to != null) ...[
                     const Spacer(),
                     _FxChip(
                       fromCode: from.currency.code,
@@ -214,27 +185,31 @@ class _TransferDualLegBody extends StatelessWidget {
                 borderColor: scheme.primary,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: 10,
                   children: [
                     _AccountLegHeader(
                       account: to,
                       onTapAccount: () => c.pickTransferAccount(context),
-                      subtitle: _AccountCurrentBalanceSubtitle(account: to),
+                      subtitle: to == null
+                          ? null
+                          : _AccountCurrentBalanceSubtitle(account: to),
                     ),
-                    const SizedBox(height: 10),
-                    _LegAmountRow(
-                      isOutflow: false,
-                      currency: to.currency,
-                      amount: destDisplay,
-                      onTapAmount: () =>
-                          c.openTransferDestinationAmountSelector(
-                            context,
-                            defaultDestinationAmount: defaultDest,
-                          ),
-                      showReset: destMismatch,
-                      onReset: destMismatch
-                          ? c.clearTransferDestinationOverride
-                          : null,
-                    ),
+                    if (to != null) ...[
+                      _LegAmountRow(
+                        isOutflow: false,
+                        currency: to.currency,
+                        amount: destDisplay,
+                        onTapAmount: () =>
+                            c.openTransferDestinationAmountSelector(
+                              context,
+                              defaultDestinationAmount: defaultDest,
+                            ),
+                        showReset: destMismatch,
+                        onReset: destMismatch
+                            ? c.clearTransferDestinationOverride
+                            : null,
+                      ),
+                    ],
                   ],
                 ),
               ),
@@ -262,7 +237,8 @@ class _InvestmentDualLegBody extends StatelessWidget {
     final displayCurrency =
         c.amountDisplayCurrency ?? from?.currency ?? asset?.currency;
 
-    final differentCurrency = from != null &&
+    final differentCurrency =
+        from != null &&
         asset != null &&
         from.currency.code != asset.currency.code;
 
@@ -273,6 +249,7 @@ class _InvestmentDualLegBody extends StatelessWidget {
           borderColor: accent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 10,
             children: [
               _AccountLegHeader(
                 account: from,
@@ -281,7 +258,6 @@ class _InvestmentDualLegBody extends StatelessWidget {
                     ? _AccountCurrentBalanceSubtitle(account: from)
                     : null,
               ),
-              const SizedBox(height: 10),
               _LegAmountRow(
                 isOutflow: topOut,
                 currency: from?.currency,
@@ -316,17 +292,14 @@ class _InvestmentDualLegBody extends StatelessWidget {
           borderColor: accent,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            spacing: 10,
             children: [
               _AssetLegHeader(
                 assetName: asset?.name,
                 subtitle: asset != null
-                    ? _AssetBookedValueSubtitle(
-                        asset: asset,
-                        date: c.date,
-                      )
+                    ? _AssetBookedValueSubtitle(asset: asset, date: c.date)
                     : null,
               ),
-              const SizedBox(height: 10),
               _LegAmountRow(
                 isOutflow: !topOut,
                 currency: displayCurrency,
@@ -383,10 +356,7 @@ class _AccountCurrentBalanceSubtitle extends StatelessWidget {
 }
 
 class _AssetBookedValueSubtitle extends StatelessWidget {
-  const _AssetBookedValueSubtitle({
-    required this.asset,
-    required this.date,
-  });
+  const _AssetBookedValueSubtitle({required this.asset, required this.date});
 
   final Asset asset;
   final DateTime date;
@@ -398,10 +368,7 @@ class _AssetBookedValueSubtitle extends StatelessWidget {
     final muted = theme.colorScheme.onSurfaceVariant;
 
     return StreamBuilder<double>(
-      stream: InvestmentService.instance.getAssetValueAtDate(
-        asset,
-        date: date,
-      ),
+      stream: InvestmentService.instance.getAssetValueAtDate(asset, date: date),
       builder: (context, snap) {
         final value = snap.data ?? asset.initialValue;
         final formatted = UINumberFormatter.currency(
@@ -497,7 +464,7 @@ class _AccountLegHeader extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       bgColor: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -544,10 +511,7 @@ class _AccountLegHeader extends StatelessWidget {
 }
 
 class _AssetLegHeader extends StatelessWidget {
-  const _AssetLegHeader({
-    required this.assetName,
-    this.subtitle,
-  });
+  const _AssetLegHeader({required this.assetName, this.subtitle});
 
   final String? assetName;
   final Widget? subtitle;
@@ -623,8 +587,10 @@ class _LegAmountRow extends StatelessWidget {
         : amount.toStringAsFixed(2);
     final label = isOutflow ? '- $formatted' : formatted;
 
-    return Align(
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12),
       alignment: AlignmentDirectional.centerEnd,
+
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
