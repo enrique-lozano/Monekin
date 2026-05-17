@@ -57,19 +57,21 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final c = _controller;
     if (c.isEditMode) return;
 
-    final assetNew =
-        c.isAssetTradeInvestment &&
-        widget.transactionToEdit == null &&
-        widget.linkedAsset != null;
-    if (assetNew) {
+    if (widget.linkedAsset != null && c.isAssetTradeInvestment) {
       await c.completeLinkedAssetBootstrap();
-      if (!mounted) return;
-      c.requestAmountFocusAfterFrame();
+    } else {
+      await c.waitForFormDefaults();
+    }
+    if (!mounted) return;
+
+    if (c.usesDualLegAmountLayout) {
+      c.openDualLegTopAmountSelector(
+        context,
+        defaultDestinationAmount: c.transactionValue.abs(),
+      );
       return;
     }
 
-    await c.waitForFormDefaults();
-    if (!mounted) return;
     await c.bootstrapCreateCategoryAndFocusAmount(context);
   }
 

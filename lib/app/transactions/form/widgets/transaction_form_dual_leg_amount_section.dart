@@ -135,19 +135,24 @@ class _DualLegBody extends StatelessWidget {
                           defaultDestinationAmount: defaultDest,
                         );
                       }
+                    } else if (topOut) {
+                      c.openInvestmentCashAmountSelector(context);
                     } else {
-                      c.openInvestmentAmountSelector(context);
+                      c.openInvestmentValuationAmountSelector(context);
                     }
                   },
-                  showReset:
-                      isTransfer && (topOut ? sourceMismatch : destMismatch),
-                  onReset: !isTransfer
-                      ? null
-                      : topOut
-                      ? () => c.alignTransferSourceFromInverseConverted(
-                          expectedSource,
-                        )
-                      : c.clearTransferDestinationOverride,
+                  showReset: isTransfer
+                      ? (topOut ? sourceMismatch : destMismatch)
+                      : c.investmentValuationUnlinked,
+                  onReset: isTransfer
+                      ? (topOut
+                            ? () => c.alignTransferSourceFromInverseConverted(
+                                expectedSource,
+                              )
+                            : c.clearTransferDestinationOverride)
+                      : (topOut
+                            ? c.alignCashAmountToInvestmentValuation
+                            : c.clearInvestmentValuationOverride),
                 ),
               ],
             ),
@@ -225,20 +230,25 @@ class _DualLegBody extends StatelessWidget {
                                 defaultDestinationAmount: defaultDest,
                               );
                             }
+                          } else if (topOut) {
+                            c.openInvestmentValuationAmountSelector(context);
                           } else {
-                            c.openInvestmentAmountSelector(context);
+                            c.openInvestmentCashAmountSelector(context);
                           }
                         },
-                        showReset:
-                            isTransfer &&
-                            (topOut ? destMismatch : sourceMismatch),
-                        onReset: !isTransfer
-                            ? null
-                            : topOut
-                            ? c.clearTransferDestinationOverride
-                            : () => c.alignTransferSourceFromInverseConverted(
-                                expectedSource,
-                              ),
+                        showReset: isTransfer
+                            ? (topOut ? destMismatch : sourceMismatch)
+                            : c.investmentValuationUnlinked,
+                        onReset: isTransfer
+                            ? (topOut
+                                  ? c.clearTransferDestinationOverride
+                                  : () =>
+                                        c.alignTransferSourceFromInverseConverted(
+                                          expectedSource,
+                                        ))
+                            : (topOut
+                                  ? c.clearInvestmentValuationOverride
+                                  : c.alignCashAmountToInvestmentValuation),
                       ),
                     ],
                   );
@@ -285,12 +295,16 @@ class _DualLegBody extends StatelessWidget {
       );
     }
 
+    final cashAbs = c.transactionValue.abs();
+    final valuationDisplay = c.investmentValuationAmount;
+    final unlinked = c.investmentValuationUnlinked;
+
     return buildLegs(
-      defaultDest: c.transactionValue.abs(),
-      destDisplay: c.transactionValue.abs(),
-      sourceMismatch: false,
-      destMismatch: false,
-      expectedSource: c.transactionValue.abs(),
+      defaultDest: cashAbs,
+      destDisplay: valuationDisplay,
+      sourceMismatch: unlinked,
+      destMismatch: unlinked,
+      expectedSource: valuationDisplay,
     );
   }
 

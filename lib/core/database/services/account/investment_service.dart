@@ -269,10 +269,15 @@ class InvestmentService {
   // Valuation adjustments from transactions (cash leg vs holdings snapshot)
   // ---------------------------------------------------------------------------
 
-  /// How [transaction] should move the asset valuation snapshot (accounting currency).
-  ///
-  /// Uses the same signed `value` stored for cash (expenses negative on outflow, etc.):
-  /// snapshot moves by `-value` so typical buys (negative `value`) increase the asset.
+  /// Valuation snapshot delta from the asset leg amount and buy/sell direction.
+  static double valuationDeltaForAssetLeg({
+    required double assetLegAmountAbs,
+    required bool isBuy,
+  }) {
+    return isBuy ? assetLegAmountAbs : -assetLegAmountAbs;
+  }
+
+  /// Default delta when cash and asset legs match: `-transaction.value`.
   static double valuationDeltaForTransaction(TransactionInDB transaction) {
     if (transaction.assetID == null) return 0;
     if (transaction.type == TransactionType.transfer) return 0;
@@ -287,65 +292,17 @@ class InvestmentService {
     return true;
   }
 
-  Future<void> onTransactionSaved(TransactionInDB inserted) async {
-    if (!statusAffectsValuation(inserted) || inserted.assetID == null) {
-      return;
-    }
-    await _applyValuationDelta(
-      assetId: inserted.assetID!,
-      date: inserted.date,
-      delta: valuationDeltaForTransaction(inserted),
-    );
-  }
-
-  Future<void> onTransactionUpdated(
+  /// Reverts any prior impact, then optionally applies [valuationDelta] for [current].
+  ///
+  /// When [valuationDelta] is null, the current row's impact is derived from
+  /// [valuationDeltaForTransaction] (cash leg equals asset leg).
+  Future<void> syncValuationOnTransactionSave({
     TransactionInDB? previous,
-    TransactionInDB current,
-  ) async {
-    if (previous != null &&
-        previous.assetID != null &&
-        statusAffectsValuation(previous)) {
-      await _applyValuationDelta(
-        assetId: previous.assetID!,
-        date: previous.date,
-        delta: -valuationDeltaForTransaction(previous),
-      );
-    }
-    if (statusAffectsValuation(current) && current.assetID != null) {
-      await _applyValuationDelta(
-        assetId: current.assetID!,
-        date: current.date,
-        delta: valuationDeltaForTransaction(current),
-      );
-    }
-  }
-
-  /// Same as [onTransactionSaved], but also shifts all later valuations by the
-  /// same delta to keep historical snapshots aligned.
-  Future<void> onTransactionSavedAndFutureValuations(
-    TransactionInDB inserted,
-  ) async {
-    if (!statusAffectsValuation(inserted) || inserted.assetID == null) return;
-
-    final delta = valuationDeltaForTransaction(inserted);
-    await _applyValuationDelta(
-      assetId: inserted.assetID!,
-      date: inserted.date,
-      delta: delta,
-    );
-    await _shiftFutureValuations(
-      assetId: inserted.assetID!,
-      date: inserted.date,
-      delta: delta,
-    );
-  }
-
-  /// Same as [onTransactionUpdated], but also shifts all later valuations by
-  /// the reverted/applied deltas.
-  Future<void> onTransactionUpdatedAndFutureValuations(
-    TransactionInDB? previous,
-    TransactionInDB current,
-  ) async {
+    required TransactionInDB current,
+    double? valuationDelta,
+    bool applyCurrent = true,
+    bool shiftFutureValuations = false,
+  }) async {
     if (previous != null &&
         previous.assetID != null &&
         statusAffectsValuation(previous)) {
@@ -355,24 +312,34 @@ class InvestmentService {
         date: previous.date,
         delta: revertDelta,
       );
-      await _shiftFutureValuations(
-        assetId: previous.assetID!,
-        date: previous.date,
-        delta: revertDelta,
-      );
+      if (shiftFutureValuations) {
+        await _shiftFutureValuations(
+          assetId: previous.assetID!,
+          date: previous.date,
+          delta: revertDelta,
+        );
+      }
     }
 
-    if (current.assetID != null && statusAffectsValuation(current)) {
-      final currentDelta = valuationDeltaForTransaction(current);
-      await _applyValuationDelta(
-        assetId: current.assetID!,
-        date: current.date,
-        delta: currentDelta,
-      );
+    if (!applyCurrent ||
+        !statusAffectsValuation(current) ||
+        current.assetID == null) {
+      return;
+    }
+
+    final delta = valuationDelta ?? valuationDeltaForTransaction(current);
+    if (delta == 0) return;
+
+    await _applyValuationDelta(
+      assetId: current.assetID!,
+      date: current.date,
+      delta: delta,
+    );
+    if (shiftFutureValuations) {
       await _shiftFutureValuations(
         assetId: current.assetID!,
         date: current.date,
-        delta: currentDelta,
+        delta: delta,
       );
     }
   }

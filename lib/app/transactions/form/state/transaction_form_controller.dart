@@ -92,6 +92,9 @@ class TransactionFormController extends ChangeNotifier {
   Asset? _asset;
   bool _updateValuations = false;
 
+  /// When set, the asset valuation leg differs from the cash leg amount.
+  double? _investmentValuationAmountOverride;
+
   /// When true, money flows from the bottom leg to the top leg (transfer) or is a sell (investment).
   bool _dualLegFlowReversed = false;
 
@@ -135,6 +138,16 @@ class TransactionFormController extends ChangeNotifier {
     _updateValuations = v;
     notifyListeners();
   }
+
+  double get investmentValuationAmount =>
+      _investmentValuationAmountOverride ?? transactionValue.abs();
+
+  bool get investmentValuationUnlinked =>
+      _investmentValuationAmountOverride != null &&
+      !nearlyEqualMoney(
+        _investmentValuationAmountOverride!,
+        transactionValue.abs(),
+      );
 
   MoneyTransaction? get transactionToEdit => _transactionToEdit;
   Debt? get linkedDebt => _linkedDebt;
@@ -538,27 +551,37 @@ class TransactionFormController extends ChangeNotifier {
           : _transactionToEdit?.assetID,
     );
 
-    final shouldUpdateAssetValuations =
-        !isAssetTradeInvestment || _updateValuations;
-    final shouldUpdateFutureAssetValuations =
+    final previousForValuation = isEditMode ? _transactionToEdit : null;
+    final shouldApplyValuation = isAssetTradeInvestment && _updateValuations;
+    final shouldShiftFutureValuations =
         isAssetTradeInvestment && _updateValuations;
+    final valuationDelta = shouldApplyValuation
+        ? InvestmentService.valuationDeltaForAssetLeg(
+            assetLegAmountAbs: investmentValuationAmount,
+            isBuy: investmentIsBuy,
+          )
+        : null;
 
     Future<int> postCall = TransactionService.instance.updateTransaction(
       transactionToPost,
-      updateAssetValuations: shouldUpdateAssetValuations,
-      updateFutureAssetValuations: shouldUpdateFutureAssetValuations,
     );
 
     if (!isEditMode) {
-      postCall = TransactionService.instance.insertTransaction(
-        transactionToPost,
-        updateAssetValuations: shouldUpdateAssetValuations,
-        updateFutureAssetValuations: shouldUpdateFutureAssetValuations,
-      );
+      postCall = TransactionService.instance.insertTransaction(transactionToPost);
     }
 
     postCall
         .then((value) async {
+          if (isAssetTradeInvestment &&
+              _asset != null &&
+              shouldApplyValuation) {
+            await InvestmentService.instance.syncValuationOnTransactionSave(
+              previous: previousForValuation,
+              current: transactionToPost,
+              valuationDelta: valuationDelta,
+              shiftFutureValuations: shouldShiftFutureValuations,
+            );
+          }
           final db = AppDB.instance;
           final existingTags = _transactionToEdit?.tags ?? [];
           final tagsToRemove = existingTags
@@ -785,7 +808,37 @@ class TransactionFormController extends ChangeNotifier {
 
   void applyAmountFromSelector(double amount) {
     transactionValue = isAssetTradeInvestment ? amount.abs() : amount;
+    if (isAssetTradeInvestment &&
+        _investmentValuationAmountOverride != null &&
+        nearlyEqualMoney(
+          _investmentValuationAmountOverride!,
+          transactionValue.abs(),
+        )) {
+      _investmentValuationAmountOverride = null;
+    }
     syncAmountFieldFromTransactionValue();
+    _safeNotify();
+  }
+
+  void applyInvestmentValuationAmount(double amount) {
+    final a = amount.abs();
+    final cash = transactionValue.abs();
+    _investmentValuationAmountOverride =
+        nearlyEqualMoney(a, cash) ? null : a;
+    _safeNotify();
+  }
+
+  void clearInvestmentValuationOverride() {
+    if (_investmentValuationAmountOverride == null) return;
+    _investmentValuationAmountOverride = null;
+    _safeNotify();
+  }
+
+  void alignCashAmountToInvestmentValuation() {
+    if (_investmentValuationAmountOverride == null) return;
+    transactionValue = _investmentValuationAmountOverride!;
+    syncAmountFieldFromTransactionValue();
+    _investmentValuationAmountOverride = null;
     _safeNotify();
   }
 
@@ -880,7 +933,7 @@ class TransactionFormController extends ChangeNotifier {
     );
   }
 
-  void openInvestmentAmountSelector(BuildContext context) {
+  void openInvestmentCashAmountSelector(BuildContext context) {
     final tr = Translations.of(context);
     showModalBottomSheet<void>(
       context: context,
@@ -890,13 +943,50 @@ class TransactionFormController extends ChangeNotifier {
         title: tr.transaction.form.value,
         initialAmount: transactionValue.abs(),
         enableSignToggleButton: false,
-        currency: amountDisplayCurrency ?? fromAccount?.currency,
+        currency: fromAccount?.currency,
         onSubmit: (amount) {
           applyAmountFromSelector(amount);
           RouteUtils.popRoute();
         },
       ),
     );
+  }
+
+  void openInvestmentValuationAmountSelector(BuildContext context) {
+    final tr = Translations.of(context);
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (ctx) => AmountSelector(
+        title: tr.assets.details.trade_sheet_valuation_create_new_title,
+        initialAmount: investmentValuationAmount,
+        enableSignToggleButton: false,
+        currency: _asset?.currency ?? fromAccount?.currency,
+        onSubmit: (amount) {
+          applyInvestmentValuationAmount(amount);
+          RouteUtils.popRoute();
+        },
+      ),
+    );
+  }
+
+  void openDualLegTopAmountSelector(
+    BuildContext context, {
+    double defaultDestinationAmount = 0,
+  }) {
+    if (transactionType.isTransfer) {
+      if (dualLegTopIsOutflow) {
+        openTransferSourceAmountSelector(context);
+      } else {
+        openTransferDestinationAmountSelector(
+          context,
+          defaultDestinationAmount: defaultDestinationAmount,
+        );
+      }
+    } else {
+      openInvestmentCashAmountSelector(context);
+    }
   }
 
   void onSavePressed(BuildContext context) {
