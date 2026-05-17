@@ -25,7 +25,7 @@ class TransactionFormTypeSelector extends StatelessWidget {
     final types = [
       TransactionType.income,
       TransactionType.expense,
-      TransactionType.transfer,
+      if (c.linkedDebt == null) TransactionType.transfer,
     ];
 
     return Padding(

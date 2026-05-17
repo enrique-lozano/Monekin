@@ -21,7 +21,7 @@ class TransactionFormAssetValuationSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.watch<TransactionFormController>();
     final asset = c.asset;
-    final amount = c.transactionValue.abs();
+    final amount = c.investmentValuationAmount;
 
     if (!c.isAssetTradeInvestment || asset == null || amount <= 0) {
       return const SizedBox.shrink();
@@ -70,7 +70,7 @@ class TransactionFormAssetValuationSwitch extends StatelessWidget {
                 ? sectionTr.trade_sheet_update_following_valuations_description
                 : sectionTr.trade_sheet_valuation_adjust_current_description;
 
-            final noImpact = nextValue == currentValue;
+            final noImpact = !c.isEditMode && nextValue == currentValue;
 
             return SwitchListTile(
               title: Text(switchTitle),

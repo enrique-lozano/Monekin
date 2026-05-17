@@ -687,6 +687,9 @@ class TransactionFormController extends ChangeNotifier {
 
     if (transactionType == TransactionType.investment) {
       transactionValue = transaction.value.abs();
+      if (transaction.assetID != null) {
+        _updateValuations = true;
+      }
     } else if (transactionType == TransactionType.expense) {
       transactionValue = transactionValue * -1;
     }
