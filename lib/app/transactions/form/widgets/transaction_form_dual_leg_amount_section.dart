@@ -242,8 +242,8 @@ class _DualLegBody extends StatelessWidget {
                         onReset: isTransfer
                             ? (topOut
                                   ? c.clearTransferDestinationOverride
-                                  : () =>
-                                        c.alignTransferSourceFromInverseConverted(
+                                  : () => c
+                                        .alignTransferSourceFromInverseConverted(
                                           expectedSource,
                                         ))
                             : (topOut

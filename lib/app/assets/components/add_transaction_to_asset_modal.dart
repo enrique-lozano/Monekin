@@ -11,7 +11,10 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-void showAddTransactionToAssetModal(BuildContext context, {required Asset asset}) {
+void showAddTransactionToAssetModal(
+  BuildContext context, {
+  required Asset asset,
+}) {
   showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,

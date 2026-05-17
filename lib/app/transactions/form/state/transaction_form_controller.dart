@@ -567,7 +567,9 @@ class TransactionFormController extends ChangeNotifier {
     );
 
     if (!isEditMode) {
-      postCall = TransactionService.instance.insertTransaction(transactionToPost);
+      postCall = TransactionService.instance.insertTransaction(
+        transactionToPost,
+      );
     }
 
     postCall
@@ -823,8 +825,7 @@ class TransactionFormController extends ChangeNotifier {
   void applyInvestmentValuationAmount(double amount) {
     final a = amount.abs();
     final cash = transactionValue.abs();
-    _investmentValuationAmountOverride =
-        nearlyEqualMoney(a, cash) ? null : a;
+    _investmentValuationAmountOverride = nearlyEqualMoney(a, cash) ? null : a;
     _safeNotify();
   }
 

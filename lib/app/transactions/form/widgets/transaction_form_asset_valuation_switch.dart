@@ -29,8 +29,9 @@ class TransactionFormAssetValuationSwitch extends StatelessWidget {
 
     final signedValue = c.investmentIsBuy ? -amount : amount;
     final tradeDate = c.date;
-    final previousSignedValue =
-        c.isEditMode ? c.transactionToEdit?.value : null;
+    final previousSignedValue = c.isEditMode
+        ? c.transactionToEdit?.value
+        : null;
     final previousTradeDate = c.isEditMode ? c.transactionToEdit?.date : null;
 
     return StreamBuilder<List<ValuationInDB>>(
@@ -50,9 +51,9 @@ class TransactionFormAssetValuationSwitch extends StatelessWidget {
             final hasPreviousImpactAtSelectedDate =
                 previousSignedValue != null &&
                 previousTradeDate != null &&
-                !DateUtils.dateOnly(previousTradeDate).isAfter(
-                  DateUtils.dateOnly(tradeDate),
-                );
+                !DateUtils.dateOnly(
+                  previousTradeDate,
+                ).isAfter(DateUtils.dateOnly(tradeDate));
 
             final nextValue = hasPreviousImpactAtSelectedDate
                 ? currentValue - (signedValue - previousSignedValue)

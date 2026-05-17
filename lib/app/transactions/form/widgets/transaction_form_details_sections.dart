@@ -31,8 +31,7 @@ class TransactionFormDetailsSections extends StatelessWidget {
           BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm))
         DebtLinkBanner(debt: c.linkedDebt!),
       const TransactionDateSelector(),
-      if (c.isAssetTradeInvestment)
-        const TransactionFormAssetValuationSwitch(),
+      if (c.isAssetTradeInvestment) const TransactionFormAssetValuationSwitch(),
       if (!c.isAssetTradeInvestment) const TransactionRecurrencySelector(),
       const TransactionStatusSelector(),
     ];

@@ -646,10 +646,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     final t = Translations.of(context);
 
     return FilledButton.tonalIcon(
-      onPressed: () => showAddTransactionToAssetModal(
-        context,
-        asset: widget.asset,
-      ),
+      onPressed: () =>
+          showAddTransactionToAssetModal(context, asset: widget.asset),
       icon: const Icon(Icons.add_link_rounded),
       label: Text(t.assets.actions.add_register.button_label),
     );
