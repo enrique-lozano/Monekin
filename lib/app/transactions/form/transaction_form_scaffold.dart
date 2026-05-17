@@ -78,11 +78,15 @@ class TransactionFormScaffold extends StatelessWidget {
       ),
     ];
 
-    final saveLabel = c.isEditMode
+    final saveLabel = c.isAssetTradeInvestment
+        ? (c.investmentIsBuy ? t.assets.details.buy : t.assets.details.sell)
+        : c.isEditMode
         ? t.transaction.edit
-        : c.isAssetTradeInvestment
-        ? t.transaction.create
         : '${t.ui_actions.save} ${c.transactionType.displayName(context)}';
+
+    final saveButtonColor = c.isAssetTradeInvestment
+        ? c.investmentAccent(context)
+        : c.transactionType.color(context);
 
     return SafeArea(
       bottom: false,
@@ -95,11 +99,9 @@ class TransactionFormScaffold extends StatelessWidget {
           PersistentFooterButton(
             child: FilledButton.icon(
               style: getBigButtonStyle(context).copyWith(
-                backgroundColor: WidgetStatePropertyAll(
-                  c.transactionType.color(context),
-                ),
+                backgroundColor: WidgetStatePropertyAll(saveButtonColor),
                 foregroundColor: WidgetStatePropertyAll(
-                  c.transactionType.color(context).getContrastColor(),
+                  saveButtonColor.getContrastColor(),
                 ),
                 fixedSize: const WidgetStatePropertyAll(Size.fromHeight(42)),
               ),
