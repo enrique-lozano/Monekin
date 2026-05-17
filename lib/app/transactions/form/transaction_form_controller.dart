@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
+import 'package:monekin/app/transactions/form/asset_selector_modal.dart';
 import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/evaluate_expression.dart';
@@ -91,8 +92,8 @@ class TransactionFormController extends ChangeNotifier {
   Asset? _asset;
   bool _updateValuations = false;
 
-  /// Buy vs sell for asset trades (editable in the form; seeded from [AssetTradeFormContext] or the row being edited).
-  bool _investmentIsBuy = true;
+  /// When true, money flows from the bottom leg to the top leg (transfer) or is a sell (investment).
+  bool _dualLegFlowReversed = false;
 
   TextEditingController get amountTextController => _amountTextController;
 
@@ -113,16 +114,24 @@ class TransactionFormController extends ChangeNotifier {
         edit.assetID != null;
   }
 
-  bool get investmentIsBuy {
-    if (!isAssetTradeInvestment) return true;
-    return _investmentIsBuy;
-  }
+  bool get dualLegFlowReversed => _dualLegFlowReversed;
 
-  void setInvestmentIsBuy(bool buy) {
-    if (!isAssetTradeInvestment || buy == _investmentIsBuy) return;
-    _investmentIsBuy = buy;
-    _safeNotify();
-  }
+  bool get investmentIsBuy =>
+      isAssetTradeInvestment && !_dualLegFlowReversed;
+
+  bool get dualLegTopIsOutflow => isAssetTradeInvestment
+      ? investmentIsBuy
+      : !_dualLegFlowReversed;
+
+  bool get canPickAsset =>
+      isAssetTradeInvestment && _assetTradeContext == null;
+
+  Account? get effectiveTransferFromAccount => _dualLegFlowReversed
+      ? transferAccount
+      : fromAccount;
+
+  Account? get effectiveTransferToAccount =>
+      _dualLegFlowReversed ? fromAccount : transferAccount;
 
   Asset? get asset => _asset;
   bool get updateValuations => _updateValuations;
@@ -148,13 +157,13 @@ class TransactionFormController extends ChangeNotifier {
       transactionType = TransactionType.investment;
       final edit = _transactionToEdit;
       if (edit != null) {
-        _investmentIsBuy = edit.value.isNegative;
+        _dualLegFlowReversed = !edit.value.isNegative;
         _fillForm(edit);
         unawaited(_loadInvestmentAsset());
         return;
       }
       _asset = _assetTradeContext?.asset;
-      _investmentIsBuy = _assetTradeContext?.isBuy ?? true;
+      _dualLegFlowReversed = !(_assetTradeContext?.isBuy ?? true);
       return;
     }
 
@@ -309,12 +318,12 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
-  void swapTransferAccounts() {
-    if (!transactionType.isTransfer) return;
-    final tmp = fromAccount;
-    fromAccount = transferAccount;
-    transferAccount = tmp;
-    valueInDestinyController.clear();
+  void toggleDualLegFlowDirection() {
+    if (!transactionType.isTransfer && !isAssetTradeInvestment) return;
+    _dualLegFlowReversed = !_dualLegFlowReversed;
+    if (transactionType.isTransfer) {
+      valueInDestinyController.clear();
+    }
     _safeNotify();
   }
 
@@ -421,6 +430,7 @@ class TransactionFormController extends ChangeNotifier {
       return investmentIsBuy ? -abs : abs;
     }
     if (transactionType == TransactionType.transfer) {
+      if (_dualLegFlowReversed) return transactionValue.abs();
       return -transactionValue.abs();
     }
     return transactionValue;
@@ -468,7 +478,11 @@ class TransactionFormController extends ChangeNotifier {
       return;
     }
 
-    if (fromAccount != null && fromAccount!.date.compareTo(date) > 0) {
+    final accountForDateCheck = transactionType.isTransfer
+        ? effectiveTransferFromAccount
+        : fromAccount;
+    if (accountForDateCheck != null &&
+        accountForDateCheck.date.compareTo(date) > 0) {
       MonekinSnackbar.warning(
         SnackbarParams(
           t.transaction.form.validators.date_after_account_creation,
@@ -500,11 +514,15 @@ class TransactionFormController extends ChangeNotifier {
       resolvedTitle = titleTrim;
     }
 
+    final postingFrom = transactionType.isTransfer
+        ? effectiveTransferFromAccount
+        : fromAccount;
+
     final transactionToPost = TransactionInDB(
       id: newTrID,
       date: date,
       type: transactionType,
-      accountID: fromAccount!.id,
+      accountID: postingFrom!.id,
       value: signedValue,
       isHidden: false,
       status: date.compareTo(DateTime.now()) > 0
@@ -530,7 +548,7 @@ class TransactionFormController extends ChangeNotifier {
           : null,
       debtId: _linkedDebt?.id,
       receivingAccountID: transactionType.isTransfer
-          ? transferAccount?.id
+          ? effectiveTransferToAccount?.id
           : null,
       assetID: isAssetTradeInvestment
           ? _asset!.id
@@ -755,6 +773,25 @@ class TransactionFormController extends ChangeNotifier {
     }
   }
 
+  Future<void> pickAsset(BuildContext context) async {
+    if (!canPickAsset) return;
+    final picked = await showAssetSelectorBottomSheet(
+      context,
+      selectedAsset: _asset,
+    );
+    if (picked == null || _disposed) return;
+    _asset = picked;
+    if (fromAccount == null && picked.linkedAccountID != null) {
+      final acc = await AccountService.instance
+          .getAccountById(picked.linkedAccountID!)
+          .first;
+      if (!_disposed && acc != null) {
+        fromAccount = acc;
+      }
+    }
+    _safeNotify();
+  }
+
   void onTitleFieldSubmitted(BuildContext context, String _) {
     notesFocusNode.requestFocus();
   }
@@ -825,7 +862,7 @@ class TransactionFormController extends ChangeNotifier {
         title: tr.transaction.form.value,
         initialAmount: transactionValue.abs(),
         enableSignToggleButton: false,
-        currency: fromAccount?.currency,
+        currency: effectiveTransferFromAccount?.currency,
         onSubmit: (amount) {
           applyTransferSourceAmount(amount);
           RouteUtils.popRoute();
@@ -848,7 +885,7 @@ class TransactionFormController extends ChangeNotifier {
         title: tr.transfer.form.value_in_destiny.title,
         initialAmount: initial,
         enableSignToggleButton: false,
-        currency: transferAccount?.currency,
+        currency: effectiveTransferToAccount?.currency,
         onSubmit: (amount) {
           applyTransferDestinationAmount(
             amount,

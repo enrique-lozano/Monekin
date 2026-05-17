@@ -45,7 +45,8 @@ class TransactionFormScaffold extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: 24,
           children: [
-            const TransactionFormTypeSelector(padding: EdgeInsets.zero),
+            if (!c.isAssetTradeInvestment)
+              const TransactionFormTypeSelector(padding: EdgeInsets.zero),
             amountOrDual,
           ],
         ),
@@ -125,10 +126,11 @@ class TransactionFormScaffold extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 12, 16, 14),
-                  child: TransactionFormTypeSelector(padding: EdgeInsets.zero),
-                ),
+                if (!c.isAssetTradeInvestment)
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(16, 12, 16, 14),
+                    child: TransactionFormTypeSelector(padding: EdgeInsets.zero),
+                  ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),

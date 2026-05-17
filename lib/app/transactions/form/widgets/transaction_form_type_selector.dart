@@ -4,10 +4,9 @@ import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
 
-/// Segmented control for income / expense / transfer (hidden for locked asset trade flows).
+/// Segmented control for income / expense / transfer.
 class TransactionFormTypeSelector extends StatelessWidget {
   const TransactionFormTypeSelector({
     super.key,
@@ -20,59 +19,8 @@ class TransactionFormTypeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.watch<TransactionFormController>();
 
-    if (c.isAssetTradeInvestment) {
-      final t = Translations.of(context);
-      final accent = c.investmentAccent(context);
-      final onAccent = accent.getContrastColor();
-      return Padding(
-        padding: padding,
-        child: SizedBox(
-          width: double.infinity,
-          child: SegmentedButton<bool>(
-            segments: [
-              ButtonSegment<bool>(
-                value: true,
-                label: Text(t.assets.details.buy),
-              ),
-              ButtonSegment<bool>(
-                value: false,
-                label: Text(t.assets.details.sell),
-              ),
-            ],
-            selected: {c.investmentIsBuy},
-            onSelectionChanged: (next) {
-              final v = next.firstOrNull;
-              if (v == null) return;
-              final t = Translations.of(context);
-              final buyL = t.assets.details.buy;
-              final sellL = t.assets.details.sell;
-              final cur = c.titleController.text.trim();
-              if (cur.isEmpty || cur == buyL || cur == sellL) {
-                c.titleController.text = v ? buyL : sellL;
-              }
-              c.setInvestmentIsBuy(v);
-            },
-            showSelectedIcon: false,
-            style: ButtonStyle(
-              animationDuration: const Duration(milliseconds: 250),
-              side: WidgetStateProperty.resolveWith(
-                (s) => const BorderSide(style: BorderStyle.none, width: 0),
-              ),
-              foregroundColor: WidgetStateProperty.resolveWith(
-                (s) => s.contains(WidgetState.selected)
-                    ? onAccent
-                    : AppColors.of(context).textBody,
-              ),
-              backgroundColor: WidgetStateProperty.resolveWith(
-                (s) => s.contains(WidgetState.selected)
-                    ? accent
-                    : Theme.of(context).colorScheme.surfaceContainerHigh,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+    if (c.isAssetTradeInvestment) return const SizedBox.shrink();
+
     final selectedColor = c.transactionType.color(context);
     final types = [
       TransactionType.income,

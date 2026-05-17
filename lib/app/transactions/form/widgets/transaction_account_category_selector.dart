@@ -74,7 +74,7 @@ class TransactionAccountCategorySelector extends StatelessWidget {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               ),
               onPressed: transactionType.isTransfer
-                  ? form.swapTransferAccounts
+                  ? form.toggleDualLegFlowDirection
                   : null,
               icon: const Icon(Icons.arrow_downward_rounded),
               tooltip: t.transfer.display,

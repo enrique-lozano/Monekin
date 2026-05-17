@@ -43,10 +43,7 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (c.transactionType.isTransfer)
-                const _TransferDualLegBody()
-              else
-                const _InvestmentDualLegBody(),
+              const _DualLegBody(),
               TransactionFormAmountBlock.insufficientBalanceWarning(context),
             ],
           );
@@ -79,234 +76,263 @@ class _DualLegCard extends StatelessWidget {
   }
 }
 
-class _TransferDualLegBody extends StatelessWidget {
-  const _TransferDualLegBody();
+class _DualLegBody extends StatelessWidget {
+  const _DualLegBody();
 
   @override
   Widget build(BuildContext context) {
     final c = context.read<TransactionFormController>();
+    final isTransfer = c.transactionType.isTransfer;
     final from = c.fromAccount;
     final to = c.transferAccount;
+    final asset = c.asset;
     final scheme = Theme.of(context).colorScheme;
+    final borderColor = scheme.primary;
 
-    final differentCurrency = from?.currency.code != to?.currency.code;
+    final effectiveFrom = isTransfer ? c.effectiveTransferFromAccount : from;
+    final effectiveTo = isTransfer ? c.effectiveTransferToAccount : null;
 
-    return StreamBuilder(
-      stream: from != null && to != null
-          ? ExchangeRateService.instance.calculateExchangeRate(
-              fromCurrency: from.currency.code,
-              toCurrency: to.currency.code,
-              amount: c.transactionValue.abs(),
-              date: c.date,
-            )
-          : Stream.value(null),
+    final fxFromCode = isTransfer
+        ? effectiveFrom?.currency.code
+        : from?.currency.code;
+    final fxToCode = isTransfer
+        ? effectiveTo?.currency.code
+        : asset?.currency.code;
+    final differentCurrency =
+        fxFromCode != null && fxToCode != null && fxFromCode != fxToCode;
 
-      builder: (context, snap) {
-        final defaultDest = snap.data ?? c.transactionValue.abs();
-        final destDisplay = c.valueInDestinyToNumber ?? defaultDest;
-        final sAbs = c.transactionValue.abs();
-        final expectedSource = defaultDest <= 1e-12
-            ? sAbs
-            : destDisplay * sAbs / defaultDest;
-        final sourceMismatch = !TransactionFormController.nearlyEqualMoney(
-          sAbs,
-          expectedSource,
-        );
-        final destMismatch = !TransactionFormController.nearlyEqualMoney(
-          destDisplay,
-          defaultDest,
-        );
+    final topOut = c.dualLegTopIsOutflow;
+    final reversed = c.dualLegFlowReversed;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _DualLegCard(
-              borderColor: scheme.primary,
+    Widget buildLegs({
+      required double defaultDest,
+      required double destDisplay,
+      required bool sourceMismatch,
+      required bool destMismatch,
+      required double expectedSource,
+    }) {
+      final topAmount = topOut ? c.transactionValue.abs() : destDisplay;
+      final bottomAmount = topOut ? destDisplay : c.transactionValue.abs();
+      final topCurrency = from?.currency;
+      final bottomCurrency = isTransfer
+          ? to?.currency
+          : (c.amountDisplayCurrency ?? asset?.currency);
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _DualLegCard(
+            borderColor: borderColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 10,
+              children: [
+                _AccountLegHeader(
+                  account: from,
+                  onTapAccount: () => c.pickFromAccount(context),
+                  subtitle: from == null
+                      ? null
+                      : _AccountCurrentBalanceSubtitle(account: from),
+                ),
+                if (from != null || !isTransfer)
+                  _LegAmountRow(
+                    isOutflow: topOut,
+                    currency: topCurrency,
+                    amount: topAmount,
+                    onTapAmount: () {
+                      if (isTransfer) {
+                        if (topOut) {
+                          c.openTransferSourceAmountSelector(context);
+                        } else {
+                          c.openTransferDestinationAmountSelector(
+                            context,
+                            defaultDestinationAmount: defaultDest,
+                          );
+                        }
+                      } else {
+                        c.openInvestmentAmountSelector(context);
+                      }
+                    },
+                    showReset:
+                        isTransfer && (topOut ? sourceMismatch : destMismatch),
+                    onReset: !isTransfer
+                        ? null
+                        : topOut
+                        ? () => c.alignTransferSourceFromInverseConverted(
+                            expectedSource,
+                          )
+                        : c.clearTransferDestinationOverride,
+                  ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                _DualLegDirectionButton(
+                  reversed: reversed,
+                  onPressed: () => _onDirectionPressed(context, c),
+                ),
+                if (differentCurrency) ...[
+                  const Spacer(),
+                  _FxChip(
+                    fromCode: fxFromCode,
+                    toCode: fxToCode,
+                    date: c.date,
+                  ),
+                ],
+              ],
+            ),
+          ),
+          ShakeWidget(
+            duration: const Duration(milliseconds: 200),
+            shakeCount: 1,
+            shakeOffset: 10,
+            key: c.shakeKey,
+            child: _DualLegCard(
+              borderColor: borderColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 spacing: 10,
                 children: [
-                  _AccountLegHeader(
-                    account: from,
-                    onTapAccount: () => c.pickFromAccount(context),
-                    subtitle: from == null
-                        ? null
-                        : _AccountCurrentBalanceSubtitle(account: from),
-                  ),
-                  if (from != null)
-                    _LegAmountRow(
-                      isOutflow: true,
-                      currency: from.currency,
-                      amount: c.transactionValue.abs(),
-                      onTapAmount: () =>
-                          c.openTransferSourceAmountSelector(context),
-                      showReset: sourceMismatch,
-                      onReset: sourceMismatch
-                          ? () => c.alignTransferSourceFromInverseConverted(
-                              expectedSource,
-                            )
-                          : null,
-                    ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                children: [
-                  IconButton.filledTonal(
-                    style: IconButton.styleFrom(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    onPressed: c.swapTransferAccounts,
-                    icon: const Icon(Icons.arrow_downward_rounded),
-                    tooltip: Translations.of(context).transfer.display,
-                  ),
-                  if (differentCurrency && from != null && to != null) ...[
-                    const Spacer(),
-                    _FxChip(
-                      fromCode: from.currency.code,
-                      toCode: to.currency.code,
-                      date: c.date,
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            ShakeWidget(
-              duration: const Duration(milliseconds: 200),
-              shakeCount: 1,
-              shakeOffset: 10,
-              key: c.shakeKey,
-              child: _DualLegCard(
-                borderColor: scheme.primary,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: 10,
-                  children: [
+                  if (isTransfer)
                     _AccountLegHeader(
                       account: to,
                       onTapAccount: () => c.pickTransferAccount(context),
                       subtitle: to == null
                           ? null
                           : _AccountCurrentBalanceSubtitle(account: to),
+                    )
+                  else
+                    _AssetLegHeader(
+                      assetName: asset?.name,
+                      showPicker: c.canPickAsset,
+                      onTapAsset: c.canPickAsset
+                          ? () => c.pickAsset(context)
+                          : null,
+                      subtitle: asset != null
+                          ? _AssetBookedValueSubtitle(
+                              asset: asset,
+                              date: c.date,
+                            )
+                          : null,
                     ),
-                    if (to != null) ...[
-                      _LegAmountRow(
-                        isOutflow: false,
-                        currency: to.currency,
-                        amount: destDisplay,
-                        onTapAmount: () =>
+                  if (isTransfer ? to != null : asset != null)
+                    _LegAmountRow(
+                      isOutflow: !topOut,
+                      currency: bottomCurrency,
+                      amount: bottomAmount,
+                      onTapAmount: () {
+                        if (isTransfer) {
+                          if (!topOut) {
+                            c.openTransferSourceAmountSelector(context);
+                          } else {
                             c.openTransferDestinationAmountSelector(
                               context,
                               defaultDestinationAmount: defaultDest,
+                            );
+                          }
+                        } else {
+                          c.openInvestmentAmountSelector(context);
+                        }
+                      },
+                      showReset: isTransfer &&
+                          (topOut ? destMismatch : sourceMismatch),
+                      onReset: !isTransfer
+                          ? null
+                          : topOut
+                          ? c.clearTransferDestinationOverride
+                          : () => c.alignTransferSourceFromInverseConverted(
+                              expectedSource,
                             ),
-                        showReset: destMismatch,
-                        onReset: destMismatch
-                            ? c.clearTransferDestinationOverride
-                            : null,
-                      ),
-                    ],
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      );
+    }
+
+    if (isTransfer && effectiveFrom != null && effectiveTo != null) {
+      return StreamBuilder(
+        stream: ExchangeRateService.instance.calculateExchangeRate(
+          fromCurrency: effectiveFrom.currency.code,
+          toCurrency: effectiveTo.currency.code,
+          amount: c.transactionValue.abs(),
+          date: c.date,
+        ),
+        builder: (context, snap) {
+          final defaultDest = snap.data ?? c.transactionValue.abs();
+          final destDisplay = c.valueInDestinyToNumber ?? defaultDest;
+          final sAbs = c.transactionValue.abs();
+          final expectedSource = defaultDest <= 1e-12
+              ? sAbs
+              : destDisplay * sAbs / defaultDest;
+          final sourceMismatch = !TransactionFormController.nearlyEqualMoney(
+            sAbs,
+            expectedSource,
+          );
+          final destMismatch = !TransactionFormController.nearlyEqualMoney(
+            destDisplay,
+            defaultDest,
+          );
+
+          return buildLegs(
+            defaultDest: defaultDest,
+            destDisplay: destDisplay,
+            sourceMismatch: sourceMismatch,
+            destMismatch: destMismatch,
+            expectedSource: expectedSource,
+          );
+        },
+      );
+    }
+
+    return buildLegs(
+      defaultDest: c.transactionValue.abs(),
+      destDisplay: c.transactionValue.abs(),
+      sourceMismatch: false,
+      destMismatch: false,
+      expectedSource: c.transactionValue.abs(),
     );
+  }
+
+  void _onDirectionPressed(BuildContext context, TransactionFormController c) {
+    c.toggleDualLegFlowDirection();
+    if (!c.isAssetTradeInvestment) return;
+
+    final t = Translations.of(context);
+    final buyL = t.assets.details.buy;
+    final sellL = t.assets.details.sell;
+    final cur = c.titleController.text.trim();
+    if (cur.isEmpty || cur == buyL || cur == sellL) {
+      c.titleController.text = c.investmentIsBuy ? buyL : sellL;
+    }
   }
 }
 
-class _InvestmentDualLegBody extends StatelessWidget {
-  const _InvestmentDualLegBody();
+class _DualLegDirectionButton extends StatelessWidget {
+  const _DualLegDirectionButton({
+    required this.reversed,
+    required this.onPressed,
+  });
+
+  final bool reversed;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.read<TransactionFormController>();
-    final from = c.fromAccount;
-    final asset = c.asset;
-    final scheme = Theme.of(context).colorScheme;
-    final accent = c.investmentAccent(context);
-    final topOut = c.investmentIsBuy;
-    final displayCurrency =
-        c.amountDisplayCurrency ?? from?.currency ?? asset?.currency;
-
-    final differentCurrency =
-        from != null &&
-        asset != null &&
-        from.currency.code != asset.currency.code;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _DualLegCard(
-          borderColor: accent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 10,
-            children: [
-              _AccountLegHeader(
-                account: from,
-                onTapAccount: () => c.pickFromAccount(context),
-                subtitle: from != null
-                    ? _AccountCurrentBalanceSubtitle(account: from)
-                    : null,
-              ),
-              _LegAmountRow(
-                isOutflow: topOut,
-                currency: from?.currency,
-                amount: c.transactionValue.abs(),
-                onTapAmount: () => c.openInvestmentAmountSelector(context),
-                showReset: false,
-                onReset: null,
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Icon(
-                Icons.arrow_downward_rounded,
-                color: scheme.onSurfaceVariant,
-              ),
-              if (differentCurrency) ...[
-                const Spacer(),
-                _FxChip(
-                  fromCode: from.currency.code,
-                  toCode: asset.currency.code,
-                  date: c.date,
-                ),
-              ],
-            ],
-          ),
-        ),
-        _DualLegCard(
-          borderColor: accent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            spacing: 10,
-            children: [
-              _AssetLegHeader(
-                assetName: asset?.name,
-                subtitle: asset != null
-                    ? _AssetBookedValueSubtitle(asset: asset, date: c.date)
-                    : null,
-              ),
-              _LegAmountRow(
-                isOutflow: !topOut,
-                currency: displayCurrency,
-                amount: c.transactionValue.abs(),
-                onTapAmount: () => c.openInvestmentAmountSelector(context),
-                showReset: false,
-                onReset: null,
-              ),
-            ],
-          ),
-        ),
-      ],
+    return IconButton.filledTonal(
+      style: IconButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+      onPressed: onPressed,
+      icon: Icon(
+        reversed ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
+      ),
+      tooltip: Translations.of(context).transfer.display,
     );
   }
 }
@@ -506,9 +532,16 @@ class _AccountLegHeader extends StatelessWidget {
 }
 
 class _AssetLegHeader extends StatelessWidget {
-  const _AssetLegHeader({required this.assetName, this.subtitle});
+  const _AssetLegHeader({
+    required this.assetName,
+    required this.showPicker,
+    this.onTapAsset,
+    this.subtitle,
+  });
 
   final String? assetName;
+  final bool showPicker;
+  final VoidCallback? onTapAsset;
   final Widget? subtitle;
 
   @override
@@ -517,8 +550,8 @@ class _AssetLegHeader extends StatelessWidget {
     final scheme = theme.colorScheme;
     final name = assetName ?? '…';
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
+    final content = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -532,13 +565,26 @@ class _AssetLegHeader extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    if (showPicker)
+                      Icon(
+                        Icons.expand_more_rounded,
+                        color: scheme.onSurfaceVariant,
+                        size: 20,
+                      ),
+                  ],
                 ),
                 if (subtitle != null) subtitle!,
               ],
@@ -546,6 +592,20 @@ class _AssetLegHeader extends StatelessWidget {
           ),
         ],
       ),
+    );
+
+    if (!showPicker || onTapAsset == null) {
+      return content;
+    }
+
+    return Tappable(
+      onTap: () {
+        unfocusCurrentFocusedItem(context);
+        onTapAsset!();
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      bgColor: Colors.transparent,
+      child: content,
     );
   }
 }
