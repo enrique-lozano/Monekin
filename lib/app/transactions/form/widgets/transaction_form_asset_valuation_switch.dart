@@ -70,7 +70,9 @@ class TransactionFormAssetValuationSwitch extends StatelessWidget {
                 ? sectionTr.trade_sheet_update_following_valuations_description
                 : sectionTr.trade_sheet_valuation_adjust_current_description;
 
-            final noImpact = !c.isEditMode && nextValue == currentValue;
+            final noImpact =
+                (!c.isEditMode && nextValue == currentValue) ||
+                (c.isEditMode && c.investmentValuationDraftUnchangedOnEdit);
 
             return SwitchListTile(
               title: Text(switchTitle),

@@ -149,6 +149,18 @@ class TransactionFormController extends ChangeNotifier {
         transactionValue.abs(),
       );
 
+  /// Edit mode: date, asset leg amount, and buy/sell match the stored transaction.
+  bool get investmentValuationDraftUnchangedOnEdit {
+    final edit = _transactionToEdit;
+    if (edit == null || !isAssetTradeInvestment) return false;
+    if (!DateUtils.isSameDay(date, edit.date)) return false;
+    if (!nearlyEqualMoney(investmentValuationAmount, edit.value.abs())) {
+      return false;
+    }
+    final wasBuy = edit.value.isNegative;
+    return investmentIsBuy == wasBuy;
+  }
+
   MoneyTransaction? get transactionToEdit => _transactionToEdit;
   Debt? get linkedDebt => _linkedDebt;
   Asset? get linkedAsset => _linkedAsset;
@@ -552,9 +564,11 @@ class TransactionFormController extends ChangeNotifier {
     );
 
     final previousForValuation = isEditMode ? _transactionToEdit : null;
-    final shouldApplyValuation = isAssetTradeInvestment && _updateValuations;
-    final shouldShiftFutureValuations =
-        isAssetTradeInvestment && _updateValuations;
+    final shouldApplyValuation =
+        isAssetTradeInvestment &&
+        _updateValuations &&
+        !investmentValuationDraftUnchangedOnEdit;
+    final shouldShiftFutureValuations = shouldApplyValuation;
     final valuationDelta = shouldApplyValuation
         ? InvestmentService.valuationDeltaForAssetLeg(
             assetLegAmountAbs: investmentValuationAmount,
@@ -687,9 +701,6 @@ class TransactionFormController extends ChangeNotifier {
 
     if (transactionType == TransactionType.investment) {
       transactionValue = transaction.value.abs();
-      if (transaction.assetID != null) {
-        _updateValuations = true;
-      }
     } else if (transactionType == TransactionType.expense) {
       transactionValue = transactionValue * -1;
     }
