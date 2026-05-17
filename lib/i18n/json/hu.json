@@ -878,7 +878,6 @@
       "trade_sheet_update_following_valuations": "Frissítse a későbbi értékeléseket",
       "trade_sheet_update_following_valuations_description": "Igazítsa az eszköz kiválasztott dátum utáni értékeléseit.",
       "trade_sheet_valuation_current_value_label": "Jelenlegi érték",
-      "trade_sheet_valuation_new_value_label": "Új érték",
       "trade_sheet_valuation_create_new_title": "Új értékelés létrehozása",
       "trade_sheet_valuation_adjust_current_description": "Az eszköz jelenlegi értékének módosítása",
       "trade_form_asset_column": "Eszköz",

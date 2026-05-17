@@ -878,7 +878,6 @@
       "trade_sheet_update_following_valuations": "Aktualisieren Sie spätere Bewertungen",
       "trade_sheet_update_following_valuations_description": "Passen Sie Bewertungen dieses Vermögenswerts an, die nach dem gewählten Datum liegen.",
       "trade_sheet_valuation_current_value_label": "Aktueller Wert",
-      "trade_sheet_valuation_new_value_label": "Neuer Wert",
       "trade_sheet_valuation_create_new_title": "Neue Bewertung erstellen",
       "trade_sheet_valuation_adjust_current_description": "Aktuellen Wert des Vermögenswerts anpassen",
       "trade_form_asset_column": "Anlage",

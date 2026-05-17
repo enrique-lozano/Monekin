@@ -878,7 +878,6 @@
       "trade_sheet_update_following_valuations": "稍後更新估值",
       "trade_sheet_update_following_valuations_description": "調整所選日期之後的資產估價。",
       "trade_sheet_valuation_current_value_label": "目前價值",
-      "trade_sheet_valuation_new_value_label": "新價值",
       "trade_sheet_valuation_create_new_title": "建立新估價",
       "trade_sheet_valuation_adjust_current_description": "調整資產的目前價值",
       "trade_form_asset_column": "資產",

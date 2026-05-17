@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_asset_valuation_switch.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
@@ -20,11 +20,6 @@ class TransactionFormDetailsSections extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.watch<TransactionFormController>();
     final t = Translations.of(context);
-    final showValueIndicator =
-        c.asset != null &&
-        c.isAssetTradeInvestment &&
-        c.transactionValue.abs() > 0;
-
     final detailsChildren = <Widget>[
       TransactionTitleField(
         controller: c.titleController,
@@ -36,18 +31,8 @@ class TransactionFormDetailsSections extends StatelessWidget {
           BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm))
         DebtLinkBanner(debt: c.linkedDebt!),
       const TransactionDateSelector(),
-      if (showValueIndicator)
-        AssetValuationImpactSection(
-          asset: c.asset!,
-          isBuy: c.investmentIsBuy,
-          cardMargin: EdgeInsets.zero,
-          tradeDate: c.date,
-          tradeAmountAbs: c.transactionValue.abs(),
-          previousSignedValue: c.isEditMode ? c.transactionToEdit?.value : null,
-          previousTradeDate: c.isEditMode ? c.transactionToEdit?.date : null,
-          updateValuations: c.updateValuations,
-          onUpdateValuationsChanged: (v) => c.updateValuations = v,
-        ),
+      if (c.isAssetTradeInvestment)
+        const TransactionFormAssetValuationSwitch(),
       if (!c.isAssetTradeInvestment) const TransactionRecurrencySelector(),
       const TransactionStatusSelector(),
     ];

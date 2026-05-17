@@ -894,7 +894,6 @@
       "trade_sheet_update_following_valuations": "Update later valuations",
       "trade_sheet_update_following_valuations_description": "Adjust valuations for this asset dated after the selected date.",
       "trade_sheet_valuation_current_value_label": "Current value",
-      "trade_sheet_valuation_new_value_label": "New value",
       "trade_sheet_valuation_create_new_title": "Create new valuation",
       "trade_sheet_valuation_adjust_current_description": "Adjust the asset's current value",
       "trade_form_asset_column": "Asset",

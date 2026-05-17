@@ -878,7 +878,6 @@
       "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
       "trade_sheet_update_following_valuations_description": "Вирівняйте оцінки активу після обраної дати.",
       "trade_sheet_valuation_current_value_label": "Поточне значення",
-      "trade_sheet_valuation_new_value_label": "Нове значення",
       "trade_sheet_valuation_create_new_title": "Створити нову оцінку",
       "trade_sheet_valuation_adjust_current_description": "Скоригувати поточну вартість активу",
       "trade_form_asset_column": "Актив",

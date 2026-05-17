@@ -878,7 +878,6 @@
       "trade_sheet_update_following_valuations": "Aggiornare le valutazioni successive",
       "trade_sheet_update_following_valuations_description": "Allinea le valutazioni dell'asset successive alla data selezionata.",
       "trade_sheet_valuation_current_value_label": "Valore attuale",
-      "trade_sheet_valuation_new_value_label": "Nuovo valore",
       "trade_sheet_valuation_create_new_title": "Crea una nuova valutazione",
       "trade_sheet_valuation_adjust_current_description": "Regola il valore attuale dell'asset",
       "trade_form_asset_column": "Asset",

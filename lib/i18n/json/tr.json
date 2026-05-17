@@ -878,7 +878,6 @@
       "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
       "trade_sheet_update_following_valuations_description": "Seçilen tarihten sonraki varlık değerlemelerini güncelleyin.",
       "trade_sheet_valuation_current_value_label": "Mevcut değer",
-      "trade_sheet_valuation_new_value_label": "Yeni değer",
       "trade_sheet_valuation_create_new_title": "Yeni değerleme oluştur",
       "trade_sheet_valuation_adjust_current_description": "Varlığın mevcut değerini ayarla",
       "trade_form_asset_column": "Varlık",
