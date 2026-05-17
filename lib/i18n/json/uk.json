@@ -906,7 +906,9 @@
       "edit": "Редагувати ресурс",
       "create": "Створити актив",
       "already_exists": "Об’єкт із такою назвою вже існує. Ви можете відредагувати його",
-      "valuation_before_creation_date": "У цьому активі є оцінки з датою, що передує даті придбання"
+      "valuation_before_creation_date": "У цьому активі є оцінки з датою, що передує даті придбання",
+      "acquisition_date": "Дата створення",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Історія оцінки",

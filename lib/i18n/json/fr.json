@@ -906,7 +906,9 @@
       "edit": "Modifier l'élément",
       "create": "Créer un actif",
       "already_exists": "Un actif portant ce nom existe déjà. Vous voudrez peut-être le modifier",
-      "valuation_before_creation_date": "Il existe des évaluations pour cet actif antérieures à la date de création"
+      "valuation_before_creation_date": "Il existe des évaluations pour cet actif antérieures à la date de création",
+      "acquisition_date": "Date de création",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Historique d'évaluation",

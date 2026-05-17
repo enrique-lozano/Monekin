@@ -906,7 +906,9 @@
       "edit": "Eszköz szerkesztése",
       "create": "Eszköz létrehozása",
       "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni",
-      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti"
+      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti",
+      "acquisition_date": "Létrehozás dátuma",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Értékelés története",

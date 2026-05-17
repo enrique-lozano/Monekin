@@ -906,7 +906,9 @@
       "edit": "Modifica risorsa",
       "create": "Crea risorsa",
       "already_exists": "Esiste già una risorsa con questo nome. Potresti volerlo modificare",
-      "valuation_before_creation_date": "Sono presenti valutazioni in questo bene con una data antecedente alla data di acquisizione"
+      "valuation_before_creation_date": "Sono presenti valutazioni in questo bene con una data antecedente alla data di acquisizione",
+      "acquisition_date": "Data di creazione",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Storia della valutazione",

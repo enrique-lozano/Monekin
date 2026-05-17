@@ -13,6 +13,7 @@ import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -45,8 +46,27 @@ class _AssetFormPageState extends State<AssetFormPage> {
 
   late final Asset? _assetToEdit;
 
+  bool get _creationDateBeforeLinkedAccount {
+    final linked = _linkedAccount;
+    if (linked == null) return false;
+    return DateUtils.dateOnly(
+      _creationDate,
+    ).isBefore(DateUtils.dateOnly(linked.date));
+  }
+
+  String _dateFieldLabel(Translations t) => _assetType.isPhysical
+      ? t.assets.form.acquisition_date
+      : t.assets.form.creation_date;
+
   Future<void> submitForm() async {
     final t = Translations.of(context);
+
+    if (_creationDateBeforeLinkedAccount) {
+      MonekinSnackbar.warning(
+        SnackbarParams(t.assets.form.creation_date_before_linked_account),
+      );
+      return;
+    }
 
     if (_currency == null) {
       MonekinSnackbar.error(
@@ -175,14 +195,18 @@ class _AssetFormPageState extends State<AssetFormPage> {
     final pageTitle = widget.asset != null
         ? t.assets.form.edit
         : t.assets.form.create;
+    final creationDateInvalid = _creationDateBeforeLinkedAccount;
+
     final footerButtons = [
       PersistentFooterButton(
         child: FilledButton.icon(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              submitForm();
-            }
-          },
+          onPressed: creationDateInvalid
+              ? null
+              : () {
+                  if (_formKey.currentState!.validate()) {
+                    submitForm();
+                  }
+                },
           icon: const Icon(Icons.save),
           label: Text(pageTitle),
         ),
@@ -278,22 +302,32 @@ class _AssetFormPageState extends State<AssetFormPage> {
               ),
               const SizedBox(height: 16),
 
-              // Creation date field
               DateTimeFormField(
                 decoration: InputDecoration(
                   suffixIcon: const Icon(Icons.event),
-                  labelText: '${t.assets.form.creation_date} *',
+                  labelText: '${_dateFieldLabel(t)} *',
                 ),
                 initialDate: _creationDate,
                 dateFormat: DateFormat.yMMMd().add_jm(),
-                validator: (e) =>
-                    e == null ? t.general.validations.required : null,
+                validator: (e) {
+                  if (e == null) return t.general.validations.required;
+                  if (_creationDateBeforeLinkedAccount) {
+                    return t.assets.form.creation_date_before_linked_account;
+                  }
+                  return null;
+                },
                 onDateSelected: (DateTime value) {
                   setState(() {
                     _creationDate = value;
                   });
                 },
               ),
+              if (creationDateInvalid)
+                InlineInfoCard(
+                  margin: const EdgeInsets.only(top: 12),
+                  text: t.assets.form.creation_date_before_linked_account,
+                  mode: InlineInfoCardMode.warn,
+                ),
             ],
           ),
         ),
