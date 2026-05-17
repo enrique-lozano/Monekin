@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/presentation/widgets/label_value_info_table.dart';
 import 'package:monekin/app/transactions/details/utils/show_pay_modal.dart';
 import 'package:monekin/app/transactions/details/widgets/translucent_transaction_status_card.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
@@ -26,6 +25,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/label_value_info_table.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -922,11 +922,8 @@ class _LinkedAssetCard extends StatelessWidget {
                       icon: const Icon(Icons.link_off_rounded, size: 18),
                       label: Text(t.debts.actions.unlink_transaction.title),
                       onPressed: () async {
-                        await TransactionViewActionService()
-                            .unlinkTransactionFromDebtWithAlertAndSnackbar(
-                              context,
-                              transactionId: transaction.id,
-                            );
+                        await InvestmentService.instance
+                            .unlinkTransactionFromAsset(transaction.id);
                       },
                     ),
                   ),

@@ -8,6 +8,7 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
@@ -30,23 +31,14 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = context.watch<TransactionFormController>();
     return Padding(
       padding: padding,
-      child: ListenableBuilder(
-        listenable: Listenable.merge([
-          c.amountTextController,
-          c.valueInDestinyController,
-        ]),
-        builder: (context, _) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _DualLegBody(),
-              TransactionFormAmountBlock.insufficientBalanceWarning(context),
-            ],
-          );
-        },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _DualLegBody(),
+          TransactionFormAmountBlock.insufficientBalanceWarning(context),
+        ],
       ),
     );
   }
@@ -67,10 +59,7 @@ class _DualLegCard extends StatelessWidget {
         borderRadius: BorderRadius.all(inputBorderRadius),
         border: Border.all(color: borderColor.withOpacity(0.65), width: 1.2),
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
-        child: child,
-      ),
+      child: Padding(padding: const EdgeInsets.only(bottom: 12), child: child),
     );
   }
 }
@@ -131,35 +120,35 @@ class _DualLegBody extends StatelessWidget {
                       ? null
                       : _AccountCurrentBalanceSubtitle(account: from),
                 ),
-                if (from != null || !isTransfer)
-                  _LegAmountRow(
-                    isOutflow: topOut,
-                    currency: topCurrency,
-                    amount: topAmount,
-                    onTapAmount: () {
-                      if (isTransfer) {
-                        if (topOut) {
-                          c.openTransferSourceAmountSelector(context);
-                        } else {
-                          c.openTransferDestinationAmountSelector(
-                            context,
-                            defaultDestinationAmount: defaultDest,
-                          );
-                        }
+                _LegAmountRow(
+                  show: from != null || !isTransfer,
+                  isOutflow: topOut,
+                  currency: topCurrency,
+                  amount: topAmount,
+                  onTapAmount: () {
+                    if (isTransfer) {
+                      if (topOut) {
+                        c.openTransferSourceAmountSelector(context);
                       } else {
-                        c.openInvestmentAmountSelector(context);
+                        c.openTransferDestinationAmountSelector(
+                          context,
+                          defaultDestinationAmount: defaultDest,
+                        );
                       }
-                    },
-                    showReset:
-                        isTransfer && (topOut ? sourceMismatch : destMismatch),
-                    onReset: !isTransfer
-                        ? null
-                        : topOut
-                        ? () => c.alignTransferSourceFromInverseConverted(
-                            expectedSource,
-                          )
-                        : c.clearTransferDestinationOverride,
-                  ),
+                    } else {
+                      c.openInvestmentAmountSelector(context);
+                    }
+                  },
+                  showReset:
+                      isTransfer && (topOut ? sourceMismatch : destMismatch),
+                  onReset: !isTransfer
+                      ? null
+                      : topOut
+                      ? () => c.alignTransferSourceFromInverseConverted(
+                          expectedSource,
+                        )
+                      : c.clearTransferDestinationOverride,
+                ),
               ],
             ),
           ),
@@ -169,6 +158,7 @@ class _DualLegBody extends StatelessWidget {
               children: [
                 _DualLegDirectionButton(
                   reversed: reversed,
+                  disabled: to == null && isTransfer,
                   onPressed: () => _onDirectionPressed(context, c),
                 ),
                 if (differentCurrency) ...[
@@ -185,63 +175,74 @@ class _DualLegBody extends StatelessWidget {
             key: c.shakeKey,
             child: _DualLegCard(
               borderColor: borderColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: 10,
-                children: [
-                  if (isTransfer)
-                    _AccountLegHeader(
-                      account: to,
-                      onTapAccount: () => c.pickTransferAccount(context),
-                      subtitle: to == null
-                          ? null
-                          : _AccountCurrentBalanceSubtitle(account: to),
-                    )
-                  else
-                    _AssetLegHeader(
-                      assetName: asset?.name,
-                      showPicker: c.canPickAsset,
-                      onTapAsset: c.canPickAsset
-                          ? () => c.pickAsset(context)
-                          : null,
-                      subtitle: asset != null
-                          ? _AssetBookedValueSubtitle(
-                              asset: asset,
-                              date: c.date,
-                            )
-                          : null,
-                    ),
-                  if (isTransfer ? to != null : asset != null)
-                    _LegAmountRow(
-                      isOutflow: !topOut,
-                      currency: bottomCurrency,
-                      amount: bottomAmount,
-                      onTapAmount: () {
-                        if (isTransfer) {
-                          if (!topOut) {
-                            c.openTransferSourceAmountSelector(context);
+              child: Builder(
+                builder: (context) {
+                  final buildAmountRow = isTransfer
+                      ? to != null
+                      : asset != null && c.updateValuations;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                    children: [
+                      if (isTransfer)
+                        _AccountLegHeader(
+                          account: to,
+                          onTapAccount: () => c.pickTransferAccount(context),
+                          subtitle: to == null
+                              ? null
+                              : _AccountCurrentBalanceSubtitle(account: to),
+                        )
+                      else
+                        _AssetLegHeader(
+                          assetName: asset?.name,
+                          showPicker: c.canPickAsset,
+                          onTapAsset: c.canPickAsset
+                              ? () => c.pickAsset(context)
+                              : null,
+                          subtitle: asset != null
+                              ? _AssetBookedValueSubtitle(
+                                  asset: asset,
+                                  date: c.date,
+                                )
+                              : null,
+                        ),
+
+                      if (buildAmountRow) const SizedBox(height: 10),
+
+                      _LegAmountRow(
+                        show: buildAmountRow,
+                        isOutflow: !topOut,
+                        currency: bottomCurrency,
+                        amount: bottomAmount,
+                        onTapAmount: () {
+                          if (isTransfer) {
+                            if (!topOut) {
+                              c.openTransferSourceAmountSelector(context);
+                            } else {
+                              c.openTransferDestinationAmountSelector(
+                                context,
+                                defaultDestinationAmount: defaultDest,
+                              );
+                            }
                           } else {
-                            c.openTransferDestinationAmountSelector(
-                              context,
-                              defaultDestinationAmount: defaultDest,
-                            );
+                            c.openInvestmentAmountSelector(context);
                           }
-                        } else {
-                          c.openInvestmentAmountSelector(context);
-                        }
-                      },
-                      showReset:
-                          isTransfer &&
-                          (topOut ? destMismatch : sourceMismatch),
-                      onReset: !isTransfer
-                          ? null
-                          : topOut
-                          ? c.clearTransferDestinationOverride
-                          : () => c.alignTransferSourceFromInverseConverted(
-                              expectedSource,
-                            ),
-                    ),
-                ],
+                        },
+                        showReset:
+                            isTransfer &&
+                            (topOut ? destMismatch : sourceMismatch),
+                        onReset: !isTransfer
+                            ? null
+                            : topOut
+                            ? c.clearTransferDestinationOverride
+                            : () => c.alignTransferSourceFromInverseConverted(
+                                expectedSource,
+                              ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -295,6 +296,7 @@ class _DualLegBody extends StatelessWidget {
 
   void _onDirectionPressed(BuildContext context, TransactionFormController c) {
     c.toggleDualLegFlowDirection();
+
     if (!c.isAssetTradeInvestment) return;
 
     final t = Translations.of(context);
@@ -311,10 +313,12 @@ class _DualLegDirectionButton extends StatelessWidget {
   const _DualLegDirectionButton({
     required this.reversed,
     required this.onPressed,
+    this.disabled = false,
   });
 
   final bool reversed;
   final VoidCallback onPressed;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
@@ -322,9 +326,11 @@ class _DualLegDirectionButton extends StatelessWidget {
       style: IconButton.styleFrom(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      onPressed: onPressed,
-      icon: Icon(
-        reversed ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
+      onPressed: disabled ? null : onPressed,
+      icon: AnimatedRotation(
+        turns: reversed ? 0.5 : 0,
+        duration: const Duration(milliseconds: 250),
+        child: Icon(Icons.arrow_downward_rounded),
       ),
       tooltip: Translations.of(context).transfer.display,
     );
@@ -626,6 +632,7 @@ class _LegAmountRow extends StatelessWidget {
     required this.showReset,
     required this.onReset,
     this.currency,
+    this.show = true,
   });
 
   final bool isOutflow;
@@ -634,6 +641,8 @@ class _LegAmountRow extends StatelessWidget {
   final VoidCallback onTapAmount;
   final bool showReset;
   final VoidCallback? onReset;
+
+  final bool show;
 
   @override
   Widget build(BuildContext context) {
@@ -650,74 +659,77 @@ class _LegAmountRow extends StatelessWidget {
         : amount.toStringAsFixed(2);
     final label = isOutflow ? '- $formatted' : formatted;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
-      alignment: AlignmentDirectional.centerEnd,
+    return AnimatedExpanded(
+      expand: show,
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        alignment: AlignmentDirectional.centerEnd,
 
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showReset && onReset != null) ...[
-            IconButton(
-              style: IconButton.styleFrom(
-                backgroundColor: scheme.primary.withOpacity(0.12),
-                foregroundColor: scheme.onSurfaceVariant,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                minimumSize: const Size(32, 32),
-                padding: EdgeInsets.zero,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (showReset && onReset != null) ...[
+              IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: scheme.primary.withOpacity(0.12),
+                  foregroundColor: scheme.onSurfaceVariant,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  minimumSize: const Size(32, 32),
+                  padding: EdgeInsets.zero,
+                ),
+                onPressed: onReset,
+                icon: const Icon(Icons.close_rounded, size: 18),
+                tooltip: MaterialLocalizations.of(context).cancelButtonLabel,
               ),
-              onPressed: onReset,
-              icon: const Icon(Icons.close_rounded, size: 18),
-              tooltip: MaterialLocalizations.of(context).cancelButtonLabel,
-            ),
-            const SizedBox(width: 6),
-          ],
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: scheme.primary.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    isOutflow
-                        ? Icons.arrow_drop_down_rounded
-                        : Icons.arrow_drop_up_rounded,
-                    color: accent,
-                    size: 26,
-                  ),
-                  Theme(
-                    data: Theme.of(
-                      context,
-                    ).copyWith(dividerColor: Colors.transparent),
-                    child: TappableTextEntry(
-                      title: label,
-                      placeholder: '0',
-                      onTap: () {
-                        unfocusCurrentFocusedItem(context);
-                        onTapAmount();
-                      },
-                      enableAnimatedSwitcher: false,
-                      textStyle: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        color: accent,
-                      ),
-                      padding: EdgeInsetsDirectional.zero,
-                      internalPadding: const EdgeInsetsDirectional.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
+              const SizedBox(width: 6),
+            ],
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: scheme.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isOutflow
+                          ? Icons.arrow_drop_down_rounded
+                          : Icons.arrow_drop_up_rounded,
+                      color: accent,
+                      size: 26,
+                    ),
+                    Theme(
+                      data: Theme.of(
+                        context,
+                      ).copyWith(dividerColor: Colors.transparent),
+                      child: TappableTextEntry(
+                        title: label,
+                        placeholder: '0',
+                        onTap: () {
+                          unfocusCurrentFocusedItem(context);
+                          onTapAmount();
+                        },
+                        enableAnimatedSwitcher: false,
+                        textStyle: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: accent,
+                        ),
+                        padding: EdgeInsetsDirectional.zero,
+                        internalPadding: const EdgeInsetsDirectional.symmetric(
+                          horizontal: 4,
+                          vertical: 2,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

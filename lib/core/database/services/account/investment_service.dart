@@ -320,15 +320,6 @@ class InvestmentService {
     }
   }
 
-  Future<void> onTransactionDeleted(TransactionInDB removed) async {
-    if (!statusAffectsValuation(removed) || removed.assetID == null) return;
-    await _applyValuationDelta(
-      assetId: removed.assetID!,
-      date: removed.date,
-      delta: -valuationDeltaForTransaction(removed),
-    );
-  }
-
   /// Same as [onTransactionSaved], but also shifts all later valuations by the
   /// same delta to keep historical snapshots aligned.
   Future<void> onTransactionSavedAndFutureValuations(

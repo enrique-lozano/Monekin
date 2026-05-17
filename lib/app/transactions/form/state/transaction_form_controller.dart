@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
@@ -116,19 +117,15 @@ class TransactionFormController extends ChangeNotifier {
 
   bool get dualLegFlowReversed => _dualLegFlowReversed;
 
-  bool get investmentIsBuy =>
-      isAssetTradeInvestment && !_dualLegFlowReversed;
+  bool get investmentIsBuy => isAssetTradeInvestment && !_dualLegFlowReversed;
 
-  bool get dualLegTopIsOutflow => isAssetTradeInvestment
-      ? investmentIsBuy
-      : !_dualLegFlowReversed;
+  bool get dualLegTopIsOutflow =>
+      isAssetTradeInvestment ? investmentIsBuy : !_dualLegFlowReversed;
 
-  bool get canPickAsset =>
-      isAssetTradeInvestment && _assetTradeContext == null;
+  bool get canPickAsset => isAssetTradeInvestment && _assetTradeContext == null;
 
-  Account? get effectiveTransferFromAccount => _dualLegFlowReversed
-      ? transferAccount
-      : fromAccount;
+  Account? get effectiveTransferFromAccount =>
+      _dualLegFlowReversed ? transferAccount : fromAccount;
 
   Account? get effectiveTransferToAccount =>
       _dualLegFlowReversed ? fromAccount : transferAccount;
@@ -320,10 +317,15 @@ class TransactionFormController extends ChangeNotifier {
 
   void toggleDualLegFlowDirection() {
     if (!transactionType.isTransfer && !isAssetTradeInvestment) return;
+
     _dualLegFlowReversed = !_dualLegFlowReversed;
+
     if (transactionType.isTransfer) {
       valueInDestinyController.clear();
     }
+
+    HapticFeedback.mediumImpact();
+
     _safeNotify();
   }
 

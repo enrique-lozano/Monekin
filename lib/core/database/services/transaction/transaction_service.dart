@@ -113,19 +113,12 @@ class TransactionService {
   }
 
   Future<int> deleteTransaction(String transactionId) async {
-    final previous = await (db.select(
-      db.transactions,
-    )..where((t) => t.id.equals(transactionId))).getSingleOrNull();
-
     final n = await (db.delete(
       db.transactions,
     )..where((tbl) => tbl.id.equals(transactionId))).go();
 
     db.markTablesUpdated([db.accounts]);
 
-    if (previous != null) {
-      await InvestmentService.instance.onTransactionDeleted(previous);
-    }
     return n;
   }
 
