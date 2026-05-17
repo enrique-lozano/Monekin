@@ -3,11 +3,10 @@ import 'dart:math' as math;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_form.dart';
-import 'package:monekin/app/assets/asset_trade_sheet.dart';
+import 'package:monekin/app/assets/components/add_transaction_to_asset_modal.dart';
 import 'package:monekin/app/assets/widgets/asset_performance_bottom_sheet.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_contribution_chart.dart';
 import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
-import 'package:monekin/app/debts/components/transaction_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
@@ -643,78 +642,16 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
   }
 
-  Row _registerTransactionActionButtons(BuildContext context) {
+  Widget _registerTransactionActionButtons(BuildContext context) {
     final t = Translations.of(context);
 
-    return Row(
-      spacing: 16,
-      children: [
-        if (widget.asset.assetType.isPhysical)
-          Expanded(
-            child: FilledButton.tonalIcon(
-              onPressed: () => showTransactionSelectorModal(
-                context,
-                onTransactionSelected: (selectedTransaction) async {
-                  try {
-                    await InvestmentService.instance.linkTransactionToAsset(
-                      transactionId: selectedTransaction.id,
-                      assetId: widget.asset.id,
-                    );
-                    MonekinSnackbar.success(
-                      SnackbarParams("Transaction linked with success"),
-                    );
-                  } catch (e) {
-                    MonekinSnackbar.error(
-                      SnackbarParams.fromError(e, showAtTop: true),
-                    );
-                  }
-                },
-                subtitle: t.assets.details.link_transaction_description,
-                initialFilters: TransactionFilterSet(
-                  transactionTypes: [
-                    TransactionType.income,
-                    TransactionType.expense,
-                  ],
-                  assetIds: [],
-                ),
-              ),
-              icon: const Icon(Icons.add_link_rounded),
-              label: Text(t.assets.details.link_transaction),
-            ),
-          ),
-        if (widget.asset.assetType.isFinancial) ...[
-          Expanded(
-            child: FilledButton.tonalIcon(
-              onPressed: () => showAssetTradeSheet(
-                context,
-                asset: widget.asset,
-                isBuy: true,
-              ),
-              icon: const Icon(Icons.add_rounded),
-              label: Text(t.assets.details.buy),
-              style: FilledButton.styleFrom(
-                foregroundColor: Colors.green,
-                backgroundColor: Colors.green.withOpacity(0.1),
-              ),
-            ),
-          ),
-          Expanded(
-            child: FilledButton.tonalIcon(
-              onPressed: () => showAssetTradeSheet(
-                context,
-                asset: widget.asset,
-                isBuy: false,
-              ),
-              icon: const Icon(Icons.remove_rounded),
-              label: Text(t.assets.details.sell),
-              style: FilledButton.styleFrom(
-                foregroundColor: Colors.red,
-                backgroundColor: Colors.red.withOpacity(0.1),
-              ),
-            ),
-          ),
-        ],
-      ],
+    return FilledButton.tonalIcon(
+      onPressed: () => showAddTransactionToAssetModal(
+        context,
+        asset: widget.asset,
+      ),
+      icon: const Icon(Icons.add_link_rounded),
+      label: Text(t.assets.actions.add_register.button_label),
     );
   }
 

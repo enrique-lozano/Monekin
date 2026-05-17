@@ -873,8 +873,6 @@
       "update_value": "Değeri güncelle",
       "trade_sheet_title_buy": "Satın al (varlığa ekle)",
       "trade_sheet_title_sell": "Sat (varlığı azalt)",
-      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
-      "trade_sheet_description_sell": "Bu varlıktan bir hesaba para çekin. Yatırımınızı ve değerini azaltın.",
       "trade_sheet_update_value_info": "Bu varlığın değeri {{ value }} olarak güncellenecek",
       "trade_sheet_update_linked_asset_value_info": "Bu işleme bağlı varlığın değeri {{ value }} olarak güncellenecek",
       "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
@@ -883,13 +881,9 @@
       "trade_sheet_valuation_new_value_label": "Yeni değer",
       "trade_sheet_valuation_create_new_title": "Yeni değerleme oluştur",
       "trade_sheet_valuation_adjust_current_description": "Varlığın mevcut değerini ayarla",
-      "trade_sheet_full_form": "Tüm alanlar",
       "trade_form_asset_column": "Varlık",
       "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
-      "treat_as_investment": "Yatırım olarak değerlendirin (yalnızca nakit ayağı)",
       "notes_optional": "Notlar (isteğe bağlı)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
       "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
@@ -935,6 +929,22 @@
       "name_desc": "İsim (Z-A)",
       "value_asc": "Değer (önce en düşük)",
       "value_desc": "Değer (önce en yüksek)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

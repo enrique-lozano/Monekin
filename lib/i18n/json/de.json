@@ -873,8 +873,6 @@
       "update_value": "Wert aktualisieren",
       "trade_sheet_title_buy": "Kaufen (zum Vermögenswert hinzufügen)",
       "trade_sheet_title_sell": "Verkaufen (Vermögenswert reduzieren)",
-      "trade_sheet_description_buy": "Fügen Sie Geld von einem Konto zu diesem Vermögenswert hinzu. Steigern Sie Ihre Investition und deren Wert.",
-      "trade_sheet_description_sell": "Heben Sie Geld von diesem Vermögenswert auf ein Konto ab. Reduzieren Sie Ihre Investition und ihren Wert.",
       "trade_sheet_update_value_info": "Der Wert dieses Vermögenswerts wird auf {{ value }} aktualisiert",
       "trade_sheet_update_linked_asset_value_info": "Der Wert des Vermögenswerts, der mit dieser Transaktion verknüpft ist, wird auf {{ value }} aktualisiert.",
       "trade_sheet_update_following_valuations": "Aktualisieren Sie spätere Bewertungen",
@@ -883,13 +881,9 @@
       "trade_sheet_valuation_new_value_label": "Neuer Wert",
       "trade_sheet_valuation_create_new_title": "Neue Bewertung erstellen",
       "trade_sheet_valuation_adjust_current_description": "Aktuellen Wert des Vermögenswerts anpassen",
-      "trade_sheet_full_form": "Alle Felder",
       "trade_form_asset_column": "Anlage",
       "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
-      "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
       "notes_optional": "Notizen (optional)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Periodenrendite",
       "performance_return_help": "Wie stark sich der Wert über neue Ein- oder Auszahlungen hinaus geändert hat: (Endbewertung − Anfangsbewertung) − (End-Nettoinvest − Anfang-Nettoinvest). Steigt der Wert nur, weil du denselben Betrag eingezahlt hast, liegt dies nahe null.",
@@ -935,6 +929,22 @@
       "name_desc": "Name (Z-A)",
       "value_asc": "Wert (niedrigster zuerst)",
       "value_desc": "Wert (höchster zuerst)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

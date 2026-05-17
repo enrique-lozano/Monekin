@@ -10,7 +10,6 @@ import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/asset_selector_modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/evaluate_expression.dart';
-import 'package:monekin/app/transactions/form/state/asset_trade_form_context.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/investment_service.dart';
@@ -44,13 +43,13 @@ class TransactionFormController extends ChangeNotifier {
     Account? fromAccount,
     Account? toAccount,
     Debt? linkedDebt,
-    AssetTradeFormContext? assetTradeContext,
+    Asset? linkedAsset,
   }) : _mode = mode,
        _transactionToEdit = transactionToEdit,
        _prefillFromAccount = fromAccount,
        _prefillToAccount = toAccount,
        _linkedDebt = linkedDebt,
-       _assetTradeContext = assetTradeContext {
+       _linkedAsset = linkedAsset {
     _amountTextController.addListener(_onAmountFieldTextChanged);
     valueInDestinyController.addListener(_onValueInDestinyTextChanged);
   }
@@ -60,7 +59,7 @@ class TransactionFormController extends ChangeNotifier {
   final Account? _prefillFromAccount;
   final Account? _prefillToAccount;
   final Debt? _linkedDebt;
-  final AssetTradeFormContext? _assetTradeContext;
+  final Asset? _linkedAsset;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ShakeWidgetState> shakeKey = GlobalKey<ShakeWidgetState>();
@@ -108,7 +107,7 @@ class TransactionFormController extends ChangeNotifier {
       transactionType.isTransfer || isAssetTradeInvestment;
 
   bool get isAssetTradeInvestment {
-    if (_assetTradeContext != null) return true;
+    if (_linkedAsset != null) return true;
     final edit = _transactionToEdit;
     return edit != null &&
         edit.type == TransactionType.investment &&
@@ -122,7 +121,7 @@ class TransactionFormController extends ChangeNotifier {
   bool get dualLegTopIsOutflow =>
       isAssetTradeInvestment ? investmentIsBuy : !_dualLegFlowReversed;
 
-  bool get canPickAsset => isAssetTradeInvestment && _assetTradeContext == null;
+  bool get canPickAsset => isAssetTradeInvestment && _linkedAsset == null;
 
   Account? get effectiveTransferFromAccount =>
       _dualLegFlowReversed ? transferAccount : fromAccount;
@@ -139,7 +138,7 @@ class TransactionFormController extends ChangeNotifier {
 
   MoneyTransaction? get transactionToEdit => _transactionToEdit;
   Debt? get linkedDebt => _linkedDebt;
-  AssetTradeFormContext? get assetTradeContext => _assetTradeContext;
+  Asset? get linkedAsset => _linkedAsset;
 
   bool _disposed = false;
 
@@ -148,7 +147,7 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void initialize() {
-    assert(_assetTradeContext == null || _transactionToEdit == null);
+    assert(_linkedAsset == null || _transactionToEdit == null);
 
     if (isAssetTradeInvestment) {
       transactionType = TransactionType.investment;
@@ -159,8 +158,7 @@ class TransactionFormController extends ChangeNotifier {
         unawaited(_loadInvestmentAsset());
         return;
       }
-      _asset = _assetTradeContext?.asset;
-      _dualLegFlowReversed = !(_assetTradeContext?.isBuy ?? true);
+      _asset = _linkedAsset;
       return;
     }
 
@@ -214,27 +212,10 @@ class TransactionFormController extends ChangeNotifier {
     _requestAmountFocusSoon();
   }
 
-  Future<void> completeAssetTradeBootstrap(BuildContext context) async {
-    final tradeCtx = _assetTradeContext;
-    if (!isAssetTradeInvestment || tradeCtx == null) return;
+  Future<void> completeLinkedAssetBootstrap() async {
+    if (!isAssetTradeInvestment || _linkedAsset == null) return;
     if (_transactionToEdit != null) return;
-    final tr = Translations.of(context);
-    titleController.text = investmentIsBuy
-        ? tr.assets.details.buy
-        : tr.assets.details.sell;
     await _initializeFormValues();
-    if (tradeCtx.prefillDate != null) {
-      date = tradeCtx.prefillDate!;
-    }
-    final prefillAmt = tradeCtx.prefillTradeAmountAbs;
-    if (prefillAmt != null && prefillAmt > 0) {
-      transactionValue = prefillAmt;
-    }
-    final prefillUv = tradeCtx.prefillUpdateValuations;
-    if (prefillUv != null) {
-      _updateValuations = prefillUv;
-    }
-    syncAmountFieldFromTransactionValue();
     _safeNotify();
   }
 

@@ -873,8 +873,6 @@
       "update_value": "Frissítse az értéket",
       "trade_sheet_title_buy": "Vásárlás (hozzáadás az eszközhöz)",
       "trade_sheet_title_sell": "Eladás (vagyon csökkentése)",
-      "trade_sheet_description_buy": "Adjon hozzá pénzt ehhez az eszközhöz egy számláról. Növelje befektetését és értékét.",
-      "trade_sheet_description_sell": "Vegyen ki pénzt ebből az eszközből egy számlára. Csökkentse befektetését és annak értékét.",
       "trade_sheet_update_value_info": "Ennek az elemnek az értéke a következőre módosul: {{ value }}",
       "trade_sheet_update_linked_asset_value_info": "A tranzakcióhoz kapcsolódó eszköz értéke {{ value }} értékre frissül",
       "trade_sheet_update_following_valuations": "Frissítse a későbbi értékeléseket",
@@ -883,13 +881,9 @@
       "trade_sheet_valuation_new_value_label": "Új érték",
       "trade_sheet_valuation_create_new_title": "Új értékelés létrehozása",
       "trade_sheet_valuation_adjust_current_description": "Az eszköz jelenlegi értékének módosítása",
-      "trade_sheet_full_form": "Minden mező",
       "trade_form_asset_column": "Eszköz",
       "trade_valuation_notice": "Az erre a dátumra vonatkozó értékelést frissítjük, hogy tükrözze ezt az összeget.",
-      "treat_as_investment": "Befektetésként kezelve (csak készpénzes láb)",
       "notes_optional": "Megjegyzések (nem kötelező)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
       "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
@@ -935,6 +929,22 @@
       "name_desc": "Név (Z-A)",
       "value_asc": "Érték (a legalacsonyabb először)",
       "value_desc": "Érték (a legmagasabb először)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

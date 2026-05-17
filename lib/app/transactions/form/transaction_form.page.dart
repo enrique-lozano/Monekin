@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/state/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
+import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/app/transactions/form/transaction_form_scaffold.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/debt/debt.dart';
@@ -18,7 +18,7 @@ class TransactionFormPage extends StatefulWidget {
     this.toAccount,
     this.transactionToEdit,
     this.linkedDebt,
-    this.assetTradeContext,
+    this.linkedAsset,
   });
 
   final TransactionType? mode;
@@ -26,7 +26,7 @@ class TransactionFormPage extends StatefulWidget {
   final Account? fromAccount;
   final Account? toAccount;
   final Debt? linkedDebt;
-  final AssetTradeFormContext? assetTradeContext;
+  final Asset? linkedAsset;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -44,7 +44,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       fromAccount: widget.fromAccount,
       toAccount: widget.toAccount,
       linkedDebt: widget.linkedDebt,
-      assetTradeContext: widget.assetTradeContext,
+      linkedAsset: widget.linkedAsset,
     )..initialize();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,9 +60,9 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final assetNew =
         c.isAssetTradeInvestment &&
         widget.transactionToEdit == null &&
-        widget.assetTradeContext != null;
+        widget.linkedAsset != null;
     if (assetNew) {
-      await c.completeAssetTradeBootstrap(context);
+      await c.completeLinkedAssetBootstrap();
       if (!mounted) return;
       c.requestAmountFocusAfterFrame();
       return;

@@ -873,8 +873,6 @@
       "update_value": "更新值",
       "trade_sheet_title_buy": "购买（添加到资产）",
       "trade_sheet_title_sell": "出售（减少资产）",
-      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
-      "trade_sheet_description_sell": "从该资产中提取资金到账户。减少您的投资及其价值。",
       "trade_sheet_update_value_info": "该资产的价值将更新为 {{ value }}",
       "trade_sheet_update_linked_asset_value_info": "与此交易关联的资产的价值将更新为 {{ value }}",
       "trade_sheet_update_following_valuations": "稍后更新估值",
@@ -883,13 +881,9 @@
       "trade_sheet_valuation_new_value_label": "新价值",
       "trade_sheet_valuation_create_new_title": "创建新估值",
       "trade_sheet_valuation_adjust_current_description": "调整资产的当前价值",
-      "trade_sheet_full_form": "完整表单",
       "trade_form_asset_column": "资产",
       "trade_valuation_notice": "该日期的估值将更新以反映这一金额。",
-      "treat_as_investment": "视为投资（仅限现金部分）",
       "notes_optional": "注释（可选）",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "表现",
       "performance_return": "区间回报",
       "performance_return_help": "剔除期间新增或撤出资金后的价值变化：（期末估值 − 期初估值）−（期末净投入 − 期初净投入）。若市值上涨仅因等额入金，该项应接近零。",
@@ -935,6 +929,22 @@
       "name_desc": "姓名（Z-A）",
       "value_asc": "值（最低的在前）",
       "value_desc": "值（最高的在前）"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {
