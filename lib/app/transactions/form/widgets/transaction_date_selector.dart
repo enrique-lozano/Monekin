@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';

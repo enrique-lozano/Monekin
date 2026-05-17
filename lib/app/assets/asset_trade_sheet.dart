@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
-import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
+import 'package:monekin/app/transactions/form/state/asset_trade_form_context.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -176,11 +176,7 @@ class _DualLegBody extends StatelessWidget {
                 ),
                 if (differentCurrency) ...[
                   const Spacer(),
-                  _FxChip(
-                    fromCode: fxFromCode,
-                    toCode: fxToCode,
-                    date: c.date,
-                  ),
+                  _FxChip(fromCode: fxFromCode, toCode: fxToCode, date: c.date),
                 ],
               ],
             ),
@@ -237,7 +233,8 @@ class _DualLegBody extends StatelessWidget {
                           c.openInvestmentAmountSelector(context);
                         }
                       },
-                      showReset: isTransfer &&
+                      showReset:
+                          isTransfer &&
                           (topOut ? destMismatch : sourceMismatch),
                       onReset: !isTransfer
                           ? null
@@ -440,19 +437,33 @@ class _FxChip extends StatelessWidget {
       builder: (context, snap) {
         final m = snap.data ?? 1;
         final decimals = m == m.roundToDouble() ? 0 : 4;
-        final label = '× ${m.toStringAsFixed(decimals)}';
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: scheme.outlineVariant),
-            color: scheme.surface,
-          ),
-          child: Text(
-            label,
-            style: Theme.of(
-              context,
-            ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+        final label = m.toStringAsFixed(decimals);
+
+        return Tooltip(
+          message: t.currencies.exchange_rate,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: scheme.outlineVariant),
+              color: scheme.surface,
+            ),
+            child: Row(
+              spacing: 4,
+              children: [
+                Icon(
+                  Icons.swap_horiz_rounded,
+                  size: 16,
+                  color: scheme.onSurfaceVariant,
+                ),
+                Text(
+                  label,
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';

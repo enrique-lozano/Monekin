@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/utils/constants.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class TransactionTitleField extends StatelessWidget {
@@ -117,66 +115,6 @@ class TransactionDescriptionField extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
           hintText: t.transaction.form.description_info,
         ),
-      ),
-    );
-  }
-}
-
-class TransactionValueInDestinyField extends StatelessWidget {
-  const TransactionValueInDestinyField({
-    super.key,
-    required this.controller,
-    required this.transferAccount,
-    this.onChanged,
-    this.focusNode,
-    this.onFieldSubmitted,
-  });
-
-  final TextEditingController controller;
-  final Account? transferAccount;
-  final VoidCallback? onChanged;
-  final FocusNode? focusNode;
-  final void Function(String value)? onFieldSubmitted;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    return ListTile(
-      leading: const Icon(Icons.trending_flat_rounded),
-      minVerticalPadding: 0,
-      contentPadding: const EdgeInsets.only(left: 16, right: 12),
-      title: TextFormField(
-        controller: controller,
-        focusNode: focusNode,
-        onFieldSubmitted: onFieldSubmitted,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: t.transfer.form.value_in_destiny.title,
-          suffixText: transferAccount?.currency.symbol,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8),
-          filled: false,
-          isDense: false,
-        ),
-        keyboardType: TextInputType.number,
-        inputFormatters: twoDecimalDigitFormatter,
-        validator: (value) {
-          final defaultNumberValidatorResult = fieldValidator(
-            value,
-            isRequired: false,
-            validator: ValidatorType.double,
-          );
-
-          if (defaultNumberValidatorResult != null) {
-            return defaultNumberValidatorResult;
-          }
-
-          return null;
-        },
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        textInputAction: TextInputAction.next,
-        onChanged: (value) {
-          onChanged?.call();
-        },
       ),
     );
   }

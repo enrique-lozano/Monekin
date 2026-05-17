@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';

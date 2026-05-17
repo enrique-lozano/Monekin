@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/asset_trade_form_context.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/asset_trade_form_context.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/transaction_form_scaffold.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/debt/debt.dart';

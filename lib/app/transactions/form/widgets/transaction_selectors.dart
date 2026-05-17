@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/custom_interval_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/tr_form_interval_selector.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';

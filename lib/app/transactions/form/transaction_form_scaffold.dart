@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_account_category_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
@@ -50,7 +50,8 @@ class TransactionFormScaffold extends StatelessWidget {
             amountOrDual,
           ],
         ),
-        if (!c.usesDualLegAmountLayout) const TransactionAccountCategorySelector(),
+        if (!c.usesDualLegAmountLayout)
+          const TransactionAccountCategorySelector(),
         if (c.linkedDebt != null &&
             BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
           const SizedBox(height: 16),
@@ -129,7 +130,9 @@ class TransactionFormScaffold extends StatelessWidget {
                 if (!c.isAssetTradeInvestment)
                   const Padding(
                     padding: EdgeInsets.fromLTRB(16, 12, 16, 14),
-                    child: TransactionFormTypeSelector(padding: EdgeInsets.zero),
+                    child: TransactionFormTypeSelector(
+                      padding: EdgeInsets.zero,
+                    ),
                   ),
                 Expanded(
                   child: SingleChildScrollView(

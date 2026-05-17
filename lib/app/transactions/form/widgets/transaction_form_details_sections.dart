@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_impact_section.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';

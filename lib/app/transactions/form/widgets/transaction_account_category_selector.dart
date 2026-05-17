@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -43,7 +43,12 @@ class TransactionAccountCategorySelector extends StatelessWidget {
         children: [
           Column(
             children: [
-              _buildFromAccountCard(context, form, fromAccount, _CardPosition.single),
+              _buildFromAccountCard(
+                context,
+                form,
+                fromAccount,
+                _CardPosition.single,
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: ShakeWidget(
