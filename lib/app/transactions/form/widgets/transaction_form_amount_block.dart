@@ -8,21 +8,20 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 /// Amount field, optional preferred-currency hint, and insufficient-balance warning.
 class TransactionFormAmountBlock extends StatelessWidget {
   const TransactionFormAmountBlock({
     super.key,
-    required this.controller,
     this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 12),
   });
 
-  final TransactionFormController controller;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
+    final c = context.read<TransactionFormController>();
     return Padding(
       padding: padding,
       child: ListenableBuilder(
@@ -33,11 +32,47 @@ class TransactionFormAmountBlock extends StatelessWidget {
             children: [
               _amountInputRow(context, c),
               _preferredCurrencyHint(context, c),
-              insufficientBalanceWarning(context, c),
+              insufficientBalanceWarning(context),
             ],
           );
         },
       ),
+    );
+  }
+
+  static Widget insufficientBalanceWarning(BuildContext context) {
+    final c = context.read<TransactionFormController>();
+    final from = c.fromAccount;
+    if (from == null || c.transactionValue <= 0) {
+      return const SizedBox.shrink();
+    }
+    final newEffect = c.draftEffectOnFromAccountLedger();
+    if (newEffect >= 0) return const SizedBox.shrink();
+
+    return StreamBuilder<double>(
+      initialData: 0,
+      stream: AccountService.instance.getAccountMoney(account: from),
+      builder: (context, snap) {
+        if (!snap.hasData || snap.connectionState == ConnectionState.waiting) {
+          return const SizedBox.shrink();
+        }
+
+        final balance = snap.data ?? 0;
+        final oldEffect = c.oldEffectOnFromAccountLedgerForEdit ?? 0;
+        final projected = balance + newEffect - oldEffect;
+
+        if (projected >= -1e-6) return const SizedBox.shrink();
+
+        final t = Translations.of(context);
+        return Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: InlineInfoCard(
+            text: t.transaction.form.negative_balance_warning,
+            mode: InlineInfoCardMode.warn,
+            margin: EdgeInsets.zero,
+          ),
+        );
+      },
     );
   }
 
@@ -89,45 +124,6 @@ class TransactionFormAmountBlock extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  /// Shared with [TransactionFormDualLegAmountSection] for transfer / investment.
-  static Widget insufficientBalanceWarning(
-    BuildContext context,
-    TransactionFormController c,
-  ) {
-    final from = c.fromAccount;
-    if (from == null || c.transactionValue <= 0) {
-      return const SizedBox.shrink();
-    }
-    final newEffect = c.draftEffectOnFromAccountLedger();
-    if (newEffect >= 0) return const SizedBox.shrink();
-
-    return StreamBuilder<double>(
-      initialData: 0,
-      stream: AccountService.instance.getAccountMoney(account: from),
-      builder: (context, snap) {
-        if (!snap.hasData || snap.connectionState == ConnectionState.waiting) {
-          return const SizedBox.shrink();
-        }
-
-        final balance = snap.data ?? 0;
-        final oldEffect = c.oldEffectOnFromAccountLedgerForEdit ?? 0;
-        final projected = balance + newEffect - oldEffect;
-
-        if (projected >= -1e-6) return const SizedBox.shrink();
-
-        final t = Translations.of(context);
-        return Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: InlineInfoCard(
-            text: t.transaction.form.negative_balance_warning,
-            mode: InlineInfoCardMode.warn,
-            margin: EdgeInsets.zero,
           ),
         );
       },

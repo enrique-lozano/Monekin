@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/app/transactions/form/transaction_form_controller.dart';
 import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 class TransactionDateSelector extends StatelessWidget {
-  const TransactionDateSelector({
-    super.key,
-    required this.date,
-    required this.fromAccount,
-    required this.onDateChanged,
-  });
-
-  final DateTime date;
-  final Account? fromAccount;
-  final ValueChanged<DateTime> onDateChanged;
+  const TransactionDateSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final c = context.watch<TransactionFormController>();
+    final date = c.date;
+    final fromAccount = c.fromAccount;
     final t = Translations.of(context);
     final dateFormat = getMMMdDateFormatBasedOnYear(date).dateFormat;
 
@@ -39,7 +34,7 @@ class TransactionDateSelector extends StatelessWidget {
             );
 
             if (datePickerRes != null) {
-              onDateChanged(datePickerRes);
+              c.setDate(datePickerRes);
             }
           },
         ),
@@ -50,7 +45,7 @@ class TransactionDateSelector extends StatelessWidget {
             mode: InlineInfoCardMode.info,
           ),
         if (fromAccount != null &&
-            fromAccount!.date.compareTo(date) > 0 &&
+            fromAccount.date.compareTo(date) > 0 &&
             !(date.compareTo(DateTime.now()) > 0))
           InlineInfoCard(
             margin: const EdgeInsets.fromLTRB(12, 8, 12, 16),

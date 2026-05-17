@@ -8,18 +8,19 @@ import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 enum _CardPosition { single, left, right }
 
 /// Account and category selector for the transaction form.
 /// Displays differently for transfer vs other transaction types.
 class TransactionAccountCategorySelector extends StatelessWidget {
-  const TransactionAccountCategorySelector({super.key, required this.form});
-
-  final TransactionFormController form;
+  const TransactionAccountCategorySelector({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final form = context.watch<TransactionFormController>();
+
     if (form.usesDualLegAmountLayout) {
       return const SizedBox.shrink();
     }
@@ -42,7 +43,7 @@ class TransactionAccountCategorySelector extends StatelessWidget {
         children: [
           Column(
             children: [
-              _buildFromAccountCard(context, fromAccount, _CardPosition.single),
+              _buildFromAccountCard(context, form, fromAccount, _CardPosition.single),
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: ShakeWidget(
@@ -90,6 +91,7 @@ class TransactionAccountCategorySelector extends StatelessWidget {
           Expanded(
             child: _buildFromAccountCard(
               context,
+              form,
               fromAccount,
               _CardPosition.left,
             ),
@@ -131,6 +133,7 @@ class TransactionAccountCategorySelector extends StatelessWidget {
 
   _AccountCard _buildFromAccountCard(
     BuildContext context,
+    TransactionFormController form,
     Account? fromAccount,
     _CardPosition position,
   ) {

@@ -16,22 +16,21 @@ import 'package:monekin/core/presentation/widgets/tappable-text-entry.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 /// Transfer / asset trade: two bordered cards (source / destination) with
 /// amounts, optional FX between them, and insufficient-balance warning.
 class TransactionFormDualLegAmountSection extends StatelessWidget {
   const TransactionFormDualLegAmountSection({
     super.key,
-    required this.controller,
     this.padding = EdgeInsets.zero,
   });
 
-  final TransactionFormController controller;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
+    final c = context.read<TransactionFormController>();
     return Padding(
       padding: padding,
       child: ListenableBuilder(
@@ -45,10 +44,10 @@ class TransactionFormDualLegAmountSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (c.transactionType.isTransfer)
-                _TransferDualLegBody(controller: c)
+                const _TransferDualLegBody()
               else
-                _InvestmentDualLegBody(controller: c),
-              TransactionFormAmountBlock.insufficientBalanceWarning(context, c),
+                const _InvestmentDualLegBody(),
+              TransactionFormAmountBlock.insufficientBalanceWarning(context),
             ],
           );
         },
@@ -81,13 +80,11 @@ class _DualLegCard extends StatelessWidget {
 }
 
 class _TransferDualLegBody extends StatelessWidget {
-  const _TransferDualLegBody({required this.controller});
-
-  final TransactionFormController controller;
+  const _TransferDualLegBody();
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
+    final c = context.read<TransactionFormController>();
     final from = c.fromAccount;
     final to = c.transferAccount;
     final scheme = Theme.of(context).colorScheme;
@@ -222,13 +219,11 @@ class _TransferDualLegBody extends StatelessWidget {
 }
 
 class _InvestmentDualLegBody extends StatelessWidget {
-  const _InvestmentDualLegBody({required this.controller});
-
-  final TransactionFormController controller;
+  const _InvestmentDualLegBody();
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
+    final c = context.read<TransactionFormController>();
     final from = c.fromAccount;
     final asset = c.asset;
     final scheme = Theme.of(context).colorScheme;

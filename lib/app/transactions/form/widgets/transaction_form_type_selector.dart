@@ -5,21 +5,20 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 /// Segmented control for income / expense / transfer (hidden for locked asset trade flows).
 class TransactionFormTypeSelector extends StatelessWidget {
   const TransactionFormTypeSelector({
     super.key,
-    required this.controller,
     this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 12),
   });
 
-  final TransactionFormController controller;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    final c = controller;
+    final c = context.watch<TransactionFormController>();
 
     if (c.isAssetTradeInvestment) {
       final t = Translations.of(context);

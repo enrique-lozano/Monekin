@@ -10,71 +10,70 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 /// Details / extra / tags for the transaction form (keeps [TransactionFormScaffold] thin).
-List<Widget> transactionFormDetailsSections(
-  BuildContext context,
-  TransactionFormController c,
-  bool showValueIndicator,
-) {
-  final t = Translations.of(context);
-  final detailsChildren = <Widget>[
-    TransactionTitleField(
-      controller: c.titleController,
-      focusNode: c.titleFocusNode,
-      textInputAction: TextInputAction.next,
-      onFieldSubmitted: (v) => c.onTitleFieldSubmitted(context, v),
-    ),
-    if (c.linkedDebt != null &&
-        BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm))
-      DebtLinkBanner(debt: c.linkedDebt!),
-    TransactionDateSelector(
-      date: c.date,
-      fromAccount: c.fromAccount,
-      onDateChanged: c.setDate,
-    ),
-    if (showValueIndicator)
-      AssetValuationImpactSection(
-        asset: c.asset!,
-        isBuy: c.investmentIsBuy,
-        cardMargin: EdgeInsets.zero,
-        tradeDate: c.date,
-        tradeAmountAbs: c.transactionValue.abs(),
-        previousSignedValue: c.isEditMode ? c.transactionToEdit?.value : null,
-        previousTradeDate: c.isEditMode ? c.transactionToEdit?.date : null,
-        updateValuations: c.updateValuations,
-        onUpdateValuationsChanged: (v) => c.updateValuations = v,
-      ),
-    if (!c.isAssetTradeInvestment)
-      TransactionRecurrencySelector(
-        recurrentRule: c.recurrentRule,
-        onRecurrencyChanged: c.setRecurrency,
-      ),
-    TransactionStatusSelector(
-      date: c.date,
-      status: c.status,
-      onStatusChanged: c.setStatus,
-    ),
-  ];
+class TransactionFormDetailsSections extends StatelessWidget {
+  const TransactionFormDetailsSections({super.key});
 
-  final extraChildren = <Widget>[
-    TransactionDescriptionField(
-      controller: c.notesController,
-      focusNode: c.notesFocusNode,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (v) => c.onNotesFieldSubmitted(context, v),
-    ),
-  ];
+  @override
+  Widget build(BuildContext context) {
+    final c = context.watch<TransactionFormController>();
+    final t = Translations.of(context);
+    final showValueIndicator =
+        c.asset != null &&
+        c.isAssetTradeInvestment &&
+        c.transactionValue.abs() > 0;
 
-  return [
-    _formSectionHeader(context, t.general.details),
-    _formCard(context, children: detailsChildren),
-    const SizedBox(height: 4),
-    _tagsStrip(context, c),
-    const SizedBox(height: 8),
-    _formSectionHeader(context, t.transaction.form.extra_info_section),
-    _formCard(context, children: extraChildren),
-  ];
+    final detailsChildren = <Widget>[
+      TransactionTitleField(
+        controller: c.titleController,
+        focusNode: c.titleFocusNode,
+        textInputAction: TextInputAction.next,
+        onFieldSubmitted: (v) => c.onTitleFieldSubmitted(context, v),
+      ),
+      if (c.linkedDebt != null &&
+          BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm))
+        DebtLinkBanner(debt: c.linkedDebt!),
+      const TransactionDateSelector(),
+      if (showValueIndicator)
+        AssetValuationImpactSection(
+          asset: c.asset!,
+          isBuy: c.investmentIsBuy,
+          cardMargin: EdgeInsets.zero,
+          tradeDate: c.date,
+          tradeAmountAbs: c.transactionValue.abs(),
+          previousSignedValue: c.isEditMode ? c.transactionToEdit?.value : null,
+          previousTradeDate: c.isEditMode ? c.transactionToEdit?.date : null,
+          updateValuations: c.updateValuations,
+          onUpdateValuationsChanged: (v) => c.updateValuations = v,
+        ),
+      if (!c.isAssetTradeInvestment) const TransactionRecurrencySelector(),
+      const TransactionStatusSelector(),
+    ];
+
+    final extraChildren = <Widget>[
+      TransactionDescriptionField(
+        controller: c.notesController,
+        focusNode: c.notesFocusNode,
+        textInputAction: TextInputAction.done,
+        onFieldSubmitted: (v) => c.onNotesFieldSubmitted(context, v),
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _formSectionHeader(context, t.general.details),
+        _formCard(context, children: detailsChildren),
+        const SizedBox(height: 4),
+        _tagsStrip(context, c),
+        const SizedBox(height: 8),
+        _formSectionHeader(context, t.transaction.form.extra_info_section),
+        _formCard(context, children: extraChildren),
+      ],
+    );
+  }
 }
 
 Widget _formSectionHeader(BuildContext context, String label) {
