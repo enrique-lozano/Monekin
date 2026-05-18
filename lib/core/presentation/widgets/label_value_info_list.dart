@@ -22,6 +22,7 @@ class LabelValueInfoList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
+      padding: EdgeInsets.zero,
       separatorBuilder: (context, index) {
         return const Divider(
           thickness: 1, // Customize the thickness of the separator
