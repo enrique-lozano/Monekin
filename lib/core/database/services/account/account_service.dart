@@ -84,20 +84,6 @@ class AccountService {
       AS $columnName ON $accountTableName.currencyId = $columnName.currencyCode
     ''';
 
-  Stream<List<String>> _watchAccountIdsForBalance({
-    Iterable<String>? accountIds,
-  }) {
-    if (accountIds == null) {
-      return db
-          .select(db.accounts)
-          .watch()
-          .map((rows) => rows.map((r) => r.id).toList());
-    }
-    final query = db.select(db.accounts)
-      ..where((a) => a.id.isIn(accountIds.toList()));
-    return query.watch().map((rows) => rows.map((r) => r.id).toList());
-  }
-
   Stream<List<String>> _watchInvestmentAccountIds({
     Iterable<String>? accountIds,
   }) {
@@ -234,6 +220,10 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
   }) {
+    if (accountIds != null && accountIds.isEmpty) {
+      return Stream.value(0.0);
+    }
+
     date ??= DateTime.now();
 
     final hasAccountFilter = accountIds != null;
@@ -280,15 +270,15 @@ class AccountService {
       status: TransactionStatus.getStatusThatCountsForStats(trFilters.status),
     );
 
-    final allAccountsTransactionsBalance =
-        _watchAccountIdsForBalance(accountIds: accountIds).switchMap((ids) {
-          if (ids.isEmpty) return Stream.value(0.0);
-          return TransactionService.instance.getTransactionsValueBalance(
-            filters: statusFiltered.copyWith(maxDate: date, accountsIDs: ids),
-            convertToPreferredCurrency: convertToPreferredCurrency,
-            exchDate: date,
-          );
-        });
+    final allAccountsTransactionsBalance = TransactionService.instance
+        .getTransactionsValueBalance(
+          filters: statusFiltered.copyWith(
+            maxDate: date,
+            accountsIDs: accountIds,
+          ),
+          convertToPreferredCurrency: convertToPreferredCurrency,
+          exchDate: date,
+        );
 
     final linkedPortfolioMarket = _linkedPortfolioMarketAggregate(
       date: date,

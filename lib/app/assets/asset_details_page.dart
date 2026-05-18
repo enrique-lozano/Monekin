@@ -831,6 +831,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 16,
             children: [
               _buildCurrentValueTile(
                 context,
@@ -839,8 +840,11 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 asset,
                 transactions,
               ),
-              const SizedBox(height: 16),
               _buildChartSection(context, valuations, transactions),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _registerTransactionActionButtons(context),
+              ),
             ],
           ),
         ),

@@ -7834,6 +7834,14 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final Budgets budgets = Budgets(this);
   late final Goals goals = Goals(this);
   late final SavedFilters savedFilters = SavedFilters(this);
+  late final Index idxExchangeRatesCurrencyCodeDate = Index(
+    'idx_exchangeRates_currencyCode_date',
+    'CREATE UNIQUE INDEX idx_exchangeRates_currencyCode_date ON exchangeRates (currencyCode, date DESC)',
+  );
+  late final Index idxValuationsAssetIdDate = Index(
+    'idx_valuations_assetId_date',
+    'CREATE UNIQUE INDEX idx_valuations_assetId_date ON valuations (assetId, date DESC)',
+  );
   late final UserSettings userSettings = UserSettings(this);
   late final AppData appData = AppData(this);
   Selectable<Account> getAccountsWithFullData({
@@ -8553,6 +8561,8 @@ abstract class _$AppDB extends GeneratedDatabase {
     budgets,
     goals,
     savedFilters,
+    idxExchangeRatesCurrencyCodeDate,
+    idxValuationsAssetIdDate,
     userSettings,
     appData,
   ];

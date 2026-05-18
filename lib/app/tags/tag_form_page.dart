@@ -91,6 +91,13 @@ class _TagFormPageState extends State<TagFormPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _descrController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
@@ -163,10 +170,18 @@ class _TagFormPageState extends State<TagFormPage> {
                           maxLength: maxLabelLenghtForDisplayNames,
                           decoration: InputDecoration(
                             labelText: '${t.tags.form.name} *',
-                            hintText: 'Ex.: Food',
+                            hintText: t.tags.form.name_hint,
                           ),
-                          validator: (value) =>
-                              fieldValidator(value, isRequired: true),
+                          validator: (value) {
+                            final error = fieldValidator(
+                              value,
+                              isRequired: true,
+                            );
+                            if (error == null && value?.contains(';') == true) {
+                              return t.tags.form.forbidden_char_error;
+                            }
+                            return error;
+                          },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textInputAction: TextInputAction.next,
                         ),

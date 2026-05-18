@@ -44,66 +44,68 @@ class BackupDatabaseService {
   Future<Uint8List> getDbFileInBytes() async =>
       File(await db.databasePath).readAsBytes();
 
-  String creatCsvFromTransactions(
+  String createCsvFromTransactions(
     List<MoneyTransaction> data, {
     String format = 'csv',
-    String separator = ',',
+    String fieldSeparator = ',',
+    String listSeparator = '|',
   }) {
-    var csvData = '';
-
-    var keys = [
-      'ID',
-      'Amount',
-      'Date',
-      'Title',
-      'Note',
-      'Account',
-      'Currency',
-      'Category',
-      'Subcategory',
-    ];
-
-    if (data.isNotEmpty) {
-      for (final key in keys) {
-        csvData += key + separator;
-      }
-    }
-
-    csvData += '\n';
-
     final dateFormatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+    final processedData = <List<String?>>[
+      // Header
+      [
+        'ID',
+        'Amount',
+        'Date',
+        'Title',
+        'Note',
+        'Account',
+        'Currency',
+        'Category',
+        'Subcategory',
+        'Tags',
+      ],
+    ];
 
     for (final transaction in data) {
       final toAdd = [
+        // ID
         transaction.id,
+        // Amount
         transaction.value.toStringAsFixed(2),
+        // Date
         dateFormatter.format(transaction.date),
+        // Title
         transaction.title ?? '',
+        // Notes
         transaction.notes ?? '',
+        // Account
         transaction.account.name,
+        // Currency
         transaction.account.currencyId,
+        // Category
         if (transaction.isIncomeOrExpense)
           (transaction.category!.parentCategory != null
               ? transaction.category!.parentCategory!.name
               : transaction.category!.name),
+        // Subcategory
         if (transaction.isTransfer) 'TRANSFER',
         if (transaction.isInvestment) 'INVESTMENT',
         (transaction.category?.parentCategory != null
             ? transaction.category?.name
             : ''),
+        // Tags
+        transaction.tags.map((e) => e.name).join(listSeparator),
       ];
-
-      csvData += toAdd.join(separator);
-
-      csvData += '\n';
+      processedData.add(toAdd);
 
       if (transaction.isTransfer) {
-        csvData += toAdd.join(separator);
-
-        csvData += '\n';
+        processedData.add(toAdd);
       }
     }
-
+    final csvData = ListToCsvConverter(
+      fieldDelimiter: fieldSeparator,
+    ).convert(processedData);
     return csvData;
   }
 
@@ -111,7 +113,7 @@ class BackupDatabaseService {
     String exportPath,
     List<MoneyTransaction> data,
   ) async {
-    final csvData = creatCsvFromTransactions(data);
+    final csvData = createCsvFromTransactions(data);
 
     final file = createAndReturnFile(
       exportPath: exportPath,
@@ -189,10 +191,10 @@ class BackupDatabaseService {
   Future<List<List<String>>> processCsv(String csvData) async {
     return const CsvToListConverter().convert(
       csvData,
-      eol: '\n',
       csvSettingsDetector: const FirstOccurrenceSettingsDetector(
         fieldDelimiters: [',', ';', '\t', '|'],
         textDelimiters: ['"', "'"],
+        eols: ['\r\n', '\n'],
       ),
       shouldParseNumbers: false,
     );

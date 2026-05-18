@@ -308,6 +308,7 @@ class _AssetFormPageState extends State<AssetFormPage> {
                   labelText: '${_dateFieldLabel(t)} *',
                 ),
                 initialDate: _creationDate,
+                lastDate: DateTime.now(),
                 dateFormat: DateFormat.yMMMd().add_jm(),
                 validator: (e) {
                   if (e == null) return t.general.validations.required;

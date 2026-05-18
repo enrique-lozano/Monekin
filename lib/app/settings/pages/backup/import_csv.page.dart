@@ -7,17 +7,20 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
@@ -44,6 +47,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   int currentStep = 0;
 
   List<List<String>>? csvData;
+
   List<String>? get csvHeaders => csvData?.firstOrNull;
 
   int? amountColumn;
@@ -53,13 +57,37 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   final TextEditingController _dateFormatController = TextEditingController(
     text: 'yyyy-MM-dd HH:mm:ss',
   );
+  // Character used to separate list of values (e.g., tags) in the CSV.
+  final _csvListSeparatorController = TextEditingController(text: '|');
+
+  bool nextButtonDisabled = false;
 
   int? categoryColumn;
   Category? defaultCategory;
   Account? defaultAccount;
+  List<Tag?>? defaultTags;
+
+  int? tagsColumn;
 
   int? notesColumn;
   int? titleColumn;
+
+  @override
+  void initState() {
+    _dateFormatController.addListener(() {
+      setState(
+        () => nextButtonDisabled =
+            dateColumn != null && _dateFormatController.text.isEmpty,
+      );
+    });
+    _csvListSeparatorController.addListener(() {
+      setState(
+        () => nextButtonDisabled =
+            tagsColumn != null && _csvListSeparatorController.text.isEmpty,
+      );
+    });
+    super.initState();
+  }
 
   Future<void> readFile() async {
     try {
@@ -104,14 +132,14 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Widget selector({
     required String title,
     required String? inputValue,
-    required SupportedIcon? icon,
-    required Color? iconColor,
     required Function onClick,
+    IconData? icon,
+    SupportedIcon? supportedIcon,
+    Color? iconColor,
     bool isRequired = false,
   }) {
     final t = Translations.of(context);
 
-    icon ??= SupportedIconService.instance.defaultSupportedIcon;
     iconColor ??= Theme.of(context).colorScheme.primary;
 
     return ReadOnlyTextFormField(
@@ -121,10 +149,16 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       decoration: InputDecoration(
         labelText: title,
         suffixIcon: const Icon(Icons.arrow_drop_down),
-        prefixIcon: Container(
-          margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-          child: IconDisplayer(mainColor: iconColor, supportedIcon: icon),
-        ),
+        prefixIcon: icon == null && supportedIcon == null
+            ? null
+            : Container(
+                margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+                child: IconDisplayer(
+                  mainColor: iconColor,
+                  icon: icon,
+                  supportedIcon: supportedIcon,
+                ),
+              ),
       ),
     );
   }
@@ -137,9 +171,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     required void Function(int? value) onChanged,
   }) {
     labelText ??= t.backup.import.manual_import.select_a_column;
-
     return DropdownButtonFormField(
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(labelText: labelText),
       items: [
         if (isNullable)
@@ -161,6 +194,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         if (amountColumn == value) amountColumn = null;
         if (accountColumn == value) accountColumn = null;
         if (categoryColumn == value) categoryColumn = null;
+        if (tagsColumn == value) tagsColumn = null;
 
         onChanged(value);
       },
@@ -203,7 +237,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           .ensureAndGetPreferredCurrency()
           .first;
 
-      final List<TransactionInDB> transactionsToInsert = [];
+      final transactionsToInsert = <TransactionInDB>[];
+      final tagsToInsert = <String, Iterable<String>>{};
 
       for (final row in csvRows) {
         // Resolve account
@@ -241,10 +276,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             ? null
             : row[categoryColumn!].toString().toLowerCase().trim();
 
-        String categoryID;
+        String categoryId;
 
         if (categoryToFind == null) {
-          categoryID = defaultCategory!.id;
+          categoryId = defaultCategory!.id;
         } else {
           final category =
               (await CategoryService.instance
@@ -260,16 +295,42 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                       )
                       .first)
                   .firstOrNull;
-          categoryID = category?.id ?? defaultCategory!.id;
+          categoryId = category?.id ?? defaultCategory!.id;
+        }
+
+        // Resolve tags
+        final Iterable<String> tagsToFind = tagsColumn == null
+            ? []
+            : row[tagsColumn!]
+                  .toString()
+                  .toLowerCase()
+                  .split(_csvListSeparatorController.text.trim())
+                  .map((t) => t.trim())
+                  .where((t) => t.isNotEmpty);
+
+        Iterable<String> tagIds;
+
+        if (tagsToFind.isEmpty) {
+          tagIds = defaultTags?.map((t) => t!.id).toList() ?? [];
+        } else {
+          tagIds =
+              (await TagService.instance
+                      .getTags(
+                        filter: (t) => t.name.lower().trim().isIn(tagsToFind),
+                      )
+                      .first)
+                  .map((t) => t.id);
         }
 
         final trValue = double.parse(
           row[amountColumn!].toString().replaceFirst(',', '.'),
         );
 
+        final transactionId = generateUUID();
+
         transactionsToInsert.add(
           TransactionInDB(
-            id: generateUUID(),
+            id: transactionId,
             date: dateColumn == null
                 ? DateTime.now()
                 : DateFormat(
@@ -282,7 +343,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             accountID: accountID,
             value: trValue,
             isHidden: false,
-            categoryID: categoryID,
+            categoryID: categoryId,
             notes: notesColumn == null || row[notesColumn!].toString().isEmpty
                 ? null
                 : row[notesColumn!].toString(),
@@ -291,6 +352,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                 : row[titleColumn!].toString(),
           ),
         );
+
+        // Add tags
+        tagsToInsert[transactionId] = tagIds;
       }
 
       // Batch insert
@@ -300,6 +364,20 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         final batch = transactionsToInsert.skip(i).take(batchSize);
         await Future.wait(
           batch.map((e) => TransactionService.instance.insertTransaction(e)),
+        );
+      }
+
+      final tagsToInsertIterable = tagsToInsert.entries;
+
+      for (var i = 0; i < tagsToInsertIterable.length; i += batchSize) {
+        final batch = tagsToInsertIterable.skip(i).take(batchSize);
+        await Future.wait(
+          batch.map(
+            (e) => TagService.instance.linkTagsToTransaction(
+              transactionId: e.key,
+              tagIds: e.value.toList(),
+            ),
+          ),
         );
       }
 
@@ -334,6 +412,13 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   }
 
   @override
+  void dispose() {
+    _dateFormatController.dispose();
+    _csvListSeparatorController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
@@ -348,15 +433,20 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           });
         },
         controlsBuilder: (context, details) {
-          bool nextButtonDisabled =
+          nextButtonDisabled =
               currentStep == 0 && csvData == null ||
-              currentStep == 3 && defaultCategory == null ||
               currentStep == 1 && amountColumn == null ||
-              currentStep == 4 && _dateFormatController.text.isEmpty;
+              currentStep == 3 && defaultCategory == null ||
+              currentStep == 4 &&
+                  tagsColumn != null &&
+                  _csvListSeparatorController.text.trim().isEmpty ||
+              currentStep == 5 &&
+                  dateColumn != null &&
+                  _dateFormatController.text.trim().isEmpty;
 
           return Padding(
             padding: const EdgeInsets.only(top: 12),
-            child: currentStep == 5
+            child: currentStep == 6
                 ? SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(
@@ -459,7 +549,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
               selector(
                 title: t.backup.import.manual_import.default_account,
                 inputValue: defaultAccount?.name,
-                icon: defaultAccount?.icon,
+                supportedIcon: defaultAccount?.icon,
                 iconColor: null,
                 onClick: () async {
                   final modalRes = await showAccountSelectorBottomSheet(
@@ -508,7 +598,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
               selector(
                 title: '${t.backup.import.manual_import.default_category} *',
                 inputValue: defaultCategory?.name,
-                icon: defaultCategory?.icon,
+                supportedIcon: defaultCategory?.icon,
                 isRequired: true,
                 iconColor: defaultCategory != null
                     ? ColorHex.get(defaultCategory!.color)
@@ -536,7 +626,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             content: [
               if (csvHeaders != null)
                 buildColumnSelector(
-                  value: dateColumn,
+                  value: tagsColumn,
                   headersToSelect: csvHeaders!.whereIndexed(
                     (index, element) =>
                         index != amountColumn &&
@@ -545,22 +635,90 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                   ),
                   onChanged: (value) {
                     setState(() {
-                      dateColumn = value;
+                      tagsColumn = value;
+                      nextButtonDisabled = tagsColumn != null;
                     });
                   },
                 ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               TextFormField(
-                controller: _dateFormatController,
-                enabled: dateColumn != null,
-                decoration: const InputDecoration(labelText: 'Date format'),
-                validator: (value) => fieldValidator(value),
-                autovalidateMode: AutovalidateMode.always,
+                controller: _csvListSeparatorController,
+                enabled: tagsColumn != null,
+                decoration: InputDecoration(
+                  labelText: t.backup.import.manual_import.tag_separator,
+                  errorStyle: TextStyle(fontSize: 0),
+                ),
+                validator: (value) {
+                  if (tagsColumn != null) {
+                    return fieldValidator(value, isRequired: true);
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+              const SizedBox(height: 12),
+              selector(
+                title: t.backup.import.manual_import.default_tags,
+                inputValue: (defaultTags == null || defaultTags!.isEmpty)
+                    ? t.tags.without_tags
+                    : defaultTags?.map((t) => t?.name).join(', '),
+                isRequired: false,
+                onClick: () async {
+                  final selected = await showTagListModal(
+                    context,
+                    modal: TagSelector(
+                      selectedTags: defaultTags ?? [],
+                      allowEmptySubmit: true,
+                      includeNullTag: false,
+                    ),
+                  );
+
+                  if (selected != null) {
+                    setState(() {
+                      defaultTags = selected.selectedTags
+                          .whereType<Tag>()
+                          .toList();
+                    });
+                  }
+                },
               ),
             ],
           ),
           buildStep(
             index: 5,
+            content: [
+              if (csvHeaders != null)
+                buildColumnSelector(
+                  value: dateColumn,
+                  headersToSelect: csvHeaders!.whereIndexed(
+                    (index, element) =>
+                        index != amountColumn &&
+                        index != accountColumn &&
+                        index != tagsColumn &&
+                        (categoryColumn == null || index != categoryColumn),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      dateColumn = value;
+                      nextButtonDisabled = dateColumn != null;
+                    });
+                  },
+                ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _dateFormatController,
+                enabled: dateColumn != null,
+                decoration: InputDecoration(
+                  labelText: t.backup.import.manual_import.date_format,
+                  errorStyle: TextStyle(fontSize: 0),
+                ),
+                validator: (value) => fieldValidator(value, isRequired: true),
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+              ),
+            ],
+          ),
+          buildStep(
+            index: 6,
             content: [
               if (csvHeaders != null)
                 Builder(
@@ -569,6 +727,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                       (index, element) =>
                           index != amountColumn &&
                           index != accountColumn &&
+                          index != tagsColumn &&
                           index != dateColumn &&
                           (categoryColumn == null || index != categoryColumn),
                     );
@@ -577,7 +736,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                       children: [
                         buildColumnSelector(
                           value: notesColumn,
-                          labelText: 'Note column',
+                          labelText: t.backup.import.manual_import.note_column,
                           headersToSelect: headersToSelect,
                           onChanged: (value) {
                             setState(() {
@@ -585,10 +744,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                             });
                           },
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 12),
                         buildColumnSelector(
                           value: titleColumn,
-                          labelText: 'Title column',
+                          labelText: t.backup.import.manual_import.title_column,
                           headersToSelect: headersToSelect,
                           onChanged: (value) {
                             setState(() {

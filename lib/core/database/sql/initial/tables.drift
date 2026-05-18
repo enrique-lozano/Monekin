@@ -51,6 +51,9 @@ CREATE TABLE IF NOT EXISTS exchangeRates (
     exchangeRate REAL NOT NULL
 ) AS ExchangeRateInDB;
 
+CREATE UNIQUE INDEX idx_exchangeRates_currencyCode_date
+ON exchangeRates(currencyCode, date DESC);
+
 CREATE TABLE IF NOT EXISTS accounts (
     id TEXT NOT NULL PRIMARY KEY,
     
@@ -135,6 +138,8 @@ CREATE TABLE IF NOT EXISTS assets (
     -- When set, this asset rolls into the linked account total (e.g. brokerage portfolio)
     linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE
 ) AS AssetInDB;
+
+CREATE UNIQUE INDEX idx_valuations_assetId_date ON valuations(assetId, date DESC);
 
 CREATE TABLE IF NOT EXISTS valuations (
     id TEXT NOT NULL PRIMARY KEY,

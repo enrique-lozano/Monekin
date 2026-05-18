@@ -175,12 +175,14 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ListTileActionItem(
                       label: t.assets.sort.name_asc,
                       icon: Icons.sort_by_alpha_rounded,
+                      selected: sortOption == AssetsSortOption.nameAsc,
                       onClick: () =>
                           setState(() => sortOption = AssetsSortOption.nameAsc),
                     ),
                     ListTileActionItem(
                       label: t.assets.sort.name_desc,
                       icon: Icons.sort_by_alpha_rounded,
+                      selected: sortOption == AssetsSortOption.nameDesc,
                       onClick: () => setState(
                         () => sortOption = AssetsSortOption.nameDesc,
                       ),
@@ -188,6 +190,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ListTileActionItem(
                       label: t.assets.sort.value_asc,
                       icon: Icons.trending_up_rounded,
+                      selected: sortOption == AssetsSortOption.valueAsc,
                       onClick: () => setState(
                         () => sortOption = AssetsSortOption.valueAsc,
                       ),
@@ -195,6 +198,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ListTileActionItem(
                       label: t.assets.sort.value_desc,
                       icon: Icons.trending_down_rounded,
+                      selected: sortOption == AssetsSortOption.valueDesc,
                       onClick: () => setState(
                         () => sortOption = AssetsSortOption.valueDesc,
                       ),
