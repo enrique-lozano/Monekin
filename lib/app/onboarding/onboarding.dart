@@ -9,7 +9,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
-import 'package:monekin/core/presentation/styles/big_button_style.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -118,7 +118,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             ),
                             shape: WidgetStatePropertyAll(
                               RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(
+                                  defaultButtonBorderRadius,
+                                ),
                               ),
                             ),
                           ),

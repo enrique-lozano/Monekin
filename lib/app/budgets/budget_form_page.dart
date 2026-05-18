@@ -23,6 +23,8 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../core/models/account/account.dart';
 import '../../core/presentation/widgets/count_indicator.dart';
 import '../../core/presentation/widgets/form_fields/list_tile_field.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
+
 import '../../core/presentation/widgets/persistent_footer_button.dart';
 
 class BudgetFormPage extends StatefulWidget {
@@ -161,6 +163,7 @@ class _BudgetFormPageState extends State<BudgetFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: categories != null && categories!.isEmpty
                 ? null
                 : () {

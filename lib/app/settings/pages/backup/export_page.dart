@@ -8,7 +8,7 @@ import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/styles/big_button_style.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';

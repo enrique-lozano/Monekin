@@ -10,7 +10,7 @@ import 'package:monekin/app/transactions/form/widgets/transaction_form_type_sele
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/styles/big_button_style.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
@@ -98,12 +98,11 @@ class TransactionFormScaffold extends StatelessWidget {
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(
-              style: getBigButtonStyle(context).copyWith(
+              style: getMediumButtonStyle(context).copyWith(
                 backgroundColor: WidgetStatePropertyAll(saveButtonColor),
                 foregroundColor: WidgetStatePropertyAll(
                   saveButtonColor.getContrastColor(),
                 ),
-                fixedSize: const WidgetStatePropertyAll(Size.fromHeight(42)),
               ),
               onPressed: () => c.onSavePressed(context),
               icon: const Icon(Icons.save),

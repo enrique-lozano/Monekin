@@ -14,6 +14,7 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -200,6 +201,7 @@ class _AssetFormPageState extends State<AssetFormPage> {
     final footerButtons = [
       PersistentFooterButton(
         child: FilledButton.icon(
+          style: getMediumButtonStyle(context),
           onPressed: creationDateInvalid
               ? null
               : () {

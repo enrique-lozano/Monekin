@@ -32,10 +32,6 @@ class BottomSheetFooter extends StatelessWidget {
     final t = Translations.of(context);
 
     final confirmButton = FilledButton.icon(
-      style: ElevatedButton.styleFrom(
-        disabledBackgroundColor: Colors.grey[200], // Background Color
-        disabledForegroundColor: Colors.grey, //Text Color
-      ),
       icon: Icon(submitIcon),
       label: Text(submitText ?? t.ui_actions.save),
       onPressed: onSaved != null

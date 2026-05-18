@@ -13,6 +13,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -190,6 +191,7 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
