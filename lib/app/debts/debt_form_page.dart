@@ -23,6 +23,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -112,6 +113,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: _submitButtonEnabled(t) ? () => submitForm() : null,
             icon: const Icon(Icons.save),
             label: Text(

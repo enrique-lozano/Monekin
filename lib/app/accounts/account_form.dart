@@ -24,6 +24,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -219,6 +220,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     final footerButtons = [
       PersistentFooterButton(
         child: FilledButton.icon(
+          style: getMediumButtonStyle(context),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               submitForm();

@@ -4,6 +4,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
 import 'package:monekin/core/models/filters/saved_filter.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_form.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -133,6 +134,7 @@ class _SavedFilterFormPageState extends State<SavedFilterFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: _save,
             icon: const Icon(Icons.save),
             label: Text(t.ui_actions.save),

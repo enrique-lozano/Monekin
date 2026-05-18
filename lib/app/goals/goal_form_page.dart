@@ -20,6 +20,7 @@ import 'package:monekin/core/presentation/widgets/count_indicator.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -150,6 +151,7 @@ class _GoalFormPageState extends State<GoalFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: () => submitForm(),
             icon: const Icon(Icons.save),
             label: Text(isEditMode ? t.ui_actions.save : t.ui_actions.add),

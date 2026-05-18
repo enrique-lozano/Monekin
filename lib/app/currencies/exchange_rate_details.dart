@@ -22,6 +22,7 @@ import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_e
 import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -303,6 +304,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(
+              style: getMediumButtonStyle(context),
               onPressed: !_hasChanges
                   ? null
                   : () async {

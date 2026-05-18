@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -67,6 +68,7 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(
+              style: getMediumButtonStyle(context),
               onPressed: !_hasChanged ? null : submitChanges,
               icon: const Icon(Icons.save),
               label: Text(t.ui_actions.save_changes),
