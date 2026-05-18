@@ -395,7 +395,9 @@
       "description": "描述",
       "description-info": "点击此处输入有关此交易的详细描述",
       "exchange-to-preferred-title": "汇率为{{currency}}",
-      "exchange-to-preferred-in-date": "交易日"
+      "exchange-to-preferred-in-date": "交易日",
+      "extra-info-section": "附加信息",
+      "negative-balance-warning": "该金额高于所选账户的当前余额。保存后余额将为负，并可能影响统计数据。"
     },
     "REVERSED": {
       "title": "逆向交易",
@@ -873,30 +875,23 @@
       "update_value": "更新值",
       "trade_sheet_title_buy": "购买（添加到资产）",
       "trade_sheet_title_sell": "出售（减少资产）",
-      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
-      "trade_sheet_description_sell": "从该资产中提取资金到账户。减少您的投资及其价值。",
       "trade_sheet_update_value_info": "该资产的价值将更新为 {{ value }}",
       "trade_sheet_update_linked_asset_value_info": "与此交易关联的资产的价值将更新为 {{ value }}",
       "trade_sheet_update_following_valuations": "稍后更新估值",
       "trade_sheet_update_following_valuations_description": "调整所选日期之后的资产估值。",
       "trade_sheet_valuation_current_value_label": "当前价值",
-      "trade_sheet_valuation_new_value_label": "新价值",
       "trade_sheet_valuation_create_new_title": "创建新估值",
       "trade_sheet_valuation_adjust_current_description": "调整资产的当前价值",
-      "trade_sheet_full_form": "完整表单",
       "trade_form_asset_column": "资产",
       "trade_valuation_notice": "该日期的估值将更新以反映这一金额。",
-      "treat_as_investment": "视为投资（仅限现金部分）",
       "notes_optional": "注释（可选）",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "表现",
       "performance_return": "区间回报",
-      "performance_return_help": "剔除期间新增或撤出资金后的价值变化：（期末估值 − 期初估值）−（期末净投入 − 期初净投入）。若市值上涨仅因等额入金，该项应接近零。",
+      "performance_return_help": "来自市场涨跌的收益或亏损，不包括你存入或取出的钱。若市值上涨只是因为多存了钱，此项会接近零。",
       "performance_invested_value": "投入金额",
-      "performance_invested_value_caption": "截至目前净投入（初始值与关联流水）。",
+      "performance_invested_value_caption": "该资产中的资金总额：初始价值加上已关联的买卖。",
       "performance_value_diff": "估值变动",
-      "performance_value_diff_caption": "当前账面市值与所选图表区间首日估值之差（仅价格变动，不按投入现金流调整）。"
+      "performance_value_diff_caption": "从所选周期开始至今，资产价值的变化幅度。"
     },
     "FORM": {
       "asset_type": "资产类型",
@@ -913,7 +908,9 @@
       "edit": "编辑资产",
       "create": "创建资产",
       "already_exists": "具有此名称的资产已存在。您可能想要编辑它",
-      "valuation_before_creation_date": "该资产的估值日期早于收购日期"
+      "valuation_before_creation_date": "该资产的估值日期早于收购日期",
+      "acquisition_date": "创建日期",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "估值历史",
@@ -935,6 +932,22 @@
       "name_desc": "姓名（Z-A）",
       "value_asc": "值（最低的在前）",
       "value_desc": "值（最高的在前）"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

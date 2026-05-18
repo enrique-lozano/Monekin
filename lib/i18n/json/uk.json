@@ -395,7 +395,9 @@
       "description": "Опис",
       "description-info": "Натисніть тут, щоб ввести детальніший опис цієї транзакції",
       "exchange-to-preferred-title": "Обмінний курс на {{ currency }}",
-      "exchange-to-preferred-in-date": "На дату транзакції"
+      "exchange-to-preferred-in-date": "На дату транзакції",
+      "extra-info-section": "Додаткова інформація",
+      "negative-balance-warning": "Ця сума перевищує поточний баланс обраного рахунку. Після збереження баланс стане від’ємним, що може спотворити статистику."
     },
     "REVERSED": {
       "title": "Скасована транзакція",
@@ -873,30 +875,23 @@
       "update_value": "Оновити значення",
       "trade_sheet_title_buy": "Купити (додати в актив)",
       "trade_sheet_title_sell": "Продати (зменшити актив)",
-      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
-      "trade_sheet_description_sell": "Вивести гроші з цього активу на рахунок. Зменште свої інвестиції та їх вартість.",
       "trade_sheet_update_value_info": "Вартість цього активу буде оновлено до {{ value }}",
       "trade_sheet_update_linked_asset_value_info": "Вартість активу, пов’язаного з цією трансакцією, буде оновлено до {{ value }}",
       "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
       "trade_sheet_update_following_valuations_description": "Вирівняйте оцінки активу після обраної дати.",
       "trade_sheet_valuation_current_value_label": "Поточне значення",
-      "trade_sheet_valuation_new_value_label": "Нове значення",
       "trade_sheet_valuation_create_new_title": "Створити нову оцінку",
       "trade_sheet_valuation_adjust_current_description": "Скоригувати поточну вартість активу",
-      "trade_sheet_full_form": "Усі поля",
       "trade_form_asset_column": "Актив",
       "trade_valuation_notice": "Оцінку буде оновлено на цю дату, щоб відобразити цю суму.",
-      "treat_as_investment": "Вважати інвестицією (лише готівкова нога)",
       "notes_optional": "Примітки (необов'язково)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
-      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_return_help": "Прибуток або збиток від ринку, а не від грошей, які ви додаєте чи виводите. Якщо вартість зросла лише через новий внесок, це близько до нуля.",
       "performance_invested_value": "Invested value",
-      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
+      "performance_invested_value_caption": "Усього грошей в активі: початкова вартість плюс пов’язані купівлі та продажі.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+      "performance_value_diff_caption": "На скільки змінилася вартість активу від початку обраного періоду до сьогодні."
     },
     "FORM": {
       "asset_type": "Тип активу",
@@ -913,7 +908,9 @@
       "edit": "Редагувати ресурс",
       "create": "Створити актив",
       "already_exists": "Об’єкт із такою назвою вже існує. Ви можете відредагувати його",
-      "valuation_before_creation_date": "У цьому активі є оцінки з датою, що передує даті придбання"
+      "valuation_before_creation_date": "У цьому активі є оцінки з датою, що передує даті придбання",
+      "acquisition_date": "Дата створення",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Історія оцінки",
@@ -935,6 +932,22 @@
       "name_desc": "Ім'я (Я-А)",
       "value_asc": "Значення (спочатку найменше)",
       "value_desc": "Значення (спочатку найвище)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

@@ -71,6 +71,7 @@ dependencies:
   flutter_expandable_fab: ^2.5.2
   saf_util: ^2.1.0
   saf_stream: ^2.0.0
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:

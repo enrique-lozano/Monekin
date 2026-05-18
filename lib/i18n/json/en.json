@@ -395,7 +395,9 @@
       "description": "Description",
       "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
-      "exchange-to-preferred-in-date": "On transaction date"
+      "exchange-to-preferred-in-date": "On transaction date",
+      "extra-info-section": "Extra info",
+      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics."
     },
     "REVERSED": {
       "title": "Inverse transaction",
@@ -866,6 +868,22 @@
       "jewelry_art": "Jewelry & art",
       "other": "Other"
     },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
+    },
     "DETAILS": {
       "select_account": "Select an account",
       "buy": "Buy",
@@ -873,30 +891,23 @@
       "update_value": "Update value",
       "trade_sheet_title_buy": "Buy (add to asset)",
       "trade_sheet_title_sell": "Sell (reduce asset)",
-      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
-      "trade_sheet_description_sell": "Withdraw money from this asset to an account. Reduce your investment and its value.",
       "trade_sheet_update_value_info": "The value of this asset will be updated to {{ value }} for the selected date",
       "trade_sheet_update_linked_asset_value_info": "The value of the asset that is linked to this transaction will be updated to {{ value }} for the selected date",
       "trade_sheet_update_following_valuations": "Update later valuations",
       "trade_sheet_update_following_valuations_description": "Adjust valuations for this asset dated after the selected date.",
       "trade_sheet_valuation_current_value_label": "Current value",
-      "trade_sheet_valuation_new_value_label": "New value",
       "trade_sheet_valuation_create_new_title": "Create new valuation",
       "trade_sheet_valuation_adjust_current_description": "Adjust the asset's current value",
-      "trade_sheet_full_form": "All fields",
       "trade_form_asset_column": "Asset",
       "trade_valuation_notice": "A valuation will be updated for this date to reflect this amount.",
-      "treat_as_investment": "Treat as investment (cash leg only)",
       "notes_optional": "Notes (optional)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
-      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_return_help": "Gain or loss from market moves, not from money you add or withdraw. If the value only rose because you deposited more, this stays near zero.",
       "performance_invested_value": "Invested value",
-      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked buy/sell flows).",
+      "performance_invested_value_caption": "Total cash in this asset: starting value plus linked buys and sells.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+      "performance_value_diff_caption": "How much the asset's value changed from the start of the selected period to now."
     },
     "FORM": {
       "asset_type": "Asset type",
@@ -909,7 +920,9 @@
       "initial_value_invalid": "Please enter a valid number",
       "currency": "Currency",
       "select_currency": "Please select a currency",
-      "creation_date": "Acquisition date",
+      "creation_date": "Creation date",
+      "acquisition_date": "Acquisition date",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
       "edit": "Edit asset",
       "create": "Create asset",
       "already_exists": "An asset with this name already exists. You may want to edit it",

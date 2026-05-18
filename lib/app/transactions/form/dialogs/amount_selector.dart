@@ -169,7 +169,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     return exprSplit.last.contains('.');
   }
 
-  toggleSign() {
+  void toggleSign() {
     if (amountString.startsWith('-')) {
       amountString = amountString.substring(1, amountString.length);
     } else {
@@ -250,7 +250,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     }
   }
 
-  submitAmount() {
+  void submitAmount() {
     HapticFeedback.lightImpact();
 
     if (widget.onSubmit != null) {
@@ -277,7 +277,7 @@ class _AmountSelectorState extends State<AmountSelector> {
     });
   }
 
-  toggleCalculatorMode() {
+  void toggleCalculatorMode() {
     calculatorMode = !calculatorMode;
 
     if (calculatorMode == false) {

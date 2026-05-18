@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';

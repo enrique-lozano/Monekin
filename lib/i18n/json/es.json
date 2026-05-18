@@ -398,7 +398,9 @@
       "description": "Descripción",
       "description-info": "Toca aquí para escribir una descripción mas detallada sobre esta transacción",
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
-      "exchange-to-preferred-in-date": "El día de la transacción"
+      "exchange-to-preferred-in-date": "El día de la transacción",
+      "extra-info-section": "Información adicional",
+      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas."
     },
     "REVERSED": {
       "title": "Transacción invertida",
@@ -869,6 +871,22 @@
       "jewelry_art": "Joyería y arte",
       "other": "Otro"
     },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Linkear transacción",
+        "modal_title": "Linkear transacción al activo",
+        "modal_subtitle": "Elige cómo quieres asociar una transacción con este activo"
+      },
+      "link_transaction": {
+        "title": "Linkear ingreso o gasto existente",
+        "description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo.",
+        "success": "Transacción vinculada correctamente"
+      },
+      "new_investment_transaction": {
+        "title": "Crear transacción de inversión",
+        "description": "Mueve dinero entre una cuenta y este activo. Invertir más añade fondos y aumenta tu inversión; retirar saca fondos y la reduce. Puedes actualizar la valoración del activo en consecuencia."
+      }
+    },
     "DETAILS": {
       "select_account": "Seleccione una cuenta",
       "buy": "Invertir más",
@@ -876,30 +894,23 @@
       "update_value": "Actualizar valor",
       "trade_sheet_title_buy": "Invertir más (agregar al activo)",
       "trade_sheet_title_sell": "Retirar dinero (reducir activo)",
-      "trade_sheet_description_buy": "Añade dinero a este activo desde una cuenta. Aumenta tu inversión y su valor.",
-      "trade_sheet_description_sell": "Saca dinero de este activo hacia una cuenta. Reduce tu inversión y su valor.",
       "trade_sheet_update_value_info": "El valor de este activo se actualizará a {{ value }} para el día seleccionado",
       "trade_sheet_update_linked_asset_value_info": "El valor del activo vinculado a esta transacción se actualizará a {{ value }} para el dia seleccionado",
       "trade_sheet_update_following_valuations": "Actualizar valoraciones posteriores",
       "trade_sheet_update_following_valuations_description": "Ajusta las valoraciones del asset posteriores a la fecha seleccionada",
       "trade_sheet_valuation_current_value_label": "Valor actual",
-      "trade_sheet_valuation_new_value_label": "Nuevo valor",
       "trade_sheet_valuation_create_new_title": "Crear nueva valoración",
       "trade_sheet_valuation_adjust_current_description": "Ajustar el valor actual del asset",
-      "trade_sheet_full_form": "Todos los campos",
       "trade_form_asset_column": "Activo",
       "trade_valuation_notice": "Se actualizará una valoración para esta fecha para reflejar este monto.",
-      "treat_as_investment": "Tratar como inversión (solo tramo de efectivo)",
       "notes_optional": "Notas (opcional)",
-      "link_transaction": "Linkear transacción",
-      "link_transaction_description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo",
       "performance_sheet_title": "Rendimiento",
       "performance_return": "Rentabilidad del periodo",
-      "performance_return_help": "Cuánto cambió el valor más allá del dinero nuevo entrado o salido: (valoración final − inicial) − (inversión neta final − inicial). Si el valor solo subió porque ingresaste la misma cantidad, esto queda cerca de cero.",
+      "performance_return_help": "Ganancia o pérdida por el mercado, no por el dinero que ingresas o retiras. Si el valor solo subió porque depositaste más, esto queda cerca de cero.",
       "performance_invested_value": "Valor invertido",
-      "performance_invested_value_caption": "Efectivo neto en el activo hasta ahora (valor inicial más flujos vinculados).",
+      "performance_invested_value_caption": "Dinero total en este activo: valor inicial más compras y ventas vinculadas.",
       "performance_value_diff": "Cambio de valoración",
-      "performance_value_diff_caption": "Diferencia entre la valoración contable actual y la del primer día del intervalo del gráfico (solo precio de mercado, sin descontar flujos invertidos)."
+      "performance_value_diff_caption": "Cuánto cambió el valor del activo desde el inicio del periodo seleccionado hasta hoy."
     },
     "FORM": {
       "asset_type": "Tipo de activo",
@@ -912,7 +923,9 @@
       "initial_value_invalid": "Por favor ingresa un número válido",
       "currency": "Divisa",
       "select_currency": "Por favor seleccione una moneda",
-      "creation_date": "Fecha de adquisición",
+      "creation_date": "Fecha de creación",
+      "acquisition_date": "Fecha de adquisición",
+      "creation_date_before_linked_account": "La fecha del activo no puede ser anterior a la fecha de creación de la cuenta vinculada",
       "edit": "Editar activo",
       "create": "Crear activo",
       "already_exists": "Ya existe un activo con este nombre. Quizás quieras editarlo",

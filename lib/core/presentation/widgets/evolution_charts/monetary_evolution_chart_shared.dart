@@ -4,8 +4,83 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+
+/// Day step for time-series charts (~100 samples across [timeRange]).
+int timeSeriesChartDayStep(DateTimeRange timeRange) {
+  return ((timeRange.end.difference(timeRange.start).inDays) / 100)
+      .ceil()
+      .clamp(1, 1 << 30);
+}
+
+/// A chart sample at [date] carrying forward [source]'s value.
+class TimeSeriesFilledSample<T> {
+  const TimeSeriesFilledSample({
+    required this.date,
+    required this.value,
+    required this.source,
+  });
+
+  final DateTime date;
+  final double value;
+  final T source;
+}
+
+/// Fills [timeRange] with samples at [timeSeriesChartDayStep] intervals,
+/// using the latest known value at or before each date.
+List<TimeSeriesFilledSample<T>> fillTimeSeriesWithPreviousValue<T>({
+  required List<T> data,
+  required DateTime Function(T) dateExtractor,
+  required double Function(T) valueExtractor,
+  required DateTimeRange timeRange,
+}) {
+  if (data.isEmpty) return const [];
+
+  final sorted = List<T>.from(data)
+    ..sort((a, b) => dateExtractor(a).compareTo(dateExtractor(b)));
+
+  final dayStep = timeSeriesChartDayStep(timeRange);
+  final samples = <TimeSeriesFilledSample<T>>[];
+
+  var dataIndex = 0;
+  var currentDay = timeRange.start.justDay();
+  T? lastSource;
+  double? lastValue;
+
+  while (dataIndex < sorted.length &&
+      !dateExtractor(sorted[dataIndex]).justDay().isAfter(timeRange.start)) {
+    final item = sorted[dataIndex];
+    lastSource = item;
+    lastValue = valueExtractor(item);
+    dataIndex++;
+  }
+
+  while (currentDay.compareTo(timeRange.end) < 0) {
+    while (dataIndex < sorted.length &&
+        !dateExtractor(sorted[dataIndex]).justDay().isAfter(currentDay)) {
+      final item = sorted[dataIndex];
+      lastSource = item;
+      lastValue = valueExtractor(item);
+      dataIndex++;
+    }
+
+    if (lastSource != null && lastValue != null) {
+      samples.add(
+        TimeSeriesFilledSample(
+          date: currentDay,
+          value: lastValue,
+          source: lastSource,
+        ),
+      );
+    }
+
+    currentDay = currentDay.add(Duration(days: dayStep));
+  }
+
+  return samples;
+}
 
 /// A time-series sample with a preformatted date [label] for tooltips.
 class TimeSeriesLabeledPoint {

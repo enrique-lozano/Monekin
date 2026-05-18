@@ -1,11 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/transactions/details/transaction_details.page.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/app/transactions/transaction_details.page.dart';
 import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -20,7 +21,7 @@ import 'package:monekin/core/services/view-actions/transaction_view_actions_serv
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../../core/presentation/app_colors.dart';
+import '../../../../core/presentation/app_colors.dart';
 
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile({
@@ -156,6 +157,10 @@ class TransactionListTile extends StatelessWidget {
     final showTime =
         appStateSettings[SettingKey.transactionTileShowTime] == '1';
 
+    final showTags =
+        transaction.tags.isNotEmpty &&
+        appStateSettings[SettingKey.transactionTileShowTags] == '1';
+
     final tileContent = ListTile(
       title: Row(
         mainAxisSize: MainAxisSize.max,
@@ -215,7 +220,7 @@ class TransactionListTile extends StatelessWidget {
           ),
         ],
       ),
-      isThreeLine: true,
+      isThreeLine: showTags || transaction.notes.isNotNullNorEmpty,
       subtitle: DefaultTextStyle(
         style: Theme.of(context).textTheme.labelMedium!,
         child: Row(
@@ -270,8 +275,7 @@ class TransactionListTile extends StatelessWidget {
                       ],
                     ],
                   ),
-                  if (transaction.notes != null &&
-                      transaction.notes!.isNotEmpty)
+                  if (transaction.notes.isNotNullNorEmpty)
                     Text(
                       transaction.notes!,
                       style: TextStyle(fontStyle: FontStyle.italic),
@@ -279,9 +283,7 @@ class TransactionListTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                  if (transaction.tags.isNotEmpty &&
-                      appStateSettings[SettingKey.transactionTileShowTags] ==
-                          '1') ...[
+                  if (showTags) ...[
                     const SizedBox(height: 2),
                     Wrap(
                       spacing: 4,

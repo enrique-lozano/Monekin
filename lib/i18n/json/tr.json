@@ -395,7 +395,9 @@
       "description": "Açıklama",
       "description-info": "Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun",
       "exchange-to-preferred-title": "{{ currency }} için kur",
-      "exchange-to-preferred-in-date": "İşlem tarihinde"
+      "exchange-to-preferred-in-date": "İşlem tarihinde",
+      "extra-info-section": "Ek bilgi",
+      "negative-balance-warning": "Bu tutar, seçilen hesabın güncel bakiyesinden yüksek. Kaydettiğinizde bakiye negatife dönebilir ve istatistikler etkilenebilir."
     },
     "REVERSED": {
       "title": "Ters işlem",
@@ -873,30 +875,23 @@
       "update_value": "Değeri güncelle",
       "trade_sheet_title_buy": "Satın al (varlığa ekle)",
       "trade_sheet_title_sell": "Sat (varlığı azalt)",
-      "trade_sheet_description_buy": "Add money to this asset from an account. Increase your investment and its value.",
-      "trade_sheet_description_sell": "Bu varlıktan bir hesaba para çekin. Yatırımınızı ve değerini azaltın.",
       "trade_sheet_update_value_info": "Bu varlığın değeri {{ value }} olarak güncellenecek",
       "trade_sheet_update_linked_asset_value_info": "Bu işleme bağlı varlığın değeri {{ value }} olarak güncellenecek",
       "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
       "trade_sheet_update_following_valuations_description": "Seçilen tarihten sonraki varlık değerlemelerini güncelleyin.",
       "trade_sheet_valuation_current_value_label": "Mevcut değer",
-      "trade_sheet_valuation_new_value_label": "Yeni değer",
       "trade_sheet_valuation_create_new_title": "Yeni değerleme oluştur",
       "trade_sheet_valuation_adjust_current_description": "Varlığın mevcut değerini ayarla",
-      "trade_sheet_full_form": "Tüm alanlar",
       "trade_form_asset_column": "Varlık",
       "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
-      "treat_as_investment": "Yatırım olarak değerlendirin (yalnızca nakit ayağı)",
       "notes_optional": "Notlar (isteğe bağlı)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
-      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_return_help": "Piyasadan gelen kâr veya zarar; yatırdığınız veya çektiğiniz paradan değil. Değer sadece daha fazla yatırdığınız için arttıysa, bu sıfıra yakın kalır.",
       "performance_invested_value": "Invested value",
-      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
+      "performance_invested_value_caption": "Bu varlıktaki toplam para: başlangıç değeri artı bağlı alım ve satımlar.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+      "performance_value_diff_caption": "Varlığın değerinin seçilen dönemin başından bugüne ne kadar değiştiği."
     },
     "FORM": {
       "asset_type": "Varlık türü",
@@ -913,7 +908,9 @@
       "edit": "Öğeyi düzenle",
       "create": "Öğe oluştur",
       "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz",
-      "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
+      "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut",
+      "acquisition_date": "Oluşturulma tarihi",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Değerleme geçmişi",
@@ -935,6 +932,22 @@
       "name_desc": "İsim (Z-A)",
       "value_asc": "Değer (önce en düşük)",
       "value_desc": "Değer (önce en yüksek)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

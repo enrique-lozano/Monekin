@@ -395,7 +395,9 @@
       "description": "Leírás",
       "description-info": "Koppintson ide a tranzakció részletesebb leírásának megadásához.",
       "exchange-to-preferred-title": "{{ currency }} átváltási árfolyam",
-      "exchange-to-preferred-in-date": "A tranzakció napján"
+      "exchange-to-preferred-in-date": "A tranzakció napján",
+      "extra-info-section": "További információk",
+      "negative-balance-warning": "Ez az összeg meghaladja a kiválasztott számla egyenlegét. Mentéskor negatív egyenleg keletkezhet, ami torzíthatja a statisztikákat."
     },
     "REVERSED": {
       "title": "Megfordított tranzakció",
@@ -873,30 +875,23 @@
       "update_value": "Frissítse az értéket",
       "trade_sheet_title_buy": "Vásárlás (hozzáadás az eszközhöz)",
       "trade_sheet_title_sell": "Eladás (vagyon csökkentése)",
-      "trade_sheet_description_buy": "Adjon hozzá pénzt ehhez az eszközhöz egy számláról. Növelje befektetését és értékét.",
-      "trade_sheet_description_sell": "Vegyen ki pénzt ebből az eszközből egy számlára. Csökkentse befektetését és annak értékét.",
       "trade_sheet_update_value_info": "Ennek az elemnek az értéke a következőre módosul: {{ value }}",
       "trade_sheet_update_linked_asset_value_info": "A tranzakcióhoz kapcsolódó eszköz értéke {{ value }} értékre frissül",
       "trade_sheet_update_following_valuations": "Frissítse a későbbi értékeléseket",
       "trade_sheet_update_following_valuations_description": "Igazítsa az eszköz kiválasztott dátum utáni értékeléseit.",
       "trade_sheet_valuation_current_value_label": "Jelenlegi érték",
-      "trade_sheet_valuation_new_value_label": "Új érték",
       "trade_sheet_valuation_create_new_title": "Új értékelés létrehozása",
       "trade_sheet_valuation_adjust_current_description": "Az eszköz jelenlegi értékének módosítása",
-      "trade_sheet_full_form": "Minden mező",
       "trade_form_asset_column": "Eszköz",
       "trade_valuation_notice": "Az erre a dátumra vonatkozó értékelést frissítjük, hogy tükrözze ezt az összeget.",
-      "treat_as_investment": "Befektetésként kezelve (csak készpénzes láb)",
       "notes_optional": "Megjegyzések (nem kötelező)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
-      "performance_return_help": "How much value changed beyond new money in or out: (end valuation − start valuation) − (end net invested − start net invested). If the value rose only because you deposited the same amount, this is about zero.",
+      "performance_return_help": "Piac vagy veszteség a piactól, nem a befizetésektől vagy kivételektől. Ha az érték csak azért nőtt, mert többet fizettél be, ez közel nulla marad.",
       "performance_invested_value": "Invested value",
-      "performance_invested_value_caption": "Net cash in the asset so far (initial value plus linked flows).",
+      "performance_invested_value_caption": "Összes pénz ebben az eszközben: kezdőérték plusz kapcsolt vétel és eladás.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Difference between the current booked valuation and the valuation on the first date in the selected chart range (market price only—independent of invested flows)."
+      "performance_value_diff_caption": "Mennyit változott az eszköz értéke a kiválasztott időszak elejétől máig."
     },
     "FORM": {
       "asset_type": "Eszköz típusa",
@@ -913,7 +908,9 @@
       "edit": "Eszköz szerkesztése",
       "create": "Eszköz létrehozása",
       "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni",
-      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti"
+      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti",
+      "acquisition_date": "Létrehozás dátuma",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Értékelés története",
@@ -935,6 +932,22 @@
       "name_desc": "Név (Z-A)",
       "value_asc": "Érték (a legalacsonyabb először)",
       "value_desc": "Érték (a legmagasabb először)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

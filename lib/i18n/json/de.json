@@ -395,7 +395,9 @@
       "description": "Beschreibung",
       "description-info": "Tippe hier, um eine detailliertere Beschreibung dieser Transaktion einzugeben",
       "exchange-to-preferred-title": "Wechselkurs zu {{ currency }}",
-      "exchange-to-preferred-in-date": "Am Transaktionsdatum"
+      "exchange-to-preferred-in-date": "Am Transaktionsdatum",
+      "extra-info-section": "Zusätzliche Infos",
+      "negative-balance-warning": "Dieser Betrag übersteigt das aktuelle Guthaben des gewählten Kontos. Beim Speichern entsteht ein negatives Saldo, was die Statistiken verzerren kann."
     },
     "REVERSED": {
       "title": "Umgekehrte Transaktion",
@@ -873,30 +875,23 @@
       "update_value": "Wert aktualisieren",
       "trade_sheet_title_buy": "Kaufen (zum Vermögenswert hinzufügen)",
       "trade_sheet_title_sell": "Verkaufen (Vermögenswert reduzieren)",
-      "trade_sheet_description_buy": "Fügen Sie Geld von einem Konto zu diesem Vermögenswert hinzu. Steigern Sie Ihre Investition und deren Wert.",
-      "trade_sheet_description_sell": "Heben Sie Geld von diesem Vermögenswert auf ein Konto ab. Reduzieren Sie Ihre Investition und ihren Wert.",
       "trade_sheet_update_value_info": "Der Wert dieses Vermögenswerts wird auf {{ value }} aktualisiert",
       "trade_sheet_update_linked_asset_value_info": "Der Wert des Vermögenswerts, der mit dieser Transaktion verknüpft ist, wird auf {{ value }} aktualisiert.",
       "trade_sheet_update_following_valuations": "Aktualisieren Sie spätere Bewertungen",
       "trade_sheet_update_following_valuations_description": "Passen Sie Bewertungen dieses Vermögenswerts an, die nach dem gewählten Datum liegen.",
       "trade_sheet_valuation_current_value_label": "Aktueller Wert",
-      "trade_sheet_valuation_new_value_label": "Neuer Wert",
       "trade_sheet_valuation_create_new_title": "Neue Bewertung erstellen",
       "trade_sheet_valuation_adjust_current_description": "Aktuellen Wert des Vermögenswerts anpassen",
-      "trade_sheet_full_form": "Alle Felder",
       "trade_form_asset_column": "Anlage",
       "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
-      "treat_as_investment": "Als Investition behandeln (nur Barzahlung)",
       "notes_optional": "Notizen (optional)",
-      "link_transaction": "Link transaction",
-      "link_transaction_description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
       "performance_sheet_title": "Performance",
       "performance_return": "Periodenrendite",
-      "performance_return_help": "Wie stark sich der Wert über neue Ein- oder Auszahlungen hinaus geändert hat: (Endbewertung − Anfangsbewertung) − (End-Nettoinvest − Anfang-Nettoinvest). Steigt der Wert nur, weil du denselben Betrag eingezahlt hast, liegt dies nahe null.",
+      "performance_return_help": "Gewinn oder Verlust durch Kursbewegungen, nicht durch Ein- oder Auszahlungen. Steigt der Wert nur, weil du mehr eingezahlt hast, bleibt dies nahe null.",
       "performance_invested_value": "Investierter Wert",
-      "performance_invested_value_caption": "Bisheriger Netto-Cash im Asset (Anfangswert plus verknüpfte Zuflüsse).",
+      "performance_invested_value_caption": "Gesamtes Geld in diesem Asset: Startwert plus verknüpfte Käufe und Verkäufe.",
       "performance_value_diff": "Bewertungsänderung",
-      "performance_value_diff_caption": "Differenz zwischen der aktuellen gebuchten Bewertung und der am ersten Tag des gewählten Diagrammbereichs (nur Marktwert, unabhängig von Investitionsströmen)."
+      "performance_value_diff_caption": "Wie sich der Wert des Assets vom Beginn des gewählten Zeitraums bis heute verändert hat."
     },
     "FORM": {
       "asset_type": "Asset-Typ",
@@ -913,7 +908,9 @@
       "edit": "Asset bearbeiten",
       "create": "Asset erstellen",
       "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten",
-      "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum"
+      "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum",
+      "acquisition_date": "Erstellungsdatum",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Bewertungshistorie",
@@ -935,6 +932,22 @@
       "name_desc": "Name (Z-A)",
       "value_asc": "Wert (niedrigster zuerst)",
       "value_desc": "Wert (höchster zuerst)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {

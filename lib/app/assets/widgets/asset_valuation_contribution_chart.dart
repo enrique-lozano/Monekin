@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 
 class AssetValuationContributionPoint {
@@ -27,6 +28,7 @@ class AssetValuationContributionChart extends StatefulWidget {
     required this.valuationLabel,
     required this.netContributionLabel,
     this.onHover,
+    this.timeRange,
   });
 
   final List<AssetValuationContributionPoint> points;
@@ -34,6 +36,7 @@ class AssetValuationContributionChart extends StatefulWidget {
   final String valuationLabel;
   final String netContributionLabel;
   final void Function(AssetValuationContributionPoint?)? onHover;
+  final DateTimeRange? timeRange;
 
   @override
   State<AssetValuationContributionChart> createState() =>
@@ -59,27 +62,10 @@ class _AssetValuationContributionChartState
       widget.points,
     )..sort((a, b) => a.date.compareTo(b.date));
 
-    final pointsByX = <int, AssetValuationContributionPoint>{
-      for (final point in sortedPoints)
-        point.date.millisecondsSinceEpoch: point,
-    };
-
-    final valuationSpots = sortedPoints
-        .map(
-          (point) => FlSpot(
-            point.date.millisecondsSinceEpoch.toDouble(),
-            point.valuation,
-          ),
-        )
-        .toList();
-    final contributionSpots = sortedPoints
-        .map(
-          (point) => FlSpot(
-            point.date.millisecondsSinceEpoch.toDouble(),
-            point.netContribution,
-          ),
-        )
-        .toList();
+    final chartSeries = _buildChartSeries(sortedPoints);
+    final pointsByX = chartSeries.pointsByX;
+    final valuationSpots = chartSeries.valuationSpots;
+    final contributionSpots = chartSeries.contributionSpots;
 
     final isNotEnoughData = sortedPoints.length <= 2;
 
@@ -152,7 +138,7 @@ class _AssetValuationContributionChartState
               show: true,
               color: isNotEnoughData
                   ? colorScheme.outlineVariant.withAlpha(10)
-                  : netContributionColor,
+                  : netContributionColor.withAlpha(50),
             ),
           ),
           LineChartBarData(
@@ -227,6 +213,64 @@ class _AssetValuationContributionChartState
           ),
         ),
       ],
+    );
+  }
+
+  DateTimeRange? _effectiveTimeRange(
+    List<AssetValuationContributionPoint> sortedPoints,
+  ) {
+    if (widget.timeRange != null) return widget.timeRange;
+    if (sortedPoints.isEmpty) return null;
+
+    final start = sortedPoints.first.date.justDay();
+    final end = DateTime.now().justDay().add(const Duration(days: 1));
+
+    return DateTimeRange(start: start, end: end);
+  }
+
+  ({
+    List<FlSpot> valuationSpots,
+    List<FlSpot> contributionSpots,
+    Map<int, AssetValuationContributionPoint> pointsByX,
+  }) _buildChartSeries(List<AssetValuationContributionPoint> sortedPoints) {
+    final timeRange = _effectiveTimeRange(sortedPoints);
+
+    if (timeRange == null) {
+      return (
+        valuationSpots: const [],
+        contributionSpots: const [],
+        pointsByX: const {},
+      );
+    }
+
+    final filledSamples = fillTimeSeriesWithPreviousValue(
+      data: sortedPoints,
+      dateExtractor: (point) => point.date,
+      valueExtractor: (point) => point.valuation,
+      timeRange: timeRange,
+    );
+
+    return (
+      valuationSpots: filledSamples
+          .map(
+            (sample) => FlSpot(
+              sample.date.millisecondsSinceEpoch.toDouble(),
+              sample.source.valuation,
+            ),
+          )
+          .toList(),
+      contributionSpots: filledSamples
+          .map(
+            (sample) => FlSpot(
+              sample.date.millisecondsSinceEpoch.toDouble(),
+              sample.source.netContribution,
+            ),
+          )
+          .toList(),
+      pointsByX: {
+        for (final sample in filledSamples)
+          sample.date.millisecondsSinceEpoch: sample.source,
+      },
     );
   }
 
