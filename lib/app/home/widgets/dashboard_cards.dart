@@ -41,7 +41,7 @@ class DashboardCards extends StatelessWidget {
                   onButtonClick: () => RouteUtils.pushRoute(
                     StatsPage(
                       dateRangeService: dateRangeService,
-                      initialIndex: 0,
+                      initialIndex: StatsTab.financialHealth,
                     ),
                   ),
                 ),
@@ -73,7 +73,7 @@ class DashboardCards extends StatelessWidget {
                   onButtonClick: () => RouteUtils.pushRoute(
                     StatsPage(
                       dateRangeService: dateRangeService,
-                      initialIndex: 1,
+                      initialIndex: StatsTab.distribution,
                     ),
                   ),
                 ),
@@ -95,7 +95,7 @@ class DashboardCards extends StatelessWidget {
                     RouteUtils.pushRoute(
                       StatsPage(
                         dateRangeService: dateRangeService,
-                        initialIndex: 2,
+                        initialIndex: StatsTab.balance,
                       ),
                     );
                   },
@@ -121,7 +121,7 @@ class DashboardCards extends StatelessWidget {
                     RouteUtils.pushRoute(
                       StatsPage(
                         dateRangeService: dateRangeService,
-                        initialIndex: 3,
+                        initialIndex: StatsTab.cashFlow,
                       ),
                     );
                   },
