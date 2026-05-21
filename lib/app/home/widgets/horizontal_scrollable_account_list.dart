@@ -38,53 +38,56 @@ class HorizontalScrollableAccountList extends StatelessWidget {
             predicate: (acc, curr) => acc.closingDate.isNull(),
           ),
           builder: (context, snapshot) {
-            return Row(
-              children: [
-                ...List.generate(snapshot.data?.length ?? 0, (index) {
-                  final account = snapshot.data!.elementAt(index);
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ...List.generate(snapshot.data?.length ?? 0, (index) {
+                    final account = snapshot.data!.elementAt(index);
 
-                  return _buildAccountCard(
-                    context,
-                    account,
-                    borderRadius: borderRadius,
-                  );
-                }),
-                // Add account card
-                Opacity(
-                  opacity: 0.6,
-                  child: SizedBox(
-                    width: 200,
-                    // Height of a normal account card minus the border width of this card
-                    height: (_useSmallLayout(context) ? 127.3 : 76) - 2,
-                    child: Tappable(
-                      onTap: () {
-                        RouteUtils.pushRoute(const AccountFormPage());
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: borderRadius,
-                        side: BorderSide(
-                          width: 2,
-                          color: Theme.of(context).dividerColor,
+                    return _buildAccountCard(
+                      context,
+                      account,
+                      borderRadius: borderRadius,
+                    );
+                  }),
+                  // Add account card
+                  Opacity(
+                    opacity: 0.6,
+                    child: SizedBox(
+                      width: _useSmallLayout(context) ? 150 : 200,
+                      // Height of a normal account card minus the border width of this card
+                      height: (_useSmallLayout(context) ? 127.3 : 76) - 2,
+                      child: Tappable(
+                        onTap: () {
+                          RouteUtils.pushRoute(const AccountFormPage());
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: borderRadius,
+                          side: BorderSide(
+                            width: 2,
+                            color: Theme.of(context).dividerColor,
+                          ),
                         ),
-                      ),
-                      child: Card(
-                        elevation: 0,
-                        color: Colors.transparent,
-                        margin: const EdgeInsets.all(0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 4,
-                          children: [
-                            Text(t.account.form.create),
-                            const Icon(Icons.add),
-                          ],
+                        child: Card(
+                          elevation: 0,
+                          color: Colors.transparent,
+                          margin: const EdgeInsets.all(0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            spacing: 4,
+                            children: [
+                              Text(t.account.form.create),
+                              const Icon(Icons.add),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),
@@ -92,19 +95,21 @@ class HorizontalScrollableAccountList extends StatelessWidget {
     );
   }
 
-  DecoratedBox _buildAccountCard(
+  Widget _buildAccountCard(
     BuildContext context,
     Account account, {
     required BorderRadius borderRadius,
   }) {
-    return DecoratedBox(
+    return Container(
       decoration: BoxDecoration(
         borderRadius: borderRadius,
         boxShadow: boxShadowGeneral(context),
       ),
+      width: _useSmallLayout(context) ? 150 : 200,
+      margin: const EdgeInsets.only(right: 12),
       child: Card(
-        margin: const EdgeInsets.only(right: 12),
         elevation: 0,
+        margin: const EdgeInsets.all(0),
         shape: RoundedRectangleBorder(borderRadius: borderRadius),
         child: Tappable(
           onTap: () => RouteUtils.pushRoute(
@@ -122,7 +127,7 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                   ? Axis.vertical
                   : Axis.horizontal,
               columnCrossAxisAlignment: CrossAxisAlignment.start,
-              columnSpacing: 8,
+              columnSpacing: 10,
               rowSpacing: 16,
               children: [
                 ResponsiveRowColumnItem(
@@ -132,52 +137,53 @@ class HorizontalScrollableAccountList extends StatelessWidget {
                   ),
                 ),
                 ResponsiveRowColumnItem(
+                  columnFit: FlexFit.loose,
+                  rowFit: FlexFit.loose,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         account.name,
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: Theme.of(context).textTheme.labelMedium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Row(
-                        children: [
-                          StreamBuilder(
-                            initialData: 0.0,
-                            stream: AccountService.instance.getAccountMoney(
-                              account: account,
-                            ),
-                            builder: (context, snapshot) {
-                              final amount = snapshot.data ?? 0.0;
+                      StreamBuilder(
+                        initialData: 0.0,
+                        stream: AccountService.instance.getAccountMoney(
+                          account: account,
+                        ),
+                        builder: (context, snapshot) {
+                          final amount = snapshot.data ?? 0.0;
 
-                              return CurrencyDisplayer(
-                                amountToConvert: amount,
-                                currency: account.currency,
-                                compactView: amount >= 10000000,
-                                integerStyle: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.w600),
-                              );
-                            },
-                          ),
-                          const SizedBox(width: 8),
-                          StreamBuilder(
-                            initialData: 0.0,
-                            stream: AccountService.instance
-                                .getAccountsBalanceRelativeChange(
-                                  accounts: [account],
-                                  startDate: dateRangeService.startDate,
-                                  endDate: dateRangeService.endDate,
-                                  convertToPreferredCurrency: false,
-                                ),
-                            builder: (context, snapshot) {
-                              return TrendingValue(
-                                percentage: snapshot.data!,
-                                decimalDigits: 0,
-                              );
-                            },
-                          ),
-                        ],
+                          return DefaultTextStyle(
+                            style: Theme.of(context).textTheme.titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            child: CurrencyDisplayer(
+                              amountToConvert: amount,
+                              currency: account.currency,
+                              compactView: amount >= 10000000,
+                            ),
+                          );
+                        },
+                      ),
+                      StreamBuilder(
+                        initialData: 0.0,
+                        stream: AccountService.instance
+                            .getAccountsBalanceRelativeChange(
+                              accounts: [account],
+                              startDate: dateRangeService.startDate,
+                              endDate: dateRangeService.endDate,
+                              convertToPreferredCurrency: false,
+                            ),
+                        builder: (context, snapshot) {
+                          return TrendingValue(
+                            percentage: snapshot.data!,
+                            decimalDigits: 0,
+                            padding: EdgeInsets.all(0),
+                          );
+                        },
                       ),
                     ],
                   ),
