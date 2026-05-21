@@ -25,7 +25,7 @@ class TransactionFormScaffold extends StatelessWidget {
     final t = Translations.of(context);
 
     final dualHorizontalPadding =
-        BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md) ? 0.0 : 16.0;
+        BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg) ? 0.0 : 16.0;
 
     final amountOrDual = c.usesDualLegAmountLayout
         ? TransactionFormDualLegAmountSection(
@@ -38,7 +38,7 @@ class TransactionFormScaffold extends StatelessWidget {
           )
         : const TransactionFormAmountBlock();
 
-    final mdLeadingColumn = _paddedColumn(
+    final lgLeadingColumn = _paddedColumn(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       children: [
         Column(
@@ -53,15 +53,15 @@ class TransactionFormScaffold extends StatelessWidget {
         if (!c.usesDualLegAmountLayout)
           const TransactionAccountCategorySelector(),
         if (c.linkedDebt != null &&
-            BreakPoint.of(context).isLargerThan(BreakpointID.sm)) ...[
+            BreakPoint.of(context).isLargerThan(BreakpointID.md)) ...[
           const SizedBox(height: 16),
           DebtLinkBanner(debt: c.linkedDebt!, padding: EdgeInsets.zero),
         ],
       ],
     );
 
-    final mdTrailingColumn = _paddedColumn(
-      padding: const EdgeInsets.fromLTRB(8, 16, 16, 24),
+    final lgTrailingColumn = _paddedColumn(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       children: const [TransactionFormDetailsSections()],
     );
 
@@ -88,64 +88,56 @@ class TransactionFormScaffold extends StatelessWidget {
         ? c.investmentAccent(context)
         : c.transactionType.color(context);
 
-    return SafeArea(
-      bottom: false,
-      left: false,
-      right: false,
-      top: BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md),
-      child: PageFramework(
-        title: c.resolveFrameworkTitle(t),
-        persistentFooterButtons: [
-          PersistentFooterButton(
-            child: FilledButton.icon(
-              style: getMediumButtonStyle(context).copyWith(
-                backgroundColor: WidgetStatePropertyAll(saveButtonColor),
-                foregroundColor: WidgetStatePropertyAll(
-                  saveButtonColor.getContrastColor(),
+    return PageFramework(
+      title: c.resolveFrameworkTitle(t),
+      persistentFooterButtons: [
+        PersistentFooterButton(
+          child: FilledButton.icon(
+            style: getMediumButtonStyle(context).copyWith(
+              backgroundColor: WidgetStatePropertyAll(saveButtonColor),
+              foregroundColor: WidgetStatePropertyAll(
+                saveButtonColor.getContrastColor(),
+              ),
+            ),
+            onPressed: () => c.onSavePressed(context),
+            icon: const Icon(Icons.save),
+            label: Text(saveLabel),
+          ),
+        ),
+      ],
+      body: Form(
+        key: c.formKey,
+        child: BreakpointContainer(
+          lgChild: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 4, child: lgLeadingColumn),
+              VerticalDivider(
+                width: 1,
+                thickness: 1,
+                color: scheme.outlineVariant,
+              ),
+              Expanded(flex: 6, child: lgTrailingColumn),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (!c.isAssetTradeInvestment)
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, 14),
+                  child: TransactionFormTypeSelector(padding: EdgeInsets.zero),
+                ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: mobileScrollInner,
+                  ),
                 ),
               ),
-              onPressed: () => c.onSavePressed(context),
-              icon: const Icon(Icons.save),
-              label: Text(saveLabel),
-            ),
-          ),
-        ],
-        body: Form(
-          key: c.formKey,
-          child: BreakpointContainer(
-            mdChild: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: mdLeadingColumn),
-                VerticalDivider(
-                  width: 1,
-                  thickness: 1,
-                  color: scheme.outlineVariant,
-                ),
-                Expanded(child: mdTrailingColumn),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (!c.isAssetTradeInvestment)
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 12, 16, 14),
-                    child: TransactionFormTypeSelector(
-                      padding: EdgeInsets.zero,
-                    ),
-                  ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: mobileScrollInner,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

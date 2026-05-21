@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
@@ -49,11 +50,10 @@ class TransactionFormAmountBlock extends StatelessWidget {
     final newEffect = c.draftEffectOnFromAccountLedger();
     if (newEffect >= 0) return const SizedBox.shrink();
 
-    return StreamBuilder<double>(
-      initialData: 0,
+    return StreamBuilder(
       stream: AccountService.instance.getAccountMoney(account: from),
       builder: (context, snap) {
-        if (!snap.hasData || snap.connectionState == ConnectionState.waiting) {
+        if (!snap.hasData) {
           return const SizedBox.shrink();
         }
 
@@ -94,13 +94,14 @@ class TransactionFormAmountBlock extends StatelessWidget {
             amount: c.transactionValue,
           ),
       builder: (context, snap) {
-        if (!snap.hasData) return const SizedBox.shrink();
-
-        final converted = snap.data!;
+        final converted = snap.data ?? c.transactionValue;
         final hintColor = c.foregroundColor(context).withOpacity(0.75);
 
         return AnimatedExpanded(
-          expand: converted != c.transactionValue,
+          expand:
+              c.transactionValue != 0 &&
+              displayCurrency.code !=
+                  appStateSettings[SettingKey.preferredCurrency],
           child: Padding(
             padding: const EdgeInsets.only(top: 6),
             child: Row(

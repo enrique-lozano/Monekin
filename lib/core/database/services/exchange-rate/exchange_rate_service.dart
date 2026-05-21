@@ -105,6 +105,10 @@ class ExchangeRateService {
     num amount = 1,
     DateTime? date,
   }) {
+    if (amount == 0) {
+      return Stream.value(0);
+    }
+
     date ??= DateTime.now();
 
     return getLastExchangeRateOf(currencyCode: fromCurrency, date: date)

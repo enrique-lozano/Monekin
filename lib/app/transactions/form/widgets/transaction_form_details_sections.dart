@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
-import 'package:monekin/app/transactions/form/widgets/transaction_form_asset_valuation_switch.dart';
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_asset_valuation_switch.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -21,15 +21,21 @@ class TransactionFormDetailsSections extends StatelessWidget {
     final c = context.watch<TransactionFormController>();
     final t = Translations.of(context);
     final detailsChildren = <Widget>[
-      TransactionTitleField(
-        controller: c.titleController,
-        focusNode: c.titleFocusNode,
-        textInputAction: TextInputAction.next,
-        onFieldSubmitted: (v) => c.onTitleFieldSubmitted(context, v),
+      Column(
+        spacing: 12,
+        children: [
+          TransactionTitleField(
+            controller: c.titleController,
+            focusNode: c.titleFocusNode,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (v) => c.onTitleFieldSubmitted(context, v),
+          ),
+          if (c.linkedDebt != null &&
+              BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.md))
+            DebtLinkBanner(debt: c.linkedDebt!),
+        ],
       ),
-      if (c.linkedDebt != null &&
-          BreakPoint.of(context).isSmallerOrEqualTo(BreakpointID.sm))
-        DebtLinkBanner(debt: c.linkedDebt!),
+
       const TransactionDateSelector(),
       if (c.isAssetTradeInvestment) const TransactionFormAssetValuationSwitch(),
       if (!c.isAssetTradeInvestment) const TransactionRecurrencySelector(),
