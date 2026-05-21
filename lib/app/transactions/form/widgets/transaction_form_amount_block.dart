@@ -160,21 +160,25 @@ class TransactionFormAmountBlock extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
             padding: const EdgeInsets.all(4),
             margin: const EdgeInsets.only(left: 6, right: 2),
             decoration: BoxDecoration(
-              color: c.foregroundColor(context),
+              color: baseColor,
               borderRadius: BorderRadius.circular(4),
             ),
-            child: Icon(
-              inv
-                  ? (c.investmentIsBuy
-                        ? TransactionType.income.mathIcon
-                        : TransactionType.expense.mathIcon)
-                  : c.transactionType.mathIcon,
-              color: baseColor,
-              size: 24,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: Icon(
+                inv
+                    ? (c.investmentIsBuy
+                          ? TransactionType.income.mathIcon
+                          : TransactionType.expense.mathIcon)
+                    : c.transactionType.mathIcon,
+                color: c.foregroundColor(context),
+                size: 26,
+              ),
             ),
           ),
           Flexible(
