@@ -1,9 +1,12 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
+import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -11,9 +14,6 @@ import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/app/tags/tags_selector.modal.dart';
 
 class BulkEditTransactionModal extends StatelessWidget {
   const BulkEditTransactionModal({
@@ -153,13 +153,6 @@ class BulkEditTransactionModal extends StatelessWidget {
                         ...tagsToAdd.map((t) => t.id),
                       }..removeAll(tagsToRemove.map((t) => t.id));
 
-<<<<<<< HEAD:lib/app/transactions/widgets/bulk_edit_transaction_modal.dart
-                      return TagService.instance.unlinkTagsFromTransaction(transactionId: e.id)
-                        .then((_) =>
-                        TagService.instance.linkTagsToTransaction(transactionId: e.id,
-                        tagIds: finalTagIds.toList(),
-                      ));
-=======
                       return TagService.instance
                           .unlinkTagsFromTransaction(transactionId: e.id)
                           .then(
@@ -168,7 +161,6 @@ class BulkEditTransactionModal extends StatelessWidget {
                               tagIds: finalTagIds.toList(),
                             ),
                           );
->>>>>>> develop:lib/app/transactions/list/widgets/bulk_edit_transaction_modal.dart
                     }),
                   );
                 });
@@ -204,23 +196,6 @@ class BulkEditTransactionModal extends StatelessWidget {
     RouteUtils.popRoute();
 
     Future.wait(futures)
-<<<<<<< HEAD:lib/app/transactions/widgets/bulk_edit_transaction_modal.dart
-      .then((_) {
-        MonekinSnackbar.success(
-          transactionsToEdit.length <= 1
-            ? SnackbarParams(t.transaction.edit_success)
-            : SnackbarParams(
-              t.transaction.edit_multiple_success(
-                x: transactionsToEdit.length,
-              ),
-            ),
-        );
-        onSuccess();
-      })
-      .catchError((err) {
-        MonekinSnackbar.error(SnackbarParams.fromError(err));
-    });
-=======
         .then((_) {
           MonekinSnackbar.success(
             transactionsToEdit.length <= 1
@@ -236,6 +211,5 @@ class BulkEditTransactionModal extends StatelessWidget {
         .catchError((err) {
           MonekinSnackbar.error(SnackbarParams.fromError(err));
         });
->>>>>>> develop:lib/app/transactions/list/widgets/bulk_edit_transaction_modal.dart
   }
 }
