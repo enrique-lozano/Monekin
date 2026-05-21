@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/debts/components/transaction_selector.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -58,7 +58,7 @@ class AddTransactionToAssetModal extends StatelessWidget {
                   onTransactionSelected: (transaction) async {
                     RouteUtils.popRoute();
                     try {
-                      await InvestmentService.instance.linkTransactionToAsset(
+                      await AssetService.instance.linkTransactionToAsset(
                         transactionId: transaction.id,
                         assetId: asset.id,
                       );

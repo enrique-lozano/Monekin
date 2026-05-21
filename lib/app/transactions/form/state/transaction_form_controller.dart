@@ -12,7 +12,8 @@ import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/evaluate_expression.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -247,7 +248,7 @@ class TransactionFormController extends ChangeNotifier {
   Future<void> _loadInvestmentAsset() async {
     final id = _transactionToEdit?.assetID;
     if (id == null) return;
-    final loaded = await InvestmentService.instance.getAssetById(id).first;
+    final loaded = await AssetService.instance.getAssetById(id).first;
     if (_disposed) return;
     _asset = loaded;
     _safeNotify();
@@ -570,7 +571,7 @@ class TransactionFormController extends ChangeNotifier {
         !investmentValuationDraftUnchangedOnEdit;
     final shouldShiftFutureValuations = shouldApplyValuation;
     final valuationDelta = shouldApplyValuation
-        ? InvestmentService.valuationDeltaForAssetLeg(
+        ? AssetValuationService.valuationDeltaForAssetLeg(
             assetLegAmountAbs: investmentValuationAmount,
             isBuy: investmentIsBuy,
           )
@@ -591,7 +592,7 @@ class TransactionFormController extends ChangeNotifier {
           if (isAssetTradeInvestment &&
               _asset != null &&
               shouldApplyValuation) {
-            await InvestmentService.instance.syncValuationOnTransactionSave(
+            await AssetValuationService.instance.syncValuationOnTransactionSave(
               previous: previousForValuation,
               current: transactionToPost,
               valuationDelta: valuationDelta,

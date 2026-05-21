@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/assets/asset_form.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
@@ -84,13 +85,13 @@ class _AssetsListPageState extends State<AssetsListPage> {
   }
 
   Stream<List<(Asset, double)>> _getAssetsWithValue() {
-    return InvestmentService.instance.getAssets().switchMap((assets) {
+    return AssetService.instance.getAssets().switchMap((assets) {
       if (assets.isEmpty) {
         return Stream.value([]);
       }
 
       final streams = assets.map((asset) {
-        return InvestmentService.instance
+        return AssetValuationService.instance
             .getCurrentAssetValue(asset)
             .map((value) => (asset, value));
       });
@@ -118,7 +119,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
             subtitle: StreamBuilder(
               // Includes linked portfolio rows (same economic value is also inside
               // investment account balances) — intentional for this “all assets” total.
-              stream: InvestmentService.instance.getTotalAssetsValueAtDate(),
+              stream: AssetValuationService.instance.getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
                 final totalValue = snapshot.data;
                 return Skeletonizer(

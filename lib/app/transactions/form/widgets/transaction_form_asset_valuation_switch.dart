@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
 
@@ -35,14 +35,14 @@ class TransactionFormAssetValuationSwitch extends StatelessWidget {
     final previousTradeDate = c.isEditMode ? c.transactionToEdit?.date : null;
 
     return StreamBuilder<List<ValuationInDB>>(
-      stream: InvestmentService.instance.getValuationsForAsset(asset.id),
+      stream: AssetValuationService.instance.getValuationsForAsset(asset.id),
       builder: (context, valuationsSnap) {
         final hasFutureValuations = valuationsSnap.data == null
             ? true
             : _hasValuationsStrictlyAfterDate(valuationsSnap.data!, tradeDate);
 
         return StreamBuilder<double>(
-          stream: InvestmentService.instance.getAssetValueAtDate(
+          stream: AssetValuationService.instance.getAssetValueAtDate(
             asset,
             date: tradeDate,
           ),

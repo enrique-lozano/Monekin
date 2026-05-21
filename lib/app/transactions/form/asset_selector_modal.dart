@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -36,7 +36,7 @@ class _AssetSelectorModal extends StatelessWidget {
         return ModalContainer(
           title: t.assets.details.trade_form_asset_column,
           body: StreamBuilder<List<Asset>>(
-            stream: InvestmentService.instance.getAssets(),
+            stream: AssetService.instance.getAssets(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());

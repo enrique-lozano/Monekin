@@ -12,7 +12,8 @@ import 'package:monekin/app/transactions/list/transactions.page.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
@@ -79,7 +80,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     final t = Translations.of(context);
 
     return StreamBuilder<List<(Asset, double)>>(
-      stream: InvestmentService.instance
+      stream: AssetService.instance
           .getAssets(
             predicate: (a, curr) => a.linkedAccountID.isValue(account.id),
           )
@@ -89,7 +90,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
             }
 
             final streams = assets.map((asset) {
-              return InvestmentService.instance
+              return AssetValuationService.instance
                   .getCurrentAssetValue(asset)
                   .map((value) => (asset, value));
             }).toList();

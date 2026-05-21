@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
@@ -115,7 +115,7 @@ class AccountService {
     return _watchInvestmentAccountIds(accountIds: accountIds).switchMap((ids) {
       if (ids.isEmpty) return Stream.value(0.0);
       final streams = ids.map(
-        (id) => InvestmentService.instance.streamLinkedAssetsTotalForAccount(
+        (id) => AssetValuationService.instance.streamLinkedAssetsTotalForAccount(
           id,
           date: date,
           convertToPreferredCurrency: convertToPreferredCurrency,
@@ -185,7 +185,7 @@ class AccountService {
       exchDate: date,
     );
 
-    final linked = InvestmentService.instance.streamLinkedAssetsTotalForAccount(
+    final linked = AssetValuationService.instance.streamLinkedAssetsTotalForAccount(
       account.id,
       date: date,
       convertToPreferredCurrency: convertToPreferredCurrency,

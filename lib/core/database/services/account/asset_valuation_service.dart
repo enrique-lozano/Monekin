@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show DateUtils;
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
@@ -10,69 +11,14 @@ import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// Service for investment accounts, assets, valuations and net worth.
-class InvestmentService {
+/// Service for valuation rows, derived asset values, and valuation sync from transactions.
+class AssetValuationService {
   final AppDB db;
 
-  InvestmentService._(this.db);
-  static final InvestmentService instance = InvestmentService._(AppDB.instance);
-
-  // ---------------------------------------------------------------------------
-  // Asset CRUD
-  // ---------------------------------------------------------------------------
-
-  Future<int> insertAsset(AssetInDB asset) {
-    return db.into(db.assets).insert(asset);
-  }
-
-  Future<bool> updateAsset(AssetInDB asset) {
-    return db.update(db.assets).replace(asset);
-  }
-
-  Future<int> deleteAsset(String assetId) {
-    return (db.delete(db.assets)..where((tbl) => tbl.id.equals(assetId))).go();
-  }
-
-  Stream<List<Asset>> getAssets({
-    Expression<bool> Function(Assets a, Currencies curr)? predicate,
-    int? limit,
-  }) {
-    return db
-        .getAssetsWithFullData(
-          predicate: predicate,
-          orderBy: (a, curr) => OrderBy([OrderingTerm.asc(a.name)]),
-          limit: (a, curr) => Limit(limit ?? -1, null),
-        )
-        .watch();
-  }
-
-  Stream<Asset?> getAssetById(String id) {
-    return getAssets(
-      predicate: (a, curr) => a.id.equals(id),
-      limit: 1,
-    ).map((res) => res.firstOrNull);
-  }
-
-  /// Only the [assetId] column is written; all other transaction data is preserved.
-  Future<int> linkTransactionToAsset({
-    required String transactionId,
-    required String assetId,
-  }) {
-    return (db.update(db.transactions)
-          ..where((tbl) => tbl.id.equals(transactionId)))
-        .write(TransactionsCompanion(assetID: Value(assetId)));
-  }
-
-  /// Removes the debt link from a transaction by setting its [assetId] to null.
-  Future<int> unlinkTransactionFromAsset(String transactionId) {
-    return (db.update(db.transactions)
-          ..where((tbl) => tbl.id.equals(transactionId)))
-        .write(TransactionsCompanion(assetID: Value<String?>(null)));
-  }
-
-  // ---------------------------------------------------------------------------
-  // Valuation CRUD
-  // ---------------------------------------------------------------------------
+  AssetValuationService._(this.db);
+  static final AssetValuationService instance = AssetValuationService._(
+    AppDB.instance,
+  );
 
   /// Inserts a valuation, or replaces an existing one if there is already
   /// a valuation for the same asset on the same day.
@@ -99,10 +45,6 @@ class InvestmentService {
     )..where((tbl) => tbl.id.equals(valuationId))).go();
   }
 
-  // ---------------------------------------------------------------------------
-  // Valuation queries
-  // ---------------------------------------------------------------------------
-
   Stream<List<ValuationInDB>> getValuationsForAsset(String assetId) {
     return db.getValuationsForAsset(assetId: assetId).watch();
   }
@@ -120,11 +62,7 @@ class InvestmentService {
     return db.getLatestValuationForAsset(assetId: assetId).watchSingleOrNull();
   }
 
-  // ---------------------------------------------------------------------------
-  // Investment account metrics
-  // ---------------------------------------------------------------------------
-
-  /// Market value of **linked portfolio assets** (migrated from account valuations).
+  /// Market value of **linked portfolio assets**.
   ///
   /// When [convertToPreferredCurrency] is false, amounts are summed in each
   /// asset's currency (caller should only use when assets match the account).
@@ -133,37 +71,35 @@ class InvestmentService {
     DateTime? date,
     bool convertToPreferredCurrency = false,
   }) {
-    return getAssets(
-      predicate: (a, c) =>
-          a.linkedAccountID.isNotNull() & a.linkedAccountID.equals(account.id),
-    ).switchMap((linked) {
-      if (linked.isEmpty) return Stream.value(0.0);
-      final streams = linked
-          .map(
-            (asset) => getAssetValueAtDate(
-              asset,
-              date: date,
-              convertToPreferredCurrency: convertToPreferredCurrency,
-            ),
-          )
-          .toList();
-      return Rx.combineLatestList(
-        streams,
-      ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
-    });
+    return AssetService.instance
+        .getAssets(
+          predicate: (a, c) =>
+              a.linkedAccountID.isNotNull() & a.linkedAccountID.equals(account.id),
+        )
+        .switchMap((linked) {
+          if (linked.isEmpty) return Stream.value(0.0);
+          final streams = linked
+              .map(
+                (asset) => getAssetValueAtDate(
+                  asset,
+                  date: date,
+                  convertToPreferredCurrency: convertToPreferredCurrency,
+                ),
+              )
+              .toList();
+          return Rx.combineLatestList(
+            streams,
+          ).map((values) => values.fold<double>(0, (sum, v) => sum + v));
+        });
   }
 
-  // ---------------------------------------------------------------------------
-  // Asset value
-  // ---------------------------------------------------------------------------
-
-  /// Returns the current value for an asset
+  /// Returns the current value for an asset.
   ///
   /// Uses the latest valuation if one exists; otherwise returns the asset's
   /// [initialValue].
   Stream<double> getCurrentAssetValue(
     AssetInDB asset, {
-    convertToPreferredCurrency = false,
+    bool convertToPreferredCurrency = false,
   }) {
     return getAssetValueAtDate(
       asset,
@@ -174,7 +110,7 @@ class InvestmentService {
   Stream<double> getAssetValueAtDate(
     AssetInDB asset, {
     DateTime? date,
-    convertToPreferredCurrency = false,
+    bool convertToPreferredCurrency = false,
   }) {
     if (date != null && date.isBefore(asset.creationDate)) {
       return Stream.value(0.0);
@@ -198,46 +134,40 @@ class InvestmentService {
 
   /// Total market value of assets at [date] in the user's preferred currency.
   ///
-  /// With [considerLinkedAccounts] `true` (default), every asset row is included
-  /// (e.g. useful for an “all rows in the assets table” total).
-  ///
-  /// With `false`, assets linked to an account ([Assets.linkedAccountID] set) are
-  /// omitted — use that next to combined account balances so linked holdings are not
-  /// double-counted. Prefer [getStandaloneAssetsValueAtDate] at call sites that always
-  /// want the latter.
+  /// With [considerLinkedAccounts] `true` (default), every asset row is included.
+  /// With `false`, assets linked to an account are omitted.
   Stream<double> getTotalAssetsValueAtDate({
     DateTime? date,
     bool considerLinkedAccounts = true,
   }) {
-    return getAssets(
-      predicate: (a, currency) => buildDriftExpr([
-        if (!considerLinkedAccounts) a.linkedAccountID.isNull(),
-      ]),
-    ).switchMap((assets) {
-      if (assets.isEmpty) {
-        return Stream.value(0.0);
-      }
+    return AssetService.instance
+        .getAssets(
+          predicate: (a, currency) => buildDriftExpr([
+            if (!considerLinkedAccounts) a.linkedAccountID.isNull(),
+          ]),
+        )
+        .switchMap((assets) {
+          if (assets.isEmpty) {
+            return Stream.value(0.0);
+          }
 
-      final streams = assets
-          .map(
-            (asset) => getAssetValueAtDate(
-              asset,
-              date: date,
-              convertToPreferredCurrency: true,
-            ),
-          )
-          .toList();
+          final streams = assets
+              .map(
+                (asset) => getAssetValueAtDate(
+                  asset,
+                  date: date,
+                  convertToPreferredCurrency: true,
+                ),
+              )
+              .toList();
 
-      return CombineLatestStream.list(
-        streams,
-      ).map((values) => values.fold(0.0, (sum, value) => sum + value));
-    });
+          return CombineLatestStream.list(
+            streams,
+          ).map((values) => values.fold(0.0, (sum, value) => sum + value));
+        });
   }
 
   /// Same as [getTotalAssetsValueAtDate] with linked-account assets excluded.
-  ///
-  /// Linked portfolio assets are already counted inside the parent account’s balance;
-  /// summing them again would overstate net worth (see `NetWorthService.getGrossAssetsAtDate`).
   Stream<double> getStandaloneAssetsValueAtDate({DateTime? date}) {
     return getTotalAssetsValueAtDate(date: date, considerLinkedAccounts: false);
   }
@@ -264,10 +194,6 @@ class InvestmentService {
           );
         });
   }
-
-  // ---------------------------------------------------------------------------
-  // Valuation adjustments from transactions (cash leg vs holdings snapshot)
-  // ---------------------------------------------------------------------------
 
   /// Valuation snapshot delta from the asset leg amount and buy/sell direction.
   static double valuationDeltaForAssetLeg({
@@ -346,8 +272,9 @@ class InvestmentService {
 
   /// `newSnapshot = latestValuationAtOrBefore(date) + delta` (same calendar day row updated in place).
   ///
-  /// Transaction-driven base uses **0** when there is no prior snapshot (manual
-  /// valuations still “win” for display until a tx touches that day).
+  /// When there is no prior valuation snapshot, transaction-driven updates start
+  /// from the asset's initial value so the first auto-valuation becomes
+  /// `initialValue ± transactionAmount`.
   Future<void> _applyValuationDelta({
     required String assetId,
     required DateTime date,
@@ -355,11 +282,9 @@ class InvestmentService {
   }) async {
     if (delta == 0) return;
 
-    final latest = await db
-        .getLatestValuationForAssetAtDate(assetId: assetId, date: date)
-        .getSingleOrNull();
+    final latest = await getLatestValuationForAsset(assetId, date: date).first;
 
-    final base = latest?.value ?? 0.0;
+    final base = latest?.value ?? await _getAssetInitialValue(assetId);
     final newVal = base + delta;
 
     await insertOrUpdateValuation(
@@ -370,6 +295,13 @@ class InvestmentService {
         value: newVal,
       ),
     );
+  }
+
+  Future<double> _getAssetInitialValue(String assetId) async {
+    final asset = await (db.select(
+      db.assets,
+    )..where((tbl) => tbl.id.equals(assetId))).getSingleOrNull();
+    return asset?.initialValue ?? 0.0;
   }
 
   Future<void> _shiftFutureValuations({
@@ -398,12 +330,7 @@ class InvestmentService {
     );
   }
 
-  /// Gain vs the asset’s **creation-time initial value** ([AssetInDB.initialValue]),
-  /// not a full cost basis rebuilt from every trade.
-  ///
-  /// Emits `(value, percent)` where `value` is current market value minus initial,
-  /// and `percent` is `value / initial` when initial ≠ 0; otherwise signed infinities
-  /// for display edge cases.
+  /// Gain vs the asset’s creation-time initial value.
   Stream<({double value, double percent})> getAssetProfit(Asset asset) {
     return getCurrentAssetValue(asset).map((currentValue) {
       final profit = currentValue - asset.initialValue;

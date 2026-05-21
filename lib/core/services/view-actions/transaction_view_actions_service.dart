@@ -4,7 +4,7 @@ import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -182,10 +182,10 @@ class TransactionViewActionService {
 
     if (copy.assetID != null &&
         copy.type == TransactionType.investment &&
-        InvestmentService.statusAffectsValuation(copy)) {
-      await InvestmentService.instance.syncValuationOnTransactionSave(
+        AssetValuationService.statusAffectsValuation(copy)) {
+      await AssetValuationService.instance.syncValuationOnTransactionSave(
         current: copy,
-        valuationDelta: InvestmentService.valuationDeltaForTransaction(copy),
+        valuationDelta: AssetValuationService.valuationDeltaForTransaction(copy),
       );
     }
 

@@ -3,7 +3,7 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
@@ -403,7 +403,10 @@ class _AssetBookedValueSubtitle extends StatelessWidget {
     final muted = theme.colorScheme.onSurfaceVariant;
 
     return StreamBuilder<double>(
-      stream: InvestmentService.instance.getAssetValueAtDate(asset, date: date),
+      stream: AssetValuationService.instance.getAssetValueAtDate(
+        asset,
+        date: date,
+      ),
       builder: (context, snap) {
         final value = snap.data ?? asset.initialValue;
         final formatted = UINumberFormatter.currency(

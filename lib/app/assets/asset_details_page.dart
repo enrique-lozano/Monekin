@@ -9,7 +9,8 @@ import 'package:monekin/app/assets/widgets/asset_valuation_contribution_chart.da
 import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/asset/asset.dart';
@@ -104,7 +105,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     final firstVisibleDate = filteredValuations.first.date;
     final txSorted =
         transactions
-            .where((tx) => InvestmentService.statusAffectsValuation(tx))
+            .where((tx) => AssetValuationService.statusAffectsValuation(tx))
             .toList()
           ..sort((a, b) => a.date.compareTo(b.date));
 
@@ -113,7 +114,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
     for (final tx in txSorted) {
       if (tx.date.isAfter(firstVisibleDate)) break;
-      netContribution += InvestmentService.valuationDeltaForTransaction(tx);
+      netContribution += AssetValuationService.valuationDeltaForTransaction(tx);
       txIndex++;
     }
 
@@ -122,7 +123,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         .map((valuation) {
           while (txIndex < txSorted.length &&
               !txSorted[txIndex].date.isAfter(valuation.date)) {
-            netContribution += InvestmentService.valuationDeltaForTransaction(
+            netContribution += AssetValuationService.valuationDeltaForTransaction(
               txSorted[txIndex],
             );
             txIndex++;
@@ -168,12 +169,12 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             .where(
               (tx) =>
                   tx.assetID == asset.id &&
-                  InvestmentService.statusAffectsValuation(tx),
+                  AssetValuationService.statusAffectsValuation(tx),
             )
             .toList()
           ..sort((a, b) => a.date.compareTo(b.date));
     for (final tx in sorted) {
-      net += InvestmentService.valuationDeltaForTransaction(tx);
+      net += AssetValuationService.valuationDeltaForTransaction(tx);
     }
     return net;
   }
@@ -242,7 +243,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
 
     if (newValuation != null) {
-      await InvestmentService.instance.insertOrUpdateValuation(newValuation);
+      await AssetValuationService.instance.insertOrUpdateValuation(newValuation);
       MonekinSnackbar.success(
         SnackbarParams(t.assets.valuation.update_value_success),
       );
@@ -262,7 +263,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
 
     if (updatedValuation != null) {
-      await InvestmentService.instance.insertOrUpdateValuation(
+      await AssetValuationService.instance.insertOrUpdateValuation(
         updatedValuation,
       );
       MonekinSnackbar.success(
@@ -273,7 +274,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
   Future<void> _deleteValuation(ValuationInDB valuation) async {
     final t = Translations.of(context);
-    await InvestmentService.instance.deleteValuation(valuation.id);
+    await AssetValuationService.instance.deleteValuation(valuation.id);
     MonekinSnackbar.success(
       SnackbarParams(t.assets.valuation.delete_valuation_success),
     );
@@ -289,7 +290,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
     if (confirmed == true) {
       await Future.wait(
-        valuations.map((v) => InvestmentService.instance.deleteValuation(v.id)),
+        valuations.map((v) => AssetValuationService.instance.deleteValuation(v.id)),
       );
       MonekinSnackbar.success(
         SnackbarParams(t.assets.valuation.delete_all_valuations_success),
@@ -306,7 +307,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
 
     if (confirmed == true) {
-      await InvestmentService.instance
+      await AssetService.instance
           .deleteAsset(widget.asset.id)
           .then((_) {
             MonekinSnackbar.success(SnackbarParams(t.assets.delete_success));
@@ -344,8 +345,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
     return StreamBuilder(
       stream: Rx.combineLatest3(
-        InvestmentService.instance.getValuationsForAsset(widget.asset.id),
-        InvestmentService.instance.getAssetById(widget.asset.id),
+        AssetValuationService.instance.getValuationsForAsset(widget.asset.id),
+        AssetService.instance.getAssetById(widget.asset.id),
         TransactionService.instance.getTransactions(
           filters: TransactionFilterSet(assetIds: [widget.asset.id]),
         ),
@@ -426,7 +427,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           Skeletonizer(
             enabled: valuations == null,
             child: StreamBuilder<double>(
-              stream: InvestmentService.instance.getCurrentAssetValue(asset),
+              stream: AssetValuationService.instance.getCurrentAssetValue(asset),
               builder: (context, valueSnapshot) {
                 final value = valueSnapshot.data ?? asset!.initialValue;
 

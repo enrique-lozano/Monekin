@@ -2,7 +2,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -68,12 +69,12 @@ class NetWorthCompositionCard extends StatelessWidget {
       }),
     );
 
-    final assets = await InvestmentService.instance
+    final assets = await AssetService.instance
         .getAssets(predicate: (a, curr) => a.linkedAccountID.isNull())
         .first;
     final assetItems = await Future.wait(
       assets.map((asset) async {
-        final value = await InvestmentService.instance
+        final value = await AssetValuationService.instance
             .getAssetValueAtDate(
               asset,
               date: date,
@@ -228,23 +229,6 @@ class NetWorthCompositionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBreakdownRow(BuildContext context, _BreakdownItem item) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Text(
-              item.title,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
-          CurrencyDisplayer(amountToConvert: item.amount),
-        ],
-      ),
-    );
-  }
 }
 
 class _BreakdownItem {

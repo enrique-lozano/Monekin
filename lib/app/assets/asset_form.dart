@@ -5,7 +5,8 @@ import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
@@ -76,11 +77,13 @@ class _AssetFormPageState extends State<AssetFormPage> {
       return;
     }
 
-    final investmentService = InvestmentService.instance;
+    final assetService = AssetService.instance;
 
     // Check if there are valuations before the creation date of the asset:
     if (_assetToEdit != null) {
-      if ((await investmentService.getValuationsForAsset(_assetToEdit.id).first)
+      if ((await AssetValuationService.instance
+              .getValuationsForAsset(_assetToEdit.id)
+              .first)
           .where((v) => v.date.isBefore(_creationDate))
           .isNotEmpty) {
         MonekinSnackbar.warning(
@@ -125,10 +128,10 @@ class _AssetFormPageState extends State<AssetFormPage> {
     }
 
     if (_assetToEdit != null) {
-      await investmentService.updateAsset(assetToSubmit);
+      await assetService.updateAsset(assetToSubmit);
       //MonekinSnackbar.success(SnackbarParams(t.assets.form.edit_success));
     } else {
-      await investmentService.insertAsset(assetToSubmit);
+      await assetService.insertAsset(assetToSubmit);
       //  MonekinSnackbar.success(SnackbarParams(t.assets.form.create_success));
     }
 

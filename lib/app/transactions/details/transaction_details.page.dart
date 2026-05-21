@@ -6,7 +6,7 @@ import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/details/utils/show_pay_modal.dart';
 import 'package:monekin/app/transactions/details/widgets/translucent_transaction_status_card.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -868,7 +868,7 @@ class _LinkedAssetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: InvestmentService.instance.getAssetById(assetId),
+      stream: AssetService.instance.getAssetById(assetId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return const SizedBox.shrink();
         final asset = snapshot.data!;
@@ -922,7 +922,7 @@ class _LinkedAssetCard extends StatelessWidget {
                       icon: const Icon(Icons.link_off_rounded, size: 18),
                       label: Text(t.debts.actions.unlink_transaction.title),
                       onPressed: () async {
-                        await InvestmentService.instance
+                        await AssetService.instance
                             .unlinkTransactionFromAsset(transaction.id);
                       },
                     ),

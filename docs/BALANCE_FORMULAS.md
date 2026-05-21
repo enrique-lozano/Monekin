@@ -34,7 +34,7 @@ $$
 
 $\text{AssetValue}$ is defined in section 2. For typical cash accounts, $H(a,t)=0$. For investment accounts, linked assets are positions (funds, securities, etc.) whose market value is added on top of the cash ledger.
 
-> **Implementation:** `InvestmentService.streamLinkedAssetsTotalForAccount()` (sums `getAssetValueAtDate` per linked asset).
+> **Implementation:** `AssetValuationService.streamLinkedAssetsTotalForAccount()` (sums `getAssetValueAtDate` per linked asset).
 
 Rounding in the account’s currency applies when not converting. For several accounts at once, the app sums opening balances, pooled ledger effects, and linked-holdings terms the same way.
 
@@ -55,7 +55,7 @@ $$
 \end{cases}
 $$
 
-> **Implementation:** `InvestmentService.getAssetValueAtDate()`; “now”: `getCurrentAssetValue()`.
+> **Implementation:** `AssetValuationService.getAssetValueAtDate()`; “now”: `getCurrentAssetValue()`.
 
 ---
 
@@ -71,7 +71,7 @@ $$
 
 When $\text{InitialValue}(s)=0$, the percentage is undefined; the app uses signed infinities for display edge cases.
 
-> **Implementation:** `InvestmentService.getAssetProfit()`.
+> **Implementation:** `AssetValuationService.getAssetProfit()`.
 
 ---
 
@@ -94,7 +94,7 @@ $$
 
 Equivalently in code: **sum of all account balances** plus **standalone asset total**:
 
-> **Implementation:** `NetWorthService.getGrossAssetsAtDate(t)` = `AccountService.getAccountsMoney(date: t)` + `InvestmentService.getStandaloneAssetsValueAtDate(date: t)`.
+> **Implementation:** `NetWorthService.getGrossAssetsAtDate(t)` = `AccountService.getAccountsMoney(date: t)` + `AssetValuationService.getStandaloneAssetsValueAtDate(date: t)`.
 
 Optional transaction filters can be passed through for stats consistency (`TransactionFilterSet`).
 

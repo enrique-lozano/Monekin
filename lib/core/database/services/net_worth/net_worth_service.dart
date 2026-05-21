@@ -1,5 +1,5 @@
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -11,7 +11,7 @@ import 'package:rxdart/rxdart.dart';
 /// Gross assets and net worth in the user’s preferred currency.
 ///
 /// **Gross assets** = all account balances ([AccountService.getAccountsMoney]) plus
-/// standalone assets only ([InvestmentService.getStandaloneAssetsValueAtDate]) so
+/// standalone assets only ([AssetValuationService.getStandaloneAssetsValueAtDate]) so
 /// linked portfolio rows are not double-counted (they are already inside investment
 /// account balances). See `docs/BALANCE_FORMULAS.md` in the repo.
 class NetWorthService {
@@ -30,7 +30,7 @@ class NetWorthService {
         trFilters: trFilters,
         convertToPreferredCurrency: true,
       ),
-      InvestmentService.instance.getStandaloneAssetsValueAtDate(date: date),
+      AssetValuationService.instance.getStandaloneAssetsValueAtDate(date: date),
       (accountsTotal, standaloneAssets) => accountsTotal + standaloneAssets,
     );
   }
