@@ -175,7 +175,7 @@ class BackupDatabaseService {
     FileType type = FileType.any,
     List<String>? allowedExtensions,
   }) async {
-    final result = await FilePicker.platform.pickFiles(
+    final result = await FilePicker.pickFiles(
       type: type,
       allowedExtensions: allowedExtensions,
       allowMultiple: false,

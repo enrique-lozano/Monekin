@@ -170,7 +170,7 @@ class _ExportDataPageState extends State<ExportDataPage> {
         String? path;
 
         try {
-          path = await FilePicker.platform.getDirectoryPath();
+          path = await FilePicker.getDirectoryPath();
         } catch (e) {
           // Platform doesn't support directory picker, use documents directory as fallback
           path = (await getApplicationDocumentsDirectory()).path;
