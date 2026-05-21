@@ -5,7 +5,7 @@ import 'package:monekin/app/layout/indexed_stacks/fade_indexed_stack.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/layout/widgets/app_bottom_bar.dart';
-import 'package:monekin/app/transactions/animate_fab.dart';
+import 'package:monekin/core/presentation/animations/animate_fab.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/utils/app_utils.dart';

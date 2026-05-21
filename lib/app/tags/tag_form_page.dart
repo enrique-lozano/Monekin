@@ -11,6 +11,7 @@ import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -91,6 +92,13 @@ class _TagFormPageState extends State<TagFormPage> {
   }
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    _descrController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
@@ -130,6 +138,7 @@ class _TagFormPageState extends State<TagFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
@@ -163,10 +172,18 @@ class _TagFormPageState extends State<TagFormPage> {
                           maxLength: maxLabelLenghtForDisplayNames,
                           decoration: InputDecoration(
                             labelText: '${t.tags.form.name} *',
-                            hintText: 'Ex.: Food',
+                            hintText: t.tags.form.name_hint,
                           ),
-                          validator: (value) =>
-                              fieldValidator(value, isRequired: true),
+                          validator: (value) {
+                            final error = fieldValidator(
+                              value,
+                              isRequired: true,
+                            );
+                            if (error == null && value?.contains(';') == true) {
+                              return t.tags.form.forbidden_char_error;
+                            }
+                            return error;
+                          },
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           textInputAction: TextInputAction.next,
                         ),

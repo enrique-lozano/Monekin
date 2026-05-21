@@ -6,6 +6,7 @@ import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 
 import 'app_colors.dart';
 
@@ -135,9 +136,15 @@ ThemeData getThemeData(
       ? theme.colorScheme.primary.darkenPastel(amount: .85)
       : theme.colorScheme.primary.lightenPastel(amount: .96);
 
+  final defaultButtons = defaultButtonStyle(isDark: isDark);
+
   return theme.copyWith(
     textTheme: textTheme,
     scaffoldBackgroundColor: theme.colorScheme.surface,
+    filledButtonTheme: FilledButtonThemeData(style: defaultButtons),
+    elevatedButtonTheme: ElevatedButtonThemeData(style: defaultButtons),
+    outlinedButtonTheme: OutlinedButtonThemeData(style: defaultButtons),
+    textButtonTheme: TextButtonThemeData(style: defaultButtons),
     dividerTheme: const DividerThemeData(space: 0),
     cardColor: cardColor,
     cardTheme: CardThemeData(

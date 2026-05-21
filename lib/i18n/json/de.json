@@ -395,7 +395,9 @@
       "description": "Beschreibung",
       "description-info": "Tippe hier, um eine detailliertere Beschreibung dieser Transaktion einzugeben",
       "exchange-to-preferred-title": "Wechselkurs zu {{ currency }}",
-      "exchange-to-preferred-in-date": "Am Transaktionsdatum"
+      "exchange-to-preferred-in-date": "Am Transaktionsdatum",
+      "extra-info-section": "Zusätzliche Infos",
+      "negative-balance-warning": "Dieser Betrag übersteigt das aktuelle Guthaben des gewählten Kontos. Beim Speichern entsteht ein negatives Saldo, was die Statistiken verzerren kann."
     },
     "REVERSED": {
       "title": "Umgekehrte Transaktion",
@@ -437,6 +439,10 @@
       "transfer": {
         "one": "Überweisen",
         "other": "Überweisungen"
+      },
+      "investment": {
+        "one": "Investition",
+        "other": "Investitionen"
       }
     }
   },
@@ -495,7 +501,7 @@
       "saving": "Sparkonto",
       "saving.descr": "Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen",
       "investment": "Investmentkonto",
-      "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto. Erfasse Dein investiertes Kapital und aktualisiere den Wert manuell über Bewertungen"
+      "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto, das Vermögenswerte enthalten kann. Erfasse Dein investiertes Kapital und aktualisiere die Werte einzelner Vermögenswerte manuell über Bewertungen"
     },
     "FORM": {
       "name": "Kontoname",
@@ -515,27 +521,6 @@
       "include-in-net-worth.descr": "Dieses Konto in die Berechnung des Gesamtnettovermögens einbeziehen",
       "correct_balance_description": "Das Anpassen des Kontostands ändert den Anfangswert des Kontos. Diese Korrektur wird in deinen Statistiken nicht berücksichtigt.",
       "valuation_before_creation_date": "Auf diesem Konto liegen Bewertungen vor, deren Datum vor dem Erstellungsdatum liegt"
-    },
-    "INVESTMENT": {
-      "details-header": "Investment",
-      "correct_balance_title": "Investiertes Kapital korrigieren",
-      "correct_balance_description": "Dieses Konto verwendet manuelle Bewertungen für den Portfoliowert. Diese Aktion aktualisiert nur das investierte Kapital (Anfangswert) und ändert nicht die aufgezeichneten Bewertungen oder Investitionsstatistiken.",
-      "invested-capital": "Investiertes Kapital",
-      "portfolio-value": "Portfoliowert",
-      "profit": "Gewinn",
-      "last-valuation": "Letzte Bewertung",
-      "no-valuations": "Noch keine Bewertungen vorhanden",
-      "update-value": "Wert aktualisieren",
-      "update-value.descr": "Den aktuellen Portfoliowert erfassen",
-      "update-value.success": "Bewertung erfolgreich gespeichert",
-      "history": "Bewertungsverlauf",
-      "history-empty": "Noch keine Bewertungen für dieses Konto",
-      "add-valuation": "Bewertung hinzufügen",
-      "edit-valuation": "Bewertung bearbeiten",
-      "edit-valuation.success": "Bewertung erfolgreich bearbeitet",
-      "delete-valuation.success": "Bewertung erfolgreich gelöscht",
-      "delete-all-valuations": "Alle Bewertungen löschen",
-      "delete-all-valuations.success": "Alle Bewertungen erfolgreich gelöscht"
     },
     "DELETE": {
       "warning-header": "Konto löschen?",
@@ -615,6 +600,8 @@
     },
     "FORM": {
       "name": "Schlagworte-Name",
+      "name-hint": "Z.B.: Essen",
+      "forbidden-char-error": "Der Name darf kein ';' enthalten",
       "description": "Beschreibung"
     },
     "SELECT": {
@@ -871,7 +858,44 @@
     "profit": "Profitieren",
     "profit_percent": "Zurückkehren %",
     "total_value": "Gesamtwert der Vermögenswerte",
+    "amount_invested": "Sie haben die {{ X }} dieses Kontos investiert",
+    "TYPES": {
+      "stocks": "Aktien",
+      "funds": "Fonds",
+      "crypto": "Krypto",
+      "real_estate": "Immobilie",
+      "vehicle": "Fahrzeuge",
+      "jewelry_art": "Schmuck & Kunst",
+      "other": "Andere"
+    },
+    "DETAILS": {
+      "select_account": "Wählen Sie ein Konto aus",
+      "buy": "Kaufen",
+      "sell": "Verkaufen",
+      "update_value": "Wert aktualisieren",
+      "trade_sheet_title_buy": "Kaufen (zum Vermögenswert hinzufügen)",
+      "trade_sheet_title_sell": "Verkaufen (Vermögenswert reduzieren)",
+      "trade_sheet_update_value_info": "Der Wert dieses Vermögenswerts wird auf {{ value }} aktualisiert",
+      "trade_sheet_update_linked_asset_value_info": "Der Wert des Vermögenswerts, der mit dieser Transaktion verknüpft ist, wird auf {{ value }} aktualisiert.",
+      "trade_sheet_update_following_valuations": "Aktualisieren Sie spätere Bewertungen",
+      "trade_sheet_update_following_valuations_description": "Passen Sie Bewertungen dieses Vermögenswerts an, die nach dem gewählten Datum liegen.",
+      "trade_sheet_valuation_current_value_label": "Aktueller Wert",
+      "trade_sheet_valuation_create_new_title": "Neue Bewertung erstellen",
+      "trade_sheet_valuation_adjust_current_description": "Aktuellen Wert des Vermögenswerts anpassen",
+      "trade_form_asset_column": "Anlage",
+      "trade_valuation_notice": "Für dieses Datum wird eine Bewertung aktualisiert, um diesen Betrag widerzuspiegeln.",
+      "notes_optional": "Notizen (optional)",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Periodenrendite",
+      "performance_return_help": "Gewinn oder Verlust durch Kursbewegungen, nicht durch Ein- oder Auszahlungen. Steigt der Wert nur, weil du mehr eingezahlt hast, bleibt dies nahe null.",
+      "performance_invested_value": "Investierter Wert",
+      "performance_invested_value_caption": "Gesamtes Geld in diesem Asset: Startwert plus verknüpfte Käufe und Verkäufe.",
+      "performance_value_diff": "Bewertungsänderung",
+      "performance_value_diff_caption": "Wie sich der Wert des Assets vom Beginn des gewählten Zeitraums bis heute verändert hat."
+    },
     "FORM": {
+      "asset_type": "Asset-Typ",
+      "linked_account": "Verknüpftes Konto (optional)",
       "name": "Asset-Name",
       "name_required": "Bitte geben Sie einen Asset-Namen ein",
       "description": "Beschreibung",
@@ -884,7 +908,9 @@
       "edit": "Asset bearbeiten",
       "create": "Asset erstellen",
       "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten",
-      "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum"
+      "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum",
+      "acquisition_date": "Erstellungsdatum",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Bewertungshistorie",
@@ -892,6 +918,7 @@
       "add_valuation": "Bewertung hinzufügen",
       "edit_valuation": "Bewertung bearbeiten",
       "value": "Wert",
+      "net_contribution": "Nettoeinlage",
       "value_required": "Bitte geben Sie einen Wert ein",
       "value_invalid": "Bitte geben Sie eine gültige Nummer ein",
       "update_value_success": "Bewertung erfolgreich hinzugefügt",
@@ -905,6 +932,22 @@
       "name_desc": "Name (Z-A)",
       "value_asc": "Wert (niedrigster zuerst)",
       "value_desc": "Wert (höchster zuerst)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -950,22 +993,29 @@
         "defaultAccount": "Standardkonto",
         "removeDefaultAccount": "Standardkonto entfernen",
         "defaultCategory": "Standardkategorie",
+        "defaultTags": "Standardtags",
         "select-a-column": "Wählen eine Spalte aus der CSV-Datei aus",
+        "date-format": "Datumsformat",
+        "note-column": "Notizspalte",
+        "title-column": "Titelsspalte",
+        "tag-separator": "Tag-Trennzeichen in der CSV-Datei",
         "steps": [
           "Wähle Deine Datei aus",
           "Spalte für Menge",
           "Spalte für Konto",
           "Spalte für Kategorie",
+          "Spalte für Tags",
           "Spalte für Datum",
-          "andere Spalten"
+          "Andere Spalten"
         ],
         "steps-descr": [
-          "Wähle eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält",
-          "Wählen die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwende negative Werte für Ausgaben und positive Werte für Einnahmen.",
-          "Wähle die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt ",
-          "Gebe die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.",
-          "Wähle die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.",
-          "Gibt die Spalten für andere optionale Transaktionsattribute an"
+          "Wähl eine CSV-Datei von Deinem Gerät aus. Stelle sicher, dass die erste Zeile den Namen der einzelnen Spalten enthält.",
+          "Wähl die Spalte aus, in der der Wert jeder Transaktion angegeben ist. Verwend negative Werte für Ausgaben und positive Werte für Einnahmen.",
+          "Wähl die Spalte aus, in der das Konto angegeben ist, zu dem jede Transaktion gehört. Du kannst auch ein Standardkonto auswählen, falls wir das von Dir gewünschte Konto nicht finden können. Wenn Du kein Standardkonto angibst, wird eines mit demselben Namen erstellt.",
+          "Gib die Spalte an, in der sich der Name der Transaktionskategorie befindet. Du musst eine Standardkategorie angeben, damit wir diese Kategorie den Transaktionen zuordnen können, falls die Kategorie nicht gefunden werden kann.",
+          "Gib die Spalte an, wo die Transaktions-Tags stehen. Wird nichts angegeben, werden Transaktionen mit Standard-Tags erstellt.",
+          "Wähl die Spalte aus, in der das Datum jeder Transaktion angegeben ist. Wird nichts angegeben, werden die Transaktionen mit dem aktuellen Datum erstellt.",
+          "Gib die Spalten für andere optionale Transaktionsattribute an."
         ],
         "success": "Erfolgreich {{x}} Transaktionen importiert"
       },

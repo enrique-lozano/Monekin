@@ -4,7 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/budget/budget.dart';
-import 'package:monekin/core/presentation/widgets/time_series_evolution_chart.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -13,7 +14,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
   final Budget budget;
 
-  Future<List<_BudgetEvolutionPoint>> _getEvolutionData(
+  Future<List<TimeSeriesLabeledPoint>> _getEvolutionData(
     BuildContext context,
   ) async {
     final List<Future<double>> values = [];
@@ -33,7 +34,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
     while (currentDay.compareTo(endDate) < 0) {
       dates.add(currentDay);
-      labels.add(getMMMdDateFormatBasedOnYear(currentDay).format(currentDay));
+      labels.add(getMMMdDateFormatBasedOnYear(currentDay).text);
       values.add(budget.getValueOnDate(currentDay).first);
       currentDay = currentDay.add(Duration(days: dayRange));
     }
@@ -42,7 +43,7 @@ class BudgetEvolutionChart extends StatelessWidget {
 
     return List.generate(
       resolved.length,
-      (i) => _BudgetEvolutionPoint(
+      (i) => TimeSeriesLabeledPoint(
         date: dates[i],
         value: resolved[i],
         label: labels[i],
@@ -72,7 +73,7 @@ class BudgetEvolutionChart extends StatelessWidget {
             );
           }
 
-          final points = snapshot.data ?? const <_BudgetEvolutionPoint>[];
+          final points = snapshot.data ?? const <TimeSeriesLabeledPoint>[];
           final maxValue = points.isEmpty
               ? 0.0
               : points.map((e) => e.value).reduce(max);
@@ -83,7 +84,7 @@ class BudgetEvolutionChart extends StatelessWidget {
             builder: (context, userCurrencySnapshot) {
               final limitLineColor = Theme.of(context).colorScheme.tertiary;
 
-              return TimeSeriesEvolutionChart<_BudgetEvolutionPoint>(
+              return TimeSeriesEvolutionChart<TimeSeriesLabeledPoint>(
                 data: points,
                 dateExtractor: (p) => p.date,
                 valueExtractor: (p) => p.value,
@@ -113,16 +114,4 @@ class BudgetEvolutionChart extends StatelessWidget {
       ),
     );
   }
-}
-
-class _BudgetEvolutionPoint {
-  final DateTime date;
-  final double value;
-  final String label;
-
-  _BudgetEvolutionPoint({
-    required this.date,
-    required this.value,
-    required this.label,
-  });
 }

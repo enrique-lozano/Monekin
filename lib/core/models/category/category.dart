@@ -21,7 +21,7 @@ enum CategoryType {
   bool get isExpense => this == E || this == B;
 
   /// Returns whether the category type matches the given transaction type.
-  /// Return `false` for transfer transaction types, since they don't have a category type.
+  /// Return `false` for transfer and investment types, since they don't use categories the same way.
   bool matchWithTransactionType(TransactionType transactionType) {
     if (transactionType == TransactionType.expense) {
       return isExpense;

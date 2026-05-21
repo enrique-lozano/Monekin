@@ -395,7 +395,9 @@
       "description": "Leírás",
       "description-info": "Koppintson ide a tranzakció részletesebb leírásának megadásához.",
       "exchange-to-preferred-title": "{{ currency }} átváltási árfolyam",
-      "exchange-to-preferred-in-date": "A tranzakció napján"
+      "exchange-to-preferred-in-date": "A tranzakció napján",
+      "extra-info-section": "További információk",
+      "negative-balance-warning": "Ez az összeg meghaladja a kiválasztott számla egyenlegét. Mentéskor negatív egyenleg keletkezhet, ami torzíthatja a statisztikákat."
     },
     "REVERSED": {
       "title": "Megfordított tranzakció",
@@ -437,6 +439,10 @@
       "transfer": {
         "one": "Áthelyezés",
         "other": "Áthelyezések"
+      },
+      "investment": {
+        "one": "Beruházás",
+        "other": "Beruházások"
       }
     }
   },
@@ -495,7 +501,7 @@
       "saving": "Megtakarítási számla",
       "saving.descr": "Csak más számlákról tud pénzt hozzáadni és kivenni belőle. Tökéletes a megtakarítás megkezdéséhez.",
       "investment": "Befektetési számla",
-      "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla. Kövesse nyomon befektetett tőkéjét és frissítse az értékét manuálisan értékeléseken keresztül"
+      "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla, amely eszközöket tartalmazhat. Kövesse nyomon befektetett tőkéjét, és frissítse minden eszköz értékét manuálisan értékelésekkel"
     },
     "FORM": {
       "name": "Számla neve",
@@ -515,27 +521,6 @@
       "include-in-net-worth.descr": "Számla hozzáadása a teljes nettó vagyon számításához",
       "correct_balance_description": "A számlaegyenleg módosítása megváltoztatja a számla kezdeti értékét. Ez a korrekció nem jelenik meg a statisztikákban.",
       "valuation_before_creation_date": "Ezen a számlán vannak olyan értékelések, amelyek dátuma a létrehozás dátuma előtti"
-    },
-    "INVESTMENT": {
-      "details-header": "Befektetés",
-      "correct_balance_title": "Befektetett tőke korrigálása",
-      "correct_balance_description": "Ez a számla kézi értékeléseket használ a portfólió értékének nyomon követésére. Ez a művelet csak a befektetett tőkét (kezdőérték) frissíti, és nem módosítja a rögzített értékeléseket vagy a befektetési statisztikákat.",
-      "invested-capital": "Befektetett tőke",
-      "portfolio-value": "Portfólió értéke",
-      "profit": "Nyereség",
-      "last-valuation": "Utolsó értékelés",
-      "no-valuations": "Még nincs értékelés rögzítve",
-      "update-value": "Érték frissítése",
-      "update-value.descr": "A portfólió aktuális értékének rögzítése",
-      "update-value.success": "Értékelés sikeresen rögzítve",
-      "history": "Értékelési előzmények",
-      "history-empty": "Még nincs értékelés ehhez a számlához",
-      "add-valuation": "Értékelés hozzáadása",
-      "edit-valuation": "Értékelés szerkesztése",
-      "edit-valuation.success": "Értékelés sikeresen szerkesztve",
-      "delete-valuation.success": "Értékelés sikeresen törölve",
-      "delete-all-valuations": "Összes értékelés törlése",
-      "delete-all-valuations.success": "Összes értékelés sikeresen törölve"
     },
     "DELETE": {
       "warning-header": "Törli a számlát?",
@@ -615,6 +600,8 @@
     },
     "FORM": {
       "name": "Címke neve",
+      "name-hint": "Pl.: Étel",
+      "forbidden-char-error": "A név nem tartalmazhat ';' karaktert",
       "description": "Leírás"
     },
     "SELECT": {
@@ -871,7 +858,44 @@
     "profit": "Nyereség",
     "profit_percent": "hozam %",
     "total_value": "Az eszközök összértéke",
+    "amount_invested": "A számla {{ X }} összegét befektette",
+    "TYPES": {
+      "stocks": "Részvények",
+      "funds": "Befektetési alapok",
+      "crypto": "Kriptovaluta",
+      "real_estate": "Ingatlan",
+      "vehicle": "Járművek",
+      "jewelry_art": "Ékszer és művészet",
+      "other": "Más"
+    },
+    "DETAILS": {
+      "select_account": "Válasszon egy fiókot",
+      "buy": "Vétel",
+      "sell": "Elad",
+      "update_value": "Frissítse az értéket",
+      "trade_sheet_title_buy": "Vásárlás (hozzáadás az eszközhöz)",
+      "trade_sheet_title_sell": "Eladás (vagyon csökkentése)",
+      "trade_sheet_update_value_info": "Ennek az elemnek az értéke a következőre módosul: {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "A tranzakcióhoz kapcsolódó eszköz értéke {{ value }} értékre frissül",
+      "trade_sheet_update_following_valuations": "Frissítse a későbbi értékeléseket",
+      "trade_sheet_update_following_valuations_description": "Igazítsa az eszköz kiválasztott dátum utáni értékeléseit.",
+      "trade_sheet_valuation_current_value_label": "Jelenlegi érték",
+      "trade_sheet_valuation_create_new_title": "Új értékelés létrehozása",
+      "trade_sheet_valuation_adjust_current_description": "Az eszköz jelenlegi értékének módosítása",
+      "trade_form_asset_column": "Eszköz",
+      "trade_valuation_notice": "Az erre a dátumra vonatkozó értékelést frissítjük, hogy tükrözze ezt az összeget.",
+      "notes_optional": "Megjegyzések (nem kötelező)",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Period return",
+      "performance_return_help": "Piac vagy veszteség a piactól, nem a befizetésektől vagy kivételektől. Ha az érték csak azért nőtt, mert többet fizettél be, ez közel nulla marad.",
+      "performance_invested_value": "Invested value",
+      "performance_invested_value_caption": "Összes pénz ebben az eszközben: kezdőérték plusz kapcsolt vétel és eladás.",
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "Mennyit változott az eszköz értéke a kiválasztott időszak elejétől máig."
+    },
     "FORM": {
+      "asset_type": "Eszköz típusa",
+      "linked_account": "Kapcsolt fiók (opcionális)",
       "name": "Eszköz neve",
       "name_required": "Kérjük, adjon meg egy elemnevet",
       "description": "Leírás",
@@ -884,7 +908,9 @@
       "edit": "Eszköz szerkesztése",
       "create": "Eszköz létrehozása",
       "already_exists": "Már létezik ilyen nevű tartalom. Érdemes lehet szerkeszteni",
-      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti"
+      "valuation_before_creation_date": "Ezen az eszközön vannak olyan értékelések, amelyek dátuma az akvizíció időpontja előtti",
+      "acquisition_date": "Létrehozás dátuma",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Értékelés története",
@@ -892,6 +918,7 @@
       "add_valuation": "Értékelés hozzáadása",
       "edit_valuation": "Értékelés szerkesztése",
       "value": "Érték",
+      "net_contribution": "Nettó hozzájárulás",
       "value_required": "Adjon meg egy értéket",
       "value_invalid": "Kérjük, adjon meg egy érvényes számot",
       "update_value_success": "Az értékelés sikeresen hozzáadva",
@@ -905,6 +932,22 @@
       "name_desc": "Név (Z-A)",
       "value_asc": "Érték (a legalacsonyabb először)",
       "value_desc": "Érték (a legmagasabb először)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -950,20 +993,27 @@
         "defaultAccount": "Alapértelm. számla",
         "removeDefaultAccount": "Alapértelmezett számla törlése",
         "defaultCategory": "Alapértelm. kategória",
+        "defaultTags": "Alapértelmezett címkék",
         "select-a-column": "Válasszon ki egy oszlopot a .csv fájlból",
+        "date-format": "Dátumformátum",
+        "note-column": "Megjegyzés oszlop",
+        "title-column": "Cím oszlop",
+        "tag-separator": "Címkeelválasztó a .csv fájlban",
         "steps": [
           "Fájl kiválasztása",
           "Mennyiség oszlop",
           "Számlaoszlop",
           "Kategória oszlop",
+          "Címkék oszlopa",
           "Dátum oszlop",
-          "egyéb oszlopok"
+          "Egyéb oszlopok"
         ],
         "steps-descr": [
           "Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.",
           "Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.",
           "Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ",
           "Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.",
+          "Adja meg azt az oszlopot, ahol a tranzakciós címkék találhatók. Ha nincs megadva, a tranzakciók az alapértelmezett címkékkel jönnek létre.",
           "Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.",
           "Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása"
         ],

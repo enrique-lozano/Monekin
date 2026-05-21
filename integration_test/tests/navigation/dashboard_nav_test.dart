@@ -4,7 +4,7 @@ import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/settings/widgets/edit_profile_modal.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/transactions.page.dart';
+import 'package:monekin/app/transactions/list/transactions.page.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';

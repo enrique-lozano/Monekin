@@ -10,7 +10,7 @@ import 'package:monekin/app/settings/help_us_page.dart';
 import 'package:monekin/app/settings/settings_page.dart';
 import 'package:monekin/app/settings/widgets/setting_card_item.dart';
 import 'package:monekin/app/stats/stats_page.dart';
-import 'package:monekin/app/transactions/recurrent_transactions_page.dart';
+import 'package:monekin/app/transactions/list/recurrent_transactions_page.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/goal/goal.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';

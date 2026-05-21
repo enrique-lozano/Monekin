@@ -1,11 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/debts/debt_details_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/label_value_info_table.dart';
-import 'package:monekin/app/transactions/utils/show_pay_modal.dart';
-import 'package:monekin/app/transactions/widgets/translucent_transaction_status_card.dart';
+import 'package:monekin/app/transactions/details/utils/show_pay_modal.dart';
+import 'package:monekin/app/transactions/details/widgets/translucent_transaction_status_card.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -24,6 +25,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/label_value_info_table.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -32,8 +34,8 @@ import 'package:monekin/core/services/view-actions/transaction_view_actions_serv
 import 'package:monekin/core/utils/constants.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../core/models/transaction/transaction_type.enum.dart';
-import '../../core/presentation/app_colors.dart';
+import '../../../core/models/transaction/transaction_type.enum.dart';
+import '../../../core/presentation/app_colors.dart';
 
 class TransactionDetailAction {
   final String label;
@@ -416,6 +418,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     _LinkedDebtCard(
                       transactionId: transaction.id,
                       debtId: transaction.debtId!,
+                    ),
+                  if (transaction.assetID != null)
+                    _LinkedAssetCard(
+                      transaction: transaction,
+                      assetId: transaction.assetID!,
                     ),
                   Builder(
                     builder: (context) {
@@ -844,6 +851,83 @@ class _LinkedDebtCard extends StatelessWidget {
                   ),
                 ),
               ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LinkedAssetCard extends StatelessWidget {
+  const _LinkedAssetCard({required this.transaction, required this.assetId});
+
+  final MoneyTransaction transaction;
+  final String assetId;
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: AssetService.instance.getAssetById(assetId),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox.shrink();
+        final asset = snapshot.data!;
+        final assetColor = Colors.tealAccent;
+
+        return TranslucentTransactionStatusCard(
+          color: assetColor,
+          icon: Debt.icon,
+          title: 'Linked Asset',
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                title: Text(
+                  asset.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+                subtitle: Row(
+                  spacing: 4,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(asset.assetType.icon(), size: 12, color: assetColor),
+                    Text(
+                      asset.assetType.displayName(context),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: assetColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Icon(Icons.open_in_new_rounded, color: assetColor),
+                onTap: () =>
+                    RouteUtils.pushRoute(AssetDetailsPage(asset: asset)),
+              ),
+              if (transaction.type != TransactionType.investment)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton.icon(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.of(
+                          context,
+                        ).danger.withOpacity(0.15),
+                        foregroundColor: AppColors.of(context).danger,
+                      ),
+                      icon: const Icon(Icons.link_off_rounded, size: 18),
+                      label: Text(t.debts.actions.unlink_transaction.title),
+                      onPressed: () async {
+                        await AssetService.instance
+                            .unlinkTransactionFromAsset(transaction.id);
+                      },
+                    ),
+                  ),
+                ),
             ],
           ),
         );

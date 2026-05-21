@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/widgets/custom_interval_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/tr_form_interval_selector.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -13,21 +14,16 @@ import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
 
 class TransactionStatusSelector extends StatelessWidget {
-  const TransactionStatusSelector({
-    super.key,
-    required this.date,
-    required this.status,
-    required this.onStatusChanged,
-  });
-
-  final DateTime date;
-  final TransactionStatus? status;
-  final ValueChanged<TransactionStatus?> onStatusChanged;
+  const TransactionStatusSelector({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final c = context.watch<TransactionFormController>();
+    final date = c.date;
+    final status = c.status;
     final isSelectorDisabled = date.compareTo(DateTime.now()) > 0;
 
     final selectedStatus = isSelectorDisabled
@@ -42,7 +38,6 @@ class TransactionStatusSelector extends StatelessWidget {
           color: selectedStatus.color.withOpacity(isSelectorDisabled ? 0.3 : 1),
         ),
       ),
-      minTileHeight: 64,
       title: Text(selectedStatus.displayName(context)),
       enabled: !isSelectorDisabled,
       onTap: () {
@@ -53,7 +48,7 @@ class TransactionStatusSelector extends StatelessWidget {
         ) {
           if (modalRes == null) return;
 
-          onStatusChanged(modalRes.result);
+          c.setStatus(modalRes.result);
         });
       },
     );
@@ -61,22 +56,17 @@ class TransactionStatusSelector extends StatelessWidget {
 }
 
 class TransactionRecurrencySelector extends StatelessWidget {
-  const TransactionRecurrencySelector({
-    super.key,
-    required this.recurrentRule,
-    required this.onRecurrencyChanged,
-  });
-
-  final RecurrencyData recurrentRule;
-  final ValueChanged<RecurrencyData> onRecurrencyChanged;
+  const TransactionRecurrencySelector({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final c = context.watch<TransactionFormController>();
+    final recurrentRule = c.recurrentRule;
+
     return ListTile(
       leading: Icon(
         recurrentRule.isRecurrent ? Icons.repeat_rounded : Icons.repeat_one,
       ),
-      minTileHeight: 64,
       title: Text(recurrentRule.formText(context)),
       onTap: () {
         showDynamicSelectorBottomSheet(
@@ -89,13 +79,13 @@ class TransactionRecurrencySelector extends StatelessWidget {
           if (res == null) return;
 
           if (res.result != null) {
-            onRecurrencyChanged(res.result!);
+            c.setRecurrency(res.result!);
           } else {
             RouteUtils.pushRoute(
               IntervalSelectorPage(preselectedRecurrentRule: recurrentRule),
             ).then((value) {
               if (value == null) return;
-              onRecurrencyChanged(value as RecurrencyData);
+              c.setRecurrency(value as RecurrencyData);
             });
           }
         });
@@ -140,7 +130,6 @@ class TransactionTagsSelector extends StatelessWidget {
 
     return ListTile(
       leading: Icon(Tag.icon),
-      minTileHeight: 64,
       onTap: () {
         showTagListModal(
           context,

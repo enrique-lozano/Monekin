@@ -6,7 +6,7 @@ import 'package:monekin/app/settings/pages/general_settings.page.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/app/settings/widgets/transaction_swipe_action_selector.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/user-setting/enum/transaction-swipe-actions.enum.dart';
@@ -211,7 +211,12 @@ class TransactionsSettingsPage extends StatelessWidget {
                                   .transactions
                                   .default_type
                                   .modal_title,
-                              items: TransactionType.values,
+                              items: TransactionType.values
+                                  .where(
+                                    (type) =>
+                                        type != TransactionType.investment,
+                                  )
+                                  .toList(),
                               selectedValue: displayType,
                               displayNameGetter: (t) => t.displayName(context),
                               valueGetter: (t) => t,

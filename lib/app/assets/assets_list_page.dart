@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/assets/asset_form.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -14,6 +14,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 enum AssetsSortOption { nameAsc, nameDesc, valueAsc, valueDesc }
 
@@ -84,13 +85,13 @@ class _AssetsListPageState extends State<AssetsListPage> {
   }
 
   Stream<List<(Asset, double)>> _getAssetsWithValue() {
-    return InvestmentService.instance.getAssets().switchMap((assets) {
+    return AssetService.instance.getAssets().switchMap((assets) {
       if (assets.isEmpty) {
         return Stream.value([]);
       }
 
       final streams = assets.map((asset) {
-        return InvestmentService.instance
+        return AssetValuationService.instance
             .getCurrentAssetValue(asset)
             .map((value) => (asset, value));
       });
@@ -102,34 +103,32 @@ class _AssetsListPageState extends State<AssetsListPage> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final isTablet = BreakPoint.of(context).isLargerThan(BreakpointID.sm);
 
     return PageFramework(
       title: t.assets.title,
-      floatingActionButton: !isTablet
-          ? AnimatedFloatingButtonBasedOnScroll(
-              onPressed: _goToCreate,
-              icon: const Icon(Icons.add_rounded),
-              scrollController: _scrollController,
-              text: t.assets.create,
-            )
-          : null,
+      floatingActionButton: AnimatedFloatingButtonBasedOnScroll(
+        onPressed: _goToCreate,
+        icon: const Icon(Icons.add_rounded),
+        scrollController: _scrollController,
+        text: t.assets.create,
+      ),
       body: Column(
         children: [
           ListTile(
             title: Text(t.assets.total_value),
             subtitle: StreamBuilder(
-              stream: InvestmentService.instance.getTotalAssetsValueAtDate(),
+              // Includes linked portfolio rows (same economic value is also inside
+              // investment account balances) — intentional for this “all assets” total.
+              stream: AssetValuationService.instance.getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-
-                final totalValue = snapshot.data!;
-                return CurrencyDisplayer(
-                  amountToConvert: totalValue,
-                  currency: null, // You can set a default currency if needed
-                  integerStyle: Theme.of(context).textTheme.headlineMedium!,
+                final totalValue = snapshot.data;
+                return Skeletonizer(
+                  enabled: !snapshot.hasData,
+                  child: CurrencyDisplayer(
+                    amountToConvert: totalValue ?? 10000,
+                    currency: null, // You can set a default currency if needed
+                    integerStyle: Theme.of(context).textTheme.headlineMedium!,
+                  ),
                 );
               },
             ),
@@ -177,12 +176,14 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ListTileActionItem(
                       label: t.assets.sort.name_asc,
                       icon: Icons.sort_by_alpha_rounded,
+                      selected: sortOption == AssetsSortOption.nameAsc,
                       onClick: () =>
                           setState(() => sortOption = AssetsSortOption.nameAsc),
                     ),
                     ListTileActionItem(
                       label: t.assets.sort.name_desc,
                       icon: Icons.sort_by_alpha_rounded,
+                      selected: sortOption == AssetsSortOption.nameDesc,
                       onClick: () => setState(
                         () => sortOption = AssetsSortOption.nameDesc,
                       ),
@@ -190,6 +191,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ListTileActionItem(
                       label: t.assets.sort.value_asc,
                       icon: Icons.trending_up_rounded,
+                      selected: sortOption == AssetsSortOption.valueAsc,
                       onClick: () => setState(
                         () => sortOption = AssetsSortOption.valueAsc,
                       ),
@@ -197,6 +199,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     ListTileActionItem(
                       label: t.assets.sort.value_desc,
                       icon: Icons.trending_down_rounded,
+                      selected: sortOption == AssetsSortOption.valueDesc,
                       onClick: () => setState(
                         () => sortOption = AssetsSortOption.valueDesc,
                       ),
@@ -236,26 +239,24 @@ class _AssetsListPageState extends State<AssetsListPage> {
                     final asset = assets[index].$1;
                     final value = assets[index].$2;
 
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: ListTile(
-                        title: Text(asset.name),
-                        subtitle: asset.description != null
-                            ? Text(
-                                asset.description!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            : null,
-                        trailing: CurrencyDisplayer(
-                          amountToConvert: value,
-                          currency: asset.currency,
-                        ),
-                        leadingAndTrailingTextStyle: Theme.of(
-                          context,
-                        ).textTheme.labelLarge,
-                        onTap: () => _goToDetails(asset),
+                    return ListTile(
+                      title: Text(asset.name),
+                      subtitle: Row(
+                        spacing: 4,
+                        children: [
+                          Icon(asset.assetType.icon(), size: 14),
+                          Text(asset.assetType.displayName(context)),
+                        ],
                       ),
+                      trailing: CurrencyDisplayer(
+                        amountToConvert: value,
+                        currency: asset.currency,
+                        integerStyle: Theme.of(context).textTheme.titleMedium!,
+                      ),
+                      leadingAndTrailingTextStyle: Theme.of(
+                        context,
+                      ).textTheme.labelLarge,
+                      onTap: () => _goToDetails(asset),
                     );
                   },
                 );

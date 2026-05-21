@@ -395,7 +395,9 @@
       "description": "Açıklama",
       "description-info": "Bu işlem hakkında daha detaylı bir açıklama girmek için buraya dokunun",
       "exchange-to-preferred-title": "{{ currency }} için kur",
-      "exchange-to-preferred-in-date": "İşlem tarihinde"
+      "exchange-to-preferred-in-date": "İşlem tarihinde",
+      "extra-info-section": "Ek bilgi",
+      "negative-balance-warning": "Bu tutar, seçilen hesabın güncel bakiyesinden yüksek. Kaydettiğinizde bakiye negatife dönebilir ve istatistikler etkilenebilir."
     },
     "REVERSED": {
       "title": "Ters işlem",
@@ -437,6 +439,10 @@
       "transfer": {
         "one": "Transfer",
         "other": "Transferler"
+      },
+      "investment": {
+        "one": "Yatırım",
+        "other": "Yatırımlar"
       }
     }
   },
@@ -495,7 +501,7 @@
       "saving": "Tasarruf hesabı",
       "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel",
       "investment": "Yatırım hesabı",
-      "investment.descr": "Bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve değerini değerlemeler aracılığıyla manuel olarak güncelleyin"
+      "investment.descr": "Birden fazla varlık içerebilen bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve her varlığın değerini değerlemeler aracılığıyla manuel olarak güncelleyin"
     },
     "FORM": {
       "name": "Hesap adı",
@@ -515,27 +521,6 @@
       "include-in-net-worth.descr": "Bu hesabı toplam net değer hesaplamasına dahil et",
       "correct_balance_description": "Bakiyeyi düzeltmek, hesabın başlangıç değerini değiştirir. Bu düzeltme istatistiklere yansımayacaktır.",
       "valuation_before_creation_date": "Bu hesapta oluşturulma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
-    },
-    "INVESTMENT": {
-      "details-header": "Yatırım",
-      "correct_balance_title": "Yatırılan sermayeyi düzelt",
-      "correct_balance_description": "Bu hesap, portföy değerini manuel değerlemelerle takip eder. Bu işlem yalnızca yatırılan sermayeyi (başlangıç değeri) günceller ve kaydedilmiş değerlemeleri veya yatırım istatistiklerini değiştirmez.",
-      "invested-capital": "Yatırılan sermaye",
-      "portfolio-value": "Portföy değeri",
-      "profit": "Kâr",
-      "last-valuation": "Son değerleme",
-      "no-valuations": "Henüz değerleme kaydedilmedi",
-      "update-value": "Değeri güncelle",
-      "update-value.descr": "Mevcut portföy değerini kaydet",
-      "update-value.success": "Değerleme başarıyla kaydedildi",
-      "history": "Değerleme geçmişi",
-      "history-empty": "Bu hesap için henüz değerleme kaydedilmedi",
-      "add-valuation": "Değerleme ekle",
-      "edit-valuation": "Değerlemeyi düzenle",
-      "edit-valuation.success": "Değerleme başarıyla düzenlendi",
-      "delete-valuation.success": "Değerleme başarıyla silindi",
-      "delete-all-valuations": "Tüm değerlemeleri sil",
-      "delete-all-valuations.success": "Tüm değerlemeler başarıyla silindi"
     },
     "DELETE": {
       "warning-header": "Hesap silinsin mi?",
@@ -615,6 +600,8 @@
     },
     "FORM": {
       "name": "Etiket adı",
+      "name-hint": "Örn.: Yemek",
+      "forbidden-char-error": "İsim ';' karakterini içeremez",
       "description": "Açıklama"
     },
     "SELECT": {
@@ -871,7 +858,44 @@
     "profit": "Kâr",
     "profit_percent": "Geri dönmek %",
     "total_value": "Varlıkların toplam değeri",
+    "amount_invested": "Bu hesaba ait {{ X }} tutarında yatırım yaptınız",
+    "TYPES": {
+      "stocks": "Hisse senetleri",
+      "funds": "Fonlar",
+      "crypto": "Kripto",
+      "real_estate": "Gayrimenkul",
+      "vehicle": "Araçlar",
+      "jewelry_art": "Takı ve sanat",
+      "other": "Diğer"
+    },
+    "DETAILS": {
+      "select_account": "Bir hesap seçin",
+      "buy": "Satın almak",
+      "sell": "Satmak",
+      "update_value": "Değeri güncelle",
+      "trade_sheet_title_buy": "Satın al (varlığa ekle)",
+      "trade_sheet_title_sell": "Sat (varlığı azalt)",
+      "trade_sheet_update_value_info": "Bu varlığın değeri {{ value }} olarak güncellenecek",
+      "trade_sheet_update_linked_asset_value_info": "Bu işleme bağlı varlığın değeri {{ value }} olarak güncellenecek",
+      "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
+      "trade_sheet_update_following_valuations_description": "Seçilen tarihten sonraki varlık değerlemelerini güncelleyin.",
+      "trade_sheet_valuation_current_value_label": "Mevcut değer",
+      "trade_sheet_valuation_create_new_title": "Yeni değerleme oluştur",
+      "trade_sheet_valuation_adjust_current_description": "Varlığın mevcut değerini ayarla",
+      "trade_form_asset_column": "Varlık",
+      "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
+      "notes_optional": "Notlar (isteğe bağlı)",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Period return",
+      "performance_return_help": "Piyasadan gelen kâr veya zarar; yatırdığınız veya çektiğiniz paradan değil. Değer sadece daha fazla yatırdığınız için arttıysa, bu sıfıra yakın kalır.",
+      "performance_invested_value": "Invested value",
+      "performance_invested_value_caption": "Bu varlıktaki toplam para: başlangıç değeri artı bağlı alım ve satımlar.",
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "Varlığın değerinin seçilen dönemin başından bugüne ne kadar değiştiği."
+    },
     "FORM": {
+      "asset_type": "Varlık türü",
+      "linked_account": "Bağlı hesap (isteğe bağlı)",
       "name": "Öğe adı",
       "name_required": "Lütfen bir varlık adı girin",
       "description": "Tanım",
@@ -884,7 +908,9 @@
       "edit": "Öğeyi düzenle",
       "create": "Öğe oluştur",
       "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz",
-      "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut"
+      "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut",
+      "acquisition_date": "Oluşturulma tarihi",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Değerleme geçmişi",
@@ -892,6 +918,7 @@
       "add_valuation": "Değerleme ekle",
       "edit_valuation": "Değerlemeyi düzenle",
       "value": "Değer",
+      "net_contribution": "Net katkı",
       "value_required": "Lütfen bir değer girin",
       "value_invalid": "Lütfen geçerli bir numara girin",
       "update_value_success": "Değerleme başarıyla eklendi",
@@ -905,6 +932,22 @@
       "name_desc": "İsim (Z-A)",
       "value_asc": "Değer (önce en düşük)",
       "value_desc": "Değer (önce en yüksek)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -950,20 +993,27 @@
         "defaultAccount": "Varsayılan hesap",
         "removeDefaultAccount": "Varsayılan hesabı kaldır",
         "defaultCategory": "Varsayılan Kategori",
+        "defaultTags": "Varsayılan Etiketler",
         "select-a-column": ".csv'den bir sütun seçin",
+        "date-format": "Tarih formatı",
+        "note-column": "Not sütunu",
+        "title-column": "Başlık sütunu",
+        "tag-separator": ".csv dosyasındaki etiket ayırıcı",
         "steps": [
           "Dosyanızı seçin",
           "Miktar için sütun",
           "Hesap için sütun",
           "Kategori için sütun",
+          "Etiket sütunu",
           "Tarih için sütun",
-          "diğer sütunlar"
+          "Diğer sütunlar"
         ],
         "steps-descr": [
           "Cihazınızdan bir .csv dosyası seçin. Her sütunun adını açıklayan bir ilk satıra sahip olduğundan emin olun",
           "Her işlemin değerinin belirtildiği sütunu seçin. Giderler için negatif değerler ve gelirler için pozitif değerler kullanın.",
           "Her işlemin ait olduğu hesabın belirtildiği sütunu seçin. İstediğiniz hesabı bulamamamız durumunda varsayılan bir hesap da seçebilirsiniz. Varsayılan bir hesap belirtilmezse, aynı adla bir tane oluşturacağız",
           "İşlem kategorisi adının bulunduğu sütunu belirtin. Kategoriyi bulamamamız durumunda işlemlere bu kategoriyi atayabilmemiz için varsayılan bir kategori belirtmeniz gerekir",
+          "İşlem etiketlerinin bulunduğu sütunu belirtin. Belirtilmediği takdirde, işlemler varsayılan etiketlerle oluşturulacaktır.",
           "Her işlemin tarihinin belirtildiği sütunu seçin. Belirtilmezse, işlemler mevcut tarihle oluşturulacaktır",
           "Diğer isteğe bağlı işlem öznitelikleri için sütunları belirtir"
         ],

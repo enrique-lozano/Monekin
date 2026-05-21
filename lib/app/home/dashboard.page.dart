@@ -67,7 +67,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Stream<double> _getBalanceVariationStream() {
     return AccountService.instance.getAccounts().switchMap(
-      (accounts) => AccountService.instance.getAccountsMoneyVariation(
+      (accounts) => AccountService.instance.getAccountsBalanceRelativeChange(
         accounts: accounts,
         startDate: dateRangeService.startDate,
         endDate: dateRangeService.endDate,

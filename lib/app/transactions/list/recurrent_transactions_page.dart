@@ -3,8 +3,8 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';

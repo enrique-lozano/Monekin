@@ -197,7 +197,7 @@
     "no-accounts.descr": "Start using all the magic of Monekin. Create at least one account to start adding transactions",
     "last-transactions": "Last transactions",
     "should-create-account.header": "Oops!",
-    "should-create-account.message": "You must have at least one no-archived account before you can start creating transactions"
+    "should-create-account.message": "You must have at least one non-archived account before you can start creating transactions"
   },
   "FINANCIAL-HEALTH": {
     "display": "Financial health",
@@ -395,7 +395,9 @@
       "description": "Description",
       "description-info": "Tap here to enter a more detailed description about this transaction",
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
-      "exchange-to-preferred-in-date": "On transaction date"
+      "exchange-to-preferred-in-date": "On transaction date",
+      "extra-info-section": "Extra info",
+      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics."
     },
     "REVERSED": {
       "title": "Inverse transaction",
@@ -437,6 +439,10 @@
       "transfer": {
         "one": "Transfer",
         "other": "Transfers"
+      },
+      "investment": {
+        "one": "Investment",
+        "other": "Investments"
       }
     }
   },
@@ -495,7 +501,7 @@
       "saving": "Savings account",
       "saving.descr": "You will only be able to add and withdraw money from it from other accounts. Perfect to start saving money",
       "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange or portfolio account. Track your invested capital and update its value manually via valuations"
+      "investment.descr": "A broker, crypto exchange, or portfolio account that can hold assets. Track your invested capital and update each asset's value manually via valuations"
     },
     "FORM": {
       "name": "Account name",
@@ -515,27 +521,6 @@
       "include-in-net-worth.descr": "Add this account to the total net worth calculation",
       "correct_balance_description": "Adjusting the balance modifies the account's initial value. This correction will not be reflected in your statistics.",
       "valuation_before_creation_date": "There are valuations in this account with a date before the creation date"
-    },
-    "INVESTMENT": {
-      "details-header": "Investment",
-      "correct_balance_title": "Correct invested capital",
-      "correct_balance_description": "This account uses manual valuations for portfolio value. This action only updates the invested capital (initial value) and will not change recorded valuations or investment statistics.",
-      "invested-capital": "Invested capital",
-      "portfolio-value": "Portfolio value",
-      "profit": "Profit",
-      "last-valuation": "Last valuation",
-      "no-valuations": "No valuations recorded yet",
-      "update-value": "Update value",
-      "update-value.descr": "Record the current portfolio value",
-      "update-value.success": "Valuation recorded successfully",
-      "history": "Valuation history",
-      "history-empty": "No valuations recorded yet for this account",
-      "add-valuation": "Add valuation",
-      "edit-valuation": "Edit valuation",
-      "edit-valuation.success": "Valuation edited successfully",
-      "delete-valuation.success": "Valuation deleted successfully",
-      "delete-all-valuations": "Delete all valuations",
-      "delete-all-valuations.success": "All valuations deleted successfully"
     },
     "DELETE": {
       "warning-header": "Delete account?",
@@ -615,6 +600,8 @@
     },
     "FORM": {
       "name": "Tag name",
+      "name-hint": "E.g.: Food",
+      "forbidden-char-error": "The name cannot contain ';'",
       "description": "Description"
     },
     "SELECT": {
@@ -871,7 +858,60 @@
     "profit": "Profit",
     "profit_percent": "Return %",
     "total_value": "Assets total value",
+    "amount_invested": "You have the {{ X }} of this account invested",
+    "TYPES": {
+      "stocks": "Stocks",
+      "funds": "Funds",
+      "crypto": "Crypto",
+      "real_estate": "Real estate",
+      "vehicle": "Vehicles",
+      "jewelry_art": "Jewelry & art",
+      "other": "Other"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
+    },
+    "DETAILS": {
+      "select_account": "Select an account",
+      "buy": "Buy",
+      "sell": "Sell",
+      "update_value": "Update value",
+      "trade_sheet_title_buy": "Buy (add to asset)",
+      "trade_sheet_title_sell": "Sell (reduce asset)",
+      "trade_sheet_update_value_info": "The value of this asset will be updated to {{ value }} for the selected date",
+      "trade_sheet_update_linked_asset_value_info": "The value of the asset that is linked to this transaction will be updated to {{ value }} for the selected date",
+      "trade_sheet_update_following_valuations": "Update later valuations",
+      "trade_sheet_update_following_valuations_description": "Adjust valuations for this asset dated after the selected date.",
+      "trade_sheet_valuation_current_value_label": "Current value",
+      "trade_sheet_valuation_create_new_title": "Create new valuation",
+      "trade_sheet_valuation_adjust_current_description": "Adjust the asset's current value",
+      "trade_form_asset_column": "Asset",
+      "trade_valuation_notice": "A valuation will be updated for this date to reflect this amount.",
+      "notes_optional": "Notes (optional)",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Period return",
+      "performance_return_help": "Gain or loss from market moves, not from money you add or withdraw. If the value only rose because you deposited more, this stays near zero.",
+      "performance_invested_value": "Invested value",
+      "performance_invested_value_caption": "Total cash in this asset: starting value plus linked buys and sells.",
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "How much the asset's value changed from the start of the selected period to now."
+    },
     "FORM": {
+      "asset_type": "Asset type",
+      "linked_account": "Linked account (optional)",
       "name": "Asset name",
       "name_required": "Please enter an asset name",
       "description": "Description",
@@ -880,7 +920,9 @@
       "initial_value_invalid": "Please enter a valid number",
       "currency": "Currency",
       "select_currency": "Please select a currency",
-      "creation_date": "Acquisition date",
+      "creation_date": "Creation date",
+      "acquisition_date": "Acquisition date",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
       "edit": "Edit asset",
       "create": "Create asset",
       "already_exists": "An asset with this name already exists. You may want to edit it",
@@ -892,6 +934,7 @@
       "add_valuation": "Add valuation",
       "edit_valuation": "Edit valuation",
       "value": "Value",
+      "net_contribution": "Net contribution",
       "value_required": "Please enter a value",
       "value_invalid": "Please enter a valid number",
       "update_value_success": "Valuation added successfully",
@@ -949,22 +992,29 @@
         "defaultAccount": "Default account",
         "removeDefaultAccount": "Remove default account",
         "defaultCategory": "Default Category",
+        "defaultTags": "Default Tags",
         "select-a-column": "Select a column from the .csv",
+        "date-format": "Date format",
+        "note-column": "Note column",
+        "title-column": "Title column",
+        "tag-separator": "Tag separator in the .csv",
         "steps": [
           "Select your file",
-          "Column for quantity",
+          "Column for amount",
           "Column for account",
           "Column for category",
+          "Column for tags",
           "Column for date",
-          "other columns"
+          "Other columns"
         ],
         "steps-descr": [
-          "Select a .csv file from your device. Make sure it has a first row that describes the name of each column",
+          "Select a .csv file from your device. Make sure it has a first row that describes the name of each column.",
           "Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.",
-          "Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name ",
-          "Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found",
-          "Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date",
-          "Specifies the columns for other optional transaction attributes"
+          "Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name.",
+          "Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found.",
+          "Specify the column where the transaction tags are located. If not specified, transactions will be created with default tags.",
+          "Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date.",
+          "Specifies the columns for other optional transaction attributes."
         ],
         "success": "Successfully imported {{x}} transactions"
       },

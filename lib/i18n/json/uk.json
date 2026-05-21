@@ -395,7 +395,9 @@
       "description": "Опис",
       "description-info": "Натисніть тут, щоб ввести детальніший опис цієї транзакції",
       "exchange-to-preferred-title": "Обмінний курс на {{ currency }}",
-      "exchange-to-preferred-in-date": "На дату транзакції"
+      "exchange-to-preferred-in-date": "На дату транзакції",
+      "extra-info-section": "Додаткова інформація",
+      "negative-balance-warning": "Ця сума перевищує поточний баланс обраного рахунку. Після збереження баланс стане від’ємним, що може спотворити статистику."
     },
     "REVERSED": {
       "title": "Скасована транзакція",
@@ -437,6 +439,10 @@
       "transfer": {
         "one": "Переказ",
         "other": "Перекази"
+      },
+      "investment": {
+        "one": "Інвестиції",
+        "other": "Інвестиції"
       }
     }
   },
@@ -495,7 +501,7 @@
       "saving": "Зберігаючий рахунок",
       "saving.descr": "З нього можна тільки додавати та знімати гроші з інших рахунків. Ідеально підходить для початку збереження грошей",
       "investment": "Інвестиційний рахунок",
-      "investment.descr": "Рахунок брокера, криптобіржі або портфеля. Відстежуйте свій інвестований капітал та оновлюйте його вартість вручну через оцінки"
+      "investment.descr": "Рахунок брокера, криптобіржі або портфеля, який може містити активи. Відстежуйте інвестований капітал та оновлюйте вартість кожного активу вручну через оцінки"
     },
     "FORM": {
       "name": "Назва рахунку",
@@ -515,27 +521,6 @@
       "include-in-net-worth.descr": "Додати цей рахунок до розрахунку загальних чистих активів",
       "correct_balance_description": "Коригування балансу змінює початкове значення рахунку. Це коригування не відобразиться у статистиці.",
       "valuation_before_creation_date": "У цьому обліковому записі є оцінки з датою, що передує даті створення"
-    },
-    "INVESTMENT": {
-      "details-header": "Інвестиція",
-      "correct_balance_title": "Відкоригувати інвестований капітал",
-      "correct_balance_description": "Цей рахунок використовує ручні оцінки для відстеження вартості портфеля. Ця дія лише оновлює інвестований капітал (початкове значення) і не змінює записані оцінки або інвестиційну статистику.",
-      "invested-capital": "Інвестований капітал",
-      "portfolio-value": "Вартість портфеля",
-      "profit": "Прибуток",
-      "last-valuation": "Остання оцінка",
-      "no-valuations": "Оцінок ще не записано",
-      "update-value": "Оновити вартість",
-      "update-value.descr": "Записати поточну вартість портфеля",
-      "update-value.success": "Оцінку успішно збережено",
-      "history": "Історія оцінок",
-      "history-empty": "Для цього рахунку ще немає оцінок",
-      "add-valuation": "Додати оцінку",
-      "edit-valuation": "Редагувати оцінку",
-      "edit-valuation.success": "Оцінку успішно відредаговано",
-      "delete-valuation.success": "Оцінку успішно видалено",
-      "delete-all-valuations": "Видалити всі оцінки",
-      "delete-all-valuations.success": "Усі оцінки успішно видалено"
     },
     "DELETE": {
       "warning-header": "Видалити рахунок?",
@@ -615,6 +600,8 @@
     },
     "FORM": {
       "name": "Назва тегу",
+      "name-hint": "Наприклад: Їжа",
+      "forbidden-char-error": "Ім'я не може містити ';'",
       "description": "Опис"
     },
     "SELECT": {
@@ -871,7 +858,44 @@
     "profit": "Прибуток",
     "profit_percent": "Повернення %",
     "total_value": "Загальна вартість активів",
+    "amount_invested": "Ви інвестували {{ X }} цього облікового запису",
+    "TYPES": {
+      "stocks": "Акції",
+      "funds": "Фонди",
+      "crypto": "Криптовалюта",
+      "real_estate": "Нерухомість",
+      "vehicle": "Транспортні засоби",
+      "jewelry_art": "Ювелірні вироби та мистецтво",
+      "other": "Інше"
+    },
+    "DETAILS": {
+      "select_account": "Виберіть обліковий запис",
+      "buy": "купити",
+      "sell": "Продати",
+      "update_value": "Оновити значення",
+      "trade_sheet_title_buy": "Купити (додати в актив)",
+      "trade_sheet_title_sell": "Продати (зменшити актив)",
+      "trade_sheet_update_value_info": "Вартість цього активу буде оновлено до {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "Вартість активу, пов’язаного з цією трансакцією, буде оновлено до {{ value }}",
+      "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
+      "trade_sheet_update_following_valuations_description": "Вирівняйте оцінки активу після обраної дати.",
+      "trade_sheet_valuation_current_value_label": "Поточне значення",
+      "trade_sheet_valuation_create_new_title": "Створити нову оцінку",
+      "trade_sheet_valuation_adjust_current_description": "Скоригувати поточну вартість активу",
+      "trade_form_asset_column": "Актив",
+      "trade_valuation_notice": "Оцінку буде оновлено на цю дату, щоб відобразити цю суму.",
+      "notes_optional": "Примітки (необов'язково)",
+      "performance_sheet_title": "Performance",
+      "performance_return": "Period return",
+      "performance_return_help": "Прибуток або збиток від ринку, а не від грошей, які ви додаєте чи виводите. Якщо вартість зросла лише через новий внесок, це близько до нуля.",
+      "performance_invested_value": "Invested value",
+      "performance_invested_value_caption": "Усього грошей в активі: початкова вартість плюс пов’язані купівлі та продажі.",
+      "performance_value_diff": "Valuation change",
+      "performance_value_diff_caption": "На скільки змінилася вартість активу від початку обраного періоду до сьогодні."
+    },
     "FORM": {
+      "asset_type": "Тип активу",
+      "linked_account": "Пов’язаний обліковий запис (необов’язково)",
       "name": "Назва активу",
       "name_required": "Введіть назву активу",
       "description": "опис",
@@ -884,7 +908,9 @@
       "edit": "Редагувати ресурс",
       "create": "Створити актив",
       "already_exists": "Об’єкт із такою назвою вже існує. Ви можете відредагувати його",
-      "valuation_before_creation_date": "У цьому активі є оцінки з датою, що передує даті придбання"
+      "valuation_before_creation_date": "У цьому активі є оцінки з датою, що передує даті придбання",
+      "acquisition_date": "Дата створення",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "Історія оцінки",
@@ -892,6 +918,7 @@
       "add_valuation": "Додайте оцінку",
       "edit_valuation": "Редагувати оцінку",
       "value": "Значення",
+      "net_contribution": "Чистий внесок",
       "value_required": "Будь ласка, введіть значення",
       "value_invalid": "Введіть дійсний номер",
       "update_value_success": "Оцінку успішно додано",
@@ -905,6 +932,22 @@
       "name_desc": "Ім'я (Я-А)",
       "value_asc": "Значення (спочатку найменше)",
       "value_desc": "Значення (спочатку найвище)"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -950,12 +993,18 @@
         "defaultAccount": "Типовий рахунок",
         "removeDefaultAccount": "Видалити типовий рахунок",
         "defaultCategory": "Типова категорія",
+        "defaultTags": "Теги за замовчуванням",
         "select-a-column": "Виберіть стовпець з файлу .csv",
+        "date-format": "Формат дати",
+        "note-column": "Колонка нотаток",
+        "title-column": "Колонка заголовків",
+        "tag-separator": "Розділювач тегів у .csv",
         "steps": [
           "Виберіть ваш файл",
           "Стовпець для суми",
           "Стовпець для рахунку",
           "Стовпець для категорії",
+          "Стовпець для тегів",
           "Стовпець для дати",
           "інші стовпці"
         ],
@@ -964,6 +1013,7 @@
           "Виберіть стовпець, де вказано значення кожної транзакції. Використовуйте від'ємні значення для витрат та позитивні значення для доходів.",
           "Виберіть стовпець, де вказано рахунок, до якого належить кожна транзакція. Ви також можете вибрати типовий рахунок у випадку, якщо ми не зможемо знайти рахунок, який вам потрібен. Якщо типовий рахунок не вказано, ми створимо його з такою самою назвою",
           "Вкажіть стовпець, де знаходиться назва категорії транзакції. Ви повинні вказати типову категорію, щоб ми призначили цю категорію транзакціям, у випадку, якщо категорія не може бути знайдена",
+          "Вкажіть стовпець, у якому розташовані теги транзакцій. Якщо його не вказати, транзакції будуть створені з тегами за замовчуванням.",
           "Виберіть стовпець, де вказано дату кожної транзакції. Якщо не вказано, транзакції будуть створені з поточною датою",
           "Вкажіть стовпці для інших необов'язкових атрибутів транзакцій"
         ],

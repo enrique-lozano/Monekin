@@ -21,15 +21,25 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../accounts/all_accounts_balance.dart';
 
+enum StatsTab {
+  financialHealth,
+  distribution,
+  netWorth,
+  balance,
+  cashFlow;
+
+  static StatsTab fromIndex(int index) => StatsTab.values[index];
+}
+
 class StatsPage extends StatefulWidget {
   const StatsPage({
     super.key,
-    this.initialIndex = 0,
+    this.initialIndex = StatsTab.financialHealth,
     this.filters = const TransactionFilterSet(),
     this.dateRangeService = const DatePeriodState(),
   });
 
-  final int initialIndex;
+  final StatsTab initialIndex;
 
   final TransactionFilterSet filters;
   final DatePeriodState dateRangeService;
@@ -54,8 +64,8 @@ class _StatsPageState extends State<StatsPage>
     dateRangeService = widget.dateRangeService;
 
     _tabController = TabController(
-      length: 5,
-      initialIndex: widget.initialIndex,
+      length: StatsTab.values.length,
+      initialIndex: widget.initialIndex.index,
       vsync: this,
     );
   }

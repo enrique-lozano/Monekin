@@ -7,7 +7,6 @@ import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -25,6 +24,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -89,18 +89,6 @@ class _AccountFormPageState extends State<AccountFormPage> {
           SnackbarParams(t.account.form.tr_before_opening_date),
         );
 
-        return;
-      }
-
-      // Check if there are valuations before the creation date of the asset:
-      if ((await InvestmentService.instance
-              .getValuationsForAccount(_accountToEdit.id)
-              .first)
-          .where((v) => v.date.isBefore(_openingDate))
-          .isNotEmpty) {
-        MonekinSnackbar.warning(
-          SnackbarParams(t.account.form.valuation_before_creation_date),
-        );
         return;
       }
 
@@ -232,6 +220,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     final footerButtons = [
       PersistentFooterButton(
         child: FilledButton.icon(
+          style: getMediumButtonStyle(context),
           onPressed: () {
             if (_formKey.currentState!.validate()) {
               submitForm();

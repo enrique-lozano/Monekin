@@ -1,19 +1,13 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/database/services/debts/debt_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/database/services/net_worth/net_worth_service.dart';
+import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -27,7 +21,7 @@ class NetWorthEvolutionCard extends StatelessWidget {
   final TransactionFilterSet filters;
   final DatePeriodState dateRangeService;
 
-  Future<(List<_NetWorthPoint>, CurrencyInDB?)> _loadEvolutionData() async {
+  Future<(List<_NetWorthPoint>, Currency?)> _loadEvolutionData() async {
     final now = DateTime.now();
     final endDate = dateRangeService.endDate ?? now;
     final startDate =
@@ -70,97 +64,15 @@ class NetWorthEvolutionCard extends StatelessWidget {
   }
 
   Future<double> _getTotalAssets(DateTime date) async {
-    final cashAccounts = await _getCashAccountsTotal(date);
-    final investmentAccounts = await _getInvestmentAccountsTotal(date);
-    final physicalAssets = await _getPhysicalAssetsTotal(date);
-
-    return cashAccounts + investmentAccounts + physicalAssets;
-  }
-
-  Future<double> _getInvestmentAccountsTotal(DateTime date) async {
-    final accounts = await AccountService.instance
-        .getAccounts(
-          predicate: (account, currency) =>
-              account.type.equals(AccountType.investment.name),
-        )
+    return NetWorthService.instance
+        .getGrossAssetsAtDate(date, trFilters: filters)
         .first;
-
-    if (accounts.isEmpty) return 0.0;
-
-    final values = await Future.wait<double>(
-      accounts.map<Future<double>>((account) async {
-        return await AccountService.instance
-            .getAccountMoney(
-              account: account,
-              date: date,
-              convertToPreferredCurrency: true,
-            )
-            .first;
-      }),
-    );
-
-    return values.fold<double>(0.0, (sum, value) => sum + value);
-  }
-
-  Future<double> _getPhysicalAssetsTotal(DateTime date) async {
-    return await InvestmentService.instance
-        .getTotalAssetsValueAtDate(date: date)
-        .first;
-  }
-
-  Future<double> _getCashAccountsTotal(DateTime date) async {
-    final accounts = await AccountService.instance
-        .getAccounts(
-          predicate: (account, currency) =>
-              account.type.isNotValue(AccountType.investment.name),
-        )
-        .first;
-
-    if (accounts.isEmpty) return 0.0;
-
-    final values = await Future.wait<double>(
-      accounts.map<Future<double>>((account) async {
-        return await AccountService.instance
-            .getAccountMoney(
-              account: account,
-              date: date,
-              convertToPreferredCurrency: true,
-            )
-            .first;
-      }),
-    );
-
-    return values.fold<double>(0.0, (sum, value) => sum + value);
   }
 
   Future<double> _getDebtsTotal(DateTime date) async {
-    final preferredCurrency = await CurrencyService.instance
-        .ensureAndGetPreferredCurrency()
+    return NetWorthService.instance
+        .getTotalDebtsInPreferredCurrency(exchangeRateAsOf: date)
         .first;
-
-    final debts = await DebtService.instance.getDebts().first;
-    if (debts.isEmpty) return 0.0;
-
-    final values = await Future.wait<double>(
-      debts.map<Future<double>>((debt) async {
-        final remaining = await DebtService.instance
-            .getDebtRemainingAmount(debt)
-            .first;
-        if (debt.currency.code == preferredCurrency.code) {
-          return remaining;
-        }
-
-        return await ExchangeRateService.instance
-            .calculateExchangeRateToPreferredCurrency(
-              fromCurrency: debt.currency.code,
-              amount: remaining,
-              date: date,
-            )
-            .first;
-      }),
-    );
-
-    return values.fold<double>(0.0, (sum, value) => sum + value);
   }
 
   @override
@@ -189,138 +101,16 @@ class NetWorthEvolutionCard extends StatelessWidget {
         ].reduce(max);
 
         final yMax = max(maxY * 1.15, 10.0);
-        final byX = {
-          for (final point in data) point.date.millisecondsSinceEpoch: point,
-        };
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
               height: 260,
-              child: LineChart(
-                LineChartData(
-                  minY: 0,
-                  maxY: yMax,
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                    horizontalInterval: yMax / 5,
-                  ),
-                  titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 36,
-                        getTitlesWidget: (value, meta) {
-                          if (value == meta.max || value == meta.min) {
-                            return const SizedBox.shrink();
-                          }
-                          return SideTitleWidget(
-                            meta: meta,
-                            child: Text(
-                              meta.formattedValue,
-                              style: Theme.of(context).textTheme.labelSmall,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    topTitles: noAxisTitles,
-                    bottomTitles: noAxisTitles,
-                    rightTitles: noAxisTitles,
-                  ),
-                  borderData: FlBorderData(show: false),
-                  lineBarsData: [
-                    _buildLine(
-                      color: Theme.of(context).colorScheme.primary,
-                      data: data
-                          .map(
-                            (p) => FlSpot(
-                              p.date.millisecondsSinceEpoch.toDouble(),
-                              p.assets,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    _buildLine(
-                      color: Theme.of(context).colorScheme.error,
-                      data: data
-                          .map(
-                            (p) => FlSpot(
-                              p.date.millisecondsSinceEpoch.toDouble(),
-                              p.debts,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    _buildLine(
-                      color: Theme.of(context).colorScheme.secondary,
-                      data: data
-                          .map(
-                            (p) => FlSpot(
-                              p.date.millisecondsSinceEpoch.toDouble(),
-                              p.netWorth,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      fitInsideHorizontally: true,
-                      fitInsideVertically: true,
-                      getTooltipColor: (spot) =>
-                          Theme.of(context).colorScheme.surface,
-                      tooltipPadding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                        horizontal: 8,
-                      ),
-                      getTooltipItems: (touchedSpots) {
-                        final date = DateTime.fromMillisecondsSinceEpoch(
-                          touchedSpots.first.x.toInt(),
-                        );
-
-                        final dataTextStyle = const TextStyle(
-                          fontSize: 12,
-                          height: 1.25,
-                        );
-
-                        return [
-                          ...touchedSpots.mapIndexed((index, spot) {
-                            final label = _lineLabel(context, spot.barIndex);
-                            return LineTooltipItem(
-                              '${index == 0 ? "${DateFormat.MMMd().format(date)}\n" : ""}',
-                              const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                height: 2,
-                              ),
-
-                              children: [
-                                TextSpan(
-                                  text: "◉ ",
-                                  style: dataTextStyle.copyWith(
-                                    color: spot.bar.color,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "$label: ",
-                                  style: dataTextStyle,
-                                ),
-                                ...UINumberFormatter.currency(
-                                  currency: snapshot.data!.$2,
-                                  amountToConvert: spot.y,
-                                  integerStyle: dataTextStyle,
-                                ).getTextSpanList(context),
-                              ],
-                            );
-                          }),
-                        ];
-                      },
-                    ),
-                  ),
-                ),
+              child: _NetWorthLineChart(
+                data: data,
+                currency: snapshot.data!.$2,
+                yMax: yMax,
               ),
             ),
             const SizedBox(height: 16),
@@ -328,20 +118,17 @@ class NetWorthEvolutionCard extends StatelessWidget {
               spacing: 12,
               runSpacing: 8,
               children: [
-                _buildLegendDot(
-                  context,
-                  t.assets.title,
-                  Theme.of(context).colorScheme.primary,
+                EvolutionChartLegendItem(
+                  color: Theme.of(context).colorScheme.primary,
+                  label: t.assets.title,
                 ),
-                _buildLegendDot(
-                  context,
-                  t.debts.display(n: 2),
-                  Theme.of(context).colorScheme.error,
+                EvolutionChartLegendItem(
+                  color: Theme.of(context).colorScheme.error,
+                  label: t.debts.display(n: 2),
                 ),
-                _buildLegendDot(
-                  context,
-                  t.stats.net_worth,
-                  Theme.of(context).colorScheme.secondary,
+                EvolutionChartLegendItem(
+                  color: Theme.of(context).colorScheme.secondary,
+                  label: t.stats.net_worth,
                 ),
               ],
             ),
@@ -350,6 +137,25 @@ class NetWorthEvolutionCard extends StatelessWidget {
       },
     );
   }
+}
+
+class _NetWorthLineChart extends StatefulWidget {
+  const _NetWorthLineChart({
+    required this.data,
+    required this.currency,
+    required this.yMax,
+  });
+
+  final List<_NetWorthPoint> data;
+  final Currency? currency;
+  final double yMax;
+
+  @override
+  State<_NetWorthLineChart> createState() => _NetWorthLineChartState();
+}
+
+class _NetWorthLineChartState extends State<_NetWorthLineChart> {
+  final EvolutionDateHoverHaptics _dateHaptics = EvolutionDateHoverHaptics();
 
   String _lineLabel(BuildContext context, int index) {
     final t = Translations.of(context);
@@ -387,18 +193,114 @@ class NetWorthEvolutionCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendDot(BuildContext context, String label, Color color) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 10,
-          height: 10,
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  @override
+  Widget build(BuildContext context) {
+    final data = widget.data;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return MouseRegion(
+      onExit: (_) => _dateHaptics.reset(),
+      child: LineChart(
+        LineChartData(
+          minY: 0,
+          maxY: widget.yMax,
+          gridData: FlGridData(
+            show: true,
+            drawVerticalLine: false,
+            horizontalInterval: widget.yMax / 5,
+          ),
+          titlesData: FlTitlesData(
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 36,
+                getTitlesWidget: (value, meta) {
+                  if (value == meta.max || value == meta.min) {
+                    return const SizedBox.shrink();
+                  }
+                  return SideTitleWidget(
+                    meta: meta,
+                    child: Text(
+                      meta.formattedValue,
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  );
+                },
+              ),
+            ),
+            topTitles: noAxisTitles,
+            bottomTitles: noAxisTitles,
+            rightTitles: noAxisTitles,
+          ),
+          borderData: FlBorderData(show: false),
+          lineBarsData: [
+            _buildLine(
+              color: colorScheme.primary,
+              data: data
+                  .map(
+                    (p) => FlSpot(
+                      p.date.millisecondsSinceEpoch.toDouble(),
+                      p.assets,
+                    ),
+                  )
+                  .toList(),
+            ),
+            _buildLine(
+              color: colorScheme.error,
+              data: data
+                  .map(
+                    (p) => FlSpot(
+                      p.date.millisecondsSinceEpoch.toDouble(),
+                      p.debts,
+                    ),
+                  )
+                  .toList(),
+            ),
+            _buildLine(
+              color: colorScheme.secondary,
+              data: data
+                  .map(
+                    (p) => FlSpot(
+                      p.date.millisecondsSinceEpoch.toDouble(),
+                      p.netWorth,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+          lineTouchData: LineTouchData(
+            touchCallback: (event, touchResponse) {
+              if (evolutionChartTouchEnded(event)) {
+                _dateHaptics.reset();
+                return;
+              }
+              final spots = touchResponse?.lineBarSpots;
+              if (spots == null || spots.isEmpty) {
+                _dateHaptics.reset();
+                return;
+              }
+              _dateHaptics.onHoveredXMs(spots.first.x.toInt());
+            },
+            touchTooltipData: LineTouchTooltipData(
+              fitInsideHorizontally: true,
+              fitInsideVertically: true,
+              getTooltipColor: (spot) => colorScheme.surface,
+              tooltipPadding: const EdgeInsets.symmetric(
+                vertical: 4,
+                horizontal: 8,
+              ),
+              getTooltipItems: (touchedSpots) {
+                return buildMultiLineCurrencyLineTooltipItems(
+                  context,
+                  touchedSpots: touchedSpots,
+                  currency: widget.currency,
+                  lineLabel: (barIndex) => _lineLabel(context, barIndex),
+                );
+              },
+            ),
+          ),
         ),
-        const SizedBox(width: 8),
-        Text(label, style: Theme.of(context).textTheme.bodyMedium),
-      ],
+      ),
     );
   }
 }

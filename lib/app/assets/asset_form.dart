@@ -4,12 +4,18 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/services/account/investment_service.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -37,11 +43,32 @@ class _AssetFormPageState extends State<AssetFormPage> {
 
   Currency? _currency;
   DateTime _creationDate = DateTime.now();
+  AssetType _assetType = AssetType.other;
+  Account? _linkedAccount;
 
   late final Asset? _assetToEdit;
 
+  bool get _creationDateBeforeLinkedAccount {
+    final linked = _linkedAccount;
+    if (linked == null) return false;
+    return DateUtils.dateOnly(
+      _creationDate,
+    ).isBefore(DateUtils.dateOnly(linked.date));
+  }
+
+  String _dateFieldLabel(Translations t) => _assetType.isPhysical
+      ? t.assets.form.acquisition_date
+      : t.assets.form.creation_date;
+
   Future<void> submitForm() async {
     final t = Translations.of(context);
+
+    if (_creationDateBeforeLinkedAccount) {
+      MonekinSnackbar.warning(
+        SnackbarParams(t.assets.form.creation_date_before_linked_account),
+      );
+      return;
+    }
 
     if (_currency == null) {
       MonekinSnackbar.error(
@@ -50,11 +77,13 @@ class _AssetFormPageState extends State<AssetFormPage> {
       return;
     }
 
-    final investmentService = InvestmentService.instance;
+    final assetService = AssetService.instance;
 
     // Check if there are valuations before the creation date of the asset:
     if (_assetToEdit != null) {
-      if ((await investmentService.getValuationsForAsset(_assetToEdit.id).first)
+      if ((await AssetValuationService.instance
+              .getValuationsForAsset(_assetToEdit.id)
+              .first)
           .where((v) => v.date.isBefore(_creationDate))
           .isNotEmpty) {
         MonekinSnackbar.warning(
@@ -75,6 +104,8 @@ class _AssetFormPageState extends State<AssetFormPage> {
       description: _descriptionController.text.isEmpty
           ? null
           : _descriptionController.text,
+      assetType: _assetType,
+      linkedAccountID: _linkedAccount?.id,
     );
 
     // Check for assets with same names before continue:
@@ -97,10 +128,10 @@ class _AssetFormPageState extends State<AssetFormPage> {
     }
 
     if (_assetToEdit != null) {
-      await investmentService.updateAsset(assetToSubmit);
+      await assetService.updateAsset(assetToSubmit);
       //MonekinSnackbar.success(SnackbarParams(t.assets.form.edit_success));
     } else {
-      await investmentService.insertAsset(assetToSubmit);
+      await assetService.insertAsset(assetToSubmit);
       //  MonekinSnackbar.success(SnackbarParams(t.assets.form.create_success));
     }
 
@@ -135,6 +166,13 @@ class _AssetFormPageState extends State<AssetFormPage> {
     _descriptionController.text = _assetToEdit.description ?? '';
     _initialValueController.text = _assetToEdit.initialValue.toString();
     _creationDate = _assetToEdit.creationDate;
+    _assetType = _assetToEdit.assetType;
+    final linkedId = _assetToEdit.linkedAccountID;
+    if (linkedId != null) {
+      AccountService.instance.getAccountById(linkedId).first.then((acc) {
+        if (mounted) setState(() => _linkedAccount = acc);
+      });
+    }
 
     CurrencyService.instance
         .getCurrencyByCode(_assetToEdit.currency.code)
@@ -161,14 +199,19 @@ class _AssetFormPageState extends State<AssetFormPage> {
     final pageTitle = widget.asset != null
         ? t.assets.form.edit
         : t.assets.form.create;
+    final creationDateInvalid = _creationDateBeforeLinkedAccount;
+
     final footerButtons = [
       PersistentFooterButton(
         child: FilledButton.icon(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              submitForm();
-            }
-          },
+          style: getMediumButtonStyle(context),
+          onPressed: creationDateInvalid
+              ? null
+              : () {
+                  if (_formKey.currentState!.validate()) {
+                    submitForm();
+                  }
+                },
           icon: const Icon(Icons.save),
           label: Text(pageTitle),
         ),
@@ -210,6 +253,49 @@ class _AssetFormPageState extends State<AssetFormPage> {
               ),
               const SizedBox(height: 16),
 
+              DropdownButtonFormField<AssetType>(
+                value: _assetType,
+                decoration: InputDecoration(
+                  labelText: t.assets.form.asset_type,
+                ),
+                items: AssetType.values
+                    .map(
+                      (at) => DropdownMenuItem(
+                        value: at,
+                        child: Text(at.displayName(context)),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (v) {
+                  if (v != null) setState(() => _assetType = v);
+                },
+              ),
+              const SizedBox(height: 16),
+
+              StreamBuilder<List<Account>>(
+                stream: AccountService.instance.getAccounts(),
+                builder: (context, snap) {
+                  final accounts = snap.data ?? [];
+                  return DropdownButtonFormField<Account?>(
+                    value: _linkedAccount,
+                    decoration: InputDecoration(
+                      labelText: t.assets.form.linked_account,
+                    ),
+                    items: [
+                      const DropdownMenuItem<Account?>(
+                        value: null,
+                        child: Text('—'),
+                      ),
+                      ...accounts.map(
+                        (a) => DropdownMenuItem(value: a, child: Text(a.name)),
+                      ),
+                    ],
+                    onChanged: (a) => setState(() => _linkedAccount = a),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+
               // Description field
               TextFormField(
                 controller: _descriptionController,
@@ -221,22 +307,33 @@ class _AssetFormPageState extends State<AssetFormPage> {
               ),
               const SizedBox(height: 16),
 
-              // Creation date field
               DateTimeFormField(
                 decoration: InputDecoration(
                   suffixIcon: const Icon(Icons.event),
-                  labelText: '${t.assets.form.creation_date} *',
+                  labelText: '${_dateFieldLabel(t)} *',
                 ),
                 initialDate: _creationDate,
+                lastDate: DateTime.now(),
                 dateFormat: DateFormat.yMMMd().add_jm(),
-                validator: (e) =>
-                    e == null ? t.general.validations.required : null,
+                validator: (e) {
+                  if (e == null) return t.general.validations.required;
+                  if (_creationDateBeforeLinkedAccount) {
+                    return t.assets.form.creation_date_before_linked_account;
+                  }
+                  return null;
+                },
                 onDateSelected: (DateTime value) {
                   setState(() {
                     _creationDate = value;
                   });
                 },
               ),
+              if (creationDateInvalid)
+                InlineInfoCard(
+                  margin: const EdgeInsets.only(top: 12),
+                  text: t.assets.form.creation_date_before_linked_account,
+                  mode: InlineInfoCardMode.warn,
+                ),
             ],
           ),
         ),

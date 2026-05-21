@@ -237,11 +237,11 @@ class TargetHeader extends StatelessWidget {
 
                     final startDateLabel = getMMMdDateFormatBasedOnYear(
                       startDate,
-                    ).format(startDate);
+                    ).text;
 
                     final endDateLabel = getMMMdDateFormatBasedOnYear(
                       endDate,
-                    ).format(endDate);
+                    ).text;
 
                     return Text(
                       '$startDateLabel - $endDateLabel',

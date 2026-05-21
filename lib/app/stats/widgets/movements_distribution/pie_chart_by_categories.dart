@@ -207,8 +207,8 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
     transactionsType = widget.initialSelectedType;
 
-    if (transactionsType.isTransfer) {
-      throw 'Can not draw the categories pie chart of transfers';
+    if (transactionsType.isTransfer || transactionsType.isInvestment) {
+      throw 'Can not draw the categories pie chart of transfers or investments';
     }
   }
 

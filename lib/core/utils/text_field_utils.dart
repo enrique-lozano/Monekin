@@ -7,12 +7,17 @@ List<FilteringTextInputFormatter> get twoDecimalDigitFormatter =>
     decimalDigitFormatter(2);
 
 /// A text input formatter that allows up to N decimal places,
-/// replacing or disabling any invalid symbols
-List<FilteringTextInputFormatter> decimalDigitFormatter(int decimalPlaces) {
+/// replacing or disabling any invalid symbols.
+List<FilteringTextInputFormatter> decimalDigitFormatter(
+  int decimalPlaces, {
+  bool allowNegative = false,
+}) {
+  final negativePart = allowNegative ? r'-?' : '';
+
   return [
     FilteringTextInputFormatter.deny(',', replacementString: '.'),
     FilteringTextInputFormatter.allow(
-      RegExp(r'(^\d*\.?\d{0,' + decimalPlaces.toString() + r'})'),
+      RegExp('^$negativePart\\d*\\.?\\d{0,$decimalPlaces}'),
     ),
   ];
 }
@@ -30,10 +35,10 @@ String? fieldValidator(
   bool isRequired = false,
   ValidatorType validator = ValidatorType.text,
 }) {
-  if (!isRequired && (value == null || value.isEmpty)) {
+  if (!isRequired && (value == null || value.trim().isEmpty)) {
     // If the field is not required and is empty, we don't return any error
     return null;
-  } else if (value == null || value.isEmpty) {
+  } else if (value == null || value.trim().isEmpty) {
     return t.general.validations.required;
   }
 

@@ -1,0 +1,234 @@
+import 'package:flutter/material.dart';
+import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/utils/text_field_utils.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:provider/provider.dart';
+
+/// Amount field, optional preferred-currency hint, and insufficient-balance warning.
+class TransactionFormAmountBlock extends StatelessWidget {
+  const TransactionFormAmountBlock({
+    super.key,
+    this.padding = const EdgeInsets.fromLTRB(16, 0, 16, 12),
+  });
+
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = context.read<TransactionFormController>();
+    return Padding(
+      padding: padding,
+      child: ListenableBuilder(
+        listenable: Listenable.merge([c, c.amountTextController]),
+        builder: (context, _) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _amountInputRow(context, c),
+              _preferredCurrencyHint(context, c),
+              insufficientBalanceWarning(context),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  static Widget insufficientBalanceWarning(BuildContext context) {
+    final c = context.read<TransactionFormController>();
+    final from = c.fromAccount;
+    if (from == null || c.transactionValue <= 0) {
+      return const SizedBox.shrink();
+    }
+    final newEffect = c.draftEffectOnFromAccountLedger();
+    if (newEffect >= 0) return const SizedBox.shrink();
+
+    return StreamBuilder(
+      stream: AccountService.instance.getAccountMoney(account: from),
+      builder: (context, snap) {
+        if (!snap.hasData) {
+          return const SizedBox.shrink();
+        }
+
+        final balance = snap.data ?? 0;
+        final oldEffect = c.oldEffectOnFromAccountLedgerForEdit ?? 0;
+        final projected = balance + newEffect - oldEffect;
+
+        if (projected >= -1e-6) return const SizedBox.shrink();
+
+        final t = Translations.of(context);
+        return Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: InlineInfoCard(
+            text: t.transaction.form.negative_balance_warning,
+            mode: InlineInfoCardMode.warn,
+            margin: EdgeInsets.zero,
+          ),
+        );
+      },
+    );
+  }
+
+  static Widget _preferredCurrencyHint(
+    BuildContext context,
+    TransactionFormController c,
+  ) {
+    final from = c.fromAccount;
+    final displayCurrency = c.amountDisplayCurrency ?? from?.currency;
+
+    if (from == null || displayCurrency == null) {
+      return const SizedBox.shrink();
+    }
+
+    return StreamBuilder<double>(
+      stream: ExchangeRateService.instance
+          .calculateExchangeRateToPreferredCurrency(
+            fromCurrency: displayCurrency.code,
+            amount: c.transactionValue,
+          ),
+      builder: (context, snap) {
+        final converted = snap.data ?? c.transactionValue;
+        final hintColor = c.foregroundColor(context).withOpacity(0.75);
+
+        return AnimatedExpanded(
+          expand:
+              c.transactionValue != 0 &&
+              displayCurrency.code !=
+                  appStateSettings[SettingKey.preferredCurrency],
+          child: Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.swap_horizontal_circle_rounded,
+                  size: 16,
+                  color: hintColor,
+                ),
+                const SizedBox(width: 6),
+                CurrencyDisplayer(
+                  amountToConvert: converted,
+                  integerStyle:
+                      Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: hintColor,
+                        fontWeight: FontWeight.w500,
+                      ) ??
+                      TextStyle(color: hintColor, fontWeight: FontWeight.w500),
+                  followPrivateMode: false,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static Widget _amountInputRow(
+    BuildContext context,
+    TransactionFormController c,
+  ) {
+    final inv = c.isAssetTradeInvestment;
+    final baseColor = inv
+        ? c.investmentAccent(context)
+        : c.transactionType.color(context);
+    final ctrl = c.amountTextController;
+    final cur = c.amountDisplayCurrency ?? c.fromAccount?.currency;
+    final decimals = cur?.decimalPlaces ?? 2;
+    double fontSize = 48;
+    switch (ctrl.text.length) {
+      case > 8:
+        fontSize = 24;
+        break;
+      case > 6:
+        fontSize = 28;
+        break;
+      case > 4:
+        fontSize = 36;
+    }
+
+    return AnimatedSizeSwitcher(
+      duration: const Duration(milliseconds: 1250),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 250),
+            padding: const EdgeInsets.all(4),
+            margin: const EdgeInsets.only(left: 6, right: 2),
+            decoration: BoxDecoration(
+              color: baseColor,
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: Icon(
+                inv
+                    ? (c.investmentIsBuy
+                          ? TransactionType.income.mathIcon
+                          : TransactionType.expense.mathIcon)
+                    : c.transactionType.mathIcon,
+                color: c.foregroundColor(context),
+                size: 26,
+              ),
+            ),
+          ),
+          Flexible(
+            child: IntrinsicWidth(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Semantics(
+                  label: Translations.of(context).transaction.form.value,
+                  textField: true,
+                  child: TextField(
+                    controller: ctrl,
+                    focusNode: c.amountFocusNode,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (_) => c.titleFocusNode.requestFocus(),
+                    textAlign: TextAlign.center,
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    inputFormatters: decimalDigitFormatter(
+                      decimals,
+                      allowNegative: true,
+                    ),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: fontSize,
+                    ),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      fillColor: Colors.transparent,
+                      hoverColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHigh.withOpacity(0.05),
+                      border: InputBorder.none,
+                      hintText: '0',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      prefixText: cur?.symbol,
+                      suffixText: ctrl.text.endsWith('.') ? '00' : null,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          IconButton.outlined(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+            onPressed: () => c.openAmountSelectorSheet(context),
+            icon: const Icon(Icons.calculate),
+          ),
+        ],
+      ),
+    );
+  }
+}

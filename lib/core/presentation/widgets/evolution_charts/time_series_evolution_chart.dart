@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A generic time-series line chart that displays data points over time
 /// with an optional gradient fill, hover interaction, and an
@@ -15,7 +16,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 ///
 /// This widget is used by both the exchange-rate evolution chart and the
 /// investment-valuation evolution chart.
-class TimeSeriesEvolutionChart<T> extends StatelessWidget {
+class TimeSeriesEvolutionChart<T> extends StatefulWidget {
   const TimeSeriesEvolutionChart({
     super.key,
     required this.data,
@@ -27,6 +28,8 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
     this.maxY,
     this.extraLinesData,
     this.onHover,
+    this.timeRange,
+    this.fillMissingDatesWithPreviousValue = true,
   });
 
   /// The raw data items to plot.
@@ -57,27 +60,110 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
   /// touch ends. The callback receives the original data item.
   final void Function(T?)? onHover;
 
+  /// Range used to fill missing dates. When null and [fillMissingDatesWithPreviousValue]
+  /// is true, it defaults from the first data point through today.
+  final DateTimeRange? timeRange;
+
+  /// When true, missing dates in [timeRange] are filled with the previous value.
+  final bool fillMissingDatesWithPreviousValue;
+
+  @override
+  State<TimeSeriesEvolutionChart<T>> createState() =>
+      _TimeSeriesEvolutionChartState<T>();
+}
+
+class _TimeSeriesEvolutionChartState<T>
+    extends State<TimeSeriesEvolutionChart<T>> {
+  final EvolutionDateHoverHaptics _dateHaptics = EvolutionDateHoverHaptics();
+
+  void _resetHover() {
+    _dateHaptics.reset();
+    widget.onHover?.call(null);
+  }
+
+  void _handleHoverSpot(FlSpot spot, Map<int, T> byX) {
+    _dateHaptics.onHoveredXMs(spot.x.toInt());
+    widget.onHover?.call(byX[spot.x.toInt()]);
+  }
+
+  DateTimeRange? _effectiveTimeRange(List<T> sortedData) {
+    if (widget.timeRange != null) return widget.timeRange;
+    if (!widget.fillMissingDatesWithPreviousValue || sortedData.isEmpty) {
+      return null;
+    }
+
+    final start = widget.dateExtractor(sortedData.first).justDay();
+    final end = DateTime.now().justDay().add(const Duration(days: 1));
+
+    return DateTimeRange(start: start, end: end);
+  }
+
+  ({List<FlSpot> spots, Map<int, T> byX}) _buildChartSeries(
+    List<T> sortedData,
+  ) {
+    final timeRange = _effectiveTimeRange(sortedData);
+
+    if (!widget.fillMissingDatesWithPreviousValue || timeRange == null) {
+      return (
+        spots: sortedData
+            .map(
+              (e) => FlSpot(
+                widget.dateExtractor(e).millisecondsSinceEpoch.toDouble(),
+                widget.valueExtractor(e),
+              ),
+            )
+            .toList(),
+        byX: {
+          for (final item in sortedData)
+            widget.dateExtractor(item).millisecondsSinceEpoch: item,
+        },
+      );
+    }
+
+    final filledSamples = fillTimeSeriesWithPreviousValue<T>(
+      data: sortedData,
+      dateExtractor: widget.dateExtractor,
+      valueExtractor: widget.valueExtractor,
+      timeRange: timeRange,
+    );
+
+    return (
+      spots: filledSamples
+          .map(
+            (sample) => FlSpot(
+              sample.date.millisecondsSinceEpoch.toDouble(),
+              sample.value,
+            ),
+          )
+          .toList(),
+      byX: {
+        for (final sample in filledSamples)
+          sample.date.millisecondsSinceEpoch: sample.source,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final lineColor = Theme.of(context).colorScheme.primary;
 
-    final sortedData = List<T>.from(data)
-      ..sort((a, b) => dateExtractor(a).compareTo(dateExtractor(b)));
+    final sortedData = List<T>.from(widget.data)
+      ..sort(
+        (a, b) => widget.dateExtractor(a).compareTo(widget.dateExtractor(b)),
+      );
 
-    final byX = <int, T>{
-      for (final item in sortedData)
-        dateExtractor(item).millisecondsSinceEpoch: item,
-    };
+    final chartSeries = _buildChartSeries(sortedData);
+    final byX = chartSeries.byX;
+    final spots = chartSeries.spots;
 
     final isNotEnoughData = sortedData.length <= 2;
 
     final chart = LineChart(
       LineChartData(
-        minY: minY,
-        maxY: maxY,
+        minY: widget.minY,
+        maxY: widget.maxY,
         gridData: const FlGridData(show: true, drawVerticalLine: false),
-        extraLinesData: extraLinesData,
+        extraLinesData: widget.extraLinesData,
         lineTouchData: isNotEnoughData
             ? const LineTouchData(enabled: false)
             : LineTouchData(
@@ -97,13 +183,14 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                         spot.x.toInt(),
                       );
 
-                      final title = item != null && tooltipTitleBuilder != null
-                          ? tooltipTitleBuilder!(item)
+                      final title =
+                          item != null && widget.tooltipTitleBuilder != null
+                          ? widget.tooltipTitleBuilder!(item)
                           : DateFormat.yMMMd().format(date);
 
-                      final valueSpans = currency != null
+                      final valueSpans = widget.currency != null
                           ? UINumberFormatter.currency(
-                              currency: currency,
+                              currency: widget.currency,
                               amountToConvert: spot.y,
                               integerStyle: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -131,12 +218,8 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                 ),
                 touchCallback:
                     (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                      if (onHover == null) return;
-
-                      if (event is FlPanEndEvent ||
-                          event is FlLongPressEnd ||
-                          event is FlTapUpEvent) {
-                        onHover!(null);
+                      if (evolutionChartTouchEnded(event)) {
+                        _resetHover();
                         return;
                       }
 
@@ -144,11 +227,11 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                           touchResponse.lineBarSpots != null &&
                           touchResponse.lineBarSpots!.isNotEmpty) {
                         final spot = touchResponse.lineBarSpots!.first;
-                        onHover!(byX[spot.x.toInt()]);
+                        _handleHoverSpot(spot, byX);
                         return;
                       }
 
-                      onHover!(null);
+                      _resetHover();
                     },
               ),
         titlesData: FlTitlesData(
@@ -193,14 +276,7 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                     FlSpot(3, 2),
                     FlSpot(4, 5),
                   ]
-                : sortedData
-                      .map(
-                        (e) => FlSpot(
-                          dateExtractor(e).millisecondsSinceEpoch.toDouble(),
-                          valueExtractor(e),
-                        ),
-                      )
-                      .toList(),
+                : spots,
             isCurved: true,
             curveSmoothness: 0.05,
             color: isNotEnoughData
@@ -212,7 +288,7 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
             belowBarData: BarAreaData(
               show: true,
               applyCutOffY: !isNotEnoughData,
-              cutOffY: minY ?? 0,
+              cutOffY: widget.minY ?? 0,
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -225,7 +301,12 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
                           context,
                         ).colorScheme.outlineVariant.withAlpha(3),
                       ]
-                    : [lineColor.withAlpha(100), lineColor.withAlpha(1)],
+                    : [
+                        lineColor.withAlpha(80),
+                        lineColor.withAlpha(20),
+                        lineColor.withAlpha(10),
+                        lineColor.withAlpha(1),
+                      ],
               ),
             ),
           ),
@@ -242,26 +323,16 @@ class TimeSeriesEvolutionChart<T> extends StatelessWidget {
       child: chart,
     );
 
+    final interactiveChartContainer = widget.onHover == null
+        ? chartContainer
+        : MouseRegion(onExit: (_) => _resetHover(), child: chartContainer);
+
     if (isNotEnoughData) {
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          chartContainer,
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Text(
-              t.general.insufficient_data,
-              style: Theme.of(context).textTheme.labelMedium,
-            ),
-          ),
-        ],
+      return EvolutionChartInsufficientDataOverlay(
+        child: interactiveChartContainer,
       );
     }
 
-    return chartContainer;
+    return interactiveChartContainer;
   }
 }

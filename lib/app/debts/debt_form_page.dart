@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/debts/components/transaction_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -23,6 +23,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
@@ -112,6 +113,7 @@ class _DebtFormPageState extends State<DebtFormPage> {
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
             onPressed: _submitButtonEnabled(t) ? () => submitForm() : null,
             icon: const Icon(Icons.save),
             label: Text(

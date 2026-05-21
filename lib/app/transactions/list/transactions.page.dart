@@ -6,9 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
-import 'package:monekin/app/transactions/widgets/bulk_edit_transaction_modal.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list.dart';
-import 'package:monekin/app/transactions/widgets/transaction_list_tile.dart';
+import 'package:monekin/app/transactions/list/widgets/bulk_edit_transaction_modal.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -19,8 +19,8 @@ import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -57,8 +57,6 @@ class TransactionsPageState extends State<TransactionsPage> {
     super.initState();
 
     filters = widget.filters ?? const TransactionFilterSet();
-
-    print("INITIAL FILTERS: $filters");
 
     searchFocusNode.addListener(() {
       if (!searchFocusNode.hasFocus && searchController.text.isEmpty) {

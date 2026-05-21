@@ -395,7 +395,9 @@
       "description": "描述",
       "description-info": "点击此处输入有关此交易的详细描述",
       "exchange-to-preferred-title": "汇率为{{currency}}",
-      "exchange-to-preferred-in-date": "交易日"
+      "exchange-to-preferred-in-date": "交易日",
+      "extra-info-section": "附加信息",
+      "negative-balance-warning": "该金额高于所选账户的当前余额。保存后余额将为负，并可能影响统计数据。"
     },
     "REVERSED": {
       "title": "逆向交易",
@@ -437,6 +439,10 @@
       "transfer": {
         "one": "转账",
         "other": "转账"
+      },
+      "investment": {
+        "one": "投资",
+        "other": "投资"
       }
     }
   },
@@ -495,7 +501,7 @@
       "saving": "储蓄账户",
       "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱",
       "investment": "投资账户",
-      "investment.descr": "券商、加密货币交易所或投资组合账户。跟踪您的投资资本，并通过估值手动更新其价值"
+      "investment.descr": "可包含资产的券商、加密货币交易所或投资组合账户。跟踪投资本金，并通过估值手动更新每个资产的价值"
     },
     "FORM": {
       "name": "账户名称",
@@ -515,27 +521,6 @@
       "include-in-net-worth.descr": "将此账户纳入总净资产计算",
       "correct_balance_description": "调整余额会修改账户的初始值。此修正不会反映在统计数据中。",
       "valuation_before_creation_date": "此帐户中存在日期早于创建日期的评估"
-    },
-    "INVESTMENT": {
-      "details-header": "投资",
-      "correct_balance_title": "更正已投资本金",
-      "correct_balance_description": "此账户使用手动估值来跟踪投资组合价值。此操作仅更新已投资本金（初始值），不会更改已记录的估值或投资统计信息。",
-      "invested-capital": "已投资本金",
-      "portfolio-value": "投资组合价值",
-      "profit": "收益",
-      "last-valuation": "最近估值",
-      "no-valuations": "暂无估值记录",
-      "update-value": "更新价值",
-      "update-value.descr": "记录当前投资组合价值",
-      "update-value.success": "估值记录成功",
-      "history": "估值历史",
-      "history-empty": "此账户暂无估值记录",
-      "add-valuation": "添加估值",
-      "edit-valuation": "编辑估值",
-      "edit-valuation.success": "估值编辑成功",
-      "delete-valuation.success": "估值删除成功",
-      "delete-all-valuations": "删除所有估值",
-      "delete-all-valuations.success": "所有估值已成功删除"
     },
     "DELETE": {
       "warning-header": "删除账户？",
@@ -615,6 +600,8 @@
     },
     "FORM": {
       "name": "标签名",
+      "name-hint": "例如：食物",
+      "forbidden-char-error": "名称不能包含 ';'",
       "description": "描述"
     },
     "SELECT": {
@@ -871,7 +858,44 @@
     "profit": "利润",
     "profit_percent": "返回 ％",
     "total_value": "资产总值",
+    "amount_invested": "您已投资该账户的 {{ X }}",
+    "TYPES": {
+      "stocks": "股票",
+      "funds": "基金",
+      "crypto": "加密货币",
+      "real_estate": "房地产",
+      "vehicle": "车辆",
+      "jewelry_art": "珠宝与艺术品",
+      "other": "其他"
+    },
+    "DETAILS": {
+      "select_account": "选择一个帐户",
+      "buy": "买",
+      "sell": "卖",
+      "update_value": "更新值",
+      "trade_sheet_title_buy": "购买（添加到资产）",
+      "trade_sheet_title_sell": "出售（减少资产）",
+      "trade_sheet_update_value_info": "该资产的价值将更新为 {{ value }}",
+      "trade_sheet_update_linked_asset_value_info": "与此交易关联的资产的价值将更新为 {{ value }}",
+      "trade_sheet_update_following_valuations": "稍后更新估值",
+      "trade_sheet_update_following_valuations_description": "调整所选日期之后的资产估值。",
+      "trade_sheet_valuation_current_value_label": "当前价值",
+      "trade_sheet_valuation_create_new_title": "创建新估值",
+      "trade_sheet_valuation_adjust_current_description": "调整资产的当前价值",
+      "trade_form_asset_column": "资产",
+      "trade_valuation_notice": "该日期的估值将更新以反映这一金额。",
+      "notes_optional": "注释（可选）",
+      "performance_sheet_title": "表现",
+      "performance_return": "区间回报",
+      "performance_return_help": "来自市场涨跌的收益或亏损，不包括你存入或取出的钱。若市值上涨只是因为多存了钱，此项会接近零。",
+      "performance_invested_value": "投入金额",
+      "performance_invested_value_caption": "该资产中的资金总额：初始价值加上已关联的买卖。",
+      "performance_value_diff": "估值变动",
+      "performance_value_diff_caption": "从所选周期开始至今，资产价值的变化幅度。"
+    },
     "FORM": {
+      "asset_type": "资产类型",
+      "linked_account": "关联帐户（可选）",
       "name": "资产名称",
       "name_required": "请输入资产名称",
       "description": "描述",
@@ -884,7 +908,9 @@
       "edit": "编辑资产",
       "create": "创建资产",
       "already_exists": "具有此名称的资产已存在。您可能想要编辑它",
-      "valuation_before_creation_date": "该资产的估值日期早于收购日期"
+      "valuation_before_creation_date": "该资产的估值日期早于收购日期",
+      "acquisition_date": "创建日期",
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
     },
     "VALUATION": {
       "history": "估值历史",
@@ -892,6 +918,7 @@
       "add_valuation": "添加估价",
       "edit_valuation": "编辑估值",
       "value": "价值",
+      "net_contribution": "净投入",
       "value_required": "请输入一个值",
       "value_invalid": "请输入有效号码",
       "update_value_success": "估价添加成功",
@@ -905,6 +932,22 @@
       "name_desc": "姓名（Z-A）",
       "value_asc": "值（最低的在前）",
       "value_desc": "值（最高的在前）"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Link transaction",
+        "modal_title": "Link transaction to asset",
+        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+      },
+      "link_transaction": {
+        "title": "Link existing income or expense",
+        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
+        "success": "Transaction linked successfully"
+      },
+      "new_investment_transaction": {
+        "title": "Create investment transaction",
+        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
+      }
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -950,12 +993,18 @@
         "defaultAccount": "默认账户",
         "removeDefaultAccount": "删除默认账户",
         "defaultCategory": "默认类别",
+        "defaultTags": "默认标签",
         "select-a-column": "从 .csv 中选择一列",
+        "date-format": "日期格式",
+        "note-column": "备注列",
+        "title-column": "标题列",
+        "tag-separator": ".csv 中的标签分隔符",
         "steps": [
           "选择您的文件",
           "数额列",
           "账户列",
           "类别列",
+          "标签列",
           "日期列",
           "其它列"
         ],
@@ -964,6 +1013,7 @@
           "选择每笔交易数额的列。负值表示支出，正值表示收入。",
           "选择每笔交易所属账户的列。您也可以选择默认账户，以防我们找不到您想要的账户。如果未指定默认账户，我们将建立一个同名账户。",
           "选择交易类别名称所在的列。您必须指定一个默认类别，以便我们在找不到此类别时，将默认类别分配给交易。",
+          "指定交易标签所在的列。如果未指定，将使用默认标签创建交易。",
           "选择每笔交易日期的列。如果未指定，所有交易将使用当前日期。",
           "选择其它交易属性的数据列"
         ],
