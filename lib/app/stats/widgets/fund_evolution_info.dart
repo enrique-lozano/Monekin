@@ -132,7 +132,7 @@ class FundEvolutionInfo extends StatelessWidget {
               ),
             const SizedBox(height: 24),
             SizedBox(
-              height: 260,
+              height: 220,
               child: Builder(
                 builder: (context) {
                   const loadingWidget = Column(

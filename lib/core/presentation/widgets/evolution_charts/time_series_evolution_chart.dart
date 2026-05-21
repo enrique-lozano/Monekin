@@ -4,10 +4,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
-import 'package:monekin/core/extensions/date.extensions.dart';
-import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 
 /// A generic time-series line chart that displays data points over time
@@ -98,10 +98,9 @@ class _TimeSeriesEvolutionChartState<T>
     return DateTimeRange(start: start, end: end);
   }
 
-  ({
-    List<FlSpot> spots,
-    Map<int, T> byX,
-  }) _buildChartSeries(List<T> sortedData) {
+  ({List<FlSpot> spots, Map<int, T> byX}) _buildChartSeries(
+    List<T> sortedData,
+  ) {
     final timeRange = _effectiveTimeRange(sortedData);
 
     if (!widget.fillMissingDatesWithPreviousValue || timeRange == null) {
@@ -302,7 +301,12 @@ class _TimeSeriesEvolutionChartState<T>
                           context,
                         ).colorScheme.outlineVariant.withAlpha(3),
                       ]
-                    : [lineColor.withAlpha(100), lineColor.withAlpha(1)],
+                    : [
+                        lineColor.withAlpha(80),
+                        lineColor.withAlpha(20),
+                        lineColor.withAlpha(10),
+                        lineColor.withAlpha(1),
+                      ],
               ),
             ),
           ),
