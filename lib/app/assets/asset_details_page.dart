@@ -123,9 +123,10 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         .map((valuation) {
           while (txIndex < txSorted.length &&
               !txSorted[txIndex].date.isAfter(valuation.date)) {
-            netContribution += AssetValuationService.valuationDeltaForTransaction(
-              txSorted[txIndex],
-            );
+            netContribution +=
+                AssetValuationService.valuationDeltaForTransaction(
+                  txSorted[txIndex],
+                );
             txIndex++;
           }
 
@@ -243,7 +244,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
 
     if (newValuation != null) {
-      await AssetValuationService.instance.insertOrUpdateValuation(newValuation);
+      await AssetValuationService.instance.insertOrUpdateValuation(
+        newValuation,
+      );
       MonekinSnackbar.success(
         SnackbarParams(t.assets.valuation.update_value_success),
       );
@@ -290,7 +293,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
     if (confirmed == true) {
       await Future.wait(
-        valuations.map((v) => AssetValuationService.instance.deleteValuation(v.id)),
+        valuations.map(
+          (v) => AssetValuationService.instance.deleteValuation(v.id),
+        ),
       );
       MonekinSnackbar.success(
         SnackbarParams(t.assets.valuation.delete_all_valuations_success),
@@ -427,7 +432,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           Skeletonizer(
             enabled: valuations == null,
             child: StreamBuilder<double>(
-              stream: AssetValuationService.instance.getCurrentAssetValue(asset),
+              stream: AssetValuationService.instance.getCurrentAssetValue(
+                asset,
+              ),
               builder: (context, valueSnapshot) {
                 final value = valueSnapshot.data ?? asset!.initialValue;
 

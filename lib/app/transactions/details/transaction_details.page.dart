@@ -922,8 +922,9 @@ class _LinkedAssetCard extends StatelessWidget {
                       icon: const Icon(Icons.link_off_rounded, size: 18),
                       label: Text(t.debts.actions.unlink_transaction.title),
                       onPressed: () async {
-                        await AssetService.instance
-                            .unlinkTransactionFromAsset(transaction.id);
+                        await AssetService.instance.unlinkTransactionFromAsset(
+                          transaction.id,
+                        );
                       },
                     ),
                   ),

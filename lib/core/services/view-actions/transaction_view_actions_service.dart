@@ -185,7 +185,9 @@ class TransactionViewActionService {
         AssetValuationService.statusAffectsValuation(copy)) {
       await AssetValuationService.instance.syncValuationOnTransactionSave(
         current: copy,
-        valuationDelta: AssetValuationService.valuationDeltaForTransaction(copy),
+        valuationDelta: AssetValuationService.valuationDeltaForTransaction(
+          copy,
+        ),
       );
     }
 

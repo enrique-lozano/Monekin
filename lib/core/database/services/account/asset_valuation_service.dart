@@ -74,7 +74,8 @@ class AssetValuationService {
     return AssetService.instance
         .getAssets(
           predicate: (a, c) =>
-              a.linkedAccountID.isNotNull() & a.linkedAccountID.equals(account.id),
+              a.linkedAccountID.isNotNull() &
+              a.linkedAccountID.equals(account.id),
         )
         .switchMap((linked) {
           if (linked.isEmpty) return Stream.value(0.0);

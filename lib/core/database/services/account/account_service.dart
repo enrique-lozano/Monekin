@@ -115,11 +115,12 @@ class AccountService {
     return _watchInvestmentAccountIds(accountIds: accountIds).switchMap((ids) {
       if (ids.isEmpty) return Stream.value(0.0);
       final streams = ids.map(
-        (id) => AssetValuationService.instance.streamLinkedAssetsTotalForAccount(
-          id,
-          date: date,
-          convertToPreferredCurrency: convertToPreferredCurrency,
-        ),
+        (id) =>
+            AssetValuationService.instance.streamLinkedAssetsTotalForAccount(
+              id,
+              date: date,
+              convertToPreferredCurrency: convertToPreferredCurrency,
+            ),
       );
       return Rx.combineLatestList(
         streams.toList(),
@@ -185,11 +186,12 @@ class AccountService {
       exchDate: date,
     );
 
-    final linked = AssetValuationService.instance.streamLinkedAssetsTotalForAccount(
-      account.id,
-      date: date,
-      convertToPreferredCurrency: convertToPreferredCurrency,
-    );
+    final linked = AssetValuationService.instance
+        .streamLinkedAssetsTotalForAccount(
+          account.id,
+          date: date,
+          convertToPreferredCurrency: convertToPreferredCurrency,
+        );
 
     return Rx.combineLatest3(
       iniStream,

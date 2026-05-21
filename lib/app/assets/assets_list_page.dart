@@ -119,7 +119,8 @@ class _AssetsListPageState extends State<AssetsListPage> {
             subtitle: StreamBuilder(
               // Includes linked portfolio rows (same economic value is also inside
               // investment account balances) — intentional for this “all assets” total.
-              stream: AssetValuationService.instance.getTotalAssetsValueAtDate(),
+              stream: AssetValuationService.instance
+                  .getTotalAssetsValueAtDate(),
               builder: (context, snapshot) {
                 final totalValue = snapshot.data;
                 return Skeletonizer(

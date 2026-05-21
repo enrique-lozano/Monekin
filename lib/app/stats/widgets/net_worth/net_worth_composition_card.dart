@@ -228,7 +228,6 @@ class NetWorthCompositionCard extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class _BreakdownItem {

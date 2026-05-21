@@ -132,8 +132,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage>
 
     final now = DateTime.now();
     final oldestDate = sortedRates.first.date;
-    final period =
-        _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
+    final period = _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
         ? _selectedChartPeriod
         : ChartTimePeriod.max;
     final periodStart = period.startDateFrom(now);

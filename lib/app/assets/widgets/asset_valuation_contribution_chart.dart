@@ -232,7 +232,8 @@ class _AssetValuationContributionChartState
     List<FlSpot> valuationSpots,
     List<FlSpot> contributionSpots,
     Map<int, AssetValuationContributionPoint> pointsByX,
-  }) _buildChartSeries(List<AssetValuationContributionPoint> sortedPoints) {
+  })
+  _buildChartSeries(List<AssetValuationContributionPoint> sortedPoints) {
     final timeRange = _effectiveTimeRange(sortedPoints);
 
     if (timeRange == null) {
