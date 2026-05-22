@@ -29,6 +29,7 @@ import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../core/database/services/app-data/app_data_service.dart';
 import '../../core/models/date-utils/date_period.dart';
 import '../../core/models/transaction/transaction_type.enum.dart';
 import '../../core/presentation/app_colors.dart';
@@ -67,7 +68,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Future<void> _loadSavedDatePeriod() async {
-    final savedPeriodJson = appStateSettings[SettingKey.dashboardDatePeriod];
+    final savedPeriodJson = appStateData[AppDataKey.lastDashboardDatePeriod];
 
     if (savedPeriodJson != null) {
       try {
@@ -291,8 +292,8 @@ class _DashboardPageState extends State<DashboardPage> {
         ).then((value) {
           if (value == null) return;
 
-          UserSettingService.instance.setItem(
-            SettingKey.dashboardDatePeriod,
+          AppDataService.instance.setItem(
+            AppDataKey.lastDashboardDatePeriod,
             value.toJsonString(),
           );
 

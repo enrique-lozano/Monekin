@@ -51,9 +51,6 @@ enum SettingKey {
 
   /// Whether to show the time of the transaction in the transaction list tiles
   transactionTileShowTime,
-
-  /// JSON string representing the last selected date period on the dashboard
-  dashboardDatePeriod,
 }
 
 final Map<SettingKey, String?> appStateSettings = {};
