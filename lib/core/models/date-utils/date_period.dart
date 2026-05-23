@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
@@ -30,6 +31,33 @@ class DatePeriod {
 
   const DatePeriod.customRange(DateTime? start, DateTime? end)
     : this(periodType: PeriodType.dateRange, customDateRange: (start, end));
+
+  Map<String, dynamic> toJson() => {
+    'periodType': periodType.name,
+    'periodicity': periodicity.name,
+    'lastDays': lastDays,
+    'customDateRangeStart': customDateRange.$1?.millisecondsSinceEpoch,
+    'customDateRangeEnd': customDateRange.$2?.millisecondsSinceEpoch,
+  };
+
+  factory DatePeriod.fromJson(Map<String, dynamic> json) => DatePeriod(
+    periodType: PeriodType.values.byName(json['periodType'] as String),
+    periodicity: Periodicity.values.byName(json['periodicity'] as String),
+    lastDays: json['lastDays'] as int,
+    customDateRange: (
+    json['customDateRangeStart'] != null
+      ? DateTime.fromMillisecondsSinceEpoch(json['customDateRangeStart'] as int)
+      : null,
+    json['customDateRangeEnd'] != null
+      ? DateTime.fromMillisecondsSinceEpoch(json['customDateRangeEnd'] as int)
+      : null,
+    ),
+  );
+
+  String toJsonString() => jsonEncode(toJson());
+
+  factory DatePeriod.fromJsonString(String raw) =>
+    DatePeriod.fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
   @override
   String toString() {
