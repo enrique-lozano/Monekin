@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
-import 'package:csv/csv_settings_autodetection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -103,9 +102,7 @@ class BackupDatabaseService {
         processedData.add(toAdd);
       }
     }
-    final csvData = ListToCsvConverter(
-      fieldDelimiter: fieldSeparator,
-    ).convert(processedData);
+    final csvData = Csv(fieldDelimiter: fieldSeparator).encode(processedData);
     return csvData;
   }
 
@@ -189,14 +186,6 @@ class BackupDatabaseService {
   }
 
   Future<List<List<String>>> processCsv(String csvData) async {
-    return const CsvToListConverter().convert(
-      csvData,
-      csvSettingsDetector: const FirstOccurrenceSettingsDetector(
-        fieldDelimiters: [',', ';', '\t', '|'],
-        textDelimiters: ['"', "'"],
-        eols: ['\r\n', '\n'],
-      ),
-      shouldParseNumbers: false,
-    );
+    return csv.decode(csvData).map((row) => row.map((e) => e.toString()).toList()).toList();
   }
 }
