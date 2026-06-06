@@ -303,7 +303,12 @@ class TransactionFormController extends ChangeNotifier {
     if (transactionValue == 0) {
       _amountTextController.text = '';
     } else {
-      final rounded = double.parse(transactionValue.toStringAsFixed(2));
+      final rounded = double.parse(
+        transactionValue.toStringAsFixed(
+          fromAccount?.currency.decimalPlaces ?? 2,
+        ),
+      );
+
       final isInt = rounded == rounded.roundToDouble();
       _amountTextController.text = isInt
           ? rounded.toInt().toString()
