@@ -31,7 +31,7 @@ dependencies:
   collection: ^1.18.0
   equatable: ^2.0.8
   path: ^1.8.2
-  async: ^2.10.0
+  async: ^2.13.1
   rxdart: ^0.28.0
 
   # i18n
