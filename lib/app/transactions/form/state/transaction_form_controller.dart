@@ -288,8 +288,6 @@ class TransactionFormController extends ChangeNotifier {
 
     final double parsed;
     try {
-      // Keep the sign so a leading "-" produces a refund/revert transaction
-      // (e.g. a positive expense or a negative income).
       parsed = evaluateExpression(raw);
     } catch (_) {
       return;
