@@ -275,7 +275,9 @@ class TransactionFormController extends ChangeNotifier {
 
   void _onAmountFieldTextChanged() {
     if (_amountFieldSyncGuard) return;
+
     final raw = _amountTextController.text.trim().replaceAll(',', '.');
+
     if (raw.isEmpty) {
       if (transactionValue != 0) {
         transactionValue = 0;
@@ -283,23 +285,25 @@ class TransactionFormController extends ChangeNotifier {
       }
       return;
     }
+
     final double parsed;
     try {
-      parsed = evaluateExpression(raw).abs();
+      parsed = evaluateExpression(raw);
     } catch (_) {
       return;
     }
+
     transactionValue = parsed;
     _safeNotify();
   }
 
   void syncAmountFieldFromTransactionValue() {
     _amountFieldSyncGuard = true;
-    final v = transactionValue.abs();
-    if (v == 0) {
+
+    if (transactionValue == 0) {
       _amountTextController.text = '';
     } else {
-      final rounded = double.parse(v.toStringAsFixed(2));
+      final rounded = double.parse(transactionValue.toStringAsFixed(2));
       final isInt = rounded == rounded.roundToDouble();
       _amountTextController.text = isInt
           ? rounded.toInt().toString()
