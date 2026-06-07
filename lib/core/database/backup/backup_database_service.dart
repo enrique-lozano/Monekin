@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:csv/csv.dart';
-import 'package:csv/csv_settings_autodetection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
@@ -103,9 +102,7 @@ class BackupDatabaseService {
         processedData.add(toAdd);
       }
     }
-    final csvData = ListToCsvConverter(
-      fieldDelimiter: fieldSeparator,
-    ).convert(processedData);
+    final csvData = Csv(fieldDelimiter: fieldSeparator).encode(processedData);
     return csvData;
   }
 
@@ -159,11 +156,35 @@ class BackupDatabaseService {
 
       db.markTablesUpdated(db.allTables);
     } catch (e) {
-      // Reset the DB as it was
+      Logger.printDebug('Error\n: $e');
+
+      if (e is MigrationFailedException) {
+        // Try restore the previous success migration:
+
+        final previousDbBackupPath = path.join(
+          path.dirname(dbPath),
+          '${path.basenameWithoutExtension(dbPath)}.pre_import_backup.db',
+        );
+
+        await File(
+          previousDbBackupPath,
+        ).writeAsBytes(currentDBContent, mode: FileMode.write);
+
+        Logger.printDebug(
+          'Previous database saved at $previousDbBackupPath before keeping '
+          'the partially-migrated import.',
+        );
+
+        db.markTablesUpdated(db.allTables);
+
+        // Surface the real cause instead of the generic message.
+        rethrow;
+      }
+
+      // The file isn't a valid Monekin database at all: fully revert so the
+      // app keeps working with the user's original data.
       await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
       db.markTablesUpdated(db.allTables);
-
-      Logger.printDebug('Error\n: $e');
 
       throw Exception('The database is invalid or could not be readed');
     }
@@ -189,14 +210,6 @@ class BackupDatabaseService {
   }
 
   Future<List<List<String>>> processCsv(String csvData) async {
-    return const CsvToListConverter().convert(
-      csvData,
-      csvSettingsDetector: const FirstOccurrenceSettingsDetector(
-        fieldDelimiters: [',', ';', '\t', '|'],
-        textDelimiters: ['"', "'"],
-        eols: ['\r\n', '\n'],
-      ),
-      shouldParseNumbers: false,
-    );
+    return csv.decode(csvData).map((row) => row.map((e) => e.toString()).toList()).toList();
   }
 }
