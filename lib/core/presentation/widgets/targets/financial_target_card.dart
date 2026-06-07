@@ -170,8 +170,6 @@ class TargetHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentYear = DateTime.now().year;
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,

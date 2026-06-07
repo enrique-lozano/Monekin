@@ -3,7 +3,6 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:monekin/app/debts/debt_form_page.dart';
 import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/i18n/generated/translations.g.dart';
 
 class DebtFabButton extends StatefulWidget {
   const DebtFabButton({super.key});
@@ -17,8 +16,6 @@ class _DebtFabButtonState extends State<DebtFabButton> {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
     return ExpandableFab(
       key: _fabKey,
       overlayStyle: ExpandableFabOverlayStyle(color: Colors.transparent),

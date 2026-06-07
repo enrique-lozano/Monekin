@@ -16,8 +16,8 @@ publish_to: 'none'
 version: 9.2.0+920000
 
 environment:
-  flutter: 3.35.6
-  sdk: '>=3.8.0 <4.0.0'
+  flutter: 3.44.1
+  sdk: '>=3.10.1 <4.0.0'
 
 dependencies:
   flutter:
