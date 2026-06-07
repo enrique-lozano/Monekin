@@ -159,11 +159,35 @@ class BackupDatabaseService {
 
       db.markTablesUpdated(db.allTables);
     } catch (e) {
-      // Reset the DB as it was
+      Logger.printDebug('Error\n: $e');
+
+      if (e is MigrationFailedException) {
+        // Try restore the previous success migration:
+
+        final previousDbBackupPath = path.join(
+          path.dirname(dbPath),
+          '${path.basenameWithoutExtension(dbPath)}.pre_import_backup.db',
+        );
+
+        await File(
+          previousDbBackupPath,
+        ).writeAsBytes(currentDBContent, mode: FileMode.write);
+
+        Logger.printDebug(
+          'Previous database saved at $previousDbBackupPath before keeping '
+          'the partially-migrated import.',
+        );
+
+        db.markTablesUpdated(db.allTables);
+
+        // Surface the real cause instead of the generic message.
+        rethrow;
+      }
+
+      // The file isn't a valid Monekin database at all: fully revert so the
+      // app keeps working with the user's original data.
       await File(dbPath).writeAsBytes(currentDBContent, mode: FileMode.write);
       db.markTablesUpdated(db.allTables);
-
-      Logger.printDebug('Error\n: $e');
 
       throw Exception('The database is invalid or could not be readed');
     }
