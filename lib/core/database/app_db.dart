@@ -52,9 +52,14 @@ class AppDB extends _$AppDB {
   final bool inMemory;
   final bool logStatements;
 
-  /// Get the path to the DB, that is `xxxx/xxxx/.../filename.db`
+  /// Get the path to the app user DB
   Future<String> get databasePath async =>
       join((await getApplicationDocumentsDirectory()).path, dbName);
+
+  /// Returns the database file instance
+  Future<File> getDatabaseFile() async {
+    return File(await databasePath);
+  }
 
   Future<void> migrateDB(int from, int to) async {
     Logger.printDebug('Executing migrations from previous version [$from]...');
@@ -62,26 +67,107 @@ class AppDB extends _$AppDB {
     await UserSettingService.instance.initializeGlobalStateMap();
     await AppDataService.instance.initializeGlobalStateMap();
 
+    // Get current database file and create a backup file
+    final dbFile = await getDatabaseFile();
+
+    if (!(await dbFile.exists())) {
+      throw Exception('Database file not found');
+    }
+
+    final backupFile = File(
+      join(
+        dirname(dbFile.path),
+        '${basenameWithoutExtension(dbFile.path)}.pre_migration_v$from.db',
+      ),
+    );
+
+    // A backup from a previous (failed) attempt may still be on disk. On
+    // Windows `File.copy` throws if the destination already exists, so
+    // remove any stale copy first.
+    if (await backupFile.exists()) {
+      await backupFile.delete();
+    }
+
+    await dbFile.copy(backupFile.path);
+    Logger.printDebug('Pre-migration backup created at ${backupFile.path}');
+
     for (var i = from + 1; i <= to; i++) {
       Logger.printDebug('Migrating database to v$i...');
 
-      String initialSQL = await rootBundle.loadString(
+      final String initialSQL = await rootBundle.loadString(
         'assets/sql/migrations/v$i.sql',
       );
 
-      await transaction(() async {
-        for (final sqlStatement in splitSQLStatements(initialSQL)) {
-          Logger.printDebug(
-            'Running migration statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
-          );
-          await customStatement(sqlStatement);
-        }
+      // `PRAGMA foreign_keys` is a silent no-op inside a transaction, so we
+      // strip any FK pragmas from the file and manage that state ourselves
+      // around the transaction below.
+      final statements = splitSQLStatements(initialSQL)
+          .where(
+            (s) => !RegExp(
+              r'^\s*PRAGMA\s+foreign_keys',
+              caseSensitive: false,
+            ).hasMatch(s),
+          )
+          .toList();
 
-        await AppDataService.instance.setItem(
-          AppDataKey.dbVersion,
-          i.toStringAsFixed(0),
+      // FK enforcement must be toggled OUTSIDE the transaction.
+      await customStatement('PRAGMA foreign_keys = OFF');
+
+      try {
+        // Apply the whole version atomically: every statement, the integrity
+        // check and the version bump commit together, or the transaction
+        // rolls all of them back. This guarantees the DB can never be left in
+        // a partially-migrated ("middle") state.
+        await transaction(() async {
+          for (final sqlStatement in statements) {
+            //Logger.printDebug(
+            //  'Running migration statement: ${sqlStatement.substring(0, sqlStatement.length > 30 ? 30 : sqlStatement.length)}...',
+            // );
+            await customStatement(sqlStatement);
+          }
+
+          // Verify the FK-off table rebuilds left no dangling references.
+          // Running this inside the transaction means a violation rolls the
+          // whole version back instead of committing a corrupt schema.
+          final fkViolations = await customSelect(
+            'PRAGMA foreign_key_check',
+          ).get();
+
+          if (fkViolations.isNotEmpty) {
+            throw StateError(
+              '${fkViolations.length} foreign key violation(s) detected '
+              'after migrating to v$i.',
+            );
+          }
+
+          // Bump the stored version in the SAME transaction as the schema
+          // changes, so version and schema are always consistent.
+          await AppDataService.instance.setItem(
+            AppDataKey.dbVersion,
+            i.toStringAsFixed(0),
+          );
+        });
+      } catch (e, stackTrace) {
+        // The failing version has been rolled back, so the DB is still at the
+        // last fully-applied version. Stop here instead of running later
+        // migrations on top of a version that never completed.
+        Logger.printDebug('ERROR migrating database to v$i: $e');
+
+        throw MigrationFailedException(
+          targetVersion: i,
+          cause: e,
+          stackTrace: stackTrace,
+          backupPath: await backupFile.exists() ? backupFile.path : null,
         );
-      });
+      } finally {
+        // Re-enable FK enforcement after the transaction, whatever happened.
+        await customStatement('PRAGMA foreign_keys = ON');
+      }
+    }
+
+    // Clean up the backup file if the migration was successful
+    if (await backupFile.exists()) {
+      await backupFile.delete();
     }
 
     Logger.printDebug('Migration completed!');
@@ -149,6 +235,40 @@ class AppDB extends _$AppDB {
       },
     );
   }
+}
+
+/// Thrown when a database migration could not be completed.
+///
+/// When this is raised the database is left at the last version that was
+/// applied successfully (the failing version is always rolled back), so the
+/// user's data stays consistent. Callers should surface a controlled error to
+/// the user instead of letting it crash the app silently.
+class MigrationFailedException implements Exception {
+  MigrationFailedException({
+    required this.targetVersion,
+    required this.cause,
+    this.stackTrace,
+    this.backupPath,
+  });
+
+  /// The version the migration was trying to reach when it failed.
+  final int targetVersion;
+
+  /// The underlying error that caused the migration to fail.
+  final Object cause;
+
+  final StackTrace? stackTrace;
+
+  /// Path to the pre-migration backup kept on disk, if one was created.
+  final String? backupPath;
+
+  @override
+  String toString() =>
+      'MigrationFailedException: failed to migrate the database to '
+      'v$targetVersion. The database was left at the last successfully '
+      'applied version.'
+      '${backupPath != null ? ' A backup was kept at $backupPath.' : ''} '
+      'Cause: $cause';
 }
 
 LazyDatabase openConnection(String dbName, {bool logStatements = false}) {

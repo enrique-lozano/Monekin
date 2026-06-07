@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
@@ -82,7 +83,32 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                         .catchError((err) {
                           RouteUtils.popRoute();
 
-                          MonekinSnackbar.error(SnackbarParams.fromError(err));
+                          if (err is MigrationFailedException) {
+                            MonekinSnackbar.error(
+                              SnackbarParams(
+                                "Failed to migrate the database to version ${err.targetVersion}",
+                                message:
+                                    "A backup was kept at ${err.backupPath}",
+                                duration: const Duration(seconds: 8),
+                                actions: [
+                                  MonekinSnackbarAction(
+                                    label: "Copy full error",
+                                    onPressed: () {
+                                      Clipboard.setData(
+                                        ClipboardData(
+                                          text: err.cause.toString(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            MonekinSnackbar.error(
+                              SnackbarParams.fromError(err),
+                            );
+                          }
                         });
                   });
                 },
@@ -127,8 +153,8 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
               ListTile(
                 title: Text(t.backup.about.size),
                 trailing: FutureBuilder(
-                  future: AppDB.instance.databasePath.then(
-                    (value) => File(value).stat(),
+                  future: AppDB.instance.getDatabaseFile().then(
+                    (value) => value.stat(),
                   ),
                   builder: (context, snapshot) {
                     final fileStats = snapshot.data;
