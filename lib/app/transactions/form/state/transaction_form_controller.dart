@@ -221,8 +221,13 @@ class TransactionFormController extends ChangeNotifier {
       _requestAmountFocusSoon();
       return;
     }
-    await selectCategory(context);
-    if (_disposed || !context.mounted) return;
+    // Only prompt for a category when none was prefilled by the form defaults
+    // (a default/last-used category being set means the user doesn't expect the
+    // picker sheet to open automatically).
+    if (selectedCategory == null) {
+      await selectCategory(context);
+      if (_disposed || !context.mounted) return;
+    }
     _requestAmountFocusSoon();
   }
 

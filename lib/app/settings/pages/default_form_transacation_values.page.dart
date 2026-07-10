@@ -153,7 +153,7 @@ class DefaultFormTransactionValuesPage extends StatelessWidget {
 
         return ListTile(
           title: Text(t.settings.transactions.default_values.default_category),
-          subtitle: Text(category.name),
+          subtitle: Text(snapshot.data?.name ?? t.general.unspecified),
           leading: IconDisplayer.fromCategory(
             context,
             category: category,
