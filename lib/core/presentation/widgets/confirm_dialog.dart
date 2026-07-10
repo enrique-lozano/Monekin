@@ -39,7 +39,7 @@ Future<bool?> confirmDialog(
     },
     transitionDuration: Duration(milliseconds: 200),
     useRootNavigator: useRootNavigator,
-    pageBuilder: (_, _, _) => PopScope(
+    pageBuilder: (dialogContext, _, _) => PopScope(
       canPop: canPop,
       child: AlertDialog.adaptive(
         title: Text(dialogTitle),
@@ -58,17 +58,18 @@ Future<bool?> confirmDialog(
               child: Text(t.ui_actions.cancel),
               onPressed: () {
                 Navigator.of(
-                  context,
+                  dialogContext,
                   rootNavigator: useRootNavigator,
                 ).pop(false);
-
-                // NOW EVERY TIME I PRESS THE PHYSICAL DEVICE BACK BUTTON, IT CLOSES THE APP
               },
             ),
           TextButton(
             child: Text(confirmationText ?? t.general.understood),
             onPressed: () {
-              Navigator.of(context, rootNavigator: useRootNavigator).pop(true);
+              Navigator.of(
+                dialogContext,
+                rootNavigator: useRootNavigator,
+              ).pop(true);
             },
           ),
         ],
