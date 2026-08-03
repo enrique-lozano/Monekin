@@ -517,10 +517,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return CardWithHeader(
       title: t.stats.by_categories,
       bodyPadding: const EdgeInsets.fromLTRB(8, 0, 8, 12),
-      onHeaderActionTap: () => RouteUtils.pushRoute(
-        StatsPage(
-          dateRangeService: dateRangeService,
-          initialIndex: StatsTab.distribution,
+      headerAction: CardHeaderAction(
+        onTap: () => RouteUtils.pushRoute(
+          StatsPage(
+            dateRangeService: dateRangeService,
+            initialIndex: StatsTab.distribution,
+          ),
         ),
       ),
       body: PieChartByCategories(datePeriodState: dateRangeService),

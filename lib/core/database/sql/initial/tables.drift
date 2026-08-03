@@ -11,6 +11,7 @@ import './../../../models/date-utils/periodicity.dart';
 import './../../../models/category/category.dart';
 import './../../../models/account/account.dart';
 import './../../../models/asset/asset_type.enum.dart';
+import './../../../models/asset/security_type.enum.dart';
 import './../../../models/goal/goal.dart';
 import './../../../models/goal/goal_type.enum.dart';
 import './../../../models/debt/debt_direction.enum.dart';
@@ -68,8 +69,16 @@ CREATE TABLE IF NOT EXISTS accounts (
 
     description TEXT,
 
-    -- The type of the account. It can be 'normal', 'investment'...
-    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('normal', 'saving', 'investment')),
+    -- The type of the account. 'money' (cash only) or 'investment' (cash + holdings)
+    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('money', 'investment')),
+
+    -- Whether this money account behaves as a savings account (money only in/out via transfers)
+    isSaving BOOLEAN NOT NULL DEFAULT 0,
+
+    -- Only meaningful for investment accounts. 'transactions': positions are
+    -- derived from buy/sell trades (type 'N'). 'holdings': positions are entered
+    -- as manual snapshots (quantity + avg cost) by date, no trades allowed.
+    trackingMode ENUMNAME(AccountTrackingMode) NOT NULL DEFAULT 'transactions' CHECK(trackingMode IN ('transactions', 'holdings')),
     
     iconId TEXT NOT NULL,
 
@@ -133,10 +142,13 @@ CREATE TABLE IF NOT EXISTS assets (
     -- Date this asset was acquired or created
     creationDate DATETIME NOT NULL,
 
-    assetType ENUMNAME(AssetType) NOT NULL DEFAULT 'other' CHECK(assetType IN ('stocks', 'funds', 'crypto', 'real_estate', 'vehicle', 'jewelry_art', 'other')),
+    assetType TEXT NOT NULL DEFAULT 'other' CHECK(assetType IN ('real_estate', 'vehicle', 'precious_metal', 'jewelry_art', 'other')) MAPPED BY `CustomEnumConverter(AssetType.values)`,
 
     -- When set, this asset rolls into the linked account total (e.g. brokerage portfolio)
-    linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE
+    linkedAccountID TEXT REFERENCES accounts(id) ON DELETE SET NULL ON UPDATE CASCADE,
+
+    -- Optional liability (e.g. a mortgage) linked to this physical asset
+    linkedDebtId TEXT REFERENCES debts(id) ON DELETE SET NULL ON UPDATE CASCADE
 ) AS AssetInDB;
 
 CREATE UNIQUE INDEX idx_valuations_assetId_date ON valuations(assetId, date DESC);
@@ -153,6 +165,167 @@ CREATE TABLE IF NOT EXISTS valuations (
     -- Value at the time of this snapshot, in the currency of the account or asset
     value REAL NOT NULL,
 ) AS ValuationInDB;
+
+-- A financial instrument (stock, fund, crypto) that can be held inside
+-- investment accounts. The price is shared across all holdings of this security.
+CREATE TABLE IF NOT EXISTS securities (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- Display name (e.g. "Apple Inc.", "Vanguard FTSE All-World")
+    name TEXT NOT NULL,
+
+    -- The type of security: stock, fund or crypto
+    type ENUMNAME(SecurityType) NOT NULL DEFAULT 'stock' CHECK(type IN ('stock', 'fund', 'crypto')),
+
+    -- Reference/quote currency of this security
+    currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Optional ticker/symbol (e.g. AAPL, VWCE, BTC)
+    ticker TEXT,
+
+    -- Latest known price per unit, updated manually (offline-first)
+    currentPrice REAL,
+
+    -- Date of the latest price
+    priceDate DATETIME,
+
+    iconId TEXT,
+    color TEXT
+) AS SecurityInDB;
+
+-- Manual price observations for a security over time, used to draw the real
+-- price chart. A new row is recorded each time the price is updated. The most
+-- recent point is mirrored into `securities.currentPrice`/`priceDate`.
+CREATE TABLE IF NOT EXISTS securityPriceHistory (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    securityID TEXT NOT NULL REFERENCES securities(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Date of this price observation
+    date DATETIME NOT NULL,
+
+    -- Price per unit at that date, in the security currency
+    price REAL NOT NULL
+) AS SecurityPriceHistoryInDB;
+
+-- A user-configurable classification dimension used to categorize securities
+-- for portfolio-composition reporting (e.g. Asset Class, Region, Sector, Risk).
+-- Built-in taxonomies ship seeded (`isSystem = 1`) but remain fully editable.
+CREATE TABLE IF NOT EXISTS taxonomies (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    -- Display name of the taxonomy
+    name TEXT NOT NULL,
+
+    -- Accent color used in charts/legends
+    color TEXT NOT NULL DEFAULT '#8abceb',
+
+    description TEXT,
+
+    -- Whether this taxonomy ships built-in with the app (vs user-created)
+    isSystem BOOLEAN NOT NULL DEFAULT 0,
+
+    -- When true, a security may be assigned to at most one category of this
+    -- taxonomy (e.g. Risk). When false, a security can be split across several
+    -- categories with weights (e.g. Regions).
+    isSingleSelect BOOLEAN NOT NULL DEFAULT 0,
+
+    -- The display order when listing taxonomies
+    displayOrder INTEGER NOT NULL DEFAULT 0
+) AS TaxonomyInDB;
+
+-- One option inside a taxonomy. Categories may be hierarchical via parentID
+-- (e.g. Region: Europe -> Northern Europe).
+CREATE TABLE IF NOT EXISTS taxonomyCategories (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    taxonomyID TEXT NOT NULL REFERENCES taxonomies(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Parent category within the same taxonomy (if any)
+    parentID TEXT REFERENCES taxonomyCategories(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    name TEXT NOT NULL,
+
+    -- Display color of this category in charts/legends
+    color TEXT NOT NULL DEFAULT '#808080',
+
+    description TEXT,
+
+    -- The display order when listing categories inside their taxonomy
+    displayOrder INTEGER NOT NULL DEFAULT 0
+) AS TaxonomyCategoryInDB;
+
+CREATE INDEX IF NOT EXISTS idx_taxonomyCategories_taxonomyID ON taxonomyCategories(taxonomyID);
+
+-- Assigns a security to a taxonomy category with a weight in basis points
+-- (0..10000, where 10000 = 100%). A security can be split across several
+-- categories of a multi-select taxonomy (e.g. a world fund 60% US / 40% Europe).
+CREATE TABLE IF NOT EXISTS securityTaxonomyAssignments (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    securityID TEXT NOT NULL REFERENCES securities(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    taxonomyID TEXT NOT NULL REFERENCES taxonomies(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    categoryID TEXT NOT NULL REFERENCES taxonomyCategories(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Weight in basis points (10000 = 100%)
+    weight INTEGER NOT NULL DEFAULT 10000 CHECK(weight >= 0 AND weight <= 10000),
+
+    UNIQUE(securityID, taxonomyID, categoryID)
+) AS SecurityTaxonomyAssignmentInDB;
+
+CREATE INDEX IF NOT EXISTS idx_securityTaxonomyAssignments_securityID ON securityTaxonomyAssignments(securityID);
+CREATE INDEX IF NOT EXISTS idx_securityTaxonomyAssignments_taxonomyID ON securityTaxonomyAssignments(taxonomyID);
+
+-- A position of a given security inside a given account: how many units are held
+-- and the weighted-average cost paid per unit.
+CREATE TABLE IF NOT EXISTS holdings (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    accountID TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    securityID TEXT NOT NULL REFERENCES securities(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Number of units currently held
+    quantity REAL NOT NULL DEFAULT 0,
+
+    -- Weighted-average cost paid per unit, in the security currency
+    avgCostPrice REAL NOT NULL DEFAULT 0,
+
+    UNIQUE(accountID, securityID)
+) AS HoldingInDB;
+
+-- A portfolio snapshot: the complete state of an investment account's holdings
+-- on a given date (used by accounts in 'holdings' tracking mode). Each snapshot
+-- groups zero or more position rows (see `holdingSnapshots`); a snapshot with no
+-- positions represents an empty portfolio on that date. When valuing the account
+-- at a date, the most recent snapshot on or before that date defines the entire
+-- set of holdings (securities absent from it are considered not held).
+CREATE TABLE IF NOT EXISTS accountSnapshots (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    accountID TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Date of this portfolio snapshot (one snapshot per account per date)
+    date DATETIME NOT NULL,
+
+    UNIQUE(accountID, date)
+) AS AccountSnapshotInDB;
+
+-- A single position inside a portfolio snapshot: how many units of a security
+-- were held and the weighted-average cost paid, as of the parent snapshot date.
+CREATE TABLE IF NOT EXISTS holdingSnapshots (
+    id TEXT NOT NULL PRIMARY KEY,
+
+    snapshotID TEXT NOT NULL REFERENCES accountSnapshots(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    securityID TEXT NOT NULL REFERENCES securities(id) ON DELETE CASCADE ON UPDATE CASCADE,
+
+    -- Number of units held at the snapshot date
+    quantity REAL NOT NULL,
+
+    -- Weighted-average cost paid per unit, in the security currency
+    avgCostPrice REAL NOT NULL,
+
+    UNIQUE(snapshotID, securityID)
+) AS HoldingSnapshotInDB;
 
 CREATE TABLE IF NOT EXISTS transactions (
   id TEXT NOT NULL PRIMARY KEY,
@@ -174,8 +347,17 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- Income, expense, transfer, or investment (asset cash leg; excluded from I/E stats)
   type TEXT NOT NULL CHECK(type IN ('E', 'I', 'T', 'N')) MAPPED BY `CustomEnumConverter(TransactionType.values)`,
 
-  -- Optional link to an asset (buy/sell / investment flows)
+  -- Optional link to an asset (legacy buy/sell / investment flows)
   assetID TEXT REFERENCES assets(id) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  -- Optional link to a security (holdings buy/sell flows)
+  securityID TEXT REFERENCES securities(id) ON DELETE SET NULL ON UPDATE CASCADE,
+
+  -- For security trades: number of units bought (+) or sold (-)
+  quantity REAL,
+
+  -- For security trades: price paid/received per unit
+  pricePerUnit REAL,
   
   status TEXT CHECK(status IN ('V', 'P', 'R', 'U')) MAPPED BY `CustomEnumConverter(TransactionStatus.values)`,
   categoryID TEXT REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -216,9 +398,10 @@ CREATE TABLE IF NOT EXISTS transactions (
   -- Number of payments remaining. This value must dicrease by one in the case a new payment is done within this rule. If this field or the `endDate` field is not specified, the recurring transaction will never end.
   remainingTransactions INTEGER,
 
-  -- Transfer/I/E: exactly one of category vs receiving. Investment (N): assetID set, receiving null, category null.
+  -- Transfer/I/E: exactly one of category vs receiving. Investment (N): asset or
+  -- security set, receiving null, category null.
   CHECK (
-    (type = 'N' AND assetID IS NOT NULL AND receivingAccountID IS NULL AND categoryID IS NULL AND valueInDestiny IS NULL)
+    (type = 'N' AND (assetID IS NOT NULL OR securityID IS NOT NULL) AND receivingAccountID IS NULL AND categoryID IS NULL AND valueInDestiny IS NULL)
     OR
     (type != 'N' AND ((receivingAccountID IS NULL) != (categoryID IS NULL)))
   ),

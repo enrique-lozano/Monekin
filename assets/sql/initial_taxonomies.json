@@ -1,0 +1,98 @@
+[
+  {
+    "id": "asset_classes",
+    "names": { "en": "Asset Classes", "es": "Clases de activo" },
+    "color": "#879a39",
+    "isSingleSelect": false,
+    "categories": [
+      { "id": "ac_cash", "names": { "en": "Cash", "es": "Efectivo" }, "color": "#879a39" },
+      { "id": "ac_equity", "names": { "en": "Equity", "es": "Renta variable" }, "color": "#4385be" },
+      { "id": "ac_fixed_income", "names": { "en": "Fixed Income", "es": "Renta fija" }, "color": "#d14d41" },
+      { "id": "ac_real_estate", "names": { "en": "Real Estate", "es": "Inmobiliario" }, "color": "#da702c" },
+      { "id": "ac_commodities", "names": { "en": "Commodities", "es": "Materias primas" }, "color": "#d0a215" },
+      { "id": "ac_alternatives", "names": { "en": "Alternatives", "es": "Alternativos" }, "color": "#8b7ec8" },
+      { "id": "ac_digital", "names": { "en": "Digital Assets", "es": "Activos digitales" }, "color": "#ce5d97" }
+    ]
+  },
+  {
+    "id": "regions",
+    "names": { "en": "Regions", "es": "Regiones" },
+    "color": "#8b7ec8",
+    "isSingleSelect": false,
+    "categories": [
+      {
+        "id": "r_europe",
+        "names": { "en": "Europe", "es": "Europa" },
+        "color": "#4385be",
+        "children": [
+          { "id": "r_eu_north", "names": { "en": "Northern Europe", "es": "Europa del Norte" }, "color": "#66a0c8" },
+          { "id": "r_eu_west", "names": { "en": "Western Europe", "es": "Europa Occidental" }, "color": "#92bfdb" },
+          { "id": "r_eu_east", "names": { "en": "Eastern Europe", "es": "Europa del Este" }, "color": "#abcfe2" },
+          { "id": "r_eu_south", "names": { "en": "Southern Europe", "es": "Europa del Sur" }, "color": "#c6dde8" }
+        ]
+      },
+      {
+        "id": "r_americas",
+        "names": { "en": "Americas", "es": "América" },
+        "color": "#8b7ec8",
+        "children": [
+          { "id": "r_am_north", "names": { "en": "Northern America", "es": "América del Norte" }, "color": "#a699d0" },
+          { "id": "r_am_latin", "names": { "en": "Latin America", "es": "Latinoamérica" }, "color": "#cbc4e2" },
+          { "id": "r_am_caribbean", "names": { "en": "Caribbean", "es": "Caribe" }, "color": "#e0dbf0" }
+        ]
+      },
+      {
+        "id": "r_asia",
+        "names": { "en": "Asia", "es": "Asia" },
+        "color": "#ce5d97",
+        "children": [
+          { "id": "r_as_east", "names": { "en": "Eastern Asia", "es": "Asia Oriental" }, "color": "#d989b3" },
+          { "id": "r_as_south", "names": { "en": "Southern Asia", "es": "Asia Meridional" }, "color": "#e4a9c9" },
+          { "id": "r_as_southeast", "names": { "en": "South-eastern Asia", "es": "Sudeste Asiático" }, "color": "#efc8dd" },
+          { "id": "r_as_west", "names": { "en": "Western Asia", "es": "Asia Occidental" }, "color": "#f5daeb" }
+        ]
+      },
+      {
+        "id": "r_africa",
+        "names": { "en": "Africa", "es": "África" },
+        "color": "#3aa99f",
+        "children": [
+          { "id": "r_af_north", "names": { "en": "Northern Africa", "es": "África del Norte" }, "color": "#6cc0b8" },
+          { "id": "r_af_sub", "names": { "en": "Sub-Saharan Africa", "es": "África Subsahariana" }, "color": "#9ed6d0" }
+        ]
+      },
+      { "id": "r_oceania", "names": { "en": "Oceania", "es": "Oceanía" }, "color": "#879a39" }
+    ]
+  },
+  {
+    "id": "industries",
+    "names": { "en": "Industries", "es": "Sectores" },
+    "color": "#da702c",
+    "isSingleSelect": false,
+    "categories": [
+      { "id": "ind_energy", "names": { "en": "Energy", "es": "Energía" }, "color": "#d0a215" },
+      { "id": "ind_materials", "names": { "en": "Materials", "es": "Materiales" }, "color": "#bc5215" },
+      { "id": "ind_industrials", "names": { "en": "Industrials", "es": "Industria" }, "color": "#879a39" },
+      { "id": "ind_cons_disc", "names": { "en": "Consumer Discretionary", "es": "Consumo discrecional" }, "color": "#3aa99f" },
+      { "id": "ind_cons_staples", "names": { "en": "Consumer Staples", "es": "Consumo básico" }, "color": "#4385be" },
+      { "id": "ind_health", "names": { "en": "Health Care", "es": "Salud" }, "color": "#8b7ec8" },
+      { "id": "ind_financials", "names": { "en": "Financials", "es": "Finanzas" }, "color": "#ce5d97" },
+      { "id": "ind_it", "names": { "en": "Information Technology", "es": "Tecnología" }, "color": "#5e409d" },
+      { "id": "ind_comm", "names": { "en": "Communication Services", "es": "Comunicaciones" }, "color": "#a02f6f" },
+      { "id": "ind_utilities", "names": { "en": "Utilities", "es": "Servicios públicos" }, "color": "#d14d41" },
+      { "id": "ind_real_estate", "names": { "en": "Real Estate", "es": "Inmobiliario" }, "color": "#da702c" }
+    ]
+  },
+  {
+    "id": "risk",
+    "names": { "en": "Risk Category", "es": "Nivel de riesgo" },
+    "color": "#d14d41",
+    "isSingleSelect": true,
+    "categories": [
+      { "id": "risk_unknown", "names": { "en": "Unknown", "es": "Desconocido" }, "color": "#878580" },
+      { "id": "risk_low", "names": { "en": "Low", "es": "Bajo" }, "color": "#879a39" },
+      { "id": "risk_medium", "names": { "en": "Medium", "es": "Medio" }, "color": "#d0a215" },
+      { "id": "risk_high", "names": { "en": "High", "es": "Alto" }, "color": "#d14d41" }
+    ]
+  }
+]

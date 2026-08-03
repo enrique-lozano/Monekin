@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -79,11 +80,33 @@ class TransactionService {
   }
 
   Future<int> deleteTransaction(String transactionId) async {
+    final tx = await (db.select(
+      db.transactions,
+    )..where((tbl) => tbl.id.equals(transactionId))).getSingleOrNull();
+
     final n = await (db.delete(
       db.transactions,
     )..where((tbl) => tbl.id.equals(transactionId))).go();
 
     db.markTablesUpdated([db.accounts]);
+
+    // When a security trade (type 'N') is removed, rebuild the affected holding
+    // so its quantity/avg cost stay consistent. Only for transactions-mode
+    // accounts; holdings-mode positions are driven by snapshots, not trades.
+    if (tx != null &&
+        tx.type == TransactionType.investment &&
+        tx.securityID != null) {
+      final account = await (db.select(
+        db.accounts,
+      )..where((a) => a.id.equals(tx.accountID))).getSingleOrNull();
+
+      if (account?.trackingMode == AccountTrackingMode.transactions) {
+        await HoldingService.instance.recomputeHolding(
+          accountId: tx.accountID,
+          securityId: tx.securityID!,
+        );
+      }
+    }
 
     return n;
   }
@@ -306,7 +329,7 @@ class TransactionService {
     return AccountService.instance
         .getAccounts(
           predicate: (acc, curr) => buildDriftExpr([
-            acc.type.equalsValue(AccountType.saving).not(),
+            acc.isSaving.equals(false),
             acc.closingDate.isNull(),
           ]),
           limit: 1,

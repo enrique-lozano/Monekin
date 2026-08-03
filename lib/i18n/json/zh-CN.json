@@ -880,20 +880,8 @@
     },
     "DETAILS": {
       "select_account": "选择一个帐户",
-      "buy": "买",
-      "sell": "卖",
       "update_value": "更新值",
-      "trade_sheet_title_buy": "购买（添加到资产）",
-      "trade_sheet_title_sell": "出售（减少资产）",
-      "trade_sheet_update_value_info": "该资产的价值将更新为 {{ value }}",
-      "trade_sheet_update_linked_asset_value_info": "与此交易关联的资产的价值将更新为 {{ value }}",
-      "trade_sheet_update_following_valuations": "稍后更新估值",
-      "trade_sheet_update_following_valuations_description": "调整所选日期之后的资产估值。",
-      "trade_sheet_valuation_current_value_label": "当前价值",
-      "trade_sheet_valuation_create_new_title": "创建新估值",
-      "trade_sheet_valuation_adjust_current_description": "调整资产的当前价值",
       "trade_form_asset_column": "资产",
-      "trade_valuation_notice": "该日期的估值将更新以反映这一金额。",
       "notes_optional": "注释（可选）",
       "performance_sheet_title": "表现",
       "performance_return": "区间回报",
@@ -945,18 +933,10 @@
     },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Link transaction",
-        "modal_title": "Link transaction to asset",
-        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+        "button_label": "Link transaction"
       },
       "link_transaction": {
-        "title": "Link existing income or expense",
-        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
         "success": "Transaction linked successfully"
-      },
-      "new_investment_transaction": {
-        "title": "Create investment transaction",
-        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
       }
     }
   },

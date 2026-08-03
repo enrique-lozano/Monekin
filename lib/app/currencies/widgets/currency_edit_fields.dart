@@ -86,6 +86,16 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
         _currencyType != widget.currency.currencyType;
   }
 
+  Widget _fieldHint(String text) => Padding(
+    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+    child: Text(
+      text,
+      style: Theme.of(
+        context,
+      ).textTheme.bodySmall?.copyWith(color: AppColors.of(context).textHint),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -122,13 +132,31 @@ class CurrencyEditFieldsState extends State<CurrencyEditFields> {
           title: Text(t.currencies.types.display),
           subtitle: Text(_currencyType.name.toUpperCase()),
           enabled: !widget.isInFormMode,
-          trailing: widget.isInFormMode || !widget.currency.isDefault
-              ? const Icon(Icons.arrow_drop_down)
-              : null,
+          trailing: widget.currency.isDefault
+              ? Icon(
+                  Icons.lock_outline_rounded,
+                  size: 18,
+                  color: AppColors.of(context).textHint,
+                )
+              : const Icon(Icons.arrow_drop_down),
           onTap: widget.currency.isDefault ? null : selectCurrencyType,
         ),
+        if (widget.currency.isDefault)
+          _fieldHint(t.currencies.details.type_locked_hint),
 
-        if (!widget.currency.isDefault)
+        if (widget.currency.isDefault) ...[
+          ListTile(
+            enabled: false,
+            title: Text(t.currencies.currency_form.code),
+            subtitle: Text(_codeController.text),
+            trailing: Icon(
+              Icons.lock_outline_rounded,
+              size: 18,
+              color: AppColors.of(context).textHint,
+            ),
+          ),
+          _fieldHint(t.currencies.details.code_locked_hint),
+        ] else
           ListTile(
             title: Text(t.currencies.currency_form.code),
             trailing: SizedBox(

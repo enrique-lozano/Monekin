@@ -14,7 +14,7 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import '../../../core/models/transaction/transaction_type.enum.dart';
 
 abstract class AccountDetailsActions {
-  static Future<void> _navigateToTransferOrWarn(
+  static Future<void> navigateToTransferOrWarn(
     BuildContext context, {
     Account? fromAccount,
     Account? toAccount,
@@ -85,7 +85,7 @@ abstract class AccountDetailsActions {
           icon: TransactionType.transfer.icon,
           onClick: account.isClosed
               ? null
-              : () => _navigateToTransferOrWarn(context, fromAccount: account),
+              : () => navigateToTransferOrWarn(context, fromAccount: account),
         ),
       );
     } else {
@@ -95,7 +95,7 @@ abstract class AccountDetailsActions {
           icon: Icons.add_rounded,
           onClick: account.isClosed
               ? null
-              : () => _navigateToTransferOrWarn(context, toAccount: account),
+              : () => navigateToTransferOrWarn(context, toAccount: account),
         ),
       );
 
@@ -105,7 +105,7 @@ abstract class AccountDetailsActions {
           icon: Icons.remove_rounded,
           onClick: account.isClosed
               ? null
-              : () => _navigateToTransferOrWarn(context, fromAccount: account),
+              : () => navigateToTransferOrWarn(context, fromAccount: account),
         ),
       );
     }

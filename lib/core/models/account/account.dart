@@ -9,56 +9,76 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// An enum representing the type of an account.
 enum AccountType {
-  // * Do not modify the names of the elements of this enums. These are used in the DB //
+  // * Do not modify the names of the elements of this enum. These are used in the DB //
+  // * Renaming a value requires a DB migration (see assets/sql/migrations).           //
 
-  /// A normal type of account. The default type
-  normal,
+  /// A cash/money account. Holds cash only. The default type.
+  money,
 
-  /// Similar to a normal account but with some differences in the UI
-  saving,
-
-  /// An investment account (broker, crypto exchange, ETF portfolio, etc.).
-  /// Its current value is tracked via manual valuations rather than individual transactions.
+  /// An investment account (broker, crypto exchange, portfolio) that holds cash
+  /// plus financial holdings (securities).
   investment;
 
-  IconData get icon {
-    if (this == normal) {
-      return Icons.wallet;
-    } else if (this == saving) {
-      return Icons.savings;
-    } else if (this == investment) {
-      return Icons.trending_up_rounded;
-    }
-
-    return Icons.question_mark;
-  }
+  IconData get icon => switch (this) {
+    AccountType.money => Icons.wallet,
+    AccountType.investment => Icons.trending_up_rounded,
+  };
 
   String title(BuildContext context) {
     final t = Translations.of(context);
 
-    if (this == normal) {
-      return t.account.types.normal;
-    } else if (this == saving) {
-      return t.account.types.saving;
-    } else if (this == investment) {
-      return t.account.types.investment;
-    }
-
-    return '';
+    return switch (this) {
+      AccountType.money => t.account.types.money,
+      AccountType.investment => t.account.types.investment,
+    };
   }
 
   String description(BuildContext context) {
     final t = Translations.of(context);
 
-    if (this == normal) {
-      return t.account.types.normal_descr;
-    } else if (this == saving) {
-      return t.account.types.saving_descr;
-    } else if (this == investment) {
-      return t.account.types.investment_descr;
-    }
+    return switch (this) {
+      AccountType.money => t.account.types.money_descr,
+      AccountType.investment => t.account.types.investment_descr,
+    };
+  }
+}
 
-    return '';
+/// How an investment account keeps track of its holdings. Only meaningful for
+/// [AccountType.investment] accounts.
+enum AccountTrackingMode {
+  // * Do not modify the names of the elements of this enum. These are used in the DB //
+  // * Renaming a value requires a DB migration (see assets/sql/migrations).           //
+
+  /// Positions are derived from buy/sell trades (type 'N' transactions), using a
+  /// weighted-average cost basis.
+  transactions,
+
+  /// Positions are entered directly as manual snapshots (quantity + avg cost) at
+  /// given dates. No buy/sell trades are recorded.
+  holdings;
+
+  IconData get icon => switch (this) {
+    AccountTrackingMode.transactions => Icons.receipt_long_rounded,
+    AccountTrackingMode.holdings => Icons.pie_chart_rounded,
+  };
+
+  String title(BuildContext context) {
+    final t = Translations.of(context);
+
+    return switch (this) {
+      AccountTrackingMode.transactions => t.account.tracking_modes.transactions,
+      AccountTrackingMode.holdings => t.account.tracking_modes.holdings,
+    };
+  }
+
+  String description(BuildContext context) {
+    final t = Translations.of(context);
+
+    return switch (this) {
+      AccountTrackingMode.transactions =>
+        t.account.tracking_modes.transactions_descr,
+      AccountTrackingMode.holdings => t.account.tracking_modes.holdings_descr,
+    };
   }
 }
 
@@ -72,6 +92,8 @@ class Account extends AccountInDB {
     required super.displayOrder,
     required super.iconId,
     required this.currency,
+    super.isSaving = false,
+    super.trackingMode = AccountTrackingMode.transactions,
     super.closingDate,
     super.description,
     super.iban,
@@ -136,6 +158,8 @@ class Account extends AccountInDB {
     iconId: account.iconId,
     closingDate: account.closingDate,
     type: account.type,
+    isSaving: account.isSaving,
+    trackingMode: account.trackingMode,
     color: account.color,
   );
 }

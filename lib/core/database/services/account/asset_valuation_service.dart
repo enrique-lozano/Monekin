@@ -211,6 +211,22 @@ class AssetValuationService {
     return -transaction.value;
   }
 
+  /// A transaction is the asset's **acquisition** record when it's linked to
+  /// that asset and dated on or before the asset's creation date. There is no
+  /// dedicated DB column for this: it's purely derived from the dates so that
+  /// old data (and the "link existing transaction" flow) keep working.
+  ///
+  /// Its amount already makes up [AssetInDB.initialValue], so it must be
+  /// excluded from valuation-delta sums (e.g. net-contribution calculations)
+  /// to avoid double counting.
+  static bool isAcquisitionTransaction(
+    TransactionInDB transaction,
+    AssetInDB asset,
+  ) {
+    return transaction.assetID == asset.id &&
+        !transaction.date.isAfter(asset.creationDate);
+  }
+
   static bool statusAffectsValuation(TransactionInDB t) {
     final s = t.status;
     if (s == TransactionStatus.pending || s == TransactionStatus.voided) {

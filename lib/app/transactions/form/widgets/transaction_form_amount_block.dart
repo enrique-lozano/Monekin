@@ -3,7 +3,6 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -81,7 +80,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
     TransactionFormController c,
   ) {
     final from = c.fromAccount;
-    final displayCurrency = c.amountDisplayCurrency ?? from?.currency;
+    final displayCurrency = from?.currency;
 
     if (from == null || displayCurrency == null) {
       return const SizedBox.shrink();
@@ -135,12 +134,9 @@ class TransactionFormAmountBlock extends StatelessWidget {
     BuildContext context,
     TransactionFormController c,
   ) {
-    final inv = c.isAssetTradeInvestment;
-    final baseColor = inv
-        ? c.investmentAccent(context)
-        : c.transactionType.color(context);
+    final baseColor = c.transactionType.color(context);
     final ctrl = c.amountTextController;
-    final cur = c.amountDisplayCurrency ?? c.fromAccount?.currency;
+    final cur = c.fromAccount?.currency;
     final decimals = cur?.decimalPlaces ?? 2;
     double fontSize = 48;
     switch (ctrl.text.length) {
@@ -171,11 +167,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: Icon(
-                inv
-                    ? (c.investmentIsBuy
-                          ? TransactionType.income.mathIcon
-                          : TransactionType.expense.mathIcon)
-                    : c.transactionType.mathIcon,
+                c.transactionType.mathIcon,
                 color: c.foregroundColor(context),
                 size: 26,
               ),

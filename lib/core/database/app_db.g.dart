@@ -493,8 +493,31 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         type: DriftSqlType.string,
         requiredDuringInsert: true,
         $customConstraints:
-            'NOT NULL CHECK (type IN (\'normal\', \'saving\', \'investment\'))',
+            'NOT NULL CHECK (type IN (\'money\', \'investment\'))',
       ).withConverter<AccountType>(Accounts.$convertertype);
+  static const VerificationMeta _isSavingMeta = const VerificationMeta(
+    'isSaving',
+  );
+  late final GeneratedColumn<bool> isSaving = GeneratedColumn<bool>(
+    'isSaving',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  late final GeneratedColumnWithTypeConverter<AccountTrackingMode, String>
+  trackingMode = GeneratedColumn<String>(
+    'trackingMode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT \'transactions\' CHECK (trackingMode IN (\'transactions\', \'holdings\'))',
+    defaultValue: const CustomExpression('\'transactions\''),
+  ).withConverter<AccountTrackingMode>(Accounts.$convertertrackingMode);
   static const VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
   late final GeneratedColumn<String> iconId = GeneratedColumn<String>(
     'iconId',
@@ -573,6 +596,8 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     date,
     description,
     type,
+    isSaving,
+    trackingMode,
     iconId,
     displayOrder,
     color,
@@ -629,6 +654,12 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
           data['description']!,
           _descriptionMeta,
         ),
+      );
+    }
+    if (data.containsKey('isSaving')) {
+      context.handle(
+        _isSavingMeta,
+        isSaving.isAcceptableOrUnknown(data['isSaving']!, _isSavingMeta),
       );
     }
     if (data.containsKey('iconId')) {
@@ -720,6 +751,16 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
           data['${effectivePrefix}type'],
         )!,
       ),
+      isSaving: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}isSaving'],
+      )!,
+      trackingMode: Accounts.$convertertrackingMode.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}trackingMode'],
+        )!,
+      ),
       iconId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}iconId'],
@@ -758,6 +799,10 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
 
   static JsonTypeConverter2<AccountType, String, String> $convertertype =
       const EnumNameConverter<AccountType>(AccountType.values);
+  static JsonTypeConverter2<AccountTrackingMode, String, String>
+  $convertertrackingMode = const EnumNameConverter<AccountTrackingMode>(
+    AccountTrackingMode.values,
+  );
   @override
   bool get dontWriteConstraints => true;
 }
@@ -773,8 +818,16 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final DateTime date;
   final String? description;
 
-  /// The type of the account. It can be 'normal', 'investment'...
+  /// The type of the account. 'money' (cash only) or 'investment' (cash + holdings)
   final AccountType type;
+
+  /// Whether this money account behaves as a savings account (money only in/out via transfers)
+  final bool isSaving;
+
+  /// Only meaningful for investment accounts. 'transactions': positions are
+  /// derived from buy/sell trades (type 'N'). 'holdings': positions are entered
+  /// as manual snapshots (quantity + avg cost) by date, no trades allowed.
+  final AccountTrackingMode trackingMode;
   final String iconId;
 
   /// The display order when listing accounts
@@ -797,6 +850,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     required this.date,
     this.description,
     required this.type,
+    required this.isSaving,
+    required this.trackingMode,
     required this.iconId,
     required this.displayOrder,
     this.color,
@@ -817,6 +872,12 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     }
     {
       map['type'] = Variable<String>(Accounts.$convertertype.toSql(type));
+    }
+    map['isSaving'] = Variable<bool>(isSaving);
+    {
+      map['trackingMode'] = Variable<String>(
+        Accounts.$convertertrackingMode.toSql(trackingMode),
+      );
     }
     map['iconId'] = Variable<String>(iconId);
     map['displayOrder'] = Variable<int>(displayOrder);
@@ -846,6 +907,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ? const Value.absent()
           : Value(description),
       type: Value(type),
+      isSaving: Value(isSaving),
+      trackingMode: Value(trackingMode),
       iconId: Value(iconId),
       displayOrder: Value(displayOrder),
       color: color == null && nullToAbsent
@@ -876,6 +939,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       type: Accounts.$convertertype.fromJson(
         serializer.fromJson<String>(json['type']),
       ),
+      isSaving: serializer.fromJson<bool>(json['isSaving']),
+      trackingMode: Accounts.$convertertrackingMode.fromJson(
+        serializer.fromJson<String>(json['trackingMode']),
+      ),
       iconId: serializer.fromJson<String>(json['iconId']),
       displayOrder: serializer.fromJson<int>(json['displayOrder']),
       color: serializer.fromJson<String?>(json['color']),
@@ -895,6 +962,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'date': serializer.toJson<DateTime>(date),
       'description': serializer.toJson<String?>(description),
       'type': serializer.toJson<String>(Accounts.$convertertype.toJson(type)),
+      'isSaving': serializer.toJson<bool>(isSaving),
+      'trackingMode': serializer.toJson<String>(
+        Accounts.$convertertrackingMode.toJson(trackingMode),
+      ),
       'iconId': serializer.toJson<String>(iconId),
       'displayOrder': serializer.toJson<int>(displayOrder),
       'color': serializer.toJson<String?>(color),
@@ -912,6 +983,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     DateTime? date,
     Value<String?> description = const Value.absent(),
     AccountType? type,
+    bool? isSaving,
+    AccountTrackingMode? trackingMode,
     String? iconId,
     int? displayOrder,
     Value<String?> color = const Value.absent(),
@@ -926,6 +999,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     date: date ?? this.date,
     description: description.present ? description.value : this.description,
     type: type ?? this.type,
+    isSaving: isSaving ?? this.isSaving,
+    trackingMode: trackingMode ?? this.trackingMode,
     iconId: iconId ?? this.iconId,
     displayOrder: displayOrder ?? this.displayOrder,
     color: color.present ? color.value : this.color,
@@ -944,6 +1019,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ? data.description.value
           : this.description,
       type: data.type.present ? data.type.value : this.type,
+      isSaving: data.isSaving.present ? data.isSaving.value : this.isSaving,
+      trackingMode: data.trackingMode.present
+          ? data.trackingMode.value
+          : this.trackingMode,
       iconId: data.iconId.present ? data.iconId.value : this.iconId,
       displayOrder: data.displayOrder.present
           ? data.displayOrder.value
@@ -969,6 +1048,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('date: $date, ')
           ..write('description: $description, ')
           ..write('type: $type, ')
+          ..write('isSaving: $isSaving, ')
+          ..write('trackingMode: $trackingMode, ')
           ..write('iconId: $iconId, ')
           ..write('displayOrder: $displayOrder, ')
           ..write('color: $color, ')
@@ -988,6 +1069,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     date,
     description,
     type,
+    isSaving,
+    trackingMode,
     iconId,
     displayOrder,
     color,
@@ -1006,6 +1089,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.date == this.date &&
           other.description == this.description &&
           other.type == this.type &&
+          other.isSaving == this.isSaving &&
+          other.trackingMode == this.trackingMode &&
           other.iconId == this.iconId &&
           other.displayOrder == this.displayOrder &&
           other.color == this.color &&
@@ -1022,6 +1107,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<DateTime> date;
   final Value<String?> description;
   final Value<AccountType> type;
+  final Value<bool> isSaving;
+  final Value<AccountTrackingMode> trackingMode;
   final Value<String> iconId;
   final Value<int> displayOrder;
   final Value<String?> color;
@@ -1037,6 +1124,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.date = const Value.absent(),
     this.description = const Value.absent(),
     this.type = const Value.absent(),
+    this.isSaving = const Value.absent(),
+    this.trackingMode = const Value.absent(),
     this.iconId = const Value.absent(),
     this.displayOrder = const Value.absent(),
     this.color = const Value.absent(),
@@ -1053,6 +1142,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     required DateTime date,
     this.description = const Value.absent(),
     required AccountType type,
+    this.isSaving = const Value.absent(),
+    this.trackingMode = const Value.absent(),
     required String iconId,
     required int displayOrder,
     this.color = const Value.absent(),
@@ -1076,6 +1167,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<DateTime>? date,
     Expression<String>? description,
     Expression<String>? type,
+    Expression<bool>? isSaving,
+    Expression<String>? trackingMode,
     Expression<String>? iconId,
     Expression<int>? displayOrder,
     Expression<String>? color,
@@ -1092,6 +1185,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (date != null) 'date': date,
       if (description != null) 'description': description,
       if (type != null) 'type': type,
+      if (isSaving != null) 'isSaving': isSaving,
+      if (trackingMode != null) 'trackingMode': trackingMode,
       if (iconId != null) 'iconId': iconId,
       if (displayOrder != null) 'displayOrder': displayOrder,
       if (color != null) 'color': color,
@@ -1110,6 +1205,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Value<DateTime>? date,
     Value<String?>? description,
     Value<AccountType>? type,
+    Value<bool>? isSaving,
+    Value<AccountTrackingMode>? trackingMode,
     Value<String>? iconId,
     Value<int>? displayOrder,
     Value<String?>? color,
@@ -1126,6 +1223,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       date: date ?? this.date,
       description: description ?? this.description,
       type: type ?? this.type,
+      isSaving: isSaving ?? this.isSaving,
+      trackingMode: trackingMode ?? this.trackingMode,
       iconId: iconId ?? this.iconId,
       displayOrder: displayOrder ?? this.displayOrder,
       color: color ?? this.color,
@@ -1157,6 +1256,14 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     }
     if (type.present) {
       map['type'] = Variable<String>(Accounts.$convertertype.toSql(type.value));
+    }
+    if (isSaving.present) {
+      map['isSaving'] = Variable<bool>(isSaving.value);
+    }
+    if (trackingMode.present) {
+      map['trackingMode'] = Variable<String>(
+        Accounts.$convertertrackingMode.toSql(trackingMode.value),
+      );
     }
     if (iconId.present) {
       map['iconId'] = Variable<String>(iconId.value);
@@ -1194,6 +1301,8 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('date: $date, ')
           ..write('description: $description, ')
           ..write('type: $type, ')
+          ..write('isSaving: $isSaving, ')
+          ..write('trackingMode: $trackingMode, ')
           ..write('iconId: $iconId, ')
           ..write('displayOrder: $displayOrder, ')
           ..write('color: $color, ')
@@ -1808,7 +1917,7 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
     $customConstraints:
-        'NOT NULL DEFAULT \'other\' CHECK (assetType IN (\'stocks\', \'funds\', \'crypto\', \'real_estate\', \'vehicle\', \'jewelry_art\', \'other\'))',
+        'NOT NULL DEFAULT \'other\' CHECK (assetType IN (\'real_estate\', \'vehicle\', \'precious_metal\', \'jewelry_art\', \'other\'))',
     defaultValue: const CustomExpression('\'other\''),
   ).withConverter<AssetType>(Assets.$converterassetType);
   static const VerificationMeta _linkedAccountIDMeta = const VerificationMeta(
@@ -1823,6 +1932,18 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     $customConstraints:
         'REFERENCES accounts(id)ON UPDATE CASCADE ON DELETE SET NULL',
   );
+  static const VerificationMeta _linkedDebtIdMeta = const VerificationMeta(
+    'linkedDebtId',
+  );
+  late final GeneratedColumn<String> linkedDebtId = GeneratedColumn<String>(
+    'linkedDebtId',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'REFERENCES debts(id)ON UPDATE CASCADE ON DELETE SET NULL',
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -1833,6 +1954,7 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     creationDate,
     assetType,
     linkedAccountID,
+    linkedDebtId,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1905,6 +2027,15 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
         ),
       );
     }
+    if (data.containsKey('linkedDebtId')) {
+      context.handle(
+        _linkedDebtIdMeta,
+        linkedDebtId.isAcceptableOrUnknown(
+          data['linkedDebtId']!,
+          _linkedDebtIdMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -1948,6 +2079,10 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}linkedAccountID'],
       ),
+      linkedDebtId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}linkedDebtId'],
+      ),
     );
   }
 
@@ -1956,8 +2091,8 @@ class Assets extends Table with TableInfo<Assets, AssetInDB> {
     return Assets(attachedDatabase, alias);
   }
 
-  static JsonTypeConverter2<AssetType, String, String> $converterassetType =
-      const EnumNameConverter<AssetType>(AssetType.values);
+  static TypeConverter<AssetType, String> $converterassetType =
+      CustomEnumConverter(AssetType.values);
   @override
   bool get dontWriteConstraints => true;
 }
@@ -1983,6 +2118,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
 
   /// When set, this asset rolls into the linked account total (e.g. brokerage portfolio)
   final String? linkedAccountID;
+
+  /// Optional liability (e.g. a mortgage) linked to this physical asset
+  final String? linkedDebtId;
   const AssetInDB({
     required this.id,
     required this.name,
@@ -1992,6 +2130,7 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     required this.creationDate,
     required this.assetType,
     this.linkedAccountID,
+    this.linkedDebtId,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -2012,6 +2151,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     if (!nullToAbsent || linkedAccountID != null) {
       map['linkedAccountID'] = Variable<String>(linkedAccountID);
     }
+    if (!nullToAbsent || linkedDebtId != null) {
+      map['linkedDebtId'] = Variable<String>(linkedDebtId);
+    }
     return map;
   }
 
@@ -2029,6 +2171,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       linkedAccountID: linkedAccountID == null && nullToAbsent
           ? const Value.absent()
           : Value(linkedAccountID),
+      linkedDebtId: linkedDebtId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(linkedDebtId),
     );
   }
 
@@ -2044,10 +2189,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       currencyId: serializer.fromJson<String>(json['currencyId']),
       initialValue: serializer.fromJson<double>(json['initialValue']),
       creationDate: serializer.fromJson<DateTime>(json['creationDate']),
-      assetType: Assets.$converterassetType.fromJson(
-        serializer.fromJson<String>(json['assetType']),
-      ),
+      assetType: serializer.fromJson<AssetType>(json['assetType']),
       linkedAccountID: serializer.fromJson<String?>(json['linkedAccountID']),
+      linkedDebtId: serializer.fromJson<String?>(json['linkedDebtId']),
     );
   }
   @override
@@ -2060,10 +2204,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       'currencyId': serializer.toJson<String>(currencyId),
       'initialValue': serializer.toJson<double>(initialValue),
       'creationDate': serializer.toJson<DateTime>(creationDate),
-      'assetType': serializer.toJson<String>(
-        Assets.$converterassetType.toJson(assetType),
-      ),
+      'assetType': serializer.toJson<AssetType>(assetType),
       'linkedAccountID': serializer.toJson<String?>(linkedAccountID),
+      'linkedDebtId': serializer.toJson<String?>(linkedDebtId),
     };
   }
 
@@ -2076,6 +2219,7 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     DateTime? creationDate,
     AssetType? assetType,
     Value<String?> linkedAccountID = const Value.absent(),
+    Value<String?> linkedDebtId = const Value.absent(),
   }) => AssetInDB(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -2087,6 +2231,7 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     linkedAccountID: linkedAccountID.present
         ? linkedAccountID.value
         : this.linkedAccountID,
+    linkedDebtId: linkedDebtId.present ? linkedDebtId.value : this.linkedDebtId,
   );
   AssetInDB copyWithCompanion(AssetsCompanion data) {
     return AssetInDB(
@@ -2108,6 +2253,9 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
       linkedAccountID: data.linkedAccountID.present
           ? data.linkedAccountID.value
           : this.linkedAccountID,
+      linkedDebtId: data.linkedDebtId.present
+          ? data.linkedDebtId.value
+          : this.linkedDebtId,
     );
   }
 
@@ -2121,7 +2269,8 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
           ..write('initialValue: $initialValue, ')
           ..write('creationDate: $creationDate, ')
           ..write('assetType: $assetType, ')
-          ..write('linkedAccountID: $linkedAccountID')
+          ..write('linkedAccountID: $linkedAccountID, ')
+          ..write('linkedDebtId: $linkedDebtId')
           ..write(')'))
         .toString();
   }
@@ -2136,6 +2285,7 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
     creationDate,
     assetType,
     linkedAccountID,
+    linkedDebtId,
   );
   @override
   bool operator ==(Object other) =>
@@ -2148,7 +2298,8 @@ class AssetInDB extends DataClass implements Insertable<AssetInDB> {
           other.initialValue == this.initialValue &&
           other.creationDate == this.creationDate &&
           other.assetType == this.assetType &&
-          other.linkedAccountID == this.linkedAccountID);
+          other.linkedAccountID == this.linkedAccountID &&
+          other.linkedDebtId == this.linkedDebtId);
 }
 
 class AssetsCompanion extends UpdateCompanion<AssetInDB> {
@@ -2160,6 +2311,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
   final Value<DateTime> creationDate;
   final Value<AssetType> assetType;
   final Value<String?> linkedAccountID;
+  final Value<String?> linkedDebtId;
   final Value<int> rowid;
   const AssetsCompanion({
     this.id = const Value.absent(),
@@ -2170,6 +2322,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     this.creationDate = const Value.absent(),
     this.assetType = const Value.absent(),
     this.linkedAccountID = const Value.absent(),
+    this.linkedDebtId = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AssetsCompanion.insert({
@@ -2181,6 +2334,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     required DateTime creationDate,
     this.assetType = const Value.absent(),
     this.linkedAccountID = const Value.absent(),
+    this.linkedDebtId = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -2195,6 +2349,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     Expression<DateTime>? creationDate,
     Expression<String>? assetType,
     Expression<String>? linkedAccountID,
+    Expression<String>? linkedDebtId,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -2206,6 +2361,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
       if (creationDate != null) 'creationDate': creationDate,
       if (assetType != null) 'assetType': assetType,
       if (linkedAccountID != null) 'linkedAccountID': linkedAccountID,
+      if (linkedDebtId != null) 'linkedDebtId': linkedDebtId,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -2219,6 +2375,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     Value<DateTime>? creationDate,
     Value<AssetType>? assetType,
     Value<String?>? linkedAccountID,
+    Value<String?>? linkedDebtId,
     Value<int>? rowid,
   }) {
     return AssetsCompanion(
@@ -2230,6 +2387,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
       creationDate: creationDate ?? this.creationDate,
       assetType: assetType ?? this.assetType,
       linkedAccountID: linkedAccountID ?? this.linkedAccountID,
+      linkedDebtId: linkedDebtId ?? this.linkedDebtId,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -2263,6 +2421,9 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
     if (linkedAccountID.present) {
       map['linkedAccountID'] = Variable<String>(linkedAccountID.value);
     }
+    if (linkedDebtId.present) {
+      map['linkedDebtId'] = Variable<String>(linkedDebtId.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -2280,6 +2441,7 @@ class AssetsCompanion extends UpdateCompanion<AssetInDB> {
           ..write('creationDate: $creationDate, ')
           ..write('assetType: $assetType, ')
           ..write('linkedAccountID: $linkedAccountID, ')
+          ..write('linkedDebtId: $linkedDebtId, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -2595,6 +2757,586 @@ class ValuationsCompanion extends UpdateCompanion<ValuationInDB> {
           ..write('assetId: $assetId, ')
           ..write('date: $date, ')
           ..write('value: $value, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class Securities extends Table with TableInfo<Securities, SecurityInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Securities(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  late final GeneratedColumnWithTypeConverter<SecurityType, String>
+  type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT \'stock\' CHECK (type IN (\'stock\', \'fund\', \'crypto\'))',
+    defaultValue: const CustomExpression('\'stock\''),
+  ).withConverter<SecurityType>(Securities.$convertertype);
+  static const VerificationMeta _currencyIdMeta = const VerificationMeta(
+    'currencyId',
+  );
+  late final GeneratedColumn<String> currencyId = GeneratedColumn<String>(
+    'currencyId',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES currencies(code)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _tickerMeta = const VerificationMeta('ticker');
+  late final GeneratedColumn<String> ticker = GeneratedColumn<String>(
+    'ticker',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _currentPriceMeta = const VerificationMeta(
+    'currentPrice',
+  );
+  late final GeneratedColumn<double> currentPrice = GeneratedColumn<double>(
+    'currentPrice',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _priceDateMeta = const VerificationMeta(
+    'priceDate',
+  );
+  late final GeneratedColumn<DateTime> priceDate = GeneratedColumn<DateTime>(
+    'priceDate',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _iconIdMeta = const VerificationMeta('iconId');
+  late final GeneratedColumn<String> iconId = GeneratedColumn<String>(
+    'iconId',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+    'color',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    type,
+    currencyId,
+    ticker,
+    currentPrice,
+    priceDate,
+    iconId,
+    color,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'securities';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SecurityInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('currencyId')) {
+      context.handle(
+        _currencyIdMeta,
+        currencyId.isAcceptableOrUnknown(data['currencyId']!, _currencyIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_currencyIdMeta);
+    }
+    if (data.containsKey('ticker')) {
+      context.handle(
+        _tickerMeta,
+        ticker.isAcceptableOrUnknown(data['ticker']!, _tickerMeta),
+      );
+    }
+    if (data.containsKey('currentPrice')) {
+      context.handle(
+        _currentPriceMeta,
+        currentPrice.isAcceptableOrUnknown(
+          data['currentPrice']!,
+          _currentPriceMeta,
+        ),
+      );
+    }
+    if (data.containsKey('priceDate')) {
+      context.handle(
+        _priceDateMeta,
+        priceDate.isAcceptableOrUnknown(data['priceDate']!, _priceDateMeta),
+      );
+    }
+    if (data.containsKey('iconId')) {
+      context.handle(
+        _iconIdMeta,
+        iconId.isAcceptableOrUnknown(data['iconId']!, _iconIdMeta),
+      );
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SecurityInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SecurityInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      type: Securities.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}type'],
+        )!,
+      ),
+      currencyId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}currencyId'],
+      )!,
+      ticker: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ticker'],
+      ),
+      currentPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}currentPrice'],
+      ),
+      priceDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}priceDate'],
+      ),
+      iconId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}iconId'],
+      ),
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color'],
+      ),
+    );
+  }
+
+  @override
+  Securities createAlias(String alias) {
+    return Securities(attachedDatabase, alias);
+  }
+
+  static JsonTypeConverter2<SecurityType, String, String> $convertertype =
+      const EnumNameConverter<SecurityType>(SecurityType.values);
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
+  final String id;
+
+  /// Display name (e.g. "Apple Inc.", "Vanguard FTSE All-World")
+  final String name;
+
+  /// The type of security: stock, fund or crypto
+  final SecurityType type;
+
+  /// Reference/quote currency of this security
+  final String currencyId;
+
+  /// Optional ticker/symbol (e.g. AAPL, VWCE, BTC)
+  final String? ticker;
+
+  /// Latest known price per unit, updated manually (offline-first)
+  final double? currentPrice;
+
+  /// Date of the latest price
+  final DateTime? priceDate;
+  final String? iconId;
+  final String? color;
+  const SecurityInDB({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.currencyId,
+    this.ticker,
+    this.currentPrice,
+    this.priceDate,
+    this.iconId,
+    this.color,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    {
+      map['type'] = Variable<String>(Securities.$convertertype.toSql(type));
+    }
+    map['currencyId'] = Variable<String>(currencyId);
+    if (!nullToAbsent || ticker != null) {
+      map['ticker'] = Variable<String>(ticker);
+    }
+    if (!nullToAbsent || currentPrice != null) {
+      map['currentPrice'] = Variable<double>(currentPrice);
+    }
+    if (!nullToAbsent || priceDate != null) {
+      map['priceDate'] = Variable<DateTime>(priceDate);
+    }
+    if (!nullToAbsent || iconId != null) {
+      map['iconId'] = Variable<String>(iconId);
+    }
+    if (!nullToAbsent || color != null) {
+      map['color'] = Variable<String>(color);
+    }
+    return map;
+  }
+
+  SecuritiesCompanion toCompanion(bool nullToAbsent) {
+    return SecuritiesCompanion(
+      id: Value(id),
+      name: Value(name),
+      type: Value(type),
+      currencyId: Value(currencyId),
+      ticker: ticker == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ticker),
+      currentPrice: currentPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currentPrice),
+      priceDate: priceDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(priceDate),
+      iconId: iconId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(iconId),
+      color: color == null && nullToAbsent
+          ? const Value.absent()
+          : Value(color),
+    );
+  }
+
+  factory SecurityInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SecurityInDB(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      type: Securities.$convertertype.fromJson(
+        serializer.fromJson<String>(json['type']),
+      ),
+      currencyId: serializer.fromJson<String>(json['currencyId']),
+      ticker: serializer.fromJson<String?>(json['ticker']),
+      currentPrice: serializer.fromJson<double?>(json['currentPrice']),
+      priceDate: serializer.fromJson<DateTime?>(json['priceDate']),
+      iconId: serializer.fromJson<String?>(json['iconId']),
+      color: serializer.fromJson<String?>(json['color']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'type': serializer.toJson<String>(Securities.$convertertype.toJson(type)),
+      'currencyId': serializer.toJson<String>(currencyId),
+      'ticker': serializer.toJson<String?>(ticker),
+      'currentPrice': serializer.toJson<double?>(currentPrice),
+      'priceDate': serializer.toJson<DateTime?>(priceDate),
+      'iconId': serializer.toJson<String?>(iconId),
+      'color': serializer.toJson<String?>(color),
+    };
+  }
+
+  SecurityInDB copyWith({
+    String? id,
+    String? name,
+    SecurityType? type,
+    String? currencyId,
+    Value<String?> ticker = const Value.absent(),
+    Value<double?> currentPrice = const Value.absent(),
+    Value<DateTime?> priceDate = const Value.absent(),
+    Value<String?> iconId = const Value.absent(),
+    Value<String?> color = const Value.absent(),
+  }) => SecurityInDB(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    type: type ?? this.type,
+    currencyId: currencyId ?? this.currencyId,
+    ticker: ticker.present ? ticker.value : this.ticker,
+    currentPrice: currentPrice.present ? currentPrice.value : this.currentPrice,
+    priceDate: priceDate.present ? priceDate.value : this.priceDate,
+    iconId: iconId.present ? iconId.value : this.iconId,
+    color: color.present ? color.value : this.color,
+  );
+  SecurityInDB copyWithCompanion(SecuritiesCompanion data) {
+    return SecurityInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      type: data.type.present ? data.type.value : this.type,
+      currencyId: data.currencyId.present
+          ? data.currencyId.value
+          : this.currencyId,
+      ticker: data.ticker.present ? data.ticker.value : this.ticker,
+      currentPrice: data.currentPrice.present
+          ? data.currentPrice.value
+          : this.currentPrice,
+      priceDate: data.priceDate.present ? data.priceDate.value : this.priceDate,
+      iconId: data.iconId.present ? data.iconId.value : this.iconId,
+      color: data.color.present ? data.color.value : this.color,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityInDB(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('currencyId: $currencyId, ')
+          ..write('ticker: $ticker, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('priceDate: $priceDate, ')
+          ..write('iconId: $iconId, ')
+          ..write('color: $color')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    type,
+    currencyId,
+    ticker,
+    currentPrice,
+    priceDate,
+    iconId,
+    color,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SecurityInDB &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.type == this.type &&
+          other.currencyId == this.currencyId &&
+          other.ticker == this.ticker &&
+          other.currentPrice == this.currentPrice &&
+          other.priceDate == this.priceDate &&
+          other.iconId == this.iconId &&
+          other.color == this.color);
+}
+
+class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<SecurityType> type;
+  final Value<String> currencyId;
+  final Value<String?> ticker;
+  final Value<double?> currentPrice;
+  final Value<DateTime?> priceDate;
+  final Value<String?> iconId;
+  final Value<String?> color;
+  final Value<int> rowid;
+  const SecuritiesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.type = const Value.absent(),
+    this.currencyId = const Value.absent(),
+    this.ticker = const Value.absent(),
+    this.currentPrice = const Value.absent(),
+    this.priceDate = const Value.absent(),
+    this.iconId = const Value.absent(),
+    this.color = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SecuritiesCompanion.insert({
+    required String id,
+    required String name,
+    this.type = const Value.absent(),
+    required String currencyId,
+    this.ticker = const Value.absent(),
+    this.currentPrice = const Value.absent(),
+    this.priceDate = const Value.absent(),
+    this.iconId = const Value.absent(),
+    this.color = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       currencyId = Value(currencyId);
+  static Insertable<SecurityInDB> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? type,
+    Expression<String>? currencyId,
+    Expression<String>? ticker,
+    Expression<double>? currentPrice,
+    Expression<DateTime>? priceDate,
+    Expression<String>? iconId,
+    Expression<String>? color,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (type != null) 'type': type,
+      if (currencyId != null) 'currencyId': currencyId,
+      if (ticker != null) 'ticker': ticker,
+      if (currentPrice != null) 'currentPrice': currentPrice,
+      if (priceDate != null) 'priceDate': priceDate,
+      if (iconId != null) 'iconId': iconId,
+      if (color != null) 'color': color,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SecuritiesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<SecurityType>? type,
+    Value<String>? currencyId,
+    Value<String?>? ticker,
+    Value<double?>? currentPrice,
+    Value<DateTime?>? priceDate,
+    Value<String?>? iconId,
+    Value<String?>? color,
+    Value<int>? rowid,
+  }) {
+    return SecuritiesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      currencyId: currencyId ?? this.currencyId,
+      ticker: ticker ?? this.ticker,
+      currentPrice: currentPrice ?? this.currentPrice,
+      priceDate: priceDate ?? this.priceDate,
+      iconId: iconId ?? this.iconId,
+      color: color ?? this.color,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(
+        Securities.$convertertype.toSql(type.value),
+      );
+    }
+    if (currencyId.present) {
+      map['currencyId'] = Variable<String>(currencyId.value);
+    }
+    if (ticker.present) {
+      map['ticker'] = Variable<String>(ticker.value);
+    }
+    if (currentPrice.present) {
+      map['currentPrice'] = Variable<double>(currentPrice.value);
+    }
+    if (priceDate.present) {
+      map['priceDate'] = Variable<DateTime>(priceDate.value);
+    }
+    if (iconId.present) {
+      map['iconId'] = Variable<String>(iconId.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecuritiesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('type: $type, ')
+          ..write('currencyId: $currencyId, ')
+          ..write('ticker: $ticker, ')
+          ..write('currentPrice: $currentPrice, ')
+          ..write('priceDate: $priceDate, ')
+          ..write('iconId: $iconId, ')
+          ..write('color: $color, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -3180,6 +3922,40 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     $customConstraints:
         'REFERENCES assets(id)ON UPDATE CASCADE ON DELETE SET NULL',
   );
+  static const VerificationMeta _securityIDMeta = const VerificationMeta(
+    'securityID',
+  );
+  late final GeneratedColumn<String> securityID = GeneratedColumn<String>(
+    'securityID',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'REFERENCES securities(id)ON UPDATE CASCADE ON DELETE SET NULL',
+  );
+  static const VerificationMeta _quantityMeta = const VerificationMeta(
+    'quantity',
+  );
+  late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
+    'quantity',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _pricePerUnitMeta = const VerificationMeta(
+    'pricePerUnit',
+  );
+  late final GeneratedColumn<double> pricePerUnit = GeneratedColumn<double>(
+    'pricePerUnit',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
   late final GeneratedColumnWithTypeConverter<TransactionStatus?, String>
   status = GeneratedColumn<String>(
     'status',
@@ -3331,6 +4107,9 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     notes,
     type,
     assetID,
+    securityID,
+    quantity,
+    pricePerUnit,
     status,
     categoryID,
     debtId,
@@ -3402,6 +4181,27 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
       context.handle(
         _assetIDMeta,
         assetID.isAcceptableOrUnknown(data['assetID']!, _assetIDMeta),
+      );
+    }
+    if (data.containsKey('securityID')) {
+      context.handle(
+        _securityIDMeta,
+        securityID.isAcceptableOrUnknown(data['securityID']!, _securityIDMeta),
+      );
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(
+        _quantityMeta,
+        quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta),
+      );
+    }
+    if (data.containsKey('pricePerUnit')) {
+      context.handle(
+        _pricePerUnitMeta,
+        pricePerUnit.isAcceptableOrUnknown(
+          data['pricePerUnit']!,
+          _pricePerUnitMeta,
+        ),
       );
     }
     if (data.containsKey('categoryID')) {
@@ -3531,6 +4331,18 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}assetID'],
       ),
+      securityID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}securityID'],
+      ),
+      quantity: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}quantity'],
+      ),
+      pricePerUnit: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}pricePerUnit'],
+      ),
       status: Transactions.$converterstatusn.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.string,
@@ -3611,7 +4423,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
   );
   @override
   List<String> get customConstraints => const [
-    'CHECK((type = \'N\' AND assetID IS NOT NULL AND receivingAccountID IS NULL AND categoryID IS NULL AND valueInDestiny IS NULL)OR(type != \'N\' AND((receivingAccountID IS NULL)!=(categoryID IS NULL))))',
+    'CHECK((type = \'N\' AND(assetID IS NOT NULL OR securityID IS NOT NULL)AND receivingAccountID IS NULL AND categoryID IS NULL AND valueInDestiny IS NULL)OR(type != \'N\' AND((receivingAccountID IS NULL)!=(categoryID IS NULL))))',
     'CHECK((intervalPeriod IS NULL)==(intervalEach IS NULL))',
     'CHECK((intervalPeriod IS NOT NULL)OR(endDate IS NULL))',
     'CHECK((intervalPeriod IS NOT NULL)OR(remainingTransactions IS NULL))',
@@ -3642,8 +4454,17 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
   /// Income, expense, transfer, or investment (asset cash leg; excluded from I/E stats)
   final TransactionType type;
 
-  /// Optional link to an asset (buy/sell / investment flows)
+  /// Optional link to an asset (legacy buy/sell / investment flows)
   final String? assetID;
+
+  /// Optional link to a security (holdings buy/sell flows)
+  final String? securityID;
+
+  /// For security trades: number of units bought (+) or sold (-)
+  final double? quantity;
+
+  /// For security trades: price paid/received per unit
+  final double? pricePerUnit;
   final TransactionStatus? status;
   final String? categoryID;
 
@@ -3688,6 +4509,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     this.notes,
     required this.type,
     this.assetID,
+    this.securityID,
+    this.quantity,
+    this.pricePerUnit,
     this.status,
     this.categoryID,
     this.debtId,
@@ -3720,6 +4544,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     }
     if (!nullToAbsent || assetID != null) {
       map['assetID'] = Variable<String>(assetID);
+    }
+    if (!nullToAbsent || securityID != null) {
+      map['securityID'] = Variable<String>(securityID);
+    }
+    if (!nullToAbsent || quantity != null) {
+      map['quantity'] = Variable<double>(quantity);
+    }
+    if (!nullToAbsent || pricePerUnit != null) {
+      map['pricePerUnit'] = Variable<double>(pricePerUnit);
     }
     if (!nullToAbsent || status != null) {
       map['status'] = Variable<String>(
@@ -3781,6 +4614,15 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       assetID: assetID == null && nullToAbsent
           ? const Value.absent()
           : Value(assetID),
+      securityID: securityID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(securityID),
+      quantity: quantity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(quantity),
+      pricePerUnit: pricePerUnit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pricePerUnit),
       status: status == null && nullToAbsent
           ? const Value.absent()
           : Value(status),
@@ -3835,6 +4677,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       notes: serializer.fromJson<String?>(json['notes']),
       type: serializer.fromJson<TransactionType>(json['type']),
       assetID: serializer.fromJson<String?>(json['assetID']),
+      securityID: serializer.fromJson<String?>(json['securityID']),
+      quantity: serializer.fromJson<double?>(json['quantity']),
+      pricePerUnit: serializer.fromJson<double?>(json['pricePerUnit']),
       status: serializer.fromJson<TransactionStatus?>(json['status']),
       categoryID: serializer.fromJson<String?>(json['categoryID']),
       debtId: serializer.fromJson<String?>(json['debtId']),
@@ -3868,6 +4713,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'notes': serializer.toJson<String?>(notes),
       'type': serializer.toJson<TransactionType>(type),
       'assetID': serializer.toJson<String?>(assetID),
+      'securityID': serializer.toJson<String?>(securityID),
+      'quantity': serializer.toJson<double?>(quantity),
+      'pricePerUnit': serializer.toJson<double?>(pricePerUnit),
       'status': serializer.toJson<TransactionStatus?>(status),
       'categoryID': serializer.toJson<String?>(categoryID),
       'debtId': serializer.toJson<String?>(debtId),
@@ -3895,6 +4743,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     Value<String?> notes = const Value.absent(),
     TransactionType? type,
     Value<String?> assetID = const Value.absent(),
+    Value<String?> securityID = const Value.absent(),
+    Value<double?> quantity = const Value.absent(),
+    Value<double?> pricePerUnit = const Value.absent(),
     Value<TransactionStatus?> status = const Value.absent(),
     Value<String?> categoryID = const Value.absent(),
     Value<String?> debtId = const Value.absent(),
@@ -3917,6 +4768,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     notes: notes.present ? notes.value : this.notes,
     type: type ?? this.type,
     assetID: assetID.present ? assetID.value : this.assetID,
+    securityID: securityID.present ? securityID.value : this.securityID,
+    quantity: quantity.present ? quantity.value : this.quantity,
+    pricePerUnit: pricePerUnit.present ? pricePerUnit.value : this.pricePerUnit,
     status: status.present ? status.value : this.status,
     categoryID: categoryID.present ? categoryID.value : this.categoryID,
     debtId: debtId.present ? debtId.value : this.debtId,
@@ -3949,6 +4803,13 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       notes: data.notes.present ? data.notes.value : this.notes,
       type: data.type.present ? data.type.value : this.type,
       assetID: data.assetID.present ? data.assetID.value : this.assetID,
+      securityID: data.securityID.present
+          ? data.securityID.value
+          : this.securityID,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      pricePerUnit: data.pricePerUnit.present
+          ? data.pricePerUnit.value
+          : this.pricePerUnit,
       status: data.status.present ? data.status.value : this.status,
       categoryID: data.categoryID.present
           ? data.categoryID.value
@@ -3994,6 +4855,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ..write('notes: $notes, ')
           ..write('type: $type, ')
           ..write('assetID: $assetID, ')
+          ..write('securityID: $securityID, ')
+          ..write('quantity: $quantity, ')
+          ..write('pricePerUnit: $pricePerUnit, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('debtId: $debtId, ')
@@ -4021,6 +4885,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     notes,
     type,
     assetID,
+    securityID,
+    quantity,
+    pricePerUnit,
     status,
     categoryID,
     debtId,
@@ -4047,6 +4914,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           other.notes == this.notes &&
           other.type == this.type &&
           other.assetID == this.assetID &&
+          other.securityID == this.securityID &&
+          other.quantity == this.quantity &&
+          other.pricePerUnit == this.pricePerUnit &&
           other.status == this.status &&
           other.categoryID == this.categoryID &&
           other.debtId == this.debtId &&
@@ -4071,6 +4941,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<String?> notes;
   final Value<TransactionType> type;
   final Value<String?> assetID;
+  final Value<String?> securityID;
+  final Value<double?> quantity;
+  final Value<double?> pricePerUnit;
   final Value<TransactionStatus?> status;
   final Value<String?> categoryID;
   final Value<String?> debtId;
@@ -4094,6 +4967,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.notes = const Value.absent(),
     this.type = const Value.absent(),
     this.assetID = const Value.absent(),
+    this.securityID = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.pricePerUnit = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.debtId = const Value.absent(),
@@ -4118,6 +4994,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.notes = const Value.absent(),
     required TransactionType type,
     this.assetID = const Value.absent(),
+    this.securityID = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.pricePerUnit = const Value.absent(),
     this.status = const Value.absent(),
     this.categoryID = const Value.absent(),
     this.debtId = const Value.absent(),
@@ -4146,6 +5025,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Expression<String>? notes,
     Expression<String>? type,
     Expression<String>? assetID,
+    Expression<String>? securityID,
+    Expression<double>? quantity,
+    Expression<double>? pricePerUnit,
     Expression<String>? status,
     Expression<String>? categoryID,
     Expression<String>? debtId,
@@ -4170,6 +5052,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       if (notes != null) 'notes': notes,
       if (type != null) 'type': type,
       if (assetID != null) 'assetID': assetID,
+      if (securityID != null) 'securityID': securityID,
+      if (quantity != null) 'quantity': quantity,
+      if (pricePerUnit != null) 'pricePerUnit': pricePerUnit,
       if (status != null) 'status': status,
       if (categoryID != null) 'categoryID': categoryID,
       if (debtId != null) 'debtId': debtId,
@@ -4197,6 +5082,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Value<String?>? notes,
     Value<TransactionType>? type,
     Value<String?>? assetID,
+    Value<String?>? securityID,
+    Value<double?>? quantity,
+    Value<double?>? pricePerUnit,
     Value<TransactionStatus?>? status,
     Value<String?>? categoryID,
     Value<String?>? debtId,
@@ -4221,6 +5109,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       notes: notes ?? this.notes,
       type: type ?? this.type,
       assetID: assetID ?? this.assetID,
+      securityID: securityID ?? this.securityID,
+      quantity: quantity ?? this.quantity,
+      pricePerUnit: pricePerUnit ?? this.pricePerUnit,
       status: status ?? this.status,
       categoryID: categoryID ?? this.categoryID,
       debtId: debtId ?? this.debtId,
@@ -4267,6 +5158,15 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     }
     if (assetID.present) {
       map['assetID'] = Variable<String>(assetID.value);
+    }
+    if (securityID.present) {
+      map['securityID'] = Variable<String>(securityID.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<double>(quantity.value);
+    }
+    if (pricePerUnit.present) {
+      map['pricePerUnit'] = Variable<double>(pricePerUnit.value);
     }
     if (status.present) {
       map['status'] = Variable<String>(
@@ -4328,6 +5228,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
           ..write('notes: $notes, ')
           ..write('type: $type, ')
           ..write('assetID: $assetID, ')
+          ..write('securityID: $securityID, ')
+          ..write('quantity: $quantity, ')
+          ..write('pricePerUnit: $pricePerUnit, ')
           ..write('status: $status, ')
           ..write('categoryID: $categoryID, ')
           ..write('debtId: $debtId, ')
@@ -7348,6 +8251,2729 @@ class SavedFiltersCompanion extends UpdateCompanion<SavedFilterInDB> {
   }
 }
 
+class SecurityPriceHistory extends Table
+    with TableInfo<SecurityPriceHistory, SecurityPriceHistoryInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  SecurityPriceHistory(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _securityIDMeta = const VerificationMeta(
+    'securityID',
+  );
+  late final GeneratedColumn<String> securityID = GeneratedColumn<String>(
+    'securityID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES securities(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _priceMeta = const VerificationMeta('price');
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+    'price',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, securityID, date, price];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'securityPriceHistory';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SecurityPriceHistoryInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('securityID')) {
+      context.handle(
+        _securityIDMeta,
+        securityID.isAcceptableOrUnknown(data['securityID']!, _securityIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_securityIDMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+        _priceMeta,
+        price.isAcceptableOrUnknown(data['price']!, _priceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SecurityPriceHistoryInDB map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SecurityPriceHistoryInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      securityID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}securityID'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+      price: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}price'],
+      )!,
+    );
+  }
+
+  @override
+  SecurityPriceHistory createAlias(String alias) {
+    return SecurityPriceHistory(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class SecurityPriceHistoryInDB extends DataClass
+    implements Insertable<SecurityPriceHistoryInDB> {
+  final String id;
+  final String securityID;
+
+  /// Date of this price observation
+  final DateTime date;
+
+  /// Price per unit at that date, in the security currency
+  final double price;
+  const SecurityPriceHistoryInDB({
+    required this.id,
+    required this.securityID,
+    required this.date,
+    required this.price,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['securityID'] = Variable<String>(securityID);
+    map['date'] = Variable<DateTime>(date);
+    map['price'] = Variable<double>(price);
+    return map;
+  }
+
+  SecurityPriceHistoryCompanion toCompanion(bool nullToAbsent) {
+    return SecurityPriceHistoryCompanion(
+      id: Value(id),
+      securityID: Value(securityID),
+      date: Value(date),
+      price: Value(price),
+    );
+  }
+
+  factory SecurityPriceHistoryInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SecurityPriceHistoryInDB(
+      id: serializer.fromJson<String>(json['id']),
+      securityID: serializer.fromJson<String>(json['securityID']),
+      date: serializer.fromJson<DateTime>(json['date']),
+      price: serializer.fromJson<double>(json['price']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'securityID': serializer.toJson<String>(securityID),
+      'date': serializer.toJson<DateTime>(date),
+      'price': serializer.toJson<double>(price),
+    };
+  }
+
+  SecurityPriceHistoryInDB copyWith({
+    String? id,
+    String? securityID,
+    DateTime? date,
+    double? price,
+  }) => SecurityPriceHistoryInDB(
+    id: id ?? this.id,
+    securityID: securityID ?? this.securityID,
+    date: date ?? this.date,
+    price: price ?? this.price,
+  );
+  SecurityPriceHistoryInDB copyWithCompanion(
+    SecurityPriceHistoryCompanion data,
+  ) {
+    return SecurityPriceHistoryInDB(
+      id: data.id.present ? data.id.value : this.id,
+      securityID: data.securityID.present
+          ? data.securityID.value
+          : this.securityID,
+      date: data.date.present ? data.date.value : this.date,
+      price: data.price.present ? data.price.value : this.price,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityPriceHistoryInDB(')
+          ..write('id: $id, ')
+          ..write('securityID: $securityID, ')
+          ..write('date: $date, ')
+          ..write('price: $price')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, securityID, date, price);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SecurityPriceHistoryInDB &&
+          other.id == this.id &&
+          other.securityID == this.securityID &&
+          other.date == this.date &&
+          other.price == this.price);
+}
+
+class SecurityPriceHistoryCompanion
+    extends UpdateCompanion<SecurityPriceHistoryInDB> {
+  final Value<String> id;
+  final Value<String> securityID;
+  final Value<DateTime> date;
+  final Value<double> price;
+  final Value<int> rowid;
+  const SecurityPriceHistoryCompanion({
+    this.id = const Value.absent(),
+    this.securityID = const Value.absent(),
+    this.date = const Value.absent(),
+    this.price = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SecurityPriceHistoryCompanion.insert({
+    required String id,
+    required String securityID,
+    required DateTime date,
+    required double price,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       securityID = Value(securityID),
+       date = Value(date),
+       price = Value(price);
+  static Insertable<SecurityPriceHistoryInDB> custom({
+    Expression<String>? id,
+    Expression<String>? securityID,
+    Expression<DateTime>? date,
+    Expression<double>? price,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (securityID != null) 'securityID': securityID,
+      if (date != null) 'date': date,
+      if (price != null) 'price': price,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SecurityPriceHistoryCompanion copyWith({
+    Value<String>? id,
+    Value<String>? securityID,
+    Value<DateTime>? date,
+    Value<double>? price,
+    Value<int>? rowid,
+  }) {
+    return SecurityPriceHistoryCompanion(
+      id: id ?? this.id,
+      securityID: securityID ?? this.securityID,
+      date: date ?? this.date,
+      price: price ?? this.price,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (securityID.present) {
+      map['securityID'] = Variable<String>(securityID.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityPriceHistoryCompanion(')
+          ..write('id: $id, ')
+          ..write('securityID: $securityID, ')
+          ..write('date: $date, ')
+          ..write('price: $price, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class Taxonomies extends Table with TableInfo<Taxonomies, TaxonomyInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Taxonomies(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT \'#8abceb\'',
+    defaultValue: const CustomExpression('\'#8abceb\''),
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _isSystemMeta = const VerificationMeta(
+    'isSystem',
+  );
+  late final GeneratedColumn<bool> isSystem = GeneratedColumn<bool>(
+    'isSystem',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  static const VerificationMeta _isSingleSelectMeta = const VerificationMeta(
+    'isSingleSelect',
+  );
+  late final GeneratedColumn<bool> isSingleSelect = GeneratedColumn<bool>(
+    'isSingleSelect',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  static const VerificationMeta _displayOrderMeta = const VerificationMeta(
+    'displayOrder',
+  );
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+    'displayOrder',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    color,
+    description,
+    isSystem,
+    isSingleSelect,
+    displayOrder,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'taxonomies';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TaxonomyInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('isSystem')) {
+      context.handle(
+        _isSystemMeta,
+        isSystem.isAcceptableOrUnknown(data['isSystem']!, _isSystemMeta),
+      );
+    }
+    if (data.containsKey('isSingleSelect')) {
+      context.handle(
+        _isSingleSelectMeta,
+        isSingleSelect.isAcceptableOrUnknown(
+          data['isSingleSelect']!,
+          _isSingleSelectMeta,
+        ),
+      );
+    }
+    if (data.containsKey('displayOrder')) {
+      context.handle(
+        _displayOrderMeta,
+        displayOrder.isAcceptableOrUnknown(
+          data['displayOrder']!,
+          _displayOrderMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TaxonomyInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TaxonomyInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      isSystem: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}isSystem'],
+      )!,
+      isSingleSelect: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}isSingleSelect'],
+      )!,
+      displayOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}displayOrder'],
+      )!,
+    );
+  }
+
+  @override
+  Taxonomies createAlias(String alias) {
+    return Taxonomies(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class TaxonomyInDB extends DataClass implements Insertable<TaxonomyInDB> {
+  final String id;
+
+  /// Display name of the taxonomy
+  final String name;
+
+  /// Accent color used in charts/legends
+  final String color;
+  final String? description;
+
+  /// Whether this taxonomy ships built-in with the app (vs user-created)
+  final bool isSystem;
+
+  /// When true, a security may be assigned to at most one category of this
+  /// taxonomy (e.g. Risk). When false, a security can be split across several
+  /// categories with weights (e.g. Regions).
+  final bool isSingleSelect;
+
+  /// The display order when listing taxonomies
+  final int displayOrder;
+  const TaxonomyInDB({
+    required this.id,
+    required this.name,
+    required this.color,
+    this.description,
+    required this.isSystem,
+    required this.isSingleSelect,
+    required this.displayOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['color'] = Variable<String>(color);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['isSystem'] = Variable<bool>(isSystem);
+    map['isSingleSelect'] = Variable<bool>(isSingleSelect);
+    map['displayOrder'] = Variable<int>(displayOrder);
+    return map;
+  }
+
+  TaxonomiesCompanion toCompanion(bool nullToAbsent) {
+    return TaxonomiesCompanion(
+      id: Value(id),
+      name: Value(name),
+      color: Value(color),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      isSystem: Value(isSystem),
+      isSingleSelect: Value(isSingleSelect),
+      displayOrder: Value(displayOrder),
+    );
+  }
+
+  factory TaxonomyInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TaxonomyInDB(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      color: serializer.fromJson<String>(json['color']),
+      description: serializer.fromJson<String?>(json['description']),
+      isSystem: serializer.fromJson<bool>(json['isSystem']),
+      isSingleSelect: serializer.fromJson<bool>(json['isSingleSelect']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'color': serializer.toJson<String>(color),
+      'description': serializer.toJson<String?>(description),
+      'isSystem': serializer.toJson<bool>(isSystem),
+      'isSingleSelect': serializer.toJson<bool>(isSingleSelect),
+      'displayOrder': serializer.toJson<int>(displayOrder),
+    };
+  }
+
+  TaxonomyInDB copyWith({
+    String? id,
+    String? name,
+    String? color,
+    Value<String?> description = const Value.absent(),
+    bool? isSystem,
+    bool? isSingleSelect,
+    int? displayOrder,
+  }) => TaxonomyInDB(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    color: color ?? this.color,
+    description: description.present ? description.value : this.description,
+    isSystem: isSystem ?? this.isSystem,
+    isSingleSelect: isSingleSelect ?? this.isSingleSelect,
+    displayOrder: displayOrder ?? this.displayOrder,
+  );
+  TaxonomyInDB copyWithCompanion(TaxonomiesCompanion data) {
+    return TaxonomyInDB(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      color: data.color.present ? data.color.value : this.color,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      isSystem: data.isSystem.present ? data.isSystem.value : this.isSystem,
+      isSingleSelect: data.isSingleSelect.present
+          ? data.isSingleSelect.value
+          : this.isSingleSelect,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TaxonomyInDB(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('color: $color, ')
+          ..write('description: $description, ')
+          ..write('isSystem: $isSystem, ')
+          ..write('isSingleSelect: $isSingleSelect, ')
+          ..write('displayOrder: $displayOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    color,
+    description,
+    isSystem,
+    isSingleSelect,
+    displayOrder,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TaxonomyInDB &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.color == this.color &&
+          other.description == this.description &&
+          other.isSystem == this.isSystem &&
+          other.isSingleSelect == this.isSingleSelect &&
+          other.displayOrder == this.displayOrder);
+}
+
+class TaxonomiesCompanion extends UpdateCompanion<TaxonomyInDB> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String> color;
+  final Value<String?> description;
+  final Value<bool> isSystem;
+  final Value<bool> isSingleSelect;
+  final Value<int> displayOrder;
+  final Value<int> rowid;
+  const TaxonomiesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.color = const Value.absent(),
+    this.description = const Value.absent(),
+    this.isSystem = const Value.absent(),
+    this.isSingleSelect = const Value.absent(),
+    this.displayOrder = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TaxonomiesCompanion.insert({
+    required String id,
+    required String name,
+    this.color = const Value.absent(),
+    this.description = const Value.absent(),
+    this.isSystem = const Value.absent(),
+    this.isSingleSelect = const Value.absent(),
+    this.displayOrder = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name);
+  static Insertable<TaxonomyInDB> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? color,
+    Expression<String>? description,
+    Expression<bool>? isSystem,
+    Expression<bool>? isSingleSelect,
+    Expression<int>? displayOrder,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (color != null) 'color': color,
+      if (description != null) 'description': description,
+      if (isSystem != null) 'isSystem': isSystem,
+      if (isSingleSelect != null) 'isSingleSelect': isSingleSelect,
+      if (displayOrder != null) 'displayOrder': displayOrder,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TaxonomiesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? color,
+    Value<String?>? description,
+    Value<bool>? isSystem,
+    Value<bool>? isSingleSelect,
+    Value<int>? displayOrder,
+    Value<int>? rowid,
+  }) {
+    return TaxonomiesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+      description: description ?? this.description,
+      isSystem: isSystem ?? this.isSystem,
+      isSingleSelect: isSingleSelect ?? this.isSingleSelect,
+      displayOrder: displayOrder ?? this.displayOrder,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (isSystem.present) {
+      map['isSystem'] = Variable<bool>(isSystem.value);
+    }
+    if (isSingleSelect.present) {
+      map['isSingleSelect'] = Variable<bool>(isSingleSelect.value);
+    }
+    if (displayOrder.present) {
+      map['displayOrder'] = Variable<int>(displayOrder.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TaxonomiesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('color: $color, ')
+          ..write('description: $description, ')
+          ..write('isSystem: $isSystem, ')
+          ..write('isSingleSelect: $isSingleSelect, ')
+          ..write('displayOrder: $displayOrder, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class TaxonomyCategories extends Table
+    with TableInfo<TaxonomyCategories, TaxonomyCategoryInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  TaxonomyCategories(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _taxonomyIDMeta = const VerificationMeta(
+    'taxonomyID',
+  );
+  late final GeneratedColumn<String> taxonomyID = GeneratedColumn<String>(
+    'taxonomyID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES taxonomies(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _parentIDMeta = const VerificationMeta(
+    'parentID',
+  );
+  late final GeneratedColumn<String> parentID = GeneratedColumn<String>(
+    'parentID',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'REFERENCES taxonomyCategories(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+    'color',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT \'#808080\'',
+    defaultValue: const CustomExpression('\'#808080\''),
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _displayOrderMeta = const VerificationMeta(
+    'displayOrder',
+  );
+  late final GeneratedColumn<int> displayOrder = GeneratedColumn<int>(
+    'displayOrder',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    taxonomyID,
+    parentID,
+    name,
+    color,
+    description,
+    displayOrder,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'taxonomyCategories';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TaxonomyCategoryInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('taxonomyID')) {
+      context.handle(
+        _taxonomyIDMeta,
+        taxonomyID.isAcceptableOrUnknown(data['taxonomyID']!, _taxonomyIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_taxonomyIDMeta);
+    }
+    if (data.containsKey('parentID')) {
+      context.handle(
+        _parentIDMeta,
+        parentID.isAcceptableOrUnknown(data['parentID']!, _parentIDMeta),
+      );
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+        _colorMeta,
+        color.isAcceptableOrUnknown(data['color']!, _colorMeta),
+      );
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('displayOrder')) {
+      context.handle(
+        _displayOrderMeta,
+        displayOrder.isAcceptableOrUnknown(
+          data['displayOrder']!,
+          _displayOrderMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TaxonomyCategoryInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TaxonomyCategoryInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      taxonomyID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}taxonomyID'],
+      )!,
+      parentID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}parentID'],
+      ),
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      color: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}color'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      displayOrder: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}displayOrder'],
+      )!,
+    );
+  }
+
+  @override
+  TaxonomyCategories createAlias(String alias) {
+    return TaxonomyCategories(attachedDatabase, alias);
+  }
+
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class TaxonomyCategoryInDB extends DataClass
+    implements Insertable<TaxonomyCategoryInDB> {
+  final String id;
+  final String taxonomyID;
+
+  /// Parent category within the same taxonomy (if any)
+  final String? parentID;
+  final String name;
+
+  /// Display color of this category in charts/legends
+  final String color;
+  final String? description;
+
+  /// The display order when listing categories inside their taxonomy
+  final int displayOrder;
+  const TaxonomyCategoryInDB({
+    required this.id,
+    required this.taxonomyID,
+    this.parentID,
+    required this.name,
+    required this.color,
+    this.description,
+    required this.displayOrder,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['taxonomyID'] = Variable<String>(taxonomyID);
+    if (!nullToAbsent || parentID != null) {
+      map['parentID'] = Variable<String>(parentID);
+    }
+    map['name'] = Variable<String>(name);
+    map['color'] = Variable<String>(color);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['displayOrder'] = Variable<int>(displayOrder);
+    return map;
+  }
+
+  TaxonomyCategoriesCompanion toCompanion(bool nullToAbsent) {
+    return TaxonomyCategoriesCompanion(
+      id: Value(id),
+      taxonomyID: Value(taxonomyID),
+      parentID: parentID == null && nullToAbsent
+          ? const Value.absent()
+          : Value(parentID),
+      name: Value(name),
+      color: Value(color),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      displayOrder: Value(displayOrder),
+    );
+  }
+
+  factory TaxonomyCategoryInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TaxonomyCategoryInDB(
+      id: serializer.fromJson<String>(json['id']),
+      taxonomyID: serializer.fromJson<String>(json['taxonomyID']),
+      parentID: serializer.fromJson<String?>(json['parentID']),
+      name: serializer.fromJson<String>(json['name']),
+      color: serializer.fromJson<String>(json['color']),
+      description: serializer.fromJson<String?>(json['description']),
+      displayOrder: serializer.fromJson<int>(json['displayOrder']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'taxonomyID': serializer.toJson<String>(taxonomyID),
+      'parentID': serializer.toJson<String?>(parentID),
+      'name': serializer.toJson<String>(name),
+      'color': serializer.toJson<String>(color),
+      'description': serializer.toJson<String?>(description),
+      'displayOrder': serializer.toJson<int>(displayOrder),
+    };
+  }
+
+  TaxonomyCategoryInDB copyWith({
+    String? id,
+    String? taxonomyID,
+    Value<String?> parentID = const Value.absent(),
+    String? name,
+    String? color,
+    Value<String?> description = const Value.absent(),
+    int? displayOrder,
+  }) => TaxonomyCategoryInDB(
+    id: id ?? this.id,
+    taxonomyID: taxonomyID ?? this.taxonomyID,
+    parentID: parentID.present ? parentID.value : this.parentID,
+    name: name ?? this.name,
+    color: color ?? this.color,
+    description: description.present ? description.value : this.description,
+    displayOrder: displayOrder ?? this.displayOrder,
+  );
+  TaxonomyCategoryInDB copyWithCompanion(TaxonomyCategoriesCompanion data) {
+    return TaxonomyCategoryInDB(
+      id: data.id.present ? data.id.value : this.id,
+      taxonomyID: data.taxonomyID.present
+          ? data.taxonomyID.value
+          : this.taxonomyID,
+      parentID: data.parentID.present ? data.parentID.value : this.parentID,
+      name: data.name.present ? data.name.value : this.name,
+      color: data.color.present ? data.color.value : this.color,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      displayOrder: data.displayOrder.present
+          ? data.displayOrder.value
+          : this.displayOrder,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TaxonomyCategoryInDB(')
+          ..write('id: $id, ')
+          ..write('taxonomyID: $taxonomyID, ')
+          ..write('parentID: $parentID, ')
+          ..write('name: $name, ')
+          ..write('color: $color, ')
+          ..write('description: $description, ')
+          ..write('displayOrder: $displayOrder')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    taxonomyID,
+    parentID,
+    name,
+    color,
+    description,
+    displayOrder,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TaxonomyCategoryInDB &&
+          other.id == this.id &&
+          other.taxonomyID == this.taxonomyID &&
+          other.parentID == this.parentID &&
+          other.name == this.name &&
+          other.color == this.color &&
+          other.description == this.description &&
+          other.displayOrder == this.displayOrder);
+}
+
+class TaxonomyCategoriesCompanion
+    extends UpdateCompanion<TaxonomyCategoryInDB> {
+  final Value<String> id;
+  final Value<String> taxonomyID;
+  final Value<String?> parentID;
+  final Value<String> name;
+  final Value<String> color;
+  final Value<String?> description;
+  final Value<int> displayOrder;
+  final Value<int> rowid;
+  const TaxonomyCategoriesCompanion({
+    this.id = const Value.absent(),
+    this.taxonomyID = const Value.absent(),
+    this.parentID = const Value.absent(),
+    this.name = const Value.absent(),
+    this.color = const Value.absent(),
+    this.description = const Value.absent(),
+    this.displayOrder = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TaxonomyCategoriesCompanion.insert({
+    required String id,
+    required String taxonomyID,
+    this.parentID = const Value.absent(),
+    required String name,
+    this.color = const Value.absent(),
+    this.description = const Value.absent(),
+    this.displayOrder = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       taxonomyID = Value(taxonomyID),
+       name = Value(name);
+  static Insertable<TaxonomyCategoryInDB> custom({
+    Expression<String>? id,
+    Expression<String>? taxonomyID,
+    Expression<String>? parentID,
+    Expression<String>? name,
+    Expression<String>? color,
+    Expression<String>? description,
+    Expression<int>? displayOrder,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (taxonomyID != null) 'taxonomyID': taxonomyID,
+      if (parentID != null) 'parentID': parentID,
+      if (name != null) 'name': name,
+      if (color != null) 'color': color,
+      if (description != null) 'description': description,
+      if (displayOrder != null) 'displayOrder': displayOrder,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TaxonomyCategoriesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? taxonomyID,
+    Value<String?>? parentID,
+    Value<String>? name,
+    Value<String>? color,
+    Value<String?>? description,
+    Value<int>? displayOrder,
+    Value<int>? rowid,
+  }) {
+    return TaxonomyCategoriesCompanion(
+      id: id ?? this.id,
+      taxonomyID: taxonomyID ?? this.taxonomyID,
+      parentID: parentID ?? this.parentID,
+      name: name ?? this.name,
+      color: color ?? this.color,
+      description: description ?? this.description,
+      displayOrder: displayOrder ?? this.displayOrder,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (taxonomyID.present) {
+      map['taxonomyID'] = Variable<String>(taxonomyID.value);
+    }
+    if (parentID.present) {
+      map['parentID'] = Variable<String>(parentID.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (displayOrder.present) {
+      map['displayOrder'] = Variable<int>(displayOrder.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TaxonomyCategoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('taxonomyID: $taxonomyID, ')
+          ..write('parentID: $parentID, ')
+          ..write('name: $name, ')
+          ..write('color: $color, ')
+          ..write('description: $description, ')
+          ..write('displayOrder: $displayOrder, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class SecurityTaxonomyAssignments extends Table
+    with
+        TableInfo<SecurityTaxonomyAssignments, SecurityTaxonomyAssignmentInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  SecurityTaxonomyAssignments(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _securityIDMeta = const VerificationMeta(
+    'securityID',
+  );
+  late final GeneratedColumn<String> securityID = GeneratedColumn<String>(
+    'securityID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES securities(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _taxonomyIDMeta = const VerificationMeta(
+    'taxonomyID',
+  );
+  late final GeneratedColumn<String> taxonomyID = GeneratedColumn<String>(
+    'taxonomyID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES taxonomies(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _categoryIDMeta = const VerificationMeta(
+    'categoryID',
+  );
+  late final GeneratedColumn<String> categoryID = GeneratedColumn<String>(
+    'categoryID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES taxonomyCategories(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _weightMeta = const VerificationMeta('weight');
+  late final GeneratedColumn<int> weight = GeneratedColumn<int>(
+    'weight',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'NOT NULL DEFAULT 10000 CHECK (weight >= 0 AND weight <= 10000)',
+    defaultValue: const CustomExpression('10000'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    securityID,
+    taxonomyID,
+    categoryID,
+    weight,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'securityTaxonomyAssignments';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<SecurityTaxonomyAssignmentInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('securityID')) {
+      context.handle(
+        _securityIDMeta,
+        securityID.isAcceptableOrUnknown(data['securityID']!, _securityIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_securityIDMeta);
+    }
+    if (data.containsKey('taxonomyID')) {
+      context.handle(
+        _taxonomyIDMeta,
+        taxonomyID.isAcceptableOrUnknown(data['taxonomyID']!, _taxonomyIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_taxonomyIDMeta);
+    }
+    if (data.containsKey('categoryID')) {
+      context.handle(
+        _categoryIDMeta,
+        categoryID.isAcceptableOrUnknown(data['categoryID']!, _categoryIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryIDMeta);
+    }
+    if (data.containsKey('weight')) {
+      context.handle(
+        _weightMeta,
+        weight.isAcceptableOrUnknown(data['weight']!, _weightMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {securityID, taxonomyID, categoryID},
+  ];
+  @override
+  SecurityTaxonomyAssignmentInDB map(
+    Map<String, dynamic> data, {
+    String? tablePrefix,
+  }) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SecurityTaxonomyAssignmentInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      securityID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}securityID'],
+      )!,
+      taxonomyID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}taxonomyID'],
+      )!,
+      categoryID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}categoryID'],
+      )!,
+      weight: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}weight'],
+      )!,
+    );
+  }
+
+  @override
+  SecurityTaxonomyAssignments createAlias(String alias) {
+    return SecurityTaxonomyAssignments(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'UNIQUE(securityID, taxonomyID, categoryID)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class SecurityTaxonomyAssignmentInDB extends DataClass
+    implements Insertable<SecurityTaxonomyAssignmentInDB> {
+  final String id;
+  final String securityID;
+  final String taxonomyID;
+  final String categoryID;
+
+  /// Weight in basis points (10000 = 100%)
+  final int weight;
+  const SecurityTaxonomyAssignmentInDB({
+    required this.id,
+    required this.securityID,
+    required this.taxonomyID,
+    required this.categoryID,
+    required this.weight,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['securityID'] = Variable<String>(securityID);
+    map['taxonomyID'] = Variable<String>(taxonomyID);
+    map['categoryID'] = Variable<String>(categoryID);
+    map['weight'] = Variable<int>(weight);
+    return map;
+  }
+
+  SecurityTaxonomyAssignmentsCompanion toCompanion(bool nullToAbsent) {
+    return SecurityTaxonomyAssignmentsCompanion(
+      id: Value(id),
+      securityID: Value(securityID),
+      taxonomyID: Value(taxonomyID),
+      categoryID: Value(categoryID),
+      weight: Value(weight),
+    );
+  }
+
+  factory SecurityTaxonomyAssignmentInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SecurityTaxonomyAssignmentInDB(
+      id: serializer.fromJson<String>(json['id']),
+      securityID: serializer.fromJson<String>(json['securityID']),
+      taxonomyID: serializer.fromJson<String>(json['taxonomyID']),
+      categoryID: serializer.fromJson<String>(json['categoryID']),
+      weight: serializer.fromJson<int>(json['weight']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'securityID': serializer.toJson<String>(securityID),
+      'taxonomyID': serializer.toJson<String>(taxonomyID),
+      'categoryID': serializer.toJson<String>(categoryID),
+      'weight': serializer.toJson<int>(weight),
+    };
+  }
+
+  SecurityTaxonomyAssignmentInDB copyWith({
+    String? id,
+    String? securityID,
+    String? taxonomyID,
+    String? categoryID,
+    int? weight,
+  }) => SecurityTaxonomyAssignmentInDB(
+    id: id ?? this.id,
+    securityID: securityID ?? this.securityID,
+    taxonomyID: taxonomyID ?? this.taxonomyID,
+    categoryID: categoryID ?? this.categoryID,
+    weight: weight ?? this.weight,
+  );
+  SecurityTaxonomyAssignmentInDB copyWithCompanion(
+    SecurityTaxonomyAssignmentsCompanion data,
+  ) {
+    return SecurityTaxonomyAssignmentInDB(
+      id: data.id.present ? data.id.value : this.id,
+      securityID: data.securityID.present
+          ? data.securityID.value
+          : this.securityID,
+      taxonomyID: data.taxonomyID.present
+          ? data.taxonomyID.value
+          : this.taxonomyID,
+      categoryID: data.categoryID.present
+          ? data.categoryID.value
+          : this.categoryID,
+      weight: data.weight.present ? data.weight.value : this.weight,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityTaxonomyAssignmentInDB(')
+          ..write('id: $id, ')
+          ..write('securityID: $securityID, ')
+          ..write('taxonomyID: $taxonomyID, ')
+          ..write('categoryID: $categoryID, ')
+          ..write('weight: $weight')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, securityID, taxonomyID, categoryID, weight);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SecurityTaxonomyAssignmentInDB &&
+          other.id == this.id &&
+          other.securityID == this.securityID &&
+          other.taxonomyID == this.taxonomyID &&
+          other.categoryID == this.categoryID &&
+          other.weight == this.weight);
+}
+
+class SecurityTaxonomyAssignmentsCompanion
+    extends UpdateCompanion<SecurityTaxonomyAssignmentInDB> {
+  final Value<String> id;
+  final Value<String> securityID;
+  final Value<String> taxonomyID;
+  final Value<String> categoryID;
+  final Value<int> weight;
+  final Value<int> rowid;
+  const SecurityTaxonomyAssignmentsCompanion({
+    this.id = const Value.absent(),
+    this.securityID = const Value.absent(),
+    this.taxonomyID = const Value.absent(),
+    this.categoryID = const Value.absent(),
+    this.weight = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  SecurityTaxonomyAssignmentsCompanion.insert({
+    required String id,
+    required String securityID,
+    required String taxonomyID,
+    required String categoryID,
+    this.weight = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       securityID = Value(securityID),
+       taxonomyID = Value(taxonomyID),
+       categoryID = Value(categoryID);
+  static Insertable<SecurityTaxonomyAssignmentInDB> custom({
+    Expression<String>? id,
+    Expression<String>? securityID,
+    Expression<String>? taxonomyID,
+    Expression<String>? categoryID,
+    Expression<int>? weight,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (securityID != null) 'securityID': securityID,
+      if (taxonomyID != null) 'taxonomyID': taxonomyID,
+      if (categoryID != null) 'categoryID': categoryID,
+      if (weight != null) 'weight': weight,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  SecurityTaxonomyAssignmentsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? securityID,
+    Value<String>? taxonomyID,
+    Value<String>? categoryID,
+    Value<int>? weight,
+    Value<int>? rowid,
+  }) {
+    return SecurityTaxonomyAssignmentsCompanion(
+      id: id ?? this.id,
+      securityID: securityID ?? this.securityID,
+      taxonomyID: taxonomyID ?? this.taxonomyID,
+      categoryID: categoryID ?? this.categoryID,
+      weight: weight ?? this.weight,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (securityID.present) {
+      map['securityID'] = Variable<String>(securityID.value);
+    }
+    if (taxonomyID.present) {
+      map['taxonomyID'] = Variable<String>(taxonomyID.value);
+    }
+    if (categoryID.present) {
+      map['categoryID'] = Variable<String>(categoryID.value);
+    }
+    if (weight.present) {
+      map['weight'] = Variable<int>(weight.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SecurityTaxonomyAssignmentsCompanion(')
+          ..write('id: $id, ')
+          ..write('securityID: $securityID, ')
+          ..write('taxonomyID: $taxonomyID, ')
+          ..write('categoryID: $categoryID, ')
+          ..write('weight: $weight, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class Holdings extends Table with TableInfo<Holdings, HoldingInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  Holdings(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _accountIDMeta = const VerificationMeta(
+    'accountID',
+  );
+  late final GeneratedColumn<String> accountID = GeneratedColumn<String>(
+    'accountID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES accounts(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _securityIDMeta = const VerificationMeta(
+    'securityID',
+  );
+  late final GeneratedColumn<String> securityID = GeneratedColumn<String>(
+    'securityID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES securities(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _quantityMeta = const VerificationMeta(
+    'quantity',
+  );
+  late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
+    'quantity',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  static const VerificationMeta _avgCostPriceMeta = const VerificationMeta(
+    'avgCostPrice',
+  );
+  late final GeneratedColumn<double> avgCostPrice = GeneratedColumn<double>(
+    'avgCostPrice',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    accountID,
+    securityID,
+    quantity,
+    avgCostPrice,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'holdings';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HoldingInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('accountID')) {
+      context.handle(
+        _accountIDMeta,
+        accountID.isAcceptableOrUnknown(data['accountID']!, _accountIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_accountIDMeta);
+    }
+    if (data.containsKey('securityID')) {
+      context.handle(
+        _securityIDMeta,
+        securityID.isAcceptableOrUnknown(data['securityID']!, _securityIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_securityIDMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(
+        _quantityMeta,
+        quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta),
+      );
+    }
+    if (data.containsKey('avgCostPrice')) {
+      context.handle(
+        _avgCostPriceMeta,
+        avgCostPrice.isAcceptableOrUnknown(
+          data['avgCostPrice']!,
+          _avgCostPriceMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {accountID, securityID},
+  ];
+  @override
+  HoldingInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HoldingInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      accountID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}accountID'],
+      )!,
+      securityID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}securityID'],
+      )!,
+      quantity: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}quantity'],
+      )!,
+      avgCostPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}avgCostPrice'],
+      )!,
+    );
+  }
+
+  @override
+  Holdings createAlias(String alias) {
+    return Holdings(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['UNIQUE(accountID, securityID)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class HoldingInDB extends DataClass implements Insertable<HoldingInDB> {
+  final String id;
+  final String accountID;
+  final String securityID;
+
+  /// Number of units currently held
+  final double quantity;
+
+  /// Weighted-average cost paid per unit, in the security currency
+  final double avgCostPrice;
+  const HoldingInDB({
+    required this.id,
+    required this.accountID,
+    required this.securityID,
+    required this.quantity,
+    required this.avgCostPrice,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['accountID'] = Variable<String>(accountID);
+    map['securityID'] = Variable<String>(securityID);
+    map['quantity'] = Variable<double>(quantity);
+    map['avgCostPrice'] = Variable<double>(avgCostPrice);
+    return map;
+  }
+
+  HoldingsCompanion toCompanion(bool nullToAbsent) {
+    return HoldingsCompanion(
+      id: Value(id),
+      accountID: Value(accountID),
+      securityID: Value(securityID),
+      quantity: Value(quantity),
+      avgCostPrice: Value(avgCostPrice),
+    );
+  }
+
+  factory HoldingInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HoldingInDB(
+      id: serializer.fromJson<String>(json['id']),
+      accountID: serializer.fromJson<String>(json['accountID']),
+      securityID: serializer.fromJson<String>(json['securityID']),
+      quantity: serializer.fromJson<double>(json['quantity']),
+      avgCostPrice: serializer.fromJson<double>(json['avgCostPrice']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'accountID': serializer.toJson<String>(accountID),
+      'securityID': serializer.toJson<String>(securityID),
+      'quantity': serializer.toJson<double>(quantity),
+      'avgCostPrice': serializer.toJson<double>(avgCostPrice),
+    };
+  }
+
+  HoldingInDB copyWith({
+    String? id,
+    String? accountID,
+    String? securityID,
+    double? quantity,
+    double? avgCostPrice,
+  }) => HoldingInDB(
+    id: id ?? this.id,
+    accountID: accountID ?? this.accountID,
+    securityID: securityID ?? this.securityID,
+    quantity: quantity ?? this.quantity,
+    avgCostPrice: avgCostPrice ?? this.avgCostPrice,
+  );
+  HoldingInDB copyWithCompanion(HoldingsCompanion data) {
+    return HoldingInDB(
+      id: data.id.present ? data.id.value : this.id,
+      accountID: data.accountID.present ? data.accountID.value : this.accountID,
+      securityID: data.securityID.present
+          ? data.securityID.value
+          : this.securityID,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      avgCostPrice: data.avgCostPrice.present
+          ? data.avgCostPrice.value
+          : this.avgCostPrice,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HoldingInDB(')
+          ..write('id: $id, ')
+          ..write('accountID: $accountID, ')
+          ..write('securityID: $securityID, ')
+          ..write('quantity: $quantity, ')
+          ..write('avgCostPrice: $avgCostPrice')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, accountID, securityID, quantity, avgCostPrice);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HoldingInDB &&
+          other.id == this.id &&
+          other.accountID == this.accountID &&
+          other.securityID == this.securityID &&
+          other.quantity == this.quantity &&
+          other.avgCostPrice == this.avgCostPrice);
+}
+
+class HoldingsCompanion extends UpdateCompanion<HoldingInDB> {
+  final Value<String> id;
+  final Value<String> accountID;
+  final Value<String> securityID;
+  final Value<double> quantity;
+  final Value<double> avgCostPrice;
+  final Value<int> rowid;
+  const HoldingsCompanion({
+    this.id = const Value.absent(),
+    this.accountID = const Value.absent(),
+    this.securityID = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.avgCostPrice = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HoldingsCompanion.insert({
+    required String id,
+    required String accountID,
+    required String securityID,
+    this.quantity = const Value.absent(),
+    this.avgCostPrice = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       accountID = Value(accountID),
+       securityID = Value(securityID);
+  static Insertable<HoldingInDB> custom({
+    Expression<String>? id,
+    Expression<String>? accountID,
+    Expression<String>? securityID,
+    Expression<double>? quantity,
+    Expression<double>? avgCostPrice,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (accountID != null) 'accountID': accountID,
+      if (securityID != null) 'securityID': securityID,
+      if (quantity != null) 'quantity': quantity,
+      if (avgCostPrice != null) 'avgCostPrice': avgCostPrice,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HoldingsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? accountID,
+    Value<String>? securityID,
+    Value<double>? quantity,
+    Value<double>? avgCostPrice,
+    Value<int>? rowid,
+  }) {
+    return HoldingsCompanion(
+      id: id ?? this.id,
+      accountID: accountID ?? this.accountID,
+      securityID: securityID ?? this.securityID,
+      quantity: quantity ?? this.quantity,
+      avgCostPrice: avgCostPrice ?? this.avgCostPrice,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (accountID.present) {
+      map['accountID'] = Variable<String>(accountID.value);
+    }
+    if (securityID.present) {
+      map['securityID'] = Variable<String>(securityID.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<double>(quantity.value);
+    }
+    if (avgCostPrice.present) {
+      map['avgCostPrice'] = Variable<double>(avgCostPrice.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HoldingsCompanion(')
+          ..write('id: $id, ')
+          ..write('accountID: $accountID, ')
+          ..write('securityID: $securityID, ')
+          ..write('quantity: $quantity, ')
+          ..write('avgCostPrice: $avgCostPrice, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class AccountSnapshots extends Table
+    with TableInfo<AccountSnapshots, AccountSnapshotInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  AccountSnapshots(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _accountIDMeta = const VerificationMeta(
+    'accountID',
+  );
+  late final GeneratedColumn<String> accountID = GeneratedColumn<String>(
+    'accountID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES accounts(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [id, accountID, date];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'accountSnapshots';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AccountSnapshotInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('accountID')) {
+      context.handle(
+        _accountIDMeta,
+        accountID.isAcceptableOrUnknown(data['accountID']!, _accountIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_accountIDMeta);
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {accountID, date},
+  ];
+  @override
+  AccountSnapshotInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AccountSnapshotInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      accountID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}accountID'],
+      )!,
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}date'],
+      )!,
+    );
+  }
+
+  @override
+  AccountSnapshots createAlias(String alias) {
+    return AccountSnapshots(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const ['UNIQUE(accountID, date)'];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class AccountSnapshotInDB extends DataClass
+    implements Insertable<AccountSnapshotInDB> {
+  final String id;
+  final String accountID;
+
+  /// Date of this portfolio snapshot (one snapshot per account per date)
+  final DateTime date;
+  const AccountSnapshotInDB({
+    required this.id,
+    required this.accountID,
+    required this.date,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['accountID'] = Variable<String>(accountID);
+    map['date'] = Variable<DateTime>(date);
+    return map;
+  }
+
+  AccountSnapshotsCompanion toCompanion(bool nullToAbsent) {
+    return AccountSnapshotsCompanion(
+      id: Value(id),
+      accountID: Value(accountID),
+      date: Value(date),
+    );
+  }
+
+  factory AccountSnapshotInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AccountSnapshotInDB(
+      id: serializer.fromJson<String>(json['id']),
+      accountID: serializer.fromJson<String>(json['accountID']),
+      date: serializer.fromJson<DateTime>(json['date']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'accountID': serializer.toJson<String>(accountID),
+      'date': serializer.toJson<DateTime>(date),
+    };
+  }
+
+  AccountSnapshotInDB copyWith({
+    String? id,
+    String? accountID,
+    DateTime? date,
+  }) => AccountSnapshotInDB(
+    id: id ?? this.id,
+    accountID: accountID ?? this.accountID,
+    date: date ?? this.date,
+  );
+  AccountSnapshotInDB copyWithCompanion(AccountSnapshotsCompanion data) {
+    return AccountSnapshotInDB(
+      id: data.id.present ? data.id.value : this.id,
+      accountID: data.accountID.present ? data.accountID.value : this.accountID,
+      date: data.date.present ? data.date.value : this.date,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountSnapshotInDB(')
+          ..write('id: $id, ')
+          ..write('accountID: $accountID, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, accountID, date);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AccountSnapshotInDB &&
+          other.id == this.id &&
+          other.accountID == this.accountID &&
+          other.date == this.date);
+}
+
+class AccountSnapshotsCompanion extends UpdateCompanion<AccountSnapshotInDB> {
+  final Value<String> id;
+  final Value<String> accountID;
+  final Value<DateTime> date;
+  final Value<int> rowid;
+  const AccountSnapshotsCompanion({
+    this.id = const Value.absent(),
+    this.accountID = const Value.absent(),
+    this.date = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AccountSnapshotsCompanion.insert({
+    required String id,
+    required String accountID,
+    required DateTime date,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       accountID = Value(accountID),
+       date = Value(date);
+  static Insertable<AccountSnapshotInDB> custom({
+    Expression<String>? id,
+    Expression<String>? accountID,
+    Expression<DateTime>? date,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (accountID != null) 'accountID': accountID,
+      if (date != null) 'date': date,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AccountSnapshotsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? accountID,
+    Value<DateTime>? date,
+    Value<int>? rowid,
+  }) {
+    return AccountSnapshotsCompanion(
+      id: id ?? this.id,
+      accountID: accountID ?? this.accountID,
+      date: date ?? this.date,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (accountID.present) {
+      map['accountID'] = Variable<String>(accountID.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AccountSnapshotsCompanion(')
+          ..write('id: $id, ')
+          ..write('accountID: $accountID, ')
+          ..write('date: $date, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class HoldingSnapshots extends Table
+    with TableInfo<HoldingSnapshots, HoldingSnapshotInDB> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  HoldingSnapshots(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL PRIMARY KEY',
+  );
+  static const VerificationMeta _snapshotIDMeta = const VerificationMeta(
+    'snapshotID',
+  );
+  late final GeneratedColumn<String> snapshotID = GeneratedColumn<String>(
+    'snapshotID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES accountSnapshots(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _securityIDMeta = const VerificationMeta(
+    'securityID',
+  );
+  late final GeneratedColumn<String> securityID = GeneratedColumn<String>(
+    'securityID',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    $customConstraints:
+        'NOT NULL REFERENCES securities(id)ON UPDATE CASCADE ON DELETE CASCADE',
+  );
+  static const VerificationMeta _quantityMeta = const VerificationMeta(
+    'quantity',
+  );
+  late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
+    'quantity',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  static const VerificationMeta _avgCostPriceMeta = const VerificationMeta(
+    'avgCostPrice',
+  );
+  late final GeneratedColumn<double> avgCostPrice = GeneratedColumn<double>(
+    'avgCostPrice',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+    $customConstraints: 'NOT NULL',
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    snapshotID,
+    securityID,
+    quantity,
+    avgCostPrice,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'holdingSnapshots';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<HoldingSnapshotInDB> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('snapshotID')) {
+      context.handle(
+        _snapshotIDMeta,
+        snapshotID.isAcceptableOrUnknown(data['snapshotID']!, _snapshotIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_snapshotIDMeta);
+    }
+    if (data.containsKey('securityID')) {
+      context.handle(
+        _securityIDMeta,
+        securityID.isAcceptableOrUnknown(data['securityID']!, _securityIDMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_securityIDMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(
+        _quantityMeta,
+        quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('avgCostPrice')) {
+      context.handle(
+        _avgCostPriceMeta,
+        avgCostPrice.isAcceptableOrUnknown(
+          data['avgCostPrice']!,
+          _avgCostPriceMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_avgCostPriceMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {snapshotID, securityID},
+  ];
+  @override
+  HoldingSnapshotInDB map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HoldingSnapshotInDB(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      snapshotID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}snapshotID'],
+      )!,
+      securityID: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}securityID'],
+      )!,
+      quantity: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}quantity'],
+      )!,
+      avgCostPrice: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}avgCostPrice'],
+      )!,
+    );
+  }
+
+  @override
+  HoldingSnapshots createAlias(String alias) {
+    return HoldingSnapshots(attachedDatabase, alias);
+  }
+
+  @override
+  List<String> get customConstraints => const [
+    'UNIQUE(snapshotID, securityID)',
+  ];
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class HoldingSnapshotInDB extends DataClass
+    implements Insertable<HoldingSnapshotInDB> {
+  final String id;
+  final String snapshotID;
+  final String securityID;
+
+  /// Number of units held at the snapshot date
+  final double quantity;
+
+  /// Weighted-average cost paid per unit, in the security currency
+  final double avgCostPrice;
+  const HoldingSnapshotInDB({
+    required this.id,
+    required this.snapshotID,
+    required this.securityID,
+    required this.quantity,
+    required this.avgCostPrice,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['snapshotID'] = Variable<String>(snapshotID);
+    map['securityID'] = Variable<String>(securityID);
+    map['quantity'] = Variable<double>(quantity);
+    map['avgCostPrice'] = Variable<double>(avgCostPrice);
+    return map;
+  }
+
+  HoldingSnapshotsCompanion toCompanion(bool nullToAbsent) {
+    return HoldingSnapshotsCompanion(
+      id: Value(id),
+      snapshotID: Value(snapshotID),
+      securityID: Value(securityID),
+      quantity: Value(quantity),
+      avgCostPrice: Value(avgCostPrice),
+    );
+  }
+
+  factory HoldingSnapshotInDB.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HoldingSnapshotInDB(
+      id: serializer.fromJson<String>(json['id']),
+      snapshotID: serializer.fromJson<String>(json['snapshotID']),
+      securityID: serializer.fromJson<String>(json['securityID']),
+      quantity: serializer.fromJson<double>(json['quantity']),
+      avgCostPrice: serializer.fromJson<double>(json['avgCostPrice']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'snapshotID': serializer.toJson<String>(snapshotID),
+      'securityID': serializer.toJson<String>(securityID),
+      'quantity': serializer.toJson<double>(quantity),
+      'avgCostPrice': serializer.toJson<double>(avgCostPrice),
+    };
+  }
+
+  HoldingSnapshotInDB copyWith({
+    String? id,
+    String? snapshotID,
+    String? securityID,
+    double? quantity,
+    double? avgCostPrice,
+  }) => HoldingSnapshotInDB(
+    id: id ?? this.id,
+    snapshotID: snapshotID ?? this.snapshotID,
+    securityID: securityID ?? this.securityID,
+    quantity: quantity ?? this.quantity,
+    avgCostPrice: avgCostPrice ?? this.avgCostPrice,
+  );
+  HoldingSnapshotInDB copyWithCompanion(HoldingSnapshotsCompanion data) {
+    return HoldingSnapshotInDB(
+      id: data.id.present ? data.id.value : this.id,
+      snapshotID: data.snapshotID.present
+          ? data.snapshotID.value
+          : this.snapshotID,
+      securityID: data.securityID.present
+          ? data.securityID.value
+          : this.securityID,
+      quantity: data.quantity.present ? data.quantity.value : this.quantity,
+      avgCostPrice: data.avgCostPrice.present
+          ? data.avgCostPrice.value
+          : this.avgCostPrice,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HoldingSnapshotInDB(')
+          ..write('id: $id, ')
+          ..write('snapshotID: $snapshotID, ')
+          ..write('securityID: $securityID, ')
+          ..write('quantity: $quantity, ')
+          ..write('avgCostPrice: $avgCostPrice')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, snapshotID, securityID, quantity, avgCostPrice);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HoldingSnapshotInDB &&
+          other.id == this.id &&
+          other.snapshotID == this.snapshotID &&
+          other.securityID == this.securityID &&
+          other.quantity == this.quantity &&
+          other.avgCostPrice == this.avgCostPrice);
+}
+
+class HoldingSnapshotsCompanion extends UpdateCompanion<HoldingSnapshotInDB> {
+  final Value<String> id;
+  final Value<String> snapshotID;
+  final Value<String> securityID;
+  final Value<double> quantity;
+  final Value<double> avgCostPrice;
+  final Value<int> rowid;
+  const HoldingSnapshotsCompanion({
+    this.id = const Value.absent(),
+    this.snapshotID = const Value.absent(),
+    this.securityID = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.avgCostPrice = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  HoldingSnapshotsCompanion.insert({
+    required String id,
+    required String snapshotID,
+    required String securityID,
+    required double quantity,
+    required double avgCostPrice,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       snapshotID = Value(snapshotID),
+       securityID = Value(securityID),
+       quantity = Value(quantity),
+       avgCostPrice = Value(avgCostPrice);
+  static Insertable<HoldingSnapshotInDB> custom({
+    Expression<String>? id,
+    Expression<String>? snapshotID,
+    Expression<String>? securityID,
+    Expression<double>? quantity,
+    Expression<double>? avgCostPrice,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (snapshotID != null) 'snapshotID': snapshotID,
+      if (securityID != null) 'securityID': securityID,
+      if (quantity != null) 'quantity': quantity,
+      if (avgCostPrice != null) 'avgCostPrice': avgCostPrice,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  HoldingSnapshotsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? snapshotID,
+    Value<String>? securityID,
+    Value<double>? quantity,
+    Value<double>? avgCostPrice,
+    Value<int>? rowid,
+  }) {
+    return HoldingSnapshotsCompanion(
+      id: id ?? this.id,
+      snapshotID: snapshotID ?? this.snapshotID,
+      securityID: securityID ?? this.securityID,
+      quantity: quantity ?? this.quantity,
+      avgCostPrice: avgCostPrice ?? this.avgCostPrice,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (snapshotID.present) {
+      map['snapshotID'] = Variable<String>(snapshotID.value);
+    }
+    if (securityID.present) {
+      map['securityID'] = Variable<String>(securityID.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<double>(quantity.value);
+    }
+    if (avgCostPrice.present) {
+      map['avgCostPrice'] = Variable<double>(avgCostPrice.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HoldingSnapshotsCompanion(')
+          ..write('id: $id, ')
+          ..write('snapshotID: $snapshotID, ')
+          ..write('securityID: $securityID, ')
+          ..write('quantity: $quantity, ')
+          ..write('avgCostPrice: $avgCostPrice, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class UserSettings extends Table with TableInfo<UserSettings, UserSetting> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -7824,6 +11450,7 @@ abstract class _$AppDB extends GeneratedDatabase {
   late final Debts debts = Debts(this);
   late final Assets assets = Assets(this);
   late final Valuations valuations = Valuations(this);
+  late final Securities securities = Securities(this);
   late final Categories categories = Categories(this);
   late final Transactions transactions = Transactions(this);
   late final ExchangeRates exchangeRates = ExchangeRates(this);
@@ -7842,6 +11469,28 @@ abstract class _$AppDB extends GeneratedDatabase {
     'idx_valuations_assetId_date',
     'CREATE UNIQUE INDEX idx_valuations_assetId_date ON valuations (assetId, date DESC)',
   );
+  late final SecurityPriceHistory securityPriceHistory = SecurityPriceHistory(
+    this,
+  );
+  late final Taxonomies taxonomies = Taxonomies(this);
+  late final TaxonomyCategories taxonomyCategories = TaxonomyCategories(this);
+  late final Index idxTaxonomyCategoriesTaxonomyID = Index(
+    'idx_taxonomyCategories_taxonomyID',
+    'CREATE INDEX IF NOT EXISTS idx_taxonomyCategories_taxonomyID ON taxonomyCategories (taxonomyID)',
+  );
+  late final SecurityTaxonomyAssignments securityTaxonomyAssignments =
+      SecurityTaxonomyAssignments(this);
+  late final Index idxSecurityTaxonomyAssignmentsSecurityID = Index(
+    'idx_securityTaxonomyAssignments_securityID',
+    'CREATE INDEX IF NOT EXISTS idx_securityTaxonomyAssignments_securityID ON securityTaxonomyAssignments (securityID)',
+  );
+  late final Index idxSecurityTaxonomyAssignmentsTaxonomyID = Index(
+    'idx_securityTaxonomyAssignments_taxonomyID',
+    'CREATE INDEX IF NOT EXISTS idx_securityTaxonomyAssignments_taxonomyID ON securityTaxonomyAssignments (taxonomyID)',
+  );
+  late final Holdings holdings = Holdings(this);
+  late final AccountSnapshots accountSnapshots = AccountSnapshots(this);
+  late final HoldingSnapshots holdingSnapshots = HoldingSnapshots(this);
   late final UserSettings userSettings = UserSettings(this);
   late final AppData appData = AppData(this);
   Selectable<Account> getAccountsWithFullData({
@@ -7900,6 +11549,10 @@ abstract class _$AppDB extends GeneratedDatabase {
         displayOrder: row.read<int>('displayOrder'),
         iconId: row.read<String>('iconId'),
         currency: await currencies.mapFromRow(row, tablePrefix: 'nested_0'),
+        isSaving: row.read<bool>('isSaving'),
+        trackingMode: Accounts.$convertertrackingMode.fromSql(
+          row.read<String>('trackingMode'),
+        ),
         closingDate: row.readNullable<DateTime>('closingDate'),
         description: row.readNullable<String>('description'),
         iban: row.readNullable<String>('iban'),
@@ -8027,6 +11680,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         ),
         description: row.readNullable<String>('description'),
         linkedAccountID: row.readNullable<String>('linkedAccountID'),
+        linkedDebtId: row.readNullable<String>('linkedDebtId'),
       ),
     );
   }
@@ -8111,7 +11765,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."isSaving" AS "nested_0.isSaving", "a"."trackingMode" AS "nested_0.trackingMode", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."isSaving" AS "nested_3.isSaving", "ra"."trackingMode" AS "nested_3.trackingMode", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
@@ -8187,6 +11841,9 @@ abstract class _$AppDB extends GeneratedDatabase {
         remainingTransactions: row.readNullable<int>('remainingTransactions'),
         debtId: row.readNullable<String>('debtId'),
         assetID: row.readNullable<String>('assetID'),
+        securityID: row.readNullable<String>('securityID'),
+        quantity: row.readNullable<double>('quantity'),
+        pricePerUnit: row.readNullable<double>('pricePerUnit'),
       ),
     );
   }
@@ -8552,6 +12209,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     debts,
     assets,
     valuations,
+    securities,
     categories,
     transactions,
     exchangeRates,
@@ -8563,6 +12221,16 @@ abstract class _$AppDB extends GeneratedDatabase {
     savedFilters,
     idxExchangeRatesCurrencyCodeDate,
     idxValuationsAssetIdDate,
+    securityPriceHistory,
+    taxonomies,
+    taxonomyCategories,
+    idxTaxonomyCategoriesTaxonomyID,
+    securityTaxonomyAssignments,
+    idxSecurityTaxonomyAssignmentsSecurityID,
+    idxSecurityTaxonomyAssignmentsTaxonomyID,
+    holdings,
+    accountSnapshots,
+    holdingSnapshots,
     userSettings,
     appData,
   ];
@@ -8626,6 +12294,20 @@ abstract class _$AppDB extends GeneratedDatabase {
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
+        'debts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('assets', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'debts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('assets', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
         'assets',
         limitUpdateKind: UpdateKind.delete,
       ),
@@ -8637,6 +12319,20 @@ abstract class _$AppDB extends GeneratedDatabase {
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('valuations', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'currencies',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('securities', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'currencies',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('securities', kind: UpdateKind.update)],
     ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
@@ -8662,6 +12358,20 @@ abstract class _$AppDB extends GeneratedDatabase {
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'assets',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('transactions', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('transactions', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
         limitUpdateKind: UpdateKind.update,
       ),
       result: [TableUpdate('transactions', kind: UpdateKind.update)],
@@ -8792,6 +12502,158 @@ abstract class _$AppDB extends GeneratedDatabase {
       ),
       result: [TableUpdate('savedFilters', kind: UpdateKind.update)],
     ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('securityPriceHistory', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('securityPriceHistory', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'taxonomies',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('taxonomyCategories', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'taxonomies',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('taxonomyCategories', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('securityTaxonomyAssignments', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [
+        TableUpdate('securityTaxonomyAssignments', kind: UpdateKind.update),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'taxonomies',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('securityTaxonomyAssignments', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'taxonomies',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [
+        TableUpdate('securityTaxonomyAssignments', kind: UpdateKind.update),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'taxonomyCategories',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('securityTaxonomyAssignments', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'taxonomyCategories',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [
+        TableUpdate('securityTaxonomyAssignments', kind: UpdateKind.update),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('holdings', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('holdings', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('holdings', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('holdings', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('accountSnapshots', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('accountSnapshots', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accountSnapshots',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('holdingSnapshots', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accountSnapshots',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('holdingSnapshots', kind: UpdateKind.update)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('holdingSnapshots', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'securities',
+        limitUpdateKind: UpdateKind.update,
+      ),
+      result: [TableUpdate('holdingSnapshots', kind: UpdateKind.update)],
+    ),
   ]);
   @override
   DriftDatabaseOptions get options =>
@@ -8827,7 +12689,7 @@ final class $CurrenciesReferences
     _$AppDB db,
   ) => MultiTypedResultKey.fromTable(
     db.accounts,
-    aliasName: $_aliasNameGenerator(db.currencies.code, db.accounts.currencyId),
+    aliasName: 'currencies__code__accounts__currencyId',
   );
 
   $AccountsProcessedTableManager get accountsRefs {
@@ -8846,7 +12708,7 @@ final class $CurrenciesReferences
     _$AppDB db,
   ) => MultiTypedResultKey.fromTable(
     db.debts,
-    aliasName: $_aliasNameGenerator(db.currencies.code, db.debts.currencyId),
+    aliasName: 'currencies__code__debts__currencyId',
   );
 
   $DebtsProcessedTableManager get debtsRefs {
@@ -8865,7 +12727,7 @@ final class $CurrenciesReferences
     _$AppDB db,
   ) => MultiTypedResultKey.fromTable(
     db.assets,
-    aliasName: $_aliasNameGenerator(db.currencies.code, db.assets.currencyId),
+    aliasName: 'currencies__code__assets__currencyId',
   );
 
   $AssetsProcessedTableManager get assetsRefs {
@@ -8880,13 +12742,28 @@ final class $CurrenciesReferences
     );
   }
 
+  static MultiTypedResultKey<Securities, List<SecurityInDB>>
+  _securitiesRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.securities,
+    aliasName: 'currencies__code__securities__currencyId',
+  );
+
+  $SecuritiesProcessedTableManager get securitiesRefs {
+    final manager = $SecuritiesTableManager(
+      $_db,
+      $_db.securities,
+    ).filter((f) => f.currencyId.code.sqlEquals($_itemColumn<String>('code')!));
+
+    final cache = $_typedResult.readTableOrNull(_securitiesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<ExchangeRates, List<ExchangeRateInDB>>
   _exchangeRatesRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.exchangeRates,
-    aliasName: $_aliasNameGenerator(
-      db.currencies.code,
-      db.exchangeRates.currencyCode,
-    ),
+    aliasName: 'currencies__code__exchangeRates__currencyCode',
   );
 
   $ExchangeRatesProcessedTableManager get exchangeRatesRefs {
@@ -9005,6 +12882,31 @@ class $CurrenciesFilterComposer extends Composer<_$AppDB, Currencies> {
           }) => $AssetsFilterComposer(
             $db: $db,
             $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> securitiesRefs(
+    Expression<bool> Function($SecuritiesFilterComposer f) f,
+  ) {
+    final $SecuritiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.code,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.currencyId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesFilterComposer(
+            $db: $db,
+            $table: $db.securities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -9182,6 +13084,31 @@ class $CurrenciesAnnotationComposer extends Composer<_$AppDB, Currencies> {
     return f(composer);
   }
 
+  Expression<T> securitiesRefs<T extends Object>(
+    Expression<T> Function($SecuritiesAnnotationComposer a) f,
+  ) {
+    final $SecuritiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.code,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.currencyId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesAnnotationComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> exchangeRatesRefs<T extends Object>(
     Expression<T> Function($ExchangeRatesAnnotationComposer a) f,
   ) {
@@ -9225,6 +13152,7 @@ class $CurrenciesTableManager
             bool accountsRefs,
             bool debtsRefs,
             bool assetsRefs,
+            bool securitiesRefs,
             bool exchangeRatesRefs,
           })
         > {
@@ -9286,6 +13214,7 @@ class $CurrenciesTableManager
                 accountsRefs = false,
                 debtsRefs = false,
                 assetsRefs = false,
+                securitiesRefs = false,
                 exchangeRatesRefs = false,
               }) {
                 return PrefetchHooks(
@@ -9294,6 +13223,7 @@ class $CurrenciesTableManager
                     if (accountsRefs) db.accounts,
                     if (debtsRefs) db.debts,
                     if (assetsRefs) db.assets,
+                    if (securitiesRefs) db.securities,
                     if (exchangeRatesRefs) db.exchangeRates,
                   ],
                   addJoins: null,
@@ -9350,6 +13280,26 @@ class $CurrenciesTableManager
                               ),
                           typedResults: items,
                         ),
+                      if (securitiesRefs)
+                        await $_getPrefetchedData<
+                          CurrencyInDB,
+                          Currencies,
+                          SecurityInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $CurrenciesReferences
+                              ._securitiesRefsTable(db),
+                          managerFromTypedResult: (p0) => $CurrenciesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).securitiesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.currencyId == item.code,
+                              ),
+                          typedResults: items,
+                        ),
                       if (exchangeRatesRefs)
                         await $_getPrefetchedData<
                           CurrencyInDB,
@@ -9394,6 +13344,7 @@ typedef $CurrenciesProcessedTableManager =
         bool accountsRefs,
         bool debtsRefs,
         bool assetsRefs,
+        bool securitiesRefs,
         bool exchangeRatesRefs,
       })
     >;
@@ -9405,6 +13356,8 @@ typedef $AccountsCreateCompanionBuilder =
       required DateTime date,
       Value<String?> description,
       required AccountType type,
+      Value<bool> isSaving,
+      Value<AccountTrackingMode> trackingMode,
       required String iconId,
       required int displayOrder,
       Value<String?> color,
@@ -9422,6 +13375,8 @@ typedef $AccountsUpdateCompanionBuilder =
       Value<DateTime> date,
       Value<String?> description,
       Value<AccountType> type,
+      Value<bool> isSaving,
+      Value<AccountTrackingMode> trackingMode,
       Value<String> iconId,
       Value<int> displayOrder,
       Value<String?> color,
@@ -9436,9 +13391,8 @@ final class $AccountsReferences
     extends BaseReferences<_$AppDB, Accounts, AccountInDB> {
   $AccountsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Currencies _currencyIdTable(_$AppDB db) => db.currencies.createAlias(
-    $_aliasNameGenerator(db.accounts.currencyId, db.currencies.code),
-  );
+  static Currencies _currencyIdTable(_$AppDB db) =>
+      db.currencies.createAlias('accounts__currencyId__currencies__code');
 
   $CurrenciesProcessedTableManager get currencyId {
     final $_column = $_itemColumn<String>('currencyId')!;
@@ -9458,7 +13412,7 @@ final class $AccountsReferences
     _$AppDB db,
   ) => MultiTypedResultKey.fromTable(
     db.assets,
-    aliasName: $_aliasNameGenerator(db.accounts.id, db.assets.linkedAccountID),
+    aliasName: 'accounts__id__assets__linkedAccountID',
   );
 
   $AssetsProcessedTableManager get assetsRefs {
@@ -9467,6 +13421,45 @@ final class $AccountsReferences
     );
 
     final cache = $_typedResult.readTableOrNull(_assetsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<Holdings, List<HoldingInDB>> _holdingsRefsTable(
+    _$AppDB db,
+  ) => MultiTypedResultKey.fromTable(
+    db.holdings,
+    aliasName: 'accounts__id__holdings__accountID',
+  );
+
+  $HoldingsProcessedTableManager get holdingsRefs {
+    final manager = $HoldingsTableManager(
+      $_db,
+      $_db.holdings,
+    ).filter((f) => f.accountID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_holdingsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<AccountSnapshots, List<AccountSnapshotInDB>>
+  _accountSnapshotsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.accountSnapshots,
+    aliasName: 'accounts__id__accountSnapshots__accountID',
+  );
+
+  $AccountSnapshotsProcessedTableManager get accountSnapshotsRefs {
+    final manager = $AccountSnapshotsTableManager(
+      $_db,
+      $_db.accountSnapshots,
+    ).filter((f) => f.accountID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _accountSnapshotsRefsTable($_db),
+    );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
     );
@@ -9511,6 +13504,21 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
         column: $table.type,
         builder: (column) => ColumnWithTypeConverterFilters(column),
       );
+
+  ColumnFilters<bool> get isSaving => $composableBuilder(
+    column: $table.isSaving,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<
+    AccountTrackingMode,
+    AccountTrackingMode,
+    String
+  >
+  get trackingMode => $composableBuilder(
+    column: $table.trackingMode,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
 
   ColumnFilters<String> get iconId => $composableBuilder(
     column: $table.iconId,
@@ -9589,6 +13597,56 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
     );
     return f(composer);
   }
+
+  Expression<bool> holdingsRefs(
+    Expression<bool> Function($HoldingsFilterComposer f) f,
+  ) {
+    final $HoldingsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdings,
+      getReferencedColumn: (t) => t.accountID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingsFilterComposer(
+            $db: $db,
+            $table: $db.holdings,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> accountSnapshotsRefs(
+    Expression<bool> Function($AccountSnapshotsFilterComposer f) f,
+  ) {
+    final $AccountSnapshotsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.accountSnapshots,
+      getReferencedColumn: (t) => t.accountID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountSnapshotsFilterComposer(
+            $db: $db,
+            $table: $db.accountSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $AccountsOrderingComposer extends Composer<_$AppDB, Accounts> {
@@ -9626,6 +13684,16 @@ class $AccountsOrderingComposer extends Composer<_$AppDB, Accounts> {
 
   ColumnOrderings<String> get type => $composableBuilder(
     column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSaving => $composableBuilder(
+    column: $table.isSaving,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get trackingMode => $composableBuilder(
+    column: $table.trackingMode,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -9711,6 +13779,15 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
   GeneratedColumnWithTypeConverter<AccountType, String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
 
+  GeneratedColumn<bool> get isSaving =>
+      $composableBuilder(column: $table.isSaving, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<AccountTrackingMode, String>
+  get trackingMode => $composableBuilder(
+    column: $table.trackingMode,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get iconId =>
       $composableBuilder(column: $table.iconId, builder: (column) => column);
 
@@ -9780,6 +13857,56 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
     );
     return f(composer);
   }
+
+  Expression<T> holdingsRefs<T extends Object>(
+    Expression<T> Function($HoldingsAnnotationComposer a) f,
+  ) {
+    final $HoldingsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdings,
+      getReferencedColumn: (t) => t.accountID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingsAnnotationComposer(
+            $db: $db,
+            $table: $db.holdings,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> accountSnapshotsRefs<T extends Object>(
+    Expression<T> Function($AccountSnapshotsAnnotationComposer a) f,
+  ) {
+    final $AccountSnapshotsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.accountSnapshots,
+      getReferencedColumn: (t) => t.accountID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountSnapshotsAnnotationComposer(
+            $db: $db,
+            $table: $db.accountSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
 }
 
 class $AccountsTableManager
@@ -9795,7 +13922,12 @@ class $AccountsTableManager
           $AccountsUpdateCompanionBuilder,
           (AccountInDB, $AccountsReferences),
           AccountInDB,
-          PrefetchHooks Function({bool currencyId, bool assetsRefs})
+          PrefetchHooks Function({
+            bool currencyId,
+            bool assetsRefs,
+            bool holdingsRefs,
+            bool accountSnapshotsRefs,
+          })
         > {
   $AccountsTableManager(_$AppDB db, Accounts table)
     : super(
@@ -9816,6 +13948,8 @@ class $AccountsTableManager
                 Value<DateTime> date = const Value.absent(),
                 Value<String?> description = const Value.absent(),
                 Value<AccountType> type = const Value.absent(),
+                Value<bool> isSaving = const Value.absent(),
+                Value<AccountTrackingMode> trackingMode = const Value.absent(),
                 Value<String> iconId = const Value.absent(),
                 Value<int> displayOrder = const Value.absent(),
                 Value<String?> color = const Value.absent(),
@@ -9831,6 +13965,8 @@ class $AccountsTableManager
                 date: date,
                 description: description,
                 type: type,
+                isSaving: isSaving,
+                trackingMode: trackingMode,
                 iconId: iconId,
                 displayOrder: displayOrder,
                 color: color,
@@ -9848,6 +13984,8 @@ class $AccountsTableManager
                 required DateTime date,
                 Value<String?> description = const Value.absent(),
                 required AccountType type,
+                Value<bool> isSaving = const Value.absent(),
+                Value<AccountTrackingMode> trackingMode = const Value.absent(),
                 required String iconId,
                 required int displayOrder,
                 Value<String?> color = const Value.absent(),
@@ -9863,6 +14001,8 @@ class $AccountsTableManager
                 date: date,
                 description: description,
                 type: type,
+                isSaving: isSaving,
+                trackingMode: trackingMode,
                 iconId: iconId,
                 displayOrder: displayOrder,
                 color: color,
@@ -9877,60 +14017,113 @@ class $AccountsTableManager
                 (e) => (e.readTable(table), $AccountsReferences(db, table, e)),
               )
               .toList(),
-          prefetchHooksCallback: ({currencyId = false, assetsRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (assetsRefs) db.assets],
-              addJoins:
-                  <
-                    T extends TableManagerState<
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic,
-                      dynamic
-                    >
-                  >(state) {
-                    if (currencyId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.currencyId,
-                                referencedTable: $AccountsReferences
-                                    ._currencyIdTable(db),
-                                referencedColumn: $AccountsReferences
-                                    ._currencyIdTable(db)
-                                    .code,
-                              )
-                              as T;
-                    }
+          prefetchHooksCallback:
+              ({
+                currencyId = false,
+                assetsRefs = false,
+                holdingsRefs = false,
+                accountSnapshotsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (assetsRefs) db.assets,
+                    if (holdingsRefs) db.holdings,
+                    if (accountSnapshotsRefs) db.accountSnapshots,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (currencyId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.currencyId,
+                                    referencedTable: $AccountsReferences
+                                        ._currencyIdTable(db),
+                                    referencedColumn: $AccountsReferences
+                                        ._currencyIdTable(db)
+                                        .code,
+                                  )
+                                  as T;
+                        }
 
-                    return state;
-                  },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (assetsRefs)
-                    await $_getPrefetchedData<AccountInDB, Accounts, AssetInDB>(
-                      currentTable: table,
-                      referencedTable: $AccountsReferences._assetsRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $AccountsReferences(db, table, p0).assetsRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.linkedAccountID == item.id,
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (assetsRefs)
+                        await $_getPrefetchedData<
+                          AccountInDB,
+                          Accounts,
+                          AssetInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountsReferences._assetsRefsTable(
+                            db,
                           ),
-                      typedResults: items,
-                    ),
-                ];
+                          managerFromTypedResult: (p0) =>
+                              $AccountsReferences(db, table, p0).assetsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.linkedAccountID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (holdingsRefs)
+                        await $_getPrefetchedData<
+                          AccountInDB,
+                          Accounts,
+                          HoldingInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountsReferences
+                              ._holdingsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $AccountsReferences(db, table, p0).holdingsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (accountSnapshotsRefs)
+                        await $_getPrefetchedData<
+                          AccountInDB,
+                          Accounts,
+                          AccountSnapshotInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountsReferences
+                              ._accountSnapshotsRefsTable(db),
+                          managerFromTypedResult: (p0) => $AccountsReferences(
+                            db,
+                            table,
+                            p0,
+                          ).accountSnapshotsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -9947,7 +14140,12 @@ typedef $AccountsProcessedTableManager =
       $AccountsUpdateCompanionBuilder,
       (AccountInDB, $AccountsReferences),
       AccountInDB,
-      PrefetchHooks Function({bool currencyId, bool assetsRefs})
+      PrefetchHooks Function({
+        bool currencyId,
+        bool assetsRefs,
+        bool holdingsRefs,
+        bool accountSnapshotsRefs,
+      })
     >;
 typedef $DebtsCreateCompanionBuilder =
     DebtsCompanion Function({
@@ -9977,9 +14175,8 @@ typedef $DebtsUpdateCompanionBuilder =
 final class $DebtsReferences extends BaseReferences<_$AppDB, Debts, DebtInDB> {
   $DebtsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Currencies _currencyIdTable(_$AppDB db) => db.currencies.createAlias(
-    $_aliasNameGenerator(db.debts.currencyId, db.currencies.code),
-  );
+  static Currencies _currencyIdTable(_$AppDB db) =>
+      db.currencies.createAlias('debts__currencyId__currencies__code');
 
   $CurrenciesProcessedTableManager get currencyId {
     final $_column = $_itemColumn<String>('currencyId')!;
@@ -9995,10 +14192,29 @@ final class $DebtsReferences extends BaseReferences<_$AppDB, Debts, DebtInDB> {
     );
   }
 
+  static MultiTypedResultKey<Assets, List<AssetInDB>> _assetsRefsTable(
+    _$AppDB db,
+  ) => MultiTypedResultKey.fromTable(
+    db.assets,
+    aliasName: 'debts__id__assets__linkedDebtId',
+  );
+
+  $AssetsProcessedTableManager get assetsRefs {
+    final manager = $AssetsTableManager(
+      $_db,
+      $_db.assets,
+    ).filter((f) => f.linkedDebtId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_assetsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
   static MultiTypedResultKey<Transactions, List<TransactionInDB>>
   _transactionsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.transactions,
-    aliasName: $_aliasNameGenerator(db.debts.id, db.transactions.debtId),
+    aliasName: 'debts__id__transactions__debtId',
   );
 
   $TransactionsProcessedTableManager get transactionsRefs {
@@ -10079,6 +14295,31 @@ class $DebtsFilterComposer extends Composer<_$AppDB, Debts> {
           ),
     );
     return composer;
+  }
+
+  Expression<bool> assetsRefs(
+    Expression<bool> Function($AssetsFilterComposer f) f,
+  ) {
+    final $AssetsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.linkedDebtId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsFilterComposer(
+            $db: $db,
+            $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
   }
 
   Expression<bool> transactionsRefs(
@@ -10228,6 +14469,31 @@ class $DebtsAnnotationComposer extends Composer<_$AppDB, Debts> {
     return composer;
   }
 
+  Expression<T> assetsRefs<T extends Object>(
+    Expression<T> Function($AssetsAnnotationComposer a) f,
+  ) {
+    final $AssetsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.assets,
+      getReferencedColumn: (t) => t.linkedDebtId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AssetsAnnotationComposer(
+            $db: $db,
+            $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
   Expression<T> transactionsRefs<T extends Object>(
     Expression<T> Function($TransactionsAnnotationComposer a) f,
   ) {
@@ -10267,7 +14533,11 @@ class $DebtsTableManager
           $DebtsUpdateCompanionBuilder,
           (DebtInDB, $DebtsReferences),
           DebtInDB,
-          PrefetchHooks Function({bool currencyId, bool transactionsRefs})
+          PrefetchHooks Function({
+            bool currencyId,
+            bool assetsRefs,
+            bool transactionsRefs,
+          })
         > {
   $DebtsTableManager(_$AppDB db, Debts table)
     : super(
@@ -10328,10 +14598,15 @@ class $DebtsTableManager
               .map((e) => (e.readTable(table), $DebtsReferences(db, table, e)))
               .toList(),
           prefetchHooksCallback:
-              ({currencyId = false, transactionsRefs = false}) {
+              ({
+                currencyId = false,
+                assetsRefs = false,
+                transactionsRefs = false,
+              }) {
                 return PrefetchHooks(
                   db: db,
                   explicitlyWatchedTables: [
+                    if (assetsRefs) db.assets,
                     if (transactionsRefs) db.transactions,
                   ],
                   addJoins:
@@ -10368,6 +14643,20 @@ class $DebtsTableManager
                       },
                   getPrefetchedDataCallback: (items) async {
                     return [
+                      if (assetsRefs)
+                        await $_getPrefetchedData<DebtInDB, Debts, AssetInDB>(
+                          currentTable: table,
+                          referencedTable: $DebtsReferences._assetsRefsTable(
+                            db,
+                          ),
+                          managerFromTypedResult: (p0) =>
+                              $DebtsReferences(db, table, p0).assetsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.linkedDebtId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
                       if (transactionsRefs)
                         await $_getPrefetchedData<
                           DebtInDB,
@@ -10405,7 +14694,11 @@ typedef $DebtsProcessedTableManager =
       $DebtsUpdateCompanionBuilder,
       (DebtInDB, $DebtsReferences),
       DebtInDB,
-      PrefetchHooks Function({bool currencyId, bool transactionsRefs})
+      PrefetchHooks Function({
+        bool currencyId,
+        bool assetsRefs,
+        bool transactionsRefs,
+      })
     >;
 typedef $AssetsCreateCompanionBuilder =
     AssetsCompanion Function({
@@ -10417,6 +14710,7 @@ typedef $AssetsCreateCompanionBuilder =
       required DateTime creationDate,
       Value<AssetType> assetType,
       Value<String?> linkedAccountID,
+      Value<String?> linkedDebtId,
       Value<int> rowid,
     });
 typedef $AssetsUpdateCompanionBuilder =
@@ -10429,6 +14723,7 @@ typedef $AssetsUpdateCompanionBuilder =
       Value<DateTime> creationDate,
       Value<AssetType> assetType,
       Value<String?> linkedAccountID,
+      Value<String?> linkedDebtId,
       Value<int> rowid,
     });
 
@@ -10436,9 +14731,8 @@ final class $AssetsReferences
     extends BaseReferences<_$AppDB, Assets, AssetInDB> {
   $AssetsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Currencies _currencyIdTable(_$AppDB db) => db.currencies.createAlias(
-    $_aliasNameGenerator(db.assets.currencyId, db.currencies.code),
-  );
+  static Currencies _currencyIdTable(_$AppDB db) =>
+      db.currencies.createAlias('assets__currencyId__currencies__code');
 
   $CurrenciesProcessedTableManager get currencyId {
     final $_column = $_itemColumn<String>('currencyId')!;
@@ -10454,9 +14748,8 @@ final class $AssetsReferences
     );
   }
 
-  static Accounts _linkedAccountIDTable(_$AppDB db) => db.accounts.createAlias(
-    $_aliasNameGenerator(db.assets.linkedAccountID, db.accounts.id),
-  );
+  static Accounts _linkedAccountIDTable(_$AppDB db) =>
+      db.accounts.createAlias('assets__linkedAccountID__accounts__id');
 
   $AccountsProcessedTableManager? get linkedAccountID {
     final $_column = $_itemColumn<String>('linkedAccountID');
@@ -10472,10 +14765,27 @@ final class $AssetsReferences
     );
   }
 
+  static Debts _linkedDebtIdTable(_$AppDB db) =>
+      db.debts.createAlias('assets__linkedDebtId__debts__id');
+
+  $DebtsProcessedTableManager? get linkedDebtId {
+    final $_column = $_itemColumn<String>('linkedDebtId');
+    if ($_column == null) return null;
+    final manager = $DebtsTableManager(
+      $_db,
+      $_db.debts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_linkedDebtIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
   static MultiTypedResultKey<Valuations, List<ValuationInDB>>
   _valuationsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.valuations,
-    aliasName: $_aliasNameGenerator(db.assets.id, db.valuations.assetId),
+    aliasName: 'assets__id__valuations__assetId',
   );
 
   $ValuationsProcessedTableManager get valuationsRefs {
@@ -10493,7 +14803,7 @@ final class $AssetsReferences
   static MultiTypedResultKey<Transactions, List<TransactionInDB>>
   _transactionsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.transactions,
-    aliasName: $_aliasNameGenerator(db.assets.id, db.transactions.assetID),
+    aliasName: 'assets__id__transactions__assetID',
   );
 
   $TransactionsProcessedTableManager get transactionsRefs {
@@ -10585,6 +14895,29 @@ class $AssetsFilterComposer extends Composer<_$AppDB, Assets> {
           }) => $AccountsFilterComposer(
             $db: $db,
             $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $DebtsFilterComposer get linkedDebtId {
+    final $DebtsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.linkedDebtId,
+      referencedTable: $db.debts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $DebtsFilterComposer(
+            $db: $db,
+            $table: $db.debts,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10728,6 +15061,29 @@ class $AssetsOrderingComposer extends Composer<_$AppDB, Assets> {
     );
     return composer;
   }
+
+  $DebtsOrderingComposer get linkedDebtId {
+    final $DebtsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.linkedDebtId,
+      referencedTable: $db.debts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $DebtsOrderingComposer(
+            $db: $db,
+            $table: $db.debts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
 }
 
 class $AssetsAnnotationComposer extends Composer<_$AppDB, Assets> {
@@ -10808,6 +15164,29 @@ class $AssetsAnnotationComposer extends Composer<_$AppDB, Assets> {
     return composer;
   }
 
+  $DebtsAnnotationComposer get linkedDebtId {
+    final $DebtsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.linkedDebtId,
+      referencedTable: $db.debts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $DebtsAnnotationComposer(
+            $db: $db,
+            $table: $db.debts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
   Expression<T> valuationsRefs<T extends Object>(
     Expression<T> Function($ValuationsAnnotationComposer a) f,
   ) {
@@ -10875,6 +15254,7 @@ class $AssetsTableManager
           PrefetchHooks Function({
             bool currencyId,
             bool linkedAccountID,
+            bool linkedDebtId,
             bool valuationsRefs,
             bool transactionsRefs,
           })
@@ -10900,6 +15280,7 @@ class $AssetsTableManager
                 Value<DateTime> creationDate = const Value.absent(),
                 Value<AssetType> assetType = const Value.absent(),
                 Value<String?> linkedAccountID = const Value.absent(),
+                Value<String?> linkedDebtId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssetsCompanion(
                 id: id,
@@ -10910,6 +15291,7 @@ class $AssetsTableManager
                 creationDate: creationDate,
                 assetType: assetType,
                 linkedAccountID: linkedAccountID,
+                linkedDebtId: linkedDebtId,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -10922,6 +15304,7 @@ class $AssetsTableManager
                 required DateTime creationDate,
                 Value<AssetType> assetType = const Value.absent(),
                 Value<String?> linkedAccountID = const Value.absent(),
+                Value<String?> linkedDebtId = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssetsCompanion.insert(
                 id: id,
@@ -10932,6 +15315,7 @@ class $AssetsTableManager
                 creationDate: creationDate,
                 assetType: assetType,
                 linkedAccountID: linkedAccountID,
+                linkedDebtId: linkedDebtId,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -10941,6 +15325,7 @@ class $AssetsTableManager
               ({
                 currencyId = false,
                 linkedAccountID = false,
+                linkedDebtId = false,
                 valuationsRefs = false,
                 transactionsRefs = false,
               }) {
@@ -10988,6 +15373,19 @@ class $AssetsTableManager
                                         ._linkedAccountIDTable(db),
                                     referencedColumn: $AssetsReferences
                                         ._linkedAccountIDTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (linkedDebtId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.linkedDebtId,
+                                    referencedTable: $AssetsReferences
+                                        ._linkedDebtIdTable(db),
+                                    referencedColumn: $AssetsReferences
+                                        ._linkedDebtIdTable(db)
                                         .id,
                                   )
                                   as T;
@@ -11054,6 +15452,7 @@ typedef $AssetsProcessedTableManager =
       PrefetchHooks Function({
         bool currencyId,
         bool linkedAccountID,
+        bool linkedDebtId,
         bool valuationsRefs,
         bool transactionsRefs,
       })
@@ -11079,9 +15478,8 @@ final class $ValuationsReferences
     extends BaseReferences<_$AppDB, Valuations, ValuationInDB> {
   $ValuationsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Assets _assetIdTable(_$AppDB db) => db.assets.createAlias(
-    $_aliasNameGenerator(db.valuations.assetId, db.assets.id),
-  );
+  static Assets _assetIdTable(_$AppDB db) =>
+      db.assets.createAlias('valuations__assetId__assets__id');
 
   $AssetsProcessedTableManager get assetId {
     final $_column = $_itemColumn<String>('assetId')!;
@@ -11353,6 +15751,881 @@ typedef $ValuationsProcessedTableManager =
       ValuationInDB,
       PrefetchHooks Function({bool assetId})
     >;
+typedef $SecuritiesCreateCompanionBuilder =
+    SecuritiesCompanion Function({
+      required String id,
+      required String name,
+      Value<SecurityType> type,
+      required String currencyId,
+      Value<String?> ticker,
+      Value<double?> currentPrice,
+      Value<DateTime?> priceDate,
+      Value<String?> iconId,
+      Value<String?> color,
+      Value<int> rowid,
+    });
+typedef $SecuritiesUpdateCompanionBuilder =
+    SecuritiesCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<SecurityType> type,
+      Value<String> currencyId,
+      Value<String?> ticker,
+      Value<double?> currentPrice,
+      Value<DateTime?> priceDate,
+      Value<String?> iconId,
+      Value<String?> color,
+      Value<int> rowid,
+    });
+
+final class $SecuritiesReferences
+    extends BaseReferences<_$AppDB, Securities, SecurityInDB> {
+  $SecuritiesReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Currencies _currencyIdTable(_$AppDB db) =>
+      db.currencies.createAlias('securities__currencyId__currencies__code');
+
+  $CurrenciesProcessedTableManager get currencyId {
+    final $_column = $_itemColumn<String>('currencyId')!;
+
+    final manager = $CurrenciesTableManager(
+      $_db,
+      $_db.currencies,
+    ).filter((f) => f.code.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_currencyIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<Transactions, List<TransactionInDB>>
+  _transactionsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.transactions,
+    aliasName: 'securities__id__transactions__securityID',
+  );
+
+  $TransactionsProcessedTableManager get transactionsRefs {
+    final manager = $TransactionsTableManager(
+      $_db,
+      $_db.transactions,
+    ).filter((f) => f.securityID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_transactionsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    SecurityPriceHistory,
+    List<SecurityPriceHistoryInDB>
+  >
+  _securityPriceHistoryRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.securityPriceHistory,
+    aliasName: 'securities__id__securityPriceHistory__securityID',
+  );
+
+  $SecurityPriceHistoryProcessedTableManager get securityPriceHistoryRefs {
+    final manager = $SecurityPriceHistoryTableManager(
+      $_db,
+      $_db.securityPriceHistory,
+    ).filter((f) => f.securityID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _securityPriceHistoryRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    SecurityTaxonomyAssignments,
+    List<SecurityTaxonomyAssignmentInDB>
+  >
+  _securityTaxonomyAssignmentsRefsTable(_$AppDB db) =>
+      MultiTypedResultKey.fromTable(
+        db.securityTaxonomyAssignments,
+        aliasName: 'securities__id__securityTaxonomyAssignments__securityID',
+      );
+
+  $SecurityTaxonomyAssignmentsProcessedTableManager
+  get securityTaxonomyAssignmentsRefs {
+    final manager = $SecurityTaxonomyAssignmentsTableManager(
+      $_db,
+      $_db.securityTaxonomyAssignments,
+    ).filter((f) => f.securityID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _securityTaxonomyAssignmentsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<Holdings, List<HoldingInDB>> _holdingsRefsTable(
+    _$AppDB db,
+  ) => MultiTypedResultKey.fromTable(
+    db.holdings,
+    aliasName: 'securities__id__holdings__securityID',
+  );
+
+  $HoldingsProcessedTableManager get holdingsRefs {
+    final manager = $HoldingsTableManager(
+      $_db,
+      $_db.holdings,
+    ).filter((f) => f.securityID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_holdingsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<HoldingSnapshots, List<HoldingSnapshotInDB>>
+  _holdingSnapshotsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.holdingSnapshots,
+    aliasName: 'securities__id__holdingSnapshots__securityID',
+  );
+
+  $HoldingSnapshotsProcessedTableManager get holdingSnapshotsRefs {
+    final manager = $HoldingSnapshotsTableManager(
+      $_db,
+      $_db.holdingSnapshots,
+    ).filter((f) => f.securityID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _holdingSnapshotsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $SecuritiesFilterComposer extends Composer<_$AppDB, Securities> {
+  $SecuritiesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<SecurityType, SecurityType, String> get type =>
+      $composableBuilder(
+        column: $table.type,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get ticker => $composableBuilder(
+    column: $table.ticker,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get priceDate => $composableBuilder(
+    column: $table.priceDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get iconId => $composableBuilder(
+    column: $table.iconId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $CurrenciesFilterComposer get currencyId {
+    final $CurrenciesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.currencyId,
+      referencedTable: $db.currencies,
+      getReferencedColumn: (t) => t.code,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CurrenciesFilterComposer(
+            $db: $db,
+            $table: $db.currencies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> transactionsRefs(
+    Expression<bool> Function($TransactionsFilterComposer f) f,
+  ) {
+    final $TransactionsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsFilterComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> securityPriceHistoryRefs(
+    Expression<bool> Function($SecurityPriceHistoryFilterComposer f) f,
+  ) {
+    final $SecurityPriceHistoryFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.securityPriceHistory,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecurityPriceHistoryFilterComposer(
+            $db: $db,
+            $table: $db.securityPriceHistory,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> securityTaxonomyAssignmentsRefs(
+    Expression<bool> Function($SecurityTaxonomyAssignmentsFilterComposer f) f,
+  ) {
+    final $SecurityTaxonomyAssignmentsFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.securityTaxonomyAssignments,
+          getReferencedColumn: (t) => t.securityID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $SecurityTaxonomyAssignmentsFilterComposer(
+                $db: $db,
+                $table: $db.securityTaxonomyAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> holdingsRefs(
+    Expression<bool> Function($HoldingsFilterComposer f) f,
+  ) {
+    final $HoldingsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdings,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingsFilterComposer(
+            $db: $db,
+            $table: $db.holdings,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> holdingSnapshotsRefs(
+    Expression<bool> Function($HoldingSnapshotsFilterComposer f) f,
+  ) {
+    final $HoldingSnapshotsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdingSnapshots,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingSnapshotsFilterComposer(
+            $db: $db,
+            $table: $db.holdingSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $SecuritiesOrderingComposer extends Composer<_$AppDB, Securities> {
+  $SecuritiesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ticker => $composableBuilder(
+    column: $table.ticker,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get priceDate => $composableBuilder(
+    column: $table.priceDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get iconId => $composableBuilder(
+    column: $table.iconId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $CurrenciesOrderingComposer get currencyId {
+    final $CurrenciesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.currencyId,
+      referencedTable: $db.currencies,
+      getReferencedColumn: (t) => t.code,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CurrenciesOrderingComposer(
+            $db: $db,
+            $table: $db.currencies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecuritiesAnnotationComposer extends Composer<_$AppDB, Securities> {
+  $SecuritiesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<SecurityType, String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<String> get ticker =>
+      $composableBuilder(column: $table.ticker, builder: (column) => column);
+
+  GeneratedColumn<double> get currentPrice => $composableBuilder(
+    column: $table.currentPrice,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get priceDate =>
+      $composableBuilder(column: $table.priceDate, builder: (column) => column);
+
+  GeneratedColumn<String> get iconId =>
+      $composableBuilder(column: $table.iconId, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  $CurrenciesAnnotationComposer get currencyId {
+    final $CurrenciesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.currencyId,
+      referencedTable: $db.currencies,
+      getReferencedColumn: (t) => t.code,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $CurrenciesAnnotationComposer(
+            $db: $db,
+            $table: $db.currencies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> transactionsRefs<T extends Object>(
+    Expression<T> Function($TransactionsAnnotationComposer a) f,
+  ) {
+    final $TransactionsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.transactions,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TransactionsAnnotationComposer(
+            $db: $db,
+            $table: $db.transactions,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> securityPriceHistoryRefs<T extends Object>(
+    Expression<T> Function($SecurityPriceHistoryAnnotationComposer a) f,
+  ) {
+    final $SecurityPriceHistoryAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.securityPriceHistory,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecurityPriceHistoryAnnotationComposer(
+            $db: $db,
+            $table: $db.securityPriceHistory,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> securityTaxonomyAssignmentsRefs<T extends Object>(
+    Expression<T> Function($SecurityTaxonomyAssignmentsAnnotationComposer a) f,
+  ) {
+    final $SecurityTaxonomyAssignmentsAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.securityTaxonomyAssignments,
+          getReferencedColumn: (t) => t.securityID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $SecurityTaxonomyAssignmentsAnnotationComposer(
+                $db: $db,
+                $table: $db.securityTaxonomyAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> holdingsRefs<T extends Object>(
+    Expression<T> Function($HoldingsAnnotationComposer a) f,
+  ) {
+    final $HoldingsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdings,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingsAnnotationComposer(
+            $db: $db,
+            $table: $db.holdings,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> holdingSnapshotsRefs<T extends Object>(
+    Expression<T> Function($HoldingSnapshotsAnnotationComposer a) f,
+  ) {
+    final $HoldingSnapshotsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdingSnapshots,
+      getReferencedColumn: (t) => t.securityID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingSnapshotsAnnotationComposer(
+            $db: $db,
+            $table: $db.holdingSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $SecuritiesTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          Securities,
+          SecurityInDB,
+          $SecuritiesFilterComposer,
+          $SecuritiesOrderingComposer,
+          $SecuritiesAnnotationComposer,
+          $SecuritiesCreateCompanionBuilder,
+          $SecuritiesUpdateCompanionBuilder,
+          (SecurityInDB, $SecuritiesReferences),
+          SecurityInDB,
+          PrefetchHooks Function({
+            bool currencyId,
+            bool transactionsRefs,
+            bool securityPriceHistoryRefs,
+            bool securityTaxonomyAssignmentsRefs,
+            bool holdingsRefs,
+            bool holdingSnapshotsRefs,
+          })
+        > {
+  $SecuritiesTableManager(_$AppDB db, Securities table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $SecuritiesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $SecuritiesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $SecuritiesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<SecurityType> type = const Value.absent(),
+                Value<String> currencyId = const Value.absent(),
+                Value<String?> ticker = const Value.absent(),
+                Value<double?> currentPrice = const Value.absent(),
+                Value<DateTime?> priceDate = const Value.absent(),
+                Value<String?> iconId = const Value.absent(),
+                Value<String?> color = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecuritiesCompanion(
+                id: id,
+                name: name,
+                type: type,
+                currencyId: currencyId,
+                ticker: ticker,
+                currentPrice: currentPrice,
+                priceDate: priceDate,
+                iconId: iconId,
+                color: color,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                Value<SecurityType> type = const Value.absent(),
+                required String currencyId,
+                Value<String?> ticker = const Value.absent(),
+                Value<double?> currentPrice = const Value.absent(),
+                Value<DateTime?> priceDate = const Value.absent(),
+                Value<String?> iconId = const Value.absent(),
+                Value<String?> color = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecuritiesCompanion.insert(
+                id: id,
+                name: name,
+                type: type,
+                currencyId: currencyId,
+                ticker: ticker,
+                currentPrice: currentPrice,
+                priceDate: priceDate,
+                iconId: iconId,
+                color: color,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) =>
+                    (e.readTable(table), $SecuritiesReferences(db, table, e)),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                currencyId = false,
+                transactionsRefs = false,
+                securityPriceHistoryRefs = false,
+                securityTaxonomyAssignmentsRefs = false,
+                holdingsRefs = false,
+                holdingSnapshotsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (transactionsRefs) db.transactions,
+                    if (securityPriceHistoryRefs) db.securityPriceHistory,
+                    if (securityTaxonomyAssignmentsRefs)
+                      db.securityTaxonomyAssignments,
+                    if (holdingsRefs) db.holdings,
+                    if (holdingSnapshotsRefs) db.holdingSnapshots,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (currencyId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.currencyId,
+                                    referencedTable: $SecuritiesReferences
+                                        ._currencyIdTable(db),
+                                    referencedColumn: $SecuritiesReferences
+                                        ._currencyIdTable(db)
+                                        .code,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (transactionsRefs)
+                        await $_getPrefetchedData<
+                          SecurityInDB,
+                          Securities,
+                          TransactionInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $SecuritiesReferences
+                              ._transactionsRefsTable(db),
+                          managerFromTypedResult: (p0) => $SecuritiesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).transactionsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.securityID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (securityPriceHistoryRefs)
+                        await $_getPrefetchedData<
+                          SecurityInDB,
+                          Securities,
+                          SecurityPriceHistoryInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $SecuritiesReferences
+                              ._securityPriceHistoryRefsTable(db),
+                          managerFromTypedResult: (p0) => $SecuritiesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).securityPriceHistoryRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.securityID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (securityTaxonomyAssignmentsRefs)
+                        await $_getPrefetchedData<
+                          SecurityInDB,
+                          Securities,
+                          SecurityTaxonomyAssignmentInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $SecuritiesReferences
+                              ._securityTaxonomyAssignmentsRefsTable(db),
+                          managerFromTypedResult: (p0) => $SecuritiesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).securityTaxonomyAssignmentsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.securityID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (holdingsRefs)
+                        await $_getPrefetchedData<
+                          SecurityInDB,
+                          Securities,
+                          HoldingInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $SecuritiesReferences
+                              ._holdingsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $SecuritiesReferences(db, table, p0).holdingsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.securityID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (holdingSnapshotsRefs)
+                        await $_getPrefetchedData<
+                          SecurityInDB,
+                          Securities,
+                          HoldingSnapshotInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $SecuritiesReferences
+                              ._holdingSnapshotsRefsTable(db),
+                          managerFromTypedResult: (p0) => $SecuritiesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).holdingSnapshotsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.securityID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $SecuritiesProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      Securities,
+      SecurityInDB,
+      $SecuritiesFilterComposer,
+      $SecuritiesOrderingComposer,
+      $SecuritiesAnnotationComposer,
+      $SecuritiesCreateCompanionBuilder,
+      $SecuritiesUpdateCompanionBuilder,
+      (SecurityInDB, $SecuritiesReferences),
+      SecurityInDB,
+      PrefetchHooks Function({
+        bool currencyId,
+        bool transactionsRefs,
+        bool securityPriceHistoryRefs,
+        bool securityTaxonomyAssignmentsRefs,
+        bool holdingsRefs,
+        bool holdingSnapshotsRefs,
+      })
+    >;
 typedef $CategoriesCreateCompanionBuilder =
     CategoriesCompanion Function({
       required String id,
@@ -11383,10 +16656,7 @@ final class $CategoriesReferences
   static MultiTypedResultKey<Transactions, List<TransactionInDB>>
   _transactionsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.transactions,
-    aliasName: $_aliasNameGenerator(
-      db.categories.id,
-      db.transactions.categoryID,
-    ),
+    aliasName: 'categories__id__transactions__categoryID',
   );
 
   $TransactionsProcessedTableManager get transactionsRefs {
@@ -11701,6 +16971,9 @@ typedef $TransactionsCreateCompanionBuilder =
       Value<String?> notes,
       required TransactionType type,
       Value<String?> assetID,
+      Value<String?> securityID,
+      Value<double?> quantity,
+      Value<double?> pricePerUnit,
       Value<TransactionStatus?> status,
       Value<String?> categoryID,
       Value<String?> debtId,
@@ -11726,6 +16999,9 @@ typedef $TransactionsUpdateCompanionBuilder =
       Value<String?> notes,
       Value<TransactionType> type,
       Value<String?> assetID,
+      Value<String?> securityID,
+      Value<double?> quantity,
+      Value<double?> pricePerUnit,
       Value<TransactionStatus?> status,
       Value<String?> categoryID,
       Value<String?> debtId,
@@ -11746,9 +17022,8 @@ final class $TransactionsReferences
     extends BaseReferences<_$AppDB, Transactions, TransactionInDB> {
   $TransactionsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Accounts _accountIDTable(_$AppDB db) => db.accounts.createAlias(
-    $_aliasNameGenerator(db.transactions.accountID, db.accounts.id),
-  );
+  static Accounts _accountIDTable(_$AppDB db) =>
+      db.accounts.createAlias('transactions__accountID__accounts__id');
 
   $AccountsProcessedTableManager get accountID {
     final $_column = $_itemColumn<String>('accountID')!;
@@ -11764,9 +17039,8 @@ final class $TransactionsReferences
     );
   }
 
-  static Assets _assetIDTable(_$AppDB db) => db.assets.createAlias(
-    $_aliasNameGenerator(db.transactions.assetID, db.assets.id),
-  );
+  static Assets _assetIDTable(_$AppDB db) =>
+      db.assets.createAlias('transactions__assetID__assets__id');
 
   $AssetsProcessedTableManager? get assetID {
     final $_column = $_itemColumn<String>('assetID');
@@ -11782,9 +17056,25 @@ final class $TransactionsReferences
     );
   }
 
-  static Categories _categoryIDTable(_$AppDB db) => db.categories.createAlias(
-    $_aliasNameGenerator(db.transactions.categoryID, db.categories.id),
-  );
+  static Securities _securityIDTable(_$AppDB db) =>
+      db.securities.createAlias('transactions__securityID__securities__id');
+
+  $SecuritiesProcessedTableManager? get securityID {
+    final $_column = $_itemColumn<String>('securityID');
+    if ($_column == null) return null;
+    final manager = $SecuritiesTableManager(
+      $_db,
+      $_db.securities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_securityIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Categories _categoryIDTable(_$AppDB db) =>
+      db.categories.createAlias('transactions__categoryID__categories__id');
 
   $CategoriesProcessedTableManager? get categoryID {
     final $_column = $_itemColumn<String>('categoryID');
@@ -11800,9 +17090,8 @@ final class $TransactionsReferences
     );
   }
 
-  static Debts _debtIdTable(_$AppDB db) => db.debts.createAlias(
-    $_aliasNameGenerator(db.transactions.debtId, db.debts.id),
-  );
+  static Debts _debtIdTable(_$AppDB db) =>
+      db.debts.createAlias('transactions__debtId__debts__id');
 
   $DebtsProcessedTableManager? get debtId {
     final $_column = $_itemColumn<String>('debtId');
@@ -11819,12 +17108,7 @@ final class $TransactionsReferences
   }
 
   static Accounts _receivingAccountIDTable(_$AppDB db) =>
-      db.accounts.createAlias(
-        $_aliasNameGenerator(
-          db.transactions.receivingAccountID,
-          db.accounts.id,
-        ),
-      );
+      db.accounts.createAlias('transactions__receivingAccountID__accounts__id');
 
   $AccountsProcessedTableManager? get receivingAccountID {
     final $_column = $_itemColumn<String>('receivingAccountID');
@@ -11843,10 +17127,7 @@ final class $TransactionsReferences
   static MultiTypedResultKey<TransactionTags, List<TransactionTag>>
   _transactionTagsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.transactionTags,
-    aliasName: $_aliasNameGenerator(
-      db.transactions.id,
-      db.transactionTags.transactionID,
-    ),
+    aliasName: 'transactions__id__transactionTags__transactionID',
   );
 
   $TransactionTagsProcessedTableManager get transactionTagsRefs {
@@ -11901,6 +17182,16 @@ class $TransactionsFilterComposer extends Composer<_$AppDB, Transactions> {
   get type => $composableBuilder(
     column: $table.type,
     builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<double> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get pricePerUnit => $composableBuilder(
+    column: $table.pricePerUnit,
+    builder: (column) => ColumnFilters(column),
   );
 
   ColumnWithTypeConverterFilters<TransactionStatus?, TransactionStatus, String>
@@ -11992,6 +17283,29 @@ class $TransactionsFilterComposer extends Composer<_$AppDB, Transactions> {
           }) => $AssetsFilterComposer(
             $db: $db,
             $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesFilterComposer get securityID {
+    final $SecuritiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesFilterComposer(
+            $db: $db,
+            $table: $db.securities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -12134,6 +17448,16 @@ class $TransactionsOrderingComposer extends Composer<_$AppDB, Transactions> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get pricePerUnit => $composableBuilder(
+    column: $table.pricePerUnit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get status => $composableBuilder(
     column: $table.status,
     builder: (column) => ColumnOrderings(column),
@@ -12221,6 +17545,29 @@ class $TransactionsOrderingComposer extends Composer<_$AppDB, Transactions> {
           }) => $AssetsOrderingComposer(
             $db: $db,
             $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesOrderingComposer get securityID {
+    final $SecuritiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesOrderingComposer(
+            $db: $db,
+            $table: $db.securities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -12326,6 +17673,14 @@ class $TransactionsAnnotationComposer extends Composer<_$AppDB, Transactions> {
   GeneratedColumnWithTypeConverter<TransactionType, String> get type =>
       $composableBuilder(column: $table.type, builder: (column) => column);
 
+  GeneratedColumn<double> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<double> get pricePerUnit => $composableBuilder(
+    column: $table.pricePerUnit,
+    builder: (column) => column,
+  );
+
   GeneratedColumnWithTypeConverter<TransactionStatus?, String> get status =>
       $composableBuilder(column: $table.status, builder: (column) => column);
 
@@ -12408,6 +17763,29 @@ class $TransactionsAnnotationComposer extends Composer<_$AppDB, Transactions> {
           }) => $AssetsAnnotationComposer(
             $db: $db,
             $table: $db.assets,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesAnnotationComposer get securityID {
+    final $SecuritiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesAnnotationComposer(
+            $db: $db,
+            $table: $db.securities,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -12528,6 +17906,7 @@ class $TransactionsTableManager
           PrefetchHooks Function({
             bool accountID,
             bool assetID,
+            bool securityID,
             bool categoryID,
             bool debtId,
             bool receivingAccountID,
@@ -12555,6 +17934,9 @@ class $TransactionsTableManager
                 Value<String?> notes = const Value.absent(),
                 Value<TransactionType> type = const Value.absent(),
                 Value<String?> assetID = const Value.absent(),
+                Value<String?> securityID = const Value.absent(),
+                Value<double?> quantity = const Value.absent(),
+                Value<double?> pricePerUnit = const Value.absent(),
                 Value<TransactionStatus?> status = const Value.absent(),
                 Value<String?> categoryID = const Value.absent(),
                 Value<String?> debtId = const Value.absent(),
@@ -12578,6 +17960,9 @@ class $TransactionsTableManager
                 notes: notes,
                 type: type,
                 assetID: assetID,
+                securityID: securityID,
+                quantity: quantity,
+                pricePerUnit: pricePerUnit,
                 status: status,
                 categoryID: categoryID,
                 debtId: debtId,
@@ -12603,6 +17988,9 @@ class $TransactionsTableManager
                 Value<String?> notes = const Value.absent(),
                 required TransactionType type,
                 Value<String?> assetID = const Value.absent(),
+                Value<String?> securityID = const Value.absent(),
+                Value<double?> quantity = const Value.absent(),
+                Value<double?> pricePerUnit = const Value.absent(),
                 Value<TransactionStatus?> status = const Value.absent(),
                 Value<String?> categoryID = const Value.absent(),
                 Value<String?> debtId = const Value.absent(),
@@ -12626,6 +18014,9 @@ class $TransactionsTableManager
                 notes: notes,
                 type: type,
                 assetID: assetID,
+                securityID: securityID,
+                quantity: quantity,
+                pricePerUnit: pricePerUnit,
                 status: status,
                 categoryID: categoryID,
                 debtId: debtId,
@@ -12651,6 +18042,7 @@ class $TransactionsTableManager
               ({
                 accountID = false,
                 assetID = false,
+                securityID = false,
                 categoryID = false,
                 debtId = false,
                 receivingAccountID = false,
@@ -12699,6 +18091,19 @@ class $TransactionsTableManager
                                         ._assetIDTable(db),
                                     referencedColumn: $TransactionsReferences
                                         ._assetIDTable(db)
+                                        .id,
+                                  )
+                                  as T;
+                        }
+                        if (securityID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.securityID,
+                                    referencedTable: $TransactionsReferences
+                                        ._securityIDTable(db),
+                                    referencedColumn: $TransactionsReferences
+                                        ._securityIDTable(db)
                                         .id,
                                   )
                                   as T;
@@ -12791,6 +18196,7 @@ typedef $TransactionsProcessedTableManager =
       PrefetchHooks Function({
         bool accountID,
         bool assetID,
+        bool securityID,
         bool categoryID,
         bool debtId,
         bool receivingAccountID,
@@ -12819,7 +18225,7 @@ final class $ExchangeRatesReferences
   $ExchangeRatesReferences(super.$_db, super.$_table, super.$_typedResult);
 
   static Currencies _currencyCodeTable(_$AppDB db) => db.currencies.createAlias(
-    $_aliasNameGenerator(db.exchangeRates.currencyCode, db.currencies.code),
+    'exchangeRates__currencyCode__currencies__code',
   );
 
   $CurrenciesProcessedTableManager get currencyCode {
@@ -13122,7 +18528,7 @@ final class $TagsReferences extends BaseReferences<_$AppDB, Tags, TagInDB> {
   static MultiTypedResultKey<TransactionTags, List<TransactionTag>>
   _transactionTagsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.transactionTags,
-    aliasName: $_aliasNameGenerator(db.tags.id, db.transactionTags.tagID),
+    aliasName: 'tags__id__transactionTags__tagID',
   );
 
   $TransactionTagsProcessedTableManager get transactionTagsRefs {
@@ -13406,13 +18812,8 @@ final class $TransactionTagsReferences
     extends BaseReferences<_$AppDB, TransactionTags, TransactionTag> {
   $TransactionTagsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static Transactions _transactionIDTable(_$AppDB db) =>
-      db.transactions.createAlias(
-        $_aliasNameGenerator(
-          db.transactionTags.transactionID,
-          db.transactions.id,
-        ),
-      );
+  static Transactions _transactionIDTable(_$AppDB db) => db.transactions
+      .createAlias('transactionTags__transactionID__transactions__id');
 
   $TransactionsProcessedTableManager get transactionID {
     final $_column = $_itemColumn<String>('transactionID')!;
@@ -13428,9 +18829,8 @@ final class $TransactionTagsReferences
     );
   }
 
-  static Tags _tagIDTable(_$AppDB db) => db.tags.createAlias(
-    $_aliasNameGenerator(db.transactionTags.tagID, db.tags.id),
-  );
+  static Tags _tagIDTable(_$AppDB db) =>
+      db.tags.createAlias('transactionTags__tagID__tags__id');
 
   $TagsProcessedTableManager get tagID {
     final $_column = $_itemColumn<String>('tagID')!;
@@ -13789,10 +19189,7 @@ final class $TransactionFilterSetsReferences
     _$AppDB db,
   ) => MultiTypedResultKey.fromTable(
     db.budgets,
-    aliasName: $_aliasNameGenerator(
-      db.transactionFilterSets.id,
-      db.budgets.filterID,
-    ),
+    aliasName: 'transactionFilterSets__id__budgets__filterID',
   );
 
   $BudgetsProcessedTableManager get budgetsRefs {
@@ -13811,10 +19208,7 @@ final class $TransactionFilterSetsReferences
     _$AppDB db,
   ) => MultiTypedResultKey.fromTable(
     db.goals,
-    aliasName: $_aliasNameGenerator(
-      db.transactionFilterSets.id,
-      db.goals.filterID,
-    ),
+    aliasName: 'transactionFilterSets__id__goals__filterID',
   );
 
   $GoalsProcessedTableManager get goalsRefs {
@@ -13832,10 +19226,7 @@ final class $TransactionFilterSetsReferences
   static MultiTypedResultKey<SavedFilters, List<SavedFilterInDB>>
   _savedFiltersRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
     db.savedFilters,
-    aliasName: $_aliasNameGenerator(
-      db.transactionFilterSets.id,
-      db.savedFilters.filterID,
-    ),
+    aliasName: 'transactionFilterSets__id__savedFilters__filterID',
   );
 
   $SavedFiltersProcessedTableManager get savedFiltersRefs {
@@ -14427,10 +19818,9 @@ final class $BudgetsReferences
     extends BaseReferences<_$AppDB, Budgets, BudgetInDB> {
   $BudgetsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static TransactionFilterSets _filterIDTable(_$AppDB db) =>
-      db.transactionFilterSets.createAlias(
-        $_aliasNameGenerator(db.budgets.filterID, db.transactionFilterSets.id),
-      );
+  static TransactionFilterSets _filterIDTable(_$AppDB db) => db
+      .transactionFilterSets
+      .createAlias('budgets__filterID__transactionFilterSets__id');
 
   $TransactionFilterSetsProcessedTableManager get filterID {
     final $_column = $_itemColumn<String>('filterID')!;
@@ -14785,10 +20175,9 @@ typedef $GoalsUpdateCompanionBuilder =
 final class $GoalsReferences extends BaseReferences<_$AppDB, Goals, GoalInDB> {
   $GoalsReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static TransactionFilterSets _filterIDTable(_$AppDB db) =>
-      db.transactionFilterSets.createAlias(
-        $_aliasNameGenerator(db.goals.filterID, db.transactionFilterSets.id),
-      );
+  static TransactionFilterSets _filterIDTable(_$AppDB db) => db
+      .transactionFilterSets
+      .createAlias('goals__filterID__transactionFilterSets__id');
 
   $TransactionFilterSetsProcessedTableManager get filterID {
     final $_column = $_itemColumn<String>('filterID')!;
@@ -15148,13 +20537,9 @@ final class $SavedFiltersReferences
     extends BaseReferences<_$AppDB, SavedFilters, SavedFilterInDB> {
   $SavedFiltersReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static TransactionFilterSets _filterIDTable(_$AppDB db) =>
-      db.transactionFilterSets.createAlias(
-        $_aliasNameGenerator(
-          db.savedFilters.filterID,
-          db.transactionFilterSets.id,
-        ),
-      );
+  static TransactionFilterSets _filterIDTable(_$AppDB db) => db
+      .transactionFilterSets
+      .createAlias('savedFilters__filterID__transactionFilterSets__id');
 
   $TransactionFilterSetsProcessedTableManager get filterID {
     final $_column = $_itemColumn<String>('filterID')!;
@@ -15426,6 +20811,2951 @@ typedef $SavedFiltersProcessedTableManager =
       (SavedFilterInDB, $SavedFiltersReferences),
       SavedFilterInDB,
       PrefetchHooks Function({bool filterID})
+    >;
+typedef $SecurityPriceHistoryCreateCompanionBuilder =
+    SecurityPriceHistoryCompanion Function({
+      required String id,
+      required String securityID,
+      required DateTime date,
+      required double price,
+      Value<int> rowid,
+    });
+typedef $SecurityPriceHistoryUpdateCompanionBuilder =
+    SecurityPriceHistoryCompanion Function({
+      Value<String> id,
+      Value<String> securityID,
+      Value<DateTime> date,
+      Value<double> price,
+      Value<int> rowid,
+    });
+
+final class $SecurityPriceHistoryReferences
+    extends
+        BaseReferences<
+          _$AppDB,
+          SecurityPriceHistory,
+          SecurityPriceHistoryInDB
+        > {
+  $SecurityPriceHistoryReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static Securities _securityIDTable(_$AppDB db) => db.securities.createAlias(
+    'securityPriceHistory__securityID__securities__id',
+  );
+
+  $SecuritiesProcessedTableManager get securityID {
+    final $_column = $_itemColumn<String>('securityID')!;
+
+    final manager = $SecuritiesTableManager(
+      $_db,
+      $_db.securities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_securityIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $SecurityPriceHistoryFilterComposer
+    extends Composer<_$AppDB, SecurityPriceHistory> {
+  $SecurityPriceHistoryFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get price => $composableBuilder(
+    column: $table.price,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $SecuritiesFilterComposer get securityID {
+    final $SecuritiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesFilterComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecurityPriceHistoryOrderingComposer
+    extends Composer<_$AppDB, SecurityPriceHistory> {
+  $SecurityPriceHistoryOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get price => $composableBuilder(
+    column: $table.price,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $SecuritiesOrderingComposer get securityID {
+    final $SecuritiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesOrderingComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecurityPriceHistoryAnnotationComposer
+    extends Composer<_$AppDB, SecurityPriceHistory> {
+  $SecurityPriceHistoryAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
+
+  $SecuritiesAnnotationComposer get securityID {
+    final $SecuritiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesAnnotationComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecurityPriceHistoryTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          SecurityPriceHistory,
+          SecurityPriceHistoryInDB,
+          $SecurityPriceHistoryFilterComposer,
+          $SecurityPriceHistoryOrderingComposer,
+          $SecurityPriceHistoryAnnotationComposer,
+          $SecurityPriceHistoryCreateCompanionBuilder,
+          $SecurityPriceHistoryUpdateCompanionBuilder,
+          (SecurityPriceHistoryInDB, $SecurityPriceHistoryReferences),
+          SecurityPriceHistoryInDB,
+          PrefetchHooks Function({bool securityID})
+        > {
+  $SecurityPriceHistoryTableManager(_$AppDB db, SecurityPriceHistory table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $SecurityPriceHistoryFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $SecurityPriceHistoryOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $SecurityPriceHistoryAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> securityID = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<double> price = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecurityPriceHistoryCompanion(
+                id: id,
+                securityID: securityID,
+                date: date,
+                price: price,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String securityID,
+                required DateTime date,
+                required double price,
+                Value<int> rowid = const Value.absent(),
+              }) => SecurityPriceHistoryCompanion.insert(
+                id: id,
+                securityID: securityID,
+                date: date,
+                price: price,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $SecurityPriceHistoryReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({securityID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (securityID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.securityID,
+                                referencedTable: $SecurityPriceHistoryReferences
+                                    ._securityIDTable(db),
+                                referencedColumn:
+                                    $SecurityPriceHistoryReferences
+                                        ._securityIDTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $SecurityPriceHistoryProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      SecurityPriceHistory,
+      SecurityPriceHistoryInDB,
+      $SecurityPriceHistoryFilterComposer,
+      $SecurityPriceHistoryOrderingComposer,
+      $SecurityPriceHistoryAnnotationComposer,
+      $SecurityPriceHistoryCreateCompanionBuilder,
+      $SecurityPriceHistoryUpdateCompanionBuilder,
+      (SecurityPriceHistoryInDB, $SecurityPriceHistoryReferences),
+      SecurityPriceHistoryInDB,
+      PrefetchHooks Function({bool securityID})
+    >;
+typedef $TaxonomiesCreateCompanionBuilder =
+    TaxonomiesCompanion Function({
+      required String id,
+      required String name,
+      Value<String> color,
+      Value<String?> description,
+      Value<bool> isSystem,
+      Value<bool> isSingleSelect,
+      Value<int> displayOrder,
+      Value<int> rowid,
+    });
+typedef $TaxonomiesUpdateCompanionBuilder =
+    TaxonomiesCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<String> color,
+      Value<String?> description,
+      Value<bool> isSystem,
+      Value<bool> isSingleSelect,
+      Value<int> displayOrder,
+      Value<int> rowid,
+    });
+
+final class $TaxonomiesReferences
+    extends BaseReferences<_$AppDB, Taxonomies, TaxonomyInDB> {
+  $TaxonomiesReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<TaxonomyCategories, List<TaxonomyCategoryInDB>>
+  _taxonomyCategoriesRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.taxonomyCategories,
+    aliasName: 'taxonomies__id__taxonomyCategories__taxonomyID',
+  );
+
+  $TaxonomyCategoriesProcessedTableManager get taxonomyCategoriesRefs {
+    final manager = $TaxonomyCategoriesTableManager(
+      $_db,
+      $_db.taxonomyCategories,
+    ).filter((f) => f.taxonomyID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _taxonomyCategoriesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    SecurityTaxonomyAssignments,
+    List<SecurityTaxonomyAssignmentInDB>
+  >
+  _securityTaxonomyAssignmentsRefsTable(_$AppDB db) =>
+      MultiTypedResultKey.fromTable(
+        db.securityTaxonomyAssignments,
+        aliasName: 'taxonomies__id__securityTaxonomyAssignments__taxonomyID',
+      );
+
+  $SecurityTaxonomyAssignmentsProcessedTableManager
+  get securityTaxonomyAssignmentsRefs {
+    final manager = $SecurityTaxonomyAssignmentsTableManager(
+      $_db,
+      $_db.securityTaxonomyAssignments,
+    ).filter((f) => f.taxonomyID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _securityTaxonomyAssignmentsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $TaxonomiesFilterComposer extends Composer<_$AppDB, Taxonomies> {
+  $TaxonomiesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isSystem => $composableBuilder(
+    column: $table.isSystem,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isSingleSelect => $composableBuilder(
+    column: $table.isSingleSelect,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> taxonomyCategoriesRefs(
+    Expression<bool> Function($TaxonomyCategoriesFilterComposer f) f,
+  ) {
+    final $TaxonomyCategoriesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.taxonomyCategories,
+      getReferencedColumn: (t) => t.taxonomyID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomyCategoriesFilterComposer(
+            $db: $db,
+            $table: $db.taxonomyCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> securityTaxonomyAssignmentsRefs(
+    Expression<bool> Function($SecurityTaxonomyAssignmentsFilterComposer f) f,
+  ) {
+    final $SecurityTaxonomyAssignmentsFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.securityTaxonomyAssignments,
+          getReferencedColumn: (t) => t.taxonomyID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $SecurityTaxonomyAssignmentsFilterComposer(
+                $db: $db,
+                $table: $db.securityTaxonomyAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $TaxonomiesOrderingComposer extends Composer<_$AppDB, Taxonomies> {
+  $TaxonomiesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSystem => $composableBuilder(
+    column: $table.isSystem,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isSingleSelect => $composableBuilder(
+    column: $table.isSingleSelect,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $TaxonomiesAnnotationComposer extends Composer<_$AppDB, Taxonomies> {
+  $TaxonomiesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isSystem =>
+      $composableBuilder(column: $table.isSystem, builder: (column) => column);
+
+  GeneratedColumn<bool> get isSingleSelect => $composableBuilder(
+    column: $table.isSingleSelect,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => column,
+  );
+
+  Expression<T> taxonomyCategoriesRefs<T extends Object>(
+    Expression<T> Function($TaxonomyCategoriesAnnotationComposer a) f,
+  ) {
+    final $TaxonomyCategoriesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.taxonomyCategories,
+      getReferencedColumn: (t) => t.taxonomyID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomyCategoriesAnnotationComposer(
+            $db: $db,
+            $table: $db.taxonomyCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> securityTaxonomyAssignmentsRefs<T extends Object>(
+    Expression<T> Function($SecurityTaxonomyAssignmentsAnnotationComposer a) f,
+  ) {
+    final $SecurityTaxonomyAssignmentsAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.securityTaxonomyAssignments,
+          getReferencedColumn: (t) => t.taxonomyID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $SecurityTaxonomyAssignmentsAnnotationComposer(
+                $db: $db,
+                $table: $db.securityTaxonomyAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $TaxonomiesTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          Taxonomies,
+          TaxonomyInDB,
+          $TaxonomiesFilterComposer,
+          $TaxonomiesOrderingComposer,
+          $TaxonomiesAnnotationComposer,
+          $TaxonomiesCreateCompanionBuilder,
+          $TaxonomiesUpdateCompanionBuilder,
+          (TaxonomyInDB, $TaxonomiesReferences),
+          TaxonomyInDB,
+          PrefetchHooks Function({
+            bool taxonomyCategoriesRefs,
+            bool securityTaxonomyAssignmentsRefs,
+          })
+        > {
+  $TaxonomiesTableManager(_$AppDB db, Taxonomies table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $TaxonomiesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $TaxonomiesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $TaxonomiesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> color = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<bool> isSystem = const Value.absent(),
+                Value<bool> isSingleSelect = const Value.absent(),
+                Value<int> displayOrder = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TaxonomiesCompanion(
+                id: id,
+                name: name,
+                color: color,
+                description: description,
+                isSystem: isSystem,
+                isSingleSelect: isSingleSelect,
+                displayOrder: displayOrder,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                Value<String> color = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<bool> isSystem = const Value.absent(),
+                Value<bool> isSingleSelect = const Value.absent(),
+                Value<int> displayOrder = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TaxonomiesCompanion.insert(
+                id: id,
+                name: name,
+                color: color,
+                description: description,
+                isSystem: isSystem,
+                isSingleSelect: isSingleSelect,
+                displayOrder: displayOrder,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) =>
+                    (e.readTable(table), $TaxonomiesReferences(db, table, e)),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                taxonomyCategoriesRefs = false,
+                securityTaxonomyAssignmentsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (taxonomyCategoriesRefs) db.taxonomyCategories,
+                    if (securityTaxonomyAssignmentsRefs)
+                      db.securityTaxonomyAssignments,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (taxonomyCategoriesRefs)
+                        await $_getPrefetchedData<
+                          TaxonomyInDB,
+                          Taxonomies,
+                          TaxonomyCategoryInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $TaxonomiesReferences
+                              ._taxonomyCategoriesRefsTable(db),
+                          managerFromTypedResult: (p0) => $TaxonomiesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).taxonomyCategoriesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.taxonomyID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (securityTaxonomyAssignmentsRefs)
+                        await $_getPrefetchedData<
+                          TaxonomyInDB,
+                          Taxonomies,
+                          SecurityTaxonomyAssignmentInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $TaxonomiesReferences
+                              ._securityTaxonomyAssignmentsRefsTable(db),
+                          managerFromTypedResult: (p0) => $TaxonomiesReferences(
+                            db,
+                            table,
+                            p0,
+                          ).securityTaxonomyAssignmentsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.taxonomyID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $TaxonomiesProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      Taxonomies,
+      TaxonomyInDB,
+      $TaxonomiesFilterComposer,
+      $TaxonomiesOrderingComposer,
+      $TaxonomiesAnnotationComposer,
+      $TaxonomiesCreateCompanionBuilder,
+      $TaxonomiesUpdateCompanionBuilder,
+      (TaxonomyInDB, $TaxonomiesReferences),
+      TaxonomyInDB,
+      PrefetchHooks Function({
+        bool taxonomyCategoriesRefs,
+        bool securityTaxonomyAssignmentsRefs,
+      })
+    >;
+typedef $TaxonomyCategoriesCreateCompanionBuilder =
+    TaxonomyCategoriesCompanion Function({
+      required String id,
+      required String taxonomyID,
+      Value<String?> parentID,
+      required String name,
+      Value<String> color,
+      Value<String?> description,
+      Value<int> displayOrder,
+      Value<int> rowid,
+    });
+typedef $TaxonomyCategoriesUpdateCompanionBuilder =
+    TaxonomyCategoriesCompanion Function({
+      Value<String> id,
+      Value<String> taxonomyID,
+      Value<String?> parentID,
+      Value<String> name,
+      Value<String> color,
+      Value<String?> description,
+      Value<int> displayOrder,
+      Value<int> rowid,
+    });
+
+final class $TaxonomyCategoriesReferences
+    extends BaseReferences<_$AppDB, TaxonomyCategories, TaxonomyCategoryInDB> {
+  $TaxonomyCategoriesReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Taxonomies _taxonomyIDTable(_$AppDB db) => db.taxonomies.createAlias(
+    'taxonomyCategories__taxonomyID__taxonomies__id',
+  );
+
+  $TaxonomiesProcessedTableManager get taxonomyID {
+    final $_column = $_itemColumn<String>('taxonomyID')!;
+
+    final manager = $TaxonomiesTableManager(
+      $_db,
+      $_db.taxonomies,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_taxonomyIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<
+    SecurityTaxonomyAssignments,
+    List<SecurityTaxonomyAssignmentInDB>
+  >
+  _securityTaxonomyAssignmentsRefsTable(_$AppDB db) =>
+      MultiTypedResultKey.fromTable(
+        db.securityTaxonomyAssignments,
+        aliasName:
+            'taxonomyCategories__id__securityTaxonomyAssignments__categoryID',
+      );
+
+  $SecurityTaxonomyAssignmentsProcessedTableManager
+  get securityTaxonomyAssignmentsRefs {
+    final manager = $SecurityTaxonomyAssignmentsTableManager(
+      $_db,
+      $_db.securityTaxonomyAssignments,
+    ).filter((f) => f.categoryID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _securityTaxonomyAssignmentsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $TaxonomyCategoriesFilterComposer
+    extends Composer<_$AppDB, TaxonomyCategories> {
+  $TaxonomyCategoriesFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get parentID => $composableBuilder(
+    column: $table.parentID,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $TaxonomiesFilterComposer get taxonomyID {
+    final $TaxonomiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taxonomyID,
+      referencedTable: $db.taxonomies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomiesFilterComposer(
+            $db: $db,
+            $table: $db.taxonomies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> securityTaxonomyAssignmentsRefs(
+    Expression<bool> Function($SecurityTaxonomyAssignmentsFilterComposer f) f,
+  ) {
+    final $SecurityTaxonomyAssignmentsFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.securityTaxonomyAssignments,
+          getReferencedColumn: (t) => t.categoryID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $SecurityTaxonomyAssignmentsFilterComposer(
+                $db: $db,
+                $table: $db.securityTaxonomyAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $TaxonomyCategoriesOrderingComposer
+    extends Composer<_$AppDB, TaxonomyCategories> {
+  $TaxonomyCategoriesOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get parentID => $composableBuilder(
+    column: $table.parentID,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get color => $composableBuilder(
+    column: $table.color,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $TaxonomiesOrderingComposer get taxonomyID {
+    final $TaxonomiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taxonomyID,
+      referencedTable: $db.taxonomies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomiesOrderingComposer(
+            $db: $db,
+            $table: $db.taxonomies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $TaxonomyCategoriesAnnotationComposer
+    extends Composer<_$AppDB, TaxonomyCategories> {
+  $TaxonomyCategoriesAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get parentID =>
+      $composableBuilder(column: $table.parentID, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get displayOrder => $composableBuilder(
+    column: $table.displayOrder,
+    builder: (column) => column,
+  );
+
+  $TaxonomiesAnnotationComposer get taxonomyID {
+    final $TaxonomiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taxonomyID,
+      referencedTable: $db.taxonomies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomiesAnnotationComposer(
+            $db: $db,
+            $table: $db.taxonomies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> securityTaxonomyAssignmentsRefs<T extends Object>(
+    Expression<T> Function($SecurityTaxonomyAssignmentsAnnotationComposer a) f,
+  ) {
+    final $SecurityTaxonomyAssignmentsAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.securityTaxonomyAssignments,
+          getReferencedColumn: (t) => t.categoryID,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $SecurityTaxonomyAssignmentsAnnotationComposer(
+                $db: $db,
+                $table: $db.securityTaxonomyAssignments,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $TaxonomyCategoriesTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          TaxonomyCategories,
+          TaxonomyCategoryInDB,
+          $TaxonomyCategoriesFilterComposer,
+          $TaxonomyCategoriesOrderingComposer,
+          $TaxonomyCategoriesAnnotationComposer,
+          $TaxonomyCategoriesCreateCompanionBuilder,
+          $TaxonomyCategoriesUpdateCompanionBuilder,
+          (TaxonomyCategoryInDB, $TaxonomyCategoriesReferences),
+          TaxonomyCategoryInDB,
+          PrefetchHooks Function({
+            bool taxonomyID,
+            bool securityTaxonomyAssignmentsRefs,
+          })
+        > {
+  $TaxonomyCategoriesTableManager(_$AppDB db, TaxonomyCategories table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $TaxonomyCategoriesFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $TaxonomyCategoriesOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $TaxonomyCategoriesAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> taxonomyID = const Value.absent(),
+                Value<String?> parentID = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> color = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<int> displayOrder = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TaxonomyCategoriesCompanion(
+                id: id,
+                taxonomyID: taxonomyID,
+                parentID: parentID,
+                name: name,
+                color: color,
+                description: description,
+                displayOrder: displayOrder,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String taxonomyID,
+                Value<String?> parentID = const Value.absent(),
+                required String name,
+                Value<String> color = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<int> displayOrder = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TaxonomyCategoriesCompanion.insert(
+                id: id,
+                taxonomyID: taxonomyID,
+                parentID: parentID,
+                name: name,
+                color: color,
+                description: description,
+                displayOrder: displayOrder,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $TaxonomyCategoriesReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({taxonomyID = false, securityTaxonomyAssignmentsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (securityTaxonomyAssignmentsRefs)
+                      db.securityTaxonomyAssignments,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (taxonomyID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.taxonomyID,
+                                    referencedTable:
+                                        $TaxonomyCategoriesReferences
+                                            ._taxonomyIDTable(db),
+                                    referencedColumn:
+                                        $TaxonomyCategoriesReferences
+                                            ._taxonomyIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (securityTaxonomyAssignmentsRefs)
+                        await $_getPrefetchedData<
+                          TaxonomyCategoryInDB,
+                          TaxonomyCategories,
+                          SecurityTaxonomyAssignmentInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $TaxonomyCategoriesReferences
+                              ._securityTaxonomyAssignmentsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $TaxonomyCategoriesReferences(
+                                db,
+                                table,
+                                p0,
+                              ).securityTaxonomyAssignmentsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.categoryID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $TaxonomyCategoriesProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      TaxonomyCategories,
+      TaxonomyCategoryInDB,
+      $TaxonomyCategoriesFilterComposer,
+      $TaxonomyCategoriesOrderingComposer,
+      $TaxonomyCategoriesAnnotationComposer,
+      $TaxonomyCategoriesCreateCompanionBuilder,
+      $TaxonomyCategoriesUpdateCompanionBuilder,
+      (TaxonomyCategoryInDB, $TaxonomyCategoriesReferences),
+      TaxonomyCategoryInDB,
+      PrefetchHooks Function({
+        bool taxonomyID,
+        bool securityTaxonomyAssignmentsRefs,
+      })
+    >;
+typedef $SecurityTaxonomyAssignmentsCreateCompanionBuilder =
+    SecurityTaxonomyAssignmentsCompanion Function({
+      required String id,
+      required String securityID,
+      required String taxonomyID,
+      required String categoryID,
+      Value<int> weight,
+      Value<int> rowid,
+    });
+typedef $SecurityTaxonomyAssignmentsUpdateCompanionBuilder =
+    SecurityTaxonomyAssignmentsCompanion Function({
+      Value<String> id,
+      Value<String> securityID,
+      Value<String> taxonomyID,
+      Value<String> categoryID,
+      Value<int> weight,
+      Value<int> rowid,
+    });
+
+final class $SecurityTaxonomyAssignmentsReferences
+    extends
+        BaseReferences<
+          _$AppDB,
+          SecurityTaxonomyAssignments,
+          SecurityTaxonomyAssignmentInDB
+        > {
+  $SecurityTaxonomyAssignmentsReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static Securities _securityIDTable(_$AppDB db) => db.securities.createAlias(
+    'securityTaxonomyAssignments__securityID__securities__id',
+  );
+
+  $SecuritiesProcessedTableManager get securityID {
+    final $_column = $_itemColumn<String>('securityID')!;
+
+    final manager = $SecuritiesTableManager(
+      $_db,
+      $_db.securities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_securityIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Taxonomies _taxonomyIDTable(_$AppDB db) => db.taxonomies.createAlias(
+    'securityTaxonomyAssignments__taxonomyID__taxonomies__id',
+  );
+
+  $TaxonomiesProcessedTableManager get taxonomyID {
+    final $_column = $_itemColumn<String>('taxonomyID')!;
+
+    final manager = $TaxonomiesTableManager(
+      $_db,
+      $_db.taxonomies,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_taxonomyIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static TaxonomyCategories _categoryIDTable(_$AppDB db) =>
+      db.taxonomyCategories.createAlias(
+        'securityTaxonomyAssignments__categoryID__taxonomyCategories__id',
+      );
+
+  $TaxonomyCategoriesProcessedTableManager get categoryID {
+    final $_column = $_itemColumn<String>('categoryID')!;
+
+    final manager = $TaxonomyCategoriesTableManager(
+      $_db,
+      $_db.taxonomyCategories,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_categoryIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $SecurityTaxonomyAssignmentsFilterComposer
+    extends Composer<_$AppDB, SecurityTaxonomyAssignments> {
+  $SecurityTaxonomyAssignmentsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get weight => $composableBuilder(
+    column: $table.weight,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $SecuritiesFilterComposer get securityID {
+    final $SecuritiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesFilterComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TaxonomiesFilterComposer get taxonomyID {
+    final $TaxonomiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taxonomyID,
+      referencedTable: $db.taxonomies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomiesFilterComposer(
+            $db: $db,
+            $table: $db.taxonomies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TaxonomyCategoriesFilterComposer get categoryID {
+    final $TaxonomyCategoriesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryID,
+      referencedTable: $db.taxonomyCategories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomyCategoriesFilterComposer(
+            $db: $db,
+            $table: $db.taxonomyCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecurityTaxonomyAssignmentsOrderingComposer
+    extends Composer<_$AppDB, SecurityTaxonomyAssignments> {
+  $SecurityTaxonomyAssignmentsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get weight => $composableBuilder(
+    column: $table.weight,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $SecuritiesOrderingComposer get securityID {
+    final $SecuritiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesOrderingComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TaxonomiesOrderingComposer get taxonomyID {
+    final $TaxonomiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taxonomyID,
+      referencedTable: $db.taxonomies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomiesOrderingComposer(
+            $db: $db,
+            $table: $db.taxonomies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TaxonomyCategoriesOrderingComposer get categoryID {
+    final $TaxonomyCategoriesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryID,
+      referencedTable: $db.taxonomyCategories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomyCategoriesOrderingComposer(
+            $db: $db,
+            $table: $db.taxonomyCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecurityTaxonomyAssignmentsAnnotationComposer
+    extends Composer<_$AppDB, SecurityTaxonomyAssignments> {
+  $SecurityTaxonomyAssignmentsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get weight =>
+      $composableBuilder(column: $table.weight, builder: (column) => column);
+
+  $SecuritiesAnnotationComposer get securityID {
+    final $SecuritiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesAnnotationComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TaxonomiesAnnotationComposer get taxonomyID {
+    final $TaxonomiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.taxonomyID,
+      referencedTable: $db.taxonomies,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomiesAnnotationComposer(
+            $db: $db,
+            $table: $db.taxonomies,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $TaxonomyCategoriesAnnotationComposer get categoryID {
+    final $TaxonomyCategoriesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.categoryID,
+      referencedTable: $db.taxonomyCategories,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $TaxonomyCategoriesAnnotationComposer(
+            $db: $db,
+            $table: $db.taxonomyCategories,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $SecurityTaxonomyAssignmentsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          SecurityTaxonomyAssignments,
+          SecurityTaxonomyAssignmentInDB,
+          $SecurityTaxonomyAssignmentsFilterComposer,
+          $SecurityTaxonomyAssignmentsOrderingComposer,
+          $SecurityTaxonomyAssignmentsAnnotationComposer,
+          $SecurityTaxonomyAssignmentsCreateCompanionBuilder,
+          $SecurityTaxonomyAssignmentsUpdateCompanionBuilder,
+          (
+            SecurityTaxonomyAssignmentInDB,
+            $SecurityTaxonomyAssignmentsReferences,
+          ),
+          SecurityTaxonomyAssignmentInDB,
+          PrefetchHooks Function({
+            bool securityID,
+            bool taxonomyID,
+            bool categoryID,
+          })
+        > {
+  $SecurityTaxonomyAssignmentsTableManager(
+    _$AppDB db,
+    SecurityTaxonomyAssignments table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $SecurityTaxonomyAssignmentsFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $SecurityTaxonomyAssignmentsOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $SecurityTaxonomyAssignmentsAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> securityID = const Value.absent(),
+                Value<String> taxonomyID = const Value.absent(),
+                Value<String> categoryID = const Value.absent(),
+                Value<int> weight = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecurityTaxonomyAssignmentsCompanion(
+                id: id,
+                securityID: securityID,
+                taxonomyID: taxonomyID,
+                categoryID: categoryID,
+                weight: weight,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String securityID,
+                required String taxonomyID,
+                required String categoryID,
+                Value<int> weight = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => SecurityTaxonomyAssignmentsCompanion.insert(
+                id: id,
+                securityID: securityID,
+                taxonomyID: taxonomyID,
+                categoryID: categoryID,
+                weight: weight,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $SecurityTaxonomyAssignmentsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({securityID = false, taxonomyID = false, categoryID = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (securityID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.securityID,
+                                    referencedTable:
+                                        $SecurityTaxonomyAssignmentsReferences
+                                            ._securityIDTable(db),
+                                    referencedColumn:
+                                        $SecurityTaxonomyAssignmentsReferences
+                                            ._securityIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (taxonomyID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.taxonomyID,
+                                    referencedTable:
+                                        $SecurityTaxonomyAssignmentsReferences
+                                            ._taxonomyIDTable(db),
+                                    referencedColumn:
+                                        $SecurityTaxonomyAssignmentsReferences
+                                            ._taxonomyIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (categoryID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.categoryID,
+                                    referencedTable:
+                                        $SecurityTaxonomyAssignmentsReferences
+                                            ._categoryIDTable(db),
+                                    referencedColumn:
+                                        $SecurityTaxonomyAssignmentsReferences
+                                            ._categoryIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $SecurityTaxonomyAssignmentsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      SecurityTaxonomyAssignments,
+      SecurityTaxonomyAssignmentInDB,
+      $SecurityTaxonomyAssignmentsFilterComposer,
+      $SecurityTaxonomyAssignmentsOrderingComposer,
+      $SecurityTaxonomyAssignmentsAnnotationComposer,
+      $SecurityTaxonomyAssignmentsCreateCompanionBuilder,
+      $SecurityTaxonomyAssignmentsUpdateCompanionBuilder,
+      (SecurityTaxonomyAssignmentInDB, $SecurityTaxonomyAssignmentsReferences),
+      SecurityTaxonomyAssignmentInDB,
+      PrefetchHooks Function({
+        bool securityID,
+        bool taxonomyID,
+        bool categoryID,
+      })
+    >;
+typedef $HoldingsCreateCompanionBuilder =
+    HoldingsCompanion Function({
+      required String id,
+      required String accountID,
+      required String securityID,
+      Value<double> quantity,
+      Value<double> avgCostPrice,
+      Value<int> rowid,
+    });
+typedef $HoldingsUpdateCompanionBuilder =
+    HoldingsCompanion Function({
+      Value<String> id,
+      Value<String> accountID,
+      Value<String> securityID,
+      Value<double> quantity,
+      Value<double> avgCostPrice,
+      Value<int> rowid,
+    });
+
+final class $HoldingsReferences
+    extends BaseReferences<_$AppDB, Holdings, HoldingInDB> {
+  $HoldingsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Accounts _accountIDTable(_$AppDB db) =>
+      db.accounts.createAlias('holdings__accountID__accounts__id');
+
+  $AccountsProcessedTableManager get accountID {
+    final $_column = $_itemColumn<String>('accountID')!;
+
+    final manager = $AccountsTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_accountIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Securities _securityIDTable(_$AppDB db) =>
+      db.securities.createAlias('holdings__securityID__securities__id');
+
+  $SecuritiesProcessedTableManager get securityID {
+    final $_column = $_itemColumn<String>('securityID')!;
+
+    final manager = $SecuritiesTableManager(
+      $_db,
+      $_db.securities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_securityIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $HoldingsFilterComposer extends Composer<_$AppDB, Holdings> {
+  $HoldingsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get avgCostPrice => $composableBuilder(
+    column: $table.avgCostPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $AccountsFilterComposer get accountID {
+    final $AccountsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesFilterComposer get securityID {
+    final $SecuritiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesFilterComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $HoldingsOrderingComposer extends Composer<_$AppDB, Holdings> {
+  $HoldingsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get avgCostPrice => $composableBuilder(
+    column: $table.avgCostPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $AccountsOrderingComposer get accountID {
+    final $AccountsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesOrderingComposer get securityID {
+    final $SecuritiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesOrderingComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $HoldingsAnnotationComposer extends Composer<_$AppDB, Holdings> {
+  $HoldingsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<double> get avgCostPrice => $composableBuilder(
+    column: $table.avgCostPrice,
+    builder: (column) => column,
+  );
+
+  $AccountsAnnotationComposer get accountID {
+    final $AccountsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesAnnotationComposer get securityID {
+    final $SecuritiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesAnnotationComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $HoldingsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          Holdings,
+          HoldingInDB,
+          $HoldingsFilterComposer,
+          $HoldingsOrderingComposer,
+          $HoldingsAnnotationComposer,
+          $HoldingsCreateCompanionBuilder,
+          $HoldingsUpdateCompanionBuilder,
+          (HoldingInDB, $HoldingsReferences),
+          HoldingInDB,
+          PrefetchHooks Function({bool accountID, bool securityID})
+        > {
+  $HoldingsTableManager(_$AppDB db, Holdings table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $HoldingsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $HoldingsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $HoldingsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> accountID = const Value.absent(),
+                Value<String> securityID = const Value.absent(),
+                Value<double> quantity = const Value.absent(),
+                Value<double> avgCostPrice = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HoldingsCompanion(
+                id: id,
+                accountID: accountID,
+                securityID: securityID,
+                quantity: quantity,
+                avgCostPrice: avgCostPrice,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String accountID,
+                required String securityID,
+                Value<double> quantity = const Value.absent(),
+                Value<double> avgCostPrice = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HoldingsCompanion.insert(
+                id: id,
+                accountID: accountID,
+                securityID: securityID,
+                quantity: quantity,
+                avgCostPrice: avgCostPrice,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (e.readTable(table), $HoldingsReferences(db, table, e)),
+              )
+              .toList(),
+          prefetchHooksCallback: ({accountID = false, securityID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (accountID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.accountID,
+                                referencedTable: $HoldingsReferences
+                                    ._accountIDTable(db),
+                                referencedColumn: $HoldingsReferences
+                                    ._accountIDTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+                    if (securityID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.securityID,
+                                referencedTable: $HoldingsReferences
+                                    ._securityIDTable(db),
+                                referencedColumn: $HoldingsReferences
+                                    ._securityIDTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $HoldingsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      Holdings,
+      HoldingInDB,
+      $HoldingsFilterComposer,
+      $HoldingsOrderingComposer,
+      $HoldingsAnnotationComposer,
+      $HoldingsCreateCompanionBuilder,
+      $HoldingsUpdateCompanionBuilder,
+      (HoldingInDB, $HoldingsReferences),
+      HoldingInDB,
+      PrefetchHooks Function({bool accountID, bool securityID})
+    >;
+typedef $AccountSnapshotsCreateCompanionBuilder =
+    AccountSnapshotsCompanion Function({
+      required String id,
+      required String accountID,
+      required DateTime date,
+      Value<int> rowid,
+    });
+typedef $AccountSnapshotsUpdateCompanionBuilder =
+    AccountSnapshotsCompanion Function({
+      Value<String> id,
+      Value<String> accountID,
+      Value<DateTime> date,
+      Value<int> rowid,
+    });
+
+final class $AccountSnapshotsReferences
+    extends BaseReferences<_$AppDB, AccountSnapshots, AccountSnapshotInDB> {
+  $AccountSnapshotsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static Accounts _accountIDTable(_$AppDB db) =>
+      db.accounts.createAlias('accountSnapshots__accountID__accounts__id');
+
+  $AccountsProcessedTableManager get accountID {
+    final $_column = $_itemColumn<String>('accountID')!;
+
+    final manager = $AccountsTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_accountIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<HoldingSnapshots, List<HoldingSnapshotInDB>>
+  _holdingSnapshotsRefsTable(_$AppDB db) => MultiTypedResultKey.fromTable(
+    db.holdingSnapshots,
+    aliasName: 'accountSnapshots__id__holdingSnapshots__snapshotID',
+  );
+
+  $HoldingSnapshotsProcessedTableManager get holdingSnapshotsRefs {
+    final manager = $HoldingSnapshotsTableManager(
+      $_db,
+      $_db.holdingSnapshots,
+    ).filter((f) => f.snapshotID.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(
+      _holdingSnapshotsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $AccountSnapshotsFilterComposer
+    extends Composer<_$AppDB, AccountSnapshots> {
+  $AccountSnapshotsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $AccountsFilterComposer get accountID {
+    final $AccountsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> holdingSnapshotsRefs(
+    Expression<bool> Function($HoldingSnapshotsFilterComposer f) f,
+  ) {
+    final $HoldingSnapshotsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdingSnapshots,
+      getReferencedColumn: (t) => t.snapshotID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingSnapshotsFilterComposer(
+            $db: $db,
+            $table: $db.holdingSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $AccountSnapshotsOrderingComposer
+    extends Composer<_$AppDB, AccountSnapshots> {
+  $AccountSnapshotsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $AccountsOrderingComposer get accountID {
+    final $AccountsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $AccountSnapshotsAnnotationComposer
+    extends Composer<_$AppDB, AccountSnapshots> {
+  $AccountSnapshotsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  $AccountsAnnotationComposer get accountID {
+    final $AccountsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountID,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountsAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> holdingSnapshotsRefs<T extends Object>(
+    Expression<T> Function($HoldingSnapshotsAnnotationComposer a) f,
+  ) {
+    final $HoldingSnapshotsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.holdingSnapshots,
+      getReferencedColumn: (t) => t.snapshotID,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $HoldingSnapshotsAnnotationComposer(
+            $db: $db,
+            $table: $db.holdingSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $AccountSnapshotsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          AccountSnapshots,
+          AccountSnapshotInDB,
+          $AccountSnapshotsFilterComposer,
+          $AccountSnapshotsOrderingComposer,
+          $AccountSnapshotsAnnotationComposer,
+          $AccountSnapshotsCreateCompanionBuilder,
+          $AccountSnapshotsUpdateCompanionBuilder,
+          (AccountSnapshotInDB, $AccountSnapshotsReferences),
+          AccountSnapshotInDB,
+          PrefetchHooks Function({bool accountID, bool holdingSnapshotsRefs})
+        > {
+  $AccountSnapshotsTableManager(_$AppDB db, AccountSnapshots table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $AccountSnapshotsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $AccountSnapshotsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $AccountSnapshotsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> accountID = const Value.absent(),
+                Value<DateTime> date = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AccountSnapshotsCompanion(
+                id: id,
+                accountID: accountID,
+                date: date,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String accountID,
+                required DateTime date,
+                Value<int> rowid = const Value.absent(),
+              }) => AccountSnapshotsCompanion.insert(
+                id: id,
+                accountID: accountID,
+                date: date,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $AccountSnapshotsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({accountID = false, holdingSnapshotsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (holdingSnapshotsRefs) db.holdingSnapshots,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (accountID) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.accountID,
+                                    referencedTable: $AccountSnapshotsReferences
+                                        ._accountIDTable(db),
+                                    referencedColumn:
+                                        $AccountSnapshotsReferences
+                                            ._accountIDTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (holdingSnapshotsRefs)
+                        await $_getPrefetchedData<
+                          AccountSnapshotInDB,
+                          AccountSnapshots,
+                          HoldingSnapshotInDB
+                        >(
+                          currentTable: table,
+                          referencedTable: $AccountSnapshotsReferences
+                              ._holdingSnapshotsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $AccountSnapshotsReferences(
+                                db,
+                                table,
+                                p0,
+                              ).holdingSnapshotsRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.snapshotID == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $AccountSnapshotsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      AccountSnapshots,
+      AccountSnapshotInDB,
+      $AccountSnapshotsFilterComposer,
+      $AccountSnapshotsOrderingComposer,
+      $AccountSnapshotsAnnotationComposer,
+      $AccountSnapshotsCreateCompanionBuilder,
+      $AccountSnapshotsUpdateCompanionBuilder,
+      (AccountSnapshotInDB, $AccountSnapshotsReferences),
+      AccountSnapshotInDB,
+      PrefetchHooks Function({bool accountID, bool holdingSnapshotsRefs})
+    >;
+typedef $HoldingSnapshotsCreateCompanionBuilder =
+    HoldingSnapshotsCompanion Function({
+      required String id,
+      required String snapshotID,
+      required String securityID,
+      required double quantity,
+      required double avgCostPrice,
+      Value<int> rowid,
+    });
+typedef $HoldingSnapshotsUpdateCompanionBuilder =
+    HoldingSnapshotsCompanion Function({
+      Value<String> id,
+      Value<String> snapshotID,
+      Value<String> securityID,
+      Value<double> quantity,
+      Value<double> avgCostPrice,
+      Value<int> rowid,
+    });
+
+final class $HoldingSnapshotsReferences
+    extends BaseReferences<_$AppDB, HoldingSnapshots, HoldingSnapshotInDB> {
+  $HoldingSnapshotsReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static AccountSnapshots _snapshotIDTable(_$AppDB db) => db.accountSnapshots
+      .createAlias('holdingSnapshots__snapshotID__accountSnapshots__id');
+
+  $AccountSnapshotsProcessedTableManager get snapshotID {
+    final $_column = $_itemColumn<String>('snapshotID')!;
+
+    final manager = $AccountSnapshotsTableManager(
+      $_db,
+      $_db.accountSnapshots,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_snapshotIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static Securities _securityIDTable(_$AppDB db) =>
+      db.securities.createAlias('holdingSnapshots__securityID__securities__id');
+
+  $SecuritiesProcessedTableManager get securityID {
+    final $_column = $_itemColumn<String>('securityID')!;
+
+    final manager = $SecuritiesTableManager(
+      $_db,
+      $_db.securities,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_securityIDTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $HoldingSnapshotsFilterComposer
+    extends Composer<_$AppDB, HoldingSnapshots> {
+  $HoldingSnapshotsFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get avgCostPrice => $composableBuilder(
+    column: $table.avgCostPrice,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $AccountSnapshotsFilterComposer get snapshotID {
+    final $AccountSnapshotsFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.snapshotID,
+      referencedTable: $db.accountSnapshots,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountSnapshotsFilterComposer(
+            $db: $db,
+            $table: $db.accountSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesFilterComposer get securityID {
+    final $SecuritiesFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesFilterComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $HoldingSnapshotsOrderingComposer
+    extends Composer<_$AppDB, HoldingSnapshots> {
+  $HoldingSnapshotsOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get quantity => $composableBuilder(
+    column: $table.quantity,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get avgCostPrice => $composableBuilder(
+    column: $table.avgCostPrice,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $AccountSnapshotsOrderingComposer get snapshotID {
+    final $AccountSnapshotsOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.snapshotID,
+      referencedTable: $db.accountSnapshots,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountSnapshotsOrderingComposer(
+            $db: $db,
+            $table: $db.accountSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesOrderingComposer get securityID {
+    final $SecuritiesOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesOrderingComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $HoldingSnapshotsAnnotationComposer
+    extends Composer<_$AppDB, HoldingSnapshots> {
+  $HoldingSnapshotsAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<double> get quantity =>
+      $composableBuilder(column: $table.quantity, builder: (column) => column);
+
+  GeneratedColumn<double> get avgCostPrice => $composableBuilder(
+    column: $table.avgCostPrice,
+    builder: (column) => column,
+  );
+
+  $AccountSnapshotsAnnotationComposer get snapshotID {
+    final $AccountSnapshotsAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.snapshotID,
+      referencedTable: $db.accountSnapshots,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $AccountSnapshotsAnnotationComposer(
+            $db: $db,
+            $table: $db.accountSnapshots,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $SecuritiesAnnotationComposer get securityID {
+    final $SecuritiesAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.securityID,
+      referencedTable: $db.securities,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $SecuritiesAnnotationComposer(
+            $db: $db,
+            $table: $db.securities,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $HoldingSnapshotsTableManager
+    extends
+        RootTableManager<
+          _$AppDB,
+          HoldingSnapshots,
+          HoldingSnapshotInDB,
+          $HoldingSnapshotsFilterComposer,
+          $HoldingSnapshotsOrderingComposer,
+          $HoldingSnapshotsAnnotationComposer,
+          $HoldingSnapshotsCreateCompanionBuilder,
+          $HoldingSnapshotsUpdateCompanionBuilder,
+          (HoldingSnapshotInDB, $HoldingSnapshotsReferences),
+          HoldingSnapshotInDB,
+          PrefetchHooks Function({bool snapshotID, bool securityID})
+        > {
+  $HoldingSnapshotsTableManager(_$AppDB db, HoldingSnapshots table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $HoldingSnapshotsFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $HoldingSnapshotsOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $HoldingSnapshotsAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> snapshotID = const Value.absent(),
+                Value<String> securityID = const Value.absent(),
+                Value<double> quantity = const Value.absent(),
+                Value<double> avgCostPrice = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => HoldingSnapshotsCompanion(
+                id: id,
+                snapshotID: snapshotID,
+                securityID: securityID,
+                quantity: quantity,
+                avgCostPrice: avgCostPrice,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String snapshotID,
+                required String securityID,
+                required double quantity,
+                required double avgCostPrice,
+                Value<int> rowid = const Value.absent(),
+              }) => HoldingSnapshotsCompanion.insert(
+                id: id,
+                snapshotID: snapshotID,
+                securityID: securityID,
+                quantity: quantity,
+                avgCostPrice: avgCostPrice,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $HoldingSnapshotsReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({snapshotID = false, securityID = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (snapshotID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.snapshotID,
+                                referencedTable: $HoldingSnapshotsReferences
+                                    ._snapshotIDTable(db),
+                                referencedColumn: $HoldingSnapshotsReferences
+                                    ._snapshotIDTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+                    if (securityID) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.securityID,
+                                referencedTable: $HoldingSnapshotsReferences
+                                    ._securityIDTable(db),
+                                referencedColumn: $HoldingSnapshotsReferences
+                                    ._securityIDTable(db)
+                                    .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $HoldingSnapshotsProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDB,
+      HoldingSnapshots,
+      HoldingSnapshotInDB,
+      $HoldingSnapshotsFilterComposer,
+      $HoldingSnapshotsOrderingComposer,
+      $HoldingSnapshotsAnnotationComposer,
+      $HoldingSnapshotsCreateCompanionBuilder,
+      $HoldingSnapshotsUpdateCompanionBuilder,
+      (HoldingSnapshotInDB, $HoldingSnapshotsReferences),
+      HoldingSnapshotInDB,
+      PrefetchHooks Function({bool snapshotID, bool securityID})
     >;
 typedef $UserSettingsCreateCompanionBuilder =
     UserSettingsCompanion Function({
@@ -15719,6 +24049,8 @@ class $AppDBManager {
   $AssetsTableManager get assets => $AssetsTableManager(_db, _db.assets);
   $ValuationsTableManager get valuations =>
       $ValuationsTableManager(_db, _db.valuations);
+  $SecuritiesTableManager get securities =>
+      $SecuritiesTableManager(_db, _db.securities);
   $CategoriesTableManager get categories =>
       $CategoriesTableManager(_db, _db.categories);
   $TransactionsTableManager get transactions =>
@@ -15734,6 +24066,23 @@ class $AppDBManager {
   $GoalsTableManager get goals => $GoalsTableManager(_db, _db.goals);
   $SavedFiltersTableManager get savedFilters =>
       $SavedFiltersTableManager(_db, _db.savedFilters);
+  $SecurityPriceHistoryTableManager get securityPriceHistory =>
+      $SecurityPriceHistoryTableManager(_db, _db.securityPriceHistory);
+  $TaxonomiesTableManager get taxonomies =>
+      $TaxonomiesTableManager(_db, _db.taxonomies);
+  $TaxonomyCategoriesTableManager get taxonomyCategories =>
+      $TaxonomyCategoriesTableManager(_db, _db.taxonomyCategories);
+  $SecurityTaxonomyAssignmentsTableManager get securityTaxonomyAssignments =>
+      $SecurityTaxonomyAssignmentsTableManager(
+        _db,
+        _db.securityTaxonomyAssignments,
+      );
+  $HoldingsTableManager get holdings =>
+      $HoldingsTableManager(_db, _db.holdings);
+  $AccountSnapshotsTableManager get accountSnapshots =>
+      $AccountSnapshotsTableManager(_db, _db.accountSnapshots);
+  $HoldingSnapshotsTableManager get holdingSnapshots =>
+      $HoldingSnapshotsTableManager(_db, _db.holdingSnapshots);
   $UserSettingsTableManager get userSettings =>
       $UserSettingsTableManager(_db, _db.userSettings);
   $AppDataTableManager get appData => $AppDataTableManager(_db, _db.appData);

@@ -3,11 +3,13 @@ import 'package:monekin/core/presentation/widgets/label_value_info_table.dart';
 
 class LabelValueInfoListItem extends LabelValueInfoItem {
   final Widget? trailing;
+  final VoidCallback? onTap;
 
   LabelValueInfoListItem({
     required super.value,
     required super.label,
     this.trailing,
+    this.onTap,
   });
 }
 
@@ -37,6 +39,7 @@ class LabelValueInfoList extends StatelessWidget {
           title: Text(element.label),
           subtitle: element.value,
           trailing: element.trailing,
+          onTap: element.onTap,
         );
       },
     );

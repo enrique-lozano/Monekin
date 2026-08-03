@@ -12,6 +12,7 @@ class Asset extends AssetInDB {
     required super.assetType,
     super.description,
     super.linkedAccountID,
+    super.linkedDebtId,
   }) : super(currencyId: currency.code);
 
   static Asset fromDB(AssetInDB asset, CurrencyInDB currency) => Asset(
@@ -23,5 +24,6 @@ class Asset extends AssetInDB {
     description: asset.description,
     assetType: asset.assetType,
     linkedAccountID: asset.linkedAccountID,
+    linkedDebtId: asset.linkedDebtId,
   );
 }

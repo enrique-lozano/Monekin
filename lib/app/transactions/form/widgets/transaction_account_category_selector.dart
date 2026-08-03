@@ -32,8 +32,8 @@ class TransactionAccountCategorySelector extends StatelessWidget {
     final transferAccount = form.transferAccount;
     final selectedCategory = form.selectedCategory;
     final shakeKey = form.shakeKey;
-    final investmentAssetName = form.isAssetTradeInvestment
-        ? (form.asset?.name ?? '…')
+    final investmentInstrumentName = form.isSecurityTradeInvestment
+        ? (form.security?.name ?? '…')
         : null;
 
     if (transactionType.isTransfer) {
@@ -99,15 +99,17 @@ class TransactionAccountCategorySelector extends StatelessWidget {
               form,
               fromAccount,
               _CardPosition.left,
+              readOnly: form.isSecurityTradeInvestment,
             ),
           ),
           const SizedBox(width: 2),
           Expanded(
-            child: transactionType.isInvestment && investmentAssetName != null
+            child:
+                transactionType.isInvestment && investmentInstrumentName != null
                 ? _AccountCard(
                     position: _CardPosition.right,
                     title: t.assets.details.trade_form_asset_column,
-                    value: investmentAssetName,
+                    value: investmentInstrumentName,
                     onTap: () {},
                     showChevron: false,
                   )
@@ -140,8 +142,9 @@ class TransactionAccountCategorySelector extends StatelessWidget {
     BuildContext context,
     TransactionFormController form,
     Account? fromAccount,
-    _CardPosition position,
-  ) {
+    _CardPosition position, {
+    bool readOnly = false,
+  }) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
 
@@ -149,6 +152,7 @@ class TransactionAccountCategorySelector extends StatelessWidget {
       position: position,
       title: t.general.account,
       value: fromAccount?.name,
+      showChevron: !readOnly,
       leading:
           fromAccount?.displayIcon(context) ??
           IconDisplayer(
@@ -156,7 +160,7 @@ class TransactionAccountCategorySelector extends StatelessWidget {
             icon: Icons.question_mark_rounded,
             mainColor: theme.colorScheme.primary,
           ),
-      onTap: () => form.pickFromAccount(context),
+      onTap: readOnly ? () {} : () => form.pickFromAccount(context),
     );
   }
 }

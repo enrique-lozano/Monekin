@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/core/database/services/taxonomy/taxonomy_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:path/path.dart' as path;
@@ -153,6 +154,11 @@ class BackupDatabaseService {
       if (dbVersion < db.schemaVersion) {
         await db.migrateDB(dbVersion, db.schemaVersion);
       }
+
+      // The imported database may predate the classification taxonomies
+      // (an old backup, or one just migrated from v12): seed the built-in
+      // taxonomies when they're missing. No-op when they already exist.
+      await TaxonomyService.instance.ensureSeeded();
 
       db.markTablesUpdated(db.allTables);
     } catch (e) {

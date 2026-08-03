@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
-import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/app/transactions/form/transaction_form_scaffold.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/debt/debt.dart';
@@ -18,7 +17,6 @@ class TransactionFormPage extends StatefulWidget {
     this.toAccount,
     this.transactionToEdit,
     this.linkedDebt,
-    this.linkedAsset,
   });
 
   final TransactionType? mode;
@@ -26,7 +24,6 @@ class TransactionFormPage extends StatefulWidget {
   final Account? fromAccount;
   final Account? toAccount;
   final Debt? linkedDebt;
-  final Asset? linkedAsset;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -44,7 +41,6 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       fromAccount: widget.fromAccount,
       toAccount: widget.toAccount,
       linkedDebt: widget.linkedDebt,
-      linkedAsset: widget.linkedAsset,
     )..initialize();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -57,11 +53,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     final c = _controller;
     if (c.isEditMode) return;
 
-    if (widget.linkedAsset != null && c.isAssetTradeInvestment) {
-      await c.completeLinkedAssetBootstrap();
-    } else {
-      await c.waitForFormDefaults();
-    }
+    await c.waitForFormDefaults();
     if (!mounted) return;
 
     if (c.usesDualLegAmountLayout) {

@@ -880,20 +880,8 @@
     },
     "DETAILS": {
       "select_account": "Виберіть обліковий запис",
-      "buy": "купити",
-      "sell": "Продати",
       "update_value": "Оновити значення",
-      "trade_sheet_title_buy": "Купити (додати в актив)",
-      "trade_sheet_title_sell": "Продати (зменшити актив)",
-      "trade_sheet_update_value_info": "Вартість цього активу буде оновлено до {{ value }}",
-      "trade_sheet_update_linked_asset_value_info": "Вартість активу, пов’язаного з цією трансакцією, буде оновлено до {{ value }}",
-      "trade_sheet_update_following_valuations": "Оновіть пізніші оцінки",
-      "trade_sheet_update_following_valuations_description": "Вирівняйте оцінки активу після обраної дати.",
-      "trade_sheet_valuation_current_value_label": "Поточне значення",
-      "trade_sheet_valuation_create_new_title": "Створити нову оцінку",
-      "trade_sheet_valuation_adjust_current_description": "Скоригувати поточну вартість активу",
       "trade_form_asset_column": "Актив",
-      "trade_valuation_notice": "Оцінку буде оновлено на цю дату, щоб відобразити цю суму.",
       "notes_optional": "Примітки (необов'язково)",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
@@ -945,18 +933,10 @@
     },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Link transaction",
-        "modal_title": "Link transaction to asset",
-        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+        "button_label": "Link transaction"
       },
       "link_transaction": {
-        "title": "Link existing income or expense",
-        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
         "success": "Transaction linked successfully"
-      },
-      "new_investment_transaction": {
-        "title": "Create investment transaction",
-        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
       }
     }
   },

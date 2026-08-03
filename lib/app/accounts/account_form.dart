@@ -57,7 +57,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
     text: '0',
   );
 
-  AccountType _type = AccountType.normal;
+  AccountType _type = AccountType.money;
+  bool _isSaving = false;
+  AccountTrackingMode _trackingMode = AccountTrackingMode.transactions;
   SupportedIcon _icon = SupportedIconService.instance.defaultSupportedIcon;
   Color _color = ColorHex.get(defaultColorPickerOptions.randomItem());
   Currency? _currency;
@@ -105,6 +107,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
       date: _openingDate,
       closingDate: _closeDate,
       type: _type,
+      isSaving: _type == AccountType.money ? _isSaving : false,
+      trackingMode: _type == AccountType.investment
+          ? _trackingMode
+          : AccountTrackingMode.transactions,
       iconId: _icon.id,
       color: _color.toHex(),
       currency: _currency!,
@@ -179,6 +185,8 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _closeDate = _accountToEdit.closingDate;
 
     _type = _accountToEdit.type;
+    _isSaving = _accountToEdit.isSaving;
+    _trackingMode = _accountToEdit.trackingMode;
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
       setState(() {
@@ -423,6 +431,69 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       },
                     ),
                   );
+
+                  // Savings flag (only relevant for money accounts)
+                  if (_type == AccountType.money) {
+                    formChildren.add(
+                      SwitchListTile.adaptive(
+                        contentPadding: EdgeInsets.zero,
+                        value: _isSaving,
+                        onChanged: (v) => setState(() => _isSaving = v),
+                        title: Text(t.account.types.saving),
+                        subtitle: Text(t.account.types.saving_descr),
+                      ),
+                    );
+                    formChildren.add(const SizedBox(height: 12));
+                  }
+
+                  // Tracking mode (only relevant for investment accounts)
+                  if (_type == AccountType.investment) {
+                    formChildren.add(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4, bottom: 4),
+                            child: Text(
+                              t.account.tracking_modes.title,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                          RadioGroup<AccountTrackingMode>(
+                            groupValue: _trackingMode,
+                            onChanged: (v) {
+                              if (v == null) return;
+                              setState(() => _trackingMode = v);
+                            },
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                for (final mode in AccountTrackingMode.values)
+                                  RadioListTile<AccountTrackingMode>.adaptive(
+                                    contentPadding: EdgeInsets.zero,
+                                    value: mode,
+                                    secondary: Icon(mode.icon),
+                                    title: Text(mode.title(context)),
+                                    subtitle: Text(mode.description(context)),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          if (_accountToEdit?.type == AccountType.investment &&
+                              _trackingMode !=
+                                  _accountToEdit?.trackingMode) ...[
+                            const SizedBox(height: 4),
+                            InlineInfoCard(
+                              text: t.account.tracking_modes.switch_warn,
+                              mode: InlineInfoCardMode.warn,
+                            ),
+                          ],
+                        ],
+                      ),
+                    );
+                    formChildren.add(const SizedBox(height: 12));
+                  }
 
                   // Show more fields
                   // Build the inner column as before (it manages its own spacing)

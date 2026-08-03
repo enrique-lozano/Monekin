@@ -21,6 +21,7 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
     required this.valueExtractor,
     this.transactions,
     required this.currency,
+    this.physics,
   });
 
   /// The items to display in the list.
@@ -45,6 +46,10 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
 
   /// Optional scroll controller for the inner [ListView].
   final ScrollController? scrollController;
+
+  /// Optional scroll physics for the inner [ListView]. Pass
+  /// [NeverScrollableScrollPhysics] to let the list flow inside an outer scroll.
+  final ScrollPhysics? physics;
 
   @override
   State<EditableTimeSeriesList<T>> createState() =>
@@ -74,6 +79,7 @@ class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
 
     return ListView.separated(
       shrinkWrap: true,
+      physics: widget.physics,
       controller: widget.scrollController,
       itemCount: widget.items.length,
       padding: const EdgeInsets.symmetric(vertical: 8),

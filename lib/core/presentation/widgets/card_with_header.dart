@@ -15,8 +15,7 @@ class CardWithHeader extends StatelessWidget {
     this.bodyPadding = const EdgeInsets.all(0),
     this.footer,
     this.titleBuilder,
-    this.onHeaderActionTap,
-    this.headerActionLabel,
+    this.headerAction,
   });
 
   final Widget body;
@@ -25,15 +24,17 @@ class CardWithHeader extends StatelessWidget {
   final String title;
   final Widget Function(String title)? titleBuilder;
   final String? subtitle;
-  final VoidCallback? onHeaderActionTap;
-  final String? headerActionLabel;
+
+  /// A widget shown at the top-right of the header, next to the title. Use
+  /// [CardHeaderAction] for the common "text + icon button" case (it matches
+  /// [CardFooterWithSingleButton]'s defaults), or pass any other widget for
+  /// full control.
+  final Widget? headerAction;
 
   final EdgeInsets bodyPadding;
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: cardSurfaceDecoration(context, radius: cardWithHeaderRadius),
@@ -41,7 +42,12 @@ class CardWithHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 10, 8),
+            padding: EdgeInsets.fromLTRB(
+              16,
+              14,
+              10,
+              headerAction != null ? 2 : 8,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,22 +77,7 @@ class CardWithHeader extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (onHeaderActionTap != null)
-                  TextButton.icon(
-                    onPressed: onHeaderActionTap,
-                    style: TextButton.styleFrom(
-                      visualDensity: VisualDensity.compact,
-                      minimumSize: const Size(0, 0),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                    ),
-                    iconAlignment: IconAlignment.end,
-                    icon: const Icon(Icons.arrow_forward_rounded, size: 15),
-                    label: Text(headerActionLabel ?? t.ui_actions.see_more),
-                  ),
+                if (headerAction != null) headerAction!,
               ],
             ),
           ),
@@ -98,6 +89,34 @@ class CardWithHeader extends StatelessWidget {
           if (footer != null) ...[footer!],
         ],
       ),
+    );
+  }
+}
+
+/// The default header action for the `CardWithHeader` widget: a text button
+/// with a "see more" text and forward-arrow icon, both of which can be
+/// customized (e.g. an "Add"/"Buy" label with a matching icon).
+class CardHeaderAction extends StatelessWidget {
+  const CardHeaderAction({super.key, this.text, this.icon, this.onTap});
+
+  final String? text;
+  final Widget? icon;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    return TextButton.icon(
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: const EdgeInsets.only(left: 10, right: 8, top: 4, bottom: 4),
+      ),
+      iconAlignment: IconAlignment.end,
+      icon: icon ?? const Icon(Icons.arrow_forward_rounded, size: 15),
+      label: Text(text ?? t.ui_actions.see_more),
     );
   }
 }

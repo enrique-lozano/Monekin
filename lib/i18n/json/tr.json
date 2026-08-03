@@ -880,20 +880,8 @@
     },
     "DETAILS": {
       "select_account": "Bir hesap seçin",
-      "buy": "Satın almak",
-      "sell": "Satmak",
       "update_value": "Değeri güncelle",
-      "trade_sheet_title_buy": "Satın al (varlığa ekle)",
-      "trade_sheet_title_sell": "Sat (varlığı azalt)",
-      "trade_sheet_update_value_info": "Bu varlığın değeri {{ value }} olarak güncellenecek",
-      "trade_sheet_update_linked_asset_value_info": "Bu işleme bağlı varlığın değeri {{ value }} olarak güncellenecek",
-      "trade_sheet_update_following_valuations": "Daha sonra değerlemeleri güncelle",
-      "trade_sheet_update_following_valuations_description": "Seçilen tarihten sonraki varlık değerlemelerini güncelleyin.",
-      "trade_sheet_valuation_current_value_label": "Mevcut değer",
-      "trade_sheet_valuation_create_new_title": "Yeni değerleme oluştur",
-      "trade_sheet_valuation_adjust_current_description": "Varlığın mevcut değerini ayarla",
       "trade_form_asset_column": "Varlık",
-      "trade_valuation_notice": "Bu tarihi yansıtacak şekilde bir değerleme güncellenecektir.",
       "notes_optional": "Notlar (isteğe bağlı)",
       "performance_sheet_title": "Performance",
       "performance_return": "Period return",
@@ -945,18 +933,10 @@
     },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Link transaction",
-        "modal_title": "Link transaction to asset",
-        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+        "button_label": "Link transaction"
       },
       "link_transaction": {
-        "title": "Link existing income or expense",
-        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
         "success": "Transaction linked successfully"
-      },
-      "new_investment_transaction": {
-        "title": "Create investment transaction",
-        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
       }
     }
   },

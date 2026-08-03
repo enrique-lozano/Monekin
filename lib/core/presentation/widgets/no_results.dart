@@ -28,20 +28,24 @@ class NoResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The illustrated variant is meant for whole (scrollable) pages, where the
+    // extra bottom-heavy spacing visually centers the content below an app
+    // bar. The compact variant (no illustration) is meant to be embedded in
+    // cards/lists, so it should keep a small, symmetric padding instead.
+    final defaultPadding = showIllustration
+        ? EdgeInsets.only(
+            bottom: MediaQuery.sizeOf(context).height * 0.4 > 400 ? 80 : 40,
+            right: 40,
+            left: 40,
+          )
+        : const EdgeInsets.symmetric(horizontal: 24, vertical: 24);
+
     return FadeIn(
       child: Opacity(
         opacity: isAppInLightBrightness(context) ? 1 : 0.9,
         child: Center(
           child: Padding(
-            padding:
-                padding ??
-                EdgeInsets.only(
-                  bottom: MediaQuery.sizeOf(context).height * 0.4 > 400
-                      ? 80
-                      : 40,
-                  right: 40,
-                  left: 40,
-                ),
+            padding: padding ?? defaultPadding,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +97,7 @@ class NoResults extends StatelessWidget {
                 ),
 
                 if (bottom != null) ...[const SizedBox(height: 16), bottom!],
-                const SizedBox(height: 42),
+                if (showIllustration) const SizedBox(height: 42),
               ],
             ),
           ),

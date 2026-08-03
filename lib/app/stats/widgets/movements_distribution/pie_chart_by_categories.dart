@@ -13,6 +13,7 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -231,24 +232,24 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 16),
-              child: SegmentedButton(
-                segments: [
-                  ButtonSegment(
+              child: ExpandingSegmentedTabs<TransactionType>(
+                fullWidth: false,
+                items: [
+                  SegmentedTabItem(
                     value: TransactionType.expense,
-                    label: Text(t.transaction.types.expense(n: 1)),
+                    icon: TransactionType.expense.icon,
+                    label: t.transaction.types.expense(n: 1),
+                    color: TransactionType.expense.color(context),
                   ),
-                  ButtonSegment(
+                  SegmentedTabItem(
                     value: TransactionType.income,
-                    label: Text(t.transaction.types.income(n: 1)),
+                    icon: TransactionType.income.icon,
+                    label: t.transaction.types.income(n: 1),
+                    color: TransactionType.income.color(context),
                   ),
                 ],
-                showSelectedIcon: false,
-                selected: {transactionsType},
-                onSelectionChanged: (newSelection) {
-                  setState(() {
-                    transactionsType = newSelection.first;
-                  });
-                },
+                selected: transactionsType,
+                onSelected: (type) => setState(() => transactionsType = type),
               ),
             ),
             SizedBox(

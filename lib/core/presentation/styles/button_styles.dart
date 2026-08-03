@@ -37,10 +37,14 @@ RoundedRectangleBorder get defaultButtonShape => RoundedRectangleBorder(
 );
 
 /// Base [ButtonStyle] applied via [ThemeData] for standard-sized buttons.
+///
+/// Disabled colors are set explicitly (instead of relying on Material's
+/// default opacity-based overlay) so disabled buttons render as a solid,
+/// opaque grey instead of a translucent one.
 ButtonStyle defaultButtonStyle({required bool isDark}) {
   return FilledButton.styleFrom(
     shape: defaultButtonShape,
-    disabledBackgroundColor: isDark ? null : Colors.grey[200],
-    disabledForegroundColor: isDark ? null : Colors.grey,
+    disabledBackgroundColor: isDark ? Colors.grey[800] : Colors.grey[200],
+    disabledForegroundColor: isDark ? Colors.grey[500] : Colors.grey,
   );
 }

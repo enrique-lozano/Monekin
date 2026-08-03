@@ -86,8 +86,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
             stream: AccountService.instance.getAccounts(
               predicate: (acc, curr) => buildDriftExpr([
                 acc.name.contains(searchValue),
-                if (widget.filterSavingAccounts)
-                  acc.type.equalsValue(AccountType.saving).not(),
+                if (widget.filterSavingAccounts) acc.isSaving.equals(false),
                 if (!widget.includeArchivedAccounts) acc.closingDate.isNull(),
               ]),
             ),

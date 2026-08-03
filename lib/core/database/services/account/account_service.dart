@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
@@ -93,7 +94,7 @@ class AccountService {
           .watch()
           .map(
             (rows) => rows
-                .where((r) => r.type == AccountType.investment.name)
+                .where((r) => r.type == AccountType.investment)
                 .map((r) => r.id)
                 .toList(),
           );
@@ -193,12 +194,22 @@ class AccountService {
           convertToPreferredCurrency: convertToPreferredCurrency,
         );
 
-    return Rx.combineLatest3(
+    final holdings = HoldingService.instance.getHoldingsMarketValue(
+      accountIds: [account.id],
+      convertToPreferred: convertToPreferredCurrency,
+      convertToCurrency: convertToPreferredCurrency
+          ? null
+          : account.currency.code,
+      date: date,
+    );
+
+    return Rx.combineLatest4(
       iniStream,
       ledgerTx,
       linked,
-      (double ini, double ledger, double l) =>
-          (ini + ledger + l).roundWithDecimals(account.currency.decimalPlaces),
+      holdings,
+      (double ini, double ledger, double l, double h) => (ini + ledger + l + h)
+          .roundWithDecimals(account.currency.decimalPlaces),
     );
   }
 
@@ -288,11 +299,19 @@ class AccountService {
       convertToPreferredCurrency: convertToPreferredCurrency,
     );
 
-    return Rx.combineLatest3(
+    final holdingsMarket = HoldingService.instance.getHoldingsMarketValue(
+      accountIds: accountIds,
+      convertToPreferred: convertToPreferredCurrency,
+      date: date,
+    );
+
+    return Rx.combineLatest4(
       allAccountsInitialAmount,
       allAccountsTransactionsBalance,
       linkedPortfolioMarket,
-      (double ini, double tr, double linked) => ini + tr + linked,
+      holdingsMarket,
+      (double ini, double tr, double linked, double holdings) =>
+          ini + tr + linked + holdings,
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:monekin/app/currencies/currency_manager.dart';
 import 'package:monekin/app/debts/debts_page.dart';
 import 'package:monekin/app/goals/goals_page.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/securities/securities_list_page.dart';
 import 'package:monekin/app/settings/about.page.dart';
 import 'package:monekin/app/settings/help_us_page.dart';
 import 'package:monekin/app/settings/settings_page.dart';
@@ -123,6 +124,12 @@ class _MoreActionsPageState extends State<MoreActionsPage> {
         icon: Icons.house_rounded,
         onTap: () => RouteUtils.pushRoute(const AssetsListPage()),
         id: AppMenuDestinationsID.assets,
+      ),
+      _ActionItem(
+        title: t.assets.securities.title,
+        icon: Icons.candlestick_chart_rounded,
+        onTap: () => RouteUtils.pushRoute(const SecuritiesListPage()),
+        id: null,
       ),
     ];
 

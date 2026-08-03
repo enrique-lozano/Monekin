@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:file_picker/file_picker.dart' show FileType;
 import 'package:flutter/material.dart';
@@ -23,6 +22,7 @@ import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/widgets/csv_file_picker_dropzone.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/destinations.dart';
@@ -263,7 +263,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             iniValue: 0,
             displayOrder: 10,
             date: DateTime.now(),
-            type: AccountType.normal,
+            type: AccountType.money,
+            isSaving: false,
+            trackingMode: AccountTrackingMode.transactions,
             iconId: SupportedIconService.instance.defaultSupportedIcon.id,
             currencyId: preferredCurrency.code,
           );
@@ -806,42 +808,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     );
   }
 
-  InkWell selectCsvButton(Translations t, BuildContext context) {
-    return InkWell(
-      onTap: () => readFile(),
-      child: DottedBorder(
-        options: RoundedRectDottedBorderOptions(
-          color: Colors.grey.withOpacity(0.5),
-          strokeWidth: 3,
-          strokeCap: StrokeCap.round,
-          dashPattern: const [6, 8],
-          radius: const Radius.circular(12),
-        ),
-        child: SizedBox(
-          height: 150,
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 68),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add,
-                  size: 48,
-                  weight: 10,
-                  color: Colors.grey.withOpacity(0.95),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  t.backup.import.tap_to_select_file,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+  CsvFilePickerDropzone selectCsvButton(Translations t, BuildContext context) {
+    return CsvFilePickerDropzone(onTap: () => readFile());
   }
 }

@@ -7,13 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
-import 'package:monekin/app/transactions/form/asset_selector_modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
 import 'package:monekin/app/transactions/form/dialogs/evaluate_expression.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/account/asset_service.dart';
-import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
+import 'package:monekin/core/database/services/account/security_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -22,7 +21,6 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/tags/tag.dart';
@@ -44,15 +42,15 @@ class TransactionFormController extends ChangeNotifier {
     Account? fromAccount,
     Account? toAccount,
     Debt? linkedDebt,
-    Asset? linkedAsset,
   }) : _mode = mode,
        _transactionToEdit = transactionToEdit,
        _prefillFromAccount = fromAccount,
        _prefillToAccount = toAccount,
-       _linkedDebt = linkedDebt,
-       _linkedAsset = linkedAsset {
+       _linkedDebt = linkedDebt {
     _amountTextController.addListener(_onAmountFieldTextChanged);
     valueInDestinyController.addListener(_onValueInDestinyTextChanged);
+    quantityController.addListener(_onTradeFieldChanged);
+    priceController.addListener(_onTradeFieldChanged);
   }
 
   final TransactionType? _mode;
@@ -60,7 +58,6 @@ class TransactionFormController extends ChangeNotifier {
   final Account? _prefillFromAccount;
   final Account? _prefillToAccount;
   final Debt? _linkedDebt;
-  final Asset? _linkedAsset;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ShakeWidgetState> shakeKey = GlobalKey<ShakeWidgetState>();
@@ -90,13 +87,39 @@ class TransactionFormController extends ChangeNotifier {
   RecurrencyData recurrentRule = const RecurrencyData.noRepeat();
   List<Tag> tags = [];
 
-  Asset? _asset;
-  bool _updateValuations = false;
+  // --- Security trades (stock/fund/crypto buy & sell) ---------------------
+  SecurityInDB? _security;
+  final TextEditingController quantityController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  bool _securityTradeIsSell = false;
 
-  /// When set, the asset valuation leg differs from the cash leg amount.
-  double? _investmentValuationAmountOverride;
+  /// True when editing a security trade (type N with a securityID).
+  bool get isSecurityTradeInvestment {
+    final edit = _transactionToEdit;
+    return edit != null &&
+        edit.type == TransactionType.investment &&
+        edit.securityID != null;
+  }
 
-  /// When true, money flows from the bottom leg to the top leg (transfer) or is a sell (investment).
+  SecurityInDB? get security => _security;
+  bool get securityTradeIsBuy => !_securityTradeIsSell;
+
+  double get securityTradeQuantity =>
+      double.tryParse(quantityController.text.trim().replaceAll(',', '.')) ?? 0;
+  double get securityTradePricePerUnit =>
+      double.tryParse(priceController.text.trim().replaceAll(',', '.')) ?? 0;
+  double get securityTradeTotal =>
+      securityTradeQuantity * securityTradePricePerUnit;
+
+  void setSecurityTradeIsSell(bool v) {
+    if (_securityTradeIsSell == v) return;
+    _securityTradeIsSell = v;
+    _safeNotify();
+  }
+
+  void _onTradeFieldChanged() => _safeNotify();
+
+  /// When true, money flows from the bottom leg to the top leg (transfer).
   bool _dualLegFlowReversed = false;
 
   TextEditingController get amountTextController => _amountTextController;
@@ -105,27 +128,13 @@ class TransactionFormController extends ChangeNotifier {
 
   late TransactionType transactionType;
 
-  /// Transfer / asset trade: combined account + amount cards replace the
-  /// classic amount row and account selector layout.
-  bool get usesDualLegAmountLayout =>
-      transactionType.isTransfer || isAssetTradeInvestment;
-
-  bool get isAssetTradeInvestment {
-    if (_linkedAsset != null) return true;
-    final edit = _transactionToEdit;
-    return edit != null &&
-        edit.type == TransactionType.investment &&
-        edit.assetID != null;
-  }
+  /// Transfer: combined account + amount cards replace the classic amount
+  /// row and account selector layout.
+  bool get usesDualLegAmountLayout => transactionType.isTransfer;
 
   bool get dualLegFlowReversed => _dualLegFlowReversed;
 
-  bool get investmentIsBuy => isAssetTradeInvestment && !_dualLegFlowReversed;
-
-  bool get dualLegTopIsOutflow =>
-      isAssetTradeInvestment ? investmentIsBuy : !_dualLegFlowReversed;
-
-  bool get canPickAsset => isAssetTradeInvestment && _linkedAsset == null;
+  bool get dualLegTopIsOutflow => !_dualLegFlowReversed;
 
   Account? get effectiveTransferFromAccount =>
       _dualLegFlowReversed ? transferAccount : fromAccount;
@@ -133,38 +142,8 @@ class TransactionFormController extends ChangeNotifier {
   Account? get effectiveTransferToAccount =>
       _dualLegFlowReversed ? fromAccount : transferAccount;
 
-  Asset? get asset => _asset;
-  bool get updateValuations => _updateValuations;
-  set updateValuations(bool v) {
-    _updateValuations = v;
-    notifyListeners();
-  }
-
-  double get investmentValuationAmount =>
-      _investmentValuationAmountOverride ?? transactionValue.abs();
-
-  bool get investmentValuationUnlinked =>
-      _investmentValuationAmountOverride != null &&
-      !nearlyEqualMoney(
-        _investmentValuationAmountOverride!,
-        transactionValue.abs(),
-      );
-
-  /// Edit mode: date, asset leg amount, and buy/sell match the stored transaction.
-  bool get investmentValuationDraftUnchangedOnEdit {
-    final edit = _transactionToEdit;
-    if (edit == null || !isAssetTradeInvestment) return false;
-    if (!DateUtils.isSameDay(date, edit.date)) return false;
-    if (!nearlyEqualMoney(investmentValuationAmount, edit.value.abs())) {
-      return false;
-    }
-    final wasBuy = edit.value.isNegative;
-    return investmentIsBuy == wasBuy;
-  }
-
   MoneyTransaction? get transactionToEdit => _transactionToEdit;
   Debt? get linkedDebt => _linkedDebt;
-  Asset? get linkedAsset => _linkedAsset;
 
   bool _disposed = false;
 
@@ -173,18 +152,14 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void initialize() {
-    assert(_linkedAsset == null || _transactionToEdit == null);
-
-    if (isAssetTradeInvestment) {
+    if (isSecurityTradeInvestment) {
       transactionType = TransactionType.investment;
-      final edit = _transactionToEdit;
-      if (edit != null) {
-        _dualLegFlowReversed = !edit.value.isNegative;
-        _fillForm(edit);
-        unawaited(_loadInvestmentAsset());
-        return;
-      }
-      _asset = _linkedAsset;
+      final edit = _transactionToEdit!;
+      _securityTradeIsSell = !edit.value.isNegative;
+      quantityController.text = _plainNumber((edit.quantity ?? 0).abs());
+      priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
+      _fillForm(edit);
+      unawaited(_loadSecurity());
       return;
     }
 
@@ -215,7 +190,6 @@ class TransactionFormController extends ChangeNotifier {
     BuildContext context,
   ) async {
     if (isEditMode) return;
-    if (isAssetTradeInvestment) return;
     if (!transactionType.isIncomeOrExpense) {
       if (usesDualLegAmountLayout) return;
       _requestAmountFocusSoon();
@@ -241,20 +215,19 @@ class TransactionFormController extends ChangeNotifier {
     _requestAmountFocusSoon();
   }
 
-  Future<void> completeLinkedAssetBootstrap() async {
-    if (!isAssetTradeInvestment || _linkedAsset == null) return;
-    if (_transactionToEdit != null) return;
-    await _initializeFormValues();
+  Future<void> _loadSecurity() async {
+    final id = _transactionToEdit?.securityID;
+    if (id == null) return;
+    final loaded = await SecurityService.instance.getSecurityById(id).first;
+    if (_disposed) return;
+    _security = loaded;
     _safeNotify();
   }
 
-  Future<void> _loadInvestmentAsset() async {
-    final id = _transactionToEdit?.assetID;
-    if (id == null) return;
-    final loaded = await AssetService.instance.getAssetById(id).first;
-    if (_disposed) return;
-    _asset = loaded;
-    _safeNotify();
+  static String _plainNumber(double v) {
+    if (v == 0) return '';
+    final isInt = v == v.roundToDouble();
+    return isInt ? v.toInt().toString() : v.toString();
   }
 
   @override
@@ -264,6 +237,10 @@ class TransactionFormController extends ChangeNotifier {
     _amountTextController.dispose();
     valueInDestinyController.removeListener(_onValueInDestinyTextChanged);
     valueInDestinyController.dispose();
+    quantityController.removeListener(_onTradeFieldChanged);
+    quantityController.dispose();
+    priceController.removeListener(_onTradeFieldChanged);
+    priceController.dispose();
     notesController.dispose();
     titleController.dispose();
     amountFocusNode.dispose();
@@ -335,13 +312,10 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void toggleDualLegFlowDirection() {
-    if (!transactionType.isTransfer && !isAssetTradeInvestment) return;
+    if (!transactionType.isTransfer) return;
 
     _dualLegFlowReversed = !_dualLegFlowReversed;
-
-    if (transactionType.isTransfer) {
-      valueInDestinyController.clear();
-    }
+    valueInDestinyController.clear();
 
     HapticFeedback.mediumImpact();
 
@@ -359,11 +333,6 @@ class TransactionFormController extends ChangeNotifier {
 
     if (_prefillFromAccount != null) {
       fromAccount = _prefillFromAccount;
-    } else if (isAssetTradeInvestment && _asset?.linkedAccountID != null) {
-      final acc = await AccountService.instance
-          .getAccountById(_asset!.linkedAccountID!)
-          .first;
-      if (acc != null) fromAccount = acc;
     } else if (useLast(TransactionFormField.account)) {
       final acc = await AccountService.instance
           .getAccountById(lastTr!.transaction.accountID)
@@ -375,7 +344,7 @@ class TransactionFormController extends ChangeNotifier {
       final accounts = await AccountService.instance
           .getAccounts(
             predicate: (acc, curr) => buildDriftExpr([
-              acc.type.equalsValue(AccountType.saving).not(),
+              acc.isSaving.equals(false),
               acc.closingDate.isNull(),
             ]),
             limit: transactionType.isTransfer ? 2 : 1,
@@ -394,19 +363,17 @@ class TransactionFormController extends ChangeNotifier {
       transferAccount = _prefillToAccount;
     }
 
-    if (!isAssetTradeInvestment) {
-      String? categoryIdToLoad;
-      if (useLast(TransactionFormField.category)) {
-        categoryIdToLoad = lastTr!.transaction.categoryID;
-      } else {
-        categoryIdToLoad = settings.values.categoryId;
-      }
+    String? categoryIdToLoad;
+    if (useLast(TransactionFormField.category)) {
+      categoryIdToLoad = lastTr!.transaction.categoryID;
+    } else {
+      categoryIdToLoad = settings.values.categoryId;
+    }
 
-      if (categoryIdToLoad != null) {
-        selectedCategory = await CategoryService.instance
-            .getCategoryById(categoryIdToLoad)
-            .first;
-      }
+    if (categoryIdToLoad != null) {
+      selectedCategory = await CategoryService.instance
+          .getCategoryById(categoryIdToLoad)
+          .first;
     }
 
     if (useLast(TransactionFormField.status)) {
@@ -445,11 +412,6 @@ class TransactionFormController extends ChangeNotifier {
     if (transactionType == TransactionType.expense) {
       return transactionValue * -1;
     }
-    if (transactionType == TransactionType.investment &&
-        isAssetTradeInvestment) {
-      final abs = transactionValue.abs();
-      return investmentIsBuy ? -abs : abs;
-    }
     if (transactionType == TransactionType.transfer) {
       if (_dualLegFlowReversed) return transactionValue.abs();
       return -transactionValue.abs();
@@ -470,6 +432,11 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void submitForm(BuildContext context) {
+    if (isSecurityTradeInvestment) {
+      _submitSecurityTrade(context);
+      return;
+    }
+
     if ((transactionType.isIncomeOrExpense && selectedCategory == null) ||
         (transactionType.isTransfer && transferAccount == null)) {
       shakeKey.currentState?.shake();
@@ -477,13 +444,6 @@ class TransactionFormController extends ChangeNotifier {
     }
 
     final t = Translations.of(context);
-
-    if (isAssetTradeInvestment && _asset == null) {
-      MonekinSnackbar.error(
-        SnackbarParams.fromError(t.general.validations.form_error),
-      );
-      return;
-    }
 
     if (transactionValue == 0) {
       MonekinSnackbar.warning(
@@ -517,23 +477,12 @@ class TransactionFormController extends ChangeNotifier {
     final double signedValue;
     if (transactionType == TransactionType.expense) {
       signedValue = transactionValue * -1;
-    } else if (transactionType == TransactionType.investment &&
-        isAssetTradeInvestment) {
-      final abs = transactionValue.abs();
-      signedValue = investmentIsBuy ? -abs : abs;
     } else {
       signedValue = transactionValue;
     }
 
     final titleTrim = titleController.text.trim();
-    final String? resolvedTitle;
-    if (titleTrim.isEmpty) {
-      resolvedTitle = isAssetTradeInvestment
-          ? (investmentIsBuy ? t.assets.details.buy : t.assets.details.sell)
-          : null;
-    } else {
-      resolvedTitle = titleTrim;
-    }
+    final String? resolvedTitle = titleTrim.isEmpty ? null : titleTrim;
 
     final postingFrom = transactionType.isTransfer
         ? effectiveTransferFromAccount
@@ -551,16 +500,10 @@ class TransactionFormController extends ChangeNotifier {
           : status,
       notes: notesController.text.isEmpty ? null : notesController.text,
       title: resolvedTitle,
-      intervalEach: isAssetTradeInvestment ? null : recurrentRule.intervalEach,
-      intervalPeriod: isAssetTradeInvestment
-          ? null
-          : recurrentRule.intervalPeriod,
-      endDate: isAssetTradeInvestment
-          ? null
-          : recurrentRule.ruleRecurrentLimit?.endDate,
-      remainingTransactions: isAssetTradeInvestment
-          ? null
-          : recurrentRule.ruleRecurrentLimit?.remainingIterations,
+      intervalEach: recurrentRule.intervalEach,
+      intervalPeriod: recurrentRule.intervalPeriod,
+      endDate: recurrentRule.ruleRecurrentLimit?.endDate,
+      remainingTransactions: recurrentRule.ruleRecurrentLimit?.remainingIterations,
       valueInDestiny: transactionType.isTransfer
           ? valueInDestinyToNumber
           : null,
@@ -571,23 +514,8 @@ class TransactionFormController extends ChangeNotifier {
       receivingAccountID: transactionType.isTransfer
           ? effectiveTransferToAccount?.id
           : null,
-      assetID: isAssetTradeInvestment
-          ? _asset!.id
-          : _transactionToEdit?.assetID,
+      assetID: _transactionToEdit?.assetID,
     );
-
-    final previousForValuation = isEditMode ? _transactionToEdit : null;
-    final shouldApplyValuation =
-        isAssetTradeInvestment &&
-        _updateValuations &&
-        !investmentValuationDraftUnchangedOnEdit;
-    final shouldShiftFutureValuations = shouldApplyValuation;
-    final valuationDelta = shouldApplyValuation
-        ? AssetValuationService.valuationDeltaForAssetLeg(
-            assetLegAmountAbs: investmentValuationAmount,
-            isBuy: investmentIsBuy,
-          )
-        : null;
 
     Future<int> postCall = TransactionService.instance.updateTransaction(
       transactionToPost,
@@ -601,16 +529,6 @@ class TransactionFormController extends ChangeNotifier {
 
     postCall
         .then((value) async {
-          if (isAssetTradeInvestment &&
-              _asset != null &&
-              shouldApplyValuation) {
-            await AssetValuationService.instance.syncValuationOnTransactionSave(
-              previous: previousForValuation,
-              current: transactionToPost,
-              valuationDelta: valuationDelta,
-              shiftFutureValuations: shouldShiftFutureValuations,
-            );
-          }
           final db = AppDB.instance;
           final existingTags = _transactionToEdit?.tags ?? [];
           final tagsToRemove = existingTags
@@ -665,6 +583,119 @@ class TransactionFormController extends ChangeNotifier {
           MonekinSnackbar.error(SnackbarParams.fromError(error));
         });
   }
+
+  Future<void> _submitSecurityTrade(BuildContext context) async {
+    final t = Translations.of(context);
+    final account = fromAccount;
+    final security = _security;
+
+    if (account == null || security == null) {
+      MonekinSnackbar.error(
+        SnackbarParams.fromError(t.general.validations.form_error),
+      );
+      return;
+    }
+
+    final qty = securityTradeQuantity;
+    final price = securityTradePricePerUnit;
+
+    if (qty <= 0 || price <= 0) {
+      MonekinSnackbar.warning(
+        SnackbarParams(t.transaction.form.validators.zero),
+      );
+      return;
+    }
+
+    if (account.date.compareTo(date) > 0) {
+      MonekinSnackbar.warning(
+        SnackbarParams(
+          t.transaction.form.validators.date_after_account_creation,
+        ),
+      );
+      return;
+    }
+
+    final id = _transactionToEdit!.id;
+    final signedQty = securityTradeIsBuy ? qty : -qty;
+    final cash = qty * price;
+    final signedCash = securityTradeIsBuy ? -cash : cash;
+
+    final titleTrim = titleController.text.trim();
+    final resolvedTitle = titleTrim.isEmpty
+        ? (securityTradeIsBuy ? t.assets.holdings.buy : t.assets.holdings.sell)
+        : titleTrim;
+
+    final tx = TransactionInDB(
+      id: id,
+      date: date,
+      type: TransactionType.investment,
+      accountID: account.id,
+      value: signedCash,
+      isHidden: false,
+      status: date.compareTo(DateTime.now()) > 0
+          ? TransactionStatus.pending
+          : status,
+      notes: notesController.text.isEmpty ? null : notesController.text,
+      title: resolvedTitle,
+      securityID: security.id,
+      quantity: signedQty,
+      pricePerUnit: price,
+    );
+
+    try {
+      await TransactionService.instance.updateTransaction(tx);
+      await HoldingService.instance.recomputeHolding(
+        accountId: account.id,
+        securityId: security.id,
+      );
+      await _syncTagsFor(tx);
+
+      DefaultTransactionValuesService.lastCreatedTransaction.value = (
+        transaction: tx,
+        tagIds: tags.map((tag) => tag.id).toList(),
+      );
+
+      RouteUtils.popRoute();
+      MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
+    } catch (error) {
+      MonekinSnackbar.error(SnackbarParams.fromError(error));
+    }
+  }
+
+  Future<void> _syncTagsFor(TransactionInDB tx) async {
+    final db = AppDB.instance;
+    final newTrID = tx.id;
+    final existingTags = _transactionToEdit?.tags ?? [];
+
+    final tagsToRemove = existingTags
+        .where(
+          (existingTag) => !tags.any((newTag) => newTag.id == existingTag.id),
+        )
+        .toList();
+    final tagsToAdd = tags
+        .where(
+          (newTag) =>
+              !existingTags.any((existingTag) => existingTag.id == newTag.id),
+        )
+        .toList();
+
+    for (final tag in tagsToRemove) {
+      await (db.delete(db.transactionTags)..where(
+            (tbl) =>
+                tbl.tagID.isValue(tag.id) & tbl.transactionID.isValue(newTrID),
+          ))
+          .go();
+    }
+
+    await TagService.instance.linkTagsToTransaction(
+      transactionId: newTrID,
+      tagIds: tagsToAdd.map((tag) => tag.id).toList(),
+    );
+  }
+
+  Color tradeAccent(BuildContext context) => securityTradeIsBuy
+      ? TransactionType.income.color(context)
+      : TransactionType.expense.color(context);
 
   Future<List<Account>?> showAccountSelector(
     BuildContext context,
@@ -724,28 +755,12 @@ class TransactionFormController extends ChangeNotifier {
     syncAmountFieldFromTransactionValue();
   }
 
-  Color foregroundColor(BuildContext context) {
-    if (isAssetTradeInvestment) {
-      return investmentAccent(context).getContrastColor();
-    }
-    return transactionType.color(context).getContrastColor();
-  }
-
-  Color investmentAccent(BuildContext context) => investmentIsBuy
-      ? TransactionType.income.color(context)
-      : TransactionType.expense.color(context);
-
-  CurrencyInDB? get amountDisplayCurrency =>
-      isAssetTradeInvestment ? _asset?.currency : fromAccount?.currency;
+  Color foregroundColor(BuildContext context) =>
+      transactionType.color(context).getContrastColor();
 
   String resolveFrameworkTitle(Translations t) {
     if (isEditMode) {
       return t.transaction.edit;
-    }
-    if (isAssetTradeInvestment) {
-      return investmentIsBuy
-          ? t.assets.details.trade_sheet_title_buy
-          : t.assets.details.trade_sheet_title_sell;
     }
     return t.transaction.create;
   }
@@ -808,25 +823,6 @@ class TransactionFormController extends ChangeNotifier {
     }
   }
 
-  Future<void> pickAsset(BuildContext context) async {
-    if (!canPickAsset) return;
-    final picked = await showAssetSelectorBottomSheet(
-      context,
-      selectedAsset: _asset,
-    );
-    if (picked == null || _disposed) return;
-    _asset = picked;
-    if (fromAccount == null && picked.linkedAccountID != null) {
-      final acc = await AccountService.instance
-          .getAccountById(picked.linkedAccountID!)
-          .first;
-      if (!_disposed && acc != null) {
-        fromAccount = acc;
-      }
-    }
-    _safeNotify();
-  }
-
   void onTitleFieldSubmitted(BuildContext context, String _) {
     notesFocusNode.requestFocus();
   }
@@ -836,37 +832,8 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void applyAmountFromSelector(double amount) {
-    transactionValue = isAssetTradeInvestment ? amount.abs() : amount;
-    if (isAssetTradeInvestment &&
-        _investmentValuationAmountOverride != null &&
-        nearlyEqualMoney(
-          _investmentValuationAmountOverride!,
-          transactionValue.abs(),
-        )) {
-      _investmentValuationAmountOverride = null;
-    }
+    transactionValue = amount;
     syncAmountFieldFromTransactionValue();
-    _safeNotify();
-  }
-
-  void applyInvestmentValuationAmount(double amount) {
-    final a = amount.abs();
-    final cash = transactionValue.abs();
-    _investmentValuationAmountOverride = nearlyEqualMoney(a, cash) ? null : a;
-    _safeNotify();
-  }
-
-  void clearInvestmentValuationOverride() {
-    if (_investmentValuationAmountOverride == null) return;
-    _investmentValuationAmountOverride = null;
-    _safeNotify();
-  }
-
-  void alignCashAmountToInvestmentValuation() {
-    if (_investmentValuationAmountOverride == null) return;
-    transactionValue = _investmentValuationAmountOverride!;
-    syncAmountFieldFromTransactionValue();
-    _investmentValuationAmountOverride = null;
     _safeNotify();
   }
 
@@ -961,59 +928,17 @@ class TransactionFormController extends ChangeNotifier {
     );
   }
 
-  void openInvestmentCashAmountSelector(BuildContext context) {
-    final tr = Translations.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (ctx) => AmountSelector(
-        title: tr.transaction.form.value,
-        initialAmount: transactionValue.abs(),
-        enableSignToggleButton: false,
-        currency: fromAccount?.currency,
-        onSubmit: (amount) {
-          applyAmountFromSelector(amount);
-          RouteUtils.popRoute();
-        },
-      ),
-    );
-  }
-
-  void openInvestmentValuationAmountSelector(BuildContext context) {
-    final tr = Translations.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (ctx) => AmountSelector(
-        title: tr.assets.details.trade_sheet_valuation_create_new_title,
-        initialAmount: investmentValuationAmount,
-        enableSignToggleButton: false,
-        currency: _asset?.currency ?? fromAccount?.currency,
-        onSubmit: (amount) {
-          applyInvestmentValuationAmount(amount);
-          RouteUtils.popRoute();
-        },
-      ),
-    );
-  }
-
   void openDualLegTopAmountSelector(
     BuildContext context, {
     double defaultDestinationAmount = 0,
   }) {
-    if (transactionType.isTransfer) {
-      if (dualLegTopIsOutflow) {
-        openTransferSourceAmountSelector(context);
-      } else {
-        openTransferDestinationAmountSelector(
-          context,
-          defaultDestinationAmount: defaultDestinationAmount,
-        );
-      }
+    if (dualLegTopIsOutflow) {
+      openTransferSourceAmountSelector(context);
     } else {
-      openInvestmentCashAmountSelector(context);
+      openTransferDestinationAmountSelector(
+        context,
+        defaultDestinationAmount: defaultDestinationAmount,
+      );
     }
   }
 
@@ -1038,7 +963,7 @@ class TransactionFormController extends ChangeNotifier {
         title: tr.transaction.form.value,
         initialAmount: transactionValue,
         enableSignToggleButton: transactionType.isIncomeOrExpense,
-        currency: amountDisplayCurrency ?? fromAccount?.currency,
+        currency: fromAccount?.currency,
         onSubmit: (amount) {
           applyAmountFromSelector(amount);
           RouteUtils.popRoute();

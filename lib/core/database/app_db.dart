@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/taxonomy/taxonomy_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/sql/initial/seed.dart';
 import 'package:monekin/core/database/utils/converters/custom_enum_converter.dart';
@@ -14,6 +16,7 @@ import 'package:monekin/core/database/utils/converters/list_converters.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/asset/asset_type.enum.dart';
+import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
@@ -47,6 +50,16 @@ class AppDB extends _$AppDB {
     inMemory: false,
     logStatements: false,
   );
+
+  /// Creates an isolated database backed by [executor] (typically
+  /// `NativeDatabase.memory()`) for unit tests. Test databases skip the seeding
+  /// and migration logic in [migration]; only [onCreate] runs, so the schema is
+  /// created empty and foreign keys are left disabled.
+  @visibleForTesting
+  AppDB.forTesting(super.executor)
+    : dbName = 'test.db',
+      inMemory = true,
+      logStatements = false;
 
   final String dbName;
   final bool inMemory;
@@ -174,12 +187,16 @@ class AppDB extends _$AppDB {
   }
 
   @override
-  int get schemaVersion => 12;
+  int get schemaVersion => 13;
 
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
       beforeOpen: (details) async {
+        // Test databases are created empty (schema only) and skip all seeding,
+        // versioning and migration logic.
+        if (inMemory) return;
+
         Logger.printDebug(
           'DB found! Version ${details.versionNow} (previous was ${details.versionBefore}). Path to DB -> ${await databasePath}',
         );
@@ -218,6 +235,11 @@ class AppDB extends _$AppDB {
         if (dbVersion < schemaVersion) {
           await migrateDB(dbVersion, schemaVersion);
         }
+
+        // Seed the built-in classification taxonomies when missing. This
+        // single call covers both fresh installs and databases that just
+        // gained the taxonomy tables via a migration (it no-ops otherwise).
+        await TaxonomyService.instance.ensureSeeded();
 
         Logger.printDebug('DB Opened!');
       },

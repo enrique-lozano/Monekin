@@ -25,10 +25,12 @@ class FinanceHealthCard extends StatelessWidget {
     return CardWithHeader(
       title: t.financial_health.display,
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      onHeaderActionTap: () => RouteUtils.pushRoute(
-        StatsPage(
-          dateRangeService: dateRangeService,
-          initialIndex: StatsTab.financialHealth,
+      headerAction: CardHeaderAction(
+        onTap: () => RouteUtils.pushRoute(
+          StatsPage(
+            dateRangeService: dateRangeService,
+            initialIndex: StatsTab.financialHealth,
+          ),
         ),
       ),
       body: StreamBuilder(

@@ -27,6 +27,9 @@ class AssetValuationContributionChart extends StatefulWidget {
     required this.currency,
     required this.valuationLabel,
     required this.netContributionLabel,
+    this.netContributionHelpText,
+    this.transactionDates = const [],
+    this.transactionsLabel,
     this.onHover,
     this.timeRange,
   });
@@ -35,6 +38,20 @@ class AssetValuationContributionChart extends StatefulWidget {
   final CurrencyInDB currency;
   final String valuationLabel;
   final String netContributionLabel;
+
+  /// Optional explanatory text shown as a tooltip next to the net-contribution
+  /// legend item.
+  final String? netContributionHelpText;
+
+  /// Dates of the transactions linked to the asset. A small marker is drawn
+  /// at the bottom of the chart for each one that falls within the visible
+  /// range.
+  final List<DateTime> transactionDates;
+
+  /// Legend label for the transaction markers. Only shown when at least one
+  /// marker is visible.
+  final String? transactionsLabel;
+
   final void Function(AssetValuationContributionPoint?)? onHover;
   final DateTimeRange? timeRange;
 
@@ -69,9 +86,43 @@ class _AssetValuationContributionChartState
 
     final isNotEnoughData = sortedPoints.length <= 2;
 
+    final visibleRange = _effectiveTimeRange(sortedPoints);
+    final markerColor = colorScheme.onSurfaceVariant;
+    final markerDates = isNotEnoughData || visibleRange == null
+        ? const <DateTime>[]
+        : widget.transactionDates
+              .map((date) => date.justDay())
+              .toSet()
+              .where(
+                (date) =>
+                    !date.isBefore(visibleRange.start) &&
+                    date.isBefore(visibleRange.end),
+              )
+              .toList();
+
     final chart = LineChart(
       LineChartData(
         gridData: const FlGridData(show: true, drawVerticalLine: false),
+        extraLinesData: markerDates.isEmpty
+            ? null
+            : ExtraLinesData(
+                verticalLines: markerDates
+                    .map(
+                      (date) => VerticalLine(
+                        x: date.millisecondsSinceEpoch.toDouble(),
+                        color: Colors.transparent,
+                        strokeWidth: 0,
+                        label: VerticalLineLabel(
+                          show: true,
+                          alignment: Alignment.bottomCenter,
+                          padding: EdgeInsets.zero,
+                          style: TextStyle(color: markerColor, fontSize: 9),
+                          labelResolver: (_) => '●',
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
         lineTouchData: isNotEnoughData
             ? const LineTouchData(enabled: false)
             : LineTouchData(
@@ -208,7 +259,13 @@ class _AssetValuationContributionChartState
               EvolutionChartLegendItem(
                 color: netContributionColor,
                 label: widget.netContributionLabel,
+                helpText: widget.netContributionHelpText,
               ),
+              if (markerDates.isNotEmpty && widget.transactionsLabel != null)
+                EvolutionChartLegendItem(
+                  color: markerColor,
+                  label: widget.transactionsLabel!,
+                ),
             ],
           ),
         ),

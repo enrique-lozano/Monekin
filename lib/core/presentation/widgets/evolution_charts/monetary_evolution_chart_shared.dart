@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -157,13 +159,20 @@ class EvolutionChartLegendItem extends StatelessWidget {
     super.key,
     required this.color,
     required this.label,
+    this.helpText,
   });
 
   final Color color;
   final String label;
 
+  /// When set, a small tappable info icon is shown next to the label,
+  /// revealing this text in a tooltip.
+  final String? helpText;
+
   @override
   Widget build(BuildContext context) {
+    final help = helpText;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: 6,
@@ -174,6 +183,19 @@ class EvolutionChartLegendItem extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         Text(label, style: Theme.of(context).textTheme.labelMedium),
+        if (help != null && help.isNotEmpty)
+          Tooltip(
+            constraints: BoxConstraints(
+              maxWidth: min(MediaQuery.widthOf(context) * 0.95, 250),
+            ),
+            triggerMode: TooltipTriggerMode.tap,
+            message: help,
+            child: Icon(
+              Icons.info_outline_rounded,
+              size: 14,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
       ],
     );
   }

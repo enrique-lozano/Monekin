@@ -15,7 +15,7 @@
     "deselect-all": "Deseleccionar todo",
     "select": "Seleccionar",
     "search": "Buscar",
-    "filter": "Filter",
+    "filter": "Filtrar",
     "reset": "Restablecer",
     "submit": "Enviar",
     "next": "Siguiente",
@@ -54,8 +54,8 @@
     "empty-warn": "Ops! Esto esta muy vacio",
     "search-no-results": "No hay elementos que coincidan con tus criterios de búsqueda",
     "insufficient-data": "Datos insuficientes",
-    "show-more-fields": "Show more fields",
-    "show-less-fields": "Show less fields",
+    "show-more-fields": "Mostrar más campos",
+    "show-less-fields": "Mostrar menos campos",
     "tap-to-search": "Toca para buscar",
     "delete_success": "Elemento eliminado con éxito",
     "LEAVE-WITHOUT-SAVING": {
@@ -291,6 +291,9 @@
     "net-worth-subtitle": "La diferencia entre lo que tienes y lo que debes.",
     "net-worth-composition": "Composición del patrimonio",
     "net-worth-composition-subtitle": "Reparto entre cuentas, inversiones y deudas.",
+    "portfolio": "Cartera",
+    "portfolio-composition": "Composición de la cartera",
+    "portfolio-composition-subtitle": "Cómo se reparten tus inversiones entre todas tus cuentas.",
     "compared-to-previous-period": "Frente al periodo anterior",
     "cash-flow": "Flujo de caja",
     "cash-flow-subtitle": "¿Estoy gastando menos de lo que gano?",
@@ -319,7 +322,7 @@
       "entertainment": "Entretenimiento",
       "technology": "Technología",
       "other": "Otros",
-      "logos/financial_institutions": "Financial institutions"
+      "logos/financial_institutions": "Instituciones financieras"
     }
   },
   "TRANSACTION": {
@@ -347,6 +350,8 @@
     "delete.multiple.success": "{{ x }} transacciones eliminadas correctamente",
     "details": "Detalles del movimiento",
     "select": "Seleccione una transacción",
+    "operation": "Operación",
+    "linked-security": "Valor vinculado",
     "NEXT-PAYMENTS": {
       "accept": "Aceptar",
       "skip": "Saltar",
@@ -519,15 +524,37 @@
     "withdraw_money": "Retirar dinero",
     "correct_balance": "Corregir saldo",
     "no-accounts": "No se han encontrado cuentas que mostrar aquí. Añade una cuenta pulsando el botón '+' de la parte inferior",
+    "current_balance": "Saldo actual",
+    "total_value": "Valor total",
+    "investments": "Inversiones",
+    "cash": "Efectivo",
+    "total_cost": "Coste total",
+    "range_income": "Ingresos",
+    "range_expense": "Gastos",
+    "no_income_range": "Sin ingresos este periodo",
+    "no_expense_range": "Sin gastos este periodo",
+    "movements_count": "{{n}} movimientos",
+    "TABS": {
+      "movements": "Movimientos",
+      "info": "Información"
+    },
     "TYPES": {
       "title": "Tipo de cuenta",
       "warning": "Una vez elegido el tipo de cuenta este no podrá cambiarse en un futuro",
-      "normal": "Cuenta corriente",
-      "normal.descr": "Útil para registrar tus finanzas del día a día. Es la cuenta mas común, permite añadir gastos, ingresos...",
+      "money": "Cuenta corriente",
+      "money.descr": "Guarda dinero en efectivo para tus finanzas del día a día. Añade gastos, ingresos y transferencias.",
       "saving": "Cuenta de ahorros",
       "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
       "investment": "Cuenta de inversión",
       "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones"
+    },
+    "TRACKING_MODES": {
+      "title": "Modo de seguimiento",
+      "transactions": "Transacciones",
+      "transactions_descr": "Las posiciones se calculan automáticamente a partir de tus operaciones de compra y venta.",
+      "holdings": "Posiciones",
+      "holdings_descr": "Introduce tus posiciones manualmente como snapshots con fecha (cantidad y coste medio).",
+      "switch_warn": "Cambiar el modo de seguimiento cambia cómo se calculan las posiciones. Las operaciones o snapshots existentes no se convierten automáticamente."
     },
     "FORM": {
       "name": "Nombre de la cuenta",
@@ -572,6 +599,23 @@
     "currency-converter": "Conversor de divisas",
     "currency": "Divisa",
     "currency-settings": "Configuración de la divisa",
+    "DETAILS": {
+      "equals-to": "1 {{code}} equivale a",
+      "min": "Mínimo",
+      "max": "Máximo",
+      "updated": "Actualizado",
+      "decimals": "{{n}} decimales",
+      "used-in": "Usado en",
+      "total-exposure": "Exposición total",
+      "no-usage": "Esta divisa aún no se usa en ninguna cuenta o inversión",
+      "code-locked-hint": "No se puede cambiar: identifica la divisa en toda la app.",
+      "type-locked-hint": "Se establece al crear la divisa. Cambiarlo alteraría cómo se obtienen sus tipos de cambio.",
+      "TABS": {
+        "rates": "Tipos de cambio",
+        "used-in": "En uso",
+        "settings": "Ajustes"
+      }
+    },
     "currency-manager": "Administrador de divisas",
     "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "preferred-currency": "Divisa predeterminada/base",
@@ -876,6 +920,10 @@
     "title": "Activos",
     "empty_description": "Aún no has creado ningún activo. Se puede realizar un seguimiento de activos como bienes raíces, vehículos o objetos de colección con sus valoraciones.",
     "create": "Agregar activo",
+    "ADD": {
+      "title": "Añadir nuevo activo",
+      "subtitle": "Elige el tipo de activo que quieres añadir"
+    },
     "create_success": "Activo creado exitosamente",
     "edit_success": "Recurso editado correctamente",
     "delete": "Eliminar activo",
@@ -891,41 +939,143 @@
       "crypto": "Criptomonedas",
       "real_estate": "Bienes raíces",
       "vehicle": "Vehículos",
+      "precious_metal": "Metales preciosos",
       "jewelry_art": "Joyería y arte",
       "other": "Otro"
     },
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "Inmuebles y terrenos",
+      "vehicle": "Coches, barcos y más",
+      "precious_metal": "Oro, plata y platino",
+      "jewelry_art": "Arte, joyas y objetos de colección",
+      "other": "Activos personalizados"
+    },
+    "SECURITY_TYPES": {
+      "stock": "Acción",
+      "fund": "Fondo / ETF",
+      "crypto": "Cripto"
+    },
+    "HOLDINGS": {
+      "title": "Posiciones",
+      "empty": "Aún no tienes posiciones. Compra un valor para empezar a seguir tu cartera.",
+      "buy": "Comprar",
+      "sell": "Vender",
+      "buy_title": "Comprar {{security}}",
+      "sell_title": "Vender {{security}}",
+      "avg_cost": "Coste medio",
+      "update_price": "Actualizar precio",
+      "choose_security": "Elige un valor",
+      "create_security": "Crear nuevo valor",
+      "security_name": "Nombre del valor",
+      "ticker": "Ticker / símbolo (opcional)",
+      "security_type": "Tipo de valor",
+      "current_price": "Precio actual",
+      "quantity": "Cantidad",
+      "price_per_unit": "Precio por unidad",
+      "total": "Total",
+      "add_position": "Añadir posición",
+      "positions_history": "Historial de posiciones",
+      "add_snapshot": "Añadir instantánea",
+      "edit_snapshot": "Editar instantánea",
+      "no_snapshots": "Aún no hay instantáneas. Añade una para registrar tu posición.",
+      "SNAPSHOTS": {
+        "history_title": "Historial de instantáneas",
+        "history_intro": "Cada instantánea guarda la cartera completa para una fecha. Al consultar un día, se aplica la más reciente en esa fecha o anterior.",
+        "count": "{{n}} instantáneas",
+        "new_snapshot": "Nueva",
+        "no_snapshots": "Aún no hay instantáneas",
+        "empty_portfolio": "Cartera vacía",
+        "positions_count": "{{n}} posiciones",
+        "manual": "Manual",
+        "current": "Instantánea actual",
+        "current_banner": "la más reciente en la fecha consultada o anterior",
+        "cost_label": "coste",
+        "update": "Actualizar",
+        "update_positions": "Actualizar posiciones",
+        "full_portfolio": "cartera completa",
+        "editor_descr": "Lo que guardas es la foto de la cartera en esa fecha. Si ya existe una instantánea ese día, se sustituye.",
+        "date_label": "Fecha de la instantánea",
+        "date_helper": "Se usa para cada consulta desde esta fecha hasta la siguiente instantánea.",
+        "add_position": "Añadir otra posición",
+        "total_cost": "Coste total de la cartera",
+        "save": "Guardar instantánea",
+        "remove_hint": "Para eliminar una posición basta con borrar su fila: la instantánea es la foto completa, no un movimiento.",
+        "delete_title": "¿Eliminar instantánea?",
+        "delete_descr": "Esta instantánea se eliminará. Si era la más reciente, tus posiciones actuales volverán a la instantánea anterior."
+      }
+    },
+    "SECURITIES": {
+      "title": "Valores",
+      "create": "Añadir valor",
+      "edit": "Editar",
+      "view_details": "Ver detalles",
+      "empty_description": "Aún no has añadido ningún valor. Añade una acción, fondo o cripto para empezar a seguir tu cartera.",
+      "total_value": "Valor de la cartera",
+      "current_price": "Precio actual",
+      "market_value": "Valor de mercado",
+      "units_held": "Unidades",
+      "unrealized_pnl": "P&L no realizado",
+      "your_position": "Tu posición",
+      "positions": "Posiciones",
+      "no_positions": "Todavía no tienes este valor en ninguna cuenta.",
+      "by_security": "Por valor",
+      "by_type": "Por tipo",
+      "by_account": "Por cuenta",
+      "by_classification": "Por clasificación",
+      "no_trades": "Todavía no hay operaciones de compra o venta.",
+      "no_price_history": "Todavía no hay histórico de precios. Añade un precio para empezar a registrarlo.",
+      "TABS": {
+        "about": "Detalles",
+        "positions": "Posiciones",
+        "trades": "Operaciones",
+        "price_history": "Precios"
+      },
+      "PRICE_HISTORY": {
+        "add": "Añadir precio",
+        "edit": "Editar precio",
+        "price": "Precio"
+      },
+      "IMPORT": {
+        "title": "Importar precios",
+        "description": "Selecciona un fichero .csv o pega un precio por línea con el formato fecha, precio. No se usa internet.",
+        "review_description": "Revisa los precios antes de importarlos.",
+        "field_label": "Datos CSV",
+        "button": "Importar precios",
+        "rows_detected": "{{n}} filas válidas detectadas",
+        "overwrite_warning": "{{n}} de estas fechas ya tienen un precio registrado y se sobrescribirán.",
+        "success": "{{n}} precios importados"
+      },
+      "CLASSIFICATION": {
+        "title": "Clasificación",
+        "edit_title": "Editar clasificación",
+        "empty": "Todavía sin clasificar. Añade clase de activo, región, sector o riesgo para ver este valor en la composición de tu cartera.",
+        "none": "Ninguna",
+        "add_category": "Añadir categoría",
+        "unclassified": "Sin clasificar",
+        "weight_over_100": "Los pesos de \"{{taxonomy}}\" suman más del 100%."
+      },
+      "delete": "Eliminar valor",
+      "delete_confirmation": "Se eliminará el valor. Esta acción no se puede deshacer.",
+      "delete_success": "Valor eliminado correctamente",
+      "in_use_error": "Este valor todavía tiene posiciones u operaciones vinculadas. Elimínalas antes de borrarlo."
+    },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Linkear transacción",
-        "modal_title": "Linkear transacción al activo",
-        "modal_subtitle": "Elige cómo quieres asociar una transacción con este activo"
+        "button_label": "Linkear transacción"
       },
       "link_transaction": {
-        "title": "Linkear ingreso o gasto existente",
-        "description": "Asocia ingresos o gastos relacionados con este activo, como compras, ventas o mantenimiento. Esto te ayudará a organizar mejor tu historial y obtener estadísticas más precisas, pero no actualizará el valor actual de tu activo.",
         "success": "Transacción vinculada correctamente"
-      },
-      "new_investment_transaction": {
-        "title": "Crear transacción de inversión",
-        "description": "Mueve dinero entre una cuenta y este activo. Invertir más añade fondos y aumenta tu inversión; retirar saca fondos y la reduce. Puedes actualizar la valoración del activo en consecuencia."
       }
     },
     "DETAILS": {
+      "about": "Detalles",
+      "gross_value": "Valor bruto",
+      "liability": "Deuda",
+      "net_worth": "Patrimonio neto",
+      "acquisition_transaction_badge": "Adquisición",
       "select_account": "Seleccione una cuenta",
-      "buy": "Invertir más",
-      "sell": "Retirar dinero",
       "update_value": "Actualizar valor",
-      "trade_sheet_title_buy": "Invertir más (agregar al activo)",
-      "trade_sheet_title_sell": "Retirar dinero (reducir activo)",
-      "trade_sheet_update_value_info": "El valor de este activo se actualizará a {{ value }} para el día seleccionado",
-      "trade_sheet_update_linked_asset_value_info": "El valor del activo vinculado a esta transacción se actualizará a {{ value }} para el dia seleccionado",
-      "trade_sheet_update_following_valuations": "Actualizar valoraciones posteriores",
-      "trade_sheet_update_following_valuations_description": "Ajusta las valoraciones del asset posteriores a la fecha seleccionada",
-      "trade_sheet_valuation_current_value_label": "Valor actual",
-      "trade_sheet_valuation_create_new_title": "Crear nueva valoración",
-      "trade_sheet_valuation_adjust_current_description": "Ajustar el valor actual del asset",
       "trade_form_asset_column": "Activo",
-      "trade_valuation_notice": "Se actualizará una valoración para esta fecha para reflejar este monto.",
       "notes_optional": "Notas (opcional)",
       "performance_sheet_title": "Rendimiento",
       "performance_return": "Rentabilidad del periodo",
@@ -938,12 +1088,19 @@
     "FORM": {
       "asset_type": "Tipo de activo",
       "linked_account": "Cuenta vinculada (opcional)",
+      "linked_liability": "Deuda vinculada",
+      "link_existing_liability": "Vincular deuda existente",
+      "no_liabilities": "Todavía no tienes ninguna deuda.",
       "name": "Nombre del activo",
       "name_required": "Por favor ingrese un nombre de activo",
       "description": "Descripción",
       "initial_value": "Valor inicial",
       "initial_value_required": "Por favor ingrese un valor inicial",
       "initial_value_invalid": "Por favor ingresa un número válido",
+      "link_acquisition_transaction": "Vincular una transacción de compra",
+      "link_acquisition_transaction_descr": "Elige el gasto que representa la compra de este activo. Su importe (convertido a la divisa del activo) y su fecha se usarán como valor inicial y fecha de adquisición",
+      "acquisition_transaction": "Transacción de adquisición",
+      "creation_date_before_acquisition_transaction": "La fecha de adquisición no puede ser anterior a la fecha de la transacción vinculada",
       "currency": "Divisa",
       "select_currency": "Por favor seleccione una moneda",
       "creation_date": "Fecha de creación",
@@ -1112,7 +1269,7 @@
         "choose_description": "Elije qué acción se activará cuando deslices una transacción del listado de transacciones usando esta dirección de deslizamiento",
         "swipe_left": "Desliza hacia la izquierda",
         "swipe_right": "Desliza hacia la derecha",
-        "none": "No action",
+        "none": "Ninguna acción",
         "toggle_reconciled": "Alternar conciliado",
         "toggle_pending": "Alternar pendiente",
         "toggle_voided": "Alternar anulado",
@@ -1195,12 +1352,12 @@
       "share.descr": "Comparte nuestra app a amigos y familiares",
       "share.text": "Monekin! La mejor app de finanzas personales. Descargala aquí",
       "thanks": "¡Gracias!",
+      "thanks_long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir.",
       "donate": "Haz una donación",
       "donate.descr": "Con tu donación ayudaras a que la app siga recibiendo mejoras. ¿Que mejor forma que agradecer el trabajo realizado invitandome a un cafe?",
       "donate.success": "Donación realizada. Muchas gracias por tu contribución! ❤️",
       "donate.err": "Ups! Parece que ha habido un error a la hora de recibir tu pago",
-      "report": "Reporta errores, deja sugerencias...",
-      "thanks.long": "Tus contribuciones a Monekin y otros proyectos de código abierto, grandes o pequeños, hacen posibles grandes proyectos como este. Gracias por tomarse el tiempo para contribuir."
+      "report": "Reporta errores, deja sugerencias..."
     }
   }
 }

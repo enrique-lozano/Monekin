@@ -37,8 +37,8 @@ class _AssetsListPageState extends State<AssetsListPage> {
     });
   }
 
-  void _goToCreate() {
-    RouteUtils.pushRoute(const AssetFormPage());
+  Future<void> _goToCreate() async {
+    await RouteUtils.pushRoute(const AssetFormPage());
   }
 
   void _goToDetails(Asset asset) {

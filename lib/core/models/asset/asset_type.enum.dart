@@ -3,12 +3,14 @@ import 'package:monekin/core/database/utils/database_enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Stored in [assets.assetType] as [databaseValue] (snake_case strings).
+///
+/// Assets are **physical / non-market** holdings only (real estate, vehicles,
+/// precious metals, etc.). Market instruments (stocks, funds, crypto) are
+/// modelled as `securities` + `holdings`, not as assets.
 enum AssetType implements DatabaseEnum<String> {
-  stocks('stocks'),
-  funds('funds'),
-  crypto('crypto'),
   realEstate('real_estate'),
   vehicle('vehicle'),
+  preciousMetal('precious_metal'),
   jewelryArt('jewelry_art'),
   other('other');
 
@@ -17,19 +19,23 @@ enum AssetType implements DatabaseEnum<String> {
   @override
   final String databaseValue;
 
-  bool get isFinancial => this == stocks || this == funds || this == crypto;
-
-  bool get isPhysical =>
-      this == realEstate || this == vehicle || this == jewelryArt;
-
   String displayName(BuildContext context) {
     final t = Translations.of(context).assets.types;
     return switch (this) {
-      AssetType.stocks => t.stocks,
-      AssetType.funds => t.funds,
-      AssetType.crypto => t.crypto,
       AssetType.realEstate => t.real_estate,
       AssetType.vehicle => t.vehicle,
+      AssetType.preciousMetal => t.precious_metal,
+      AssetType.jewelryArt => t.jewelry_art,
+      AssetType.other => t.other,
+    };
+  }
+
+  String description(BuildContext context) {
+    final t = Translations.of(context).assets.type_descriptions;
+    return switch (this) {
+      AssetType.realEstate => t.real_estate,
+      AssetType.vehicle => t.vehicle,
+      AssetType.preciousMetal => t.precious_metal,
       AssetType.jewelryArt => t.jewelry_art,
       AssetType.other => t.other,
     };
@@ -37,13 +43,21 @@ enum AssetType implements DatabaseEnum<String> {
 
   IconData icon() {
     return switch (this) {
-      AssetType.stocks => Icons.show_chart,
-      AssetType.funds => Icons.pie_chart,
-      AssetType.crypto => Icons.currency_bitcoin,
       AssetType.realEstate => Icons.home,
       AssetType.vehicle => Icons.directions_car,
+      AssetType.preciousMetal => Icons.paid,
       AssetType.jewelryArt => Icons.diamond,
       AssetType.other => Icons.category,
+    };
+  }
+
+  Color color() {
+    return switch (this) {
+      AssetType.realEstate => const Color(0xFF3B82F6),
+      AssetType.vehicle => const Color(0xFF14B8A6),
+      AssetType.preciousMetal => const Color(0xFFF59E0B),
+      AssetType.jewelryArt => const Color(0xFFA855F7),
+      AssetType.other => const Color(0xFF64748B),
     };
   }
 }

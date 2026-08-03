@@ -5,10 +5,8 @@ import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -39,11 +37,21 @@ class DashboardAccountList extends StatelessWidget {
 
         return CardWithHeader(
           title: t.home.my_accounts,
-          bodyPadding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-          onHeaderActionTap: total > _maxAccountsToShow
-              ? () => RouteUtils.pushRoute(const AllAccountsPage())
+          bodyPadding: const EdgeInsets.only(top: 4, bottom: 8),
+          headerAction: total > _maxAccountsToShow
+              ? CardHeaderAction(
+                  icon: const Icon(Icons.add_rounded),
+                  text: t.account.form.create,
+                  onTap: () => RouteUtils.pushRoute(const AccountFormPage()),
+                )
               : null,
-          headerActionLabel: t.ui_actions.see_all,
+          footer: total > _maxAccountsToShow
+              ? CardFooterWithSingleButton(
+                  text: t.ui_actions.see_all,
+                  onButtonClick: () =>
+                      RouteUtils.pushRoute(const AllAccountsPage()),
+                )
+              : null,
           body: Column(
             children: [
               if (accounts == null)
@@ -54,7 +62,6 @@ class DashboardAccountList extends StatelessWidget {
                     account: account,
                     dateRangeService: dateRangeService,
                   ),
-                _AddAccountRow(),
               ],
             ],
           ),
@@ -72,128 +79,56 @@ class _AccountRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Tappable(
-      bgColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(14),
+    return ListTile(
+      leading: Hero(
+        tag: 'dashboard-page__account-icon-${account.id}',
+        child: account.displayIcon(context, size: 26),
+      ),
+      title: Text(account.name),
+      subtitle: Text(account.type.title(context)),
       onTap: () => RouteUtils.pushRoute(
         AccountDetailsPage(
           account: account,
           accountIconHeroTag: 'dashboard-page__account-icon-${account.id}',
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
-        child: Row(
-          children: [
-            Hero(
-              tag: 'dashboard-page__account-icon-${account.id}',
-              child: account.displayIcon(context, size: 26),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    account.name,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    account.type.title(context),
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: AppColors.of(context).textHint,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                StreamBuilder(
-                  initialData: 0.0,
-                  stream: AccountService.instance.getAccountMoney(
-                    account: account,
-                  ),
-                  builder: (context, snapshot) {
-                    final amount = snapshot.data ?? 0.0;
+      trailing: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          StreamBuilder(
+            initialData: 0.0,
+            stream: AccountService.instance.getAccountMoney(account: account),
+            builder: (context, snapshot) {
+              final amount = snapshot.data ?? 0.0;
 
-                    return CurrencyDisplayer(
-                      amountToConvert: amount,
-                      currency: account.currency,
-                      compactView: amount >= 10000000,
-                      integerStyle: Theme.of(context).textTheme.titleSmall!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    );
-                  },
-                ),
-                StreamBuilder(
-                  initialData: 0.0,
-                  stream: AccountService.instance
-                      .getAccountsBalanceRelativeChange(
-                        accounts: [account],
-                        startDate: dateRangeService.startDate,
-                        endDate: dateRangeService.endDate,
-                        convertToPreferredCurrency: false,
-                      ),
-                  builder: (context, snapshot) {
-                    return TrendingValue(
-                      percentage: snapshot.data ?? 0,
-                      decimalDigits: 0,
-                      fontSize: 12,
-                      padding: EdgeInsets.zero,
-                    );
-                  },
-                ),
-              ],
+              return CurrencyDisplayer(
+                amountToConvert: amount,
+                currency: account.currency,
+                compactView: amount >= 10000000,
+                integerStyle: Theme.of(
+                  context,
+                ).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.bold),
+              );
+            },
+          ),
+          StreamBuilder(
+            initialData: 0.0,
+            stream: AccountService.instance.getAccountsBalanceRelativeChange(
+              accounts: [account],
+              startDate: dateRangeService.startDate,
+              endDate: dateRangeService.endDate,
+              convertToPreferredCurrency: false,
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _AddAccountRow extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final accent = Theme.of(context).colorScheme.primary;
-
-    return Tappable(
-      bgColor: Colors.transparent,
-      borderRadius: BorderRadius.circular(14),
-      onTap: () => RouteUtils.pushRoute(const AccountFormPage()),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-        child: Row(
-          children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: accent.withOpacity(0.6), width: 1.4),
-              ),
-              child: Icon(Icons.add_rounded, color: accent, size: 20),
-            ),
-            const SizedBox(width: 14),
-            Text(
-              t.account.form.create,
-              style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: accent,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
+            builder: (context, snapshot) {
+              return TrendingValue(
+                percentage: snapshot.data ?? 0,
+                decimalDigits: 0,
+                fontSize: 12,
+                padding: EdgeInsets.zero,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

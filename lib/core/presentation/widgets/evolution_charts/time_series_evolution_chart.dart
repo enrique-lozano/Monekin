@@ -30,6 +30,7 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
     this.onHover,
     this.timeRange,
     this.fillMissingDatesWithPreviousValue = true,
+    this.showYAxisTitles = true,
   });
 
   /// The raw data items to plot.
@@ -66,6 +67,10 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
 
   /// When true, missing dates in [timeRange] are filled with the previous value.
   final bool fillMissingDatesWithPreviousValue;
+
+  /// When false, the left (Y) axis labels and the background grid are hidden,
+  /// for a cleaner, dashboard-like chart.
+  final bool showYAxisTitles;
 
   @override
   State<TimeSeriesEvolutionChart<T>> createState() =>
@@ -156,13 +161,16 @@ class _TimeSeriesEvolutionChartState<T>
     final byX = chartSeries.byX;
     final spots = chartSeries.spots;
 
-    final isNotEnoughData = sortedData.length <= 2;
+    final isNotEnoughData = sortedData.length < 2;
 
     final chart = LineChart(
       LineChartData(
         minY: widget.minY,
         maxY: widget.maxY,
-        gridData: const FlGridData(show: true, drawVerticalLine: false),
+        gridData: FlGridData(
+          show: widget.showYAxisTitles,
+          drawVerticalLine: false,
+        ),
         extraLinesData: widget.extraLinesData,
         lineTouchData: isNotEnoughData
             ? const LineTouchData(enabled: false)
@@ -236,7 +244,7 @@ class _TimeSeriesEvolutionChartState<T>
               ),
         titlesData: FlTitlesData(
           show: true,
-          leftTitles: isNotEnoughData
+          leftTitles: (isNotEnoughData || !widget.showYAxisTitles)
               ? noAxisTitles
               : AxisTitles(
                   sideTitles: SideTitles(

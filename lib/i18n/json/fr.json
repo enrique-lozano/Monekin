@@ -880,20 +880,8 @@
     },
     "DETAILS": {
       "select_account": "Sélectionnez un compte",
-      "buy": "Acheter",
-      "sell": "Vendre",
       "update_value": "Mettre à jour la valeur",
-      "trade_sheet_title_buy": "Acheter (ajouter à l'actif)",
-      "trade_sheet_title_sell": "Vendre (réduire l'actif)",
-      "trade_sheet_update_value_info": "La valeur de cet actif sera mise à jour à {{ value }}",
-      "trade_sheet_update_linked_asset_value_info": "La valeur de l'actif lié à cette transaction sera mise à jour à {{ value }}",
-      "trade_sheet_update_following_valuations": "Mettre à jour les évaluations ultérieures",
-      "trade_sheet_update_following_valuations_description": "Ajustez les évaluations de l'actif postérieures à la date sélectionnée.",
-      "trade_sheet_valuation_current_value_label": "Valeur actuelle",
-      "trade_sheet_valuation_create_new_title": "Créer une nouvelle évaluation",
-      "trade_sheet_valuation_adjust_current_description": "Ajuster la valeur actuelle de l'actif",
       "trade_form_asset_column": "Actif",
-      "trade_valuation_notice": "Une évaluation sera mise à jour à cette date pour refléter ce montant.",
       "notes_optional": "Remarques (facultatif)",
       "performance_sheet_title": "Performance",
       "performance_return": "Rendement sur la période",
@@ -945,18 +933,10 @@
     },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Link transaction",
-        "modal_title": "Link transaction to asset",
-        "modal_subtitle": "Choose how you want to associate a transaction with this asset"
+        "button_label": "Link transaction"
       },
       "link_transaction": {
-        "title": "Link existing income or expense",
-        "description": "Associate income or expense entries related to this asset, like purchases, sales, or maintenance. This will help organize history and improve stats, but it won't change the asset's current value.",
         "success": "Transaction linked successfully"
-      },
-      "new_investment_transaction": {
-        "title": "Create investment transaction",
-        "description": "Move money between an account and this asset. Buying adds funds and increases your investment; selling withdraws funds and reduces it. You can update the asset valuation accordingly."
       }
     }
   },

@@ -197,6 +197,8 @@ Consume via `TransactionService.instance.getTransactions(...)`. The same `._()` 
 - **Theming**: use `Theme.of(context)` / `getThemeData(...)`; don't hardcode colors.
 - **Responsive**: use helpers in `lib/core/presentation/responsive/` (`BreakPoint`, responsive row/column) and `AppUtils.isMobileLayout(context)`.
 - **Feedback**: use the shared snackbar helpers, not raw `ScaffoldMessenger`.
+- **Segmented controls**: use `ExpandingSegmentedTabs`/`SegmentedTabItem` (`lib/core/presentation/widgets/expanding_segmented_tabs.dart`) instead of Flutter's `SegmentedButton`/`ButtonSegment`. It adapts to narrow screens (collapsing unselected segments to just their icon instead of truncating labels) and hugs its content width when `fullWidth: false` is passed, unlike the native widget.
+  - There's no automated lint enforcing this yet: `custom_lint` is unmaintained (archived, pinned to an old `analyzer` that conflicts with `freezed`), and the official `analysis_server_plugin` replacement currently isn't picked up by whole-project `flutter analyze`/`dart analyze .` on this SDK due to open Dart SDK bugs (only single-file `dart analyze <file>` and some IDEs see plugin diagnostics today). Revisit automating this once that's fixed upstream.
 
 ### Adding / editing translations
 

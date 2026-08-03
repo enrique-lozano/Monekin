@@ -183,12 +183,17 @@ class FundEvolutionLineChart extends StatefulWidget {
     required this.filters,
     required this.loadingWidget,
     this.accountsIds,
+    this.showYAxisTitles = true,
   });
 
   final DateTimeRange? timeRange;
   final TransactionFilterSet filters;
   final Iterable<String>? accountsIds;
   final Widget loadingWidget;
+
+  /// Whether the chart shows its Y-axis labels/grid. Set to `false` for a
+  /// minimal, dashboard-style hero chart.
+  final bool showYAxisTitles;
 
   @override
   State<FundEvolutionLineChart> createState() => _FundEvolutionLineChartState();
@@ -314,6 +319,7 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
       tooltipTitleBuilder: (p) => p.label,
       minY: minY,
       maxY: maxY,
+      showYAxisTitles: widget.showYAxisTitles,
     );
   }
 }

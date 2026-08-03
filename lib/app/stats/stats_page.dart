@@ -7,6 +7,7 @@ import 'package:monekin/app/stats/widgets/income_expense_comparason.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_tab.dart';
+import 'package:monekin/app/stats/widgets/portfolio/portfolio_composition_card.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -25,6 +26,7 @@ enum StatsTab {
   financialHealth,
   distribution,
   netWorth,
+  portfolio,
   balance,
   cashFlow;
 
@@ -144,6 +146,7 @@ class _StatsPageState extends State<StatsPage>
           Tab(text: t.financial_health.display),
           Tab(text: t.stats.distribution),
           Tab(text: t.stats.net_worth),
+          Tab(text: t.stats.portfolio),
           Tab(text: t.stats.balance),
           Tab(text: t.stats.cash_flow),
         ],
@@ -220,6 +223,21 @@ class _StatsPageState extends State<StatsPage>
                   NetWorthTab(
                     dateRangeService: dateRangeService,
                     filters: filters,
+                  ),
+                ]),
+                buildContainerWithPadding([
+                  CardWithHeader(
+                    title: t.stats.portfolio_composition,
+                    subtitle: t.stats.portfolio_composition_subtitle,
+                    bodyPadding: const EdgeInsets.only(
+                      bottom: 12,
+                      top: 16,
+                      right: 16,
+                      left: 16,
+                    ),
+                    body: PortfolioCompositionCard(
+                      date: dateRangeService.endDate ?? DateTime.now(),
+                    ),
                   ),
                 ]),
                 buildContainerWithPadding([

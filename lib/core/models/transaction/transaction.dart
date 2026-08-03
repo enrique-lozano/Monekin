@@ -53,6 +53,9 @@ class MoneyTransaction extends TransactionInDB {
     super.remainingTransactions,
     super.debtId,
     super.assetID,
+    super.securityID,
+    super.quantity,
+    super.pricePerUnit,
   }) : category = category != null
            ? Category.fromDB(category, parentCategory)
            : null,
@@ -105,7 +108,7 @@ class MoneyTransaction extends TransactionInDB {
     }
 
     if (isInvestment) {
-      return value.isNegative
+      return value <= 0
           ? TransactionType.income.color(context)
           : TransactionType.expense.color(context);
     }
@@ -150,7 +153,7 @@ class MoneyTransaction extends TransactionInDB {
     return IconDisplayer(
       mainColor: color(context),
       icon: isInvestment
-          ? value < 0
+          ? value <= 0
                 ? Icons.call_received
                 : Icons.call_made
           : TransactionType.transfer.icon,
