@@ -50,19 +50,27 @@ class AccountDetailsPage extends StatefulWidget {
     super.key,
     required this.account,
     required this.accountIconHeroTag,
+    this.dateRangeService = const DatePeriodState(),
   });
 
   final Account account;
 
   final Object? accountIconHeroTag;
+  final DatePeriodState dateRangeService;
 
   @override
   State<AccountDetailsPage> createState() => _AccountDetailsPageState();
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
-  DatePeriodState _dateRange = const DatePeriodState();
+  late DatePeriodState _dateRange;
   _DetailTab _selectedTab = _DetailTab.movements;
+
+  @override
+  void initState() {
+    super.initState();
+    _dateRange = widget.dateRangeService;
+  }
 
   void _onPeriodChanged(DatePeriod period) {
     setState(() {
@@ -151,8 +159,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1100),
                 child: BreakpointContainer(
-                  lgChild: _buildDesktopLayout(account, isInvestment),
-                  child: _buildMobileLayout(account, isInvestment),
+                  lgBuilder: (context) =>
+                      _buildDesktopLayout(account, isInvestment),
+                  builder: (context) =>
+                      _buildMobileLayout(account, isInvestment),
                 ),
               ),
             ),
@@ -925,14 +935,15 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: ExpandingSegmentedTabs<_DetailTab>(
-            items: items,
-            selected: selected,
-            onSelected: (v) => setState(() => _selectedTab = v),
+        if (items.length > 1)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ExpandingSegmentedTabs<_DetailTab>(
+              items: items,
+              selected: selected,
+              onSelected: (v) => setState(() => _selectedTab = v),
+            ),
           ),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: content,

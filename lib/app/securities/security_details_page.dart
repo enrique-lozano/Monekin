@@ -341,13 +341,13 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       BreakpointContainer(
-                        lgChild: _buildTopDesktop(
+                        lgBuilder: (context) => _buildTopDesktop(
                           security,
                           currency,
                           positions,
                           allPoints,
                         ),
-                        child: _buildTopMobile(
+                        builder: (context) => _buildTopMobile(
                           security,
                           currency,
                           positions,

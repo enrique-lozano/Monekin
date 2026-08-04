@@ -99,7 +99,7 @@ class IntroPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: BreakpointContainer(
-            mdChild: Row(
+            mdBuilder: (context) => Row(
               children: [
                 Flexible(
                   flex: 1,
@@ -124,7 +124,7 @@ class IntroPage extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
+            builder: (context) => Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 buildFirstSection(context),

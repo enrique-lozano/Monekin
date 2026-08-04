@@ -26,8 +26,19 @@ class BreakPoint extends Equatable {
     return breakpoints.first;
   }
 
-  /// Get the current BreakPoint based on the device width
+  /// Get the current BreakPoint based on the device width.
+  ///
+  /// Reads the cached value from an ancestor [BreakpointProvider] when
+  /// present (so consumers rebuild only on breakpoint changes), otherwise
+  /// falls back to the window width.
   static BreakPoint of(BuildContext context, {Set<BreakPoint>? breakpoints}) {
+    if (breakpoints == null) {
+      final inherited = context
+          .dependOnInheritedWidgetOfExactType<_InheritedBreakpoint>();
+
+      if (inherited != null) return inherited.breakpoint;
+    }
+
     return fromWidth(
       MediaQuery.of(context).size.width,
       breakpoints: breakpoints,
@@ -75,5 +86,40 @@ class BreakPoint extends Equatable {
 
   bool operator <=(BreakPoint other) {
     return id.index <= other.id.index;
+  }
+}
+
+/// Exposes the current [BreakPoint] to descendants, notifying them only when
+/// the breakpoint changes (not on every pixel of a resize).
+///
+/// Install it once, high in the tree and below `MediaQuery` (e.g. in the
+/// `MaterialApp.builder`).
+class BreakpointProvider extends StatelessWidget {
+  const BreakpointProvider({super.key, required this.child, this.breakpoints});
+
+  final Widget child;
+
+  /// Optional custom breakpoints. Defaults to `appBreakPoints`.
+  final Set<BreakPoint>? breakpoints;
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+
+    return _InheritedBreakpoint(
+      breakpoint: BreakPoint.fromWidth(width, breakpoints: breakpoints),
+      child: child,
+    );
+  }
+}
+
+class _InheritedBreakpoint extends InheritedWidget {
+  const _InheritedBreakpoint({required this.breakpoint, required super.child});
+
+  final BreakPoint breakpoint;
+
+  @override
+  bool updateShouldNotify(_InheritedBreakpoint oldWidget) {
+    return breakpoint != oldWidget.breakpoint;
   }
 }

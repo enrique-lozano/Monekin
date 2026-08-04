@@ -120,7 +120,7 @@ class TransactionFormScaffold extends StatelessWidget {
       body: Form(
         key: c.formKey,
         child: BreakpointContainer(
-          lgChild: Row(
+          lgBuilder: (context) => Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(flex: 4, child: lgLeadingColumn),
@@ -132,7 +132,7 @@ class TransactionFormScaffold extends StatelessWidget {
               Expanded(flex: 6, child: lgTrailingColumn),
             ],
           ),
-          child: Column(
+          builder: (context) => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (!c.isSecurityTradeInvestment)

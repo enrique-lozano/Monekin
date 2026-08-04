@@ -14,6 +14,7 @@ import 'package:monekin/core/database/services/user-setting/private_mode_service
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/handle_will_pop_scope.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
@@ -229,9 +230,7 @@ class MaterialAppContainer extends StatelessWidget {
               getSystemUiOverlayStyle(Theme.of(context).brightness),
             );
 
-            child ??= const SizedBox.shrink();
-
-            return child;
+            return BreakpointProvider(child: child ?? const SizedBox.shrink());
           },
           home: HandleWillPopScope(
             child: Builder(

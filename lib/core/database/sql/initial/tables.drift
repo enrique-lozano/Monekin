@@ -183,6 +183,9 @@ CREATE TABLE IF NOT EXISTS securities (
     -- Optional ticker/symbol (e.g. AAPL, VWCE, BTC)
     ticker TEXT,
 
+    -- Optional free-text notes/description about the security
+    notes TEXT,
+
     -- Latest known price per unit, updated manually (offline-first)
     currentPrice REAL,
 

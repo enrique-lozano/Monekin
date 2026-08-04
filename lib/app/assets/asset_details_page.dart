@@ -432,14 +432,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                       _buildHeader(context, asset),
                       const SizedBox(height: 20),
                       BreakpointContainer(
-                        lgChild: _buildTopDesktop(
+                        lgBuilder: (context) => _buildTopDesktop(
                           context,
                           valuations,
                           displayValuation,
                           asset,
                           snapshot.data?.transactions,
                         ),
-                        child: _buildTopMobile(
+                        builder: (context) => _buildTopMobile(
                           context,
                           valuations,
                           displayValuation,
@@ -449,13 +449,13 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                       ),
                       const SizedBox(height: 24),
                       BreakpointContainer(
-                        lgChild: _buildDesktopBody(
+                        lgBuilder: (context) => _buildDesktopBody(
                           context,
                           valuations,
                           snapshot.data?.transactions,
                           asset,
                         ),
-                        child: _buildSegmentedSection(
+                        builder: (context) => _buildSegmentedSection(
                           context,
                           valuations,
                           snapshot.data?.transactions,

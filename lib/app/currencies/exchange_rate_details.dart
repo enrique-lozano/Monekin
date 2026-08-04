@@ -491,15 +491,16 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     BreakpointContainer(
-                      lgChild: _buildHeaderBlock(showAddButton: true),
-                      child: _buildHeaderBlock(),
+                      lgBuilder: (context) =>
+                          _buildHeaderBlock(showAddButton: true),
+                      builder: (context) => _buildHeaderBlock(),
                     ),
                     const SizedBox(height: 16),
                     _buildChartAndStats(),
                     const SizedBox(height: 24),
                     BreakpointContainer(
-                      lgChild: _buildDesktopBottom(),
-                      child: _buildMobileBottom(),
+                      lgBuilder: (context) => _buildDesktopBottom(),
+                      builder: (context) => _buildMobileBottom(),
                     ),
                   ],
                 ),

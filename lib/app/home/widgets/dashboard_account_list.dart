@@ -90,6 +90,7 @@ class _AccountRow extends StatelessWidget {
         AccountDetailsPage(
           account: account,
           accountIconHeroTag: 'dashboard-page__account-icon-${account.id}',
+          dateRangeService: dateRangeService,
         ),
       ),
       trailing: Column(

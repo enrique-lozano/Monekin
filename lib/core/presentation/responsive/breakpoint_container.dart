@@ -1,58 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 
+enum _BreakpointSlot { xs, sm, md, lg, xl, xxl }
+
+/// Picks a builder based on the current [BreakPoint]. Rebuilds only when the
+/// breakpoint changes (see [BreakpointProvider]).
 class BreakpointContainer extends StatelessWidget {
-  /// XS and up child widget
-  final Widget child;
+  /// XS and up builder
+  final WidgetBuilder builder;
 
-  /// SM and up child widget. If null will use child
-  final Widget? smChild;
+  /// SM and up builder. If null will use [builder]
+  final WidgetBuilder? smBuilder;
 
-  /// MD and up child widget. If null will use smaller breakpoint child
-  final Widget? mdChild;
+  /// MD and up builder. If null will use smaller breakpoint's builder
+  final WidgetBuilder? mdBuilder;
 
-  /// LG and up child widget. If null will use smaller breakpoint child
-  final Widget? lgChild;
+  /// LG and up builder. If null will use smaller breakpoint's builder
+  final WidgetBuilder? lgBuilder;
 
-  /// XL and up child widget. If null will use smaller breakpoint child
-  final Widget? xlChild;
+  /// XL and up builder. If null will use smaller breakpoint's builder
+  final WidgetBuilder? xlBuilder;
 
-  /// XXL and up child widget. If null will use smaller breakpoint child
-  final Widget? xxlChild;
+  /// XXL and up builder. If null will use smaller breakpoint's builder
+  final WidgetBuilder? xxlBuilder;
 
   const BreakpointContainer({
     super.key,
-    required this.child,
-    this.smChild,
-    this.mdChild,
-    this.lgChild,
-    this.xlChild,
-    this.xxlChild,
+    required this.builder,
+    this.smBuilder,
+    this.mdBuilder,
+    this.lgBuilder,
+    this.xlBuilder,
+    this.xxlBuilder,
   });
 
-  Widget getChild(BreakPoint breakpoint) {
-    if (xxlChild != null &&
+  (WidgetBuilder, _BreakpointSlot) _resolveBuilder(BreakPoint breakpoint) {
+    if (xxlBuilder != null &&
         breakpoint >= BreakPoint.getById(BreakpointID.xxl)) {
-      return xxlChild!;
+      return (xxlBuilder!, _BreakpointSlot.xxl);
     }
-    if (xlChild != null && breakpoint >= BreakPoint.getById(BreakpointID.xl)) {
-      return xlChild!;
+    if (xlBuilder != null &&
+        breakpoint >= BreakPoint.getById(BreakpointID.xl)) {
+      return (xlBuilder!, _BreakpointSlot.xl);
     }
-    if (lgChild != null && breakpoint >= BreakPoint.getById(BreakpointID.lg)) {
-      return lgChild!;
+    if (lgBuilder != null &&
+        breakpoint >= BreakPoint.getById(BreakpointID.lg)) {
+      return (lgBuilder!, _BreakpointSlot.lg);
     }
-    if (mdChild != null && breakpoint >= BreakPoint.getById(BreakpointID.md)) {
-      return mdChild!;
+    if (mdBuilder != null &&
+        breakpoint >= BreakPoint.getById(BreakpointID.md)) {
+      return (mdBuilder!, _BreakpointSlot.md);
     }
-    if (smChild != null && breakpoint >= BreakPoint.getById(BreakpointID.sm)) {
-      return smChild!;
+    if (smBuilder != null &&
+        breakpoint >= BreakPoint.getById(BreakpointID.sm)) {
+      return (smBuilder!, _BreakpointSlot.sm);
     }
 
-    return child;
+    return (builder, _BreakpointSlot.xs);
   }
 
   @override
   Widget build(BuildContext context) {
-    return getChild(BreakPoint.of(context));
+    final (selectedBuilder, slot) = _resolveBuilder(BreakPoint.of(context));
+
+    // Keyed by slot so crossing a breakpoint tears down the old subtree
+    // instead of reusing its State (and any streams it captured) in the new
+    // one. The builder runs only for the active slot, always fresh.
+    return KeyedSubtree(key: ValueKey(slot), child: selectedBuilder(context));
   }
 }

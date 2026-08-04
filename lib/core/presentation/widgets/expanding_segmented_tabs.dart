@@ -50,7 +50,11 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
     this.selectedColor,
     this.selectedForegroundColor,
     this.unselectedForegroundColor,
-  });
+  }) : assert(
+         items.length > 1,
+         'ExpandingSegmentedTabs needs at least 2 items; with only one, '
+         "there's nothing to switch between, so don't display it at all.",
+       );
 
   final List<SegmentedTabItem<T>> items;
   final T selected;
@@ -144,11 +148,15 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
         final totalFullWidth = fullWidths.fold<double>(0, (a, b) => a + b);
         final fitsExpanded = totalFullWidth <= constraints.maxWidth;
 
+        final effectiveCollapsedWidth =
+            collapsedWidth * items.length <= constraints.maxWidth
+            ? collapsedWidth
+            : constraints.maxWidth / items.length;
+
         final selectedCollapsedWidth =
-            (constraints.maxWidth - collapsedWidth * (items.length - 1)).clamp(
-              collapsedWidth,
-              constraints.maxWidth,
-            );
+            (constraints.maxWidth -
+                    effectiveCollapsedWidth * (items.length - 1))
+                .clamp(effectiveCollapsedWidth, constraints.maxWidth);
 
         return Container(
           height: height,
@@ -192,7 +200,7 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
                     isSelected: items[i].value == selected,
                     width: items[i].value == selected
                         ? selectedCollapsedWidth
-                        : collapsedWidth,
+                        : effectiveCollapsedWidth,
                     showLabel: items[i].value == selected,
                   ),
             ],

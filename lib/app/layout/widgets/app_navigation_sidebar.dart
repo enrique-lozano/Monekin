@@ -78,12 +78,12 @@ class AppNavigationSidebarState extends State<AppNavigationSidebar> {
           }
 
           return BreakpointContainer(
-            xlChild: SideNavigationDrawer(
+            xlBuilder: (context) => SideNavigationDrawer(
               drawerActions: menuItems,
               onDestinationSelected: onDestinationSelected,
               selectedIndex: selectedNavItemIndex,
             ),
-            child: NavigationRail(
+            builder: (context) => NavigationRail(
               destinations: menuItems
                   .map((e) => e.toNavigationRailDestinationWidget())
                   .toList(),
