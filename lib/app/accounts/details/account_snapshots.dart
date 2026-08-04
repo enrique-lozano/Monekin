@@ -135,24 +135,21 @@ class _SnapshotTile extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
-        title: Row(
+        title: Wrap(
+          spacing: 8,
+          runSpacing: 4,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Flexible(
-              child: Text(
-                DateFormat.yMMMd().format(data.date),
-                style: theme.textTheme.titleSmall,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Text(
+              DateFormat.yMMMd().format(data.date),
+              style: theme.textTheme.titleSmall,
             ),
-            const SizedBox(width: 8),
             _Badge(label: t.assets.holdings.snapshots.manual),
-            if (isCurrent) ...[
-              const SizedBox(width: 4),
+            if (isCurrent)
               _Badge(
                 label: t.assets.holdings.snapshots.current,
                 color: theme.colorScheme.primary,
               ),
-            ],
           ],
         ),
         subtitle: Padding(

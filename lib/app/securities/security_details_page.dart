@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
+import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/app/securities/widgets/security_classification_card.dart';
@@ -20,6 +21,7 @@ import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
@@ -45,9 +47,14 @@ enum _DetailTab { about, positions, trades, history }
 typedef _Position = ({HoldingWithSecurity data, Account account});
 
 class SecurityDetailsPage extends StatefulWidget {
-  const SecurityDetailsPage({super.key, required this.security});
+  const SecurityDetailsPage({
+    super.key,
+    required this.security,
+    this.securityAvatarHeroTag,
+  });
 
   final SecurityInDB security;
+  final String? securityAvatarHeroTag;
 
   @override
   State<SecurityDetailsPage> createState() => _SecurityDetailsPageState();
@@ -57,11 +64,6 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
   _PricePoint? _hoveredPoint;
   ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
   _DetailTab _selectedTab = _DetailTab.about;
-
-  /// The price-history list is paginated client-side: only the most recent
-  /// `_historyPagesShown * _historyPageSize` entries are rendered at a time.
-  static const _historyPageSize = 20;
-  int _historyPagesShown = 1;
 
   /// The trades list is paginated client-side the same way as the history one.
   static const _tradesPageSize = 20;
@@ -498,7 +500,10 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
               ],
             ),
           ),
-          SecurityAvatar(security: security, size: 44),
+          Hero(
+            tag: widget.securityAvatarHeroTag ?? UniqueKey(),
+            child: SecurityAvatar(security: security, size: 44),
+          ),
         ],
       ),
     );
@@ -890,96 +895,22 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     final sorted = List<SecurityPriceHistoryInDB>.from(history)
       ..sort((a, b) => b.date.compareTo(a.date));
 
-    return CardWithHeader(
+    return EditableTimeSeriesCard<SecurityPriceHistoryInDB>(
       title: t.assets.securities.tabs.price_history,
       headerAction: CardHeaderAction(
         text: t.ui_actions.add,
         icon: const Icon(Icons.add_rounded, size: 15),
         onTap: () => _addPricePoint(security, currency),
       ),
-      bodyPadding: const EdgeInsets.symmetric(vertical: 4),
-      body: sorted.isEmpty
-          ? NoResults(
-              title: t.general.empty_warn,
-              description: t.assets.securities.no_price_history,
-              showIllustration: false,
-            )
-          : Column(
-              children: [
-                for (var i = 0; i < _visibleHistoryCount(sorted.length); i++)
-                  _buildHistoryTile(
-                    sorted[i],
-                    i + 1 < sorted.length ? sorted[i + 1] : null,
-                    security,
-                    currency,
-                  ),
-              ],
-            ),
-      footer: sorted.length > _visibleHistoryCount(sorted.length)
-          ? CardFooterWithSingleButton(
-              onButtonClick: () => setState(() => _historyPagesShown++),
-            )
-          : null,
-    );
-  }
-
-  /// Number of price-history rows to render for the currently requested
-  /// number of pages. The tab loads all history to feed the chart, but the
-  /// list itself is paginated client-side to avoid building thousands of
-  /// tiles up front when a security has a long history.
-  int _visibleHistoryCount(int totalCount) =>
-      (_historyPagesShown * _historyPageSize).clamp(0, totalCount);
-
-  Widget _buildHistoryTile(
-    SecurityPriceHistoryInDB point,
-    SecurityPriceHistoryInDB? previous,
-    SecurityInDB security,
-    Currency? currency,
-  ) {
-    final t = Translations.of(context);
-
-    double? variation;
-    if (previous != null && previous.price != 0) {
-      variation = (point.price - previous.price) / previous.price;
-    }
-
-    return ListTile(
-      title: Text(_dateLabel(point.date)),
-      subtitle: (variation != null && variation != 0)
-          ? Align(
-              alignment: Alignment.centerLeft,
-              child: TrendingValue(
-                padding: EdgeInsets.zero,
-                percentage: variation,
-                fontSize: 12,
-              ),
-            )
-          : null,
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CurrencyDisplayer(
-            amountToConvert: point.price,
-            currency: currency,
-            integerStyle: Theme.of(context).textTheme.titleMedium!,
-          ),
-          MonekinPopupMenuButton(
-            actionItems: [
-              ListTileActionItem(
-                label: t.ui_actions.edit,
-                icon: Icons.edit_rounded,
-                onClick: () => _editPricePoint(point, security, currency),
-              ),
-              ListTileActionItem(
-                label: t.ui_actions.delete,
-                icon: Icons.delete_rounded,
-                role: ListTileActionRole.delete,
-                onClick: () => _deletePricePoint(point),
-              ),
-            ],
-          ),
-        ],
-      ),
+      items: sorted,
+      dateExtractor: (p) => p.date,
+      valueExtractor: (p) => p.price,
+      // The security's currency always exists (FK), so it has resolved by the
+      // time this stream-driven builder runs.
+      currency: currency!,
+      emptyDescription: t.assets.securities.no_price_history,
+      onEdit: (p) => _editPricePoint(p, security, currency),
+      onDelete: (p) => _deletePricePoint(p),
     );
   }
 

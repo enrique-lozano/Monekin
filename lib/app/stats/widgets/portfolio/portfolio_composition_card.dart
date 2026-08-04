@@ -290,8 +290,44 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
 
         if (slices.isEmpty) {
           return SizedBox(
-            height: 200,
-            child: Center(child: Text(t.general.insufficient_data)),
+            height: 260,
+            child: Stack(
+              children: [
+                PieChart(
+                  PieChartData(
+                    borderData: FlBorderData(show: false),
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 35,
+                    sections: [
+                      PieChartSectionData(
+                        color: Colors.grey.withOpacity(0.175),
+                        value: 100,
+                        radius: 50,
+                        showTitle: false,
+                      ),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    width: 35 * 2.25,
+                    height: 35 * 2.25,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surface.withOpacity(0.1),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    t.general.insufficient_data,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+              ],
+            ),
           );
         }
 

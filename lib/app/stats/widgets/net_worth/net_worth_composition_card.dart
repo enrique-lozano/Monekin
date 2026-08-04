@@ -4,8 +4,8 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
-import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -27,45 +27,48 @@ class NetWorthCompositionCard extends StatelessWidget {
         .ensureAndGetPreferredCurrency()
         .first;
 
-    final accounts = await AccountService.instance
-        .getAccounts(
-          predicate: (account, currency) =>
-              account.type.isNotValue(AccountType.investment.name),
-        )
-        .first;
+    final accounts = await AccountService.instance.getAccounts().first;
 
-    final accountItems = await Future.wait(
+    final cashAndInvestmentItems = await Future.wait(
       accounts.map((account) async {
-        final amount = await AccountService.instance
-            .getAccountMoney(
-              account: account,
-              date: date,
-              convertToPreferredCurrency: true,
-              trFilters: filters,
-            )
-            .first;
-        return _BreakdownItem(title: account.name, amount: amount);
-      }),
-    );
+        final values = await Future.wait([
+          AccountService.instance
+              .getAccountMoney(
+                account: account,
+                date: date,
+                convertToPreferredCurrency: true,
+                trFilters: filters,
+              )
+              .first,
+          HoldingService.instance
+              .getHoldingsMarketValue(
+                accountIds: [account.id],
+                convertToPreferred: true,
+                date: date,
+              )
+              .first,
+          AssetValuationService.instance
+              .streamLinkedAssetsTotalForAccount(
+                account.id,
+                date: date,
+                convertToPreferredCurrency: true,
+              )
+              .first,
+        ]);
 
-    final investmentAccounts = await AccountService.instance
-        .getAccounts(
-          predicate: (account, currency) =>
-              account.type.equals(AccountType.investment.name),
-        )
-        .first;
-
-    final investmentItems = await Future.wait(
-      investmentAccounts.map((account) async {
-        final amount = await AccountService.instance
-            .getAccountMoney(
-              account: account,
-              date: date,
-              convertToPreferredCurrency: true,
-              trFilters: filters,
-            )
-            .first;
-        return _BreakdownItem(title: account.name, amount: amount);
+        final accountTotal = values[0];
+        final holdings = values[1];
+        final linkedAssets = values[2];
+        return (
+          cash: _BreakdownItem(
+            title: account.name,
+            amount: accountTotal - holdings - linkedAssets,
+          ),
+          investments: _BreakdownItem(
+            title: account.name,
+            amount: holdings + linkedAssets,
+          ),
+        );
       }),
     );
 
@@ -88,8 +91,10 @@ class NetWorthCompositionCard extends StatelessWidget {
 
     return _NetWorthCompositionData(
       preferredCurrency: preferredCurrency,
-      accountItems: accountItems,
-      investmentItems: investmentItems,
+      cashItems: cashAndInvestmentItems.map((item) => item.cash).toList(),
+      investmentItems: cashAndInvestmentItems
+          .map((item) => item.investments)
+          .toList(),
       assetItems: assetItems,
     );
   }
@@ -109,7 +114,7 @@ class NetWorthCompositionCard extends StatelessWidget {
         }
 
         final data = snapshot.data!;
-        final totalAccounts = data.accountItems.fold<double>(
+        final totalCash = data.cashItems.fold<double>(
           0,
           (sum, item) => sum + item.amount,
         );
@@ -123,9 +128,9 @@ class NetWorthCompositionCard extends StatelessWidget {
         );
 
         final sections = <PieChartSectionData>[];
-        if (totalAccounts > 0) {
+        if (totalCash > 0) {
           sections.add(
-            _section(0, totalAccounts, Theme.of(context).colorScheme.primary),
+            _section(0, totalCash, Theme.of(context).colorScheme.primary),
           );
         }
         if (totalInvestments > 0) {
@@ -169,13 +174,13 @@ class NetWorthCompositionCard extends StatelessWidget {
               children: [
                 _buildLegend(
                   context,
-                  t.general.accounts,
-                  totalAccounts,
+                  t.account.cash,
+                  totalCash,
                   Theme.of(context).colorScheme.primary,
                 ),
                 _buildLegend(
                   context,
-                  t.account.types.investment,
+                  t.account.investments,
                   totalInvestments,
                   Theme.of(context).colorScheme.secondary,
                 ),
@@ -240,13 +245,13 @@ class _BreakdownItem {
 class _NetWorthCompositionData {
   _NetWorthCompositionData({
     required this.preferredCurrency,
-    required this.accountItems,
+    required this.cashItems,
     required this.investmentItems,
     required this.assetItems,
   });
 
   final CurrencyInDB preferredCurrency;
-  final List<_BreakdownItem> accountItems;
+  final List<_BreakdownItem> cashItems;
   final List<_BreakdownItem> investmentItems;
   final List<_BreakdownItem> assetItems;
 }

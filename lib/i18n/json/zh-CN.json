@@ -34,7 +34,11 @@
     "apply": "应用",
     "discard": "放弃",
     "refresh": "刷新",
-    "share": "分享"
+    "share": "分享",
+    "see-more-count": "查看更多 ({{n}})",
+    "see-all": "查看全部",
+    "sort": "排序",
+    "display_options": "显示选项"
   },
   "GENERAL": {
     "or": "或",
@@ -207,7 +211,19 @@
     "no-accounts.descr": "要开始使用 Monekin，请创建至少一个账户，以便开始添加交易",
     "last-transactions": "最近的交易",
     "should-create-account.header": "哎呀!",
-    "should-create-account.message": "在可以开始创建交易之前，您必须拥有至少一个未被归档的账户"
+    "should-create-account.message": "在可以开始创建交易之前，您必须拥有至少一个未被归档的账户",
+    "no-income-this-period": "此期间无收入",
+    "no-expenses-this-period": "此期间无任何费用",
+    "vs-previous-period": "与上一个相比",
+    "date-ranges": {
+      "week": "1周",
+      "month": "1月",
+      "quarter": "3月",
+      "half-year": "6月",
+      "year": "1年",
+      "max": "MAX",
+      "custom": "风俗"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "财务健康",
@@ -283,7 +299,10 @@
     "by-tags": "按标签",
     "distribution": "分布",
     "finance-health-resume": "总结",
-    "finance-health-breakdown": "分解"
+    "finance-health-breakdown": "分解",
+    "portfolio": "文件夹",
+    "portfolio-composition": "投资组合构成",
+    "portfolio-composition-subtitle": "您的投资如何在您的所有账户中分配。"
   },
   "ICON-SELECTOR": {
     "name": "名称",
@@ -454,7 +473,9 @@
         "one": "投资",
         "other": "投资"
       }
-    }
+    },
+    "operation": "手术",
+    "linked-security": "关联证券"
   },
   "TRANSFER": {
     "display": "转账",
@@ -511,7 +532,9 @@
       "saving": "储蓄账户",
       "saving.descr": "您只能从此账户中向其它账户中转入/转出（而无法用于消费开支）。非常适合用于存钱",
       "investment": "投资账户",
-      "investment.descr": "可包含资产的券商、加密货币交易所或投资组合账户。跟踪投资本金，并通过估值手动更新每个资产的价值"
+      "investment.descr": "可包含资产的券商、加密货币交易所或投资组合账户。跟踪投资本金，并通过估值手动更新每个资产的价值",
+      "money": "现金账户",
+      "money.descr": "用于日常财务的现金账户。可添加支出、收入和转账。"
     },
     "FORM": {
       "name": "账户名称",
@@ -550,6 +573,30 @@
       "one": "选择一个账户",
       "all": "所有账户",
       "multiple": "选择多个账户"
+    },
+    "current_balance": "当前余额",
+    "total_value": "总价值",
+    "investments": "投资",
+    "cash": "现金",
+    "total_cost": "总成本",
+    "total_cost_help": "您为当前持有的证券支付的费用（其加权平均购买成本），而不是其当前市场价值。",
+    "unrealized_pnl_help": "您仍然持有的证券的账面损益：当前市场价值减去总成本。只有当你出售时它才会实现。",
+    "range_income": "收入",
+    "range_expense": "开支",
+    "no_income_range": "本期无收入",
+    "no_expense_range": "本期无费用",
+    "movements_count": "{{n}} 个动作",
+    "TABS": {
+      "movements": "动作",
+      "info": "Info"
+    },
+    "TRACKING_MODES": {
+      "title": "追踪模式",
+      "transactions": "交易",
+      "transactions_descr": "头寸是根据您的买入和卖出交易自动计算的。",
+      "holdings": "控股",
+      "holdings_descr": "以带日期的快照形式手动输入您的头寸（数量和平均成本）。",
+      "switch_warn": "更改跟踪模式会改变位置的计算方式。现有交易或快照不会自动转换。"
     }
   },
   "CURRENCIES": {
@@ -601,7 +648,24 @@
     "max-exchange-rate": "最高汇率",
     "empty": "如果您有账户使用默认货币以外的货币，请在此处添加汇率，以获得更准确的图表",
     "select-a-currency": "选择货币",
-    "search": "按名称或货币代码搜索"
+    "search": "按名称或货币代码搜索",
+    "DETAILS": {
+      "equals-to": "1 {{code}} 等于",
+      "min": "最低限度",
+      "max": "最大限度",
+      "updated": "已更新",
+      "decimals": "{{n}} 位小数",
+      "used-in": "用于",
+      "total-exposure": "总曝光量",
+      "no-usage": "该货币尚未用于任何账户或投资",
+      "code-locked-hint": "无法更改：它标识整个应用程序中的货币。",
+      "type-locked-hint": "创建货币时设置。改变它会改变其费率的获取方式。",
+      "TABS": {
+        "rates": "价格",
+        "used-in": "使用中",
+        "settings": "设置"
+      }
+    }
   },
   "TAGS": {
     "display": {
@@ -876,7 +940,8 @@
       "real_estate": "房地产",
       "vehicle": "车辆",
       "jewelry_art": "珠宝与艺术品",
-      "other": "其他"
+      "other": "其他",
+      "precious_metal": "贵金属"
     },
     "DETAILS": {
       "select_account": "选择一个帐户",
@@ -889,7 +954,12 @@
       "performance_invested_value": "投入金额",
       "performance_invested_value_caption": "该资产中的资金总额：初始价值加上已关联的买卖。",
       "performance_value_diff": "估值变动",
-      "performance_value_diff_caption": "从所选周期开始至今，资产价值的变化幅度。"
+      "performance_value_diff_caption": "从所选周期开始至今，资产价值的变化幅度。",
+      "about": "关于",
+      "gross_value": "总价值",
+      "liability": "责任",
+      "net_worth": "净值",
+      "acquisition_transaction_badge": "获得"
     },
     "FORM": {
       "asset_type": "资产类型",
@@ -908,7 +978,14 @@
       "already_exists": "具有此名称的资产已存在。您可能想要编辑它",
       "valuation_before_creation_date": "该资产的估值日期早于收购日期",
       "acquisition_date": "创建日期",
-      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
+      "linked_liability": "连带责任",
+      "link_existing_liability": "链接现有责任",
+      "no_liabilities": "您还没有任何负债。",
+      "link_acquisition_transaction": "链接购买交易",
+      "link_acquisition_transaction_descr": "选择代表购买该资产的费用。其金额（转换为资产的货币）和日期将用作初始值和购买日期",
+      "acquisition_transaction": "收购交易",
+      "creation_date_before_acquisition_transaction": "收购日期不能早于关联交易日期"
     },
     "VALUATION": {
       "history": "估值历史",
@@ -923,7 +1000,8 @@
       "edit_valuation_success": "估值更新成功",
       "delete_valuation_success": "评估删除成功",
       "delete_all_valuations": "删除所有估价",
-      "delete_all_valuations_success": "所有估价已成功删除"
+      "delete_all_valuations_success": "所有估价已成功删除",
+      "net_contribution_help": "您投入该资产的现金：其起始价值加上任何关联的买卖交易。它与市场价值变化分开，您可以通过估值手动记录市场价值变化。"
     },
     "SORT": {
       "name_asc": "姓名（A-Z）",
@@ -938,6 +1016,136 @@
       "link_transaction": {
         "success": "Transaction linked successfully"
       }
+    },
+    "ADD": {
+      "title": "添加新资产",
+      "subtitle": "选择您要添加的资产类型"
+    },
+    "group_by_type": "按资产类型分组",
+    "show_value_variation": "显示百分比变化",
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "财产和土地",
+      "vehicle": "汽车、船只等",
+      "precious_metal": "黄金、白银和铂金",
+      "jewelry_art": "艺术品、珠宝和收藏品",
+      "other": "自定义资产"
+    },
+    "SECURITY_TYPES": {
+      "stock": "库存",
+      "fund": "基金/ETF",
+      "crypto": "Crypto"
+    },
+    "HOLDINGS": {
+      "title": "控股",
+      "empty": "还没有持股。购买证券以开始跟踪您的投资组合。",
+      "buy": "买",
+      "sell": "卖",
+      "buy_title": "购买 {{security}}",
+      "sell_title": "出售 {{security}}",
+      "avg_cost": "平均。成本",
+      "update_price": "更新价格",
+      "choose_security": "选择证券",
+      "create_security": "创建新证券",
+      "security_name": "证券名称",
+      "ticker": "股票代码/符号（可选）",
+      "security_type": "证券类型",
+      "current_price": "现价",
+      "quantity": "数量",
+      "price_per_unit": "每单位价格",
+      "total": "全部的",
+      "add_position": "添加职位",
+      "positions_history": "职位历史",
+      "add_snapshot": "添加快照",
+      "edit_snapshot": "编辑快照",
+      "no_snapshots": "还没有快照。添加一个来记录您的位置。",
+      "SNAPSHOTS": {
+        "history_title": "快照历史记录",
+        "history_intro": "每个快照都存储某个日期的完整投资组合。当查看一天时，是应用该天或之前的最近一天。",
+        "count": "{{n}} 个快照",
+        "new_snapshot": "新的",
+        "no_snapshots": "还没有快照",
+        "empty_portfolio": "空投资组合",
+        "positions_count": "{{n}} 个位置",
+        "manual": "Manual",
+        "current": "当前快照",
+        "current_banner": "查询日期或之前的最新日期",
+        "cost_label": "成本",
+        "update": "更新",
+        "update_positions": "更新职位",
+        "full_portfolio": "完整的投资组合",
+        "editor_descr": "您保存的是当天的作品集照片。如果当天已存在快照，则会将其替换。",
+        "date_label": "快照日期",
+        "date_helper": "用于从该日期到下一个快照的每个查询。",
+        "add_position": "添加另一个位置",
+        "total_cost": "投资组合总成本",
+        "save": "保存快照",
+        "remove_hint": "要删除某个位置，只需删除其行即可：快照是完整照片，而不是运动。",
+        "delete_title": "删除快照？",
+        "delete_descr": "该快照将被删除。如果是最新的，您当前的仓位将回落到上一个快照。"
+      }
+    },
+    "SECURITIES": {
+      "title": "证券",
+      "create": "添加证券",
+      "edit": "编辑证券",
+      "view_details": "查看详情",
+      "empty_description": "您尚未添加任何证券。添加股票、基金或加密货币以开始跟踪您的投资组合。",
+      "total_value": "投资组合价值",
+      "group_by_type": "按安全类型分组",
+      "current_price": "现价",
+      "market_value": "市场价值",
+      "units_held": "持有单位",
+      "unrealized_pnl": "未实现损益",
+      "your_position": "你的立场",
+      "positions": "职位",
+      "no_positions": "您尚未在任何账户中持有此证券。",
+      "by_security": "按证券",
+      "by_type": "按类型",
+      "by_account": "按账户",
+      "by_classification": "按分类",
+      "no_trades": "尚未有买卖交易。",
+      "no_price_history": "尚无价格历史记录。添加价格以开始跟踪。",
+      "TABS": {
+        "about": "详情",
+        "positions": "职位",
+        "trades": "交易",
+        "price_history": "价格"
+      },
+      "PRICE_HISTORY": {
+        "add": "添加价格",
+        "edit": "编辑价格",
+        "price": "价格"
+      },
+      "IMPORT": {
+        "title": "导入价格",
+        "description": "选择 .csv 文件或将每行一个价格粘贴为日期、价格。不使用互联网。",
+        "review_description": "导入前请查看以下价格。",
+        "field_label": "CSV 数据",
+        "button": "导入价格",
+        "rows_detected": "检测到 {{n}} 有效行",
+        "overwrite_warning": "其中 {{n}} 个日期已记录价格并将被覆盖。",
+        "success": "导入 {{n}} 价格"
+      },
+      "FORM": {
+        "tab_general": "General",
+        "tab_classification": "分类",
+        "notes": "笔记"
+      },
+      "CLASSIFICATION": {
+        "title": "分类",
+        "edit_title": "编辑分类",
+        "empty": "尚未分类。添加资产类别、地区、部门或风险，以在您的投资组合构成中查看该证券。",
+        "none": "没有任何",
+        "add_category": "添加",
+        "select_category": "选择一个类别",
+        "search_categories": "搜索类别...",
+        "unclassified": "未分类",
+        "weight_over_100": "“{{taxonomy}}”的权重加起来超过100%。"
+      },
+      "delete": "删除证券",
+      "delete_confirmation": "将删除该证券。此操作无法撤销。",
+      "delete_success": "证券已成功删除",
+      "in_use_error": "该证券仍有关联持仓或交易。请先移除后再删除。"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

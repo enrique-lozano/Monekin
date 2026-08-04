@@ -34,7 +34,11 @@
     "apply": "Appliquer",
     "discard": "Abandonner",
     "refresh": "Actualiser",
-    "share": "Partager"
+    "share": "Partager",
+    "see-more-count": "Voir plus ({{n}})",
+    "see-all": "Voir tout",
+    "sort": "Trier",
+    "display_options": "Options d’affichage"
   },
   "GENERAL": {
     "or": "ou",
@@ -207,7 +211,19 @@
     "no-accounts.descr": "Commencez à profiter de toute la magie de Monekin. Créez au moins un compte pour commencer à ajouter des transactions.",
     "last-transactions": "Dernières transactions",
     "should-create-account.header": "Oups !",
-    "should-create-account.message": "Vous devez avoir au moins un compte non archivé avant de pouvoir créer des transactions"
+    "should-create-account.message": "Vous devez avoir au moins un compte non archivé avant de pouvoir créer des transactions",
+    "no-income-this-period": "Aucun revenu sur cette période",
+    "no-expenses-this-period": "Aucune dépense pendant cette période",
+    "vs-previous-period": "contre précédent.",
+    "date-ranges": {
+      "week": "1W",
+      "month": "1M",
+      "quarter": "3M",
+      "half-year": "6M",
+      "year": "1Y",
+      "max": "MAX",
+      "custom": "Coutume"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "Santé financière",
@@ -283,7 +299,10 @@
     "by-tags": "Par tags",
     "distribution": "Répartition",
     "finance-health-resume": "Résumé",
-    "finance-health-breakdown": "Détail"
+    "finance-health-breakdown": "Détail",
+    "portfolio": "Portefeuille",
+    "portfolio-composition": "Composition du portefeuille",
+    "portfolio-composition-subtitle": "Comment vos investissements sont répartis sur tous vos comptes."
   },
   "ICON-SELECTOR": {
     "name": "Nom :",
@@ -454,7 +473,9 @@
         "one": "Investissement",
         "other": "Investissements"
       }
-    }
+    },
+    "operation": "Opération",
+    "linked-security": "Sécurité liée"
   },
   "TRANSFER": {
     "display": "Virement",
@@ -511,7 +532,9 @@
       "saving": "Compte d'épargne",
       "saving.descr": "Vous ne pourrez y ajouter et y retirer de l'argent qu'à partir d'autres comptes. Parfait pour commencer à économiser",
       "investment": "Compte d'investissement",
-      "investment.descr": "Un compte de courtier, d'échange de cryptomonnaies ou un portefeuille pouvant contenir des actifs. Suivez votre capital investi et mettez à jour la valeur de chaque actif manuellement via des évaluations"
+      "investment.descr": "Un compte de courtier, d'échange de cryptomonnaies ou un portefeuille pouvant contenir des actifs. Suivez votre capital investi et mettez à jour la valeur de chaque actif manuellement via des évaluations",
+      "money": "Compte d'argent",
+      "money.descr": "Contient des liquidités pour vos finances quotidiennes. Ajoutez les dépenses, les revenus et les transferts."
     },
     "FORM": {
       "name": "Nom du compte",
@@ -550,6 +573,30 @@
       "one": "Sélectionnez un compte",
       "all": "Tous les comptes",
       "multiple": "Sélectionnez des comptes"
+    },
+    "current_balance": "Solde courant",
+    "total_value": "Valeur totale",
+    "investments": "Investissements",
+    "cash": "Espèces",
+    "total_cost": "Coût total",
+    "total_cost_help": "Ce que vous avez payé pour les titres que vous détenez actuellement (leur coût d'achat moyen pondéré), et non leur valeur marchande actuelle.",
+    "unrealized_pnl_help": "Gain ou perte papier sur les titres que vous détenez encore : leur valeur marchande actuelle moins leur coût total. Cela ne se réalise que lorsque vous vendez.",
+    "range_income": "Revenu",
+    "range_expense": "Dépenses",
+    "no_income_range": "Aucun revenu cette période",
+    "no_expense_range": "Aucune dépense cette période",
+    "movements_count": "{{n}} mouvements",
+    "TABS": {
+      "movements": "Mouvements",
+      "info": "Info"
+    },
+    "TRACKING_MODES": {
+      "title": "Mode de suivi",
+      "transactions": "Transactions",
+      "transactions_descr": "Les positions sont calculées automatiquement à partir de vos transactions d'achat et de vente.",
+      "holdings": "Avoirs",
+      "holdings_descr": "Saisissez manuellement vos positions sous forme de clichés datés (quantité et coût moyen).",
+      "switch_warn": "La modification du mode de suivi modifie la façon dont les positions sont calculées. Les transactions ou instantanés existants ne sont pas convertis automatiquement."
     }
   },
   "CURRENCIES": {
@@ -601,7 +648,24 @@
     "max-exchange-rate": "Taux de change maximum",
     "empty": "Ajoutez ici des taux de change pour que, si vous avez des comptes dans d'autres devises que votre devise de base, nos graphiques soient plus précis",
     "select-a-currency": "Sélectionnez une devise",
-    "search": "Rechercher par nom ou par code de devise"
+    "search": "Rechercher par nom ou par code de devise",
+    "DETAILS": {
+      "equals-to": "1 {{code}} est égal à",
+      "min": "Minimum",
+      "max": "Maximum",
+      "updated": "Mis à jour",
+      "decimals": "{{n}} décimales",
+      "used-in": "Utilisé dans",
+      "total-exposure": "Exposition totale",
+      "no-usage": "Cette devise n'est encore utilisée dans aucun compte ou investissement",
+      "code-locked-hint": "Ne peut pas être modifié : il identifie la devise dans toute l'application.",
+      "type-locked-hint": "Défini quand la devise est créée. Le modifier modifierait la manière dont ses tarifs sont obtenus.",
+      "TABS": {
+        "rates": "Tarifs",
+        "used-in": "Utilisé",
+        "settings": "Paramètres"
+      }
+    }
   },
   "TAGS": {
     "display": {
@@ -876,7 +940,8 @@
       "real_estate": "Immobilier",
       "vehicle": "Véhicules",
       "jewelry_art": "Bijoux et art",
-      "other": "Autre"
+      "other": "Autre",
+      "precious_metal": "Métaux précieux"
     },
     "DETAILS": {
       "select_account": "Sélectionnez un compte",
@@ -889,7 +954,12 @@
       "performance_invested_value": "Valeur investie",
       "performance_invested_value_caption": "Argent total dans cet actif : valeur initiale plus achats et ventes liés.",
       "performance_value_diff": "Variation de valorisation",
-      "performance_value_diff_caption": "Évolution de la valeur de l'actif du début de la période choisie à aujourd'hui."
+      "performance_value_diff_caption": "Évolution de la valeur de l'actif du début de la période choisie à aujourd'hui.",
+      "about": "À propos",
+      "gross_value": "Valeur brute",
+      "liability": "Responsabilité",
+      "net_worth": "Valeur nette",
+      "acquisition_transaction_badge": "Acquisition"
     },
     "FORM": {
       "asset_type": "Type d'actif",
@@ -908,7 +978,14 @@
       "already_exists": "Un actif portant ce nom existe déjà. Vous voudrez peut-être le modifier",
       "valuation_before_creation_date": "Il existe des évaluations pour cet actif antérieures à la date de création",
       "acquisition_date": "Date de création",
-      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
+      "linked_liability": "Responsabilité liée",
+      "link_existing_liability": "Lier la responsabilité existante",
+      "no_liabilities": "Vous n'avez pas encore de passif.",
+      "link_acquisition_transaction": "Lier une transaction d'achat",
+      "link_acquisition_transaction_descr": "Choisissez la dépense que représente l'achat de cet actif. Son montant (converti dans la devise du bien) et sa date feront office de valeur initiale et de date d'acquisition.",
+      "acquisition_transaction": "Opération d'acquisition",
+      "creation_date_before_acquisition_transaction": "La date d'acquisition ne peut pas être antérieure à la date de la transaction liée"
     },
     "VALUATION": {
       "history": "Historique d'évaluation",
@@ -923,7 +1000,8 @@
       "edit_valuation_success": "Valorisation mise à jour avec succès",
       "delete_valuation_success": "Évaluation supprimée avec succès",
       "delete_all_valuations": "Supprimer toutes les évaluations",
-      "delete_all_valuations_success": "Toutes les évaluations ont été supprimées avec succès"
+      "delete_all_valuations_success": "Toutes les évaluations ont été supprimées avec succès",
+      "net_contribution_help": "Cash que vous avez investi dans cet actif : sa valeur de départ plus toutes les transactions d'achat/vente liées. Elle est distincte des modifications de la valeur marchande, que vous enregistrez manuellement via les évaluations."
     },
     "SORT": {
       "name_asc": "Nom (A-Z)",
@@ -938,7 +1016,137 @@
       "link_transaction": {
         "success": "Transaction linked successfully"
       }
-    }
+    },
+    "ADD": {
+      "title": "Ajouter un nouvel actif",
+      "subtitle": "Choisissez le type d'actif que vous souhaitez ajouter"
+    },
+    "group_by_type": "Regrouper par type d'actif",
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "Propriété et terrain",
+      "vehicle": "Voitures, bateaux et plus",
+      "precious_metal": "Or, argent et platine",
+      "jewelry_art": "Art, bijoux et objets de collection",
+      "other": "Actifs personnalisés"
+    },
+    "SECURITY_TYPES": {
+      "stock": "Action",
+      "fund": "Fonds / FNB",
+      "crypto": "Crypto"
+    },
+    "HOLDINGS": {
+      "title": "Avoirs",
+      "empty": "Pas encore de titres. Achetez un titre pour commencer à suivre votre portefeuille.",
+      "buy": "Acheter",
+      "sell": "Vendre",
+      "buy_title": "Acheter {{security}}",
+      "sell_title": "Vendre {{security}}",
+      "avg_cost": "Moy. coût",
+      "update_price": "Mettre à jour le prix",
+      "choose_security": "Choisissez un titre",
+      "create_security": "Créer une nouvelle sécurité",
+      "security_name": "Nom de sécurité",
+      "ticker": "Ticker/symbole (facultatif)",
+      "security_type": "Type de sécurité",
+      "current_price": "Prix ​​actuel",
+      "quantity": "Quantité",
+      "price_per_unit": "Prix ​​par unité",
+      "total": "Total",
+      "add_position": "Ajouter un poste",
+      "positions_history": "Historique des positions",
+      "add_snapshot": "Ajouter un instantané",
+      "edit_snapshot": "Modifier l'instantané",
+      "no_snapshots": "Aucun instantané pour l'instant. Ajoutez-en un pour enregistrer votre position.",
+      "SNAPSHOTS": {
+        "history_title": "Historique des instantanés",
+        "history_intro": "Chaque instantané stocke le portefeuille complet pour une date. Lorsque vous examinez un jour, le jour le plus récent au moment où il est appliqué ou avant celui-ci est appliqué.",
+        "count": "{{n}} instantanés",
+        "new_snapshot": "Nouveau",
+        "no_snapshots": "Pas encore d'instantanés",
+        "empty_portfolio": "Portefeuille vide",
+        "positions_count": "{{n}} postes",
+        "manual": "Manual",
+        "current": "Instantané actuel",
+        "current_banner": "le plus récent au plus tard à la date demandée",
+        "cost_label": "coût",
+        "update": "Mise à jour",
+        "update_positions": "Mettre à jour les postes",
+        "full_portfolio": "portefeuille complet",
+        "editor_descr": "Ce que vous enregistrez, c'est la photo du portfolio à cette date. Si un instantané existe déjà ce jour-là, il est remplacé.",
+        "date_label": "Date de l'instantané",
+        "date_helper": "Utilisé pour chaque requête à partir de cette date jusqu'au prochain instantané.",
+        "add_position": "Ajouter un autre poste",
+        "total_cost": "Coût total du portefeuille",
+        "save": "Enregistrer un instantané",
+        "remove_hint": "Pour supprimer une position, supprimez simplement sa ligne : l'instantané est la photo complète, pas un mouvement.",
+        "delete_title": "Supprimer l'instantané ?",
+        "delete_descr": "Cet instantané sera supprimé. S'il s'agit de la plus récente, vos positions actuelles reviendront à l'instantané précédent."
+      }
+    },
+    "SECURITIES": {
+      "title": "Titres",
+      "create": "Ajouter de la sécurité",
+      "edit": "Modifier la sécurité",
+      "view_details": "Afficher les détails",
+      "empty_description": "Vous n'avez pas encore ajouté de titres. Ajoutez une action, un fonds ou une crypto pour commencer à suivre votre portefeuille.",
+      "total_value": "Valeur du portefeuille",
+      "group_by_type": "Regrouper par type de sécurité",
+      "current_price": "Prix ​​actuel",
+      "market_value": "Valeur marchande",
+      "units_held": "Parts détenues",
+      "unrealized_pnl": "P&L non réalisé",
+      "your_position": "Votre poste",
+      "positions": "Postes",
+      "no_positions": "Vous ne détenez pas encore cette sécurité sur aucun compte.",
+      "by_security": "Par sécurité",
+      "by_type": "Par type",
+      "by_account": "Par compte",
+      "by_classification": "Par classement",
+      "no_trades": "Aucune transaction d'achat ou de vente pour l'instant.",
+      "no_price_history": "Pas d'historique de prix pour l'instant. Ajoutez un prix pour commencer à le suivre.",
+      "TABS": {
+        "about": "À propos",
+        "positions": "Postes",
+        "trades": "Métiers",
+        "price_history": "Tarifs"
+      },
+      "PRICE_HISTORY": {
+        "add": "Ajouter un prix",
+        "edit": "Modifier le prix",
+        "price": "Prix"
+      },
+      "IMPORT": {
+        "title": "Prix ​​​​à l'importation",
+        "description": "Sélectionnez un fichier .csv ou collez un prix par ligne comme date, prix. Aucun Internet n’est utilisé.",
+        "review_description": "Consultez les prix ci-dessous avant de les importer.",
+        "field_label": "Données CSV",
+        "button": "Prix ​​​​à l'importation",
+        "rows_detected": "{{n}} lignes valides détectées",
+        "overwrite_warning": "{{n}} de ces dates ont déjà un prix enregistré et seront écrasées.",
+        "success": "{{n}} prix importés"
+      },
+      "FORM": {
+        "tab_general": "General",
+        "tab_classification": "Classification",
+        "notes": "Remarques"
+      },
+      "CLASSIFICATION": {
+        "title": "Classification",
+        "edit_title": "Modifier le classement",
+        "empty": "Pas encore classé. Ajoutez une classe d'actifs, une région, un secteur ou un risque pour voir ce titre dans la composition de votre portefeuille.",
+        "none": "Aucun",
+        "add_category": "Ajouter",
+        "select_category": "Sélectionnez une catégorie",
+        "search_categories": "Catégories de recherche...",
+        "unclassified": "Non classé",
+        "weight_over_100": "Les poids de « {{taxonomy}} » totalisent plus de 100 %."
+      },
+      "delete": "Supprimer la sécurité",
+      "delete_confirmation": "Cela supprimera la sécurité. Cette action ne peut pas être annulée.",
+      "delete_success": "Sécurité supprimée avec succès",
+      "in_use_error": "Ce titre a toujours des avoirs ou des transactions qui lui sont liés. Supprimez-les avant de le supprimer."
+    },
+    "show_value_variation": "Afficher la variation en pourcentage"
   },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Actif",

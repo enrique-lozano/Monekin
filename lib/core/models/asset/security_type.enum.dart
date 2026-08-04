@@ -30,4 +30,12 @@ enum SecurityType implements DatabaseEnum<String> {
       SecurityType.crypto => Icons.currency_bitcoin,
     };
   }
+
+  Color color() {
+    return switch (this) {
+      SecurityType.stock => const Color(0xFF3B82F6),
+      SecurityType.fund => const Color(0xFFA855F7),
+      SecurityType.crypto => const Color(0xFFF59E0B),
+    };
+  }
 }

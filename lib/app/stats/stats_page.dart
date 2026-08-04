@@ -8,6 +8,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_ca
 import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart';
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_tab.dart';
 import 'package:monekin/app/stats/widgets/portfolio/portfolio_composition_card.dart';
+import 'package:monekin/app/stats/widgets/portfolio/portfolio_treemap_card.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -236,6 +237,15 @@ class _StatsPageState extends State<StatsPage>
                       left: 16,
                     ),
                     body: PortfolioCompositionCard(
+                      date: dateRangeService.endDate ?? DateTime.now(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  CardWithHeader(
+                    title: t.stats.portfolio_heat_map,
+                    subtitle: t.stats.portfolio_heat_map_subtitle,
+                    bodyPadding: const EdgeInsets.all(16),
+                    body: PortfolioTreemapCard(
                       date: dateRangeService.endDate ?? DateTime.now(),
                     ),
                   ),

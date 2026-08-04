@@ -105,6 +105,7 @@ CREATE TABLE securities (
     type TEXT NOT NULL DEFAULT 'stock' CHECK(type IN ('stock', 'fund', 'crypto')),
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     ticker TEXT,
+    notes TEXT,
     currentPrice REAL,
     priceDate TEXT,
     iconId TEXT,
@@ -230,7 +231,7 @@ DROP TABLE transactions_old;
 
 -- 7a. One security per financial asset. Current price = latest
 --     valuation, falling back to the asset's initial value.
-INSERT INTO securities (id, name, type, currencyId, ticker, currentPrice, priceDate, iconId, color)
+INSERT INTO securities (id, name, type, currencyId, ticker, notes, currentPrice, priceDate, iconId, color)
 SELECT
     'sec_' || a.id,
     a.name,
@@ -241,6 +242,7 @@ SELECT
     END,
     a.currencyId,
     NULL,
+    a.description,
     COALESCE(
         (SELECT v.value FROM valuations v WHERE v.assetId = a.id ORDER BY v.date DESC LIMIT 1),
         a.initialValue

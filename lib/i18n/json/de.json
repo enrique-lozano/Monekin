@@ -34,7 +34,11 @@
     "apply": "Anwenden",
     "discard": "Verwerfen",
     "refresh": "Aktualisieren",
-    "share": "Teilen"
+    "share": "Teilen",
+    "see-more-count": "Mehr sehen ({{n}})",
+    "see-all": "Alle anzeigen",
+    "sort": "Sortieren",
+    "display_options": "Anzeigeoptionen"
   },
   "GENERAL": {
     "or": "oder",
@@ -207,7 +211,19 @@
     "no-accounts.descr": "Beginne, die ganze Magie von Monekin zu nutzen. ",
     "last-transactions": "Letzte Transaktionen",
     "should-create-account.header": "Hoppla!",
-    "should-create-account.message": "Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst"
+    "should-create-account.message": "Du musst über mindestens ein nicht archiviertes Konto verfügen, bevor Du mit der Erstellung von Transaktionen beginnen kannst",
+    "no-income-this-period": "Kein Einkommen in diesem Zeitraum",
+    "no-expenses-this-period": "Keine Ausgaben in diesem Zeitraum",
+    "vs-previous-period": "vs. vorher.",
+    "date-ranges": {
+      "week": "1W",
+      "month": "1M",
+      "quarter": "3M",
+      "half-year": "6M",
+      "year": "1Y",
+      "max": "MAX",
+      "custom": "Brauch"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "Finanzielle Lage",
@@ -283,7 +299,10 @@
     "by-tags": "Nach Tags",
     "distribution": "Verteilung",
     "finance-health-resume": "Zusammenfassung",
-    "finance-health-breakdown": "Auflüsselung"
+    "finance-health-breakdown": "Auflüsselung",
+    "portfolio": "Portfolio",
+    "portfolio-composition": "Portfoliozusammensetzung",
+    "portfolio-composition-subtitle": "Wie Ihre Investitionen auf alle Ihre Konten verteilt werden."
   },
   "ICON-SELECTOR": {
     "name": "Name:",
@@ -454,7 +473,9 @@
         "one": "Investition",
         "other": "Investitionen"
       }
-    }
+    },
+    "operation": "Betrieb",
+    "linked-security": "Verknüpfte Sicherheit"
   },
   "TRANSFER": {
     "display": "Überweisen",
@@ -511,7 +532,9 @@
       "saving": "Sparkonto",
       "saving.descr": "Du kannst nur Geld von anderen Konten einzahlen und abheben. Perfekt geignet, um Geld zu sparen",
       "investment": "Investmentkonto",
-      "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto, das Vermögenswerte enthalten kann. Erfasse Dein investiertes Kapital und aktualisiere die Werte einzelner Vermögenswerte manuell über Bewertungen"
+      "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto, das Vermögenswerte enthalten kann. Erfasse Dein investiertes Kapital und aktualisiere die Werte einzelner Vermögenswerte manuell über Bewertungen",
+      "money": "Geldkonto",
+      "money.descr": "Hält Bargeld für Ihre täglichen Finanzen bereit. Fügen Sie Ausgaben, Einnahmen und Überweisungen hinzu."
     },
     "FORM": {
       "name": "Kontoname",
@@ -550,6 +573,30 @@
       "one": "Wähle ein Konto aus",
       "all": "Alle Konten",
       "multiple": "Wähle Konten aus"
+    },
+    "current_balance": "Aktueller Kontostand",
+    "total_value": "Gesamtwert",
+    "investments": "Investitionen",
+    "cash": "Kasse",
+    "total_cost": "Gesamtkosten",
+    "total_cost_help": "Was Sie für die Wertpapiere bezahlt haben, die Sie derzeit halten (ihre gewichteten durchschnittlichen Anschaffungskosten), nicht ihren aktuellen Marktwert.",
+    "unrealized_pnl_help": "Papiergewinn oder -verlust der Wertpapiere, die Sie noch halten: ihr aktueller Marktwert abzüglich ihrer Gesamtkosten. Es wird erst realisiert, wenn Sie verkaufen.",
+    "range_income": "Einkommen",
+    "range_expense": "Kosten",
+    "no_income_range": "In diesem Zeitraum kein Einkommen",
+    "no_expense_range": "In diesem Zeitraum fallen keine Kosten an",
+    "movements_count": "{{n}} Bewegungen",
+    "TABS": {
+      "movements": "Bewegungen",
+      "info": "Info"
+    },
+    "TRACKING_MODES": {
+      "title": "Tracking-Modus",
+      "transactions": "Transaktionen",
+      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet.",
+      "holdings": "Bestände",
+      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten).",
+      "switch_warn": "Wenn Sie den Tracking-Modus ändern, ändert sich die Art und Weise, wie Positionen berechnet werden. Bestehende Trades oder Snapshots werden nicht automatisch konvertiert."
     }
   },
   "CURRENCIES": {
@@ -601,7 +648,24 @@
     "max-exchange-rate": "Maximaler Wechselkurs",
     "empty": "Füge hier Wechselkurse hinzu, damit unsere Diagramme genauer sind, wenn Du Konten in anderen Währungen als Deiner Basiswährung hast",
     "select-a-currency": "Wähle eine Währung aus",
-    "search": "Suche nach Name oder Währungscode"
+    "search": "Suche nach Name oder Währungscode",
+    "DETAILS": {
+      "equals-to": "1 {{code}} ist gleich",
+      "min": "Minimum",
+      "max": "Maximal",
+      "updated": "Aktualisiert",
+      "decimals": "{{n}} Dezimalstellen",
+      "used-in": "Verwendet in",
+      "total-exposure": "Gesamtexposition",
+      "no-usage": "Diese Währung wird noch in keinem Konto oder bei keiner Anlage verwendet",
+      "code-locked-hint": "Kann nicht geändert werden: Es identifiziert die Währung in der gesamten App.",
+      "type-locked-hint": "Wird festgelegt, wenn die Währung erstellt wird. Eine Änderung würde die Art und Weise verändern, wie die Tarife ermittelt werden.",
+      "TABS": {
+        "rates": "Preise",
+        "used-in": "Im Einsatz",
+        "settings": "Einstellungen"
+      }
+    }
   },
   "TAGS": {
     "display": {
@@ -876,7 +940,8 @@
       "real_estate": "Immobilie",
       "vehicle": "Fahrzeuge",
       "jewelry_art": "Schmuck & Kunst",
-      "other": "Andere"
+      "other": "Andere",
+      "precious_metal": "Edelmetalle"
     },
     "DETAILS": {
       "select_account": "Wählen Sie ein Konto aus",
@@ -889,7 +954,12 @@
       "performance_invested_value": "Investierter Wert",
       "performance_invested_value_caption": "Gesamtes Geld in diesem Asset: Startwert plus verknüpfte Käufe und Verkäufe.",
       "performance_value_diff": "Bewertungsänderung",
-      "performance_value_diff_caption": "Wie sich der Wert des Assets vom Beginn des gewählten Zeitraums bis heute verändert hat."
+      "performance_value_diff_caption": "Wie sich der Wert des Assets vom Beginn des gewählten Zeitraums bis heute verändert hat.",
+      "about": "Um",
+      "gross_value": "Bruttowert",
+      "liability": "Haftung",
+      "net_worth": "Nettovermögen",
+      "acquisition_transaction_badge": "Erwerb"
     },
     "FORM": {
       "asset_type": "Asset-Typ",
@@ -908,7 +978,14 @@
       "already_exists": "Ein Asset mit diesem Namen existiert bereits. Möglicherweise möchten Sie es bearbeiten",
       "valuation_before_creation_date": "Es gibt Bewertungen für diesen Vermögenswert mit einem Datum vor dem Erstellungsdatum",
       "acquisition_date": "Erstellungsdatum",
-      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
+      "linked_liability": "Verbundene Haftung",
+      "link_existing_liability": "Bestehende Haftung verknüpfen",
+      "no_liabilities": "Sie haben noch keine Verbindlichkeiten.",
+      "link_acquisition_transaction": "Verknüpfen Sie eine Kauftransaktion",
+      "link_acquisition_transaction_descr": "Wählen Sie die Kosten aus, die den Kauf dieses Vermögenswerts darstellen. Der Betrag (umgerechnet in die Währung des Vermögenswerts) und das Datum werden als Anfangswert und Erwerbsdatum verwendet",
+      "acquisition_transaction": "Erwerbstransaktion",
+      "creation_date_before_acquisition_transaction": "Das Erwerbsdatum darf nicht vor dem Datum der verknüpften Transaktion liegen"
     },
     "VALUATION": {
       "history": "Bewertungshistorie",
@@ -923,7 +1000,8 @@
       "edit_valuation_success": "Bewertung erfolgreich aktualisiert",
       "delete_valuation_success": "Bewertung erfolgreich gelöscht",
       "delete_all_valuations": "Alle Bewertungen löschen",
-      "delete_all_valuations_success": "Alle Bewertungen erfolgreich gelöscht"
+      "delete_all_valuations_success": "Alle Bewertungen erfolgreich gelöscht",
+      "net_contribution_help": "Bargeld, das Sie in diesen Vermögenswert investiert haben: sein Startwert plus alle damit verbundenen Kauf-/Verkaufstransaktionen. Es ist unabhängig von Marktwertänderungen, die Sie manuell über Bewertungen erfassen."
     },
     "SORT": {
       "name_asc": "Name (A-Z)",
@@ -938,7 +1016,137 @@
       "link_transaction": {
         "success": "Transaction linked successfully"
       }
-    }
+    },
+    "ADD": {
+      "title": "Neues Asset hinzufügen",
+      "subtitle": "Wählen Sie den Asset-Typ aus, den Sie hinzufügen möchten"
+    },
+    "group_by_type": "Gruppieren Sie nach Asset-Typ",
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "Eigentum und Grundstücke",
+      "vehicle": "Autos, Boote und mehr",
+      "precious_metal": "Gold, Silber und Platin",
+      "jewelry_art": "Kunst, Schmuck und Sammlerstücke",
+      "other": "Benutzerdefinierte Assets"
+    },
+    "SECURITY_TYPES": {
+      "stock": "Aktie",
+      "fund": "Fonds / ETF",
+      "crypto": "Crypto"
+    },
+    "HOLDINGS": {
+      "title": "Bestände",
+      "empty": "Noch keine Bestände. Kaufen Sie ein Wertpapier, um mit der Verfolgung Ihres Portfolios zu beginnen.",
+      "buy": "Kaufen",
+      "sell": "Verkaufen",
+      "buy_title": "Kaufen {{security}}",
+      "sell_title": "Verkaufe {{security}}",
+      "avg_cost": "Durchschn. kosten",
+      "update_price": "Preis aktualisieren",
+      "choose_security": "Wertpapier auswählen",
+      "create_security": "Neues Wertpapier erstellen",
+      "security_name": "Name des Wertpapiers",
+      "ticker": "Ticker/Symbol (optional)",
+      "security_type": "Wertpapierart",
+      "current_price": "Aktueller Preis",
+      "quantity": "Menge",
+      "price_per_unit": "Preis pro Einheit",
+      "total": "Gesamt",
+      "add_position": "Position hinzufügen",
+      "positions_history": "Positionshistorie",
+      "add_snapshot": "Schnappschuss hinzufügen",
+      "edit_snapshot": "Schnappschuss bearbeiten",
+      "no_snapshots": "Noch keine Schnappschüsse. Fügen Sie eine hinzu, um Ihre Position aufzuzeichnen.",
+      "SNAPSHOTS": {
+        "history_title": "Snapshot-Verlauf",
+        "history_intro": "Jeder Snapshot speichert das gesamte Portfolio für ein Datum. Wenn Sie sich einen Tag ansehen, wird der letzte an oder davor angewendet.",
+        "count": "{{n}} Schnappschüsse",
+        "new_snapshot": "Neu",
+        "no_snapshots": "Noch keine Schnappschüsse",
+        "empty_portfolio": "Leeres Portfolio",
+        "positions_count": "{{n}} Positionen",
+        "manual": "Manual",
+        "current": "Aktueller Schnappschuss",
+        "current_banner": "das aktuellste am oder vor dem abgefragten Datum",
+        "cost_label": "Kosten",
+        "update": "Aktualisieren",
+        "update_positions": "Positionen aktualisieren",
+        "full_portfolio": "komplettes Portfolio",
+        "editor_descr": "Was Sie speichern, ist das Portfoliofoto zu diesem Datum. Wenn an diesem Tag bereits ein Snapshot vorhanden ist, wird dieser ersetzt.",
+        "date_label": "Snapshot-Datum",
+        "date_helper": "Wird für jede Abfrage von diesem Datum bis zum nächsten Snapshot verwendet.",
+        "add_position": "Fügen Sie eine weitere Position hinzu",
+        "total_cost": "Gesamtkosten des Portfolios",
+        "save": "Schnappschuss speichern",
+        "remove_hint": "Um eine Position zu entfernen, löschen Sie einfach deren Zeile: Der Schnappschuss ist das vollständige Foto, keine Bewegung.",
+        "delete_title": "Snapshot löschen?",
+        "delete_descr": "Dieser Snapshot wird entfernt. Wenn es der aktuellste war, werden Ihre aktuellen Positionen auf den vorherigen Schnappschuss zurückgesetzt."
+      }
+    },
+    "SECURITIES": {
+      "title": "Wertpapiere",
+      "create": "Wertpapier hinzufügen",
+      "edit": "Wertpapier bearbeiten",
+      "view_details": "Details anzeigen",
+      "empty_description": "Sie haben noch keine Wertpapiere hinzugefügt. Fügen Sie eine Aktie, einen Fonds oder eine Kryptowährung hinzu, um mit der Verfolgung Ihres Portfolios zu beginnen.",
+      "total_value": "Portfoliowert",
+      "group_by_type": "Gruppieren Sie nach Sicherheitstyp",
+      "current_price": "Aktueller Preis",
+      "market_value": "Marktwert",
+      "units_held": "Einheiten gehalten",
+      "unrealized_pnl": "Nicht realisierte Gewinne und Verluste",
+      "your_position": "Ihre Position",
+      "positions": "Positionen",
+      "no_positions": "Du hältst dieses Wertpapier noch in keinem Konto.",
+      "by_security": "Nach Wertpapier",
+      "by_type": "Nach Typ",
+      "by_account": "Nach Konto",
+      "by_classification": "Nach Klassifizierung",
+      "no_trades": "Noch keine Kauf- oder Verkaufstransaktionen.",
+      "no_price_history": "Noch kein Preisverlauf. Fügen Sie einen Preis hinzu, um mit der Verfolgung zu beginnen.",
+      "TABS": {
+        "about": "Details",
+        "positions": "Positionen",
+        "trades": "Trades",
+        "price_history": "Preise"
+      },
+      "PRICE_HISTORY": {
+        "add": "Preis hinzufügen",
+        "edit": "Preis bearbeiten",
+        "price": "Preis"
+      },
+      "IMPORT": {
+        "title": "Preise importieren",
+        "description": "Wählen Sie eine CSV-Datei aus oder fügen Sie einen Preis pro Zeile als Datum und Preis ein. Es wird kein Internet genutzt.",
+        "review_description": "Überprüfen Sie die unten aufgeführten Preise, bevor Sie sie importieren.",
+        "field_label": "CSV-Daten",
+        "button": "Preise importieren",
+        "rows_detected": "{{n}} gültige Zeilen erkannt",
+        "overwrite_warning": "Für {{n}} dieser Daten ist bereits ein Preis erfasst und wird überschrieben.",
+        "success": "{{n}} Preise importiert"
+      },
+      "FORM": {
+        "tab_general": "General",
+        "tab_classification": "Einstufung",
+        "notes": "Notizen"
+      },
+      "CLASSIFICATION": {
+        "title": "Einstufung",
+        "edit_title": "Klassifizierung bearbeiten",
+        "empty": "Noch nicht klassifiziert. Fügen Sie Anlageklasse, Region, Sektor oder Risiko hinzu, um dieses Wertpapier in Ihrer Portfoliozusammensetzung anzuzeigen.",
+        "none": "Keiner",
+        "add_category": "Hinzufügen",
+        "select_category": "Wählen Sie eine Kategorie aus",
+        "search_categories": "Kategorien durchsuchen...",
+        "unclassified": "Nicht klassifiziert",
+        "weight_over_100": "Die Gewichtungen von „{{taxonomy}}“ summieren sich zu mehr als 100 %."
+      },
+      "delete": "Sicherheit löschen",
+      "delete_confirmation": "Dadurch wird die Sicherheit entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
+      "delete_success": "Sicherheit erfolgreich gelöscht",
+      "in_use_error": "Mit diesem Wertpapier sind weiterhin Bestände oder Geschäfte verbunden. Entfernen Sie sie, bevor Sie sie löschen."
+    },
+    "show_value_variation": "Prozentuale Veränderung anzeigen"
   },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktiv",

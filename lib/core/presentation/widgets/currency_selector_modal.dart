@@ -9,7 +9,7 @@ import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-showCurrencySelectorModal(
+void showCurrencySelectorModal(
   BuildContext context,
   CurrencySelectorModal modalData,
 ) {

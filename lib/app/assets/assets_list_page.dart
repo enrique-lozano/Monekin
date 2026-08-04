@@ -5,11 +5,12 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/database/services/account/asset_valuation_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/trending_value.dart';
+import 'package:monekin/core/presentation/widgets/valued_item_list.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -17,6 +18,10 @@ import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 enum AssetsSortOption { nameAsc, nameDesc, valueAsc, valueDesc }
+
+typedef _AssetListEntry = ({Asset asset, double value, double valueVariation});
+
+String _assetIconHeroTag(String assetId) => 'assets-list__asset-icon-$assetId';
 
 class AssetsListPage extends StatefulWidget {
   const AssetsListPage({super.key});
@@ -28,6 +33,8 @@ class AssetsListPage extends StatefulWidget {
 class _AssetsListPageState extends State<AssetsListPage> {
   String searchQuery = '';
   AssetsSortOption sortOption = AssetsSortOption.nameAsc;
+  bool groupByType = false;
+  bool showValueVariation = false;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -42,38 +49,43 @@ class _AssetsListPageState extends State<AssetsListPage> {
   }
 
   void _goToDetails(Asset asset) {
-    RouteUtils.pushRoute(AssetDetailsPage(asset: asset));
+    RouteUtils.pushRoute(
+      AssetDetailsPage(
+        asset: asset,
+        assetIconHeroTag: _assetIconHeroTag(asset.id),
+      ),
+    );
   }
 
-  List<(Asset, double)> _sortAssets(List<(Asset, double)> items) {
+  List<_AssetListEntry> _sortAssets(List<_AssetListEntry> items) {
     // Making the list mutable to be able to sort it
-    final sorted = List<(Asset, double)>.from(items);
+    final sorted = List<_AssetListEntry>.from(items);
 
     switch (sortOption) {
       case AssetsSortOption.nameAsc:
-        sorted.sort((a, b) => a.$1.name.compareTo(b.$1.name));
+        sorted.sort((a, b) => a.asset.name.compareTo(b.asset.name));
         break;
       case AssetsSortOption.nameDesc:
-        sorted.sort((a, b) => b.$1.name.compareTo(a.$1.name));
+        sorted.sort((a, b) => b.asset.name.compareTo(a.asset.name));
         break;
       case AssetsSortOption.valueAsc:
-        sorted.sort((a, b) => a.$2.compareTo(b.$2));
+        sorted.sort((a, b) => a.value.compareTo(b.value));
         break;
       case AssetsSortOption.valueDesc:
-        sorted.sort((a, b) => b.$2.compareTo(a.$2));
+        sorted.sort((a, b) => b.value.compareTo(a.value));
         break;
     }
 
     return sorted;
   }
 
-  List<(Asset, double)> _filterAssets(List<(Asset, double)> items) {
+  List<_AssetListEntry> _filterAssets(List<_AssetListEntry> items) {
     if (searchQuery.isEmpty) return items;
 
     return items
         .where(
           (item) =>
-              item.$1.name.toLowerCase().contains(searchQuery.toLowerCase()),
+              item.asset.name.toLowerCase().contains(searchQuery.toLowerCase()),
         )
         .toList();
   }
@@ -84,7 +96,7 @@ class _AssetsListPageState extends State<AssetsListPage> {
     super.dispose();
   }
 
-  Stream<List<(Asset, double)>> _getAssetsWithValue() {
+  Stream<List<_AssetListEntry>> _getAssetsWithValue() {
     return AssetService.instance.getAssets().switchMap((assets) {
       if (assets.isEmpty) {
         return Stream.value([]);
@@ -92,12 +104,75 @@ class _AssetsListPageState extends State<AssetsListPage> {
 
       final streams = assets.map((asset) {
         return AssetValuationService.instance
-            .getCurrentAssetValue(asset)
-            .map((value) => (asset, value));
+            .getAssetProfit(asset)
+            .map(
+              (profit) => (
+                asset: asset,
+                value: asset.initialValue + profit.value,
+                valueVariation: profit.percent,
+              ),
+            );
       });
 
       return CombineLatestStream.list(streams);
     });
+  }
+
+  Widget _buildAssetsList(List<_AssetListEntry> assets) {
+    const listPadding = EdgeInsets.fromLTRB(16, 0, 16, 96);
+
+    if (!groupByType) {
+      return ListView.separated(
+        controller: _scrollController,
+        padding: listPadding,
+        itemCount: assets.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemBuilder: (context, index) {
+          final entry = assets[index];
+
+          return _AssetListTile(
+            asset: entry.asset,
+            value: entry.value,
+            valueVariation: entry.valueVariation,
+            showValueVariation: showValueVariation,
+            onTap: () => _goToDetails(entry.asset),
+          );
+        },
+      );
+    }
+
+    final groupedAssets = <AssetType, List<_AssetListEntry>>{};
+    for (final entry in assets) {
+      groupedAssets.putIfAbsent(entry.asset.assetType, () => []).add(entry);
+    }
+
+    return ListView(
+      controller: _scrollController,
+      padding: listPadding,
+      children: [
+        for (final type in AssetType.values)
+          if (groupedAssets[type] case final entries?
+              when entries.isNotEmpty) ...[
+            ValuedItemSectionHeader(
+              label: type.displayName(context),
+              icon: type.icon(),
+              color: type.color(),
+              count: entries.length,
+            ),
+            for (var index = 0; index < entries.length; index++) ...[
+              if (index > 0) const SizedBox(height: 10),
+              _AssetListTile(
+                asset: entries[index].asset,
+                value: entries[index].value,
+                valueVariation: entries[index].valueVariation,
+                showValueVariation: showValueVariation,
+                onTap: () => _goToDetails(entries[index].asset),
+              ),
+            ],
+            const SizedBox(height: 18),
+          ],
+      ],
+    );
   }
 
   @override
@@ -112,68 +187,47 @@ class _AssetsListPageState extends State<AssetsListPage> {
         scrollController: _scrollController,
         text: t.assets.create,
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text(t.assets.total_value),
-            subtitle: StreamBuilder(
-              // Includes linked portfolio rows (same economic value is also inside
-              // investment account balances) — intentional for this “all assets” total.
-              stream: AssetValuationService.instance
-                  .getTotalAssetsValueAtDate(),
-              builder: (context, snapshot) {
-                final totalValue = snapshot.data;
-                return Skeletonizer(
-                  enabled: !snapshot.hasData,
-                  child: CurrencyDisplayer(
-                    amountToConvert: totalValue ?? 10000,
-                    currency: null, // You can set a default currency if needed
-                    integerStyle: Theme.of(context).textTheme.headlineMedium!,
-                  ),
-                );
-              },
-            ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 16,
-              children: [const Divider(thickness: 2)],
-            ),
-          ),
-
-          // Search bar
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              spacing: 12,
-              children: [
-                Expanded(
-                  child: SearchBar(
-                    onChanged: _onSearchChanged,
-                    hintText: t.general.tap_to_search,
-                    trailing: [
-                      AnimatedExpanded(
-                        expand: searchQuery.isNotEmpty,
-                        axis: Axis.horizontal,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () {
-                              _onSearchChanged('');
-                            },
-                          ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 960),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                child: ValuedItemSummaryCard(
+                  label: t.assets.total_value,
+                  icon: Icons.inventory_2_rounded,
+                  backgroundIcon: Icons.account_balance_rounded,
+                  value: StreamBuilder(
+                    // Includes linked portfolio rows (same economic value is also
+                    // inside investment account balances) — intentional for this
+                    // “all assets” total.
+                    stream: AssetValuationService.instance
+                        .getTotalAssetsValueAtDate(),
+                    builder: (context, snapshot) {
+                      final totalValue = snapshot.data;
+                      return Skeletonizer(
+                        enabled: !snapshot.hasData,
+                        child: CurrencyDisplayer(
+                          amountToConvert: totalValue ?? 10000,
+                          currency: null,
+                          integerStyle: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(fontWeight: FontWeight.w700),
                         ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-                // Sort option
-                MonekinPopupMenuButton(
-                  actionItems: [
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+                child: ValuedItemListToolbar(
+                  searchQuery: searchQuery,
+                  searchHint: t.general.tap_to_search,
+                  onSearchChanged: _onSearchChanged,
+                  sortActionItems: [
                     ListTileActionItem(
                       label: t.assets.sort.name_asc,
                       icon: Icons.sort_by_alpha_rounded,
@@ -206,64 +260,136 @@ class _AssetsListPageState extends State<AssetsListPage> {
                       ),
                     ),
                   ],
+                  displayActionItems: [
+                    ListTileActionItem(
+                      label: t.assets.group_by_type,
+                      icon: Icons.view_agenda_rounded,
+                      role: ListTileActionRole.checkbox,
+                      selected: groupByType,
+                      onClick: () => setState(() => groupByType = !groupByType),
+                    ),
+                    ListTileActionItem(
+                      label: t.assets.show_value_variation,
+                      icon: Icons.percent_rounded,
+                      role: ListTileActionRole.checkbox,
+                      selected: showValueVariation,
+                      onClick: () => setState(
+                        () => showValueVariation = !showValueVariation,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          // Assets list
-          Expanded(
-            child: StreamBuilder(
-              stream: _getAssetsWithValue(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              ),
+              Expanded(
+                child: StreamBuilder(
+                  stream: _getAssetsWithValue(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                var assets = snapshot.data!;
-                assets = _filterAssets(assets);
-                assets = _sortAssets(assets);
+                    var assets = snapshot.data!;
+                    assets = _filterAssets(assets);
+                    assets = _sortAssets(assets);
 
-                if (assets.isEmpty) {
-                  return NoResults(
-                    title: t.general.empty_warn,
-                    noSearchResultsVariation: searchQuery.isNotEmpty,
-                    description: searchQuery.isNotEmpty
-                        ? t.general.search_no_results
-                        : t.assets.empty_description,
-                  );
-                }
+                    if (assets.isEmpty) {
+                      return NoResults(
+                        title: t.general.empty_warn,
+                        noSearchResultsVariation: searchQuery.isNotEmpty,
+                        description: searchQuery.isNotEmpty
+                            ? t.general.search_no_results
+                            : t.assets.empty_description,
+                      );
+                    }
 
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: assets.length,
-                  itemBuilder: (context, index) {
-                    final asset = assets[index].$1;
-                    final value = assets[index].$2;
-
-                    return ListTile(
-                      title: Text(asset.name),
-                      subtitle: Row(
-                        spacing: 4,
-                        children: [
-                          Icon(asset.assetType.icon(), size: 14),
-                          Text(asset.assetType.displayName(context)),
-                        ],
-                      ),
-                      trailing: CurrencyDisplayer(
-                        amountToConvert: value,
-                        currency: asset.currency,
-                        integerStyle: Theme.of(context).textTheme.titleMedium!,
-                      ),
-                      leadingAndTrailingTextStyle: Theme.of(
-                        context,
-                      ).textTheme.labelLarge,
-                      onTap: () => _goToDetails(asset),
-                    );
+                    return _buildAssetsList(assets);
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AssetListTile extends StatelessWidget {
+  const _AssetListTile({
+    required this.asset,
+    required this.value,
+    required this.valueVariation,
+    required this.showValueVariation,
+    required this.onTap,
+  });
+
+  final Asset asset;
+  final double value;
+  final double valueVariation;
+  final bool showValueVariation;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final typeColor = asset.assetType.color();
+
+    return ValuedItemListTile(
+      onTap: onTap,
+      accentColor: typeColor,
+      leading: Hero(
+        tag: _assetIconHeroTag(asset.id),
+        child: Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: typeColor.withAlpha(28),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Icon(asset.assetType.icon(), color: typeColor, size: 22),
+        ),
+      ),
+      title: Text(
+        asset.name,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+      ),
+      subtitle: Text(
+        asset.assetType.displayName(context),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+      ),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          CurrencyDisplayer(
+            amountToConvert: value,
+            currency: asset.currency,
+            integerStyle: Theme.of(
+              context,
+            ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+          ),
+          if (showValueVariation && valueVariation.isFinite)
+            TrendingValue(
+              percentage: valueVariation,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              padding: EdgeInsets.zero,
+            )
+          else if (showValueVariation)
+            Text(
+              '—',
+              style: Theme.of(
+                context,
+              ).textTheme.labelMedium?.copyWith(color: scheme.onSurfaceVariant),
+            ),
         ],
       ),
     );

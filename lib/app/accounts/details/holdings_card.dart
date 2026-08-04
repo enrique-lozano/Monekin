@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/securities/security_details_page.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
+import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/account/security_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
-import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -20,8 +18,6 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/text_field_utils.dart';
-import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A card that lists the holdings of an investment account and lets the user
@@ -281,173 +277,6 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
             ],
           );
         },
-      ),
-    );
-  }
-}
-
-/// Creates a new security (or edits [securityToEdit] when provided).
-/// Returns the created/updated security, or null if cancelled.
-Future<SecurityInDB?> showSecurityFormSheet(
-  BuildContext context, {
-  SecurityInDB? securityToEdit,
-}) {
-  return showModalBottomSheet<SecurityInDB>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
-    builder: (context) => _SecurityFormSheet(securityToEdit: securityToEdit),
-  );
-}
-
-class _SecurityFormSheet extends StatefulWidget {
-  const _SecurityFormSheet({this.securityToEdit});
-
-  final SecurityInDB? securityToEdit;
-
-  @override
-  State<_SecurityFormSheet> createState() => _SecurityFormSheetState();
-}
-
-class _SecurityFormSheetState extends State<_SecurityFormSheet> {
-  final _formKey = GlobalKey<FormState>();
-  late final _nameController = TextEditingController(
-    text: widget.securityToEdit?.name ?? '',
-  );
-  late final _tickerController = TextEditingController(
-    text: widget.securityToEdit?.ticker ?? '',
-  );
-  late final _priceController = TextEditingController(
-    text: (widget.securityToEdit?.currentPrice ?? 0).toString(),
-  );
-
-  late SecurityType _type = widget.securityToEdit?.type ?? SecurityType.stock;
-  Currency? _currency;
-
-  bool get _isEditing => widget.securityToEdit != null;
-
-  @override
-  void initState() {
-    super.initState();
-    final currencyCode = widget.securityToEdit?.currencyId;
-    final currencyStream = currencyCode != null
-        ? CurrencyService.instance.getCurrencyByCode(currencyCode)
-        : CurrencyService.instance.ensureAndGetPreferredCurrency();
-
-    currencyStream.first.then((value) {
-      if (mounted) setState(() => _currency = value);
-    });
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _tickerController.dispose();
-    _priceController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _submit() async {
-    final t = Translations.of(context);
-    if (!_formKey.currentState!.validate()) return;
-    if (_currency == null) {
-      MonekinSnackbar.error(
-        SnackbarParams.fromError(t.assets.form.select_currency),
-      );
-      return;
-    }
-
-    final newPrice = double.tryParse(_priceController.text) ?? 0;
-    final priceChanged =
-        _isEditing && newPrice != (widget.securityToEdit?.currentPrice ?? 0);
-
-    final security = SecurityInDB(
-      id: widget.securityToEdit?.id ?? generateUUID(),
-      name: _nameController.text,
-      type: _type,
-      currencyId: _currency!.code,
-      ticker: _tickerController.text.isEmpty ? null : _tickerController.text,
-      currentPrice: newPrice,
-      priceDate: (!_isEditing || priceChanged)
-          ? DateTime.now()
-          : (widget.securityToEdit?.priceDate ?? DateTime.now()),
-    );
-
-    if (_isEditing) {
-      await SecurityService.instance.updateSecurity(security);
-      if (priceChanged && newPrice > 0) {
-        await SecurityService.instance.addPricePoint(
-          security.id,
-          newPrice,
-          security.priceDate ?? DateTime.now(),
-        );
-      }
-    } else {
-      // insertSecurity records the initial price point on its own.
-      await SecurityService.instance.insertSecurity(security);
-    }
-    RouteUtils.popRoute(security);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return ModalContainer(
-      title: _isEditing
-          ? t.assets.securities.edit
-          : t.assets.holdings.create_security,
-      bodyPadding: const EdgeInsets.symmetric(horizontal: 16),
-      footer: BottomSheetFooter(onSaved: _submit),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: '${t.assets.holdings.security_name} *',
-              ),
-              validator: (v) => fieldValidator(v, isRequired: true),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _tickerController,
-              decoration: InputDecoration(labelText: t.assets.holdings.ticker),
-            ),
-            const SizedBox(height: 12),
-            DropdownButtonFormField<SecurityType>(
-              value: _type,
-              decoration: InputDecoration(
-                labelText: t.assets.holdings.security_type,
-              ),
-              items: SecurityType.values
-                  .map(
-                    (st) => DropdownMenuItem(
-                      value: st,
-                      child: Text(st.displayName(context)),
-                    ),
-                  )
-                  .toList(),
-              onChanged: (v) {
-                if (v != null) setState(() => _type = v);
-              },
-            ),
-            const SizedBox(height: 12),
-            AmountAndCurrencyFormField(
-              amountController: _priceController,
-              currency: _currency,
-              amountLabel: t.assets.holdings.current_price,
-              isRequired: false,
-              onCurrencySelected: (newCurrency) {
-                setState(() => _currency = newCurrency);
-              },
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
       ),
     );
   }

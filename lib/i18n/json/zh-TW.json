@@ -34,7 +34,11 @@
     "apply": "套用",
     "discard": "捨棄",
     "refresh": "重新整理",
-    "share": "分享"
+    "share": "分享",
+    "see-more-count": "查看更多 ({{n}})",
+    "see-all": "查看全部",
+    "sort": "排序",
+    "display_options": "顯示選項"
   },
   "GENERAL": {
     "or": "或",
@@ -207,7 +211,19 @@
     "no-accounts.descr": "開始使用 Monekin 的所有魔力。至少建立一個帳戶以開始添加交易",
     "last-transactions": "最後的交易",
     "should-create-account.header": "哎呀！",
-    "should-create-account.message": "您必須至少擁有一個非存檔帳戶才能開始建立交易"
+    "should-create-account.message": "您必須至少擁有一個非存檔帳戶才能開始建立交易",
+    "no-income-this-period": "此期間無收入",
+    "no-expenses-this-period": "此期間無任何費用",
+    "vs-previous-period": "與上一個相比",
+    "date-ranges": {
+      "week": "1週",
+      "month": "1月",
+      "quarter": "3月",
+      "half-year": "6月",
+      "year": "1年",
+      "max": "MAX",
+      "custom": "風俗"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "財務健康",
@@ -283,7 +299,10 @@
     "by-tags": "按標籤",
     "distribution": "分配",
     "finance-health-resume": "恢復",
-    "finance-health-breakdown": "分解"
+    "finance-health-breakdown": "分解",
+    "portfolio": "資料夾",
+    "portfolio-composition": "投資組合構成",
+    "portfolio-composition-subtitle": "您的投資如何在您的所有帳戶中分配。"
   },
   "ICON-SELECTOR": {
     "name": "姓名：",
@@ -454,7 +473,9 @@
         "one": "投資",
         "other": "投資"
       }
-    }
+    },
+    "operation": "手術",
+    "linked-security": "關聯證券"
   },
   "TRANSFER": {
     "display": "轉移",
@@ -511,7 +532,9 @@
       "saving": "儲蓄帳戶",
       "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢",
       "investment": "投資帳戶",
-      "investment.descr": "可包含資產的券商、加密貨幣交易所或投資組合帳戶。追蹤投資本金，並透過估值手動更新每個資產的價值"
+      "investment.descr": "可包含資產的券商、加密貨幣交易所或投資組合帳戶。追蹤投資本金，並透過估值手動更新每個資產的價值",
+      "money": "現金帳戶",
+      "money.descr": "用於日常財務的現金帳戶。可新增支出、收入與轉帳。"
     },
     "FORM": {
       "name": "帳戶名稱",
@@ -550,6 +573,30 @@
       "one": "選擇一個帳戶",
       "all": "所有帳戶",
       "multiple": "選擇帳戶"
+    },
+    "current_balance": "當前餘額",
+    "total_value": "總價值",
+    "investments": "投資",
+    "cash": "現金",
+    "total_cost": "總成本",
+    "total_cost_help": "您為目前持有的證券支付的費用（其加權平均購買成本），而不是其當前市場價值。",
+    "unrealized_pnl_help": "您仍持有的證券的帳面損益：當前市場價值減去總成本。只有當你出售時它才會實現。",
+    "range_income": "收入",
+    "range_expense": "開支",
+    "no_income_range": "本期無收入",
+    "no_expense_range": "本期無費用",
+    "movements_count": "{{n}} 個動作",
+    "TABS": {
+      "movements": "動作",
+      "info": "Info"
+    },
+    "TRACKING_MODES": {
+      "title": "追蹤模式",
+      "transactions": "交易",
+      "transactions_descr": "頭寸是根據您的買入和賣出交易自動計算的。",
+      "holdings": "控股",
+      "holdings_descr": "以帶有日期的快照形式手動輸入您的頭寸（數量和平均成本）。",
+      "switch_warn": "更改追蹤模式會改變位置的計算方式。現有交易或快照不會自動轉換。"
     }
   },
   "CURRENCIES": {
@@ -601,7 +648,24 @@
     "max-exchange-rate": "最高匯率",
     "empty": "在此處添加匯率，以便如果您的帳戶使用基礎貨幣以外的貨幣，我們的圖表會更加準確",
     "select-a-currency": "選擇貨幣",
-    "search": "按名稱或貨幣代碼搜尋"
+    "search": "按名稱或貨幣代碼搜尋",
+    "DETAILS": {
+      "equals-to": "1 {{code}} 等於",
+      "min": "最低限度",
+      "max": "最大限度",
+      "updated": "已更新",
+      "decimals": "{{n}} 位小數",
+      "used-in": "用於",
+      "total-exposure": "總曝光量",
+      "no-usage": "該貨幣尚未用於任何帳戶或投資",
+      "code-locked-hint": "無法更改：它標識整個應用程式中的貨幣。",
+      "type-locked-hint": "創建貨幣時設定。改變它會改變其費率的取得方式。",
+      "TABS": {
+        "rates": "價格",
+        "used-in": "使用中",
+        "settings": "設定"
+      }
+    }
   },
   "TAGS": {
     "display": {
@@ -876,7 +940,8 @@
       "real_estate": "房地產",
       "vehicle": "車輛",
       "jewelry_art": "珠寶與藝術品",
-      "other": "其他"
+      "other": "其他",
+      "precious_metal": "貴金屬"
     },
     "DETAILS": {
       "select_account": "選擇一個帳戶",
@@ -889,7 +954,12 @@
       "performance_invested_value": "投入金額",
       "performance_invested_value_caption": "該資產中的資金總額：初始價值加上已關聯的買賣。",
       "performance_value_diff": "估值變動",
-      "performance_value_diff_caption": "從所選週期開始至今，資產價值的變化幅度。"
+      "performance_value_diff_caption": "從所選週期開始至今，資產價值的變化幅度。",
+      "about": "關於",
+      "gross_value": "總價值",
+      "liability": "責任",
+      "net_worth": "淨值",
+      "acquisition_transaction_badge": "獲得"
     },
     "FORM": {
       "asset_type": "資產類型",
@@ -908,7 +978,14 @@
       "already_exists": "具有此名稱的資產已存在。您可能想要編輯它",
       "valuation_before_creation_date": "該資產的估值日期早於收購日期",
       "acquisition_date": "建立日期",
-      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
+      "linked_liability": "連帶責任",
+      "link_existing_liability": "連結現有責任",
+      "no_liabilities": "您還沒有任何負債。",
+      "link_acquisition_transaction": "連結購買交易",
+      "link_acquisition_transaction_descr": "選擇代表購買該資產的費用。其金額（轉換為資產的貨幣）和日期將用作初始值和購買日期",
+      "acquisition_transaction": "收購交易",
+      "creation_date_before_acquisition_transaction": "收購日期不能早於關聯交易日期"
     },
     "VALUATION": {
       "history": "估值歷史",
@@ -923,7 +1000,8 @@
       "edit_valuation_success": "估值更新成功",
       "delete_valuation_success": "評估刪除成功",
       "delete_all_valuations": "刪除所有估價",
-      "delete_all_valuations_success": "所有估價已成功刪除"
+      "delete_all_valuations_success": "所有估價已成功刪除",
+      "net_contribution_help": "您投入該資產的現金：其起始價值加上任何關聯的買賣交易。它與市場價值變化分開，您可以透過估值手動記錄市場價值變化。"
     },
     "SORT": {
       "name_asc": "名稱（A-Z）",
@@ -938,6 +1016,136 @@
       "link_transaction": {
         "success": "Transaction linked successfully"
       }
+    },
+    "ADD": {
+      "title": "新增資產",
+      "subtitle": "選擇您要新增的資產類型"
+    },
+    "group_by_type": "按資產類型分組",
+    "show_value_variation": "顯示百分比變化",
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "財產和土地",
+      "vehicle": "汽車、船隻等",
+      "precious_metal": "黃金、白銀和鉑金",
+      "jewelry_art": "藝術品、珠寶和收藏品",
+      "other": "自訂資產"
+    },
+    "SECURITY_TYPES": {
+      "stock": "庫存",
+      "fund": "基金/ETF",
+      "crypto": "Crypto"
+    },
+    "HOLDINGS": {
+      "title": "控股",
+      "empty": "還沒有持股。購買證券以開始追蹤您的投資組合。",
+      "buy": "買",
+      "sell": "賣",
+      "buy_title": "購買 {{security}}",
+      "sell_title": "出售 {{security}}",
+      "avg_cost": "平均。成本",
+      "update_price": "更新價格",
+      "choose_security": "選擇證券",
+      "create_security": "建立新證券",
+      "security_name": "證券名稱",
+      "ticker": "股票代碼/符號（可選）",
+      "security_type": "證券類型",
+      "current_price": "現價",
+      "quantity": "數量",
+      "price_per_unit": "每單位價格",
+      "total": "全部的",
+      "add_position": "新增職位",
+      "positions_history": "職位歷史",
+      "add_snapshot": "新增快照",
+      "edit_snapshot": "編輯快照",
+      "no_snapshots": "還沒有快照。新增一個來記錄您的位置。",
+      "SNAPSHOTS": {
+        "history_title": "快照歷史記錄",
+        "history_intro": "每個快照都儲存某個日期的完整投資組合。當查看一天時，是應用該天或之前的最近一天。",
+        "count": "{{n}} 個快照",
+        "new_snapshot": "新的",
+        "no_snapshots": "還沒有快照",
+        "empty_portfolio": "空投資組合",
+        "positions_count": "{{n}} 個位置",
+        "manual": "Manual",
+        "current": "目前快照",
+        "current_banner": "查詢日期或之前的最新日期",
+        "cost_label": "成本",
+        "update": "更新",
+        "update_positions": "更新職位",
+        "full_portfolio": "完整的投資組合",
+        "editor_descr": "您儲存的是當天的作品集照片。如果當天已存在快照，則會將其替換。",
+        "date_label": "快照日期",
+        "date_helper": "用於從該日期到下一個快照的每個查詢。",
+        "add_position": "新增另一個位置",
+        "total_cost": "投資組合總成本",
+        "save": "儲存快照",
+        "remove_hint": "要刪除某個位置，只需刪除其行即可：快照是完整照片，而不是運動。",
+        "delete_title": "刪除快照？",
+        "delete_descr": "該快照將會被刪除。如果是最新的，您目前的部位將回落到上一個快照。"
+      }
+    },
+    "SECURITIES": {
+      "title": "證券",
+      "create": "新增證券",
+      "edit": "編輯證券",
+      "view_details": "看詳情",
+      "empty_description": "您尚未新增任何證券。新增股票、基金或加密貨幣以開始追蹤您的投資組合。",
+      "total_value": "投資組合價值",
+      "group_by_type": "按安全類型分組",
+      "current_price": "現價",
+      "market_value": "市場價值",
+      "units_held": "持有單位",
+      "unrealized_pnl": "未實現損益",
+      "your_position": "你的立場",
+      "positions": "職位",
+      "no_positions": "您尚未在任何帳戶中持有此證券。",
+      "by_security": "依證券",
+      "by_type": "按類型",
+      "by_account": "按帳戶",
+      "by_classification": "按分類",
+      "no_trades": "尚無買賣交易。",
+      "no_price_history": "尚無價格歷史記錄。添加價格以開始跟踪。",
+      "TABS": {
+        "about": "詳情",
+        "positions": "職位",
+        "trades": "交易",
+        "price_history": "價格"
+      },
+      "PRICE_HISTORY": {
+        "add": "添加價格",
+        "edit": "編輯價格",
+        "price": "價格"
+      },
+      "IMPORT": {
+        "title": "匯入價格",
+        "description": "選擇 .csv 檔案或將每行一個價格貼為日期、價格。不使用互聯網。",
+        "review_description": "導入前請查看以下價格。",
+        "field_label": "CSV 數據",
+        "button": "匯入價格",
+        "rows_detected": "偵測到 {{n}} 有效行",
+        "overwrite_warning": "其中 {{n}} 個日期已記錄價格並將被覆蓋。",
+        "success": "導入 {{n}} 價格"
+      },
+      "FORM": {
+        "tab_general": "General",
+        "tab_classification": "分類",
+        "notes": "筆記"
+      },
+      "CLASSIFICATION": {
+        "title": "分類",
+        "edit_title": "編輯分類",
+        "empty": "尚未分類。新增資產類別、地區、部門或風險，以在您的投資組合構成中查看該證券。",
+        "none": "沒有任何",
+        "add_category": "添加",
+        "select_category": "選擇一個類別",
+        "search_categories": "搜尋類別...",
+        "unclassified": "未分類",
+        "weight_over_100": "「{{taxonomy}}」的權重加起來超過100%。"
+      },
+      "delete": "刪除證券",
+      "delete_confirmation": "將刪除此證券。此操作無法復原。",
+      "delete_success": "證券已成功刪除",
+      "in_use_error": "此證券仍有关联持倉或交易。請先移除後再刪除。"
     }
   },
   "TARGET_TIMELINE_STATUSES": {

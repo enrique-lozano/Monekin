@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/securities/widgets/security_classification_editor.dart';
+import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/taxonomy/taxonomy_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -22,7 +22,11 @@ class SecurityClassificationCard extends StatelessWidget {
       headerAction: CardHeaderAction(
         text: t.ui_actions.edit,
         icon: const Icon(Icons.edit_rounded, size: 15),
-        onTap: () => showSecurityClassificationEditor(context, security),
+        onTap: () => showSecurityFormSheet(
+          context,
+          securityToEdit: security,
+          openClassification: true,
+        ),
       ),
       body: StreamBuilder<List<SecurityClassification>>(
         stream: TaxonomyService.instance.getSecurityClassification(security.id),

@@ -1009,7 +1009,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       );
     }
 
-    return CardWithHeader(
+    return EditableTimeSeriesCard<ExchangeRate>(
       title: t.currencies.historical,
       titleBuilder: (title) => Row(
         mainAxisSize: MainAxisSize.min,
@@ -1024,21 +1024,13 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
         icon: const Icon(Icons.add_rounded, size: 15),
         onTap: _addRate,
       ),
-      bodyPadding: const EdgeInsets.symmetric(vertical: 4),
-      body: _currentRates!.isEmpty
-          ? NoResults(
-              description: t.currencies.historical_empty,
-              showIllustration: false,
-            )
-          : EditableTimeSeriesList<ExchangeRate>(
-              items: _currentRates!,
-              dateExtractor: (r) => r.date,
-              valueExtractor: (r) => r.exchangeRate,
-              currency: _preferredCurrency ?? _currency,
-              onEdit: _editRate,
-              onDelete: _deleteRate,
-              physics: const NeverScrollableScrollPhysics(),
-            ),
+      items: _currentRates!,
+      dateExtractor: (r) => r.date,
+      valueExtractor: (r) => r.exchangeRate,
+      currency: _preferredCurrency ?? _currency,
+      emptyDescription: t.currencies.historical_empty,
+      onEdit: _editRate,
+      onDelete: _deleteRate,
     );
   }
 

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/securities/security_details_page.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
+import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/account/security_service.dart';
 import 'package:monekin/core/models/asset/holding.dart';
-import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/trending_value.dart';
+import 'package:monekin/core/presentation/widgets/valued_item_list.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -21,23 +20,15 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 enum SecuritiesSortOption { nameAsc, nameDesc, valueDesc, valueAsc }
 
+String _securityAvatarHeroTag(String securityId) =>
+    'securities-list__security-avatar-$securityId';
+
 /// A security together with its aggregated position across all accounts.
 class _SecurityRow {
-  _SecurityRow({
-    required this.security,
-    required this.units,
-    required this.marketValue,
-    required this.costBasis,
-  });
+  _SecurityRow({required this.security, required this.marketValue});
 
   final SecurityInDB security;
-  final double units;
   final double marketValue;
-  final double costBasis;
-
-  double get unrealizedPnl => marketValue - costBasis;
-  double get unrealizedPnlPercent =>
-      costBasis == 0 ? 0 : unrealizedPnl / costBasis;
 }
 
 class SecuritiesListPage extends StatefulWidget {
@@ -50,6 +41,7 @@ class SecuritiesListPage extends StatefulWidget {
 class _SecuritiesListPageState extends State<SecuritiesListPage> {
   String searchQuery = '';
   SecuritiesSortOption sortOption = SecuritiesSortOption.valueDesc;
+  bool groupByType = false;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -80,12 +72,10 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
 
           return _SecurityRow(
             security: security,
-            units: positions.fold<double>(0, (sum, h) => sum + h.quantity),
             marketValue: positions.fold<double>(
               0,
               (sum, h) => sum + h.marketValue,
             ),
-            costBasis: positions.fold<double>(0, (sum, h) => sum + h.costBasis),
           );
         }).toList();
       },
@@ -125,6 +115,47 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
     return result;
   }
 
+  Widget _buildSecuritiesList(BuildContext context, List<_SecurityRow> rows) {
+    const listPadding = EdgeInsets.fromLTRB(16, 0, 16, 96);
+
+    if (!groupByType) {
+      return ListView.separated(
+        controller: _scrollController,
+        padding: listPadding,
+        itemCount: rows.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemBuilder: (context, index) => _buildRow(context, rows[index]),
+      );
+    }
+
+    final groupedRows = <SecurityType, List<_SecurityRow>>{};
+    for (final row in rows) {
+      groupedRows.putIfAbsent(row.security.type, () => []).add(row);
+    }
+
+    return ListView(
+      controller: _scrollController,
+      padding: listPadding,
+      children: [
+        for (final type in SecurityType.values)
+          if (groupedRows[type] case final entries?
+              when entries.isNotEmpty) ...[
+            ValuedItemSectionHeader(
+              label: type.displayName(context),
+              icon: type.icon(),
+              color: type.color(),
+              count: entries.length,
+            ),
+            for (var index = 0; index < entries.length; index++) ...[
+              if (index > 0) const SizedBox(height: 10),
+              _buildRow(context, entries[index]),
+            ],
+            const SizedBox(height: 18),
+          ],
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -137,55 +168,43 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
         scrollController: _scrollController,
         text: t.assets.securities.create,
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text(t.assets.securities.total_value),
-            subtitle: StreamBuilder<double>(
-              stream: HoldingService.instance.getHoldingsMarketValue(
-                convertToPreferred: true,
-              ),
-              builder: (context, snapshot) {
-                return Skeletonizer(
-                  enabled: !snapshot.hasData,
-                  child: CurrencyDisplayer(
-                    amountToConvert: snapshot.data ?? 10000,
-                    integerStyle: Theme.of(context).textTheme.headlineMedium!,
-                  ),
-                );
-              },
-            ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Divider(thickness: 2),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              spacing: 12,
-              children: [
-                Expanded(
-                  child: SearchBar(
-                    onChanged: _onSearchChanged,
-                    hintText: t.general.tap_to_search,
-                    trailing: [
-                      AnimatedExpanded(
-                        expand: searchQuery.isNotEmpty,
-                        axis: Axis.horizontal,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: IconButton(
-                            icon: const Icon(Icons.close),
-                            onPressed: () => _onSearchChanged(''),
-                          ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 960),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                child: ValuedItemSummaryCard(
+                  label: t.assets.securities.total_value,
+                  icon: Icons.show_chart_rounded,
+                  backgroundIcon: Icons.account_balance_wallet_rounded,
+                  value: StreamBuilder<double>(
+                    stream: HoldingService.instance.getHoldingsMarketValue(
+                      convertToPreferred: true,
+                    ),
+                    builder: (context, snapshot) {
+                      return Skeletonizer(
+                        enabled: !snapshot.hasData,
+                        child: CurrencyDisplayer(
+                          amountToConvert: snapshot.data ?? 10000,
+                          integerStyle: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .copyWith(fontWeight: FontWeight.w700),
                         ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-                MonekinPopupMenuButton(
-                  actionItems: [
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+                child: ValuedItemListToolbar(
+                  searchQuery: searchQuery,
+                  searchHint: t.general.tap_to_search,
+                  onSearchChanged: _onSearchChanged,
+                  sortActionItems: [
                     ListTileActionItem(
                       label: t.assets.sort.value_desc,
                       icon: Icons.trending_down_rounded,
@@ -219,74 +238,108 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
                       ),
                     ),
                   ],
+                  displayActionItems: [
+                    ListTileActionItem(
+                      label: t.assets.securities.group_by_type,
+                      icon: Icons.view_agenda_rounded,
+                      role: ListTileActionRole.checkbox,
+                      selected: groupByType,
+                      onClick: () => setState(() => groupByType = !groupByType),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: StreamBuilder<List<_SecurityRow>>(
+                  stream: _getRows(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final rows = _filterAndSort(snapshot.data!);
+
+                    if (rows.isEmpty) {
+                      return NoResults(
+                        title: t.general.empty_warn,
+                        noSearchResultsVariation: searchQuery.isNotEmpty,
+                        description: searchQuery.isNotEmpty
+                            ? t.general.search_no_results
+                            : t.assets.securities.empty_description,
+                      );
+                    }
+
+                    return _buildSecuritiesList(context, rows);
+                  },
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: StreamBuilder<List<_SecurityRow>>(
-              stream: _getRows(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                final rows = _filterAndSort(snapshot.data!);
-
-                if (rows.isEmpty) {
-                  return NoResults(
-                    title: t.general.empty_warn,
-                    noSearchResultsVariation: searchQuery.isNotEmpty,
-                    description: searchQuery.isNotEmpty
-                        ? t.general.search_no_results
-                        : t.assets.securities.empty_description,
-                  );
-                }
-
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: rows.length,
-                  itemBuilder: (context, index) =>
-                      _buildRow(context, rows[index]),
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildRow(BuildContext context, _SecurityRow row) {
     final security = row.security;
+    final scheme = Theme.of(context).colorScheme;
+    final typeColor = security.type.color();
 
-    return ListTile(
-      leading: SecurityAvatar(security: security),
-      title: Text(security.name),
+    return ValuedItemListTile(
+      accentColor: typeColor,
+      leading: Hero(
+        tag: _securityAvatarHeroTag(security.id),
+        child: SecurityAvatar(security: security, size: 44),
+      ),
+      title: Text(
+        security.name,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+      ),
       subtitle: Row(
+        mainAxisSize: MainAxisSize.min,
         spacing: 4,
         children: [
-          Text(security.type.displayName(context)),
+          Flexible(
+            child: Text(
+              security.type.displayName(context),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+            ),
+          ),
           if (security.ticker != null) ...[
-            const Text('·'),
-            Text(security.ticker!),
+            Text('·', style: TextStyle(color: scheme.onSurfaceVariant)),
+            Flexible(
+              child: Text(
+                security.ticker!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+              ),
+            ),
           ],
         ],
       ),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          CurrencyDisplayer(
-            amountToConvert: row.marketValue,
-            integerStyle: Theme.of(context).textTheme.titleMedium!,
-          ),
-          if (row.units > 0)
-            TrendingValue(percentage: row.unrealizedPnlPercent, fontSize: 12),
-        ],
+      trailing: CurrencyDisplayer(
+        amountToConvert: row.marketValue,
+        integerStyle: Theme.of(
+          context,
+        ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),
       ),
-      onTap: () =>
-          RouteUtils.pushRoute(SecurityDetailsPage(security: security)),
+      onTap: () => RouteUtils.pushRoute(
+        SecurityDetailsPage(
+          security: security,
+          securityAvatarHeroTag: _securityAvatarHeroTag(security.id),
+        ),
+      ),
     );
   }
 }

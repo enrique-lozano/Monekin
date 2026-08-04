@@ -34,7 +34,11 @@
     "apply": "Uygula",
     "discard": "Vazgeç",
     "refresh": "Yenile",
-    "share": "Paylaş"
+    "share": "Paylaş",
+    "see-more-count": "Daha fazlasını görün ({{n}})",
+    "see-all": "Tümünü gör",
+    "sort": "Sırala",
+    "display_options": "Görüntüleme seçenekleri"
   },
   "GENERAL": {
     "or": "veya",
@@ -207,7 +211,19 @@
     "no-accounts.descr": "Monekin'in tüm sihrini kullanmaya başlayın. İşlem eklemeye başlamak için en az bir hesap oluşturun",
     "last-transactions": "Son işlemler",
     "should-create-account.header": "Ups!",
-    "should-create-account.message": "İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır"
+    "should-create-account.message": "İşlem oluşturmaya başlamadan önce en az bir arşivlenmemiş hesabınız olmalıdır",
+    "no-income-this-period": "Bu dönemde gelir yok",
+    "no-expenses-this-period": "Bu dönemde masraf yok",
+    "vs-previous-period": "vs önceki",
+    "date-ranges": {
+      "week": "1W",
+      "month": "1M",
+      "quarter": "3M",
+      "half-year": "6M",
+      "year": "1Y",
+      "max": "MAX",
+      "custom": "Gelenek"
+    }
   },
   "FINANCIAL-HEALTH": {
     "display": "Finansal sağlık",
@@ -283,7 +299,10 @@
     "by-tags": "Etiketlere göre",
     "distribution": "Dağıtım",
     "finance-health-resume": "Özet",
-    "finance-health-breakdown": "Detaylı Analiz"
+    "finance-health-breakdown": "Detaylı Analiz",
+    "portfolio": "Portföy",
+    "portfolio-composition": "Portföy bileşimi",
+    "portfolio-composition-subtitle": "Yatırımlarınızın tüm hesaplarınıza nasıl dağıtıldığı."
   },
   "ICON-SELECTOR": {
     "name": "İsim:",
@@ -454,7 +473,9 @@
         "one": "Yatırım",
         "other": "Yatırımlar"
       }
-    }
+    },
+    "operation": "Operasyon",
+    "linked-security": "Bağlantılı güvenlik"
   },
   "TRANSFER": {
     "display": "Transfer",
@@ -511,7 +532,9 @@
       "saving": "Tasarruf hesabı",
       "saving.descr": "Yalnızca diğer hesaplardan para ekleyebilecek ve çekebileceksiniz. Para biriktirmeye başlamak için mükemmel",
       "investment": "Yatırım hesabı",
-      "investment.descr": "Birden fazla varlık içerebilen bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve her varlığın değerini değerlemeler aracılığıyla manuel olarak güncelleyin"
+      "investment.descr": "Birden fazla varlık içerebilen bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve her varlığın değerini değerlemeler aracılığıyla manuel olarak güncelleyin",
+      "money": "Para hesabı",
+      "money.descr": "Günlük finansmanınız için nakit tutar. Giderleri, geliri ve transferleri ekleyin."
     },
     "FORM": {
       "name": "Hesap adı",
@@ -550,6 +573,30 @@
       "one": "Bir hesap seçin",
       "all": "Tüm hesaplar",
       "multiple": "Hesapları seçin"
+    },
+    "current_balance": "Mevcut bakiye",
+    "total_value": "Toplam değer",
+    "investments": "Yatırımlar",
+    "cash": "Peşin",
+    "total_cost": "Toplam maliyet",
+    "total_cost_help": "Şu anda elinizde bulundurduğunuz menkul kıymetler için ödediğiniz tutar (ağırlıklı ortalama satın alma maliyeti), bunların mevcut piyasa değeri değil.",
+    "unrealized_pnl_help": "Halen elinizde tuttuğunuz menkul kıymetlerin kâğıt üzerinde kazancı veya kaybı: mevcut piyasa değeri eksi toplam maliyeti. Ancak sattığınızda gerçekleşir.",
+    "range_income": "Gelir",
+    "range_expense": "Giderler",
+    "no_income_range": "Bu dönemde gelir yok",
+    "no_expense_range": "Bu dönemde masraf yok",
+    "movements_count": "{{n}} hareketler",
+    "TABS": {
+      "movements": "Hareketler",
+      "info": "Info"
+    },
+    "TRACKING_MODES": {
+      "title": "İzleme modu",
+      "transactions": "İşlemler",
+      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır.",
+      "holdings": "Holdingler",
+      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin.",
+      "switch_warn": "İzleme modunu değiştirmek, konumların hesaplanma şeklini değiştirir. Mevcut işlemler veya anlık görüntüler otomatik olarak dönüştürülmez."
     }
   },
   "CURRENCIES": {
@@ -601,7 +648,24 @@
     "max-exchange-rate": "Maksimum döviz kuru",
     "empty": "Buraya döviz kurları ekleyin, böylece temel para biriminizden farklı para birimlerinde hesaplarınız varsa grafiklerimiz daha doğru olur",
     "select-a-currency": "Bir para birimi seçin",
-    "search": "Adına veya para birimi koduna göre arayın"
+    "search": "Adına veya para birimi koduna göre arayın",
+    "DETAILS": {
+      "equals-to": "1 {{code}} eşittir",
+      "min": "Asgari",
+      "max": "Maksimum",
+      "updated": "Güncellendi",
+      "decimals": "{{n}} ondalık sayılar",
+      "used-in": "Kullanılan",
+      "total-exposure": "Toplam maruz kalma",
+      "no-usage": "Bu para birimi henüz hiçbir hesapta veya yatırımda kullanılmıyor",
+      "code-locked-hint": "Değiştirilemez: Uygulamanın tamamındaki para birimini tanımlar.",
+      "type-locked-hint": "Para biriminin ne zaman oluşturulacağını ayarlayın. Bunu değiştirmek, oranlarının nasıl elde edildiğini değiştirecektir.",
+      "TABS": {
+        "rates": "Oranlar",
+        "used-in": "Kullanımda",
+        "settings": "Ayarlar"
+      }
+    }
   },
   "TAGS": {
     "display": {
@@ -876,7 +940,8 @@
       "real_estate": "Gayrimenkul",
       "vehicle": "Araçlar",
       "jewelry_art": "Takı ve sanat",
-      "other": "Diğer"
+      "other": "Diğer",
+      "precious_metal": "Değerli metaller"
     },
     "DETAILS": {
       "select_account": "Bir hesap seçin",
@@ -889,7 +954,12 @@
       "performance_invested_value": "Invested value",
       "performance_invested_value_caption": "Bu varlıktaki toplam para: başlangıç değeri artı bağlı alım ve satımlar.",
       "performance_value_diff": "Valuation change",
-      "performance_value_diff_caption": "Varlığın değerinin seçilen dönemin başından bugüne ne kadar değiştiği."
+      "performance_value_diff_caption": "Varlığın değerinin seçilen dönemin başından bugüne ne kadar değiştiği.",
+      "about": "Hakkında",
+      "gross_value": "Brüt değer",
+      "liability": "Yükümlülük",
+      "net_worth": "Net değer",
+      "acquisition_transaction_badge": "Kazanma"
     },
     "FORM": {
       "asset_type": "Varlık türü",
@@ -908,7 +978,14 @@
       "already_exists": "Bu ada sahip bir öğe zaten mevcut. Düzenlemek isteyebilirsiniz",
       "valuation_before_creation_date": "Bu varlıkta satın alma tarihinden önceki bir tarihe sahip değerlemeler mevcut",
       "acquisition_date": "Oluşturulma tarihi",
-      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date"
+      "creation_date_before_linked_account": "The asset date cannot be before the linked account creation date",
+      "linked_liability": "Bağlantılı sorumluluk",
+      "link_existing_liability": "Mevcut sorumluluğu bağlayın",
+      "no_liabilities": "Henüz herhangi bir yükümlülüğünüz yok.",
+      "link_acquisition_transaction": "Bir satın alma işlemini bağlayın",
+      "link_acquisition_transaction_descr": "Bu varlığın satın alınmasını temsil eden gideri seçin. Tutarı (varlığın para birimine dönüştürülmüş) ve tarihi, başlangıç ​​değeri ve edinme tarihi olarak kullanılacaktır.",
+      "acquisition_transaction": "Satın alma işlemi",
+      "creation_date_before_acquisition_transaction": "Edinme tarihi bağlantılı işlemin tarihinden önce olamaz"
     },
     "VALUATION": {
       "history": "Değerleme geçmişi",
@@ -923,7 +1000,8 @@
       "edit_valuation_success": "Değerleme başarıyla güncellendi",
       "delete_valuation_success": "Değerleme başarıyla silindi",
       "delete_all_valuations": "Tüm değerlemeleri sil",
-      "delete_all_valuations_success": "Tüm değerlemeler başarıyla silindi"
+      "delete_all_valuations_success": "Tüm değerlemeler başarıyla silindi",
+      "net_contribution_help": "Bu varlığa yatırdığınız nakit: başlangıç ​​değeri artı bağlantılı alım/satım işlemleri. Değerlemeler aracılığıyla manuel olarak kaydettiğiniz piyasa değeri değişikliklerinden ayrıdır."
     },
     "SORT": {
       "name_asc": "İsim (A'dan Z'ye)",
@@ -938,7 +1016,137 @@
       "link_transaction": {
         "success": "Transaction linked successfully"
       }
-    }
+    },
+    "ADD": {
+      "title": "Yeni varlık ekle",
+      "subtitle": "Eklemek istediğiniz varlık türünü seçin"
+    },
+    "group_by_type": "Varlık türüne göre gruplandır",
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "Mülk ve arazi",
+      "vehicle": "Arabalar, tekneler ve daha fazlası",
+      "precious_metal": "Altın, gümüş ve platin",
+      "jewelry_art": "Sanat, mücevher ve koleksiyon ürünleri",
+      "other": "Özel varlıklar"
+    },
+    "SECURITY_TYPES": {
+      "stock": "Stoklamak",
+      "fund": "Fon / ETF",
+      "crypto": "Crypto"
+    },
+    "HOLDINGS": {
+      "title": "Holdingler",
+      "empty": "Henüz holding yok. Portföyünüzü izlemeye başlamak için bir menkul kıymet satın alın.",
+      "buy": "Satın almak",
+      "sell": "Satmak",
+      "buy_title": "{{security}} satın al",
+      "sell_title": "{{security}} sat",
+      "avg_cost": "Ortalama maliyet",
+      "update_price": "Fiyatı güncelle",
+      "choose_security": "Bir güvenlik seçin",
+      "create_security": "Yeni güvenlik oluşturun",
+      "security_name": "Güvenlik adı",
+      "ticker": "Ticker / sembol (isteğe bağlı)",
+      "security_type": "Güvenlik türü",
+      "current_price": "Güncel fiyat",
+      "quantity": "Miktar",
+      "price_per_unit": "Birim başına fiyat",
+      "total": "Toplam",
+      "add_position": "Pozisyon ekle",
+      "positions_history": "Pozisyon geçmişi",
+      "add_snapshot": "Anlık görüntü ekle",
+      "edit_snapshot": "Anlık görüntüyü düzenle",
+      "no_snapshots": "Henüz anlık görüntü yok. Konumunuzu kaydetmek için bir tane ekleyin.",
+      "SNAPSHOTS": {
+        "history_title": "Anlık görüntü geçmişi",
+        "history_intro": "Her anlık görüntü, bir tarihe ait portföyün tamamını saklar. Bir güne bakıldığında en güncel olanı veya ondan önceki gün uygulanır.",
+        "count": "{{n}} anlık görüntü",
+        "new_snapshot": "Yeni",
+        "no_snapshots": "Henüz anlık görüntü yok",
+        "empty_portfolio": "Boş portföy",
+        "positions_count": "{{n}} konum",
+        "manual": "Manual",
+        "current": "Geçerli anlık görüntü",
+        "current_banner": "sorgulanan tarihte veya öncesinde en yeni olanı",
+        "cost_label": "maliyet",
+        "update": "Güncelleme",
+        "update_positions": "Pozisyonları güncelle",
+        "full_portfolio": "tam portföy",
+        "editor_descr": "Kaydettiğiniz şey o tarihteki portföy fotoğrafıdır. Anlık görüntü o gün zaten mevcutsa değiştirilir.",
+        "date_label": "Anlık görüntü tarihi",
+        "date_helper": "Bu tarihten sonraki anlık görüntüye kadar her sorgu için kullanılır.",
+        "add_position": "Başka bir pozisyon ekle",
+        "total_cost": "Toplam portföy maliyeti",
+        "save": "Anlık görüntüyü kaydet",
+        "remove_hint": "Bir konumdan kurtulmak için yalnızca satırını silin: anlık görüntü fotoğrafın tamamıdır, bir hareket değil.",
+        "delete_title": "Anlık görüntü silinsin mi?",
+        "delete_descr": "Bu anlık görüntü kaldırılacak. En yenisiyse mevcut konumlarınız önceki anlık görüntüye geri dönecektir."
+      }
+    },
+    "SECURITIES": {
+      "title": "Menkul Kıymetler",
+      "create": "Güvenlik ekle",
+      "edit": "Güvenliği düzenle",
+      "view_details": "Ayrıntıları görüntüle",
+      "empty_description": "Henüz herhangi bir menkul kıymet eklemediniz. Portföyünüzü izlemeye başlamak için bir hisse senedi, fon veya kripto ekleyin.",
+      "total_value": "Portföy değeri",
+      "group_by_type": "Güvenlik türüne göre gruplandır",
+      "current_price": "Güncel fiyat",
+      "market_value": "Piyasa değeri",
+      "units_held": "Tutulan birimler",
+      "unrealized_pnl": "Gerçekleşmemiş kar ve zarar",
+      "your_position": "Konumunuz",
+      "positions": "Pozisyonlar",
+      "no_positions": "Bu teminatı henüz hiçbir hesabınızda tutmuyorsunuz.",
+      "by_security": "Güvenlik tarafından",
+      "by_type": "Türe göre",
+      "by_account": "Hesaba göre",
+      "by_classification": "Sınıflandırmaya göre",
+      "no_trades": "Henüz alım-satım işlemi bulunmamaktadır.",
+      "no_price_history": "Henüz fiyat geçmişi yok. Takibe başlamak için bir fiyat ekleyin.",
+      "TABS": {
+        "about": "Hakkında",
+        "positions": "Pozisyonlar",
+        "trades": "İşlemler",
+        "price_history": "Fiyatlar"
+      },
+      "PRICE_HISTORY": {
+        "add": "Fiyat ekle",
+        "edit": "Fiyatı düzenle",
+        "price": "Fiyat"
+      },
+      "IMPORT": {
+        "title": "İthalat fiyatları",
+        "description": "Bir .csv dosyası seçin veya tarih, fiyat olarak her satıra bir fiyat yapıştırın. İnternet kullanılmamaktadır.",
+        "review_description": "İthal etmeden önce aşağıdaki fiyatları inceleyin.",
+        "field_label": "CSV verileri",
+        "button": "İthalat fiyatları",
+        "rows_detected": "{{n}} geçerli satır algılandı",
+        "overwrite_warning": "Bu tarihlerin {{n}} tanesinde zaten kayıtlı bir fiyat var ve bunların üzerine yazılacak.",
+        "success": "{{n}} fiyatlar içe aktarıldı"
+      },
+      "FORM": {
+        "tab_general": "General",
+        "tab_classification": "sınıflandırma",
+        "notes": "Notlar"
+      },
+      "CLASSIFICATION": {
+        "title": "sınıflandırma",
+        "edit_title": "Sınıflandırmayı düzenle",
+        "empty": "Henüz sınıflandırılmadı. Bu güvenliği portföy kompozisyonunuzda görmek için varlık sınıfı, bölge, sektör veya risk ekleyin.",
+        "none": "Hiçbiri",
+        "add_category": "Eklemek",
+        "select_category": "Bir kategori seçin",
+        "search_categories": "Kategorileri ara...",
+        "unclassified": "sınıflandırılmamış",
+        "weight_over_100": "\"{{taxonomy}}\" ağırlıklarının toplamı %100'den fazladır."
+      },
+      "delete": "Güvenliği sil",
+      "delete_confirmation": "Bu güvenliği ortadan kaldıracaktır. Bu eylem geri alınamaz.",
+      "delete_success": "Güvenlik başarıyla silindi",
+      "in_use_error": "Bu menkul kıymetin hâlâ kendisine bağlı holdingleri veya alım satımları var. Silmeden önce bunları kaldırın."
+    },
+    "show_value_variation": "Yüzde değişimini göster"
   },
   "TARGET_TIMELINE_STATUSES": {
     "active": "Aktif",

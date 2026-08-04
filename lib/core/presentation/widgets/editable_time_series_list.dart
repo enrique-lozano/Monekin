@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
-import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
+/// A vertical list of dated values (prices, valuations, exchange rates...) where
+/// each row can be expanded to edit or delete that point. Items must be sorted
+/// newest-first (the previous/older value is read from `items[index + 1]` to
+/// compute the variation shown on each tile).
 class EditableTimeSeriesList<T> extends StatefulWidget {
   const EditableTimeSeriesList({
     super.key,
@@ -19,7 +21,6 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
     required this.onDelete,
     this.scrollController,
     required this.valueExtractor,
-    this.transactions,
     required this.currency,
     this.physics,
   });
@@ -33,8 +34,6 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
   /// Extracts the currencyValue to be displayed in each tile. If a null is returned,
   /// the value will be inherited from the previous one
   final double Function(T) valueExtractor;
-
-  final List<MoneyTransaction>? transactions;
 
   final CurrencyInDB currency;
 
@@ -59,20 +58,6 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
 class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
   Set<DateTime> _expandedTiles = {};
 
-  Widget buildListOfTransactions(List<MoneyTransaction> transactions) {
-    return ListView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      children: transactions.map((transaction) {
-        return TransactionListTile(
-          transaction: transaction,
-          heroTag: 'EDITABLE_TIMESERIES__${transaction.id}',
-          showDateTime: false,
-        );
-      }).toList(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -93,31 +78,11 @@ class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
           widget.dateExtractor(item).justDay(),
         );
 
-        final transactionsInDate =
-            widget.transactions
-                ?.where(
-                  (t) =>
-                      DateUtils.isSameDay(widget.dateExtractor(item), t.date),
-                )
-                .toList() ??
-            [];
-
-        double? itemValue = widget.valueExtractor(item);
+        double itemValue = widget.valueExtractor(item);
 
         return ExpansionTile(
-          title: Row(
-            spacing: 8,
-            children: [
-              Text(
-                getMMMdDateFormatBasedOnYear(widget.dateExtractor(item)).text,
-              ),
-              if (transactionsInDate.isNotEmpty)
-                Icon(
-                  Icons.notes,
-                  color: AppColors.of(context).textHint,
-                  size: 16,
-                ),
-            ],
+          title: Text(
+            getMMMdDateFormatBasedOnYear(widget.dateExtractor(item)).text,
           ),
           leading: AnimatedRotation(
             turns: isExpanded ? 0.5 : 0,
@@ -165,14 +130,6 @@ class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
           },
           childrenPadding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           children: [
-            if (transactionsInDate.isNotEmpty) ...[
-              CardWithHeader(
-                title: t.transaction.display(n: 10),
-                body: buildListOfTransactions(transactionsInDate),
-              ),
-              const SizedBox(height: 12),
-            ],
-
             Row(
               spacing: 8,
               children: [
@@ -193,9 +150,7 @@ class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
                         context,
                       ).colorScheme.errorContainer,
                     ),
-                    onPressed: transactionsInDate.isNotEmpty
-                        ? null
-                        : () => widget.onDelete(item),
+                    onPressed: () => widget.onDelete(item),
                   ),
                 ),
               ],
@@ -217,6 +172,116 @@ class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
 
         return const Divider();
       },
+    );
+  }
+}
+
+/// A [CardWithHeader] wrapping an [EditableTimeSeriesList], with a built-in
+/// empty state and client-side pagination ("See more (N)"). Used across the
+/// asset, security and exchange-rate detail pages so a long history renders a
+/// handful of rows up front instead of thousands of tiles.
+///
+/// [items] must be sorted newest-first, like [EditableTimeSeriesList].
+class EditableTimeSeriesCard<T> extends StatefulWidget {
+  const EditableTimeSeriesCard({
+    super.key,
+    required this.title,
+    this.titleBuilder,
+    this.headerAction,
+    required this.emptyDescription,
+    this.emptyTitle,
+    required this.items,
+    required this.dateExtractor,
+    required this.valueExtractor,
+    required this.currency,
+    required this.onEdit,
+    required this.onDelete,
+    this.initialCount = 10,
+    this.pageSize = 10,
+  });
+
+  final String title;
+  final Widget Function(String title)? titleBuilder;
+  final Widget? headerAction;
+
+  final String emptyDescription;
+  final String? emptyTitle;
+
+  final List<T> items;
+  final DateTime Function(T) dateExtractor;
+  final double Function(T) valueExtractor;
+  final CurrencyInDB currency;
+
+  final void Function(T item) onEdit;
+  final void Function(T item) onDelete;
+
+  /// How many rows to show before the first "See more" tap.
+  final int initialCount;
+
+  /// How many extra rows each "See more" tap reveals.
+  final int pageSize;
+
+  @override
+  State<EditableTimeSeriesCard<T>> createState() =>
+      _EditableTimeSeriesCardState<T>();
+}
+
+class _EditableTimeSeriesCardState<T> extends State<EditableTimeSeriesCard<T>> {
+  late int _visible = widget.initialCount;
+
+  @override
+  void didUpdateWidget(covariant EditableTimeSeriesCard<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Keep the revealed count sane when the underlying list changes (e.g. after
+    // adding/deleting a point) without collapsing back to the first page.
+    final maxVisible = widget.items.length.clamp(widget.initialCount, 1 << 30);
+    if (_visible > maxVisible) _visible = maxVisible;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
+    if (widget.items.isEmpty) {
+      return CardWithHeader(
+        title: widget.title,
+        titleBuilder: widget.titleBuilder,
+        headerAction: widget.headerAction,
+        body: NoResults(
+          title: widget.emptyTitle ?? t.general.empty_warn,
+          description: widget.emptyDescription,
+          showIllustration: false,
+        ),
+      );
+    }
+
+    final total = widget.items.length;
+    final visible = _visible.clamp(0, total);
+    final remaining = total - visible;
+
+    return CardWithHeader(
+      title: widget.title,
+      titleBuilder: widget.titleBuilder,
+      headerAction: widget.headerAction,
+      bodyPadding: const EdgeInsets.symmetric(vertical: 4),
+      body: EditableTimeSeriesList<T>(
+        items: widget.items.sublist(0, visible),
+        dateExtractor: widget.dateExtractor,
+        valueExtractor: widget.valueExtractor,
+        currency: widget.currency,
+        onEdit: widget.onEdit,
+        onDelete: widget.onDelete,
+        physics: const NeverScrollableScrollPhysics(),
+      ),
+      footer: remaining > 0
+          ? CardFooterWithSingleButton(
+              text: t.ui_actions.see_more_count(n: remaining),
+              icon: const Icon(Icons.keyboard_arrow_down_rounded),
+              onButtonClick: () => setState(
+                () => _visible = (_visible + widget.pageSize).clamp(0, total),
+              ),
+            )
+          : null,
     );
   }
 }

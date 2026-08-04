@@ -2818,6 +2818,15 @@ class Securities extends Table with TableInfo<Securities, SecurityInDB> {
     requiredDuringInsert: false,
     $customConstraints: '',
   );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
   static const VerificationMeta _currentPriceMeta = const VerificationMeta(
     'currentPrice',
   );
@@ -2865,6 +2874,7 @@ class Securities extends Table with TableInfo<Securities, SecurityInDB> {
     type,
     currencyId,
     ticker,
+    notes,
     currentPrice,
     priceDate,
     iconId,
@@ -2907,6 +2917,12 @@ class Securities extends Table with TableInfo<Securities, SecurityInDB> {
       context.handle(
         _tickerMeta,
         ticker.isAcceptableOrUnknown(data['ticker']!, _tickerMeta),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
       );
     }
     if (data.containsKey('currentPrice')) {
@@ -2967,6 +2983,10 @@ class Securities extends Table with TableInfo<Securities, SecurityInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}ticker'],
       ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
       currentPrice: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}currentPrice'],
@@ -3012,6 +3032,9 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
   /// Optional ticker/symbol (e.g. AAPL, VWCE, BTC)
   final String? ticker;
 
+  /// Optional free-text notes/description about the security
+  final String? notes;
+
   /// Latest known price per unit, updated manually (offline-first)
   final double? currentPrice;
 
@@ -3025,6 +3048,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
     required this.type,
     required this.currencyId,
     this.ticker,
+    this.notes,
     this.currentPrice,
     this.priceDate,
     this.iconId,
@@ -3041,6 +3065,9 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
     map['currencyId'] = Variable<String>(currencyId);
     if (!nullToAbsent || ticker != null) {
       map['ticker'] = Variable<String>(ticker);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
     }
     if (!nullToAbsent || currentPrice != null) {
       map['currentPrice'] = Variable<double>(currentPrice);
@@ -3066,6 +3093,9 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
       ticker: ticker == null && nullToAbsent
           ? const Value.absent()
           : Value(ticker),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
       currentPrice: currentPrice == null && nullToAbsent
           ? const Value.absent()
           : Value(currentPrice),
@@ -3094,6 +3124,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
       ),
       currencyId: serializer.fromJson<String>(json['currencyId']),
       ticker: serializer.fromJson<String?>(json['ticker']),
+      notes: serializer.fromJson<String?>(json['notes']),
       currentPrice: serializer.fromJson<double?>(json['currentPrice']),
       priceDate: serializer.fromJson<DateTime?>(json['priceDate']),
       iconId: serializer.fromJson<String?>(json['iconId']),
@@ -3109,6 +3140,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
       'type': serializer.toJson<String>(Securities.$convertertype.toJson(type)),
       'currencyId': serializer.toJson<String>(currencyId),
       'ticker': serializer.toJson<String?>(ticker),
+      'notes': serializer.toJson<String?>(notes),
       'currentPrice': serializer.toJson<double?>(currentPrice),
       'priceDate': serializer.toJson<DateTime?>(priceDate),
       'iconId': serializer.toJson<String?>(iconId),
@@ -3122,6 +3154,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
     SecurityType? type,
     String? currencyId,
     Value<String?> ticker = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
     Value<double?> currentPrice = const Value.absent(),
     Value<DateTime?> priceDate = const Value.absent(),
     Value<String?> iconId = const Value.absent(),
@@ -3132,6 +3165,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
     type: type ?? this.type,
     currencyId: currencyId ?? this.currencyId,
     ticker: ticker.present ? ticker.value : this.ticker,
+    notes: notes.present ? notes.value : this.notes,
     currentPrice: currentPrice.present ? currentPrice.value : this.currentPrice,
     priceDate: priceDate.present ? priceDate.value : this.priceDate,
     iconId: iconId.present ? iconId.value : this.iconId,
@@ -3146,6 +3180,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
           ? data.currencyId.value
           : this.currencyId,
       ticker: data.ticker.present ? data.ticker.value : this.ticker,
+      notes: data.notes.present ? data.notes.value : this.notes,
       currentPrice: data.currentPrice.present
           ? data.currentPrice.value
           : this.currentPrice,
@@ -3163,6 +3198,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
           ..write('type: $type, ')
           ..write('currencyId: $currencyId, ')
           ..write('ticker: $ticker, ')
+          ..write('notes: $notes, ')
           ..write('currentPrice: $currentPrice, ')
           ..write('priceDate: $priceDate, ')
           ..write('iconId: $iconId, ')
@@ -3178,6 +3214,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
     type,
     currencyId,
     ticker,
+    notes,
     currentPrice,
     priceDate,
     iconId,
@@ -3192,6 +3229,7 @@ class SecurityInDB extends DataClass implements Insertable<SecurityInDB> {
           other.type == this.type &&
           other.currencyId == this.currencyId &&
           other.ticker == this.ticker &&
+          other.notes == this.notes &&
           other.currentPrice == this.currentPrice &&
           other.priceDate == this.priceDate &&
           other.iconId == this.iconId &&
@@ -3204,6 +3242,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
   final Value<SecurityType> type;
   final Value<String> currencyId;
   final Value<String?> ticker;
+  final Value<String?> notes;
   final Value<double?> currentPrice;
   final Value<DateTime?> priceDate;
   final Value<String?> iconId;
@@ -3215,6 +3254,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
     this.type = const Value.absent(),
     this.currencyId = const Value.absent(),
     this.ticker = const Value.absent(),
+    this.notes = const Value.absent(),
     this.currentPrice = const Value.absent(),
     this.priceDate = const Value.absent(),
     this.iconId = const Value.absent(),
@@ -3227,6 +3267,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
     this.type = const Value.absent(),
     required String currencyId,
     this.ticker = const Value.absent(),
+    this.notes = const Value.absent(),
     this.currentPrice = const Value.absent(),
     this.priceDate = const Value.absent(),
     this.iconId = const Value.absent(),
@@ -3241,6 +3282,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
     Expression<String>? type,
     Expression<String>? currencyId,
     Expression<String>? ticker,
+    Expression<String>? notes,
     Expression<double>? currentPrice,
     Expression<DateTime>? priceDate,
     Expression<String>? iconId,
@@ -3253,6 +3295,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
       if (type != null) 'type': type,
       if (currencyId != null) 'currencyId': currencyId,
       if (ticker != null) 'ticker': ticker,
+      if (notes != null) 'notes': notes,
       if (currentPrice != null) 'currentPrice': currentPrice,
       if (priceDate != null) 'priceDate': priceDate,
       if (iconId != null) 'iconId': iconId,
@@ -3267,6 +3310,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
     Value<SecurityType>? type,
     Value<String>? currencyId,
     Value<String?>? ticker,
+    Value<String?>? notes,
     Value<double?>? currentPrice,
     Value<DateTime?>? priceDate,
     Value<String?>? iconId,
@@ -3279,6 +3323,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
       type: type ?? this.type,
       currencyId: currencyId ?? this.currencyId,
       ticker: ticker ?? this.ticker,
+      notes: notes ?? this.notes,
       currentPrice: currentPrice ?? this.currentPrice,
       priceDate: priceDate ?? this.priceDate,
       iconId: iconId ?? this.iconId,
@@ -3307,6 +3352,9 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
     if (ticker.present) {
       map['ticker'] = Variable<String>(ticker.value);
     }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
     if (currentPrice.present) {
       map['currentPrice'] = Variable<double>(currentPrice.value);
     }
@@ -3333,6 +3381,7 @@ class SecuritiesCompanion extends UpdateCompanion<SecurityInDB> {
           ..write('type: $type, ')
           ..write('currencyId: $currencyId, ')
           ..write('ticker: $ticker, ')
+          ..write('notes: $notes, ')
           ..write('currentPrice: $currentPrice, ')
           ..write('priceDate: $priceDate, ')
           ..write('iconId: $iconId, ')
@@ -15758,6 +15807,7 @@ typedef $SecuritiesCreateCompanionBuilder =
       Value<SecurityType> type,
       required String currencyId,
       Value<String?> ticker,
+      Value<String?> notes,
       Value<double?> currentPrice,
       Value<DateTime?> priceDate,
       Value<String?> iconId,
@@ -15771,6 +15821,7 @@ typedef $SecuritiesUpdateCompanionBuilder =
       Value<SecurityType> type,
       Value<String> currencyId,
       Value<String?> ticker,
+      Value<String?> notes,
       Value<double?> currentPrice,
       Value<DateTime?> priceDate,
       Value<String?> iconId,
@@ -15931,6 +15982,11 @@ class $SecuritiesFilterComposer extends Composer<_$AppDB, Securities> {
 
   ColumnFilters<String> get ticker => $composableBuilder(
     column: $table.ticker,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -16132,6 +16188,11 @@ class $SecuritiesOrderingComposer extends Composer<_$AppDB, Securities> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get currentPrice => $composableBuilder(
     column: $table.currentPrice,
     builder: (column) => ColumnOrderings(column),
@@ -16195,6 +16256,9 @@ class $SecuritiesAnnotationComposer extends Composer<_$AppDB, Securities> {
 
   GeneratedColumn<String> get ticker =>
       $composableBuilder(column: $table.ticker, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
 
   GeneratedColumn<double> get currentPrice => $composableBuilder(
     column: $table.currentPrice,
@@ -16400,6 +16464,7 @@ class $SecuritiesTableManager
                 Value<SecurityType> type = const Value.absent(),
                 Value<String> currencyId = const Value.absent(),
                 Value<String?> ticker = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
                 Value<double?> currentPrice = const Value.absent(),
                 Value<DateTime?> priceDate = const Value.absent(),
                 Value<String?> iconId = const Value.absent(),
@@ -16411,6 +16476,7 @@ class $SecuritiesTableManager
                 type: type,
                 currencyId: currencyId,
                 ticker: ticker,
+                notes: notes,
                 currentPrice: currentPrice,
                 priceDate: priceDate,
                 iconId: iconId,
@@ -16424,6 +16490,7 @@ class $SecuritiesTableManager
                 Value<SecurityType> type = const Value.absent(),
                 required String currencyId,
                 Value<String?> ticker = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
                 Value<double?> currentPrice = const Value.absent(),
                 Value<DateTime?> priceDate = const Value.absent(),
                 Value<String?> iconId = const Value.absent(),
@@ -16435,6 +16502,7 @@ class $SecuritiesTableManager
                 type: type,
                 currencyId: currencyId,
                 ticker: ticker,
+                notes: notes,
                 currentPrice: currentPrice,
                 priceDate: priceDate,
                 iconId: iconId,

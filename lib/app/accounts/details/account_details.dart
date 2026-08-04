@@ -774,11 +774,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         final costColumn = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              t.account.total_cost.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.outline,
-              ),
+            _StatLabel(
+              label: t.account.total_cost.toUpperCase(),
+              tooltip: t.account.total_cost_help,
             ),
             const SizedBox(height: 2),
             DefaultTextStyle.merge(
@@ -798,11 +796,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         final pnlColumn = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              t.assets.securities.unrealized_pnl.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.outline,
-              ),
+            _StatLabel(
+              label: t.assets.securities.unrealized_pnl.toUpperCase(),
+              tooltip: t.account.unrealized_pnl_help,
             ),
             const SizedBox(height: 2),
             TrendingValue(
@@ -1193,6 +1189,41 @@ class _LegendDot extends StatelessWidget {
       width: 8,
       height: 8,
       decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+    );
+  }
+}
+
+/// A small stat title with an info icon that reveals [tooltip] on tap/hover.
+class _StatLabel extends StatelessWidget {
+  const _StatLabel({required this.label, required this.tooltip});
+
+  final String label;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = theme.colorScheme.outline;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.labelSmall?.copyWith(color: color),
+          ),
+        ),
+        const SizedBox(width: 3),
+        Tooltip(
+          message: tooltip,
+          triggerMode: TooltipTriggerMode.tap,
+          showDuration: const Duration(seconds: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 24),
+          child: Icon(Icons.info_outline_rounded, size: 13, color: color),
+        ),
+      ],
     );
   }
 }
