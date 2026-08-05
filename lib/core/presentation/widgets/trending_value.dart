@@ -64,9 +64,10 @@ class TrendingValue extends StatelessWidget {
   /// Ignored when only one data type is shown.
   final String separator;
 
-  /// Currently unused (kept for backwards API compatibility). To control
-  /// the number of decimals shown, use [showValueDecimals] /
-  /// [showPercentageDecimals] instead.
+  /// How many decimals [value] is shown with when [showValueDecimals] is set
+  /// and no [valueCurrency] is given (money always follows the currency's own
+  /// precision). Useful for figures that need more precision than money, such
+  /// as an exchange rate.
   final int decimalDigits;
 
   final double fontSize;
@@ -210,6 +211,7 @@ class TrendingValue extends StatelessWidget {
                   amountToConvert: valueToDisplay,
                   compactView: compactValue,
                   showDecimals: showValueDecimals,
+                  decimalDigits: decimalDigits,
                   integerStyle: TextStyle(
                     fontSize: fontSize,
                     fontWeight: fontWeight,

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A quick date-range preset that maps a short label to a [DatePeriod].
+///
+/// Every preset is a rolling window ([PeriodType.lastDays]) or the whole
+/// history, never a calendar cycle, so the same label always means the same
+/// span no matter what day of the month/year it is picked on.
 class DateRangePreset {
   const DateRangePreset({
     required this.label,
@@ -33,7 +37,22 @@ class DateRangePreset {
       PeriodType.dateRange => false,
     };
   }
+
+  /// Whether this preset's window fits in the history available, given the
+  /// [oldestDate] with data. Presets reaching further back are pointless,
+  /// since they would render exactly like the all-time one.
+  bool isAvailableFor(DateTime oldestDate) {
+    final startDate = DatePeriodState(datePeriod: period).startDate;
+
+    if (startDate == null) return true;
+
+    return !oldestDate.isAfter(startDate);
+  }
 }
+
+/// The period every screen showing [DateRangeChips] starts on, so that a chip
+/// is always selected on a fresh start instead of falling back to "custom".
+const defaultDatePeriod = DatePeriod.lastDays(30);
 
 List<DateRangePreset> _presets(BuildContext context) {
   final t = Translations.of(context);
@@ -41,11 +60,11 @@ List<DateRangePreset> _presets(BuildContext context) {
   return [
     DateRangePreset(
       label: t.home.date_ranges.week,
-      period: const DatePeriod.withPeriods(Periodicity.week),
+      period: const DatePeriod.lastDays(7),
     ),
     DateRangePreset(
       label: t.home.date_ranges.month,
-      period: const DatePeriod.withPeriods(Periodicity.month),
+      period: const DatePeriod.lastDays(30),
     ),
     DateRangePreset(
       label: t.home.date_ranges.quarter,
@@ -58,13 +77,24 @@ List<DateRangePreset> _presets(BuildContext context) {
     ),
     DateRangePreset(
       label: t.home.date_ranges.year,
-      period: const DatePeriod.withPeriods(Periodicity.year),
+      period: const DatePeriod.lastDays(365),
     ),
     DateRangePreset(
       label: t.home.date_ranges.max,
       period: const DatePeriod.allTime(),
     ),
   ];
+}
+
+/// A short label for [state], preferring the label of the quick chip it
+/// corresponds to so that headers echo the chip the user just tapped, and
+/// falling back to the full range text for custom periods.
+String datePeriodShortLabel(BuildContext context, DatePeriodState state) {
+  for (final preset in _presets(context)) {
+    if (preset.matches(state.datePeriod)) return preset.label;
+  }
+
+  return state.getText(context, showLongMonth: false);
 }
 
 /// A horizontal, scrollable row of quick date-range chips plus a dashed
@@ -75,6 +105,7 @@ class DateRangeChips extends StatelessWidget {
     required this.currentPeriod,
     required this.onPresetSelected,
     required this.onCustomTap,
+    this.oldestDate,
     this.foregroundColor,
     this.wrap = false,
     this.shrink = false,
@@ -84,6 +115,10 @@ class DateRangeChips extends StatelessWidget {
   final DatePeriod currentPeriod;
   final void Function(DatePeriod period) onPresetSelected;
   final VoidCallback onCustomTap;
+
+  /// Oldest date with data. When set, presets reaching further back than it
+  /// are shown disabled, since they would all render the same chart.
+  final DateTime? oldestDate;
 
   /// Base color for labels/borders. Defaults to the theme's onSurface.
   final Color? foregroundColor;
@@ -134,6 +169,7 @@ class DateRangeChips extends StatelessWidget {
             _Chip(
               label: preset.label,
               selected: preset.matches(currentPeriod),
+              enabled: oldestDate == null || preset.isAvailableFor(oldestDate!),
               baseColor: baseColor,
               accent: accent,
               onTap: () {
@@ -311,12 +347,14 @@ class _Chip extends StatelessWidget {
     required this.baseColor,
     required this.accent,
     required this.onTap,
+    this.enabled = true,
     this.icon,
     this.compact = false,
   });
 
   final String label;
   final bool selected;
+  final bool enabled;
   final Color baseColor;
   final Color accent;
   final IconData? icon;
@@ -332,7 +370,9 @@ class _Chip extends StatelessWidget {
         ? accent.withOpacity(0.14)
         : Colors.transparent;
 
-    final Color fgColor = selected ? accent : baseColor.withOpacity(0.5);
+    final Color fgColor = selected
+        ? accent
+        : baseColor.withOpacity(enabled ? 0.5 : 0.22);
 
     final showLabel = !compact || icon == null;
 
@@ -341,7 +381,7 @@ class _Chip extends StatelessWidget {
       borderRadius: BorderRadius.circular(999),
       child: InkWell(
         borderRadius: BorderRadius.circular(999),
-        onTap: onTap,
+        onTap: enabled ? onTap : null,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           padding: showLabel

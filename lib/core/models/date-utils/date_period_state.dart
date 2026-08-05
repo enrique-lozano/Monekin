@@ -127,6 +127,28 @@ class DatePeriodState {
     }
   }
 
+  /// Returns the items of [data] whose date falls inside this period, sorted
+  /// chronologically. Null bounds are unbounded, so an all-time period keeps
+  /// every item.
+  List<T> filterTimeSeries<T>(
+    List<T> data, {
+    required DateTime Function(T item) dateExtractor,
+  }) {
+    final (from, to) = getDates();
+
+    final sorted = List<T>.from(data)
+      ..sort((a, b) => dateExtractor(a).compareTo(dateExtractor(b)));
+
+    return sorted.where((item) {
+      final date = dateExtractor(item);
+
+      if (from != null && date.isBefore(from)) return false;
+      if (to != null && date.isAfter(to)) return false;
+
+      return true;
+    }).toList();
+  }
+
   String getText(BuildContext context, {bool showLongMonth = true}) {
     final t = Translations.of(context);
 

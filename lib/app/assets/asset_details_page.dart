@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/assets/asset_form.dart';
-import 'package:monekin/app/assets/widgets/asset_performance_bottom_sheet.dart';
 import 'package:monekin/app/assets/widgets/asset_valuation_contribution_chart.dart';
 import 'package:monekin/app/assets/widgets/valuation_form_dialog.dart';
 import 'package:monekin/app/debts/components/transaction_selector.dart';
@@ -18,15 +17,17 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/asset/asset.dart';
+import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
@@ -41,6 +42,14 @@ import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+
+/// Clamps extreme fractions so [TrendingValue] stays readable in the UI.
+double _clampTrendFraction(double fraction) {
+  if (fraction.isNaN || !fraction.isFinite) return 0;
+  if (fraction > 10) return 10;
+  if (fraction < -10) return -10;
+  return fraction;
+}
 
 class AssetDetailsPage extends StatefulWidget {
   const AssetDetailsPage({
@@ -60,7 +69,10 @@ enum _DetailTab { about, transactions, history }
 
 class _AssetDetailsPageState extends State<AssetDetailsPage> {
   ValuationInDB? _hoveredValuation;
-  ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
+  double? _hoveredNetContribution;
+  DatePeriodState _dateRange = const DatePeriodState(
+    datePeriod: DatePeriod.allTime(),
+  );
   _DetailTab _selectedTab = _DetailTab.history;
 
   final ScrollController _scrollController = ScrollController();
@@ -95,18 +107,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   }
 
   List<ValuationInDB> _buildFilteredChartData(List<ValuationInDB> valuations) {
-    final sortedValuations = _valuationsWithInitial(valuations);
-
-    final oldestDate = sortedValuations.first.date;
-    final periodToUse =
-        _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
-        ? _selectedChartPeriod
-        : ChartTimePeriod.max;
-
-    return filterTimeSeriesByPeriod(
-      data: sortedValuations,
+    return _dateRange.filterTimeSeries(
+      _valuationsWithInitial(valuations),
       dateExtractor: (valuation) => valuation.date,
-      period: periodToUse,
     );
   }
 
@@ -165,25 +168,35 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         .toList();
   }
 
-  ChartTimePeriod _effectiveChartPeriod(DateTime oldestDate) {
-    return _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
-        ? _selectedChartPeriod
-        : ChartTimePeriod.max;
+  DateTimeRange _chartTimeRange(DateTime oldestDate) {
+    final oldestDay = oldestDate.justDay();
+    final periodStart = (_dateRange.startDate ?? oldestDay).justDay();
+    final periodEnd = (_dateRange.endDate ?? DateTime.now()).justDay();
+
+    // The axis never starts before the first data point, nor ends before it
+    // starts: a custom range fully older than the asset would do just that.
+    final start = periodStart.isBefore(oldestDay) ? oldestDay : periodStart;
+    final end = periodEnd.isBefore(start) ? start : periodEnd;
+
+    return DateTimeRange(start: start, end: end.add(const Duration(days: 1)));
   }
 
-  DateTimeRange? _chartTimeRange(DateTime oldestDate) {
-    final now = DateTime.now();
-    final period = _effectiveChartPeriod(oldestDate);
-    final periodStart = period.startDateFrom(now);
-    final start = (periodStart ?? oldestDate).justDay();
-    final effectiveStart = start.isBefore(oldestDate.justDay())
-        ? oldestDate.justDay()
-        : start;
+  void _onPeriodChanged(DatePeriod period) {
+    setState(() {
+      _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
+      _hoveredValuation = null;
+      _hoveredNetContribution = null;
+    });
+  }
 
-    return DateTimeRange(
-      start: effectiveStart,
-      end: now.justDay().add(const Duration(days: 1)),
-    );
+  void _openCustomPeriodModal() {
+    openDatePeriodModal(
+      context,
+      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
+    ).then((value) {
+      if (value == null) return;
+      _onPeriodChanged(value);
+    });
   }
 
   double _netContributionNow({
@@ -612,6 +625,24 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
   }
 
+  /// The endpoint the performance figures are measured against: the hovered
+  /// chart point while the user inspects the chart, "now" otherwise.
+  ({double value, double netContribution}) _performanceEndpoint({
+    required double currentValue,
+    required double netContributionNow,
+  }) {
+    final hovered = _hoveredValuation;
+
+    if (hovered == null) {
+      return (value: currentValue, netContribution: netContributionNow);
+    }
+
+    return (
+      value: hovered.value,
+      netContribution: _hoveredNetContribution ?? netContributionNow,
+    );
+  }
+
   Widget _buildTrendSection(
     BuildContext context, {
     required List<ValuationInDB>? valuations,
@@ -628,97 +659,149 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       );
     }
 
-    final allSorted = _valuationsWithInitial(valuations);
-    final oldestDate = allSorted.first.date;
-    final effectivePeriod = _effectiveChartPeriod(oldestDate);
+    final points = _buildChartPoints(
+      valuations: valuations,
+      transactions: transactions,
+    );
+    final endpoint = _performanceEndpoint(
+      currentValue: currentValue,
+      netContributionNow: _netContributionNow(
+        asset: resolvedAsset,
+        transactions: transactions,
+      ),
+    );
+    final rangeMetrics = _assetRangePerformanceMetrics(
+      points: points.isEmpty ? null : points,
+      currentValue: endpoint.value,
+      netContributionNow: endpoint.netContribution,
+    );
+
+    if (rangeMetrics == null) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 2),
+      child: TrendingValue(
+        percentage: _clampTrendFraction(rangeMetrics.performanceReturnFraction),
+        value: rangeMetrics.performanceReturnMoney,
+        valueCurrency: resolvedAsset.currency,
+        dataTypes: const [
+          TrendingValueDataType.value,
+          TrendingValueDataType.percentage,
+        ],
+        fontWeight: FontWeight.w600,
+      ),
+    );
+  }
+
+  /// Performance figures for the visible chart range, shown inline as a card
+  /// (mirroring the "your position" card of the securities page) instead of
+  /// hidden behind a bottom sheet.
+  Widget _buildPerformanceCard(
+    BuildContext context,
+    List<ValuationInDB>? valuations,
+    List<MoneyTransaction>? transactions,
+    Asset? asset,
+  ) {
+    final t = Translations.of(context);
+    final resolvedAsset = asset ?? widget.asset;
+
+    if (valuations == null || transactions == null) {
+      return const SizedBox.shrink();
+    }
 
     final points = _buildChartPoints(
       valuations: valuations,
       transactions: transactions,
     );
-    final netNow = _netContributionNow(
-      asset: resolvedAsset,
-      transactions: transactions,
-    );
-    final rangeMetrics = _assetRangePerformanceMetrics(
-      points: points.isEmpty ? null : points,
-      currentValue: currentValue,
-      netContributionNow: netNow,
-    );
-    final returnFraction = rangeMetrics == null
-        ? 0.0
-        : clampAssetPerformanceTrendFraction(
-            rangeMetrics.performanceReturnFraction,
-          );
-    final rangeSnapshot = rangeMetrics;
+    if (points.isEmpty) return const SizedBox.shrink();
 
-    final trendValue = Builder(
-      builder: (context) {
-        final pr = rangeSnapshot;
+    return StreamBuilder<double>(
+      stream: AssetValuationService.instance.getCurrentAssetValue(
+        resolvedAsset,
+      ),
+      builder: (context, valueSnapshot) {
+        final endpoint = _performanceEndpoint(
+          currentValue: valueSnapshot.data ?? resolvedAsset.initialValue,
+          netContributionNow: _netContributionNow(
+            asset: resolvedAsset,
+            transactions: transactions,
+          ),
+        );
+        final metrics = _assetRangePerformanceMetrics(
+          points: points,
+          currentValue: endpoint.value,
+          netContributionNow: endpoint.netContribution,
+        );
 
-        return Semantics(
-          button: true,
-          label: Translations.of(
-            context,
-          ).assets.details.performance_sheet_title,
-          child: InkWell(
-            onTap: points.isEmpty || pr == null
-                ? null
-                : () {
-                    if (!mounted) return;
+        if (metrics == null) return const SizedBox.shrink();
 
-                    showAssetPerformanceBottomSheet(
-                      context: context,
-                      asset: resolvedAsset,
-                      effectivePeriod: effectivePeriod,
-                      rangeStartDate: pr.rangeStartDate,
-                      performanceReturnMoney: pr.performanceReturnMoney,
-                      performanceReturnFraction: pr.performanceReturnFraction,
-                      valueDiffMoney: pr.valueDiffMoney,
-                      valueDiffFraction: pr.valueDiffFraction,
-                      netInvestedNow: netNow,
-                    );
-                  },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.ideographic,
-              spacing: 8,
-              children: [
-                TrendingValue(
-                  percentage: returnFraction,
-                  fontWeight: FontWeight.w600,
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 2,
-                  children: [
-                    Text(
-                      _selectedChartPeriod.localizedLabel(context),
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: AppColors.of(context).textBody,
-                      size: 16,
-                    ),
+        return CardWithHeader(
+          title: t.assets.details.performance_title,
+          subtitle:
+              '${datePeriodShortLabel(context, _dateRange)} · '
+              '${getMMMdDateFormatBasedOnYear(metrics.rangeStartDate).text}',
+          body: LabelValueInfoList(
+            items: [
+              LabelValueInfoListItem(
+                label: t.assets.details.performance_return,
+                value: TrendingValue(
+                  percentage: _clampTrendFraction(
+                    metrics.performanceReturnFraction,
+                  ),
+                  value: metrics.performanceReturnMoney,
+                  valueCurrency: resolvedAsset.currency,
+                  dataTypes: const [
+                    TrendingValueDataType.value,
+                    TrendingValueDataType.percentage,
                   ],
                 ),
-              ],
-            ),
+                trailing: _infoTooltip(
+                  context,
+                  t.assets.details.performance_return_help,
+                ),
+              ),
+              LabelValueInfoListItem(
+                label: t.assets.details.performance_invested_value,
+                value: CurrencyDisplayer(
+                  amountToConvert: endpoint.netContribution,
+                  currency: resolvedAsset.currency,
+                ),
+                trailing: _infoTooltip(
+                  context,
+                  t.assets.details.performance_invested_value_caption,
+                ),
+              ),
+              LabelValueInfoListItem(
+                label: t.assets.details.performance_value_diff,
+                value: TrendingValue(
+                  percentage: _clampTrendFraction(metrics.valueDiffFraction),
+                  value: metrics.valueDiffMoney,
+                  valueCurrency: resolvedAsset.currency,
+                  dataTypes: const [
+                    TrendingValueDataType.value,
+                    TrendingValueDataType.percentage,
+                  ],
+                ),
+                trailing: _infoTooltip(
+                  context,
+                  t.assets.details.performance_value_diff_caption,
+                ),
+              ),
+            ],
           ),
         );
       },
     );
+  }
 
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
-      child: _hoveredValuation == null
-          ? trendValue
-          : Text(
-              getMMMdDateFormatBasedOnYear(_hoveredValuation!.date).text,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+  Widget _infoTooltip(BuildContext context, String message) {
+    return Tooltip(
+      constraints: BoxConstraints(
+        maxWidth: math.min(MediaQuery.widthOf(context) * 0.95, 250),
+      ),
+      triggerMode: TooltipTriggerMode.tap,
+      message: message,
+      child: const Icon(Icons.info_outline_rounded, size: 18),
     );
   }
 
@@ -768,28 +851,19 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                           value: point.valuation,
                           assetId: widget.asset.id,
                         );
+                  _hoveredNetContribution = point?.netContribution;
                 });
               },
             ),
           ),
         // Period chips below the chart, centered (matches the securities page).
         if (allChartData != null)
-          Center(
-            child: ChartTimePeriodSelector(
-              selectedPeriod:
-                  _selectedChartPeriod.isRangeAvailable(
-                    oldestDate: allChartData.first.date,
-                  )
-                  ? _selectedChartPeriod
-                  : ChartTimePeriod.max,
-              oldestDate: allChartData.first.date,
-              onSelected: (period) {
-                setState(() {
-                  _selectedChartPeriod = period;
-                  _hoveredValuation = null;
-                });
-              },
-            ),
+          DateRangeChips(
+            currentPeriod: _dateRange.datePeriod,
+            oldestDate: allChartData.first.date,
+            onPresetSelected: _onPeriodChanged,
+            onCustomTap: _openCustomPeriodModal,
+            padding: EdgeInsets.zero,
           ),
 
         if (valuations == null)
@@ -969,6 +1043,15 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         ),
         if (valuations != null)
           _buildChartSection(context, valuations, transactions),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: _buildPerformanceCard(
+            context,
+            valuations,
+            transactions,
+            asset,
+          ),
+        ),
       ],
     );
   }
@@ -987,12 +1070,27 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: _buildCurrentValueTile(
-              context,
-              valuations,
-              displayValuation,
-              asset,
-              transactions,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 16,
+              children: [
+                _buildCurrentValueTile(
+                  context,
+                  valuations,
+                  displayValuation,
+                  asset,
+                  transactions,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _buildPerformanceCard(
+                    context,
+                    valuations,
+                    transactions,
+                    asset,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

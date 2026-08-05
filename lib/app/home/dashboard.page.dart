@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/dashboard_account_list.dart';
 import 'package:monekin/app/home/widgets/dashboard_balance_chart.dart';
 import 'package:monekin/app/home/widgets/dashboard_flow_card.dart';
-import 'package:monekin/app/home/widgets/date_range_chips.dart';
 import 'package:monekin/app/home/widgets/finance_health_donut.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/page_context.dart';
@@ -27,6 +26,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
@@ -48,7 +48,9 @@ class DashboardPage extends StatefulWidget {
 typedef _BalanceStats = ({double delta, double percentage});
 
 class _DashboardPageState extends State<DashboardPage> {
-  DatePeriodState dateRangeService = const DatePeriodState();
+  DatePeriodState dateRangeService = const DatePeriodState(
+    datePeriod: defaultDatePeriod,
+  );
   final ScrollController _scrollController = ScrollController();
   late final String _welcomeGreeting = _pickWelcomeGreeting();
 

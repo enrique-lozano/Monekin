@@ -51,12 +51,26 @@ class HoldingsSnapshotCard extends StatelessWidget {
                 onTap: () => showPortfolioSnapshotEditor(
                   context,
                   account: account,
-                  snapshotToEdit: current,
-                  prefillPositions: current == null ? null : current.positions,
+                  prefillPositions: current?.positions,
                 ),
               ),
               bodyPadding: const EdgeInsets.symmetric(vertical: 4),
-              footer: _HistoryFooter(account: account, count: snapshots.length),
+              footer: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                child: FilledButton.tonalIcon(
+                  label: Text(
+                    '${t.assets.holdings.snapshots.history_title} · ${snapshots.length}',
+                  ),
+                  icon: const Icon(Icons.history_rounded),
+                  onPressed: () => RouteUtils.pushRoute(
+                    AccountSnapshotsPage(account: account),
+                  ),
+                ),
+              ),
               body: Column(
                 children: [
                   if (current != null)
@@ -124,8 +138,9 @@ class _CurrentSnapshotBanner extends StatelessWidget {
                 Text(
                   snapshot.isEmpty
                       ? t.assets.holdings.snapshots.empty_portfolio
-                      : '${t.assets.holdings.snapshots.positions_count(n: snapshot.positionsCount)}'
-                            ' · ${t.assets.holdings.snapshots.current_banner}',
+                      : t.assets.holdings.snapshots.positions_count(
+                          n: snapshot.positionsCount,
+                        ),
                   style: theme.textTheme.bodySmall,
                 ),
               ],
@@ -192,36 +207,6 @@ class _PositionTile extends StatelessWidget {
               RouteUtils.pushRoute(SecurityDetailsPage(security: security)),
         );
       },
-    );
-  }
-}
-
-class _HistoryFooter extends StatelessWidget {
-  const _HistoryFooter({required this.account, required this.count});
-
-  final Account account;
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
-    return InkWell(
-      onTap: () => RouteUtils.pushRoute(AccountSnapshotsPage(account: account)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.history_rounded, size: 18),
-            const SizedBox(width: 8),
-            Text(
-              '${t.assets.holdings.snapshots.history_title} · $count',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -12,6 +12,7 @@ class UINumberFormatter {
   const UINumberFormatter.decimal({
     required this.amountToConvert,
     this.showDecimals = true,
+    this.decimalDigits = 2,
     this.compactView = false,
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
@@ -27,7 +28,8 @@ class UINumberFormatter {
   }) : mode = UINumberFormatterMode.percentage,
        currency = null,
        currencyStyle = null,
-       compactView = false;
+       compactView = false,
+       decimalDigits = 2;
 
   const UINumberFormatter.currency({
     required this.amountToConvert,
@@ -37,7 +39,8 @@ class UINumberFormatter {
     this.integerStyle = const TextStyle(inherit: true),
     this.decimalsStyle,
     this.currencyStyle,
-  }) : mode = UINumberFormatterMode.currency;
+  }) : mode = UINumberFormatterMode.currency,
+       decimalDigits = 2;
 
   /// The amount/number to display
   final double amountToConvert;
@@ -61,6 +64,12 @@ class UINumberFormatter {
   final TextStyle? currencyStyle;
 
   final bool showDecimals;
+
+  /// How many decimals to show when [showDecimals] is set. Only honored by
+  /// the `decimal` mode: the others derive them from the currency or from the
+  /// percentage format.
+  final int decimalDigits;
+
   final bool compactView;
 
   final UINumberFormatterMode mode;
@@ -130,7 +139,7 @@ class UINumberFormatter {
       return formatter.format(amountToConvert);
     } else {
       return NumberFormat.decimalPatternDigits(
-        decimalDigits: showDecimals ? 2 : 0,
+        decimalDigits: showDecimals ? decimalDigits : 0,
       ).format(amountToConvert);
     }
   }

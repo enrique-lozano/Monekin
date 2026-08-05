@@ -7,7 +7,6 @@ import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/accounts/details/holdings_snapshot_card.dart';
-import 'package:monekin/app/home/widgets/date_range_chips.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
@@ -30,6 +29,7 @@ import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
@@ -50,7 +50,9 @@ class AccountDetailsPage extends StatefulWidget {
     super.key,
     required this.account,
     required this.accountIconHeroTag,
-    this.dateRangeService = const DatePeriodState(),
+    this.dateRangeService = const DatePeriodState(
+      datePeriod: defaultDatePeriod,
+    ),
   });
 
   final Account account;
@@ -438,11 +440,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   }
 
   Widget _buildTrendRow(Account account, double endValue, DateTime? startDate) {
-    final periodText = _dateRange.getText(context);
-
-    if (startDate == null) {
-      return Text(periodText, style: Theme.of(context).textTheme.bodySmall);
-    }
+    // An all-time period has no starting point to compare the balance against.
+    if (startDate == null) return const SizedBox.shrink();
 
     return StreamBuilder<double>(
       stream: AccountService.instance.getAccountMoney(
@@ -450,31 +449,21 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         date: startDate,
       ),
       builder: (context, startSnapshot) {
-        if (!startSnapshot.hasData) {
-          return Text(periodText, style: Theme.of(context).textTheme.bodySmall);
-        }
+        if (!startSnapshot.hasData) return const SizedBox.shrink();
 
         final startValue = startSnapshot.data!;
         final change = endValue - startValue;
         final pct = startValue == 0 ? 0.0 : change / startValue.abs();
 
-        return Row(
-          children: [
-            TrendingValue(
-              percentage: pct,
-              value: change,
-              valueCurrency: account.currency,
-              dataTypes: const [
-                TrendingValueDataType.value,
-                TrendingValueDataType.percentage,
-              ],
-              fontWeight: FontWeight.w600,
-            ),
-            Text(
-              ' · $periodText',
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+        return TrendingValue(
+          percentage: pct,
+          value: change,
+          valueCurrency: account.currency,
+          dataTypes: const [
+            TrendingValueDataType.value,
+            TrendingValueDataType.percentage,
           ],
+          fontWeight: FontWeight.w600,
         );
       },
     );

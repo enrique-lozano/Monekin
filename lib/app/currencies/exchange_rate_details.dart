@@ -16,14 +16,17 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/currency/currency_type.enum.dart';
+import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/exit_without_save_warn_dialog.dart';
@@ -32,6 +35,7 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -80,7 +84,9 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   final GlobalKey<CurrencyEditFieldsState> _currencyFormKey = GlobalKey();
 
   ExchangeRate? _selectedRate;
-  ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
+  DatePeriodState _dateRange = const DatePeriodState(
+    datePeriod: DatePeriod.allTime(),
+  );
 
   _DetailTab _selectedTab = _DetailTab.rates;
 
@@ -169,42 +175,43 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       ..sort((a, b) => a.date.compareTo(b.date));
   }
 
-  ChartTimePeriod _effectivePeriod() {
-    final sorted = _sortedRatesAsc();
-    if (sorted == null || sorted.isEmpty) return _selectedChartPeriod;
-
-    return _selectedChartPeriod.isRangeAvailable(oldestDate: sorted.first.date)
-        ? _selectedChartPeriod
-        : ChartTimePeriod.max;
-  }
-
   List<ExchangeRate> _buildFilteredChartRates() {
-    final sortedRates = _sortedRatesAsc() ?? const <ExchangeRate>[];
-
-    if (sortedRates.isEmpty) return sortedRates;
-
-    return filterTimeSeriesByPeriod(
-      data: sortedRates,
+    return _dateRange.filterTimeSeries(
+      _sortedRatesAsc() ?? const <ExchangeRate>[],
       dateExtractor: (rate) => rate.date,
-      period: _effectivePeriod(),
     );
   }
 
   DateTimeRange? _chartTimeRange(List<ExchangeRate> sortedRates) {
     if (sortedRates.isEmpty) return null;
 
-    final now = DateTime.now();
-    final oldestDate = sortedRates.first.date;
-    final periodStart = _effectivePeriod().startDateFrom(now);
-    final start = (periodStart ?? oldestDate).justDay();
-    final effectiveStart = start.isBefore(oldestDate.justDay())
-        ? oldestDate.justDay()
-        : start;
+    final oldestDay = sortedRates.first.date.justDay();
+    final periodStart = (_dateRange.startDate ?? oldestDay).justDay();
+    final periodEnd = (_dateRange.endDate ?? DateTime.now()).justDay();
 
-    return DateTimeRange(
-      start: effectiveStart,
-      end: now.justDay().add(const Duration(days: 1)),
-    );
+    // The axis never starts before the first rate, nor ends before it starts:
+    // a custom range fully older than the currency would do just that.
+    final start = periodStart.isBefore(oldestDay) ? oldestDay : periodStart;
+    final end = periodEnd.isBefore(start) ? start : periodEnd;
+
+    return DateTimeRange(start: start, end: end.add(const Duration(days: 1)));
+  }
+
+  void _onPeriodChanged(DatePeriod period) {
+    setState(() {
+      _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
+      _selectedRate = null;
+    });
+  }
+
+  void _openCustomPeriodModal() {
+    openDatePeriodModal(
+      context,
+      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
+    ).then((value) {
+      if (value == null) return;
+      _onPeriodChanged(value);
+    });
   }
 
   Stream<List<_UsedInEntry>> _watchUsedIn() {
@@ -632,7 +639,21 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
                 ),
                 if (changeValue != null && changeFraction != null) ...[
                   const SizedBox(height: 4),
-                  _heroTrend(changeValue, changeFraction),
+                  TrendingValue(
+                    percentage: changeFraction,
+                    value: changeValue,
+                    dataTypes: const [
+                      TrendingValueDataType.value,
+                      TrendingValueDataType.percentage,
+                    ],
+                    // Rates need more precision than the two decimals money
+                    // gets, hence the plain decimal display.
+                    showValueDecimals: true,
+                    decimalDigits: 4,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    padding: EdgeInsets.zero,
+                  ),
                 ],
               ],
             ),
@@ -670,48 +691,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     );
   }
 
-  Widget _heroTrend(double changeValue, double changeFraction) {
-    final appColors = AppColors.of(context);
-    final theme = Theme.of(context);
-
-    final isUp = changeValue > 0;
-    final isFlat = changeValue == 0;
-    final color = isFlat
-        ? appColors.brand
-        : (isUp ? appColors.success : appColors.danger);
-
-    final pct = _fmtNum2((changeFraction * 100).abs());
-    final sign = isFlat ? '' : (isUp ? '+' : '−');
-    final style = TextStyle(
-      color: color,
-      fontWeight: FontWeight.w600,
-      fontSize: 15,
-    );
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(
-          isFlat
-              ? Icons.remove_rounded
-              : (isUp
-                    ? Icons.arrow_drop_up_rounded
-                    : Icons.arrow_drop_down_rounded),
-          color: color,
-          size: 22,
-        ),
-        Text(_fmtRate(changeValue.abs()), style: style),
-        Text('   ·   $sign$pct %', style: style),
-        const SizedBox(width: 8),
-        Text(
-          _effectivePeriod().localizedLabel(context),
-          style: theme.textTheme.bodySmall?.copyWith(color: appColors.textHint),
-        ),
-      ],
-    );
-  }
-
   // ---------------------------------------------------------------------------
   // Chart + min/max/updated stats
   // ---------------------------------------------------------------------------
@@ -740,17 +719,12 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
               ),
             ),
           const SizedBox(height: 12),
-          Center(
-            child: ChartTimePeriodSelector(
-              selectedPeriod: _effectivePeriod(),
-              oldestDate: sortedAsc.first.date,
-              onSelected: (period) {
-                setState(() {
-                  _selectedChartPeriod = period;
-                  _selectedRate = null;
-                });
-              },
-            ),
+          DateRangeChips(
+            currentPeriod: _dateRange.datePeriod,
+            oldestDate: sortedAsc.first.date,
+            onPresetSelected: _onPeriodChanged,
+            onCustomTap: _openCustomPeriodModal,
+            padding: EdgeInsets.zero,
           ),
           const SizedBox(height: 20),
         ],

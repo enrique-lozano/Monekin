@@ -66,7 +66,10 @@ class SecurityAvatar extends StatelessWidget {
           ),
           placeholder: (_, _) =>
               Skeletonizer.zone(child: Bone.circle(size: size)),
-          errorWidget: (_, _, _) => fallback,
+          errorWidget: (_, _, _) {
+            MarketDataService.instance.markLogoUnavailable(ticker);
+            return fallback;
+          },
         ),
       ),
     );

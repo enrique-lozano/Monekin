@@ -8,9 +8,12 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -262,6 +265,23 @@ Future<void> showPortfolioSnapshotEditor(
   );
 }
 
+const _totalColWidth = 88.0;
+const _actionColWidth = 32.0;
+const _colGap = 6.0;
+
+typedef _ColumnLayout = ({double qty, double cost, bool showTotal});
+
+/// Widths of the editable columns, scaled to the room the sheet actually has.
+/// On phones the (derived) total is dropped, since the symbol column needs it.
+_ColumnLayout _columnLayout(double maxWidth) {
+  final isTabletOrLarger =
+      maxWidth >= BreakPoint.getById(BreakpointID.sm).width;
+
+  return isTabletOrLarger
+      ? (qty: 84, cost: 96, showTotal: true)
+      : (qty: 68, cost: 78, showTotal: false);
+}
+
 class _EditorRow {
   final SecurityInDB security;
   final TextEditingController quantity;
@@ -360,6 +380,45 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     });
   }
 
+  static bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+
+  /// When creating a new snapshot, picking a date should load whatever was
+  /// in effect on that date (the most recent snapshot on or before it), so
+  /// you always start editing from the right baseline instead of today's.
+  void _onDateSelected(
+    DateTime value,
+    List<AccountSnapshotWithPositions> snapshots,
+  ) {
+    setState(() {
+      _date = value;
+
+      if (_isEditing) return;
+
+      final effective = snapshots
+          .cast<AccountSnapshotWithPositions?>()
+          .firstWhere((s) => !s!.date.isAfter(value), orElse: () => null);
+
+      for (final row in _rows) {
+        row.dispose();
+      }
+
+      _rows
+        ..clear()
+        ..addAll(
+          (effective?.positions ?? const <SnapshotPosition>[]).map(
+            (p) => _EditorRow(
+              security: p.security,
+              quantity: TextEditingController(text: _plainNumber(p.quantity)),
+              avgCost: TextEditingController(
+                text: _plainNumber(p.avgCostPrice),
+              ),
+            ),
+          ),
+        );
+    });
+  }
+
   Future<void> _submit() async {
     await HoldingService.instance.saveAccountSnapshot(
       accountId: widget.account.id,
@@ -382,170 +441,283 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+
+    return StreamBuilder<List<AccountSnapshotWithPositions>>(
+      stream: HoldingService.instance.getAccountSnapshots(widget.account.id),
+      builder: (context, snap) {
+        final snapshots = snap.data ?? const <AccountSnapshotWithPositions>[];
+
+        return ModalContainer(
+          title: _isEditing
+              ? t.assets.holdings.edit_snapshot
+              : t.assets.holdings.snapshots.update_positions,
+          subtitle:
+              '${widget.account.name} · ${t.assets.holdings.snapshots.full_portfolio}',
+          bodyPadding: const EdgeInsets.symmetric(horizontal: 16),
+          footer: BottomSheetFooter(
+            submitText: t.assets.holdings.snapshots.save,
+            submitIcon: Icons.save_rounded,
+            onSaved: _submit,
+          ),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: _buildBody(
+                  _columnLayout(constraints.maxWidth),
+                  snapshots,
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildBody(
+    _ColumnLayout cols,
+    List<AccountSnapshotWithPositions> snapshots,
+  ) {
+    final t = Translations.of(context);
     final theme = Theme.of(context);
 
-    return ModalContainer(
-      title: _isEditing
-          ? t.assets.holdings.snapshots.update_positions
-          : t.assets.holdings.snapshots.new_snapshot,
-      subtitle:
-          '${widget.account.name} · ${t.assets.holdings.snapshots.full_portfolio}',
-      bodyPadding: const EdgeInsets.symmetric(horizontal: 16),
-      footer: BottomSheetFooter(
-        submitText: t.assets.holdings.snapshots.save,
-        submitIcon: Icons.save_rounded,
-        onSaved: _submit,
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            t.assets.holdings.snapshots.editor_descr,
-            style: theme.textTheme.bodySmall,
+    final willOverwrite =
+        !_isEditing && snapshots.any((s) => _isSameDay(s.date, _date));
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          t.assets.holdings.snapshots.editor_intro(
+            date: DateFormat.yMMMd().format(_date),
           ),
-          const SizedBox(height: 16),
-          DateTimeFormField(
-            decoration: InputDecoration(
-              suffixIcon: const Icon(Icons.event),
-              labelText: '${t.assets.holdings.snapshots.date_label} *',
-              helperText: t.assets.holdings.snapshots.date_helper,
-              helperMaxLines: 2,
-            ),
-            initialDate: _date,
-            dateFormat: DateFormat.yMMMd(),
-            lastDate: DateTime.now(),
-            onDateSelected: (value) => setState(() => _date = value),
+          style: theme.textTheme.bodySmall,
+        ),
+        const SizedBox(height: 16),
+        DateTimeFormField(
+          decoration: InputDecoration(
+            suffixIcon: const Icon(Icons.event),
+            labelText: '${t.assets.holdings.snapshots.date_label} *',
           ),
-          const SizedBox(height: 16),
-          if (_rows.isEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                t.assets.holdings.snapshots.empty_portfolio,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
-            )
-          else
-            ..._rows.map(_buildRow),
+          initialDate: _date,
+          dateFormat: DateFormat.yMMMd(),
+          mode: DateTimeFieldPickerMode.date,
+          lastDate: DateTime.now(),
+          onDateSelected: (value) => _onDateSelected(value, snapshots),
+        ),
+        if (willOverwrite) ...[
           const SizedBox(height: 8),
-          OutlinedButton.icon(
-            onPressed: _addPosition,
-            icon: const Icon(Icons.add_circle_outline_rounded),
-            label: Text(t.assets.holdings.snapshots.add_position),
+          InlineInfoCard(
+            text: t.assets.holdings.snapshots.overwrite_warning,
+            mode: InlineInfoCardMode.info,
           ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.primary.withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(8),
+        ],
+        const SizedBox(height: 16),
+        if (_rows.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              t.assets.holdings.snapshots.empty_portfolio,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  t.assets.holdings.snapshots.total_cost.toUpperCase(),
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
+          )
+        else ...[
+          _buildTableHeader(cols),
+          ..._rows.map((row) => _buildRow(row, cols)),
+        ],
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          onPressed: _addPosition,
+          icon: const Icon(Icons.add_circle_outline_rounded),
+          label: Text(t.assets.holdings.snapshots.add_position),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                t.assets.holdings.snapshots.total_cost.toUpperCase(),
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w700,
                 ),
-                DefaultTextStyle.merge(
-                  style: theme.textTheme.titleMedium!.copyWith(
-                    color: theme.colorScheme.primary,
-                  ),
-                  child: CurrencyDisplayer(
-                    amountToConvert: _totalCost,
-                    currency: widget.account.currency,
-                  ),
+              ),
+              DefaultTextStyle.merge(
+                style: theme.textTheme.titleMedium!.copyWith(
+                  color: theme.colorScheme.primary,
                 ),
-              ],
+                child: CurrencyDisplayer(
+                  amountToConvert: _totalCost,
+                  currency: widget.account.currency,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        Text(
+          t.assets.holdings.snapshots.remove_hint,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.outline,
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildTableHeader(_ColumnLayout cols) {
+    final t = Translations.of(context);
+    final theme = Theme.of(context);
+
+    final style = theme.textTheme.labelSmall?.copyWith(
+      color: theme.colorScheme.outline,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Text(t.assets.holdings.snapshots.col_symbol, style: style),
+          ),
+          const SizedBox(width: _colGap),
+          SizedBox(
+            width: cols.qty,
+            child: Text(
+              t.assets.holdings.quantity,
+              style: style,
+              textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            t.assets.holdings.snapshots.remove_hint,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.outline,
+          const SizedBox(width: _colGap),
+          SizedBox(
+            width: cols.cost,
+            child: Text(
+              t.assets.holdings.avg_cost,
+              style: style,
+              textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 16),
+          if (cols.showTotal) ...[
+            const SizedBox(width: _colGap),
+            SizedBox(
+              width: _totalColWidth,
+              child: Text(
+                t.assets.holdings.total,
+                style: style,
+                textAlign: TextAlign.right,
+              ),
+            ),
+          ],
+          const SizedBox(width: _actionColWidth),
         ],
       ),
     );
   }
 
-  Widget _buildRow(_EditorRow row) {
-    final t = Translations.of(context);
+  Widget _buildRow(_EditorRow row, _ColumnLayout cols) {
+    final theme = Theme.of(context);
+
+    final ticker = row.security.ticker?.trim();
+    final hasTicker = ticker != null && ticker.isNotEmpty;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SecurityAvatar(security: row.security, size: 34),
-          const SizedBox(width: 8),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+            child: Row(
               children: [
-                Text(
-                  row.security.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                Text(
-                  row.security.type.displayName(context),
-                  style: Theme.of(context).textTheme.bodySmall,
+                SecurityAvatar(security: row.security, size: 32),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        hasTicker ? ticker : row.security.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        hasTicker
+                            ? row.security.name
+                            : row.security.type.displayName(context),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: _colGap),
+          SizedBox(width: cols.qty, child: _buildCellField(row.quantity)),
+          const SizedBox(width: _colGap),
+          SizedBox(width: cols.cost, child: _buildCellField(row.avgCost)),
+          if (cols.showTotal) ...[
+            const SizedBox(width: _colGap),
+            SizedBox(
+              width: _totalColWidth,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: DefaultTextStyle.merge(
+                  style: theme.textTheme.bodyMedium!,
+                  child: CurrencyDisplayer(
+                    amountToConvert: row.cost,
+                    currency: widget.account.currency,
+                  ),
+                ),
+              ),
+            ),
+          ],
           SizedBox(
-            width: 64,
-            child: TextFormField(
-              controller: row.quantity,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                labelText: t.assets.holdings.quantity,
-                isDense: true,
+            width: _actionColWidth,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              visualDensity: VisualDensity.compact,
+              constraints: const BoxConstraints(),
+              icon: Icon(
+                Icons.delete_outline_rounded,
+                size: 20,
+                color: theme.colorScheme.error,
               ),
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              onChanged: (_) => setState(() {}),
+              onPressed: () => _removeRow(row),
             ),
-          ),
-          const SizedBox(width: 6),
-          SizedBox(
-            width: 76,
-            child: TextFormField(
-              controller: row.avgCost,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                labelText: t.assets.holdings.avg_cost,
-                isDense: true,
-              ),
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              onChanged: (_) => setState(() {}),
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.delete_outline_rounded,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            onPressed: () => _removeRow(row),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildCellField(TextEditingController controller) {
+    return TextFormField(
+      controller: controller,
+      textAlign: TextAlign.center,
+      decoration: const InputDecoration(
+        isDense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      ),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      onChanged: (_) => setState(() {}),
     );
   }
 }

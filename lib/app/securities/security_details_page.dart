@@ -16,11 +16,14 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/chart_time_period_selector.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
@@ -62,7 +65,9 @@ class SecurityDetailsPage extends StatefulWidget {
 
 class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
   _PricePoint? _hoveredPoint;
-  ChartTimePeriod _selectedChartPeriod = ChartTimePeriod.max;
+  DatePeriodState _dateRange = const DatePeriodState(
+    datePeriod: DatePeriod.allTime(),
+  );
   _DetailTab _selectedTab = _DetailTab.about;
 
   /// The trades list is paginated client-side the same way as the history one.
@@ -141,19 +146,25 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     return points;
   }
 
-  ChartTimePeriod _effectivePeriod(DateTime oldestDate) {
-    return _selectedChartPeriod.isRangeAvailable(oldestDate: oldestDate)
-        ? _selectedChartPeriod
-        : ChartTimePeriod.max;
+  List<_PricePoint> _visiblePoints(List<_PricePoint> all) {
+    return _dateRange.filterTimeSeries(all, dateExtractor: (p) => p.date);
   }
 
-  List<_PricePoint> _visiblePoints(List<_PricePoint> all) {
-    if (all.isEmpty) return const [];
-    return filterTimeSeriesByPeriod(
-      data: all,
-      dateExtractor: (p) => p.date,
-      period: _effectivePeriod(all.first.date),
-    );
+  void _onPeriodChanged(DatePeriod period) {
+    setState(() {
+      _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
+      _hoveredPoint = null;
+    });
+  }
+
+  void _openCustomPeriodModal() {
+    openDatePeriodModal(
+      context,
+      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
+    ).then((value) {
+      if (value == null) return;
+      _onPeriodChanged(value);
+    });
   }
 
   // ---------------------------------------------------------------------------
@@ -528,17 +539,12 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
         ),
         if (allPoints.isNotEmpty) ...[
           const SizedBox(height: 12),
-          Center(
-            child: ChartTimePeriodSelector(
-              selectedPeriod: _effectivePeriod(allPoints.first.date),
-              oldestDate: allPoints.first.date,
-              onSelected: (period) {
-                setState(() {
-                  _selectedChartPeriod = period;
-                  _hoveredPoint = null;
-                });
-              },
-            ),
+          DateRangeChips(
+            currentPeriod: _dateRange.datePeriod,
+            oldestDate: allPoints.first.date,
+            onPresetSelected: _onPeriodChanged,
+            onCustomTap: _openCustomPeriodModal,
+            padding: EdgeInsets.zero,
           ),
         ],
       ],

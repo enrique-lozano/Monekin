@@ -26,10 +26,24 @@ class MarketDataService {
     return provider.getQuote(symbol);
   }
 
+  final _tickersWithoutLogo = <String>{};
+
   String? logoUrlForTicker(String? ticker) {
-    final t = ticker?.trim();
-    if (t == null || t.isEmpty) return null;
+    final t = _normalizeTicker(ticker);
+    if (t == null || _tickersWithoutLogo.contains(t)) return null;
     return provider.logoUrl(t);
+  }
+
+  /// Remembers that [ticker] has no logo, so we stop re-requesting it (and
+  /// flashing a placeholder) on every rebuild.
+  void markLogoUnavailable(String? ticker) {
+    final t = _normalizeTicker(ticker);
+    if (t != null) _tickersWithoutLogo.add(t);
+  }
+
+  String? _normalizeTicker(String? ticker) {
+    final t = ticker?.trim().toUpperCase();
+    return (t == null || t.isEmpty) ? null : t;
   }
 
   static SecurityType securityTypeFor(String quoteType) {
