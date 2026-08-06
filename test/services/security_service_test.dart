@@ -143,6 +143,23 @@ void main() {
     expect(history.any((p) => p.price == 250), isTrue);
   });
 
+  test('updatePrice replaces the observation of the same day', () async {
+    await service.insertSecurity(buildSecurity());
+
+    // Correcting a typo minutes later must not leave two points on that day,
+    // which would make "the latest price of the day" ambiguous.
+    await service.updatePrice(securityId, 250, date: DateTime(2026, 5, 1, 9));
+    await service.updatePrice(securityId, 260, date: DateTime(2026, 5, 1, 18));
+    await service.updatePrice(securityId, 270, date: DateTime(2026, 5, 2));
+
+    final history = await service.getPriceHistory(securityId).first;
+    expect(history.length, 2);
+    expect(history.firstWhere((p) => p.date.day == 1).price, 260);
+
+    final sec = await service.getSecurityById(securityId).first;
+    expect(sec!.currentPrice, 270);
+  });
+
   test(
     'getPriceAtDate returns the latest observation up to the date',
     () async {

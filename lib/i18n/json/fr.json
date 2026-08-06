@@ -596,7 +596,7 @@
       "transactions_descr": "Les positions sont calculées automatiquement à partir de vos transactions d'achat et de vente.",
       "holdings": "Avoirs",
       "holdings_descr": "Saisissez manuellement vos positions sous forme de clichés datés (quantité et coût moyen).",
-      "switch_warn": "La modification du mode de suivi modifie la façon dont les positions sont calculées. Les transactions ou instantanés existants ne sont pas convertis automatiquement."
+      "switch_warn": "Chaque mode calcule vos positions à partir d'une source différente. Lors de l'enregistrement, vos positions actuelles seront converties vers le nouveau mode. Les dates antérieures seront valorisées avec l'historique dont ce mode dispose déjà."
     }
   },
   "CURRENCIES": {
@@ -1052,6 +1052,9 @@
       "quantity": "Quantité",
       "price_per_unit": "Prix ​​par unité",
       "total": "Total",
+      "units_available": "{{quantity}} disponibles",
+      "not_enough_units": "Vous ne détenez pas autant d'unités",
+      "opening_position": "Position d'ouverture",
       "add_position": "Ajouter un poste",
       "positions_history": "Historique des positions",
       "edit_snapshot": "Modifier l'instantané",

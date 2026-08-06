@@ -559,7 +559,7 @@
       "transactions_descr": "Positions are calculated automatically from your buy and sell trades.",
       "holdings": "Holdings",
       "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost).",
-      "switch_warn": "Changing the tracking mode changes how positions are calculated. Existing trades or snapshots are not converted automatically."
+      "switch_warn": "Each mode calculates your positions from a different source. When you save, your current positions are converted to the new mode. Earlier dates will be valued using the history that mode already has."
     },
     "FORM": {
       "name": "Account name",
@@ -980,6 +980,9 @@
       "quantity": "Quantity",
       "price_per_unit": "Price per unit",
       "total": "Total",
+      "units_available": "{{quantity}} available",
+      "not_enough_units": "You do not hold that many units",
+      "opening_position": "Opening position",
       "add_position": "Add position",
       "positions_history": "Position history",
       "edit_snapshot": "Edit snapshot",

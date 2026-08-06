@@ -67,8 +67,11 @@ CREATE TABLE accounts_new (
 );
 
 -- normal -> money, saving -> money (+isSaving), investment -> investment.
--- trackingMode heuristic: accounts that already had type 'N' investment
--- transactions are tracked from trades, the rest via holdings snapshots.
+-- trackingMode heuristic: only investment accounts can be tracked via
+-- snapshots, and only when they had no type 'N' investment transactions to
+-- derive their positions from. Everything else keeps the default 'transactions'
+-- (the mode is meaningless for money accounts, so leaving them on the default
+-- avoids a stale value nobody would ever notice or fix).
 INSERT INTO accounts_new (id, name, iniValue, date, description, type, isSaving, trackingMode, iconId, displayOrder, color, closingDate, currencyId, iban, swift)
 SELECT
     id,
@@ -79,6 +82,7 @@ SELECT
     CASE type WHEN 'investment' THEN 'investment' ELSE 'money' END,
     CASE type WHEN 'saving' THEN 1 ELSE 0 END,
     CASE
+        WHEN type != 'investment' THEN 'transactions'
         WHEN EXISTS (SELECT 1 FROM transactions t WHERE t.accountID = accounts.id AND t.type = 'N')
         THEN 'transactions'
         ELSE 'holdings'
@@ -345,9 +349,12 @@ WHERE type = 'N'
 --         the position would vanish when replayed, so create a zero-cash
 --         anchor buy (value 0 keeps the account balance unchanged, the
 --         security value was already counted as a valuation pre-v13).
+--         The title is left NULL: a migration cannot know the user's locale,
+--         and the app already renders untitled 'N' rows with a translated
+--         label.
 INSERT INTO transactions (id, date, accountID, value, title, type, securityID, quantity, pricePerUnit, isHidden)
 SELECT 'anchor_' || h.id, COALESCE(s.priceDate, DATE('now')), h.accountID, 0,
-       'Opening position', 'N', h.securityID, 1, COALESCE(s.currentPrice, 0), 0
+       NULL, 'N', h.securityID, 1, COALESCE(s.currentPrice, 0), 0
 FROM holdings h
 JOIN securities s ON s.id = h.securityID
 JOIN accounts a ON a.id = h.accountID

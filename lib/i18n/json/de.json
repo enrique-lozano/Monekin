@@ -596,7 +596,7 @@
       "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet.",
       "holdings": "Bestände",
       "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten).",
-      "switch_warn": "Wenn Sie den Tracking-Modus ändern, ändert sich die Art und Weise, wie Positionen berechnet werden. Bestehende Trades oder Snapshots werden nicht automatisch konvertiert."
+      "switch_warn": "Jeder Modus berechnet Ihre Positionen aus einer anderen Quelle. Beim Speichern werden Ihre aktuellen Positionen in den neuen Modus übertragen. Frühere Zeitpunkte werden mit dem Verlauf bewertet, den dieser Modus bereits hat."
     }
   },
   "CURRENCIES": {
@@ -1052,6 +1052,9 @@
       "quantity": "Menge",
       "price_per_unit": "Preis pro Einheit",
       "total": "Gesamt",
+      "units_available": "{{quantity}} verfügbar",
+      "not_enough_units": "Sie besitzen nicht so viele Einheiten",
+      "opening_position": "Eröffnungsposition",
       "add_position": "Position hinzufügen",
       "positions_history": "Positionshistorie",
       "edit_snapshot": "Schnappschuss bearbeiten",

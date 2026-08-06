@@ -596,7 +596,7 @@
       "transactions_descr": "A pozíciókat a rendszer automatikusan számítja ki az Ön vételi és eladási kereskedéseiből.",
       "holdings": "Holdingok",
       "holdings_descr": "Adja meg pozícióit manuálisan keltezett pillanatképként (mennyiség és átlagos költség).",
-      "switch_warn": "A követési mód megváltoztatása megváltoztatja a pozíciók kiszámításának módját. A meglévő ügyletek vagy pillanatképek nem konvertálódnak automatikusan."
+      "switch_warn": "Minden mód más forrásból számítja ki a pozícióidat. Mentéskor a jelenlegi pozícióid átkerülnek az új módba. A korábbi dátumokat az adott mód már meglévő előzményei alapján értékeljük."
     }
   },
   "CURRENCIES": {
@@ -1052,6 +1052,9 @@
       "quantity": "Mennyiség",
       "price_per_unit": "Ár egységenként",
       "total": "Teljes",
+      "units_available": "{{quantity}} elérhető",
+      "not_enough_units": "Nincs ennyi egységed",
+      "opening_position": "Nyitó pozíció",
       "add_position": "Pozíció hozzáadása",
       "positions_history": "Pozíciótörténet",
       "edit_snapshot": "Pillanatkép szerkesztése",

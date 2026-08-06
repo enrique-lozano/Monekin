@@ -596,7 +596,7 @@
       "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır.",
       "holdings": "Holdingler",
       "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin.",
-      "switch_warn": "İzleme modunu değiştirmek, konumların hesaplanma şeklini değiştirir. Mevcut işlemler veya anlık görüntüler otomatik olarak dönüştürülmez."
+      "switch_warn": "Her mod pozisyonlarınızı farklı bir kaynaktan hesaplar. Kaydettiğinizde mevcut pozisyonlarınız yeni moda dönüştürülür. Daha önceki tarihler, o modun halihazırda sahip olduğu geçmişe göre değerlenir."
     }
   },
   "CURRENCIES": {
@@ -1052,6 +1052,9 @@
       "quantity": "Miktar",
       "price_per_unit": "Birim başına fiyat",
       "total": "Toplam",
+      "units_available": "{{quantity}} mevcut",
+      "not_enough_units": "Bu kadar biriminiz yok",
+      "opening_position": "Açılış pozisyonu",
       "add_position": "Pozisyon ekle",
       "positions_history": "Pozisyon geçmişi",
       "edit_snapshot": "Anlık görüntüyü düzenle",

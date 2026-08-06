@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:monekin/app/securities/security_details_page.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
@@ -12,6 +13,8 @@ import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -320,7 +323,10 @@ class _TradeSheetState extends State<_TradeSheet> {
   final _formKey = GlobalKey<FormState>();
   final _quantityController = TextEditingController();
   late final TextEditingController _priceController;
-  final DateTime _date = DateTime.now();
+  DateTime _date = DateTime.now();
+
+  /// Units currently held, used to cap a sell. Null until loaded.
+  double? _heldQuantity;
 
   @override
   void initState() {
@@ -328,6 +334,16 @@ class _TradeSheetState extends State<_TradeSheet> {
     _priceController = TextEditingController(
       text: (widget.security.currentPrice ?? 0).toString(),
     );
+
+    if (!widget.isBuy) {
+      HoldingService.instance
+          .getHolding(widget.account.id, widget.security.id)
+          .first
+          .then((holding) {
+            if (!mounted) return;
+            setState(() => _heldQuantity = holding?.quantity ?? 0);
+          });
+    }
   }
 
   @override
@@ -371,6 +387,7 @@ class _TradeSheetState extends State<_TradeSheet> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final held = _heldQuantity;
 
     return ModalContainer(
       title: widget.isBuy
@@ -393,6 +410,13 @@ class _TradeSheetState extends State<_TradeSheet> {
               controller: _quantityController,
               decoration: InputDecoration(
                 labelText: '${t.assets.holdings.quantity} *',
+                helperText: held == null
+                    ? null
+                    : t.assets.holdings.units_available(
+                        quantity: UINumberFormatter.decimal(
+                          amountToConvert: held,
+                        ).getFormattedAmount(),
+                      ),
               ),
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
@@ -402,6 +426,9 @@ class _TradeSheetState extends State<_TradeSheet> {
                 final parsed = double.tryParse(v ?? '');
                 if (parsed == null || parsed <= 0) {
                   return t.general.validations.required;
+                }
+                if (held != null && parsed > held + 0.0000001) {
+                  return t.assets.holdings.not_enough_units;
                 }
                 return null;
               },
@@ -417,6 +444,21 @@ class _TradeSheetState extends State<_TradeSheet> {
                 decimal: true,
               ),
               onChanged: (_) => setState(() {}),
+            ),
+            const SizedBox(height: 12),
+            DateTimeFormField(
+              mode: DateTimeFieldPickerMode.date,
+              decoration: InputDecoration(
+                suffixIcon: const Icon(Icons.event),
+                labelText: '${t.general.time.date} *',
+              ),
+              initialDate: _date,
+              firstDate: widget.account.date,
+              lastDate: DateTime.now(),
+              dateFormat: DateFormat.yMMMMd(),
+              validator: (e) =>
+                  e == null ? t.general.validations.required : null,
+              onDateSelected: (value) => setState(() => _date = value),
             ),
             const SizedBox(height: 12),
             ListTile(

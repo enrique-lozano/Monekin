@@ -596,7 +596,7 @@
       "transactions_descr": "頭寸是根據您的買入和賣出交易自動計算的。",
       "holdings": "控股",
       "holdings_descr": "以帶有日期的快照形式手動輸入您的頭寸（數量和平均成本）。",
-      "switch_warn": "更改追蹤模式會改變位置的計算方式。現有交易或快照不會自動轉換。"
+      "switch_warn": "每種追蹤模式使用不同的資料來源計算持倉。儲存時，你目前的持倉會轉換到新模式；更早的日期將依該模式已有的歷史資料估值。"
     }
   },
   "CURRENCIES": {
@@ -1053,6 +1053,9 @@
       "quantity": "數量",
       "price_per_unit": "每單位價格",
       "total": "全部的",
+      "units_available": "可用 {{quantity}}",
+      "not_enough_units": "你持有的份額不足",
+      "opening_position": "初始持倉",
       "add_position": "新增職位",
       "positions_history": "職位歷史",
       "edit_snapshot": "編輯快照",

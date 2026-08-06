@@ -245,12 +245,14 @@ void main() {
     );
   });
 
-  test('synthetic anchor trades are labelled "Opening position"', () {
+  test('synthetic anchor trades carry no hardcoded title', () {
     final db = migrateSample();
 
     // The safety-net anchor buy (value 0, created only when a formerly
-    // valuation-tracked asset lands in a transactions-mode account) must carry a
-    // clear title so it does not read as a mysterious 0-amount movement.
+    // valuation-tracked asset lands in a transactions-mode account) is left
+    // untitled: a migration has no locale, and the app labels untitled 'N' rows
+    // with a translated string. A hardcoded English title would leak into every
+    // other language.
     final anchors = db.select('''
       SELECT title FROM transactions
       WHERE type = 'N' AND value = 0 AND id LIKE 'anchor_%'
@@ -258,8 +260,22 @@ void main() {
 
     expect(anchors, isNotEmpty, reason: 'sample produces at least one anchor');
     for (final a in anchors) {
-      expect(a['title'], 'Opening position');
+      expect(a['title'], isNull);
     }
+  });
+
+  test('only investment accounts can end up in holdings mode', () {
+    final db = migrateSample();
+
+    // The heuristic looks at whether an account has trades to derive positions
+    // from, which is meaningless for money/saving accounts: those must keep the
+    // default 'transactions' instead of a stale value nobody would ever fix.
+    final nonInvestment = db.select('''
+      SELECT id FROM accounts
+      WHERE type != 'investment' AND trackingMode != 'transactions'
+    ''');
+
+    expect(nonInvestment, isEmpty);
   });
 
   test('migration file has no semicolons inside comments', () {

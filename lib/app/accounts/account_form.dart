@@ -7,6 +7,7 @@ import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -139,6 +140,17 @@ class _AccountFormPageState extends State<AccountFormPage> {
     }
 
     if (_accountToEdit != null) {
+      // Each tracking mode values the account from a different source (trades
+      // vs. portfolio snapshots), so the positions have to be moved across or
+      // the account would suddenly be worth nothing.
+      if (accountToSubmit.trackingMode != _accountToEdit.trackingMode) {
+        await HoldingService.instance.convertTrackingMode(
+          accountId: accountToSubmit.id,
+          to: accountToSubmit.trackingMode,
+          anchorTradeTitle: t.assets.holdings.opening_position,
+        );
+      }
+
       await accountService
           .updateAccount(accountToSubmit)
           .then((value) => {RouteUtils.popRoute()});

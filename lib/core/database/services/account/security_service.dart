@@ -216,25 +216,39 @@ class SecurityService {
 
   /// Updates the manually-tracked price of a security (offline-first) and stores
   /// the observation in the price history so the chart reflects it.
+  ///
+  /// A day holds a single observation: correcting the price again on the same
+  /// calendar day replaces it instead of adding a second, ambiguous point.
   Future<int> updatePrice(
     String securityId,
     double price, {
     DateTime? date,
   }) async {
     final effectiveDate = date ?? DateTime.now();
+    final dayRange = _dayRange(effectiveDate);
 
-    final res =
-        await (db.update(
-          db.securities,
-        )..where((tbl) => tbl.id.equals(securityId))).write(
-          SecuritiesCompanion(
-            currentPrice: Value(price),
-            priceDate: Value(effectiveDate),
-          ),
-        );
+    return db.transaction(() async {
+      final res =
+          await (db.update(
+            db.securities,
+          )..where((tbl) => tbl.id.equals(securityId))).write(
+            SecuritiesCompanion(
+              currentPrice: Value(price),
+              priceDate: Value(effectiveDate),
+            ),
+          );
 
-    await addPricePoint(securityId, price, effectiveDate);
+      await (db.delete(db.securityPriceHistory)..where(
+            (tbl) =>
+                tbl.securityID.equals(securityId) &
+                tbl.date.isBiggerOrEqualValue(dayRange.$1) &
+                tbl.date.isSmallerThanValue(dayRange.$2),
+          ))
+          .go();
 
-    return res;
+      await addPricePoint(securityId, price, effectiveDate);
+
+      return res;
+    });
   }
 }

@@ -321,6 +321,133 @@ void main() {
     );
   });
 
+  group('trading', () {
+    setUp(() async {
+      await insertAccount(accountId, AccountTrackingMode.transactions);
+      await insertSecurity(securityId, currentPrice: 100);
+    });
+
+    test('sell refuses to trade more units than are held', () async {
+      await service.buy(
+        accountId: accountId,
+        securityId: securityId,
+        quantity: 10,
+        pricePerUnit: 100,
+      );
+
+      await service.sell(
+        accountId: accountId,
+        securityId: securityId,
+        quantity: 15,
+        pricePerUnit: 120,
+      );
+
+      final holding = await service.getHolding(accountId, securityId).first;
+      expect(holding!.quantity, 10, reason: 'the position is left untouched');
+
+      // The oversized trade must not reach the ledger either, or the cash
+      // balance and the position would drift apart.
+      final trades = await db.select(db.transactions).get();
+      expect(trades.length, 1);
+      expect(trades.single.quantity, 10);
+    });
+
+    test('a buy writes the position and its cash leg together', () async {
+      await service.buy(
+        accountId: accountId,
+        securityId: securityId,
+        quantity: 4,
+        pricePerUnit: 25,
+        date: DateTime(2026, 1, 1),
+      );
+
+      final holding = await service.getHolding(accountId, securityId).first;
+      expect(holding!.quantity, 4);
+
+      final trade = (await db.select(db.transactions).get()).single;
+      expect(trade.value, -100);
+      expect(trade.quantity, 4);
+    });
+  });
+
+  group('switching tracking mode', () {
+    test('to holdings snapshots the positions built from trades', () async {
+      await insertAccount(accountId, AccountTrackingMode.transactions);
+      await insertSecurity(securityId, currentPrice: 200);
+
+      await insertTrade(quantity: 10, price: 100, date: DateTime(2026, 1, 1));
+      await service.recomputeHolding(
+        accountId: accountId,
+        securityId: securityId,
+      );
+
+      await service.convertTrackingMode(
+        accountId: accountId,
+        to: AccountTrackingMode.holdings,
+        date: DateTime(2026, 6, 1),
+      );
+
+      final snapshot =
+          (await service.getAccountSnapshots(accountId).first).single;
+      expect(snapshot.date, DateTime(2026, 6, 1));
+      expect(snapshot.positions.single.row.quantity, 10);
+      expect(snapshot.positions.single.row.avgCostPrice, 100);
+    });
+
+    test('to transactions anchors the positions with a zero-cash buy', () async {
+      await insertAccount('acc-c', AccountTrackingMode.holdings);
+      await insertSecurity('sec-c', currentPrice: 60);
+
+      await service.saveAccountSnapshot(
+        accountId: 'acc-c',
+        date: DateTime(2026, 1, 1),
+        positions: [(securityId: 'sec-c', quantity: 3, avgCostPrice: 50)],
+      );
+
+      await service.convertTrackingMode(
+        accountId: 'acc-c',
+        to: AccountTrackingMode.transactions,
+        date: DateTime(2026, 6, 1),
+        anchorTradeTitle: 'Opening position',
+      );
+
+      // The anchor moves no money: the cash left the account when the position
+      // was originally funded, outside of the app's knowledge.
+      final trade = (await db.select(db.transactions).get()).single;
+      expect(trade.value, 0);
+      expect(trade.quantity, 3);
+      expect(trade.pricePerUnit, 50);
+
+      // Replaying the trades now reproduces the position, so the account keeps
+      // its value in the new mode instead of dropping to zero.
+      final holding = await service.getHolding('acc-c', 'sec-c').first;
+      expect(holding!.quantity, 3);
+      expect(holding.avgCostPrice, 50);
+
+      final value = await service
+          .getHoldingsMarketValue(
+            accountIds: ['acc-c'],
+            date: DateTime(2026, 7, 1),
+          )
+          .first;
+      expect(value, closeTo(3 * 60, 0.001));
+    });
+
+    test('to transactions leaves positions that already have trades', () async {
+      await insertAccount(accountId, AccountTrackingMode.transactions);
+      await insertSecurity(securityId, currentPrice: 100);
+      await insertTrade(quantity: 10, price: 100, date: DateTime(2026, 1, 1));
+      await insertHolding(accountId, securityId, quantity: 10, avgCost: 100);
+
+      await service.convertTrackingMode(
+        accountId: accountId,
+        to: AccountTrackingMode.transactions,
+      );
+
+      expect((await db.select(db.transactions).get()).length, 1);
+    });
+  });
+
   group('per-holding valuation at date', () {
     test('transactions mode reports market and cost basis at date', () async {
       await insertAccount(accountId, AccountTrackingMode.transactions);
@@ -354,6 +481,51 @@ void main() {
       expect(janValuations.single.market, closeTo(10 * 100, 0.001));
       expect(janValuations.single.cost, closeTo(10 * 100, 0.001));
     });
+
+    test(
+      'cost basis restarts after closing and reopening a position',
+      () async {
+        await insertAccount(accountId, AccountTrackingMode.transactions);
+        await insertSecurity(securityId, currentPrice: 250);
+
+        await insertTrade(quantity: 10, price: 100, date: DateTime(2026, 1, 1));
+        await insertTrade(
+          quantity: -10,
+          price: 150,
+          date: DateTime(2026, 2, 1),
+        );
+        await insertTrade(quantity: 10, price: 200, date: DateTime(2026, 3, 1));
+
+        await insertPricePoint(securityId, 250, DateTime(2026, 3, 1));
+
+        // Averaging every buy ever made would report 150 here. The units held
+        // were all bought at 200, so that is the cost basis.
+        final valuation =
+            (await service
+                    .getHoldingValuationsAtDate(DateTime(2026, 4, 1))
+                    .first)
+                .single;
+        expect(valuation.market, closeTo(10 * 250, 0.001));
+        expect(valuation.cost, closeTo(10 * 200, 0.001));
+
+        // The SQL path and the replay used to write the holding must agree.
+        await service.recomputeHolding(
+          accountId: accountId,
+          securityId: securityId,
+        );
+        final holding = await service.getHolding(accountId, securityId).first;
+        expect(holding!.avgCostPrice, closeTo(200, 0.001));
+
+        // Between the sale and the re-entry nothing is held.
+        final flat =
+            (await service
+                    .getHoldingValuationsAtDate(DateTime(2026, 2, 15))
+                    .first)
+                .single;
+        expect(flat.market, closeTo(0, 0.001));
+        expect(flat.cost, closeTo(0, 0.001));
+      },
+    );
 
     test('holdings mode reports market and cost from the snapshot', () async {
       await insertAccount('acc-h3', AccountTrackingMode.holdings);

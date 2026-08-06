@@ -596,7 +596,7 @@
       "transactions_descr": "Le posizioni vengono calcolate automaticamente dalle tue operazioni di acquisto e vendita.",
       "holdings": "Partecipazioni",
       "holdings_descr": "Inserisci manualmente le tue posizioni come istantanee datate (quantità e costo medio).",
-      "switch_warn": "La modifica della modalità di tracciamento modifica il modo in cui vengono calcolate le posizioni. Le operazioni o gli snapshot esistenti non vengono convertiti automaticamente."
+      "switch_warn": "Ogni modalità calcola le tue posizioni da una fonte diversa. Al salvataggio, le tue posizioni attuali verranno convertite nella nuova modalità. Le date precedenti saranno valorizzate con lo storico già presente in quella modalità."
     }
   },
   "CURRENCIES": {
@@ -1053,6 +1053,9 @@
       "quantity": "Quantità",
       "price_per_unit": "Prezzo per unità",
       "total": "Totale",
+      "units_available": "{{quantity}} disponibili",
+      "not_enough_units": "Non possiedi così tante unità",
+      "opening_position": "Posizione iniziale",
       "add_position": "Aggiungi posizione",
       "positions_history": "Cronologia delle posizioni",
       "edit_snapshot": "Modifica istantanea",

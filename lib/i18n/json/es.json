@@ -562,7 +562,7 @@
       "transactions_descr": "Las posiciones se calculan automáticamente a partir de tus operaciones de compra y venta.",
       "holdings": "Posiciones",
       "holdings_descr": "Introduce tus posiciones manualmente como snapshots con fecha (cantidad y coste medio).",
-      "switch_warn": "Cambiar el modo de seguimiento cambia cómo se calculan las posiciones. Las operaciones o snapshots existentes no se convierten automáticamente."
+      "switch_warn": "Cada modo calcula tus posiciones a partir de una fuente distinta. Al guardar, tus posiciones actuales se convertirán al nuevo modo. Las fechas anteriores se valorarán con el historial que ya tenga ese modo."
     },
     "FORM": {
       "name": "Nombre de la cuenta",
@@ -983,6 +983,9 @@
       "quantity": "Cantidad",
       "price_per_unit": "Precio por unidad",
       "total": "Total",
+      "units_available": "{{quantity}} disponibles",
+      "not_enough_units": "No tienes tantas unidades",
+      "opening_position": "Posición inicial",
       "add_position": "Añadir posición",
       "positions_history": "Historial de posiciones",
       "edit_snapshot": "Editar instantánea",
