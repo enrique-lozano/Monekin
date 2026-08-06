@@ -226,37 +226,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Hero(
-            tag: widget.accountIconHeroTag ?? UniqueKey(),
-            child: account.displayIcon(context, size: 44),
-          ),
-          const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        account.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleLarge,
-                      ),
-                    ),
-                    if (isInvestment) ...[
-                      const SizedBox(width: 8),
-                      _TypeBadge(label: t.account.types.investment),
-                    ],
-                  ],
-                ),
-                Text(
-                  '${account.type.title(context)} · ${account.currency.code}',
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
+            child: _AccountIdentity(
+              account: account,
+              heroTag: widget.accountIconHeroTag ?? UniqueKey(),
+              iconSize: 44,
+              titleStyle: theme.textTheme.titleLarge,
+              showTrackingMode: true,
             ),
           ),
           const SizedBox(width: 16),
@@ -346,41 +322,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Hero(
-                tag: widget.accountIconHeroTag ?? UniqueKey(),
-                child: account.displayIcon(context, size: 40),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            account.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleMedium,
-                          ),
-                        ),
-                        if (isInvestment) ...[
-                          const SizedBox(width: 8),
-                          _TypeBadge(label: t.account.types.investment),
-                        ],
-                      ],
-                    ),
-                    Text(
-                      '${account.type.title(context)} · ${account.currency.code}',
-                      style: theme.textTheme.bodySmall,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          _AccountIdentity(
+            account: account,
+            heroTag: widget.accountIconHeroTag ?? UniqueKey(),
+            iconSize: 40,
+            titleStyle: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
           _buildValueSection(account, isInvestment),
@@ -862,7 +808,17 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [ratioAndLegend, const Divider(height: 24), costAndPnl],
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: ratioAndLegend,
+              ),
+              const Divider(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: costAndPnl,
+              ),
+            ],
           ),
         );
       },
@@ -1047,29 +1003,102 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 // Small building blocks
 // ---------------------------------------------------------------------------
 
-class _TypeBadge extends StatelessWidget {
-  const _TypeBadge({required this.label});
+/// The account icon, its name and a single meta line describing it
+/// (type · currency). Shared by the mobile and the desktop headers, which
+/// differ in the icon size, the title style and how much fits in the meta
+/// line.
+class _AccountIdentity extends StatelessWidget {
+  const _AccountIdentity({
+    required this.account,
+    required this.heroTag,
+    required this.iconSize,
+    required this.titleStyle,
+    this.showTrackingMode = false,
+  });
 
-  final String label;
+  final Account account;
+  final Object heroTag;
+  final double iconSize;
+  final TextStyle? titleStyle;
+
+  /// Only enabled on wide layouts: on a phone the meta line has no room
+  /// left for it once the text is scaled up or translated.
+  final bool showTrackingMode;
 
   @override
   Widget build(BuildContext context) {
-    final c = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final isInvestment = account.type == AccountType.investment;
+    final metaColor = theme.colorScheme.outline;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: c.withValues(alpha: 0.14),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          color: c,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
+    final meta = [
+      account.type.title(context),
+      if (isInvestment && showTrackingMode) account.trackingMode.title(context),
+      account.currency.code,
+    ].join(' · ');
+
+    return Row(
+      children: [
+        Hero(
+          tag: heroTag,
+          child: account.displayIcon(context, size: iconSize),
         ),
-      ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      account.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: titleStyle,
+                    ),
+                  ),
+                  if (account.isClosed) ...[
+                    const SizedBox(width: 6),
+                    Tooltip(
+                      message:
+                          '${t.account.close_date}: ${DateFormat.yMMMd().format(account.closingDate!)}',
+                      triggerMode: TooltipTriggerMode.tap,
+                      child: const Icon(
+                        Icons.archive_outlined,
+                        size: 16,
+                        color: Colors.amber,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 2),
+              Row(
+                children: [
+                  Icon(
+                    account.type.icon,
+                    size: 13,
+                    color: isInvestment ? theme.colorScheme.primary : metaColor,
+                  ),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: Text(
+                      meta,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: metaColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

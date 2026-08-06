@@ -47,7 +47,7 @@ class DashboardAccountList extends StatelessWidget {
               : null,
           footer: total > _maxAccountsToShow
               ? CardFooterWithSingleButton(
-                  text: t.ui_actions.see_all,
+                  text: t.ui_actions.see_all_count(n: total),
                   onButtonClick: () =>
                       RouteUtils.pushRoute(const AllAccountsPage()),
                 )
