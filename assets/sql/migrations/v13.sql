@@ -4,6 +4,8 @@
 --     `isSaving` flag (the old `saving` type becomes money+flag).
 --   * Investment accounts gain a `trackingMode` ('transactions' or
 --     'holdings'), assigned heuristically below.
+--   * Accounts gain an optional free-text `groupName` (accounts sharing
+--     the same value are displayed together). Starts empty for everyone.
 --   * New `securities` + `holdings` tables (financial instruments
 --     held inside investment accounts, weighted-average cost).
 --   * New `securityPriceHistory` table (manual price observations
@@ -51,6 +53,7 @@
 CREATE TABLE accounts_new (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT UNIQUE NOT NULL,
+    groupName TEXT,
     iniValue REAL NOT NULL,
     date TEXT NOT NULL,
     description TEXT,

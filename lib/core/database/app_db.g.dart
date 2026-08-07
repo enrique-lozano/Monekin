@@ -454,6 +454,17 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     requiredDuringInsert: true,
     $customConstraints: 'UNIQUE NOT NULL',
   );
+  static const VerificationMeta _groupNameMeta = const VerificationMeta(
+    'groupName',
+  );
+  late final GeneratedColumn<String> groupName = GeneratedColumn<String>(
+    'groupName',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
   static const VerificationMeta _iniValueMeta = const VerificationMeta(
     'iniValue',
   );
@@ -592,6 +603,7 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
   List<GeneratedColumn> get $columns => [
     id,
     name,
+    groupName,
     iniValue,
     date,
     description,
@@ -630,6 +642,12 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
       );
     } else if (isInserting) {
       context.missing(_nameMeta);
+    }
+    if (data.containsKey('groupName')) {
+      context.handle(
+        _groupNameMeta,
+        groupName.isAcceptableOrUnknown(data['groupName']!, _groupNameMeta),
+      );
     }
     if (data.containsKey('iniValue')) {
       context.handle(
@@ -733,6 +751,10 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}name'],
       )!,
+      groupName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}groupName'],
+      ),
       iniValue: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}iniValue'],
@@ -812,6 +834,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
 
   /// Account name (unique among user accounts)
   final String name;
+
+  /// Free-text group. Accounts sharing the exact same value are displayed
+  /// together (as a single expandable row) in the account lists and stats.
+  final String? groupName;
   final double iniValue;
 
   /// Creation/Opening date of this account. Before this date, no transactions can exists on it.
@@ -846,6 +872,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   const AccountInDB({
     required this.id,
     required this.name,
+    this.groupName,
     required this.iniValue,
     required this.date,
     this.description,
@@ -865,6 +892,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
     map['name'] = Variable<String>(name);
+    if (!nullToAbsent || groupName != null) {
+      map['groupName'] = Variable<String>(groupName);
+    }
     map['iniValue'] = Variable<double>(iniValue);
     map['date'] = Variable<DateTime>(date);
     if (!nullToAbsent || description != null) {
@@ -901,6 +931,9 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     return AccountsCompanion(
       id: Value(id),
       name: Value(name),
+      groupName: groupName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(groupName),
       iniValue: Value(iniValue),
       date: Value(date),
       description: description == null && nullToAbsent
@@ -933,6 +966,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     return AccountInDB(
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
+      groupName: serializer.fromJson<String?>(json['groupName']),
       iniValue: serializer.fromJson<double>(json['iniValue']),
       date: serializer.fromJson<DateTime>(json['date']),
       description: serializer.fromJson<String?>(json['description']),
@@ -958,6 +992,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
       'name': serializer.toJson<String>(name),
+      'groupName': serializer.toJson<String?>(groupName),
       'iniValue': serializer.toJson<double>(iniValue),
       'date': serializer.toJson<DateTime>(date),
       'description': serializer.toJson<String?>(description),
@@ -979,6 +1014,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   AccountInDB copyWith({
     String? id,
     String? name,
+    Value<String?> groupName = const Value.absent(),
     double? iniValue,
     DateTime? date,
     Value<String?> description = const Value.absent(),
@@ -995,6 +1031,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   }) => AccountInDB(
     id: id ?? this.id,
     name: name ?? this.name,
+    groupName: groupName.present ? groupName.value : this.groupName,
     iniValue: iniValue ?? this.iniValue,
     date: date ?? this.date,
     description: description.present ? description.value : this.description,
@@ -1013,6 +1050,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     return AccountInDB(
       id: data.id.present ? data.id.value : this.id,
       name: data.name.present ? data.name.value : this.name,
+      groupName: data.groupName.present ? data.groupName.value : this.groupName,
       iniValue: data.iniValue.present ? data.iniValue.value : this.iniValue,
       date: data.date.present ? data.date.value : this.date,
       description: data.description.present
@@ -1044,6 +1082,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     return (StringBuffer('AccountInDB(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('groupName: $groupName, ')
           ..write('iniValue: $iniValue, ')
           ..write('date: $date, ')
           ..write('description: $description, ')
@@ -1065,6 +1104,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   int get hashCode => Object.hash(
     id,
     name,
+    groupName,
     iniValue,
     date,
     description,
@@ -1085,6 +1125,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       (other is AccountInDB &&
           other.id == this.id &&
           other.name == this.name &&
+          other.groupName == this.groupName &&
           other.iniValue == this.iniValue &&
           other.date == this.date &&
           other.description == this.description &&
@@ -1103,6 +1144,7 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
 class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<String> id;
   final Value<String> name;
+  final Value<String?> groupName;
   final Value<double> iniValue;
   final Value<DateTime> date;
   final Value<String?> description;
@@ -1120,6 +1162,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   const AccountsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
+    this.groupName = const Value.absent(),
     this.iniValue = const Value.absent(),
     this.date = const Value.absent(),
     this.description = const Value.absent(),
@@ -1138,6 +1181,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   AccountsCompanion.insert({
     required String id,
     required String name,
+    this.groupName = const Value.absent(),
     required double iniValue,
     required DateTime date,
     this.description = const Value.absent(),
@@ -1163,6 +1207,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   static Insertable<AccountInDB> custom({
     Expression<String>? id,
     Expression<String>? name,
+    Expression<String>? groupName,
     Expression<double>? iniValue,
     Expression<DateTime>? date,
     Expression<String>? description,
@@ -1181,6 +1226,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
+      if (groupName != null) 'groupName': groupName,
       if (iniValue != null) 'iniValue': iniValue,
       if (date != null) 'date': date,
       if (description != null) 'description': description,
@@ -1201,6 +1247,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   AccountsCompanion copyWith({
     Value<String>? id,
     Value<String>? name,
+    Value<String?>? groupName,
     Value<double>? iniValue,
     Value<DateTime>? date,
     Value<String?>? description,
@@ -1219,6 +1266,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     return AccountsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
+      groupName: groupName ?? this.groupName,
       iniValue: iniValue ?? this.iniValue,
       date: date ?? this.date,
       description: description ?? this.description,
@@ -1244,6 +1292,9 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
+    }
+    if (groupName.present) {
+      map['groupName'] = Variable<String>(groupName.value);
     }
     if (iniValue.present) {
       map['iniValue'] = Variable<double>(iniValue.value);
@@ -1297,6 +1348,7 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     return (StringBuffer('AccountsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
+          ..write('groupName: $groupName, ')
           ..write('iniValue: $iniValue, ')
           ..write('date: $date, ')
           ..write('description: $description, ')
@@ -11545,6 +11597,7 @@ abstract class _$AppDB extends GeneratedDatabase {
         ),
         closingDate: row.readNullable<DateTime>('closingDate'),
         description: row.readNullable<String>('description'),
+        groupName: row.readNullable<String>('groupName'),
         iban: row.readNullable<String>('iban'),
         swift: row.readNullable<String>('swift'),
         color: row.readNullable<String>('color'),
@@ -11754,7 +11807,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."isSaving" AS "nested_0.isSaving", "a"."trackingMode" AS "nested_0.trackingMode", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."isSaving" AS "nested_3.isSaving", "ra"."trackingMode" AS "nested_3.trackingMode", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."groupName" AS "nested_0.groupName", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."isSaving" AS "nested_0.isSaving", "a"."trackingMode" AS "nested_0.trackingMode", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."groupName" AS "nested_3.groupName", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."isSaving" AS "nested_3.isSaving", "ra"."trackingMode" AS "nested_3.trackingMode", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
@@ -13327,6 +13380,7 @@ typedef $AccountsCreateCompanionBuilder =
     AccountsCompanion Function({
       required String id,
       required String name,
+      Value<String?> groupName,
       required double iniValue,
       required DateTime date,
       Value<String?> description,
@@ -13346,6 +13400,7 @@ typedef $AccountsUpdateCompanionBuilder =
     AccountsCompanion Function({
       Value<String> id,
       Value<String> name,
+      Value<String?> groupName,
       Value<double> iniValue,
       Value<DateTime> date,
       Value<String?> description,
@@ -13438,6 +13493,11 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
 
   ColumnFilters<String> get name => $composableBuilder(
     column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get groupName => $composableBuilder(
+    column: $table.groupName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -13599,6 +13659,11 @@ class $AccountsOrderingComposer extends Composer<_$AppDB, Accounts> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get groupName => $composableBuilder(
+    column: $table.groupName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<double> get iniValue => $composableBuilder(
     column: $table.iniValue,
     builder: (column) => ColumnOrderings(column),
@@ -13696,6 +13761,9 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
 
   GeneratedColumn<String> get name =>
       $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get groupName =>
+      $composableBuilder(column: $table.groupName, builder: (column) => column);
 
   GeneratedColumn<double> get iniValue =>
       $composableBuilder(column: $table.iniValue, builder: (column) => column);
@@ -13850,6 +13918,7 @@ class $AccountsTableManager
               ({
                 Value<String> id = const Value.absent(),
                 Value<String> name = const Value.absent(),
+                Value<String?> groupName = const Value.absent(),
                 Value<double> iniValue = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
                 Value<String?> description = const Value.absent(),
@@ -13867,6 +13936,7 @@ class $AccountsTableManager
               }) => AccountsCompanion(
                 id: id,
                 name: name,
+                groupName: groupName,
                 iniValue: iniValue,
                 date: date,
                 description: description,
@@ -13886,6 +13956,7 @@ class $AccountsTableManager
               ({
                 required String id,
                 required String name,
+                Value<String?> groupName = const Value.absent(),
                 required double iniValue,
                 required DateTime date,
                 Value<String?> description = const Value.absent(),
@@ -13903,6 +13974,7 @@ class $AccountsTableManager
               }) => AccountsCompanion.insert(
                 id: id,
                 name: name,
+                groupName: groupName,
                 iniValue: iniValue,
                 date: date,
                 description: description,

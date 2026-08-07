@@ -540,6 +540,12 @@
     "no_income_range": "No income this period",
     "no_expense_range": "No expenses this period",
     "movements_count": "{{n}} movements",
+    "GROUP": {
+      "accounts_count": {
+        "one": "{{n}} account",
+        "other": "{{n}} accounts"
+      }
+    },
     "TABS": {
       "movements": "Movements",
       "info": "Info"
@@ -565,6 +571,9 @@
     "FORM": {
       "name": "Account name",
       "name.placeholder": "Ex: Savings account",
+      "group": "Group",
+      "group.placeholder": "Ex: My bank",
+      "group.descr": "Accounts with the same group are displayed together",
       "notes": "Notes",
       "notes.placeholder": "Type some notes/description about this account",
       "initial-balance": "Initial balance",

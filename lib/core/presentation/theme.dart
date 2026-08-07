@@ -160,6 +160,7 @@ ThemeData getThemeData(
       contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       floatingLabelBehavior: FloatingLabelBehavior.auto,
       hintStyle: TextStyle(color: customAppColors.textHint),
+      helperStyle: TextStyle(color: customAppColors.textHint),
       border: appInputBorder,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(

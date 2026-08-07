@@ -61,6 +61,10 @@ CREATE TABLE IF NOT EXISTS accounts (
     -- Account name (unique among user accounts)
     name TEXT UNIQUE NOT NULL,
 
+    -- Free-text group. Accounts sharing the exact same value are displayed
+    -- together (as a single expandable row) in the account lists and stats.
+    groupName TEXT,
+
     
     iniValue REAL NOT NULL,
 

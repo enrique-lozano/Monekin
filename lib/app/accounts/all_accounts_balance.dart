@@ -4,9 +4,11 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/app/accounts/widgets/account_group.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -134,55 +136,36 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
               bodyPadding: const EdgeInsets.only(bottom: 0, top: 8),
               body: accounts.isEmpty
                   ? emptyAccountsIndicator()
-                  : ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final accountWithMoney = accounts[index];
+                  : Builder(
+                      builder: (context) {
+                        final rows = _groupBalances(accounts);
 
-                        return ListTile(
-                          titleAlignment: ListTileTitleAlignment.bottom,
-                          minTileHeight: 56,
-                          leading: accountWithMoney.account.displayIcon(
-                            context,
-                          ),
-                          onTap: () => RouteUtils.pushRoute(
-                            AccountFormPage(account: accountWithMoney.account),
-                          ),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      accountWithMoney.account.name,
-                                      softWrap: false,
-                                      overflow: TextOverflow.fade,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  CurrencyDisplayer(
-                                    amountToConvert: accountWithMoney.money,
-                                  ),
-                                ],
-                              ),
-                              AnimatedProgressBar(
-                                value: min(
-                                  max(accountWithMoney.money / totalMoney, 0),
-                                  1,
-                                ),
-                              ),
-                            ],
-                          ),
+                        return ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final row = rows[index];
+
+                            if (row.groupName == null ||
+                                row.items.length == 1) {
+                              return _AccountBalanceTile(
+                                accountWithMoney: row.items.first,
+                                totalMoney: totalMoney,
+                              );
+                            }
+
+                            return _GroupBalanceTile(
+                              groupName: row.groupName!,
+                              items: row.items,
+                              totalMoney: totalMoney,
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 2);
+                          },
+                          itemCount: rows.length,
+                          shrinkWrap: true,
                         );
                       },
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(height: 2);
-                      },
-                      itemCount: accounts.length,
-                      shrinkWrap: true,
                     ),
             ),
             CardWithHeader(
@@ -278,6 +261,193 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
           ],
         );
       },
+    );
+  }
+}
+
+/// A row of the "balance by account" list: either a single account or the
+/// accounts that share a [Account.groupName], with the group's total money.
+typedef _BalanceRow = ({
+  String? groupName,
+  List<AccountWithMoney> items,
+  double money,
+});
+
+/// Groups the accounts by their group name (keeping members in the incoming
+/// money-descending order) and sorts the resulting rows by total money.
+List<_BalanceRow> _groupBalances(List<AccountWithMoney> items) {
+  final working = <({String? groupName, List<AccountWithMoney> items})>[];
+  final indexByGroup = <String, int>{};
+
+  for (final item in items) {
+    final group = item.account.groupName;
+
+    if (group == null) {
+      working.add((groupName: null, items: [item]));
+      continue;
+    }
+
+    final idx = indexByGroup[group];
+    if (idx == null) {
+      indexByGroup[group] = working.length;
+      working.add((groupName: group, items: [item]));
+    } else {
+      working[idx].items.add(item);
+    }
+  }
+
+  return working
+      .map(
+        (r) => (
+          groupName: r.groupName,
+          items: r.items,
+          money: r.items.map((e) => e.money).sum,
+        ),
+      )
+      .toList()
+    ..sort((a, b) => b.money.compareTo(a.money));
+}
+
+/// A single account row with its share-of-total progress bar. Reused for
+/// standalone accounts and as the expanded children of a group.
+class _AccountBalanceTile extends StatelessWidget {
+  const _AccountBalanceTile({
+    required this.accountWithMoney,
+    required this.totalMoney,
+  });
+
+  final AccountWithMoney accountWithMoney;
+  final double totalMoney;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      titleAlignment: ListTileTitleAlignment.bottom,
+      minTileHeight: 56,
+      leading: accountWithMoney.account.displayIcon(context),
+      onTap: () => RouteUtils.pushRoute(
+        AccountFormPage(account: accountWithMoney.account),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  accountWithMoney.account.name,
+                  softWrap: false,
+                  overflow: TextOverflow.fade,
+                ),
+              ),
+              const SizedBox(width: 6),
+              CurrencyDisplayer(amountToConvert: accountWithMoney.money),
+            ],
+          ),
+          AnimatedProgressBar(
+            value: min(max(accountWithMoney.money / totalMoney, 0), 1),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// An expandable row aggregating the balances of every account in a group.
+class _GroupBalanceTile extends StatefulWidget {
+  const _GroupBalanceTile({
+    required this.groupName,
+    required this.items,
+    required this.totalMoney,
+  });
+
+  final String groupName;
+  final List<AccountWithMoney> items;
+  final double totalMoney;
+
+  @override
+  State<_GroupBalanceTile> createState() => _GroupBalanceTileState();
+}
+
+class _GroupBalanceTileState extends State<_GroupBalanceTile> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final groupMoney = widget.items.map((e) => e.money).sum;
+    final accounts = widget.items.map((e) => e.account).toList();
+
+    // The header mirrors [_AccountBalanceTile] exactly (amount inside the title,
+    // no trailing) so the group and standalone rows line up. Expansion is
+    // handled manually instead of with an ExpansionTile, whose trailing slot
+    // would otherwise leave a gap at the end of the row.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ListTile(
+          titleAlignment: ListTileTitleAlignment.bottom,
+          minTileHeight: 56,
+          leading: accountGroupIcon(context, accounts),
+          onTap: () => setState(() => _isExpanded = !_isExpanded),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            widget.groupName,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        AnimatedRotation(
+                          turns: _isExpanded ? 0.5 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: Icon(
+                            Icons.expand_more,
+                            size: 20,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  CurrencyDisplayer(amountToConvert: groupMoney),
+                ],
+              ),
+              AnimatedProgressBar(
+                value: min(max(groupMoney / widget.totalMoney, 0), 1),
+              ),
+            ],
+          ),
+        ),
+        AnimatedExpanded(
+          expand: _isExpanded,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Column(
+              children: [
+                for (final item in widget.items)
+                  _AccountBalanceTile(
+                    accountWithMoney: item,
+                    totalMoney: widget.totalMoney,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/app/accounts/widgets/account_group.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -51,6 +52,21 @@ class _AccountFormPageState extends State<AccountFormPage> {
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _groupController = TextEditingController();
+  final FocusNode _groupFocusNode = FocusNode();
+
+  /// The group names already in use, offered as autocomplete suggestions.
+  List<String> _existingGroups = [];
+
+  /// The accounts of each existing group (in display order), used both to
+  /// render the group icon/color in the suggestions and to prefill the
+  /// icon/color when the user picks a group.
+  final Map<String, List<Account>> _accountsByGroup = {};
+
+  /// Whether the user has explicitly picked an icon or color. While `false`,
+  /// choosing a group adopts that group's icon and color.
+  bool _iconOrColorTouched = false;
+
   final TextEditingController _ibanController = TextEditingController();
   final TextEditingController _swiftController = TextEditingController();
   final TextEditingController _textController = TextEditingController();
@@ -100,9 +116,14 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iniValue = double.parse(_balanceController.text);
     }
 
+    // Accounts are grouped by an exact match of this text, so a stray space
+    // would silently create a group of its own.
+    final groupName = _groupController.text.trim();
+
     Account accountToSubmit = Account(
       id: _accountToEdit?.id ?? generateUUID(),
       name: _nameController.text,
+      groupName: groupName.isEmpty ? null : groupName,
       displayOrder: _accountToEdit?.displayOrder ?? 10,
       iniValue: iniValue,
       date: _openingDate,
@@ -181,6 +202,43 @@ class _AccountFormPageState extends State<AccountFormPage> {
         _userPrCurrency = value;
       });
     });
+
+    AccountService.instance.getAccounts().first.then((accounts) {
+      if (!mounted) return;
+
+      final byGroup = <String, List<Account>>{};
+      for (final account in accounts) {
+        final group = account.groupName;
+        if (group != null) {
+          byGroup.putIfAbsent(group, () => []).add(account);
+        }
+      }
+
+      setState(() {
+        _accountsByGroup
+          ..clear()
+          ..addAll(byGroup);
+        _existingGroups = byGroup.keys.toList()..sort();
+      });
+    });
+
+    _groupController.addListener(_adoptGroupStyleIfUntouched);
+  }
+
+  /// When creating an account and the user hasn't customized the icon/color
+  /// yet, adopt them from the first account of the chosen group.
+  void _adoptGroupStyleIfUntouched() {
+    if (_accountToEdit != null || _iconOrColorTouched) return;
+
+    final accounts = _accountsByGroup[_groupController.text.trim()];
+    if (accounts == null) return;
+
+    final match = accountGroupRepresentative(accounts);
+
+    setState(() {
+      _icon = match.icon;
+      _color = match.getComputedColor(context);
+    });
   }
 
   void _fillForm() {
@@ -189,6 +247,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
     final accountService = AccountService.instance;
 
     _nameController.text = _accountToEdit.name;
+    _groupController.text = _accountToEdit.groupName ?? '';
     _ibanController.text = _accountToEdit.iban ?? '';
     _swiftController.text = _accountToEdit.swift ?? '';
     _textController.text = _accountToEdit.description ?? '';
@@ -223,6 +282,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
   @override
   void dispose() {
     _nameController.dispose();
+    _groupController.removeListener(_adoptGroupStyleIfUntouched);
+    _groupController.dispose();
+    _groupFocusNode.dispose();
     _balanceController.dispose();
     _textController.dispose();
     _ibanController.dispose();
@@ -291,6 +353,86 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     ),
                   );
 
+                  // Group
+                  add(
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return RawAutocomplete<String>(
+                          textEditingController: _groupController,
+                          focusNode: _groupFocusNode,
+                          optionsBuilder: (textEditingValue) {
+                            final input = textEditingValue.text
+                                .trim()
+                                .toLowerCase();
+
+                            return _existingGroups.where((group) {
+                              final lower = group.toLowerCase();
+
+                              // Don't suggest what's already fully typed.
+                              if (lower == input) return false;
+
+                              return input.isEmpty || lower.contains(input);
+                            });
+                          },
+                          fieldViewBuilder:
+                              (context, controller, focusNode, onSubmitted) {
+                                return TextFormField(
+                                  controller: controller,
+                                  focusNode: focusNode,
+                                  decoration: InputDecoration(
+                                    labelText: t.account.form.group,
+                                    hintText: t.account.form.group_placeholder,
+                                    helperText: t.account.form.group_descr,
+                                    helperMaxLines: 2,
+                                  ),
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) => onSubmitted(),
+                                );
+                              },
+                          optionsViewBuilder: (context, onSelected, options) {
+                            return Align(
+                              alignment: Alignment.topLeft,
+                              child: Material(
+                                elevation: 4,
+                                borderRadius: BorderRadius.circular(8),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: 200,
+                                    maxWidth: constraints.maxWidth,
+                                  ),
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    itemCount: options.length,
+                                    itemBuilder: (context, index) {
+                                      final option = options.elementAt(index);
+
+                                      final groupAccounts =
+                                          _accountsByGroup[option];
+
+                                      return ListTile(
+                                        dense: true,
+                                        leading: groupAccounts == null
+                                            ? null
+                                            : accountGroupIcon(
+                                                context,
+                                                groupAccounts,
+                                                size: 20,
+                                              ),
+                                        title: Text(option),
+                                        onTap: () => onSelected(option),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+
                   // Icon & color selector
                   add(
                     IconAndColorSelector(
@@ -310,6 +452,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                               onIconSelected: (selectedIcon) {
                                 setState(() {
                                   _icon = selectedIcon;
+                                  _iconOrColorTouched = true;
                                 });
                               },
                             ),
@@ -327,6 +470,7 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         setState(() {
                           _icon = data.icon;
                           _color = data.color;
+                          _iconOrColorTouched = true;
                         });
                       }),
                       data: (color: _color, icon: _icon),
