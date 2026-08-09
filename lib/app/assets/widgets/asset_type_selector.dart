@@ -53,10 +53,8 @@ Future<AssetType?> showAssetTypeSelector(
 }) {
   final t = Translations.of(context);
 
-  return showModalBottomSheet<AssetType>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<AssetType>(
+    context,
     builder: (context) => ModalContainer(
       title: t.assets.form.asset_type,
       body: SingleChildScrollView(

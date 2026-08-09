@@ -37,7 +37,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
   }
 
   void _goToEdit() {
-    RouteUtils.pushRoute(const CategoryFormPage());
+    RouteUtils.showResponsiveForm(const CategoryFormPage());
   }
 
   @override
@@ -105,7 +105,7 @@ class _CategoriesListPageState extends State<CategoriesListPage> {
 
                 return ReorderableListTileStyling(
                   child: ListTile(
-                    onTap: () => RouteUtils.pushRoute(
+                    onTap: () => RouteUtils.showResponsiveForm(
                       CategoryFormPage(categoryUUID: category.id),
                     ),
                     trailing: categories.length > 1

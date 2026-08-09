@@ -13,10 +13,8 @@ Future<void> showIconSelectorModal(
   BuildContext context,
   IconSelectorModal component,
 ) {
-  return showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<void>(
+    context,
     builder: (context) {
       return component;
     },

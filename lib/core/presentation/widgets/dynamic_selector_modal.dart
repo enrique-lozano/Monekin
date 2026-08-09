@@ -140,10 +140,8 @@ Future<ModalResult<V>?> showDynamicSelectorBottomSheet<T, V>(
   BuildContext context, {
   required DynamicSelectorModal<T, V> selectorWidget,
 }) {
-  return showModalBottomSheet<ModalResult<V>>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
+  return RouteUtils.showResponsiveModal<ModalResult<V>>(
+    context,
     builder: (context) {
       return selectorWidget;
     },
@@ -261,10 +259,8 @@ Future<ModalResult<List<V>>?> showDynamicMultiSelectorBottomSheet<T, V>(
   BuildContext context, {
   required DynamicMultiSelectorModal<T, V> selectorWidget,
 }) {
-  return showModalBottomSheet<ModalResult<List<V>>>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
+  return RouteUtils.showResponsiveModal<ModalResult<List<V>>>(
+    context,
     builder: (context) {
       return selectorWidget;
     },

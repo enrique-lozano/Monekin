@@ -36,6 +36,8 @@ class TransactionListTile extends StatelessWidget {
     this.isSelected = false,
     this.applySwipeActions = false,
     this.preventDefaultOnTap = false,
+    this.tableLayout = false,
+    this.onSelectedChanged,
   });
 
   final MoneyTransaction transaction;
@@ -72,6 +74,15 @@ class TransactionListTile extends StatelessWidget {
   final bool preventDefaultOnTap;
 
   final bool isSelected;
+
+  /// Renders a desktop-oriented table row (checkbox + account column) instead
+  /// of the mobile list tile. Swipe actions and the long-press menu are not
+  /// applied in this mode.
+  final bool tableLayout;
+
+  /// Called when the row's selection checkbox is toggled (only in
+  /// [tableLayout]).
+  final ValueChanged<bool?>? onSelectedChanged;
 
   bool get showPeriodicityInfo =>
       periodicityInfo != null && transaction.recurrentInfo.isRecurrent;
@@ -152,8 +163,142 @@ class TransactionListTile extends StatelessWidget {
     );
   }
 
+  void _openDetails() {
+    RouteUtils.pushRoute(
+      TransactionDetailsPage(transaction: transaction, heroTag: heroTag),
+    );
+  }
+
+  /// Desktop table-like row: leading selection checkbox, name, a dedicated
+  /// account column, a date column and the amount.
+  Widget _buildTableRow(BuildContext context) {
+    final showTime =
+        appStateSettings[SettingKey.transactionTileShowTime] == '1';
+
+    DateFormat dateFormat = currentYear == transaction.date.year
+        ? DateFormat.MMMd()
+        : DateFormat.yMMMd();
+    if (showTime) dateFormat = dateFormat.add_Hm();
+
+    return Material(
+      color: isSelected
+          ? Theme.of(context).colorScheme.primary.withOpacity(0.12)
+          : Colors.transparent,
+      child: InkWell(
+        onTap: onTap ?? (preventDefaultOnTap ? null : _openDetails),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Row(
+            children: [
+              Checkbox(value: isSelected, onChanged: onSelectedChanged),
+              const SizedBox(width: 4),
+              transaction.getDisplayIcon(context, size: 26, padding: 6),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            transaction.displayName(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (transaction.status != null ||
+                            transaction.recurrentInfo.isRecurrent) ...[
+                          const SizedBox(width: 4),
+                          Icon(
+                            transaction.status?.icon ?? Icons.repeat,
+                            size: 12,
+                            color:
+                                transaction.status?.color.darken(0.1) ??
+                                Theme.of(context).colorScheme.primary,
+                          ),
+                        ],
+                      ],
+                    ),
+                    if (transaction.notes.isNotNullNorEmpty)
+                      Text(
+                        transaction.notes!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelMedium!
+                            .copyWith(fontStyle: FontStyle.italic),
+                      ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: [
+                    IconDisplayer(
+                      supportedIcon: transaction.account.icon,
+                      size: 14,
+                      mainColor: transaction.account
+                          .getComputedColor(context)
+                          .lightenPastel(
+                            amount: isAppInDarkBrightness(context) ? 0.12 : 0,
+                          ),
+                      secondaryColor: Colors.transparent,
+                      padding: 0,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        transaction.account.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 110,
+                child: Text(
+                  dateFormat.format(transaction.date),
+                  textAlign: TextAlign.end,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
+              const SizedBox(width: 12),
+              CurrencyDisplayer(
+                amountToConvert: transaction.value,
+                currency: transaction.account.currency,
+                integerStyle: TextStyle(
+                  color: transaction.status == TransactionStatus.voided
+                      ? Colors.grey.shade400
+                      : transaction.isIncomeOrExpense
+                      ? transaction.type.color(context)
+                      : null,
+                  decoration: transaction.status == TransactionStatus.voided
+                      ? TextDecoration.lineThrough
+                      : null,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (tableLayout) {
+      return _buildTableRow(context);
+    }
+
     final showTime =
         appStateSettings[SettingKey.transactionTileShowTime] == '1';
 
@@ -481,7 +626,7 @@ Future<bool> executeTransactionSwipeAction(
       );
       break;
     case TransactionSwipeAction.edit:
-      await RouteUtils.pushRoute(
+      await RouteUtils.showResponsiveForm(
         TransactionFormPage(transactionToEdit: transaction),
       );
 

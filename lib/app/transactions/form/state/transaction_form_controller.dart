@@ -885,10 +885,8 @@ class TransactionFormController extends ChangeNotifier {
 
   void openTransferSourceAmountSelector(BuildContext context) {
     final tr = Translations.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    RouteUtils.showResponsiveModal<void>(
+      context,
       builder: (ctx) => AmountSelector(
         title: tr.transaction.form.value,
         initialAmount: transactionValue.abs(),
@@ -908,10 +906,8 @@ class TransactionFormController extends ChangeNotifier {
   }) {
     final tr = Translations.of(context);
     final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    RouteUtils.showResponsiveModal<void>(
+      context,
       builder: (ctx) => AmountSelector(
         title: tr.transfer.form.value_in_destiny.title,
         initialAmount: initial,
@@ -955,10 +951,8 @@ class TransactionFormController extends ChangeNotifier {
 
   void openAmountSelectorSheet(BuildContext context) {
     final tr = Translations.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    RouteUtils.showResponsiveModal<void>(
+      context,
       builder: (ctx) => AmountSelector(
         title: tr.transaction.form.value,
         initialAmount: transactionValue,

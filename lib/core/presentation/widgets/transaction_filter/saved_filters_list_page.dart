@@ -35,7 +35,7 @@ class _SavedFiltersListPageState extends State<SavedFiltersListPage> {
   }
 
   void _goToEdit() {
-    RouteUtils.pushRoute(const SavedFilterFormPage());
+    RouteUtils.showResponsiveForm(const SavedFilterFormPage());
   }
 
   @override
@@ -84,7 +84,7 @@ class _SavedFiltersListPageState extends State<SavedFiltersListPage> {
 
             return ReorderableListTileStyling(
               child: ListTile(
-                onTap: () => RouteUtils.pushRoute(
+                onTap: () => RouteUtils.showResponsiveForm(
                   SavedFilterFormPage(savedFilter: filter),
                 ),
                 trailing: filters.length > 1

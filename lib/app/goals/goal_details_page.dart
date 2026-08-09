@@ -85,7 +85,9 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                   label: t.goals.form.edit_title,
                   icon: Icons.edit,
                   onClick: () {
-                    RouteUtils.pushRoute(GoalFormPage(goalToEdit: goal));
+                    RouteUtils.showResponsiveForm(
+                      GoalFormPage(goalToEdit: goal),
+                    );
                   },
                 ),
                 ListTileActionItem(

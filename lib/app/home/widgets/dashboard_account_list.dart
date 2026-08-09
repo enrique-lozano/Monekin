@@ -44,7 +44,8 @@ class DashboardAccountList extends StatelessWidget {
               ? CardHeaderAction(
                   icon: const Icon(Icons.add_rounded),
                   text: t.account.form.create,
-                  onTap: () => RouteUtils.pushRoute(const AccountFormPage()),
+                  onTap: () =>
+                      RouteUtils.showResponsiveForm(const AccountFormPage()),
                 )
               : null,
           footer: hasHiddenRows

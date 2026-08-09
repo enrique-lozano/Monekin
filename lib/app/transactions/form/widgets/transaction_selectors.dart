@@ -81,7 +81,7 @@ class TransactionRecurrencySelector extends StatelessWidget {
           if (res.result != null) {
             c.setRecurrency(res.result!);
           } else {
-            RouteUtils.pushRoute(
+            RouteUtils.showResponsiveForm(
               IntervalSelectorPage(preselectedRecurrentRule: recurrentRule),
             ).then((value) {
               if (value == null) return;

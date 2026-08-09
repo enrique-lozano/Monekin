@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/custom_color_picker.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 Future<void> showCustomColorPickerModal(
   BuildContext context,
   CustomColorPickerModal component,
 ) {
-  return showModalBottomSheet<Color>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<Color>(
+    context,
     builder: (context) {
       return component;
     },

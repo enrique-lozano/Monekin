@@ -27,10 +27,8 @@ Future<TagSelectorResult?> showTagListModal(
   BuildContext context, {
   required TagSelector modal,
 }) {
-  return showModalBottomSheet<TagSelectorResult>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<TagSelectorResult>(
+    context,
     builder: (context) {
       return modal;
     },

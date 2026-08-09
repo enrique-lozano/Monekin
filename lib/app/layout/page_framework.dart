@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/animations/animate_fab.dart';
 import 'package:monekin/core/presentation/helpers/empty_app_bar.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 
 class PageFramework extends StatelessWidget {
@@ -10,6 +11,7 @@ class PageFramework extends StatelessWidget {
     this.tabBar,
     this.appBarActions,
     this.appBarBuilder,
+    this.breadcrumbs,
     this.appBarBackgroundColor,
     this.appBarForegroundColor,
     this.enableAppBar = true,
@@ -23,6 +25,7 @@ class PageFramework extends StatelessWidget {
   final String? title;
   final TabBar? tabBar;
   final List<Widget>? appBarActions;
+  final List<PageBreadcrumb>? breadcrumbs;
   final PreferredSizeWidget Function(
     String title,
     TabBar? tabBar,
@@ -38,14 +41,30 @@ class PageFramework extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
-  PreferredSizeWidget? _buildAppBar() {
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
     if (enableAppBar) {
+      if (breadcrumbs != null && !AppUtils.isMobileLayout(context)) {
+        return AppBar(
+          key: ValueKey(
+            'AppBar_${breadcrumbs!.map((item) => item.label).join('_')}',
+          ),
+          toolbarHeight: 64,
+          titleSpacing: 0,
+          title: _Breadcrumbs(items: breadcrumbs!),
+          bottom: tabBar,
+          backgroundColor: appBarBackgroundColor,
+          foregroundColor: appBarForegroundColor,
+          actions: appBarActions,
+        );
+      }
+
       if (appBarBuilder != null) {
         return appBarBuilder!(title ?? '', tabBar, appBarActions);
       }
 
       return AppBar(
         key: ValueKey('AppBar_${title ?? ''}'),
+        leading: SideDrawerScope.of(context) ? const CloseButton() : null,
         title: Text(title ?? ''),
         bottom: tabBar,
         backgroundColor: appBarBackgroundColor,
@@ -71,7 +90,7 @@ class PageFramework extends StatelessWidget {
       removeLeft: !AppUtils.isMobileLayout(context),
       removeRight: !AppUtils.isMobileLayout(context),
       child: Scaffold(
-        appBar: _buildAppBar(),
+        appBar: _buildAppBar(context),
         persistentFooterButtons: persistentFooterButtons,
         floatingActionButton: AnimateFABDelayed(fab: floatingActionButton),
         floatingActionButtonLocation: floatingActionButtonLocation,
@@ -81,6 +100,103 @@ class PageFramework extends StatelessWidget {
     );
 
     return PageNavigationFrameworkSafeArea(child: scaffold);
+  }
+}
+
+class PageBreadcrumb {
+  const PageBreadcrumb(this.label, {this.onTap});
+
+  final String label;
+  final VoidCallback? onTap;
+}
+
+class _Breadcrumbs extends StatelessWidget {
+  const _Breadcrumbs({required this.items});
+
+  final List<PageBreadcrumb> items;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodySmall;
+
+    return Row(
+      children: [
+        for (var index = 0; index < items.length; index++) ...[
+          if (index > 0)
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 16,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          Flexible(
+            child: items[index].onTap == null
+                ? Text(
+                    items[index].label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: style,
+                  )
+                : TextButton(
+                    onPressed: items[index].onTap,
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 6),
+                      minimumSize: const Size(0, 40),
+                      textStyle: style,
+                    ),
+                    child: Text(
+                      items[index].label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class PageScrollTitle extends StatelessWidget {
+  const PageScrollTitle({
+    super.key,
+    this.primaryTitle,
+    required this.secondaryTitle,
+    required this.controller,
+  });
+
+  final String? primaryTitle;
+  final String secondaryTitle;
+  final ScrollController controller;
+
+  static double opacityForOffset(
+    double offset, {
+    double fadeStart = 40,
+    double fadeEnd = 100,
+  }) {
+    return ((offset - fadeStart) / (fadeEnd - fadeStart))
+        .clamp(0, 1)
+        .toDouble();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        final opacity = controller.hasClients
+            ? opacityForOffset(controller.offset)
+            : 0.0;
+
+        return Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            if (primaryTitle != null)
+              Opacity(opacity: 1 - opacity, child: Text(primaryTitle!)),
+            Opacity(opacity: opacity, child: Text(secondaryTitle)),
+          ],
+        );
+      },
+    );
   }
 }
 

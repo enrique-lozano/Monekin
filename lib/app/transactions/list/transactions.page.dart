@@ -21,6 +21,7 @@ import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -229,21 +230,30 @@ class TransactionsPageState extends State<TransactionsPage> {
                 listPadding: const EdgeInsets.only(
                   bottom: 64,
                 ).withSafeBottom(context),
-                tileBuilder: (tr) => TransactionListTile(
-                  transaction: tr,
-                  heroTag: 'transactions-page__tr-icon-${tr.id}',
-                  onLongPress: selectedTransactions.isNotEmpty
-                      ? null
-                      : () => toggleTransaction(tr),
-                  onTap: selectedTransactions.isEmpty
-                      ? null
-                      : () => toggleTransaction(tr),
-                  isSelected: selectedTransactions.any(
+                tileBuilder: (tr) {
+                  final isDesktop = !AppUtils.isMobileLayout(context);
+                  final isSelected = selectedTransactions.any(
                     (element) => element.id == tr.id,
-                  ),
-                  showDateTime: false,
-                  applySwipeActions: true,
-                ),
+                  );
+
+                  return TransactionListTile(
+                    transaction: tr,
+                    heroTag: 'transactions-page__tr-icon-${tr.id}',
+                    tableLayout: isDesktop,
+                    onSelectedChanged: isDesktop
+                        ? (_) => toggleTransaction(tr)
+                        : null,
+                    onLongPress: isDesktop || selectedTransactions.isNotEmpty
+                        ? null
+                        : () => toggleTransaction(tr),
+                    onTap: isDesktop || selectedTransactions.isEmpty
+                        ? null
+                        : () => toggleTransaction(tr),
+                    isSelected: isSelected,
+                    showDateTime: false,
+                    applySwipeActions: !isDesktop,
+                  );
+                },
                 filters: filters.copyWith(searchValue: searchController.text),
                 onEmptyList: NoResults(
                   title: filters.hasFilter ? null : t.general.empty_warn,

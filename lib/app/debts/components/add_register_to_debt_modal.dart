@@ -77,7 +77,9 @@ class AddMoneyTransactionToDebtModal extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               onTap: () {
                 RouteUtils.popRoute();
-                RouteUtils.pushRoute(TransactionFormPage(linkedDebt: debt));
+                RouteUtils.showResponsiveForm(
+                  TransactionFormPage(linkedDebt: debt),
+                );
               },
             ),
             const SizedBox(height: 8),

@@ -22,10 +22,8 @@ Future<Category?> showCategoryPickerModal(
   BuildContext context, {
   required CategoryPicker modal,
 }) {
-  return showModalBottomSheet<Category>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<Category>(
+    context,
     builder: (context) {
       return modal;
     },

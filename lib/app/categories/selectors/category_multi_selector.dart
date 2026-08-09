@@ -18,10 +18,8 @@ Future<List<Category>?> showMultiCategoryListModal(
   BuildContext context,
   CategoryMultiSelectorModal modal,
 ) {
-  return showModalBottomSheet<List<Category>>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<List<Category>>(
+    context,
     builder: (context) => modal,
   );
 }

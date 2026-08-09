@@ -76,35 +76,10 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
 
   final ScrollController _scrollController = ScrollController();
 
-  /// Opacity of the security name shown in the app bar: it only fades in
-  /// once the large name/price header has scrolled past.
-  double _appBarTitleOpacity = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _onScroll() {
-    const fadeStart = 40.0;
-    const fadeEnd = 100.0;
-
-    final opacity =
-        ((_scrollController.offset - fadeStart) / (fadeEnd - fadeStart)).clamp(
-          0.0,
-          1.0,
-        );
-
-    if ((opacity - _appBarTitleOpacity).abs() > 0.01) {
-      setState(() => _appBarTitleOpacity = opacity);
-    }
   }
 
   // ---------------------------------------------------------------------------
@@ -214,7 +189,9 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
         .first;
     if (rich == null || !mounted) return;
 
-    await RouteUtils.pushRoute(TransactionFormPage(transactionToEdit: rich));
+    await RouteUtils.showResponsiveForm(
+      TransactionFormPage(transactionToEdit: rich),
+    );
   }
 
   Future<void> _addPricePoint(SecurityInDB security, Currency? currency) async {
@@ -293,8 +270,7 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
         final security = snapshot.data?.security ?? widget.security;
         final positions = snapshot.data?.positions ?? const <_Position>[];
         final trades = snapshot.data?.trades ?? const <TransactionInDB>[];
-        final history =
-            snapshot.data?.history ?? const <SecurityPriceInDB>[];
+        final history = snapshot.data?.history ?? const <SecurityPriceInDB>[];
         final currency = snapshot.data?.currency;
 
         final allPoints = _buildPricePoints(security, trades, history);
@@ -303,7 +279,10 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
           title: security.name,
           appBarBuilder: (title, tabBar, actions) => AppBar(
             key: ValueKey('AppBar_$title'),
-            title: Opacity(opacity: _appBarTitleOpacity, child: Text(title)),
+            title: PageScrollTitle(
+              secondaryTitle: title,
+              controller: _scrollController,
+            ),
             bottom: tabBar,
             actions: actions,
           ),

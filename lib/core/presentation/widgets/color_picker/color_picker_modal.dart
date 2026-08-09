@@ -12,10 +12,8 @@ Future<void> showColorPickerModal(
   BuildContext context,
   ColorPickerModal component,
 ) {
-  return showModalBottomSheet<Color>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<Color>(
+    context,
     builder: (context) {
       return component;
     },

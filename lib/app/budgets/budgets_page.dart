@@ -102,8 +102,9 @@ class BudgetFabButton extends StatelessWidget {
       heroTag: UniqueKey(),
       icon: const Icon(Icons.add_rounded),
       label: Text(t.budgets.form.create),
-      onPressed: () =>
-          RouteUtils.pushRoute(const BudgetFormPage(prevPage: BudgetsPage())),
+      onPressed: () => RouteUtils.showResponsiveForm(
+        const BudgetFormPage(prevPage: BudgetsPage()),
+      ),
     );
   }
 }

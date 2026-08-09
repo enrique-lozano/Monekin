@@ -118,7 +118,7 @@ class CurrencyManagerPage extends StatelessWidget {
                       enabled: userCurrency != null,
                       onTap: () {
                         if (userCurrency != null) {
-                          RouteUtils.pushRoute(
+                          RouteUtils.showResponsiveForm(
                             EditCurrencyPage(currency: userCurrency),
                           );
                         }

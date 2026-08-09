@@ -32,7 +32,7 @@ Future<SecurityInDB?> showSecurityFormSheet(
   SecurityInDB? securityToEdit,
   bool openClassification = false,
 }) {
-  return RouteUtils.pushRoute<SecurityInDB>(
+  return RouteUtils.showResponsiveForm<SecurityInDB>(
     _SecurityFormPage(
       securityToEdit: securityToEdit,
       initialTab: openClassification

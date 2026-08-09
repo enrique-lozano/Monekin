@@ -288,10 +288,8 @@ class _DashboardPageState extends State<DashboardPage> {
       bgColor: Colors.transparent,
       borderRadius: BorderRadius.circular(14),
       onTap: () {
-        showModalBottomSheet(
+        RouteUtils.showResponsiveSheet(
           context: context,
-          isScrollControlled: true,
-          showDragHandle: true,
           builder: (context) => const EditProfileModal(),
         );
       },

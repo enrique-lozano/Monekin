@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/database/services/taxonomy/taxonomy_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
+import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
@@ -398,106 +399,114 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
               ),
             ],
             const SizedBox(height: 16),
-            SizedBox(
-              height: 220,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  PieChart(
-                    PieChartData(
-                      startDegreeOffset: -90,
-                      borderData: FlBorderData(show: false),
-                      sectionsSpace: 2,
-                      centerSpaceRadius: 60,
-                      pieTouchData: PieTouchData(
-                        touchCallback: (event, response) {
-                          setState(() {
-                            _touchedIndex =
-                                response?.touchedSection?.touchedSectionIndex ??
-                                -1;
-                          });
-                        },
-                      ),
-                      sections: [
-                        for (var i = 0; i < slices.length; i++)
-                          PieChartSectionData(
-                            color:
-                                slices[i].color ??
-                                _palette[i % _palette.length],
-                            value: slices[i].market,
-                            radius: _touchedIndex == i ? 64 : 56,
-                            showTitle: false,
-                          ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CurrencyDisplayer(
-                        amountToConvert: total,
-                        integerStyle: Theme.of(context).textTheme.titleLarge!,
-                      ),
-                      TrendingValue(
-                        percentage: totalPnlPct,
-                        value: totalPnl,
-                        dataTypes: const [TrendingValueDataType.value],
-                        fontSize: 12,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            ...List.generate(slices.length, (i) {
-              final slice = slices[i];
-              final pct = total == 0 ? 0.0 : slice.market / total;
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
+            AdaptiveTwoColumn(
+              breakpoint: 520,
+              rowCrossAxisAlignment: CrossAxisAlignment.center,
+              first: SizedBox(
+                height: 220,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Container(
-                      width: 12,
-                      height: 12,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: slice.color ?? _palette[i % _palette.length],
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            slice.label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          Text(
-                            '${(pct * 100).toStringAsFixed(1)}%',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                    PieChart(
+                      PieChartData(
+                        startDegreeOffset: -90,
+                        borderData: FlBorderData(show: false),
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 60,
+                        pieTouchData: PieTouchData(
+                          touchCallback: (event, response) {
+                            setState(() {
+                              _touchedIndex =
+                                  response
+                                      ?.touchedSection
+                                      ?.touchedSectionIndex ??
+                                  -1;
+                            });
+                          },
+                        ),
+                        sections: [
+                          for (var i = 0; i < slices.length; i++)
+                            PieChartSectionData(
+                              color:
+                                  slices[i].color ??
+                                  _palette[i % _palette.length],
+                              value: slices[i].market,
+                              radius: _touchedIndex == i ? 64 : 56,
+                              showTitle: false,
+                            ),
                         ],
                       ),
                     ),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        CurrencyDisplayer(amountToConvert: slice.market),
+                        CurrencyDisplayer(
+                          amountToConvert: total,
+                          integerStyle: Theme.of(context).textTheme.titleLarge!,
+                        ),
                         TrendingValue(
-                          percentage: slice.pnlPercent,
+                          percentage: totalPnlPct,
+                          value: totalPnl,
+                          dataTypes: const [TrendingValueDataType.value],
                           fontSize: 12,
                         ),
                       ],
                     ),
                   ],
                 ),
-              );
-            }),
+              ),
+              second: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(slices.length, (i) {
+                  final slice = slices[i];
+                  final pct = total == 0 ? 0.0 : slice.market / total;
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 12,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: slice.color ?? _palette[i % _palette.length],
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                slice.label,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              Text(
+                                '${(pct * 100).toStringAsFixed(1)}%',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            CurrencyDisplayer(amountToConvert: slice.market),
+                            TrendingValue(
+                              percentage: slice.pnlPercent,
+                              fontSize: 12,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ),
+            ),
           ],
         );
       },

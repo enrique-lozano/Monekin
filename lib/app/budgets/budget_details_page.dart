@@ -103,7 +103,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                   label: t.budgets.form.edit,
                   icon: Icons.edit,
                   onClick: () {
-                    RouteUtils.pushRoute(
+                    RouteUtils.showResponsiveForm(
                       BudgetFormPage(
                         prevPage: const BudgetsPage(),
                         budgetToEdit: budget,

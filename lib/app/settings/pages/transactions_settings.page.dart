@@ -238,7 +238,7 @@ class TransactionsSettingsPage extends StatelessWidget {
               ListTile(
                 title: Text(t.settings.transactions.default_values.title),
                 trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                onTap: () => RouteUtils.pushRoute(
+                onTap: () => RouteUtils.showResponsiveForm(
                   const DefaultFormTransactionValuesPage(),
                 ),
               ),

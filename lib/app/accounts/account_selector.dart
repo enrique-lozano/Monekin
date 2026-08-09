@@ -17,10 +17,8 @@ Future<List<Account>?> showAccountSelectorBottomSheet(
   BuildContext context,
   AccountSelectorModal accountSelector,
 ) {
-  return showModalBottomSheet<List<Account>>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
+  return RouteUtils.showResponsiveModal<List<Account>>(
+    context,
     builder: (context) {
       return accountSelector;
     },

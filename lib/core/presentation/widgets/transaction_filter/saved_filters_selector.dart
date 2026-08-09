@@ -6,6 +6,7 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filter_form_page.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/saved_filters_list_page.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -100,11 +101,8 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
                             showIllustration: false,
                             bottom: FilledButton.icon(
                               onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SavedFilterFormPage(),
-                                  ),
+                                RouteUtils.showResponsiveForm(
+                                  const SavedFilterFormPage(),
                                 );
                               },
                               label: Text(t.ui_actions.add),
@@ -134,11 +132,9 @@ class _SavedFiltersSelectorState extends State<SavedFiltersSelector>
                               trailing: IconButton(
                                 icon: const Icon(Icons.edit_rounded),
                                 onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => SavedFilterFormPage(
-                                        savedFilter: savedFilter,
-                                      ),
+                                  RouteUtils.showResponsiveForm(
+                                    SavedFilterFormPage(
+                                      savedFilter: savedFilter,
                                     ),
                                   );
                                 },

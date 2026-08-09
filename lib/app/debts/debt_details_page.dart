@@ -81,7 +81,7 @@ class DebtDetailsPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                RouteUtils.pushRoute(DebtFormPage(debt: debt));
+                RouteUtils.showResponsiveForm(DebtFormPage(debt: debt));
               },
             ),
           ],

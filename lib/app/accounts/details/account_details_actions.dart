@@ -34,7 +34,7 @@ abstract class AccountDetailsActions {
         contentParagraphs: [Text(t.transfer.need_two_accounts_warning_message)],
       );
     } else {
-      RouteUtils.pushRoute(
+      RouteUtils.showResponsiveForm(
         TransactionFormPage(
           fromAccount: fromAccount,
           toAccount: toAccount,
@@ -66,10 +66,8 @@ abstract class AccountDetailsActions {
       icon: Icons.balance_rounded,
       onClick: account.isClosed
           ? null
-          : () => showModalBottomSheet(
+          : () => RouteUtils.showResponsiveSheet(
               context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
               builder: (context) => BalanceCorrectionModal(account: account),
             ),
     );

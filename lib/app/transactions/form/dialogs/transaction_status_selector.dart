@@ -9,10 +9,8 @@ Future<ModalResult<TransactionStatus>?> showTransactionStatusModal(
   BuildContext context, {
   required TransactionStatus? initialStatus,
 }) {
-  return showModalBottomSheet<ModalResult<TransactionStatus>>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<ModalResult<TransactionStatus>>(
+    context,
     builder: (context) {
       return TransactionStatusSelector(initialTransactionStatus: initialStatus);
     },

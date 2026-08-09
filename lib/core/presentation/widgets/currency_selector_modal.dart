@@ -13,10 +13,8 @@ void showCurrencySelectorModal(
   BuildContext context,
   CurrencySelectorModal modalData,
 ) {
-  showModalBottomSheet(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
+  RouteUtils.showResponsiveModal(
+    context,
     builder: (context) => modalData,
   );
 }

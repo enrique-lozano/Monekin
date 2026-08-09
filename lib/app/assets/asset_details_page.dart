@@ -89,7 +89,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   /// it's timestamped with the exact creation time while manually-added
   /// valuations are timestamped at midnight, it could sort *after* that real
   /// valuation and silently override it when the chart samples that day.
-  List<AssetValuationInDB> _valuationsWithInitial(List<AssetValuationInDB> valuations) {
+  List<AssetValuationInDB> _valuationsWithInitial(
+    List<AssetValuationInDB> valuations,
+  ) {
     final hasValuationOnCreationDay = valuations.any(
       (v) => v.date.justDay() == widget.asset.creationDate.justDay(),
     );
@@ -106,7 +108,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     ]..sort((a, b) => a.date.compareTo(b.date));
   }
 
-  List<AssetValuationInDB> _buildFilteredChartData(List<AssetValuationInDB> valuations) {
+  List<AssetValuationInDB> _buildFilteredChartData(
+    List<AssetValuationInDB> valuations,
+  ) {
     return _dateRange.filterTimeSeries(
       _valuationsWithInitial(valuations),
       dateExtractor: (valuation) => valuation.date,
@@ -414,8 +418,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 ListTileActionItem(
                   label: t.ui_actions.edit,
                   icon: Icons.edit_rounded,
-                  onClick: () =>
-                      RouteUtils.pushRoute(AssetFormPage(asset: asset)),
+                  onClick: () => RouteUtils.showResponsiveForm(
+                    AssetFormPage(asset: asset),
+                  ),
                 ),
                 if (valuations != null && valuations.isNotEmpty)
                   ListTileActionItem(
@@ -1365,7 +1370,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton.tonalIcon(
-                      onPressed: () => RouteUtils.pushRoute(
+                      onPressed: () => RouteUtils.showResponsiveForm(
                         AssetFormPage(asset: resolvedAsset),
                       ),
                       icon: const Icon(Icons.edit_rounded),

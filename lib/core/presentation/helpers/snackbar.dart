@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
@@ -105,12 +106,25 @@ abstract class MonekinSnackbar {
       return snackbarResult;
     }
 
+    final context = snackbarKey.currentContext;
+    final showAsToast = context != null && !AppUtils.isMobileLayout(context);
+    final screenWidth = context == null
+        ? 0.0
+        : MediaQuery.sizeOf(context).width;
+    final toastWidth = screenWidth > 380 ? 380.0 : screenWidth;
+
     return _getScaffoldMessenger(options).showSnackBar(
       SnackBar(
         padding: options.padding,
         backgroundColor: bgColor,
-        //  margin: const EdgeInsets.all(8),
-        //  behavior: SnackBarBehavior.floating,
+        behavior: showAsToast ? SnackBarBehavior.floating : null,
+        margin: showAsToast
+            ? EdgeInsets.only(
+                left: screenWidth - toastWidth - 16,
+                right: 16,
+                bottom: 16,
+              )
+            : null,
         duration: options.duration,
         content: MonekinSnackbarContent(
           title: options.title,

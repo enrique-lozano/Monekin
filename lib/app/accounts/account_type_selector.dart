@@ -14,10 +14,8 @@ Future<AccountType?> showAccountTypeSelector(
   BuildContext context, {
   required AccountType selectedType,
 }) {
-  return showModalBottomSheet<AccountType>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<AccountType>(
+    context,
     builder: (context) => _AccountTypeSelectorSheet(selectedType: selectedType),
   );
 }

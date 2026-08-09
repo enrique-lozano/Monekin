@@ -65,6 +65,7 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
+  final ScrollController _scrollController = ScrollController();
   late DatePeriodState _dateRange;
   _DetailTab _selectedTab = _DetailTab.movements;
 
@@ -72,6 +73,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   void initState() {
     super.initState();
     _dateRange = widget.dateRangeService;
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void _onPeriodChanged(DatePeriod period) {
@@ -131,13 +138,32 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         ).menu;
 
         return PageFramework(
-          title: t.account.details,
+          title: t.general.details,
+          breadcrumbs: [
+            PageBreadcrumb(
+              t.general.accounts,
+              onTap: () => RouteUtils.popRoute(),
+            ),
+            if (account.groupName != null) PageBreadcrumb(account.groupName!),
+            PageBreadcrumb(account.name),
+          ],
+          appBarBuilder: (title, tabBar, actions) => AppBar(
+            key: ValueKey('AppBar_$title'),
+            title: PageScrollTitle(
+              primaryTitle: title,
+              secondaryTitle: account.name,
+              controller: _scrollController,
+            ),
+            bottom: tabBar,
+            actions: actions,
+          ),
           appBarActions: [
             IconButton(
               icon: const Icon(Icons.edit_rounded),
               tooltip: t.ui_actions.edit,
-              onPressed: () =>
-                  RouteUtils.pushRoute(AccountFormPage(account: account)),
+              onPressed: () => RouteUtils.showResponsiveForm(
+                AccountFormPage(account: account),
+              ),
             ),
             if (menuActions.isNotEmpty)
               MonekinPopupMenuButton(actionItems: menuActions),
@@ -154,6 +180,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           // screens the user can scroll from anywhere on the page, not just
           // while hovering over the centered column.
           body: SingleChildScrollView(
+            controller: _scrollController,
             padding: const EdgeInsets.symmetric(
               vertical: 16,
             ).withSafeBottom(context),
@@ -489,7 +516,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           color: Colors.green,
           onTap: disabled
               ? null
-              : () => RouteUtils.pushRoute(
+              : () => RouteUtils.showResponsiveForm(
                   TransactionFormPage(
                     mode: TransactionType.income,
                     fromAccount: account,
@@ -502,7 +529,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           color: Colors.red,
           onTap: disabled
               ? null
-              : () => RouteUtils.pushRoute(
+              : () => RouteUtils.showResponsiveForm(
                   TransactionFormPage(
                     mode: TransactionType.expense,
                     fromAccount: account,

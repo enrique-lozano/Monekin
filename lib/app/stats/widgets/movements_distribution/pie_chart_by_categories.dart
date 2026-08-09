@@ -13,6 +13,7 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
@@ -252,126 +253,130 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                 onSelected: (type) => setState(() => transactionsType = type),
               ),
             ),
-            SizedBox(
-              height: 260,
-              child: Stack(
-                children: [
-                  PieChart(
-                    curve: Curves.easeOut,
-                    duration: const Duration(milliseconds: 250),
-                    PieChartData(
-                      startDegreeOffset: -45,
-                      pieTouchData: PieTouchData(
-                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                          setState(() {
-                            if (!event.isInterestedForInteractions ||
-                                pieTouchResponse == null ||
-                                pieTouchResponse.touchedSection == null) {
-                              touchedIndex = -1;
-                              return;
-                            }
-                            touchedIndex = pieTouchResponse
-                                .touchedSection!
-                                .touchedSectionIndex;
-                          });
-                        },
-                      ),
-                      borderData: FlBorderData(show: false),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: centerRadius.toDouble(),
-                      sections: showingSections(dataItems),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: centerRadius * 2.25,
-                        height: centerRadius * 2.25,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surface.withOpacity(0.1),
+            AdaptiveTwoColumn(
+              breakpoint: widget.showList ? 520 : double.infinity,
+              rowCrossAxisAlignment: CrossAxisAlignment.center,
+              first: SizedBox(
+                height: 260,
+                child: Stack(
+                  children: [
+                    PieChart(
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 250),
+                      PieChartData(
+                        startDegreeOffset: -45,
+                        pieTouchData: PieTouchData(
+                          touchCallback:
+                              (FlTouchEvent event, pieTouchResponse) {
+                                setState(() {
+                                  if (!event.isInterestedForInteractions ||
+                                      pieTouchResponse == null ||
+                                      pieTouchResponse.touchedSection == null) {
+                                    touchedIndex = -1;
+                                    return;
+                                  }
+                                  touchedIndex = pieTouchResponse
+                                      .touchedSection!
+                                      .touchedSectionIndex;
+                                });
+                              },
                         ),
+                        borderData: FlBorderData(show: false),
+                        sectionsSpace: 0,
+                        centerSpaceRadius: centerRadius.toDouble(),
+                        sections: showingSections(dataItems),
                       ),
                     ),
-                  ),
-                  if (snapshot.data!.isEmpty)
                     Positioned.fill(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(
-                          t.general.insufficient_data,
-                          style: Theme.of(context).textTheme.titleLarge,
+                        child: Container(
+                          width: centerRadius * 2.25,
+                          height: centerRadius * 2.25,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surface.withOpacity(0.1),
+                          ),
                         ),
                       ),
                     ),
-                ],
-              ),
-            ),
-
-            /* ----------------------------- */
-            /* ------ Info in a list ------- */
-            /* ----------------------------- */
-            if (widget.showList)
-              ListView.builder(
-                itemCount: snapshot.data!.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final dataCategory = snapshot.data![index];
-
-                  return ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(dataCategory.category.name),
-                        CurrencyDisplayer(amountToConvert: dataCategory.value),
-                      ],
-                    ),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
-                              .toLowerCase(),
-                        ),
-                        Text(
-                          NumberFormat.decimalPercentPattern(
-                            decimalDigits: 2,
-                          ).format(
-                            getElementPercentageInTotal(
-                              dataCategory.value,
-                              snapshot.data!,
-                            ),
+                    if (snapshot.data!.isEmpty)
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            t.general.insufficient_data,
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ),
-                      ],
-                    ),
-                    leading: IconDisplayer.fromCategory(
-                      context,
-                      category: dataCategory.category,
-                      size: 25,
-                    ),
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) {
-                          return CategoryStatsModal(
-                            categoryData: dataCategory,
-                            dateRangeText: widget.datePeriodState.getText(
-                              context,
-                            ),
-                            filters: _getTransactionFilters(),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
+                      ),
+                  ],
+                ),
               ),
+              second: widget.showList
+                  ? ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final dataCategory = snapshot.data![index];
+
+                        return ListTile(
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(dataCategory.category.name),
+                              CurrencyDisplayer(
+                                amountToConvert: dataCategory.value,
+                              ),
+                            ],
+                          ),
+                          subtitle: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
+                                    .toLowerCase(),
+                              ),
+                              Text(
+                                NumberFormat.decimalPercentPattern(
+                                  decimalDigits: 2,
+                                ).format(
+                                  getElementPercentageInTotal(
+                                    dataCategory.value,
+                                    snapshot.data!,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          leading: IconDisplayer.fromCategory(
+                            context,
+                            category: dataCategory.category,
+                            size: 25,
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return CategoryStatsModal(
+                                  categoryData: dataCategory,
+                                  dateRangeText: widget.datePeriodState.getText(
+                                    context,
+                                  ),
+                                  filters: _getTransactionFilters(),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ),
           ],
         );
       },
