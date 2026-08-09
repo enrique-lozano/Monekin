@@ -9,6 +9,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
+import 'package:monekin/core/routes/content_modal_observer.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
@@ -67,7 +68,7 @@ class AppNavigationSidebarState extends State<AppNavigationSidebar> {
 
     final navSidebarWidth = getNavigationSidebarWidth(context);
 
-    return AnimatedContainer(
+    final sidebar = AnimatedContainer(
       duration: const Duration(milliseconds: 1500),
       curve: Curves.easeInOutCubicEmphasized,
       width: navSidebarWidth,
@@ -115,6 +116,36 @@ class AppNavigationSidebarState extends State<AppNavigationSidebar> {
           );
         },
       ),
+    );
+
+    // While a bottom sheet is open on the content navigator, its scrim only
+    // covers the content pane. Dim and block the sidebar too, so it isn't
+    // actionable and tapping it dismisses the sheet (like a real barrier).
+    return ValueListenableBuilder<int>(
+      valueListenable: contentModalRoutesCount,
+      builder: (context, modalCount, child) {
+        final blocked = modalCount > 0;
+
+        return Stack(
+          children: [
+            child!,
+            Positioned.fill(
+              child: IgnorePointer(
+                ignoring: !blocked,
+                child: GestureDetector(
+                  onTap: () => navigatorKey.currentState?.maybePop(),
+                  child: AnimatedOpacity(
+                    opacity: blocked ? 1 : 0,
+                    duration: const Duration(milliseconds: 250),
+                    child: const ColoredBox(color: Colors.black54),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+      child: sidebar,
     );
   }
 }

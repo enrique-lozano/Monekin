@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 
-/// Lays out [first] and [second] side-by-side (each in an [Expanded]) when the
-/// available width is at least [breakpoint]; otherwise stacks them vertically.
+/// Lays out [first] and [second] side-by-side (each flexed) when the available
+/// width is at least [breakpoint]; otherwise stacks them vertically.
 ///
 /// Reacts to the *available* width (via [LayoutBuilder]), not the screen size,
 /// so it adapts to the space the widget actually has (e.g. inside a card, a
-/// split pane or a drawer).
+/// split pane or a drawer). It only picks the direction from the available
+/// width — the actual row/column rendering is delegated to [ResponsiveRowColumn].
 class AdaptiveTwoColumn extends StatelessWidget {
   const AdaptiveTwoColumn({
     super.key,
@@ -32,23 +34,25 @@ class AdaptiveTwoColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth < breakpoint) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              first,
-              SizedBox(height: spacing),
-              second,
-            ],
-          );
-        }
+        final isRow = constraints.maxWidth >= breakpoint;
 
-        return Row(
-          crossAxisAlignment: rowCrossAxisAlignment,
+        return ResponsiveRowColumn(
+          direction: isRow ? Axis.horizontal : Axis.vertical,
+          rowCrossAxisAlignment: rowCrossAxisAlignment,
+          columnCrossAxisAlignment: CrossAxisAlignment.stretch,
+          rowSpacing: spacing,
+          columnSpacing: spacing,
           children: [
-            Expanded(flex: firstFlex, child: first),
-            SizedBox(width: spacing),
-            Expanded(flex: secondFlex, child: second),
+            ResponsiveRowColumnItem(
+              rowFlex: firstFlex,
+              rowFit: FlexFit.tight,
+              child: first,
+            ),
+            ResponsiveRowColumnItem(
+              rowFlex: secondFlex,
+              rowFit: FlexFit.tight,
+              child: second,
+            ),
           ],
         );
       },

@@ -172,14 +172,6 @@ class TransactionListTile extends StatelessWidget {
   /// Desktop table-like row: leading selection checkbox, name, a dedicated
   /// account column, a date column and the amount.
   Widget _buildTableRow(BuildContext context) {
-    final showTime =
-        appStateSettings[SettingKey.transactionTileShowTime] == '1';
-
-    DateFormat dateFormat = currentYear == transaction.date.year
-        ? DateFormat.MMMd()
-        : DateFormat.yMMMd();
-    if (showTime) dateFormat = dateFormat.add_Hm();
-
     return Material(
       color: isSelected
           ? Theme.of(context).colorScheme.primary.withOpacity(0.12)
@@ -190,10 +182,13 @@ class TransactionListTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
             children: [
-              Checkbox(value: isSelected, onChanged: onSelectedChanged),
-              const SizedBox(width: 4),
+              if (onSelectedChanged != null) ...[
+                Checkbox(value: isSelected, onChanged: onSelectedChanged),
+                const SizedBox(width: 4),
+              ],
               transaction.getDisplayIcon(context, size: 26, padding: 6),
               const SizedBox(width: 12),
+              // Title + tags
               Expanded(
                 flex: 3,
                 child: Column(
@@ -220,20 +215,36 @@ class TransactionListTile extends StatelessWidget {
                                 Theme.of(context).colorScheme.primary,
                           ),
                         ],
+                        if (transaction.isReversed) ...[
+                          const SizedBox(width: 6),
+                          Icon(
+                            MoneyTransaction.reversedIcon,
+                            size: 12,
+                            color: AppColors.of(context).brand,
+                          ),
+                        ],
                       ],
                     ),
-                    if (transaction.notes.isNotNullNorEmpty)
-                      Text(
-                        transaction.notes!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelMedium!
-                            .copyWith(fontStyle: FontStyle.italic),
+                    if (transaction.tags.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: transaction.tags
+                            .map(
+                              (tag) => TransactionTagChip(
+                                tag: tag,
+                                visualDensity: VisualDensity.compact,
+                              ),
+                            )
+                            .toList(),
                       ),
+                    ],
                   ],
                 ),
               ),
               const SizedBox(width: 12),
+              // Account
               Expanded(
                 flex: 2,
                 child: Row(
@@ -262,28 +273,50 @@ class TransactionListTile extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              SizedBox(
-                width: 110,
-                child: Text(
-                  dateFormat.format(transaction.date),
-                  textAlign: TextAlign.end,
-                  style: Theme.of(context).textTheme.labelMedium,
-                ),
+              // Description (notes)
+              Expanded(
+                flex: 3,
+                child: transaction.notes.isNotNullNorEmpty
+                    ? Text(
+                        transaction.notes!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelMedium!
+                            .copyWith(fontStyle: FontStyle.italic),
+                      )
+                    : const SizedBox.shrink(),
               ),
               const SizedBox(width: 12),
-              CurrencyDisplayer(
-                amountToConvert: transaction.value,
-                currency: transaction.account.currency,
-                integerStyle: TextStyle(
-                  color: transaction.status == TransactionStatus.voided
-                      ? Colors.grey.shade400
-                      : transaction.isIncomeOrExpense
-                      ? transaction.type.color(context)
-                      : null,
-                  decoration: transaction.status == TransactionStatus.voided
-                      ? TextDecoration.lineThrough
-                      : null,
-                  fontWeight: FontWeight.bold,
+              // Amount + time
+              SizedBox(
+                width: 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CurrencyDisplayer(
+                      amountToConvert: transaction.value,
+                      currency: transaction.account.currency,
+                      integerStyle: TextStyle(
+                        color: transaction.status == TransactionStatus.voided
+                            ? Colors.grey.shade400
+                            : transaction.isIncomeOrExpense
+                            ? transaction.type.color(context)
+                            : null,
+                        decoration:
+                            transaction.status == TransactionStatus.voided
+                            ? TextDecoration.lineThrough
+                            : null,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      DateFormat.Hm().format(transaction.date),
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

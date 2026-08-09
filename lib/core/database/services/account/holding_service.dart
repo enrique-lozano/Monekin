@@ -627,8 +627,13 @@ class HoldingService {
   /// at the call site).
   Stream<List<HoldingValuationAtDate>> getHoldingValuationsAtDate([
     DateTime? date,
+    Iterable<String>? accountIds,
   ]) {
-    return _watchPositionValuations(date: date).map(
+    if (accountIds != null && accountIds.isEmpty) {
+      return Stream.value(const []);
+    }
+
+    return _watchPositionValuations(date: date, accountIds: accountIds).map(
       (rows) => rows
           .map(
             (r) => HoldingValuationAtDate(

@@ -18,6 +18,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/routes/handle_will_pop_scope.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
+import 'package:monekin/core/routes/content_modal_observer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/keyboard_intents.dart';
@@ -300,6 +301,7 @@ class InitialPageRouteNavigator extends StatelessWidget {
       controller: MaterialApp.createMaterialHeroController(),
       child: Navigator(
         key: navigatorKey,
+        observers: [contentModalObserver],
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
           introSeen ? PageSwitcher(key: tabsPageKey) : const IntroPage(),
         ),

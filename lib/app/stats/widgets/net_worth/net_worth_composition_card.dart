@@ -27,7 +27,11 @@ class NetWorthCompositionCard extends StatelessWidget {
         .ensureAndGetPreferredCurrency()
         .first;
 
-    final accounts = await AccountService.instance.getAccounts().first;
+    final allAccounts = await AccountService.instance.getAccounts().first;
+    final accountFilter = filters.accountsIDs;
+    final accounts = accountFilter == null
+        ? allAccounts
+        : allAccounts.where((a) => accountFilter.contains(a.id)).toList();
 
     final cashAndInvestmentItems = await Future.wait(
       accounts.map((account) async {

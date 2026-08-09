@@ -27,6 +27,7 @@ class NetWorthService {
     return Rx.combineLatest2(
       AccountService.instance.getAccountsMoney(
         date: date,
+        accountIds: trFilters.accountsIDs,
         trFilters: trFilters,
         convertToPreferredCurrency: true,
       ),

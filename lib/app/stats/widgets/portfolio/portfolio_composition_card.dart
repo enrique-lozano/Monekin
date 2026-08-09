@@ -11,6 +11,7 @@ import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// One slice of the portfolio composition (a security, a security type or a
@@ -39,10 +40,18 @@ class _Slice {
 enum _GroupBy { security, type, account, classification }
 
 class PortfolioCompositionCard extends StatefulWidget {
-  const PortfolioCompositionCard({super.key, this.date});
+  const PortfolioCompositionCard({
+    super.key,
+    this.date,
+    this.filters = const TransactionFilterSet(),
+  });
 
   /// Value the composition as of this date. Defaults to now when null.
   final DateTime? date;
+
+  /// Only the account scope of the filter applies to holdings; the rest of the
+  /// filter fields (categories, tags, type…) don't map onto securities.
+  final TransactionFilterSet filters;
 
   @override
   State<PortfolioCompositionCard> createState() =>
@@ -96,7 +105,7 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
     ).assets.securities.classification.unclassified;
 
     final holdings = await HoldingService.instance
-        .getHoldingValuationsAtDate(widget.date)
+        .getHoldingValuationsAtDate(widget.date, widget.filters.accountsIDs)
         .first;
 
     // Convert every holding's market/cost to the preferred currency once.
