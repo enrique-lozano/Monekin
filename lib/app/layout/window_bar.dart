@@ -1,6 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 
 Color getWindowBackgroundColor(BuildContext context) {
@@ -35,42 +36,51 @@ class WindowBarState extends State<WindowBar> {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: getWindowBackgroundColor(context),
+    // macOS draws its own window controls (the traffic lights) on the left, so
+    // we leave room for them there and don't paint our own buttons. Windows and
+    // Linux keep the app-drawn buttons on the right.
+    final isApple = AppUtils.isApple;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: getWindowBackgroundColor(context),
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.5),
+          ),
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              height: 36,
+              padding: EdgeInsets.only(left: isApple ? 74 : 12, right: 12),
+              height: 31,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 spacing: 12,
                 children: [
-                  // IconButton(
-                  //   icon: const Icon(Icons.arrow_back_rounded, size: 20),
-                  //   onPressed: canGoBack
-                  //       ? () {
-                  //           navigatorKey.currentState?.pop();
-                  //         }
-                  //       : null,
-                  // ),
                   Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(top: 3),
                     child: DisplayAppIcon(
-                      height: 24,
+                      height: 20,
+                      withBorder: false,
                       padding: EdgeInsets.all(2),
                     ),
                   ),
                   Expanded(
                     child: MoveWindow(
-                      child: Align(
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 3),
+                        width: double.infinity,
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          "Monekin",
+                          'Monekin',
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
                       ),
@@ -80,20 +90,60 @@ class WindowBarState extends State<WindowBar> {
               ),
             ),
           ),
-          WindowTitleBarBox(
-            child: ColoredBox(
-              color: Theme.of(context).colorScheme.surface,
-              child: WindowButtons(),
+          if (!isApple)
+            WindowTitleBarBox(
+              child: ColoredBox(
+                color: Theme.of(context).colorScheme.surface,
+                child: WindowButtons(),
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 }
 
-class WindowButtons extends StatelessWidget {
+class WindowButtons extends StatefulWidget {
   const WindowButtons({super.key});
+
+  @override
+  State<WindowButtons> createState() => _WindowButtonsState();
+}
+
+class _WindowButtonsState extends State<WindowButtons>
+    with WidgetsBindingObserver {
+  bool _isMaximized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _isMaximized = appWindow.isMaximized;
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    _syncMaximizedState();
+  }
+
+  void _syncMaximizedState() {
+    final isMaximized = appWindow.isMaximized;
+    if (!mounted || isMaximized == _isMaximized) return;
+    setState(() => _isMaximized = isMaximized);
+  }
+
+  void maximizeOrRestore() {
+    appWindow.maximizeOrRestore();
+    // Native maximize/restore is posted asynchronously; flip the icon now and
+    // let [didChangeMetrics] confirm once the window size actually changes.
+    setState(() => _isMaximized = !_isMaximized);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +152,8 @@ class WindowButtons extends StatelessWidget {
     final buttonColors = WindowButtonColors(
       normal: Theme.of(context).colorScheme.surfaceContainerLow,
       iconNormal: iconNormalColor,
-      mouseOver: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-      mouseDown: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+      mouseOver: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+      mouseDown: Theme.of(context).colorScheme.primary.withValues(alpha: 0.2),
       iconMouseOver: Theme.of(context).colorScheme.primary,
       iconMouseDown: Theme.of(context).colorScheme.primary,
     );
@@ -111,7 +161,16 @@ class WindowButtons extends StatelessWidget {
     return Row(
       children: [
         MinimizeWindowButton(colors: buttonColors),
-        MaximizeWindowButton(colors: buttonColors),
+        if (_isMaximized)
+          RestoreWindowButton(
+            colors: buttonColors,
+            onPressed: maximizeOrRestore,
+          )
+        else
+          MaximizeWindowButton(
+            colors: buttonColors,
+            onPressed: maximizeOrRestore,
+          ),
         CloseWindowButton(
           colors: WindowButtonColors(
             normal: Theme.of(context).colorScheme.surfaceContainerLow,

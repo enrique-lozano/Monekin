@@ -16,9 +16,9 @@ import 'package:monekin/core/database/services/user-setting/utils/get_theme_from
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/routes/content_modal_observer.dart';
 import 'package:monekin/core/routes/handle_will_pop_scope.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
-import 'package:monekin/core/routes/content_modal_observer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/keyboard_intents.dart';
@@ -200,8 +200,8 @@ class MaterialAppContainer extends StatelessWidget {
           title: 'Monekin',
           debugShowCheckedModeBanner: false,
           color: Theme.of(context).colorScheme.primary,
-          shortcuts: appShortcuts,
-          actions: keyboardIntents,
+          shortcuts: {...WidgetsApp.defaultShortcuts, ...appShortcuts},
+          actions: {...WidgetsApp.defaultActions, ...keyboardIntents},
           locale: TranslationProvider.of(context).flutterLocale,
           scrollBehavior: ScrollBehaviorOverride(),
           supportedLocales: AppLocaleUtils.supportedLocales,
@@ -231,7 +231,21 @@ class MaterialAppContainer extends StatelessWidget {
               getSystemUiOverlayStyle(Theme.of(context).brightness),
             );
 
-            return BreakpointProvider(child: child ?? const SizedBox.shrink());
+            Widget content = child ?? const SizedBox.shrink();
+
+            // The window title bar lives *above* the root navigator, so nothing
+            // routed on top of it (side drawers, popovers, dialogs and their
+            // scrims) can ever cover the window controls or the drag area.
+            if (AppUtils.isDesktop) {
+              content = Column(
+                children: [
+                  WindowBar(key: windowBarKey),
+                  Expanded(child: content),
+                ],
+              );
+            }
+
+            return BreakpointProvider(child: content);
           },
           home: HandleWillPopScope(
             child: Builder(
@@ -243,7 +257,7 @@ class MaterialAppContainer extends StatelessWidget {
                   ],
                 );
 
-                final mainContent = ColoredBox(
+                return ColoredBox(
                   color: getWindowBackgroundColor(context),
                   child: Row(
                     children: [
@@ -254,9 +268,19 @@ class MaterialAppContainer extends StatelessWidget {
                           builder: (context) {
                             if (AppUtils.isDesktop &&
                                 !AppUtils.isMobileLayout(context)) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(12),
+                              // Square content area, separated from the sidebar
+                              // by a thin border instead of a rounded corner.
+                              return DecoratedBox(
+                                position: DecorationPosition.foreground,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    left: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant
+                                          .withValues(alpha: 0.5),
+                                    ),
+                                  ),
                                 ),
                                 child: mainSide,
                               );
@@ -268,17 +292,6 @@ class MaterialAppContainer extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-
-                if (!AppUtils.isDesktop) {
-                  return mainContent;
-                }
-
-                return Column(
-                  children: [
-                    WindowBar(key: windowBarKey),
-                    Expanded(child: mainContent),
-                  ],
                 );
               },
             ),

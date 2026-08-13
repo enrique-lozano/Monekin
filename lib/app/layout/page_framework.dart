@@ -48,7 +48,6 @@ class PageFramework extends StatelessWidget {
           key: ValueKey(
             'AppBar_${breadcrumbs!.map((item) => item.label).join('_')}',
           ),
-          toolbarHeight: 64,
           titleSpacing: 0,
           title: _Breadcrumbs(items: breadcrumbs!),
           bottom: tabBar,
@@ -117,17 +116,19 @@ class _Breadcrumbs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.bodySmall;
+    final style = Theme.of(context).textTheme.titleLarge;
 
     return Row(
+      spacing: 4,
       children: [
         for (var index = 0; index < items.length; index++) ...[
-          if (index > 0)
+          if (index > 0) ...[
             Icon(
               Icons.chevron_right_rounded,
               size: 16,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
+          ],
           Flexible(
             child: items[index].onTap == null
                 ? Text(
@@ -142,11 +143,13 @@ class _Breadcrumbs extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       minimumSize: const Size(0, 40),
                       textStyle: style,
+                      foregroundColor: style?.color,
                     ),
                     child: Text(
                       items[index].label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
+                      style: style,
                     ),
                   ),
           ),

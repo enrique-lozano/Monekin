@@ -14,6 +14,7 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/dates/segmented_calendar_button.dart';
+import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_side_pane.dart';
@@ -33,6 +34,12 @@ enum StatsTab {
   cashFlow;
 
   static StatsTab fromIndex(int index) => StatsTab.values[index];
+
+  /// Net worth and portfolio are computed from holdings/asset valuations, not
+  /// from transactions, so the transaction-specific filters (category, tag,
+  /// type, status, amount) don't affect them. Only the account scope applies.
+  bool get usesTransactionRefinements =>
+      this != StatsTab.netWorth && this != StatsTab.portfolio;
 }
 
 class StatsPage extends StatefulWidget {
@@ -101,7 +108,50 @@ class _StatsPageState extends State<StatsPage>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final isDesktop = BreakPoint.of(context).isLargerThan(BreakpointID.md);
+    final isDesktopLayout = BreakPoint.of(
+      context,
+    ).isLargerThan(BreakpointID.md);
+
+    // On desktop the tabs live at the top of the body (fixed, below the app
+    // bar) as a segmented control instead of a swipeable TabBar.
+    final segmentedTabs = !isDesktopLayout
+        ? null
+        : SegmentedTabBar<int>(
+            selected: _tabController.index,
+            onSelected: (value) => setState(() => _tabController.index = value),
+            items: [
+              SegmentedTabItem(
+                value: StatsTab.financialHealth.index,
+                icon: Icons.monitor_heart_outlined,
+                label: t.financial_health.display,
+              ),
+              SegmentedTabItem(
+                value: StatsTab.distribution.index,
+                icon: Icons.pie_chart_outline_rounded,
+                label: t.stats.distribution,
+              ),
+              SegmentedTabItem(
+                value: StatsTab.netWorth.index,
+                icon: Icons.account_balance_outlined,
+                label: t.stats.net_worth,
+              ),
+              SegmentedTabItem(
+                value: StatsTab.portfolio.index,
+                icon: Icons.candlestick_chart_outlined,
+                label: t.stats.portfolio,
+              ),
+              SegmentedTabItem(
+                value: StatsTab.balance.index,
+                icon: Icons.show_chart_rounded,
+                label: t.stats.balance,
+              ),
+              SegmentedTabItem(
+                value: StatsTab.cashFlow.index,
+                icon: Icons.swap_vert_rounded,
+                label: t.stats.cash_flow,
+              ),
+            ],
+          );
 
     return PageFramework(
       title: t.stats.title,
@@ -124,7 +174,7 @@ class _StatsPageState extends State<StatsPage>
         ],
         // On wide layouts the split-pane owns filtering (its collapsed strip is
         // always visible), so the app-bar filter button is only needed on mobile.
-        if (!isDesktop)
+        if (!isDesktopLayout)
           IconButton(
             onPressed: () async {
               final modalRes = await openFilterSheetModal(
@@ -132,6 +182,9 @@ class _StatsPageState extends State<StatsPage>
                 FilterSheetModal(
                   preselectedFilter: filters,
                   showDateFilter: false,
+                  showTransactionRefinements: StatsTab.fromIndex(
+                    _tabController.index,
+                  ).usesTransactionRefinements,
                 ),
               );
 
@@ -144,21 +197,21 @@ class _StatsPageState extends State<StatsPage>
             icon: const Icon(Icons.filter_alt_outlined),
           ),
       ],
-      tabBar: TabBar(
-        tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
-            ? TabAlignment.center
-            : TabAlignment.start,
-        isScrollable: true,
-        controller: _tabController,
-        tabs: [
-          Tab(text: t.financial_health.display),
-          Tab(text: t.stats.distribution),
-          Tab(text: t.stats.net_worth),
-          Tab(text: t.stats.portfolio),
-          Tab(text: t.stats.balance),
-          Tab(text: t.stats.cash_flow),
-        ],
-      ),
+      tabBar: isDesktopLayout
+          ? null
+          : TabBar(
+              tabAlignment: TabAlignment.center,
+              isScrollable: true,
+              controller: _tabController,
+              tabs: [
+                Tab(text: t.financial_health.display),
+                Tab(text: t.stats.distribution),
+                Tab(text: t.stats.net_worth),
+                Tab(text: t.stats.portfolio),
+                Tab(text: t.stats.balance),
+                Tab(text: t.stats.cash_flow),
+              ],
+            ),
       persistentFooterButtons:
           BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md)
           ? null
@@ -186,7 +239,8 @@ class _StatsPageState extends State<StatsPage>
           Expanded(
             child: Column(
               children: [
-                if (filters.hasFilter && !isDesktop) ...[
+                ?segmentedTabs,
+                if (filters.hasFilter && !isDesktopLayout) ...[
                   FilterRowIndicator(
                     filters: filters,
                     onChange: (newFilters) {
@@ -200,6 +254,9 @@ class _StatsPageState extends State<StatsPage>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
+                    physics: isDesktopLayout
+                        ? const NeverScrollableScrollPhysics()
+                        : null,
                     children: [
                       buildContainerWithPadding([
                         FinanceHealthDetails(
@@ -314,21 +371,31 @@ class _StatsPageState extends State<StatsPage>
               ],
             ),
           ),
-          if (isDesktop)
-            FilterSidePane(
-              filters: filters,
-              onChanged: (newFilters) {
-                setState(() {
-                  filters = newFilters;
-                });
+          if (isDesktopLayout)
+            // Rebuild the pane when the active tab changes so it can adapt its
+            // facets (and the "inapplicable filters" notice) to the tab.
+            AnimatedBuilder(
+              animation: _tabController,
+              builder: (context, _) {
+                return FilterSidePane(
+                  filters: filters,
+                  onChanged: (newFilters) {
+                    setState(() {
+                      filters = newFilters;
+                    });
+                  },
+                  expanded: filterPaneExpanded,
+                  onToggle: () {
+                    setState(() {
+                      filterPaneExpanded = !filterPaneExpanded;
+                    });
+                  },
+                  showDateFilter: false,
+                  showTransactionRefinements: StatsTab.fromIndex(
+                    _tabController.index,
+                  ).usesTransactionRefinements,
+                );
               },
-              expanded: filterPaneExpanded,
-              onToggle: () {
-                setState(() {
-                  filterPaneExpanded = !filterPaneExpanded;
-                });
-              },
-              showDateFilter: false,
             ),
         ],
       ),

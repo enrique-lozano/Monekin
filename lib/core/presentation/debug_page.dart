@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
@@ -6,6 +7,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/utils/logger.dart';
+import 'package:monekin/main.dart';
 
 class DebugPage extends StatelessWidget {
   const DebugPage({super.key});
@@ -74,6 +76,15 @@ class DebugPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text('Simulated platform:', style: sectionStyle),
+            const SizedBox(height: 4),
+            const Text(
+              'Overrides AppUtils.isDesktop / isApple to preview '
+              'platform-specific UI. Not persisted; resets on restart.',
+            ),
+            const SizedBox(height: 8),
+            const _SimulatedPlatformSelector(),
+            const SizedBox(height: 24),
             const Text('Flutter color scheme:', style: sectionStyle),
             const SizedBox(height: 4),
             Column(
@@ -245,6 +256,54 @@ class DebugPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SimulatedPlatformSelector extends StatefulWidget {
+  const _SimulatedPlatformSelector();
+
+  @override
+  State<_SimulatedPlatformSelector> createState() =>
+      _SimulatedPlatformSelectorState();
+}
+
+class _SimulatedPlatformSelectorState
+    extends State<_SimulatedPlatformSelector> {
+  static const _options = <(String, TargetPlatform?)>[
+    ('System', null),
+    ('Android', TargetPlatform.android),
+    ('iOS', TargetPlatform.iOS),
+    ('macOS', TargetPlatform.macOS),
+    ('Windows', TargetPlatform.windows),
+    ('Linux', TargetPlatform.linux),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final current = debugDefaultTargetPlatformOverride;
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: _options.map((option) {
+        final (label, platform) = option;
+
+        return ChoiceChip(
+          label: Text(label),
+          selected: current == platform,
+          onSelected: (_) {
+            // The override throws outside debug builds; guard just in case the
+            // Debug page is ever reachable in a release build.
+            if (!kDebugMode) return;
+
+            setState(() => debugDefaultTargetPlatformOverride = platform);
+            // Rebuild the whole app so the theme + platform-conditional widgets
+            // (window bar, sidebar, ...) re-read the override.
+            appStateKey.currentState?.refreshAppState();
+          },
+        );
+      }).toList(),
     );
   }
 }

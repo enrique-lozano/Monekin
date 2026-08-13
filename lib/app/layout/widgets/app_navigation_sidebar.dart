@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/widgets/app_navigation_drawer.dart';
 import 'package:monekin/app/layout/window_bar.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
@@ -89,7 +90,7 @@ class AppNavigationSidebarState extends State<AppNavigationSidebar> {
                   .map((e) => e.toNavigationRailDestinationWidget())
                   .toList(),
               onDestinationSelected: onDestinationSelected,
-              leading: const SizedBox(height: 2),
+              leading: const SidebarNewTransactionButton(),
               backgroundColor: getWindowBackgroundColor(context),
               labelType: NavigationRailLabelType.all,
               scrollable: true,

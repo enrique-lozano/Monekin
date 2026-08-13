@@ -324,152 +324,172 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
                   ? Colors.black26
                   : Colors.white24;
 
-              return BarChart(
-                BarChartData(
-                  maxY:
-                      snapshot.data!.expense.every((ex) => ex == 0) &&
-                          snapshot.data!.income.every((inc) => inc == 0) &&
-                          snapshot.data!.balance.every((bal) => bal == 0)
-                      ? 10.2
-                      : null,
-                  barTouchData: BarTouchData(
-                    touchTooltipData: BarTouchTooltipData(
-                      fitInsideVertically: true,
-                      fitInsideHorizontally: true,
-                      getTooltipColor: (spot) =>
-                          Theme.of(context).colorScheme.surface,
-                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                        final barRodsToY = group.barRods.map((e) => e.toY);
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final groupCount = snapshot.data!.income.length;
 
-                        return BarTooltipItem(
-                          '${snapshot.data!.longTitles[group.x]}\n',
-                          const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                            decoration: TextDecoration.underline,
-                          ),
-                          textAlign: TextAlign.start,
-                          children: [
-                            TextSpan(
-                              text: '↑ ',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.of(context).success,
-                                decoration: TextDecoration.none,
+                  // Scale the bar width to the available plot width (minus the
+                  // left axis labels and right padding) so bars grow on wider
+                  // screens instead of staying thin. Each group holds 2 rods.
+                  final plotWidth = (constraints.maxWidth - 42 - 16).clamp(
+                    0.0,
+                    double.infinity,
+                  );
+                  final barWidth = groupCount == 0
+                      ? 12.0
+                      : (plotWidth * 0.62 / (groupCount * 2)).clamp(8.0, 42.0);
+
+                  return BarChart(
+                    BarChartData(
+                      maxY:
+                          snapshot.data!.expense.every((ex) => ex == 0) &&
+                              snapshot.data!.income.every((inc) => inc == 0) &&
+                              snapshot.data!.balance.every((bal) => bal == 0)
+                          ? 10.2
+                          : null,
+                      barTouchData: BarTouchData(
+                        touchTooltipData: BarTouchTooltipData(
+                          fitInsideVertically: true,
+                          fitInsideHorizontally: true,
+                          getTooltipColor: (spot) =>
+                              Theme.of(context).colorScheme.surface,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            final barRodsToY = group.barRods.map((e) => e.toY);
+
+                            return BarTooltipItem(
+                              '${snapshot.data!.longTitles[group.x]}\n',
+                              const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                decoration: TextDecoration.underline,
                               ),
-                              children: UINumberFormatter.currency(
-                                currency: userCurrencySnapshot.data,
-                                amountToConvert: barRodsToY.elementAt(0),
-                              ).getTextSpanList(context),
-                            ),
-                            const TextSpan(text: '\n'),
-                            TextSpan(
-                              text: '↓ ',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: AppColors.of(context).danger,
-                                decoration: TextDecoration.none,
-                              ),
-                              children: UINumberFormatter.currency(
-                                currency: userCurrencySnapshot.data,
-                                amountToConvert: barRodsToY.elementAt(1),
-                              ).getTextSpanList(context),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                    touchCallback: (event, barTouchResponse) {
-                      if (!event.isInterestedForInteractions ||
-                          barTouchResponse == null ||
-                          barTouchResponse.spot == null) {
-                        touchedBarGroupIndex = -1;
-                        touchedRodDataIndex = -1;
-                        return;
-                      }
-
-                      touchedBarGroupIndex =
-                          barTouchResponse.spot!.touchedBarGroupIndex;
-
-                      touchedRodDataIndex =
-                          barTouchResponse.spot!.touchedRodDataIndex;
-
-                      setState(() {});
-                    },
-                  ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          return SideTitleWidget(
-                            meta: meta,
-                            child: Text(
-                              snapshot.data!.shortTitles[value.toInt()],
-                              style: smallAxisTitleStyle(context),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          if (value == meta.max) {
-                            return Container();
+                              textAlign: TextAlign.start,
+                              children: [
+                                TextSpan(
+                                  text: '↑ ',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.of(context).success,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                  children: UINumberFormatter.currency(
+                                    currency: userCurrencySnapshot.data,
+                                    amountToConvert: barRodsToY.elementAt(0),
+                                  ).getTextSpanList(context),
+                                ),
+                                const TextSpan(text: '\n'),
+                                TextSpan(
+                                  text: '↓ ',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColors.of(context).danger,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                  children: UINumberFormatter.currency(
+                                    currency: userCurrencySnapshot.data,
+                                    amountToConvert: barRodsToY.elementAt(1),
+                                  ).getTextSpanList(context),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        touchCallback: (event, barTouchResponse) {
+                          if (!event.isInterestedForInteractions ||
+                              barTouchResponse == null ||
+                              barTouchResponse.spot == null) {
+                            touchedBarGroupIndex = -1;
+                            touchedRodDataIndex = -1;
+                            return;
                           }
 
-                          return SideTitleWidget(
-                            meta: meta,
-                            child: BlurBasedOnPrivateMode(
-                              child: Text(
-                                meta.formattedValue,
-                                style: smallAxisTitleStyle(context),
-                              ),
-                            ),
+                          touchedBarGroupIndex =
+                              barTouchResponse.spot!.touchedBarGroupIndex;
+
+                          touchedRodDataIndex =
+                              barTouchResponse.spot!.touchedRodDataIndex;
+
+                          setState(() {});
+                        },
+                      ),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return SideTitleWidget(
+                                meta: meta,
+                                child: Text(
+                                  snapshot.data!.shortTitles[value.toInt()],
+                                  style: smallAxisTitleStyle(context),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              if (value == meta.max) {
+                                return Container();
+                              }
+
+                              return SideTitleWidget(
+                                meta: meta,
+                                child: BlurBasedOnPrivateMode(
+                                  child: Text(
+                                    meta.formattedValue,
+                                    style: smallAxisTitleStyle(context),
+                                  ),
+                                ),
+                              );
+                            },
+                            reservedSize: 42,
+                          ),
+                        ),
+                        rightTitles: noAxisTitles,
+                        topTitles: noAxisTitles,
+                      ),
+                      borderData: FlBorderData(
+                        show: true,
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1,
+                            color: ultraLightBorderColor,
+                          ),
+                        ),
+                      ),
+                      gridData: FlGridData(
+                        drawVerticalLine: false,
+                        getDrawingHorizontalLine: (value) {
+                          if (value != 0) {
+                            return defaultGridLine(value).copyWith(
+                              strokeWidth: 0.5,
+                              color: ultraLightBorderColor,
+                            );
+                          }
+
+                          return defaultGridLine(value).copyWith(
+                            strokeWidth: 0.75,
+                            color: lightBorderColor,
                           );
                         },
-                        reservedSize: 42,
                       ),
-                    ),
-                    rightTitles: noAxisTitles,
-                    topTitles: noAxisTitles,
-                  ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: ultraLightBorderColor,
-                      ),
-                    ),
-                  ),
-                  gridData: FlGridData(
-                    drawVerticalLine: false,
-                    getDrawingHorizontalLine: (value) {
-                      if (value != 0) {
-                        return defaultGridLine(value).copyWith(
-                          strokeWidth: 0.5,
-                          color: ultraLightBorderColor,
+                      barGroups: List.generate(snapshot.data!.income.length, (
+                        i,
+                      ) {
+                        return makeGroupData(
+                          i,
+                          snapshot.data!.income[i],
+                          snapshot.data!.expense[i],
+                          width: barWidth,
                         );
-                      }
-
-                      return defaultGridLine(
-                        value,
-                      ).copyWith(strokeWidth: 0.75, color: lightBorderColor);
-                    },
-                  ),
-                  barGroups: List.generate(snapshot.data!.income.length, (i) {
-                    return makeGroupData(
-                      i,
-                      snapshot.data!.income[i],
-                      snapshot.data!.expense[i],
-                      width: 75 / snapshot.data!.income.length,
-                    );
-                  }),
-                ),
+                      }),
+                    ),
+                  );
+                },
               );
             },
           );

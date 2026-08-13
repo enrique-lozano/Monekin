@@ -375,6 +375,18 @@
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions...",
+      "FILTERED_EMPTY": {
+        "title": "No transactions with these filters",
+        "description": {
+          "one": "Your {{n}} transaction is still there — it just doesn't match the current filters. Try widening the range or removing a filter.",
+          "other": "All {{n}} transactions are still there — they just don't match the current filters. Try widening the range or removing a filter."
+        },
+        "clear": {
+          "one": "Remove filter",
+          "other": "Remove the {{n}} filters"
+        },
+        "expand-dates": "Show all dates"
+      },
       "selected.short": {
         "one": "{{n}} selected",
         "other": "{{n}} selected"
@@ -399,6 +411,10 @@
       "from_date_def": "From the {{ date }}",
       "to_date_def": "Up to the {{ date }}",
       "reset": "Reset filters",
+      "inapplicable_here": {
+        "one": "<b>1</b> active filter doesn't apply to this view.",
+        "other": "<b>{{n}}</b> active filters don't apply to this view."
+      },
       "saved": {
         "title": "Saved filters",
         "new_title": "New Filter",

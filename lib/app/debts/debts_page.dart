@@ -9,6 +9,7 @@ import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -34,29 +35,56 @@ class _DebtsPageState extends State<DebtsPage>
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final tabBar = TabBar(
-      controller: _tabController,
-      tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
-          ? TabAlignment.fill
-          : TabAlignment.start,
-      isScrollable: !BreakPoint.of(context).isSmallerThan(BreakpointID.md),
-      tabs: [
-        Tab(text: t.debts.status.active),
-        Tab(text: t.debts.status.close),
-      ],
-    );
+    final isMobile = BreakPoint.of(context).isSmallerThan(BreakpointID.md);
+
+    final segmentedTabs = isMobile
+        ? null
+        : SegmentedTabBar<int>(
+            selected: _tabController.index,
+            onSelected: (value) => setState(() => _tabController.index = value),
+            items: [
+              SegmentedTabItem(
+                value: 0,
+                icon: Icons.schedule_rounded,
+                label: t.debts.status.active,
+              ),
+              SegmentedTabItem(
+                value: 1,
+                icon: Icons.check_circle_outline_rounded,
+                label: t.debts.status.close,
+              ),
+            ],
+          );
 
     return PageFramework(
       title: t.debts.display(n: 2),
-      tabBar: tabBar,
+      tabBar: isMobile
+          ? TabBar(
+              controller: _tabController,
+              tabAlignment: TabAlignment.fill,
+              isScrollable: false,
+              tabs: [
+                Tab(text: t.debts.status.active),
+                Tab(text: t.debts.status.close),
+              ],
+            )
+          : null,
       floatingActionButton: ifIsInTabs(context) ? null : const DebtFabButton(),
       floatingActionButtonLocation: ExpandableFab.location,
 
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
         children: [
-          const DebtsView(isActive: true),
-          const DebtsView(isActive: false),
+          ?segmentedTabs,
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              physics: isMobile ? null : const NeverScrollableScrollPhysics(),
+              children: [
+                const DebtsView(isActive: true),
+                const DebtsView(isActive: false),
+              ],
+            ),
+          ),
         ],
       ),
     );

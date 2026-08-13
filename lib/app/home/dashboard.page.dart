@@ -394,6 +394,32 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         );
 
+        final chartHeight = isWide ? 150.0 : 110.0;
+
+        Widget chart = DashboardBalanceChart(
+          dateRange: dateRangeService,
+          lineColor: accent,
+          height: chartHeight,
+        );
+
+        // On mobile the hero has no card and inherits the dashboard's 16px
+        // horizontal padding. Let the chart break out of it so it spans the
+        // full width edge-to-edge. On wide layouts it lives inside a padded
+        // card, so we keep it as-is. We reuse the enclosing LayoutBuilder's
+        // constraints (adding a nested one triggers setState-during-build).
+        if (!isWide) {
+          chart = SizedBox(
+            height: chartHeight,
+            child: OverflowBox(
+              minWidth: constraints.maxWidth + 32,
+              maxWidth: constraints.maxWidth + 32,
+              minHeight: chartHeight,
+              maxHeight: chartHeight,
+              child: chart,
+            ),
+          );
+        }
+
         final hero = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -415,11 +441,7 @@ class _DashboardPageState extends State<DashboardPage> {
             else
               balanceInfo,
             const SizedBox(height: 12),
-            DashboardBalanceChart(
-              dateRange: dateRangeService,
-              lineColor: accent,
-              height: isWide ? 150 : 110,
-            ),
+            chart,
             if (!chipsTopRight) ...[
               const SizedBox(height: 14),
               DateRangeChips(

@@ -74,10 +74,14 @@ class PageSwitcherState extends State<PageSwitcher> {
           ),
         ),
         floatingActionButton: AnimateFAB(
+          // On tablet/desktop the main page actions live in the sidebar ("New
+          // transaction") or in the app bar ("Create budget"), so the floating
+          // buttons are mobile-only.
           condition:
-              selectedDestination == AppMenuDestinationsID.transactions ||
-              selectedDestination == AppMenuDestinationsID.dashboard ||
-              selectedDestination == AppMenuDestinationsID.budgets,
+              AppUtils.isMobileLayout(context) &&
+              (selectedDestination == AppMenuDestinationsID.budgets ||
+                  selectedDestination == AppMenuDestinationsID.transactions ||
+                  selectedDestination == AppMenuDestinationsID.dashboard),
           fab: Builder(
             builder: (context) {
               if (selectedDestination == AppMenuDestinationsID.budgets) {

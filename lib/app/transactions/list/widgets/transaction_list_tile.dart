@@ -38,6 +38,7 @@ class TransactionListTile extends StatelessWidget {
     this.preventDefaultOnTap = false,
     this.tableLayout = false,
     this.onSelectedChanged,
+    this.selectionActive = false,
   });
 
   final MoneyTransaction transaction;
@@ -83,6 +84,11 @@ class TransactionListTile extends StatelessWidget {
   /// Called when the row's selection checkbox is toggled (only in
   /// [tableLayout]).
   final ValueChanged<bool?>? onSelectedChanged;
+
+  /// Whether any transaction is currently selected on the page. When `true`,
+  /// the [tableLayout] checkbox stays visible on every row; otherwise it only
+  /// appears while hovering the row.
+  final bool selectionActive;
 
   bool get showPeriodicityInfo =>
       periodicityInfo != null && transaction.recurrentInfo.isRecurrent;
@@ -171,7 +177,10 @@ class TransactionListTile extends StatelessWidget {
 
   /// Desktop table-like row: leading selection checkbox, name, a dedicated
   /// account column, a date column and the amount.
-  Widget _buildTableRow(BuildContext context) {
+  ///
+  /// The checkbox slot is always reserved (to avoid layout shifts) but the
+  /// checkbox itself is only shown when [showCheckbox] is `true`.
+  Widget _buildTableRow(BuildContext context, {required bool showCheckbox}) {
     return Material(
       color: isSelected
           ? Theme.of(context).colorScheme.primary.withOpacity(0.12)
@@ -179,15 +188,30 @@ class TransactionListTile extends StatelessWidget {
       child: InkWell(
         onTap: onTap ?? (preventDefaultOnTap ? null : _openDetails),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
           child: Row(
             children: [
               if (onSelectedChanged != null) ...[
-                Checkbox(value: isSelected, onChanged: onSelectedChanged),
+                SizedBox(
+                  width: 36,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 120),
+                    opacity: showCheckbox ? 1 : 0,
+                    child: IgnorePointer(
+                      ignoring: !showCheckbox,
+                      child: Checkbox(
+                        value: isSelected,
+                        onChanged: onSelectedChanged,
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(width: 4),
               ],
-              transaction.getDisplayIcon(context, size: 26, padding: 6),
-              const SizedBox(width: 12),
+              transaction.getDisplayIcon(context, size: 20, padding: 5),
+              const SizedBox(width: 14),
               // Title + tags
               Expanded(
                 flex: 3,
@@ -329,7 +353,7 @@ class TransactionListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tableLayout) {
-      return _buildTableRow(context);
+      return _TransactionTableRow(tile: this);
     }
 
     final showTime =
@@ -638,6 +662,33 @@ class TransactionListTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Wraps the desktop table row so the selection checkbox only shows while the
+/// pointer hovers the row (or when a selection is already active).
+class _TransactionTableRow extends StatefulWidget {
+  const _TransactionTableRow({required this.tile});
+
+  final TransactionListTile tile;
+
+  @override
+  State<_TransactionTableRow> createState() => _TransactionTableRowState();
+}
+
+class _TransactionTableRowState extends State<_TransactionTableRow> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final tile = widget.tile;
+    final showCheckbox = _hovering || tile.selectionActive || tile.isSelected;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: tile._buildTableRow(context, showCheckbox: showCheckbox),
     );
   }
 }

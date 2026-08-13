@@ -228,18 +228,20 @@ class _DynamicMultiSelectorModalState<T, V>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ModalContainer(
+    final content = ModalContainer(
       title: widget.title,
       subtitle: widget.subtitle,
       responseToKeyboard: false,
       showTitleDivider: true,
-      footer: BottomSheetFooter(
-        submitText: t.ui_actions.continue_text,
-        submitIcon: Icons.check_rounded,
-        onSaved: () {
-          RouteUtils.popRoute(ModalResult(_currentSelectedValues));
-        },
-      ),
+      footer: ModalPresentation.isPopover(context)
+          ? null
+          : BottomSheetFooter(
+              submitText: t.ui_actions.continue_text,
+              submitIcon: Icons.check_rounded,
+              onSaved: () {
+                RouteUtils.popRoute(ModalResult(_currentSelectedValues));
+              },
+            ),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -251,6 +253,12 @@ class _DynamicMultiSelectorModalState<T, V>
           ],
         ),
       ),
+    );
+
+    // Popovers have no save button: apply the current selection on dismiss.
+    return PopoverCommitOnDismiss(
+      onCommit: () => RouteUtils.popRoute(ModalResult(_currentSelectedValues)),
+      child: content,
     );
   }
 }

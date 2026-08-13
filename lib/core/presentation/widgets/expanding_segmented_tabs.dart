@@ -29,6 +29,47 @@ class SegmentedTabItem<T> {
   final int? badgeCount;
 }
 
+/// An [ExpandingSegmentedTabs] wrapped as a [PreferredSizeWidget] so it can be
+/// dropped into a page's app-bar `bottom` slot as a desktop-friendly
+/// replacement for Flutter's swipeable [TabBar].
+class SegmentedTabBar<T> extends StatelessWidget
+    implements PreferredSizeWidget {
+  const SegmentedTabBar({
+    super.key,
+    required this.items,
+    required this.selected,
+    required this.onSelected,
+    this.padding = const EdgeInsets.fromLTRB(16, 2, 16, 12),
+    this.tabsHeight = 40,
+  });
+
+  final List<SegmentedTabItem<T>> items;
+  final T selected;
+  final ValueChanged<T> onSelected;
+  final EdgeInsetsGeometry padding;
+  final double tabsHeight;
+
+  @override
+  Size get preferredSize => Size.fromHeight(tabsHeight + padding.vertical);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: padding,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: ExpandingSegmentedTabs<T>(
+          items: items,
+          selected: selected,
+          onSelected: onSelected,
+          fullWidth: false,
+          height: tabsHeight,
+        ),
+      ),
+    );
+  }
+}
+
 /// A segmented tab bar that adapts to the available width instead of
 /// truncating labels:
 ///
@@ -45,6 +86,7 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
     this.fullWidth = true,
     this.height = 40,
     this.collapsedWidth = 48,
+    this.innerPadding = 3,
     this.duration = const Duration(milliseconds: 250),
     this.borderColor,
     this.selectedColor,
@@ -75,18 +117,22 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
   /// Width of a collapsed (icon-only) segment.
   final double collapsedWidth;
 
+  /// Gap between the outer border/track and the segments inside it, so the
+  /// selected pill floats within the track instead of touching its edge.
+  final double innerPadding;
+
   final Duration duration;
 
   final Color? borderColor;
 
   /// Background of the selected segment, used when that item doesn't define
   /// its own [SegmentedTabItem.color]. Defaults to
-  /// `colorScheme.secondaryContainer`.
+  /// `colorScheme.primaryContainer`.
   final Color? selectedColor;
 
   /// Foreground (icon/label) of the selected segment, used when that item
   /// doesn't define its own [SegmentedTabItem.color]. Defaults to
-  /// `colorScheme.onSecondaryContainer`.
+  /// `colorScheme.onPrimaryContainer`.
   final Color? selectedForegroundColor;
 
   /// Foreground (icon) of unselected segments. Defaults to
@@ -135,39 +181,50 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
     return painter.width + 12;
   }
 
+  /// Width of the outer border/track.
+  static const double _borderWidth = 1;
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final shape = BorderRadius.circular(height / 2);
 
+    // Height/shape of the segments once the track padding + border are
+    // subtracted, so the selected pill sits inset within the track.
+    final innerHeight = height - 2 * (innerPadding + _borderWidth);
+    final innerShape = BorderRadius.circular(innerHeight / 2);
+
     return LayoutBuilder(
       builder: (context, constraints) {
+        final innerMaxWidth =
+            constraints.maxWidth - 2 * (innerPadding + _borderWidth);
+
         final fullWidths = [
           for (final item in items) _fullSegmentWidth(context, item),
         ];
         final totalFullWidth = fullWidths.fold<double>(0, (a, b) => a + b);
-        final fitsExpanded = totalFullWidth <= constraints.maxWidth;
+        final fitsExpanded = totalFullWidth <= innerMaxWidth;
 
         final effectiveCollapsedWidth =
-            collapsedWidth * items.length <= constraints.maxWidth
+            collapsedWidth * items.length <= innerMaxWidth
             ? collapsedWidth
-            : constraints.maxWidth / items.length;
+            : innerMaxWidth / items.length;
 
         final selectedCollapsedWidth =
-            (constraints.maxWidth -
-                    effectiveCollapsedWidth * (items.length - 1))
-                .clamp(effectiveCollapsedWidth, constraints.maxWidth);
+            (innerMaxWidth - effectiveCollapsedWidth * (items.length - 1))
+                .clamp(effectiveCollapsedWidth, innerMaxWidth);
 
         return Container(
           height: height,
-          clipBehavior: Clip.antiAlias,
-          // The border is drawn as a foreground decoration so it always
-          // paints on top of the (square-cornered) segments below, instead
-          // of being hidden behind them at the rounded corners.
-          decoration: BoxDecoration(borderRadius: shape),
-          foregroundDecoration: BoxDecoration(
-            border: Border.all(color: borderColor ?? colorScheme.outline),
+          padding: EdgeInsets.all(innerPadding),
+          decoration: BoxDecoration(
             borderRadius: shape,
+            border: Border.all(
+              color:
+                  borderColor ??
+                  colorScheme.outlineVariant.withValues(alpha: 0.4),
+              width: _borderWidth,
+            ),
           ),
           child: Row(
             mainAxisSize: fullWidth || !fitsExpanded
@@ -183,6 +240,8 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
                       isSelected: items[i].value == selected,
                       width: null,
                       showLabel: true,
+                      innerHeight: innerHeight,
+                      innerShape: innerShape,
                     ),
                   )
                 else if (fitsExpanded)
@@ -192,6 +251,8 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
                     isSelected: items[i].value == selected,
                     width: fullWidths[i],
                     showLabel: true,
+                    innerHeight: innerHeight,
+                    innerShape: innerShape,
                   )
                 else
                   _buildSegment(
@@ -202,6 +263,8 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
                         ? selectedCollapsedWidth
                         : effectiveCollapsedWidth,
                     showLabel: items[i].value == selected,
+                    innerHeight: innerHeight,
+                    innerShape: innerShape,
                   ),
             ],
           ),
@@ -216,29 +279,32 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
     required bool isSelected,
     required double? width,
     required bool showLabel,
+    required double innerHeight,
+    required BorderRadius innerShape,
   }) {
     final colorScheme = Theme.of(context).colorScheme;
 
     final bgColor = isSelected
-        ? (item.color ?? selectedColor ?? colorScheme.secondaryContainer)
+        ? (item.color ?? selectedColor ?? colorScheme.primaryContainer)
         : Colors.transparent;
 
     final fgColor = isSelected
         ? (item.color?.getContrastColor() ??
               selectedForegroundColor ??
-              colorScheme.onSecondaryContainer)
+              colorScheme.onPrimaryContainer)
         : (unselectedForegroundColor ?? colorScheme.onSurfaceVariant);
 
     return AnimatedContainer(
       duration: duration,
       curve: Curves.easeOutCubic,
       width: width,
-      height: height,
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(color: bgColor),
+      height: innerHeight,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(color: bgColor, borderRadius: innerShape),
       child: Tappable(
         onTap: () => onSelected(item.value),
         bgColor: bgColor,
+        borderRadius: innerShape,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

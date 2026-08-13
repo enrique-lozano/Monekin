@@ -40,6 +40,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -130,12 +131,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       builder: (context, snapshot) {
         final account = snapshot.data ?? widget.account;
         final isInvestment = account.type == AccountType.investment;
-
-        final menuActions = AccountDetailsActions.getAccountDetailsActions(
-          context,
-          account: account,
-          navigateBackOnDelete: true,
-        ).menu;
+        final isWide = !AppUtils.isMobileLayout(context);
 
         return PageFramework(
           title: t.general.details,
@@ -157,17 +153,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
             bottom: tabBar,
             actions: actions,
           ),
-          appBarActions: [
-            IconButton(
-              icon: const Icon(Icons.edit_rounded),
-              tooltip: t.ui_actions.edit,
-              onPressed: () => RouteUtils.showResponsiveForm(
-                AccountFormPage(account: account),
-              ),
-            ),
-            if (menuActions.isNotEmpty)
-              MonekinPopupMenuButton(actionItems: menuActions),
-          ],
+          appBarActions: _buildAppBarActions(
+            account,
+            isInvestment,
+            wide: isWide,
+          ),
           // A SingleChildScrollView (not a ListView) is used on purpose: the
           // page mixes several StreamBuilder-backed sections and a ListView
           // would wrap each of them in a `_SelectionKeepAlive`, which
@@ -199,6 +189,73 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         );
       },
     );
+  }
+
+  /// Account actions for the app bar. On wide layouts the quick actions
+  /// (add/withdraw money, transfer, buy/sell...) live here as labelled buttons;
+  /// on mobile they stay in the in-page action grid and only edit/menu show.
+  List<Widget> _buildAppBarActions(
+    Account account,
+    bool isInvestment, {
+    required bool wide,
+  }) {
+    final menuActions = AccountDetailsActions.getAccountDetailsActions(
+      context,
+      account: account,
+      navigateBackOnDelete: true,
+    ).menu;
+
+    final editButton = IconButton(
+      icon: const Icon(Icons.edit_rounded),
+      tooltip: t.ui_actions.edit,
+      onPressed: () =>
+          RouteUtils.showResponsiveForm(AccountFormPage(account: account)),
+    );
+
+    return [
+      if (wide) ...[
+        for (final action in _resolveQuickActions(account, isInvestment))
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: OutlinedButton.icon(
+              onPressed: action.onTap,
+              icon: Icon(action.icon, size: 18, color: action.color),
+              label: Text(action.label),
+
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Theme.of(context).colorScheme.onSurface,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                side: BorderSide(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.outlineVariant.withValues(alpha: 0.6),
+                ),
+              ),
+            ),
+          ),
+        const SizedBox(width: 8),
+        SizedBox(
+          height: 24,
+          child: VerticalDivider(
+            width: 1,
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.6),
+          ),
+        ),
+        const SizedBox(width: 8),
+      ],
+      editButton,
+      if (menuActions.isNotEmpty)
+        MonekinPopupMenuButton(actionItems: menuActions),
+      const SizedBox(width: 4),
+    ];
   }
 
   Widget _buildMobileLayout(Account account, bool isInvestment) {
@@ -246,7 +303,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
   Widget _buildDesktopHeader(Account account, bool isInvestment) {
     final theme = Theme.of(context);
-    final actions = _resolveQuickActions(account, isInvestment);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -262,15 +318,14 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               showTrackingMode: true,
             ),
           ),
-          const SizedBox(width: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.end,
-            children: [
-              for (var i = 0; i < actions.length; i++)
-                _HeaderActionButton(action: actions[i], isPrimary: i == 0),
-            ],
+          const SizedBox(width: 24),
+          _buildValueSection(account, isInvestment),
+          const SizedBox(width: 24),
+          DateRangeChips(
+            currentPeriod: _dateRange.datePeriod,
+            onPresetSelected: _onPeriodChanged,
+            onCustomTap: _openCustomPeriodModal,
+            wrap: true,
           ),
         ],
       ),
@@ -284,20 +339,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: _buildValueSection(account, isInvestment)),
-              const SizedBox(width: 16),
-              DateRangeChips(
-                currentPeriod: _dateRange.datePeriod,
-                onPresetSelected: _onPeriodChanged,
-                onCustomTap: _openCustomPeriodModal,
-                wrap: true,
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
           _buildChartSection(account, showRangeChips: false),
 
           if (isInvestment) ...[
@@ -1181,50 +1222,6 @@ class _QuickAction extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-/// Renders a [_QuickAction] as a pill-shaped button, used in the desktop
-/// header next to the account name (as opposed to the icon-grid tiles used
-/// by [_QuickAction] itself on mobile).
-class _HeaderActionButton extends StatelessWidget {
-  const _HeaderActionButton({required this.action, required this.isPrimary});
-
-  final _QuickAction action;
-  final bool isPrimary;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = ButtonStyle(
-      visualDensity: VisualDensity.compact,
-      shape: const WidgetStatePropertyAll(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(999)),
-        ),
-      ),
-      padding: const WidgetStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      ),
-    );
-
-    final icon = Icon(action.icon, size: 18);
-    final label = Text(action.label);
-
-    if (isPrimary) {
-      return FilledButton.icon(
-        onPressed: action.onTap,
-        style: style,
-        icon: icon,
-        label: label,
-      );
-    }
-
-    return FilledButton.tonalIcon(
-      onPressed: action.onTap,
-      style: style,
-      icon: icon,
-      label: label,
     );
   }
 }

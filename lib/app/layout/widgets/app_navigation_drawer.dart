@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/window_bar.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -32,7 +33,10 @@ class SideNavigationDrawer extends StatelessWidget {
         indicatorShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        header: SizedBox(height: AppUtils.isDesktop ? 8 : 12),
+        header: Padding(
+          padding: EdgeInsets.only(top: AppUtils.isDesktop ? 4 : 8),
+          child: const SidebarNewTransactionButton(extended: true),
+        ),
         footer: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Row(

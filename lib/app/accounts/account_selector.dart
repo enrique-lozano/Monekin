@@ -61,7 +61,7 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return buildDraggableSheet(
+    final sheet = buildDraggableSheet(
       minChildSize: 0.64,
       defaultSize: 0.65,
       builder: (context, scrollController) {
@@ -92,6 +92,8 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
               return Column(
                 children: [
                   TextField(
+                    focusNode: searchFocusNode,
+                    autofocus: ModalPresentation.isPopover(context),
                     decoration: InputDecoration(
                       filled: false,
                       isDense: false,
@@ -113,7 +115,9 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
               );
             },
           ),
-          footer: !widget.allowMultiSelection
+          footer:
+              !widget.allowMultiSelection ||
+                  ModalPresentation.isPopover(context)
               ? null
               : BottomSheetFooter(
                   onSaved: selectedAccounts.isNotEmpty
@@ -123,6 +127,17 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
         );
       },
     );
+
+    // Multi-select popovers have no save button: apply the current selection
+    // when the popover is dismissed. Single-select already closes on tap.
+    if (widget.allowMultiSelection) {
+      return PopoverCommitOnDismiss(
+        onCommit: () => RouteUtils.popRoute(selectedAccounts),
+        child: sheet,
+      );
+    }
+
+    return sheet;
   }
 
   Widget buildSelectAllButton(AsyncSnapshot<List<Account>> snapshot) {

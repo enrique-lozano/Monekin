@@ -5,6 +5,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/presentation/widgets/sheet_or_fixed.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -13,10 +14,7 @@ void showCurrencySelectorModal(
   BuildContext context,
   CurrencySelectorModal modalData,
 ) {
-  RouteUtils.showResponsiveModal(
-    context,
-    builder: (context) => modalData,
-  );
+  RouteUtils.showResponsiveModal(context, builder: (context) => modalData);
 }
 
 class CurrencySelectorModal extends StatefulWidget {
@@ -41,6 +39,8 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
 
   Currency? _selectedCurrency;
 
+  final FocusNode _searchFocus = createPopoverSearchFocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -56,13 +56,18 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
   }
 
   @override
+  void dispose() {
+    _searchFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
 
     final t = Translations.of(context);
 
-    return DraggableScrollableSheet(
-      expand: false,
+    return SheetOrFixed(
       maxChildSize: 0.85,
       minChildSize: 0.625,
       initialChildSize: 0.85,
@@ -83,6 +88,8 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
           body: Column(
             children: [
               TextField(
+                focusNode: _searchFocus,
+                autofocus: ModalPresentation.isPopover(context),
                 decoration: InputDecoration(
                   filled: false,
                   isDense: false,
@@ -153,6 +160,14 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
                             ),
                           ),
                           onTap: () {
+                            // In a popover single-select applies + closes on
+                            // tap (no save button).
+                            if (ModalPresentation.isPopover(context)) {
+                              widget.onCurrencySelected?.call(currencyItem);
+                              RouteUtils.popRoute();
+                              return;
+                            }
+
                             setState(() {
                               _selectedCurrency = currencyItem;
                             });
@@ -168,15 +183,17 @@ class _CurrencySelectorModalState extends State<CurrencySelectorModal> {
               ),
             ],
           ),
-          footer: BottomSheetFooter(
-            onSaved: _selectedCurrency != null
-                ? () {
-                    RouteUtils.popRoute();
+          footer: ModalPresentation.isPopover(context)
+              ? null
+              : BottomSheetFooter(
+                  onSaved: _selectedCurrency != null
+                      ? () {
+                          RouteUtils.popRoute();
 
-                    widget.onCurrencySelected!(_selectedCurrency!);
-                  }
-                : null,
-          ),
+                          widget.onCurrencySelected!(_selectedCurrency!);
+                        }
+                      : null,
+                ),
         );
       },
     );

@@ -47,7 +47,7 @@ class _CustomColorPickerModalState extends State<CustomColorPickerModal> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ModalContainer(
+    final content = ModalContainer(
       title: t.icon_selector.custom_color,
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
       body: CustomColorPicker(
@@ -61,13 +61,24 @@ class _CustomColorPickerModalState extends State<CustomColorPickerModal> {
       endWidget: widget.previewBuilder == null
           ? null
           : widget.previewBuilder!(color),
-      footer: BottomSheetFooter(
-        submitIcon: Icons.colorize_rounded,
-        submitText: t.ui_actions.select,
-        onSaved: () {
-          widget.onColorSelected(color);
-        },
-      ),
+      footer: ModalPresentation.isPopover(context)
+          ? null
+          : BottomSheetFooter(
+              submitIcon: Icons.colorize_rounded,
+              submitText: t.ui_actions.select,
+              onSaved: () {
+                widget.onColorSelected(color);
+              },
+            ),
+    );
+
+    // Popovers have no save button: apply the picked color on dismiss.
+    return PopoverCommitOnDismiss(
+      onCommit: () {
+        widget.onColorSelected(color);
+        RouteUtils.popRoute();
+      },
+      child: content,
     );
   }
 }
