@@ -39,7 +39,7 @@ class SegmentedTabBar<T> extends StatelessWidget
     required this.items,
     required this.selected,
     required this.onSelected,
-    this.padding = const EdgeInsets.fromLTRB(16, 2, 16, 12),
+    this.padding = const EdgeInsets.fromLTRB(16, 12, 16, 0),
     this.tabsHeight = 40,
   });
 

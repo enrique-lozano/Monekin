@@ -43,6 +43,8 @@
   },
   "GENERAL": {
     "or": "o",
+    "of": "de",
+    "showing": "Mostrando",
     "understood": "Entendido",
     "unspecified": "Sin especificar",
     "quick_actions": "Acciones rápidas",
@@ -386,6 +388,11 @@
         "one": "{{n}} transacción seleccionada",
         "other": "{{n}} transacciones seleccionadas"
       },
+      "selected_of": {
+        "one": "{{n}} de {{total}} seleccionada",
+        "other": "{{n}} de {{total}} seleccionadas"
+      },
+      "shown": "mostrado",
       "BULK_EDIT": {
         "dates": "Editar fechas",
         "categories": "Editar categorías",

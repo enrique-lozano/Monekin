@@ -25,6 +25,7 @@ import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
+import 'package:monekin/core/presentation/widgets/equal_height_chart_row.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
@@ -386,33 +387,75 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     );
   }
 
+  /// Desktop top block: a two-column row whose columns share the exact same
+  /// height. The left column drives the height with the identity/price/position
+  /// content; the right column holds the chart card, whose chart flexes to fill
+  /// whatever height the left column ends up needing.
   Widget _buildTopDesktop(
     SecurityInDB security,
     Currency? currency,
     List<_Position> positions,
     List<_PricePoint> allPoints,
   ) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(security, currency, allPoints),
-              const SizedBox(height: 24),
-              _buildChartSection(currency, allPoints),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16, top: 8),
+    return EqualHeightChartRow(
+      info: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildHeader(security, currency, allPoints),
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: _buildPositionCard(currency, positions),
           ),
+        ],
+      ),
+      chart: _buildChartCard(currency, allPoints),
+    );
+  }
+
+  /// The price chart and its period chips, wrapped in a bordered card that
+  /// stretches to fill the height handed to it by [_buildTopDesktop]. The chart
+  /// is set to [TimeSeriesEvolutionChart.expand] so it grows/shrinks with the
+  /// card instead of using a fixed height.
+  Widget _buildChartCard(Currency? currency, List<_PricePoint> allPoints) {
+    final visible = _visiblePoints(allPoints);
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(
+            context,
+          ).colorScheme.outlineVariant.withValues(alpha: 0.5),
         ),
-      ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: TimeSeriesEvolutionChart<_PricePoint>(
+              expand: true,
+              data: visible,
+              dateExtractor: (p) => p.date,
+              valueExtractor: (p) => p.price,
+              currency: currency,
+              showYAxisTitles: false,
+              onHover: (point) => setState(() => _hoveredPoint = point),
+            ),
+          ),
+          const SizedBox(height: 12),
+          if (allPoints.isNotEmpty)
+            DateRangeChips(
+              currentPeriod: _dateRange.datePeriod,
+              oldestDate: allPoints.first.date,
+              onPresetSelected: _onPeriodChanged,
+              onCustomTap: _openCustomPeriodModal,
+              padding: EdgeInsets.zero,
+            ),
+        ],
+      ),
     );
   }
 
@@ -450,6 +493,10 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 12,
         children: [
+          Hero(
+            tag: widget.securityAvatarHeroTag ?? UniqueKey(),
+            child: SecurityAvatar(security: security, size: 44),
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -489,10 +536,6 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
                   ),
               ],
             ),
-          ),
-          Hero(
-            tag: widget.securityAvatarHeroTag ?? UniqueKey(),
-            child: SecurityAvatar(security: security, size: 44),
           ),
         ],
       ),

@@ -32,6 +32,7 @@ class AssetValuationContributionChart extends StatefulWidget {
     this.transactionsLabel,
     this.onHover,
     this.timeRange,
+    this.expand = false,
   });
 
   final List<AssetValuationContributionPoint> points;
@@ -54,6 +55,11 @@ class AssetValuationContributionChart extends StatefulWidget {
 
   final void Function(AssetValuationContributionPoint?)? onHover;
   final DateTimeRange? timeRange;
+
+  /// When true, the chart fills the available vertical space (via an
+  /// [Expanded]) instead of using a fixed height. Used by the desktop layout
+  /// where the chart card stretches to match the height of the info column.
+  final bool expand;
 
   @override
   State<AssetValuationContributionChart> createState() =>
@@ -223,14 +229,16 @@ class _AssetValuationContributionChartState
       ),
     );
 
-    final chartContainer = SizedBox(
-      height:
-          (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
-              ? 280
-              : 100) *
-          clampDouble(MediaQuery.of(context).size.height / 800, 0.2, 1),
-      child: chart,
-    );
+    final Widget chartContainer = widget.expand
+        ? chart
+        : SizedBox(
+            height:
+                (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
+                    ? 280
+                    : 100) *
+                clampDouble(MediaQuery.of(context).size.height / 800, 0.2, 1),
+            child: chart,
+          );
 
     final interactiveChart = widget.onHover == null
         ? chartContainer
@@ -241,11 +249,11 @@ class _AssetValuationContributionChartState
         : interactiveChart;
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 6,
       children: [
-        chartWithOverlay,
+        widget.expand ? Expanded(child: chartWithOverlay) : chartWithOverlay,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Wrap(

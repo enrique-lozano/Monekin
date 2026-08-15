@@ -233,9 +233,9 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: ExpandingSegmentedTabs<TransactionType>(
-                fullWidth: false,
+                fullWidth: true,
                 items: [
                   SegmentedTabItem(
                     value: TransactionType.expense,
@@ -329,7 +329,14 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(dataCategory.category.name),
+                                Expanded(
+                                  child: Text(
+                                    dataCategory.category.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
                                 CurrencyDisplayer(
                                   amountToConvert: dataCategory.value,
                                 ),
@@ -338,10 +345,15 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                             subtitle: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
-                                      .toLowerCase(),
+                                Expanded(
+                                  child: Text(
+                                    '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
+                                        .toLowerCase(),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
+                                const SizedBox(width: 8),
                                 Text(
                                   NumberFormat.decimalPercentPattern(
                                     decimalDigits: 2,

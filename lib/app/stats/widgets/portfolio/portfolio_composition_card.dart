@@ -8,7 +8,6 @@ import 'package:monekin/core/database/services/taxonomy/taxonomy_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
-import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -282,6 +281,85 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
     return slices;
   }
 
+  /// A single selector combining the fixed groupings (by value / type /
+  /// account) and every taxonomy, so the user picks the composition breakdown
+  /// in one place instead of a segmented control plus a second dropdown.
+  Widget _buildGroupBySelector(Translations t) {
+    final theme = Theme.of(context);
+    final currentValue = _groupBy == _GroupBy.classification
+        ? _selectedTaxonomyId
+        : _groupBy.name;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHigh,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: currentValue,
+          isDense: true,
+          borderRadius: BorderRadius.circular(12),
+          items: [
+            _selectorItem(
+              _GroupBy.security.name,
+              Icons.show_chart_rounded,
+              t.assets.securities.by_security,
+            ),
+            _selectorItem(
+              _GroupBy.type.name,
+              Icons.category_outlined,
+              t.assets.securities.by_type,
+            ),
+            _selectorItem(
+              _GroupBy.account.name,
+              Icons.account_balance_wallet_outlined,
+              t.assets.securities.by_account,
+            ),
+            for (final taxonomy in _taxonomies)
+              _selectorItem(
+                taxonomy.id,
+                Icons.donut_small_outlined,
+                taxonomy.name,
+              ),
+          ],
+          onChanged: (value) {
+            if (value == null) return;
+            setState(() {
+              _touchedIndex = -1;
+              switch (value) {
+                case 'security':
+                  _groupBy = _GroupBy.security;
+                case 'type':
+                  _groupBy = _GroupBy.type;
+                case 'account':
+                  _groupBy = _GroupBy.account;
+                default:
+                  _groupBy = _GroupBy.classification;
+                  _selectedTaxonomyId = value;
+              }
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  DropdownMenuItem<String> _selectorItem(
+    String value,
+    IconData icon,
+    String label,
+  ) {
+    return DropdownMenuItem(
+      value: value,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [Icon(icon, size: 18), const SizedBox(width: 8), Text(label)],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -349,64 +427,7 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.center,
-              child: ExpandingSegmentedTabs<_GroupBy>(
-                fullWidth: false,
-                items: [
-                  SegmentedTabItem(
-                    value: _GroupBy.security,
-                    icon: Icons.show_chart_rounded,
-                    label: t.assets.securities.by_security,
-                  ),
-                  SegmentedTabItem(
-                    value: _GroupBy.type,
-                    icon: Icons.category_outlined,
-                    label: t.assets.securities.by_type,
-                  ),
-                  SegmentedTabItem(
-                    value: _GroupBy.account,
-                    icon: Icons.account_balance_wallet_outlined,
-                    label: t.assets.securities.by_account,
-                  ),
-                  if (_taxonomies.isNotEmpty)
-                    SegmentedTabItem(
-                      value: _GroupBy.classification,
-                      icon: Icons.donut_small_outlined,
-                      label: t.assets.securities.by_classification,
-                    ),
-                ],
-                selected: _groupBy,
-                onSelected: (value) {
-                  setState(() {
-                    _groupBy = value;
-                    _touchedIndex = -1;
-                  });
-                },
-              ),
-            ),
-            if (_groupBy == _GroupBy.classification &&
-                _taxonomies.isNotEmpty) ...[
-              const SizedBox(height: 12),
-              Align(
-                alignment: Alignment.center,
-                child: DropdownButton<String>(
-                  value: _selectedTaxonomyId,
-                  borderRadius: BorderRadius.circular(12),
-                  items: [
-                    for (final taxonomy in _taxonomies)
-                      DropdownMenuItem(
-                        value: taxonomy.id,
-                        child: Text(taxonomy.name),
-                      ),
-                  ],
-                  onChanged: (value) => setState(() {
-                    _selectedTaxonomyId = value;
-                    _touchedIndex = -1;
-                  }),
-                ),
-              ),
-            ],
+            Align(alignment: Alignment.center, child: _buildGroupBySelector(t)),
             const SizedBox(height: 16),
             AdaptiveTwoColumn(
               breakpoint: 520,

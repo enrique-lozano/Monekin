@@ -37,6 +37,7 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -814,37 +815,42 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     final theme = Theme.of(context);
     final hint = AppColors.of(context).textHint;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label.toUpperCase(),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: hint,
-            letterSpacing: 0.5,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          primary,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        if (secondary.isNotEmpty) ...[
-          const SizedBox(height: 2),
+    return Padding(
+      padding: EdgeInsetsGeometry.symmetric(
+        horizontal: AppUtils.isMobileSize(context) ? 4 : 12,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(
-            secondary,
+            label.toUpperCase(),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall?.copyWith(color: hint),
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: hint,
+              letterSpacing: 0.5,
+            ),
           ),
+          const SizedBox(height: 6),
+          Text(
+            primary,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          if (secondary.isNotEmpty) ...[
+            const SizedBox(height: 2),
+            Text(
+              secondary,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.bodySmall?.copyWith(color: hint),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 

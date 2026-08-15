@@ -31,6 +31,7 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
     this.timeRange,
     this.fillMissingDatesWithPreviousValue = true,
     this.showYAxisTitles = true,
+    this.expand = false,
   });
 
   /// The raw data items to plot.
@@ -71,6 +72,12 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
   /// When false, the left (Y) axis labels and the background grid are hidden,
   /// for a cleaner, dashboard-like chart.
   final bool showYAxisTitles;
+
+  /// When true, the chart fills the available vertical space instead of using
+  /// a fixed height, so its parent (typically an [Expanded]) decides how tall
+  /// it is. Used by desktop layouts where the chart card stretches to match the
+  /// height of the neighbouring info column.
+  final bool expand;
 
   @override
   State<TimeSeriesEvolutionChart<T>> createState() =>
@@ -322,14 +329,16 @@ class _TimeSeriesEvolutionChartState<T>
       ),
     );
 
-    final chartContainer = SizedBox(
-      height:
-          (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
-              ? 160
-              : 120) *
-          clampDouble(MediaQuery.of(context).size.height / 800, 0.25, 1),
-      child: chart,
-    );
+    final Widget chartContainer = widget.expand
+        ? chart
+        : SizedBox(
+            height:
+                (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
+                    ? 160
+                    : 120) *
+                clampDouble(MediaQuery.of(context).size.height / 800, 0.25, 1),
+            child: chart,
+          );
 
     final interactiveChartContainer = widget.onHover == null
         ? chartContainer

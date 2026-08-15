@@ -43,6 +43,8 @@
   },
   "GENERAL": {
     "or": "or",
+    "of": "of",
+    "showing": "Showing",
     "understood": "Understood",
     "unspecified": "Unspecified",
     "quick_actions": "Quick actions",
@@ -395,6 +397,11 @@
         "one": "{{n}} transaction selected",
         "other": "{{n}} transactions selected"
       },
+      "selected_of": {
+        "one": "{{n}} of {{total}} selected",
+        "other": "{{n}} of {{total}} selected"
+      },
+      "shown": "shown",
       "BULK_EDIT": {
         "dates": "Edit dates",
         "categories": "Edit categories",

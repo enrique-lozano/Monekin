@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 
 /// Default corner radius for buttons across the app.
-const defaultButtonBorderRadius = 12.0;
+final defaultButtonBorderRadius = AppUtils.isDesktop ? 10.0 : 12.0;
 
 /// Height for prominent call-to-action buttons (e.g. onboarding).
 const bigButtonStyleHeight = 52.0;
 
 /// Height for full-width persistent footer action buttons.
-const mediumButtonStyleHeight = 42.0;
+final mediumButtonStyleHeight = AppUtils.isDesktop ? 34.0 : 42.0;
 
 ButtonStyle _iconButtonStyle(BuildContext context, double height) {
   return ButtonStyle(

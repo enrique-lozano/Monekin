@@ -388,7 +388,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
             const SizedBox(height: 4),
-            _buildTotalBalance(context, accent),
+            _buildTotalBalance(context),
             const SizedBox(height: 6),
             _buildVariationRow(context),
           ],
@@ -464,7 +464,9 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildTotalBalance(BuildContext context, Color accent) {
+  Widget _buildTotalBalance(BuildContext context) {
+    final subdued = AppColors.of(context).textHint;
+
     return StreamBuilder(
       stream: AccountService.instance.getAccountsMoney(),
       builder: (context, snapshot) {
@@ -481,9 +483,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: 1.05,
                       ),
                   decimalsStyle: Theme.of(context).textTheme.titleLarge!
-                      .copyWith(fontWeight: FontWeight.w700, color: accent),
+                      .copyWith(fontWeight: FontWeight.w700, color: subdued),
                   currencyStyle: Theme.of(context).textTheme.headlineSmall!
-                      .copyWith(fontWeight: FontWeight.w700, color: accent),
+                      .copyWith(fontWeight: FontWeight.w700, color: subdued),
                 ),
         );
       },
@@ -522,12 +524,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 fontSize: 14,
                 padding: EdgeInsets.zero,
               ),
-              Text(
-                '·  $periodText',
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: AppColors.of(context).textHint,
-                ),
-              ),
+              // Text(
+              //   '·  $periodText',
+              //   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              //     color: AppColors.of(context).textHint,
+              //   ),
+              // ),
             ],
           ),
         );

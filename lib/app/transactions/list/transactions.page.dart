@@ -19,7 +19,6 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/filter_row_indicator.dart';
-import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/filter_side_pane.dart';
@@ -27,7 +26,6 @@ import 'package:monekin/core/presentation/widgets/transaction_filter/transaction
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_sheet_modal.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
-import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -113,7 +111,10 @@ class TransactionsPageState extends State<TransactionsPage> {
       },
       child: PageFramework(
         title: t.transaction.display(n: 10),
-        appBarBuilder: (_, _, _) => selectedTransactions.isNotEmpty
+        // On desktop the page app bar never changes on selection (so the page
+        // doesn't shift); the selection UI lives in the summary bar instead.
+        appBarBuilder: (_, _, _) =>
+            (!isDesktop && selectedTransactions.isNotEmpty)
             ? selectedTransactionsAppbar()
             : transactionsPageDefaultAppBar(t, context, isDesktop),
         floatingActionButton: ifIsInTabs(context)
@@ -160,11 +161,16 @@ class TransactionsPageState extends State<TransactionsPage> {
         ),
         LayoutBuilder(
           builder: (context, constraints) {
+            // A bulk selection turns the summary bar into the selection
+            // indicator (with actions on desktop), keeping the page app bar
+            // untouched on desktop.
+            if (selectedTransactions.isNotEmpty) {
+              return _buildSelectionSummary(t, context);
+            }
+
             // The income/expense breakdown only appears when there's plenty of
-            // horizontal room (very wide layouts) and no bulk selection is
-            // taking over the summary bar.
-            final showBreakdown =
-                constraints.maxWidth >= 720 && selectedTransactions.isEmpty;
+            // horizontal room (very wide layouts).
+            final showBreakdown = constraints.maxWidth >= 720;
 
             return showBreakdown
                 ? _buildBreakdownSummary(t, context)
@@ -295,16 +301,25 @@ class TransactionsPageState extends State<TransactionsPage> {
     required bool loading,
     required Widget child,
     required bool flat,
+    bool selected = false,
   }) {
+    final colors = Theme.of(context).colorScheme;
+
     if (flat) {
       // Desktop: a flat, square-cornered bar integrated into the page, with a
       // bottom border acting as the separator (no elevated/rounded card).
+      // While a selection is active it takes a light primary tone.
       return Skeletonizer(
         enabled: loading,
         child: DecoratedBox(
           decoration: BoxDecoration(
+            color: selected ? colors.primary.withValues(alpha: 0.08) : null,
             border: Border(
-              bottom: BorderSide(color: _summaryLineColor(context)),
+              bottom: BorderSide(
+                color: selected
+                    ? colors.primary.withValues(alpha: 0.4)
+                    : _summaryLineColor(context),
+              ),
             ),
           ),
           child: Padding(
@@ -320,9 +335,15 @@ class TransactionsPageState extends State<TransactionsPage> {
       child: Card(
         elevation: 2,
         margin: const EdgeInsets.all(8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6),
+          side: BorderSide(
+            width: 1,
+            color: selected ? colors.primary : Colors.transparent,
+          ),
+        ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+          padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
           child: child,
         ),
       ),
@@ -342,13 +363,15 @@ class TransactionsPageState extends State<TransactionsPage> {
     BuildContext context, {
     required String label,
     required Widget value,
+    CrossAxisAlignment alignment = CrossAxisAlignment.start,
   }) {
     final theme = Theme.of(context);
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: alignment,
       mainAxisSize: MainAxisSize.min,
       children: [
+        value,
         Text(
           label.toUpperCase(),
           style: theme.textTheme.labelSmall!.copyWith(
@@ -356,8 +379,6 @@ class TransactionsPageState extends State<TransactionsPage> {
             letterSpacing: 0.6,
           ),
         ),
-        const SizedBox(height: 4),
-        value,
       ],
     );
   }
@@ -379,83 +400,161 @@ class TransactionsPageState extends State<TransactionsPage> {
     );
   }
 
+  /// The default summary bar: a "showing N movements" column on the left and
+  /// the filter balance on the right.
   Widget _buildCompactSummary(Translations t, BuildContext context) {
-    const smallerTextStyle = TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w300,
-    );
+    final f = filters.copyWith(searchValue: searchController.text);
 
     return StreamBuilder(
       stream: Rx.combineLatest2(
-        TransactionService.instance.countTransactions(
-          filters: filters.copyWith(searchValue: searchController.text),
-        ),
-        TransactionService.instance.getTransactionsValueBalance(
-          filters: filters.copyWith(searchValue: searchController.text),
-        ),
-        (a, b) => (count: a, value: b),
+        TransactionService.instance.countTransactions(filters: f),
+        TransactionService.instance.getTransactionsValueBalance(filters: f),
+        (int a, double b) => (count: a, value: b),
       ),
       builder: (context, snapshot) {
-        final trCountAndBalance = snapshot.data;
+        final data = snapshot.data;
+        final theme = Theme.of(context);
+        final count = data?.count ?? 0;
+        final balance = data?.value ?? 0;
 
         return _summaryCardShell(
-          loading: trCountAndBalance == null,
+          loading: data == null,
           flat: !AppUtils.isMobileLayout(context),
-          child: DefaultTextStyle(
-            style: Theme.of(context).textTheme.titleMedium!,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                if (trCountAndBalance == null) const Text("XX Transactions"),
-                if (trCountAndBalance != null)
-                  Text.rich(
-                    TextSpan(
-                      text: selectedTransactions.isNotEmpty
-                          ? ('${selectedTransactions.length.toStringAsFixed(0)}')
-                          : '',
-                      children: [
-                        TextSpan(
-                          text:
-                              '${selectedTransactions.isNotEmpty ? ' / ' : ''}${trCountAndBalance.count} ',
-                          style: selectedTransactions.isNotEmpty
-                              ? smallerTextStyle
-                              : null,
-                        ),
-                        if (selectedTransactions.isNotEmpty)
-                          const TextSpan(text: " "),
-                        TextSpan(
-                          text: t.transaction
-                              .display(n: trCountAndBalance.count)
-                              .toLowerCase(),
-                        ),
-                      ],
-                    ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _summaryColumn(
+                context,
+                label: t.transaction.display(n: count),
+                value: Text(
+                  count.toStringAsFixed(0),
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
-                Row(
+                ),
+              ),
+              _summaryColumn(
+                context,
+                alignment: CrossAxisAlignment.end,
+                label: t.general.balance,
+                value: _summaryAmount(
+                  context,
+                  amount: balance,
+                  color:
+                      (balance >= 0
+                              ? TransactionType.income
+                              : TransactionType.expense)
+                          .color(context),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Replaces the summary bar while a bulk selection is active: it shows how
+  /// many transactions are selected (and their balance vs the shown total). On
+  /// desktop it also carries the bulk actions and keeps the page app bar put;
+  /// on mobile the actions stay in the selection app bar.
+  Widget _buildSelectionSummary(Translations t, BuildContext context) {
+    final f = filters.copyWith(searchValue: searchController.text);
+    final isMobile = AppUtils.isMobileLayout(context);
+    final selCount = selectedTransactions.length;
+    final selSum = selectedTransactions
+        .map((e) => e.getCurrentBalanceInPreferredCurrency())
+        .sum;
+
+    return StreamBuilder(
+      stream: Rx.combineLatest2(
+        TransactionService.instance.countTransactions(filters: f),
+        TransactionService.instance.getTransactionsValueBalance(filters: f),
+        (int a, double b) => (count: a, value: b),
+      ),
+      builder: (context, snapshot) {
+        final data = snapshot.data;
+        final theme = Theme.of(context);
+
+        return _summaryCardShell(
+          loading: false,
+          flat: !isMobile,
+          selected: true,
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (selectedTransactions.isNotEmpty) ...[
-                      CurrencyDisplayer(
-                        amountToConvert: selectedTransactions
-                            .map(
-                              (e) => e.getCurrentBalanceInPreferredCurrency(),
-                            )
-                            .sum,
-                        showDecimals: false,
+                    Text(
+                      t.transaction.list.selected_of(
+                        n: selCount,
+                        total: data?.count ?? 0,
                       ),
-                      const Text(" / ", style: smallerTextStyle),
-                    ],
-                    CurrencyDisplayer(
-                      amountToConvert: trCountAndBalance?.value ?? 0,
-                      showDecimals: selectedTransactions.isEmpty,
-                      integerStyle: selectedTransactions.isEmpty
-                          ? const TextStyle(inherit: true)
-                          : smallerTextStyle,
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    DefaultTextStyle(
+                      style: theme.textTheme.labelMedium!.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          DefaultTextStyle.merge(
+                            style: TextStyle(
+                              color:
+                                  (selSum >= 0
+                                          ? TransactionType.income
+                                          : TransactionType.expense)
+                                      .color(context),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            child: CurrencyDisplayer(
+                              amountToConvert: selSum,
+                              showDecimals: false,
+                            ),
+                          ),
+                          Text(' ${t.general.of} '),
+                          CurrencyDisplayer(
+                            amountToConvert: data?.value ?? 0,
+                            showDecimals: false,
+                          ),
+                          Text(' ${t.transaction.list.shown}'),
+                        ],
+                      ),
                     ),
                   ],
                 ),
+              ),
+              if (!isMobile) ...[
+                const SizedBox(width: 12),
+                OutlinedButton.icon(
+                  onPressed: _bulkEditSelected,
+                  icon: const Icon(Icons.edit_rounded, size: 18),
+                  label: Text(t.ui_actions.edit),
+                ),
+                const SizedBox(width: 8),
+                OutlinedButton.icon(
+                  onPressed: _bulkDeleteSelected,
+                  icon: const Icon(Icons.delete_rounded, size: 18),
+                  label: Text(t.ui_actions.delete),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: theme.colorScheme.error,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                IconButton(
+                  tooltip: t.ui_actions.close,
+                  onPressed: cleanSelectedTransactions,
+                  icon: const Icon(Icons.close),
+                ),
               ],
-            ),
+            ],
           ),
         );
       },
@@ -677,85 +776,78 @@ class TransactionsPageState extends State<TransactionsPage> {
         },
         icon: const Icon(Icons.close),
       ),
-      title: Text(
-        t.transaction.list.selected_short(n: selectedTransactions.length),
-      ),
+      title: Text(""),
       actions: [
-        MonekinPopupMenuButton(
-          actionItems: [
-            ListTileActionItem(
-              label: t.ui_actions.edit,
-              icon: Icons.edit_rounded,
-              onClick: () {
-                showModalBottomSheet(
-                  context: context,
-                  showDragHandle: true,
-                  builder: (context) {
-                    return BulkEditTransactionModal(
-                      transactionsToEdit: selectedTransactions,
-                      onSuccess: () {
-                        cleanSelectedTransactions();
-                      },
-                    );
-                  },
-                );
-              },
-            ),
-            ListTileActionItem(
-              label: t.ui_actions.delete,
-              icon: Icons.delete_rounded,
-              onClick: () {
-                confirmDialog(
-                  context,
-                  dialogTitle: selectedTransactions.length <= 1
-                      ? t.transaction.delete
-                      : t.transaction.delete_multiple,
-                  confirmationText: t.ui_actions.confirm,
-                  showCancelButton: true,
-                  icon: Icons.delete_rounded,
-                  contentParagraphs: [
-                    Text(
-                      selectedTransactions.length <= 1
-                          ? t.transaction.delete_warning_message
-                          : t.transaction.delete_multiple_warning_message(
-                              x: selectedTransactions.length,
-                            ),
-                    ),
-                  ],
-                ).then((value) {
-                  if (value != true) {
-                    return;
-                  }
-
-                  final futures = selectedTransactions.map(
-                    (e) => TransactionService.instance.deleteTransaction(e.id),
-                  );
-
-                  Future.wait(futures)
-                      .then((value) {
-                        MonekinSnackbar.success(
-                          SnackbarParams(
-                            selectedTransactions.length <= 1
-                                ? t.transaction.delete_success
-                                : t.transaction.delete_multiple_success(
-                                    x: selectedTransactions.length,
-                                  ),
-                          ),
-                        );
-
-                        cleanSelectedTransactions();
-                      })
-                      .catchError((err) {
-                        MonekinSnackbar.error(SnackbarParams.fromError(err));
-                      });
-                });
-              },
-              role: ListTileActionRole.delete,
-            ),
-          ],
+        IconButton(
+          tooltip: t.ui_actions.edit,
+          onPressed: _bulkEditSelected,
+          icon: const Icon(Icons.edit_rounded),
+        ),
+        IconButton(
+          tooltip: t.ui_actions.delete,
+          onPressed: _bulkDeleteSelected,
+          icon: const Icon(Icons.delete_rounded),
         ),
       ],
     );
+  }
+
+  void _bulkEditSelected() {
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => BulkEditTransactionModal(
+        transactionsToEdit: selectedTransactions,
+        onSuccess: cleanSelectedTransactions,
+      ),
+    );
+  }
+
+  void _bulkDeleteSelected() {
+    confirmDialog(
+      context,
+      dialogTitle: selectedTransactions.length <= 1
+          ? t.transaction.delete
+          : t.transaction.delete_multiple,
+      confirmationText: t.ui_actions.confirm,
+      showCancelButton: true,
+      icon: Icons.delete_rounded,
+      contentParagraphs: [
+        Text(
+          selectedTransactions.length <= 1
+              ? t.transaction.delete_warning_message
+              : t.transaction.delete_multiple_warning_message(
+                  x: selectedTransactions.length,
+                ),
+        ),
+      ],
+    ).then((value) {
+      if (value != true) {
+        return;
+      }
+
+      final futures = selectedTransactions.map(
+        (e) => TransactionService.instance.deleteTransaction(e.id),
+      );
+
+      Future.wait(futures)
+          .then((value) {
+            MonekinSnackbar.success(
+              SnackbarParams(
+                selectedTransactions.length <= 1
+                    ? t.transaction.delete_success
+                    : t.transaction.delete_multiple_success(
+                        x: selectedTransactions.length,
+                      ),
+              ),
+            );
+
+            cleanSelectedTransactions();
+          })
+          .catchError((err) {
+            MonekinSnackbar.error(SnackbarParams.fromError(err));
+          });
+    });
   }
 
   /// Clear all the selected transactions (remove the selection)

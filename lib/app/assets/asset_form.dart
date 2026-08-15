@@ -22,13 +22,13 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
-import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -551,7 +551,7 @@ class _AssetFormPageState extends State<AssetFormPage> {
                 icon: const Icon(Icons.arrow_back_rounded),
                 iconSize: 20,
                 style: ButtonStyle(
-                  fixedSize: const WidgetStatePropertyAll(
+                  fixedSize: WidgetStatePropertyAll(
                     Size(42, mediumButtonStyleHeight),
                   ),
                   shape: WidgetStatePropertyAll(
@@ -624,20 +624,28 @@ class _AssetFormPageState extends State<AssetFormPage> {
                 const SizedBox(height: 16),
 
                 if (!_isTypeLocked) ...[
-                  ListTileField(
-                    leading: Icon(_assetType.icon(), color: _assetType.color()),
-                    title: t.assets.form.asset_type,
-                    subtitle: _assetType.displayName(context),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () async {
-                      final selected = await showAssetTypeSelector(
-                        context,
-                        selectedType: _assetType,
-                      );
-                      if (selected != null) {
-                        setState(() => _assetType = selected);
-                      }
-                    },
+                  // The Builder gives the selector a context whose render box
+                  // is this field, so the popover highlight/arrow anchors to
+                  // the field itself and not the whole drawer.
+                  Builder(
+                    builder: (fieldContext) => ListTileField(
+                      leading: Icon(
+                        _assetType.icon(),
+                        color: _assetType.color(),
+                      ),
+                      title: t.assets.form.asset_type,
+                      subtitle: _assetType.displayName(context),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () async {
+                        final selected = await showAssetTypeSelector(
+                          fieldContext,
+                          selectedType: _assetType,
+                        );
+                        if (selected != null) {
+                          setState(() => _assetType = selected);
+                        }
+                      },
+                    ),
                   ),
                   const SizedBox(height: 16),
                 ],
