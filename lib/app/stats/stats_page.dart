@@ -9,6 +9,7 @@ import 'package:monekin/app/stats/widgets/movements_distribution/tags_stats.dart
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_tab.dart';
 import 'package:monekin/app/stats/widgets/portfolio/portfolio_composition_card.dart';
 import 'package:monekin/app/stats/widgets/portfolio/portfolio_treemap_card.dart';
+import 'package:monekin/app/stats/widgets/stats_cards_layout.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -267,24 +268,27 @@ class _StatsPageState extends State<StatsPage>
                         ),
                       ]),
                       buildContainerWithPadding([
-                        CardWithHeader(
-                          title: t.stats.by_categories,
-                          body: PieChartByCategories(
-                            datePeriodState: dateRangeService,
-                            showList: true,
-                            initialSelectedType: TransactionType.expense,
-                            filters: filters,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        CardWithHeader(
-                          title: t.stats.by_tags,
-                          body: TagStats(
-                            filters: filters.copyWith(
-                              minDate: dateRangeService.startDate,
-                              maxDate: dateRangeService.endDate,
+                        StatsCardsLayout(
+                          cards: [
+                            CardWithHeader(
+                              title: t.stats.by_categories,
+                              body: PieChartByCategories(
+                                datePeriodState: dateRangeService,
+                                showList: true,
+                                initialSelectedType: TransactionType.expense,
+                                filters: filters,
+                              ),
                             ),
-                          ),
+                            CardWithHeader(
+                              title: t.stats.by_tags,
+                              body: TagStats(
+                                filters: filters.copyWith(
+                                  minDate: dateRangeService.startDate,
+                                  maxDate: dateRangeService.endDate,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ]),
                       buildContainerWithPadding([
@@ -294,75 +298,86 @@ class _StatsPageState extends State<StatsPage>
                         ),
                       ]),
                       buildContainerWithPadding([
-                        CardWithHeader(
-                          title: t.stats.portfolio_composition,
-                          subtitle: t.stats.portfolio_composition_subtitle,
-                          bodyPadding: const EdgeInsets.only(
-                            bottom: 12,
-                            top: 16,
-                            right: 16,
-                            left: 16,
-                          ),
-                          body: PortfolioCompositionCard(
-                            date: dateRangeService.endDate ?? DateTime.now(),
-                            filters: filters,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        CardWithHeader(
-                          title: t.stats.portfolio_heat_map,
-                          subtitle: t.stats.portfolio_heat_map_subtitle,
-                          bodyPadding: const EdgeInsets.all(16),
-                          body: PortfolioTreemapCard(
-                            date: dateRangeService.endDate ?? DateTime.now(),
-                            filters: filters,
-                          ),
-                        ),
-                      ]),
-                      buildContainerWithPadding([
-                        CardWithHeader(
-                          title: t.stats.balance_evolution,
-                          subtitle: t.stats.balance_evolution_subtitle,
-                          bodyPadding: const EdgeInsets.only(
-                            bottom: 12,
-                            top: 16,
-                            right: 16,
-                            left: 16,
-                          ),
-                          body: FundEvolutionInfo(
-                            showBalanceHeader: true,
-                            dateRange: dateRangeService,
-                            filters: filters,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        AllAccountBalancePage(
-                          date: dateRangeService.endDate ?? DateTime.now(),
-                          filters: filters,
+                        StatsCardsLayout(
+                          cards: [
+                            CardWithHeader(
+                              title: t.stats.portfolio_composition,
+                              subtitle: t.stats.portfolio_composition_subtitle,
+                              bodyPadding: const EdgeInsets.only(
+                                bottom: 12,
+                                top: 16,
+                                right: 16,
+                                left: 16,
+                              ),
+                              body: PortfolioCompositionCard(
+                                date:
+                                    dateRangeService.endDate ?? DateTime.now(),
+                                filters: filters,
+                              ),
+                            ),
+                            CardWithHeader(
+                              title: t.stats.portfolio_heat_map,
+                              subtitle: t.stats.portfolio_heat_map_subtitle,
+                              bodyPadding: const EdgeInsets.all(16),
+                              body: PortfolioTreemapCard(
+                                date:
+                                    dateRangeService.endDate ?? DateTime.now(),
+                                filters: filters,
+                              ),
+                            ),
+                          ],
                         ),
                       ]),
                       buildContainerWithPadding([
-                        CardWithHeader(
-                          title: t.stats.cash_flow,
-                          subtitle: t.stats.cash_flow_subtitle,
-                          body: IncomeExpenseComparason(
-                            startDate: dateRangeService.startDate,
-                            endDate: dateRangeService.endDate,
-                            filters: filters,
-                          ),
+                        StatsCardsLayout(
+                          cards: [
+                            CardWithHeader(
+                              title: t.stats.balance_evolution,
+                              subtitle: t.stats.balance_evolution_subtitle,
+                              bodyPadding: const EdgeInsets.only(
+                                bottom: 12,
+                                top: 16,
+                                right: 16,
+                                left: 16,
+                              ),
+                              body: FundEvolutionInfo(
+                                showBalanceHeader: true,
+                                dateRange: dateRangeService,
+                                filters: filters,
+                              ),
+                            ),
+                            AllAccountBalancePage(
+                              date: dateRangeService.endDate ?? DateTime.now(),
+                              filters: filters,
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        CardWithHeader(
-                          title: t.stats.by_periods,
-                          bodyPadding: const EdgeInsets.only(
-                            bottom: 12,
-                            top: 24,
-                            right: 16,
-                          ),
-                          body: BalanceBarChart(
-                            dateRange: dateRangeService,
-                            filters: filters,
-                          ),
+                      ]),
+                      buildContainerWithPadding([
+                        StatsCardsLayout(
+                          cards: [
+                            CardWithHeader(
+                              title: t.stats.cash_flow,
+                              subtitle: t.stats.cash_flow_subtitle,
+                              body: IncomeExpenseComparason(
+                                startDate: dateRangeService.startDate,
+                                endDate: dateRangeService.endDate,
+                                filters: filters,
+                              ),
+                            ),
+                            CardWithHeader(
+                              title: t.stats.by_periods,
+                              bodyPadding: const EdgeInsets.only(
+                                bottom: 12,
+                                top: 24,
+                                right: 16,
+                              ),
+                              body: BalanceBarChart(
+                                dateRange: dateRangeService,
+                                filters: filters,
+                              ),
+                            ),
+                          ],
                         ),
                       ]),
                     ],

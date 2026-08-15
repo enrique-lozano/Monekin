@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_composition_card.dart';
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_evolution_card.dart';
+import 'package:monekin/app/stats/widgets/stats_cards_layout.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -20,9 +21,8 @@ class NetWorthTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return StatsCardsLayout(
+      cards: [
         CardWithHeader(
           title: t.stats.net_worth,
           subtitle: t.stats.net_worth_subtitle,
@@ -37,7 +37,6 @@ class NetWorthTab extends StatelessWidget {
             filters: filters,
           ),
         ),
-        const SizedBox(height: 16),
         CardWithHeader(
           title: t.stats.net_worth_composition,
           subtitle: t.stats.net_worth_composition_subtitle,

@@ -9,8 +9,8 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// One slice of the portfolio composition (a security, a security type or a
@@ -300,6 +300,8 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
         child: DropdownButton<String>(
           value: currentValue,
           isDense: true,
+          isExpanded: true,
+          padding: const EdgeInsets.symmetric(vertical: 12),
           borderRadius: BorderRadius.circular(12),
           items: [
             _selectorItem(
@@ -427,63 +429,74 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(alignment: Alignment.center, child: _buildGroupBySelector(t)),
-            const SizedBox(height: 16),
             AdaptiveTwoColumn(
               breakpoint: 520,
-              rowCrossAxisAlignment: CrossAxisAlignment.center,
-              first: SizedBox(
-                height: 220,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    PieChart(
-                      PieChartData(
-                        startDegreeOffset: -90,
-                        borderData: FlBorderData(show: false),
-                        sectionsSpace: 2,
-                        centerSpaceRadius: 60,
-                        pieTouchData: PieTouchData(
-                          touchCallback: (event, response) {
-                            setState(() {
-                              _touchedIndex =
-                                  response
-                                      ?.touchedSection
-                                      ?.touchedSectionIndex ??
-                                  -1;
-                            });
-                          },
-                        ),
-                        sections: [
-                          for (var i = 0; i < slices.length; i++)
-                            PieChartSectionData(
-                              color:
-                                  slices[i].color ??
-                                  _palette[i % _palette.length],
-                              value: slices[i].market,
-                              radius: _touchedIndex == i ? 64 : 56,
-                              showTitle: false,
-                            ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
+              rowCrossAxisAlignment: CrossAxisAlignment.start,
+              first: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 24,
+                children: [
+                  _buildGroupBySelector(t),
+                  SizedBox(
+                    height: 220,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        CurrencyDisplayer(
-                          amountToConvert: total,
-                          integerStyle: Theme.of(context).textTheme.titleLarge!,
+                        PieChart(
+                          PieChartData(
+                            startDegreeOffset: -90,
+                            borderData: FlBorderData(show: false),
+                            sectionsSpace: 2,
+                            centerSpaceRadius: 60,
+                            pieTouchData: PieTouchData(
+                              touchCallback: (event, response) {
+                                setState(() {
+                                  _touchedIndex =
+                                      response
+                                          ?.touchedSection
+                                          ?.touchedSectionIndex ??
+                                      -1;
+                                });
+                              },
+                            ),
+                            sections: [
+                              for (var i = 0; i < slices.length; i++)
+                                PieChartSectionData(
+                                  color:
+                                      slices[i].color ??
+                                      _palette[i % _palette.length],
+                                  value: slices[i].market,
+                                  radius: _touchedIndex == i ? 64 : 56,
+                                  showTitle: false,
+                                ),
+                            ],
+                          ),
                         ),
-                        TrendingValue(
-                          percentage: totalPnlPct,
-                          value: totalPnl,
-                          dataTypes: const [TrendingValueDataType.value],
-                          fontSize: 12,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CurrencyDisplayer(
+                              amountToConvert: total,
+                              integerStyle: Theme.of(
+                                context,
+                              ).textTheme.titleLarge!,
+                              showDecimals: total < 100,
+                            ),
+                            TrendingValue(
+                              percentage: totalPnlPct,
+                              value: totalPnl,
+                              dataTypes: const [
+                                TrendingValueDataType.percentage,
+                              ],
+                              fontSize: 12,
+                              showPercentageDecimals: false,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               second: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_main_info.dart';
+import 'package:monekin/app/stats/widgets/stats_cards_layout.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -29,15 +30,13 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
 
         final financeHealthData = snapshot.data!;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        return StatsCardsLayout(
+          cards: [
             CardWithHeader(
               title: t.stats.finance_health_resume,
               bodyPadding: const EdgeInsets.all(16),
               body: FinanceHealthMainInfo(financeHealthData: financeHealthData),
             ),
-            const SizedBox(height: 16),
             Builder(
               builder: (context) {
                 final savingsText = financeHealthData.savingsPercentage > 20

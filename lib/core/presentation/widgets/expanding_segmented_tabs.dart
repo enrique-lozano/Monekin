@@ -89,6 +89,7 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
     this.innerPadding = 3,
     this.duration = const Duration(milliseconds: 250),
     this.borderColor,
+    this.backgroundColor,
     this.selectedColor,
     this.selectedForegroundColor,
     this.unselectedForegroundColor,
@@ -124,6 +125,10 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
   final Duration duration;
 
   final Color? borderColor;
+
+  /// Fill of the outer track (behind the segments). Defaults to the theme's
+  /// card color (`Theme.of(context).cardColor`).
+  final Color? backgroundColor;
 
   /// Background of the selected segment, used when that item doesn't define
   /// its own [SegmentedTabItem.color]. Defaults to
@@ -218,6 +223,7 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
           height: height,
           padding: EdgeInsets.all(innerPadding),
           decoration: BoxDecoration(
+            color: backgroundColor ?? Theme.of(context).cardColor,
             borderRadius: shape,
             border: Border.all(
               color:
