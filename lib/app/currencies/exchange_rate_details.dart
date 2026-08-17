@@ -22,10 +22,11 @@ import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
@@ -190,8 +191,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     final periodStart = (_dateRange.startDate ?? oldestDay).justDay();
     final periodEnd = (_dateRange.endDate ?? DateTime.now()).justDay();
 
-    // The axis never starts before the first rate, nor ends before it starts:
-    // a custom range fully older than the currency would do just that.
+    // Clamp the axis to available data.
     final start = periodStart.isBefore(oldestDay) ? oldestDay : periodStart;
     final end = periodEnd.isBefore(start) ? start : periodEnd;
 
@@ -202,16 +202,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     setState(() {
       _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
       _selectedRate = null;
-    });
-  }
-
-  void _openCustomPeriodModal() {
-    openDatePeriodModal(
-      context,
-      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
-    ).then((value) {
-      if (value == null) return;
-      _onPeriodChanged(value);
     });
   }
 
@@ -244,11 +234,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       >(accountsMoney, holdingsStream, (moneys, holdings) {
         final entries = <_UsedInEntry>[];
 
-        // Accounts using this currency. Note: for investment accounts,
-        // `getAccountMoney` already folds in the market value of their
-        // holdings, so a holding priced in this same currency may also appear
-        // as its own row below. We accept this minor overlap rather than
-        // adding dedicated de-duplication logic.
+        // Investment accounts already include holdings in `getAccountMoney`;
+        // securities below may overlap slightly — accepted for simplicity.
         for (var i = 0; i < accounts.length; i++) {
           entries.add(
             _UsedInEntry.account(account: accounts[i], amount: moneys[i]),
@@ -446,6 +433,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
+    final isWide = BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg);
+
     return PopScope(
       canPop: !_hasChanges,
       onPopInvokedWithResult: (didPop, result) {
@@ -456,8 +445,31 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
         }
       },
       child: PageFramework(
-        title: '',
+        title: _currency.name,
+        subtitle: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 8,
+          children: [
+            Text('${_currency.code} · ${_currency.symbol}'),
+            _typeBadge(),
+          ],
+        ),
+        icon: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: _currency.displayFlagIcon(size: 38),
+        ),
         appBarActions: [
+          if (isWide) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: FilledButton.icon(
+                onPressed: _addRate,
+                icon: const Icon(Icons.add_rounded, size: 18),
+                label: Text(t.currencies.exchange_rate_form.add),
+              ),
+            ),
+            const SizedBox(width: 4),
+          ],
           MonekinPopupMenuButton(
             actionItems: [
               ListTileActionItem(
@@ -492,26 +504,19 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
           controller: scrollController,
           padding: const EdgeInsets.only(top: 8, bottom: 16),
           children: [
-            Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1100),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    BreakpointContainer(
-                      lgBuilder: (context) =>
-                          _buildHeaderBlock(showAddButton: true),
-                      builder: (context) => _buildHeaderBlock(),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildChartAndStats(),
-                    const SizedBox(height: 24),
-                    BreakpointContainer(
-                      lgBuilder: (context) => _buildDesktopBottom(),
-                      builder: (context) => _buildMobileBottom(),
-                    ),
-                  ],
-                ),
+            PageContent(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildHeaderBlock(),
+                  const SizedBox(height: 16),
+                  _buildChartAndStats(),
+                  const SizedBox(height: 24),
+                  BreakpointContainer(
+                    lgBuilder: (context) => _buildDesktopBottom(),
+                    builder: (context) => _buildMobileBottom(),
+                  ),
+                ],
               ),
             ),
           ],
@@ -524,7 +529,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   // Header + hero rate
   // ---------------------------------------------------------------------------
 
-  Widget _buildHeaderBlock({bool showAddButton = false}) {
+  Widget _buildHeaderBlock() {
     final t = Translations.of(context);
     final theme = Theme.of(context);
     final hint = AppColors.of(context).textHint;
@@ -556,56 +561,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: _currency.displayFlagIcon(size: 44),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _currency.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Row(
-                      spacing: 8,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${_currency.code} · ${_currency.symbol}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: hint,
-                          ),
-                        ),
-                        _typeBadge(),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              if (showAddButton) ...[
-                const SizedBox(width: 12),
-                FilledButton.icon(
-                  onPressed: _addRate,
-                  icon: const Icon(Icons.add_rounded),
-                  label: Text(t.currencies.exchange_rate_form.add),
-                ),
-              ],
-            ],
-          ),
-          const SizedBox(height: 20),
           Skeletonizer(
             enabled: loading,
             child: Column(
@@ -724,7 +679,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
             currentPeriod: _dateRange.datePeriod,
             oldestDate: sortedAsc.first.date,
             onPresetSelected: _onPeriodChanged,
-            onCustomTap: _openCustomPeriodModal,
             padding: EdgeInsets.zero,
           ),
           const SizedBox(height: 20),

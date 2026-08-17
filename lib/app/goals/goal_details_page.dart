@@ -45,7 +45,6 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    // Reuse page framework style
     return StreamBuilder(
       stream: GoalService.instance.getGoalById(widget.goal.id),
       initialData: widget.goal,
@@ -54,9 +53,6 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
 
         final goal = snapshot.data!;
 
-        // Construct PeriodState for charts using goal dates
-        // If end date is null, we might default to "now" or some logic,
-        // but charts usually need a finite range.
         final periodState = DatePeriodState(
           datePeriod: DatePeriod.customRange(
             goal.startDate,
@@ -87,7 +83,16 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
               );
 
         return PageFramework(
-          title: t.goals.details.title,
+          title: goal.name,
+          subtitle: Text(goal.type.title(context)),
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: goal.type.color(context).withValues(alpha: 0.2),
+            ),
+            child: Icon(Goal.icon, color: goal.type.color(context), size: 22),
+          ),
           tabBar: isMobile
               ? TabBar(
                   controller: _tabController,
@@ -146,11 +151,10 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
           ],
           body: Column(
             children: [
-              // Use a header similar to budget card header
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: TargetHeader(target: goal),
+                child: TargetHeader(target: goal, showIdentity: false),
               ),
               ?segmentedTabs,
               Expanded(

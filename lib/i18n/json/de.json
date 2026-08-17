@@ -1019,7 +1019,6 @@
         "col_symbol": "Symbol",
         "total_cost": "Gesamtkosten des Portfolios",
         "save": "Schnappschuss speichern",
-        "remove_hint": "Um eine Position zu entfernen, löschen Sie einfach deren Zeile: Der Schnappschuss ist das vollständige Foto, keine Bewegung.",
         "delete_title": "Snapshot löschen?",
         "delete_descr": "Dieser Snapshot wird entfernt. Wenn es der aktuellste war, werden Ihre aktuellen Positionen auf den vorherigen Schnappschuss zurückgesetzt."
       }

@@ -184,6 +184,8 @@ class FundEvolutionLineChart extends StatefulWidget {
     required this.loadingWidget,
     this.accountsIds,
     this.showYAxisTitles = true,
+    this.expand = false,
+    this.onHover,
   });
 
   final DateTimeRange? timeRange;
@@ -192,8 +194,13 @@ class FundEvolutionLineChart extends StatefulWidget {
   final Widget loadingWidget;
 
   /// Whether the chart shows its Y-axis labels/grid. Set to `false` for a
-  /// minimal, dashboard-style hero chart.
+  /// minimal, dashboard-style chart.
   final bool showYAxisTitles;
+
+  /// Fill the parent instead of using a computed height. Used when the
+  /// chart sits inside an [EvolutionCard].
+  final bool expand;
+  final ValueChanged<TimeSeriesLabeledPoint?>? onHover;
 
   @override
   State<FundEvolutionLineChart> createState() => _FundEvolutionLineChartState();
@@ -293,33 +300,15 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     List<TimeSeriesLabeledPoint> points,
     CurrencyInDB? currency,
   ) {
-    // Handle edge case: when all values are the same or very close,
-    // add padding to the min/max values to ensure proper axis rendering
-    double? minY;
-    double? maxY;
-
-    if (points.isNotEmpty) {
-      final values = points.map((p) => p.value).toList();
-      final min = values.reduce((a, b) => a < b ? a : b);
-      final max = values.reduce((a, b) => a > b ? a : b);
-
-      // If all values are effectively the same, add 10% padding
-      if ((max - min).abs() < 0.0001) {
-        final padding = (min.abs() * 0.1).abs() + 1;
-        minY = min - padding;
-        maxY = max + padding;
-      }
-    }
-
     return TimeSeriesEvolutionChart<TimeSeriesLabeledPoint>(
       data: points,
       dateExtractor: (p) => p.date,
       valueExtractor: (p) => p.value,
       currency: currency,
       tooltipTitleBuilder: (p) => p.label,
-      minY: minY,
-      maxY: maxY,
       showYAxisTitles: widget.showYAxisTitles,
+      expand: widget.expand,
+      onHover: widget.onHover,
     );
   }
 }

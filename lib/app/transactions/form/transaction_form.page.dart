@@ -7,6 +7,7 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:provider/provider.dart';
 
 class TransactionFormPage extends StatefulWidget {
@@ -61,6 +62,11 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
         context,
         defaultDestinationAmount: c.transactionValue.abs(),
       );
+      return;
+    }
+
+    if (SideDrawerScope.of(context)) {
+      c.requestAmountFocusAfterFrame();
       return;
     }
 

@@ -24,13 +24,13 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
-import 'package:monekin/core/presentation/widgets/equal_height_chart_row.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/evolution_card.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
@@ -43,7 +43,6 @@ import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 /// Clamps extreme fractions so [TrendingValue] stays readable in the UI.
 double _clampTrendFraction(double fraction) {
@@ -154,8 +153,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       return net;
     }
 
-    // The most recent explicit valuation at or before [date] (the synthetic
-    // initial point counts as one).
     AssetValuationInDB? latestValuationAt(DateTime date) {
       AssetValuationInDB? result;
       for (final valuation in allValuations) {
@@ -165,12 +162,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       return result;
     }
 
-    // A chart point is needed wherever either line can change: on every
-    // explicit valuation and on every value-affecting transaction (plus the
-    // window start). Building points on valuation dates only — as before —
-    // made the net-contribution line step late (on the next valuation)
-    // whenever a transaction had no same-day valuation, e.g. one linked to
-    // the asset after the fact (linking doesn't create a valuation row).
+    // Step dates include transactions too, not just valuations — otherwise the
+    // net line steps late when a tx has no same-day valuation.
     final stepDates = <DateTime>{firstVisibleDate};
     for (final valuation in allValuations) {
       if (!valuation.date.isBefore(firstVisibleDate)) {
@@ -210,8 +203,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     final periodStart = (_dateRange.startDate ?? oldestDay).justDay();
     final periodEnd = (_dateRange.endDate ?? DateTime.now()).justDay();
 
-    // The axis never starts before the first data point, nor ends before it
-    // starts: a custom range fully older than the asset would do just that.
+    // Clamp the axis to available data.
     final start = periodStart.isBefore(oldestDay) ? oldestDay : periodStart;
     final end = periodEnd.isBefore(start) ? start : periodEnd;
 
@@ -223,16 +215,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
       _hoveredValuation = null;
       _hoveredNetContribution = null;
-    });
-  }
-
-  void _openCustomPeriodModal() {
-    openDatePeriodModal(
-      context,
-      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
-    ).then((value) {
-      if (value == null) return;
-      _onPeriodChanged(value);
     });
   }
 
@@ -440,11 +422,23 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             : (List<AssetValuationInDB>.from(snapshot.data!.valuations)
                 ..sort((a, b) => b.date.compareTo(a.date)));
 
-        final displayValuation = _hoveredValuation ?? valuations?.firstOrNull;
-
         final asset = snapshot.data?.asset ?? widget.asset;
+        final assetColor = asset.assetType.color();
 
         return PageFramework(
+          title: asset.name,
+          subtitle: Text(asset.assetType.displayName(context)),
+          icon: Hero(
+            tag: widget.assetIconHeroTag ?? UniqueKey(),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: assetColor.withAlpha(38),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(asset.assetType.icon(), color: assetColor, size: 22),
+            ),
+          ),
           appBarActions: [
             MonekinPopupMenuButton(
               actionItems: [
@@ -470,50 +464,33 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
               ],
             ),
           ],
-          // The ListView spans the full page width (rather than being nested
-          // inside the centered/max-width content) so that on wide screens
-          // the user can scroll from anywhere on the page, not just while
-          // hovering over the centered column.
           body: ListView(
             controller: _scrollController,
             padding: const EdgeInsets.symmetric(vertical: 16),
             children: [
-              Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1100),
-                  child: Column(
+              PageContent(
+                child: BreakpointContainer(
+                  lgBuilder: (context) => _buildDesktopLayout(
+                    context,
+                    valuations,
+                    asset,
+                    snapshot.data?.transactions,
+                  ),
+                  builder: (context) => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      BreakpointContainer(
-                        lgBuilder: (context) => _buildTopDesktop(
-                          context,
-                          valuations,
-                          displayValuation,
-                          asset,
-                          snapshot.data?.transactions,
-                        ),
-                        builder: (context) => _buildTopMobile(
-                          context,
-                          valuations,
-                          displayValuation,
-                          asset,
-                          snapshot.data?.transactions,
-                        ),
+                      _buildTopMobile(
+                        context,
+                        valuations,
+                        asset,
+                        snapshot.data?.transactions,
                       ),
                       const SizedBox(height: 24),
-                      BreakpointContainer(
-                        lgBuilder: (context) => _buildDesktopBody(
-                          context,
-                          valuations,
-                          snapshot.data?.transactions,
-                          asset,
-                        ),
-                        builder: (context) => _buildSegmentedSection(
-                          context,
-                          valuations,
-                          snapshot.data?.transactions,
-                          asset,
-                        ),
+                      _buildSegmentedSection(
+                        context,
+                        valuations,
+                        snapshot.data?.transactions,
+                        asset,
                       ),
                     ],
                   ),
@@ -526,65 +503,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
   }
 
-  Widget _buildCurrentValueTile(
-    BuildContext context,
-    List<AssetValuationInDB>? valuations,
-    AssetValuationInDB? displayValuation,
-    Asset? asset,
-    List<MoneyTransaction>? transactions,
-  ) {
-    asset ??= widget.asset;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Skeletonizer(
-            enabled: valuations == null,
-            child: StreamBuilder<double>(
-              stream: AssetValuationService.instance.getCurrentAssetValue(
-                asset,
-              ),
-              builder: (context, valueSnapshot) {
-                final value = valueSnapshot.data ?? asset!.initialValue;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DefaultTextStyle.merge(
-                      style: Theme.of(context).textTheme.titleLarge,
-                      child: CurrencyDisplayer(
-                        amountToConvert: displayValuation?.value ?? value,
-                        currency: asset?.currency ?? widget.asset.currency,
-                      ),
-                    ),
-                    _buildTrendSection(
-                      context,
-                      valuations: valuations,
-                      transactions: transactions,
-                      asset: asset,
-                      currentValue: value,
-                    ),
-                    _buildNetWorthSection(context, asset!, value),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// When the asset has a linked liability (e.g. a mortgage), show the net
   /// worth of the asset: current value minus the outstanding debt.
   Widget _buildNetWorthSection(
     BuildContext context,
     Asset asset,
-    double currentValue,
-  ) {
+    double currentValue, {
+    bool cardFooter = false,
+  }) {
     final debtId = asset.linkedDebtId;
     if (debtId == null) return const SizedBox.shrink();
 
@@ -615,6 +541,38 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             final remaining = remainingSnap.data!;
             final netWorth = currentValue - remaining;
 
+            Widget metric(
+              String label,
+              double amount, {
+              bool emphasized = false,
+            }) {
+              final valueStyle = emphasized
+                  ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    )
+                  : Theme.of(context).textTheme.bodyMedium;
+
+              return Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 2,
+                  children: [
+                    Text(
+                      label,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                    CurrencyDisplayer(
+                      amountToConvert: amount,
+                      currency: asset.currency,
+                      integerStyle: valueStyle ?? const TextStyle(),
+                    ),
+                  ],
+                ),
+              );
+            }
+
             Widget row(String label, double amount, {TextStyle? style}) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -626,6 +584,25 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                     integerStyle: style ?? const TextStyle(),
                   ),
                 ],
+              );
+            }
+
+            if (cardFooter) {
+              return IntrinsicHeight(
+                child: Row(
+                  spacing: 16,
+                  children: [
+                    metric(t.assets.details.gross_value, currentValue),
+                    const VerticalDivider(width: 1),
+                    metric(t.assets.details.liability, -remaining),
+                    const VerticalDivider(width: 1),
+                    metric(
+                      t.assets.details.net_worth,
+                      netWorth,
+                      emphasized: true,
+                    ),
+                  ],
+                ),
               );
             }
 
@@ -679,56 +656,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
   }
 
-  Widget _buildTrendSection(
-    BuildContext context, {
-    required List<AssetValuationInDB>? valuations,
-    required List<MoneyTransaction>? transactions,
-    required Asset? asset,
-    required double currentValue,
-  }) {
-    final resolvedAsset = asset ?? widget.asset;
-
-    if (valuations == null || transactions == null) {
-      return const Padding(
-        padding: EdgeInsets.only(top: 8),
-        child: Row(children: [Bone(width: 88, height: 24)]),
-      );
-    }
-
-    final points = _buildChartPoints(
-      valuations: valuations,
-      transactions: transactions,
-    );
-    final endpoint = _performanceEndpoint(
-      currentValue: currentValue,
-      netContributionNow: _netContributionNow(
-        asset: resolvedAsset,
-        transactions: transactions,
-      ),
-    );
-    final rangeMetrics = _assetRangePerformanceMetrics(
-      points: points.isEmpty ? null : points,
-      currentValue: endpoint.value,
-      netContributionNow: endpoint.netContribution,
-    );
-
-    if (rangeMetrics == null) return const SizedBox.shrink();
-
-    return Padding(
-      padding: const EdgeInsets.only(top: 2),
-      child: TrendingValue(
-        percentage: _clampTrendFraction(rangeMetrics.performanceReturnFraction),
-        value: rangeMetrics.performanceReturnMoney,
-        valueCurrency: resolvedAsset.currency,
-        dataTypes: const [
-          TrendingValueDataType.value,
-          TrendingValueDataType.percentage,
-        ],
-        fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-
   /// Performance figures for the visible chart range, shown inline as a card
   /// (mirroring the "your position" card of the securities page) instead of
   /// hidden behind a bottom sheet.
@@ -756,9 +683,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         resolvedAsset,
       ),
       builder: (context, valueSnapshot) {
-        // The performance card always reflects the current position for the
-        // selected period; it deliberately ignores chart hover, matching the
-        // securities "your position" card.
+        // Current position only, not chart hover (matches securities page).
         final metrics = _assetRangePerformanceMetrics(
           points: points,
           currentValue: valueSnapshot.data ?? resolvedAsset.initialValue,
@@ -840,76 +765,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       triggerMode: TooltipTriggerMode.tap,
       message: message,
       child: const Icon(Icons.info_outline_rounded, size: 18),
-    );
-  }
-
-  Widget _buildChartSection(
-    BuildContext context,
-    List<AssetValuationInDB>? valuations,
-    List<MoneyTransaction>? transactions,
-  ) {
-    final t = Translations.of(context);
-    final allChartData = valuations == null
-        ? null
-        : _valuationsWithInitial(valuations);
-
-    final chartData = valuations == null
-        ? null
-        : _buildChartPoints(
-            valuations: valuations,
-            transactions: transactions ?? const [],
-          );
-
-    return Column(
-      spacing: 16,
-      children: [
-        if (chartData != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
-            child: AssetValuationContributionChart(
-              points: chartData,
-              timeRange: allChartData == null || allChartData.isEmpty
-                  ? null
-                  : _chartTimeRange(allChartData.first.date),
-              currency: widget.asset.currency,
-              valuationLabel: t.assets.valuation.value,
-              netContributionLabel: t.assets.valuation.net_contribution,
-              netContributionHelpText: t.assets.valuation.net_contribution_help,
-              transactionDates: (transactions ?? const [])
-                  .map((tx) => tx.date)
-                  .toList(),
-              transactionsLabel: t.transaction.display(n: 2),
-              onHover: (point) {
-                setState(() {
-                  _hoveredValuation = point == null
-                      ? null
-                      : AssetValuationInDB(
-                          id: 'HOVERED_VALUE',
-                          date: point.date,
-                          value: point.valuation,
-                          assetId: widget.asset.id,
-                        );
-                  _hoveredNetContribution = point?.netContribution;
-                });
-              },
-            ),
-          ),
-        // Period chips below the chart, centered (matches the securities page).
-        if (allChartData != null)
-          DateRangeChips(
-            currentPeriod: _dateRange.datePeriod,
-            oldestDate: allChartData.first.date,
-            onPresetSelected: _onPeriodChanged,
-            onCustomTap: _openCustomPeriodModal,
-            padding: EdgeInsets.zero,
-          ),
-
-        if (valuations == null)
-          const SizedBox(
-            height: 120,
-            child: Center(child: CircularProgressIndicator()),
-          ),
-      ],
     );
   }
 
@@ -996,203 +851,194 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
   }
 
-  /// Icon (in the asset type's own color) + name + type, shown above the
-  /// page content on both mobile and desktop. The app bar itself is left
-  /// without a title (see [build]) so this is the only place the asset's
-  /// identity is shown.
-  Widget _buildHeader(BuildContext context, Asset asset) {
-    final color = asset.assetType.color();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Hero(
-            tag: widget.assetIconHeroTag ?? UniqueKey(),
-            child: Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: color.withAlpha(38),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(asset.assetType.icon(), color: color, size: 22),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  asset.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  asset.assetType.displayName(context),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildTopMobile(
     BuildContext context,
     List<AssetValuationInDB>? valuations,
-    AssetValuationInDB? displayValuation,
     Asset? asset,
     List<MoneyTransaction>? transactions,
   ) {
+    final resolvedAsset = asset ?? widget.asset;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
       children: [
-        _buildHeader(context, asset ?? widget.asset),
-        _buildCurrentValueTile(
-          context,
-          valuations,
-          displayValuation,
-          asset,
-          transactions,
-        ),
-        if (valuations != null)
-          _buildChartSection(context, valuations, transactions),
+        _buildEvolutionCard(context, valuations, resolvedAsset, transactions),
+        if (resolvedAsset.linkedDebtId != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: StreamBuilder<double>(
+              stream: AssetValuationService.instance.getCurrentAssetValue(
+                resolvedAsset,
+              ),
+              builder: (context, snapshot) => _buildNetWorthSection(
+                context,
+                resolvedAsset,
+                snapshot.data ?? resolvedAsset.initialValue,
+              ),
+            ),
+          ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: _buildPerformanceCard(
             context,
             valuations,
             transactions,
-            asset,
+            resolvedAsset,
           ),
         ),
       ],
     );
   }
 
-  /// Desktop top block: a two-column row whose columns share the exact same
-  /// height. The left column drives the height with the identity/value/
-  /// performance content; the right column holds the chart card, whose chart
-  /// flexes to fill whatever height the left column ends up needing.
-  Widget _buildTopDesktop(
+  Widget _buildDesktopLayout(
     BuildContext context,
     List<AssetValuationInDB>? valuations,
-    AssetValuationInDB? displayValuation,
-    Asset? asset,
+    Asset asset,
     List<MoneyTransaction>? transactions,
   ) {
-    return EqualHeightChartRow(
-      info: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        spacing: 16,
-        children: [
-          _buildHeader(context, asset ?? widget.asset),
-          _buildCurrentValueTile(
-            context,
-            valuations,
-            displayValuation,
-            asset,
-            transactions,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildEvolutionCard(
+                context,
+                valuations,
+                asset,
+                transactions,
+                includeFooter: true,
+              ),
+              const SizedBox(height: 16),
+              _buildSegmentedSection(
+                context,
+                valuations,
+                transactions,
+                asset,
+                includeAboutTab: false,
+                horizontalPadding: 0,
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildPerformanceCard(
-              context,
-              valuations,
-              transactions,
-              asset,
-            ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          flex: 4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildAbout(context, asset, transactions, horizontalPadding: 0),
+              const SizedBox(height: 16),
+              _buildPerformanceCard(context, valuations, transactions, asset),
+            ],
           ),
-        ],
-      ),
-      chart: valuations == null
-          ? const SizedBox.shrink()
-          : _buildChartCard(context, valuations, transactions),
+        ),
+      ],
     );
   }
 
-  /// The chart, its legend and the period chips, wrapped in a bordered card
-  /// that stretches to fill the height handed to it by [_buildTopDesktop]. The
-  /// chart itself is set to [AssetValuationContributionChart.expand] so it
-  /// grows/shrinks with the card instead of using a fixed height.
-  Widget _buildChartCard(
+  Widget _buildEvolutionCard(
     BuildContext context,
-    List<AssetValuationInDB> valuations,
-    List<MoneyTransaction>? transactions,
-  ) {
+    List<AssetValuationInDB>? valuations,
+    Asset asset,
+    List<MoneyTransaction>? transactions, {
+    bool includeFooter = false,
+  }) {
     final t = Translations.of(context);
+
+    if (valuations == null) {
+      return EvolutionCard(
+        valueLabel: t.assets.valuation.value,
+        finalValue: asset.initialValue,
+        currency: asset.currency,
+        loading: true,
+        chart: const Center(child: CircularProgressIndicator()),
+        currentPeriod: _dateRange.datePeriod,
+        onPresetSelected: _onPeriodChanged,
+        showDateSelector: false,
+        chartHeight: 220,
+      );
+    }
+
     final allChartData = _valuationsWithInitial(valuations);
     final chartData = _buildChartPoints(
       valuations: valuations,
       transactions: transactions ?? const [],
     );
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(
-            context,
-          ).colorScheme.outlineVariant.withValues(alpha: 0.5),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: AssetValuationContributionChart(
-              expand: true,
-              points: chartData,
-              timeRange: allChartData.isEmpty
-                  ? null
-                  : _chartTimeRange(allChartData.first.date),
-              currency: widget.asset.currency,
-              valuationLabel: t.assets.valuation.value,
-              netContributionLabel: t.assets.valuation.net_contribution,
-              netContributionHelpText: t.assets.valuation.net_contribution_help,
-              transactionDates: (transactions ?? const [])
-                  .map((tx) => tx.date)
-                  .toList(),
-              transactionsLabel: t.transaction.display(n: 2),
-              onHover: (point) {
-                setState(() {
-                  _hoveredValuation = point == null
-                      ? null
-                      : AssetValuationInDB(
-                          id: 'HOVERED_VALUE',
-                          date: point.date,
-                          value: point.valuation,
-                          assetId: widget.asset.id,
-                        );
-                  _hoveredNetContribution = point?.netContribution;
-                });
-              },
-            ),
+    return StreamBuilder<double>(
+      stream: AssetValuationService.instance.getCurrentAssetValue(asset),
+      builder: (context, snapshot) {
+        final currentValue = snapshot.data ?? asset.initialValue;
+        final endpoint = _performanceEndpoint(
+          currentValue: currentValue,
+          netContributionNow: _netContributionNow(
+            asset: asset,
+            transactions: transactions ?? const [],
           ),
-          const SizedBox(height: 12),
-          if (allChartData.isNotEmpty)
-            DateRangeChips(
-              currentPeriod: _dateRange.datePeriod,
-              oldestDate: allChartData.first.date,
-              onPresetSelected: _onPeriodChanged,
-              onCustomTap: _openCustomPeriodModal,
-              padding: EdgeInsets.zero,
-            ),
-        ],
-      ),
+        );
+        final metrics = _assetRangePerformanceMetrics(
+          points: chartData.isEmpty ? null : chartData,
+          currentValue: endpoint.value,
+          netContributionNow: endpoint.netContribution,
+        );
+
+        return EvolutionCard(
+          chartHeight: 220,
+          valueLabel: t.assets.valuation.value,
+          initialValue: metrics == null
+              ? null
+              : endpoint.value - metrics.performanceReturnMoney,
+          finalValue: endpoint.value,
+          currency: asset.currency,
+          chart: AssetValuationContributionChart(
+            expand: true,
+            points: chartData,
+            timeRange: allChartData.isEmpty
+                ? null
+                : _chartTimeRange(allChartData.first.date),
+            currency: asset.currency,
+            valuationLabel: t.assets.valuation.value,
+            netContributionLabel: t.assets.valuation.net_contribution,
+            netContributionHelpText: t.assets.valuation.net_contribution_help,
+            transactionDates: (transactions ?? const [])
+                .map((transaction) => transaction.date)
+                .toList(),
+            transactionsLabel: t.transaction.display(n: 2),
+            onHover: _handleChartHover,
+          ),
+          currentPeriod: _dateRange.datePeriod,
+          oldestDate: allChartData.isEmpty ? null : allChartData.first.date,
+          showDateSelector: allChartData.isNotEmpty,
+          onPresetSelected: _onPeriodChanged,
+          footer: !includeFooter || asset.linkedDebtId == null
+              ? null
+              : _buildNetWorthSection(
+                  context,
+                  asset,
+                  currentValue,
+                  cardFooter: true,
+                ),
+        );
+      },
     );
+  }
+
+  void _handleChartHover(AssetValuationContributionPoint? point) {
+    setState(() {
+      _hoveredValuation = point == null
+          ? null
+          : AssetValuationInDB(
+              id: 'HOVERED_VALUE',
+              date: point.date,
+              value: point.valuation,
+              assetId: widget.asset.id,
+            );
+      _hoveredNetContribution = point?.netContribution;
+    });
   }
 
   /// On desktop, the "about" info is shown as a persistent card next to this
@@ -1203,6 +1049,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     List<MoneyTransaction>? transactions,
     Asset? asset, {
     bool includeAboutTab = true,
+    double horizontalPadding = 16,
   }) {
     final t = Translations.of(context);
 
@@ -1228,7 +1075,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: ExpandingSegmentedTabs<_DetailTab>(
             items: [
               if (includeAboutTab)
@@ -1254,33 +1101,6 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         ),
         const SizedBox(height: 16),
         content,
-      ],
-    );
-  }
-
-  /// Two-column desktop body: the tabbed section (transactions/history) next
-  /// to a persistent "about" card, instead of stacking everything behind
-  /// tabs like on mobile.
-  Widget _buildDesktopBody(
-    BuildContext context,
-    List<AssetValuationInDB>? valuations,
-    List<MoneyTransaction>? transactions,
-    Asset asset,
-  ) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 2,
-          child: _buildSegmentedSection(
-            context,
-            valuations,
-            transactions,
-            asset,
-            includeAboutTab: false,
-          ),
-        ),
-        Expanded(child: _buildAbout(context, asset, transactions)),
       ],
     );
   }
@@ -1379,8 +1199,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   Widget _buildAbout(
     BuildContext context,
     Asset? asset,
-    List<MoneyTransaction>? transactions,
-  ) {
+    List<MoneyTransaction>? transactions, {
+    double horizontalPadding = 16,
+  }) {
     final t = Translations.of(context);
     final resolvedAsset = asset ?? widget.asset;
 
@@ -1389,7 +1210,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     );
 
     return Padding(
-      padding: const EdgeInsets.only(right: 16),
+      padding: EdgeInsets.only(right: horizontalPadding),
       child: CardWithHeader(
         title: t.assets.details.about,
         body: Column(

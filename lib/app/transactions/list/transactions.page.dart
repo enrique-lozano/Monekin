@@ -110,13 +110,24 @@ class TransactionsPageState extends State<TransactionsPage> {
         }
       },
       child: PageFramework(
-        title: t.transaction.display(n: 10),
-        // On desktop the page app bar never changes on selection (so the page
-        // doesn't shift); the selection UI lives in the summary bar instead.
-        appBarBuilder: (_, _, _) =>
-            (!isDesktop && selectedTransactions.isNotEmpty)
-            ? selectedTransactionsAppbar()
-            : transactionsPageDefaultAppBar(t, context, isDesktop),
+        title: !isDesktop && selectedTransactions.isNotEmpty
+            ? t.transaction.list.selected_short(n: selectedTransactions.length)
+            : t.transaction.display(n: 10),
+        leading: !isDesktop && (selectedTransactions.isNotEmpty || searchActive)
+            ? IconButton(
+                onPressed: selectedTransactions.isNotEmpty
+                    ? cleanSelectedTransactions
+                    : closeSearch,
+                icon: const Icon(Icons.close),
+              )
+            : null,
+        appBarActions: _buildAppBarActions(t, isDesktop),
+        appBarBackgroundColor: !isDesktop && selectedTransactions.isNotEmpty
+            ? Theme.of(context).colorScheme.primary
+            : null,
+        appBarForegroundColor: !isDesktop && selectedTransactions.isNotEmpty
+            ? Theme.of(context).colorScheme.onPrimary
+            : null,
         floatingActionButton: ifIsInTabs(context)
             ? null
             : NewTransactionButton(scrollController: listScrollController),
@@ -651,133 +662,9 @@ class TransactionsPageState extends State<TransactionsPage> {
     });
   }
 
-  AppBar transactionsPageDefaultAppBar(
-    Translations t,
-    BuildContext context,
-    bool isDesktop,
-  ) {
-    if (isDesktop) {
-      return _desktopDefaultAppBar(t, context);
-    }
-
-    return AppBar(
-      leading: searchActive
-          ? IconButton(onPressed: closeSearch, icon: const Icon(Icons.close))
-          : null,
-      title: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 175),
-        child: searchActive
-            ? TextField(
-                controller: searchController,
-                focusNode: searchFocusNode,
-                decoration: InputDecoration(
-                  hintText: t.transaction.list.searcher_placeholder,
-                  border: const UnderlineInputBorder(),
-                  filled: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 16,
-                    horizontal: 8,
-                  ),
-                ),
-                onChanged: (text) {
-                  setState(() {});
-                },
-              )
-            : Text(t.transaction.display(n: 10)),
-      ),
-      actions: [
-        if (!searchActive)
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              searchActive = true;
-              searchFocusNode.requestFocus();
-              setState(() {});
-            },
-          ),
-        // On wide layouts the split-pane owns filtering (its collapsed strip is
-        // always visible), so the app-bar filter button is only needed on mobile.
-        if (AppUtils.isMobileLayout(context))
-          IconButton(
-            onPressed: () async {
-              final modalRes = await openFilterSheetModal(
-                context,
-                FilterSheetModal(preselectedFilter: filters),
-              );
-
-              if (modalRes != null) {
-                setState(() {
-                  filters = modalRes;
-                });
-              }
-            },
-            icon: const Icon(Icons.filter_alt_outlined),
-          ),
-      ],
-    );
-  }
-
-  AppBar _desktopDefaultAppBar(Translations t, BuildContext context) {
-    final theme = Theme.of(context);
-
-    return AppBar(
-      title: Text(t.transaction.display(n: 10)),
-      actions: [
-        SizedBox(
-          width: 260,
-          height: 40,
-          child: TextField(
-            controller: searchController,
-            onChanged: (_) => setState(() {}),
-            textAlignVertical: TextAlignVertical.center,
-            decoration: InputDecoration(
-              hintText: t.transaction.list.searcher_placeholder,
-              prefixIcon: const Icon(Icons.search_rounded, size: 20),
-              isDense: true,
-              filled: true,
-              fillColor: theme.colorScheme.surfaceContainerHigh,
-              contentPadding: EdgeInsets.zero,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(499),
-                borderSide: BorderSide.none,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        FilledButton.tonalIcon(
-          onPressed: () =>
-              setState(() => filterPaneExpanded = !filterPaneExpanded),
-          icon: Badge(
-            isLabelVisible: filters.hasFilter,
-            child: const Icon(Icons.filter_alt_outlined, size: 20),
-          ),
-          label: Text(t.general.filters),
-        ),
-        const SizedBox(width: 8),
-        IconButton(
-          tooltip: t.backup.export.title,
-          onPressed: () =>
-              RouteUtils.showResponsiveForm(const ExportDataPage()),
-          icon: const Icon(Icons.file_download_outlined),
-        ),
-        const SizedBox(width: 8),
-      ],
-    );
-  }
-
-  AppBar selectedTransactionsAppbar() {
-    return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      leading: IconButton(
-        onPressed: () {
-          cleanSelectedTransactions();
-        },
-        icon: const Icon(Icons.close),
-      ),
-      title: Text(""),
-      actions: [
+  List<Widget> _buildAppBarActions(Translations t, bool isDesktop) {
+    if (!isDesktop && selectedTransactions.isNotEmpty) {
+      return [
         IconButton(
           tooltip: t.ui_actions.edit,
           onPressed: _bulkEditSelected,
@@ -788,8 +675,95 @@ class TransactionsPageState extends State<TransactionsPage> {
           onPressed: _bulkDeleteSelected,
           icon: const Icon(Icons.delete_rounded),
         ),
-      ],
-    );
+      ];
+    }
+
+    if (!isDesktop) {
+      if (searchActive) {
+        return [
+          SizedBox(
+            width: MediaQuery.sizeOf(context).width - 72,
+            child: TextField(
+              controller: searchController,
+              focusNode: searchFocusNode,
+              decoration: InputDecoration(
+                hintText: t.transaction.list.searcher_placeholder,
+                border: const UnderlineInputBorder(),
+                filled: true,
+              ),
+              onChanged: (_) => setState(() {}),
+            ),
+          ),
+        ];
+      }
+
+      return [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            searchActive = true;
+            searchFocusNode.requestFocus();
+            setState(() {});
+          },
+        ),
+        IconButton(
+          onPressed: () async {
+            final modalRes = await openFilterSheetModal(
+              context,
+              FilterSheetModal(preselectedFilter: filters),
+            );
+
+            if (modalRes != null) {
+              setState(() => filters = modalRes);
+            }
+          },
+          icon: const Icon(Icons.filter_alt_outlined),
+        ),
+      ];
+    }
+
+    final theme = Theme.of(context);
+
+    return [
+      SizedBox(
+        width: 260,
+        height: 40,
+        child: TextField(
+          controller: searchController,
+          onChanged: (_) => setState(() {}),
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: t.transaction.list.searcher_placeholder,
+            prefixIcon: const Icon(Icons.search_rounded, size: 20),
+            isDense: true,
+            filled: true,
+            fillColor: theme.colorScheme.surfaceContainerHigh,
+            contentPadding: EdgeInsets.zero,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(499),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ),
+      const SizedBox(width: 12),
+      FilledButton.tonalIcon(
+        onPressed: () =>
+            setState(() => filterPaneExpanded = !filterPaneExpanded),
+        icon: Badge(
+          isLabelVisible: filters.hasFilter,
+          child: const Icon(Icons.filter_alt_outlined, size: 20),
+        ),
+        label: Text(t.general.filters),
+      ),
+      const SizedBox(width: 8),
+      IconButton(
+        tooltip: t.backup.export.title,
+        onPressed: () => RouteUtils.showResponsiveForm(const ExportDataPage()),
+        icon: const Icon(Icons.file_download_outlined),
+      ),
+      const SizedBox(width: 8),
+    ];
   }
 
   void _bulkEditSelected() {

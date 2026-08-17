@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/date-utils/period_type.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -104,7 +107,7 @@ class DateRangeChips extends StatelessWidget {
     super.key,
     required this.currentPeriod,
     required this.onPresetSelected,
-    required this.onCustomTap,
+    this.onCustomTap,
     this.oldestDate,
     this.foregroundColor,
     this.wrap = false,
@@ -114,7 +117,7 @@ class DateRangeChips extends StatelessWidget {
 
   final DatePeriod currentPeriod;
   final void Function(DatePeriod period) onPresetSelected;
-  final VoidCallback onCustomTap;
+  final VoidCallback? onCustomTap;
 
   /// Oldest date with data. When set, presets reaching further back than it
   /// are shown disabled, since they would all render the same chart.
@@ -186,7 +189,19 @@ class DateRangeChips extends StatelessWidget {
             compact: isVeryNarrow,
             onTap: () {
               HapticFeedback.selectionClick();
-              onCustomTap();
+              if (onCustomTap != null) {
+                onCustomTap!();
+                return;
+              }
+
+              unawaited(
+                openDatePeriodModal(
+                  context,
+                  DatePeriodModal(initialDatePeriod: currentPeriod),
+                ).then((period) {
+                  if (period != null) onPresetSelected(period);
+                }),
+              );
             },
           ),
         ];
@@ -367,12 +382,12 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color bgColor = selected
-        ? accent.withOpacity(0.14)
+        ? accent.withValues(alpha: 0.14)
         : Colors.transparent;
 
     final Color fgColor = selected
         ? accent
-        : baseColor.withOpacity(enabled ? 0.5 : 0.22);
+        : baseColor.withValues(alpha: enabled ? 0.5 : 0.22);
 
     final showLabel = !compact || icon == null;
 

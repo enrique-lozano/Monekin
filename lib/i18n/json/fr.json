@@ -1019,7 +1019,6 @@
         "col_symbol": "Symbole",
         "total_cost": "Coût total du portefeuille",
         "save": "Enregistrer un instantané",
-        "remove_hint": "Pour supprimer une position, supprimez simplement sa ligne : l'instantané est la photo complète, pas un mouvement.",
         "delete_title": "Supprimer l'instantané ?",
         "delete_descr": "Cet instantané sera supprimé. S'il s'agit de la plus récente, vos positions actuelles reviendront à l'instantané précédent."
       }

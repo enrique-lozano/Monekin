@@ -16,6 +16,14 @@ enum TrendingValueDataType {
   value,
 }
 
+enum TrendingValueStyle {
+  /// Icon and values inline, without a tinted background.
+  plain,
+
+  /// Pill-shaped chip with a semi-transparent tint of the trend color.
+  chip,
+}
+
 class TrendingValue extends StatelessWidget {
   const TrendingValue({
     super.key,
@@ -30,7 +38,7 @@ class TrendingValue extends StatelessWidget {
     this.showValueDecimals = false,
     this.showPercentageDecimals = true,
     this.compactValue = false,
-    this.chip = false,
+    this.style = TrendingValueStyle.plain,
     this.inverse = false,
     this.markNanAsZero = true,
     this.afterText,
@@ -84,9 +92,8 @@ class TrendingValue extends StatelessWidget {
   /// Only applies to the [TrendingValueDataType.value] entry.
   final bool compactValue;
 
-  /// Paints the trend as a pill-shaped chip with a tinted background,
-  /// instead of the plain (transparent) inline style.
-  final bool chip;
+  /// Visual presentation of the trend indicator.
+  final TrendingValueStyle style;
 
   /// Whether a positive trend should be treated as a bad thing (and painted
   /// as such) and vice versa. Useful for metrics where "less is better",
@@ -106,8 +113,8 @@ class TrendingValue extends StatelessWidget {
   final String? afterText;
 
   /// Padding around the content. If null, defaults to a small inline
-  /// padding, or a larger pill-shaped padding when [chip] is `true` (see
-  /// `build()`).
+  /// padding, or a larger pill-shaped padding when [style] is
+  /// [TrendingValueStyle.chip] (see `build()`).
   final EdgeInsets? padding;
 
   List<TrendingValueDataType> get _effectiveDataTypes =>
@@ -249,18 +256,18 @@ class TrendingValue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final trendColor = _getColorBasedOnPercentage(context);
+    final isChip = style == TrendingValueStyle.chip;
 
     return Container(
       padding:
           padding ??
-          (chip
-              ? EdgeInsets.fromLTRB(2, 0, 6, 0)
+          (isChip
+              ? const EdgeInsets.fromLTRB(4, 4, 10, 4)
               : const EdgeInsets.symmetric(horizontal: 6, vertical: 1)),
-      decoration: chip
+      decoration: isChip
           ? BoxDecoration(
-              color: trendColor.withOpacity(0.16),
+              color: trendColor.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(9999),
-              border: Border.all(color: trendColor.withOpacity(0.5)),
             )
           : null,
       child: _paintTrendValue(context, trendColor),

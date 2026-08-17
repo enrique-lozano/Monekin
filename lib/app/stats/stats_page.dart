@@ -173,8 +173,7 @@ class _StatsPageState extends State<StatsPage>
           ),
           const SizedBox(width: 12),
         ],
-        // On wide layouts the split-pane owns filtering (its collapsed strip is
-        // always visible), so the app-bar filter button is only needed on mobile.
+        // Split-pane owns filtering on wide layouts; app-bar button is mobile-only.
         if (!isDesktopLayout)
           IconButton(
             onPressed: () async {

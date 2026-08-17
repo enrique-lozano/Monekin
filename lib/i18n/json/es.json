@@ -1027,7 +1027,7 @@
         "col_symbol": "Símbolo",
         "total_cost": "Coste total de la cartera",
         "save": "Guardar instantánea",
-        "remove_hint": "Para eliminar una posición basta con borrar su fila: la instantánea es la foto completa, no un movimiento.",
+        "zero_qty_hint": "Una cantidad de 0 mantiene esta posición en la instantánea. Para quitarla por completo, borra la fila.",
         "delete_title": "¿Eliminar instantánea?",
         "delete_descr": "Esta instantánea se eliminará. Si era la más reciente, tus posiciones actuales volverán a la instantánea anterior."
       }

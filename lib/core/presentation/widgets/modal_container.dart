@@ -57,11 +57,7 @@ class ModalContainer extends StatelessWidget {
     // button), so the chrome is just noise in the compact panel.
     final isPopover = ModalPresentation.isPopover(context);
 
-    // On wide layouts the modal is a full-height right-side drawer. There we
-    // stretch to fill the available height and push the footer to the bottom
-    // (instead of hugging the content, which would strand the footer in the
-    // middle of the drawer with empty space below it). Bottom sheets keep
-    // hugging their content.
+    // Side drawer: fill height and pin footer to bottom; bottom sheets hug content.
     final isInSideDrawer = SideDrawerScope.of(context);
 
     return Padding(

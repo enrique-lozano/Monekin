@@ -14,6 +14,7 @@ import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/presentation/widgets/tappable-text-entry.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -150,27 +151,62 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
         );
 
       case PeriodType.dateRange:
+        final startSelector = createDateSelectorRow(
+          context,
+          dateToSelect: toReturn.customDateRange.$1,
+          lastDate: toReturn.customDateRange.$2,
+          label: t.general.time.start_date,
+          onDateSelected: (value) {
+            toReturn = toReturn.copyWith(
+              customDateRange: (value?.justDay(), toReturn.customDateRange.$2),
+            );
+            setState(() {});
+          },
+        );
+
+        final endSelector = createDateSelectorRow(
+          context,
+          dateToSelect: toReturn.customDateRange.$2,
+          firstDate: toReturn.customDateRange.$1,
+          label: t.general.time.end_date,
+          onDateSelected: (value) {
+            toReturn = toReturn.copyWith(
+              customDateRange: (
+                toReturn.customDateRange.$1,
+                value
+                    ?.justDay(dayOffset: 1)
+                    .subtract(const Duration(milliseconds: 1)),
+              ),
+            );
+            setState(() {});
+          },
+        );
+
+        // On wide layouts there is room to put the start and end dates on the
+        // same line, separated by a horizontal arrow instead of stacking them.
+        if (!AppUtils.isMobileLayout(context)) {
+          return Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(child: startSelector),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: Icon(Icons.arrow_forward_rounded, size: 22),
+              ),
+              Flexible(child: endSelector),
+            ],
+          );
+        }
+
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 4,
           children: [
-            createDateSelectorRow(
-              context,
-              dateToSelect: toReturn.customDateRange.$1,
-              lastDate: toReturn.customDateRange.$2,
-              label: t.general.time.start_date,
-              onDateSelected: (value) {
-                toReturn = toReturn.copyWith(
-                  customDateRange: (
-                    value?.justDay(),
-                    toReturn.customDateRange.$2,
-                  ),
-                );
-                setState(() {});
-              },
-            ),
+            startSelector,
             Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -185,23 +221,7 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                 ),
               ],
             ),
-            createDateSelectorRow(
-              context,
-              dateToSelect: toReturn.customDateRange.$2,
-              firstDate: toReturn.customDateRange.$1,
-              label: t.general.time.end_date,
-              onDateSelected: (value) {
-                toReturn = toReturn.copyWith(
-                  customDateRange: (
-                    toReturn.customDateRange.$1,
-                    value
-                        ?.justDay(dayOffset: 1)
-                        .subtract(const Duration(milliseconds: 1)),
-                  ),
-                );
-                setState(() {});
-              },
-            ),
+            endSelector,
           ],
         );
     }
@@ -210,6 +230,8 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+
+    final isWide = !AppUtils.isMobileLayout(context);
 
     return ModalContainer(
       title: t.general.time.ranges.display,
@@ -239,6 +261,12 @@ class _DatePeriodModalState extends State<DatePeriodModal> {
                     periodType: periodType,
                     selectedCycle: toReturn.periodType,
                     extraWidget: buildPeriodTypeCardContent(periodType),
+                    // On wide layouts the compact selectors (cycle periodicity
+                    // and the "last N days" field) fit on the title line.
+                    extraWidgetBeside:
+                        isWide &&
+                        (periodType == PeriodType.cycle ||
+                            periodType == PeriodType.lastDays),
                   ),
               ],
             ),
@@ -318,12 +346,17 @@ class PeriodTypeEntry extends StatelessWidget {
   const PeriodTypeEntry({
     super.key,
     this.extraWidget,
+    this.extraWidgetBeside = false,
     required this.onTap,
     required this.periodType,
     required this.selectedCycle,
   });
 
   final Widget? extraWidget;
+
+  /// Whether [extraWidget] should sit on the same line as the title instead
+  /// of below it (see [OutlinedButtonStacked.afterWidgetBeside]).
+  final bool extraWidgetBeside;
   final VoidCallback onTap;
   final PeriodType periodType;
   final PeriodType selectedCycle;
@@ -344,6 +377,7 @@ class PeriodTypeEntry extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           text: periodType.titleText(context),
           iconData: periodType.icon(),
+          afterWidgetBeside: extraWidgetBeside,
           onTap: () {
             onTap();
           },

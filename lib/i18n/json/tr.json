@@ -1019,7 +1019,6 @@
         "col_symbol": "Sembol",
         "total_cost": "Toplam portföy maliyeti",
         "save": "Anlık görüntüyü kaydet",
-        "remove_hint": "Bir konumdan kurtulmak için yalnızca satırını silin: anlık görüntü fotoğrafın tamamıdır, bir hareket değil.",
         "delete_title": "Anlık görüntü silinsin mi?",
         "delete_descr": "Bu anlık görüntü kaldırılacak. En yenisiyse mevcut konumlarınız önceki anlık görüntüye geri dönecektir."
       }

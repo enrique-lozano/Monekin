@@ -18,8 +18,8 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -124,22 +124,17 @@ class _HoldingTile extends StatelessWidget {
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
+            spacing: 4,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  CurrencyDisplayer(
-                    amountToConvert: data.marketValue,
-                    currency: currency,
-                  ),
-                  Text(
-                    pnlText,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall!.copyWith(color: pnlColor),
-                  ),
-                ],
+              TrailingValue(
+                amount: data.marketValue,
+                currency: currency,
+                secondary: Text(
+                  pnlText,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall!.copyWith(color: pnlColor),
+                ),
               ),
               MonekinPopupMenuButton(
                 actionItems: [

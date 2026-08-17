@@ -89,6 +89,10 @@ class _AssetValuationContributionChartState
     final pointsByX = chartSeries.pointsByX;
     final valuationSpots = chartSeries.valuationSpots;
     final contributionSpots = chartSeries.contributionSpots;
+    final domain = computeMonetaryChartYDomain([
+      ...valuationSpots.map((spot) => spot.y),
+      ...contributionSpots.map((spot) => spot.y),
+    ]);
 
     final isNotEnoughData = sortedPoints.length <= 2;
 
@@ -108,6 +112,8 @@ class _AssetValuationContributionChartState
 
     final chart = LineChart(
       LineChartData(
+        minY: isNotEnoughData ? null : domain.minY,
+        maxY: isNotEnoughData ? null : domain.maxY,
         gridData: const FlGridData(show: true, drawVerticalLine: false),
         extraLinesData: markerDates.isEmpty
             ? null
@@ -193,6 +199,8 @@ class _AssetValuationContributionChartState
             dotData: const FlDotData(show: false),
             belowBarData: BarAreaData(
               show: true,
+              applyCutOffY: !isNotEnoughData,
+              cutOffY: domain.areaFillCutoffY,
               color: isNotEnoughData
                   ? colorScheme.outlineVariant.withAlpha(10)
                   : netContributionColor.withAlpha(50),
@@ -210,6 +218,8 @@ class _AssetValuationContributionChartState
             dotData: const FlDotData(show: false),
             belowBarData: BarAreaData(
               show: true,
+              applyCutOffY: !isNotEnoughData,
+              cutOffY: domain.areaFillCutoffY,
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,

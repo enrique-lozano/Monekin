@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/account/asset_valuation_service.d
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
+import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
@@ -187,127 +188,121 @@ class _AssetsListPageState extends State<AssetsListPage> {
         scrollController: _scrollController,
         text: t.assets.create,
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 960),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                child: ValuedItemSummaryCard(
-                  label: t.assets.total_value,
-                  icon: Icons.inventory_2_rounded,
-                  backgroundIcon: Icons.account_balance_rounded,
-                  value: StreamBuilder(
-                    // Includes linked portfolio rows (same economic value is also
-                    // inside investment account balances) — intentional for this
-                    // “all assets” total.
-                    stream: AssetValuationService.instance
-                        .getTotalAssetsValueAtDate(),
-                    builder: (context, snapshot) {
-                      final totalValue = snapshot.data;
-                      return Skeletonizer(
-                        enabled: !snapshot.hasData,
-                        child: CurrencyDisplayer(
-                          amountToConvert: totalValue ?? 10000,
-                          currency: null,
-                          integerStyle: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .copyWith(fontWeight: FontWeight.w700),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
-                child: ValuedItemListToolbar(
-                  searchQuery: searchQuery,
-                  searchHint: t.general.tap_to_search,
-                  onSearchChanged: _onSearchChanged,
-                  sortActionItems: [
-                    ListTileActionItem(
-                      label: t.assets.sort.name_asc,
-                      icon: Icons.sort_by_alpha_rounded,
-                      selected: sortOption == AssetsSortOption.nameAsc,
-                      onClick: () =>
-                          setState(() => sortOption = AssetsSortOption.nameAsc),
-                    ),
-                    ListTileActionItem(
-                      label: t.assets.sort.name_desc,
-                      icon: Icons.sort_by_alpha_rounded,
-                      selected: sortOption == AssetsSortOption.nameDesc,
-                      onClick: () => setState(
-                        () => sortOption = AssetsSortOption.nameDesc,
-                      ),
-                    ),
-                    ListTileActionItem(
-                      label: t.assets.sort.value_asc,
-                      icon: Icons.trending_up_rounded,
-                      selected: sortOption == AssetsSortOption.valueAsc,
-                      onClick: () => setState(
-                        () => sortOption = AssetsSortOption.valueAsc,
-                      ),
-                    ),
-                    ListTileActionItem(
-                      label: t.assets.sort.value_desc,
-                      icon: Icons.trending_down_rounded,
-                      selected: sortOption == AssetsSortOption.valueDesc,
-                      onClick: () => setState(
-                        () => sortOption = AssetsSortOption.valueDesc,
-                      ),
-                    ),
-                  ],
-                  displayActionItems: [
-                    ListTileActionItem(
-                      label: t.assets.group_by_type,
-                      icon: Icons.view_agenda_rounded,
-                      role: ListTileActionRole.checkbox,
-                      selected: groupByType,
-                      onClick: () => setState(() => groupByType = !groupByType),
-                    ),
-                    ListTileActionItem(
-                      label: t.assets.show_value_variation,
-                      icon: Icons.percent_rounded,
-                      role: ListTileActionRole.checkbox,
-                      selected: showValueVariation,
-                      onClick: () => setState(
-                        () => showValueVariation = !showValueVariation,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: StreamBuilder(
-                  stream: _getAssetsWithValue(),
+      body: PageContent(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+              child: ValuedItemSummaryCard(
+                label: t.assets.total_value,
+                icon: Icons.inventory_2_rounded,
+                backgroundIcon: Icons.account_balance_rounded,
+                value: StreamBuilder(
+                  // Includes linked portfolio rows (same economic value is also
+                  // inside investment account balances) — intentional for this
+                  // “all assets” total.
+                  stream: AssetValuationService.instance
+                      .getTotalAssetsValueAtDate(),
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    var assets = snapshot.data!;
-                    assets = _filterAssets(assets);
-                    assets = _sortAssets(assets);
-
-                    if (assets.isEmpty) {
-                      return NoResults(
-                        title: t.general.empty_warn,
-                        noSearchResultsVariation: searchQuery.isNotEmpty,
-                        description: searchQuery.isNotEmpty
-                            ? t.general.search_no_results
-                            : t.assets.empty_description,
-                      );
-                    }
-
-                    return _buildAssetsList(assets);
+                    final totalValue = snapshot.data;
+                    return Skeletonizer(
+                      enabled: !snapshot.hasData,
+                      child: CurrencyDisplayer(
+                        amountToConvert: totalValue ?? 10000,
+                        currency: null,
+                        integerStyle: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    );
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
+              child: ValuedItemListToolbar(
+                searchQuery: searchQuery,
+                searchHint: t.general.tap_to_search,
+                onSearchChanged: _onSearchChanged,
+                sortActionItems: [
+                  ListTileActionItem(
+                    label: t.assets.sort.name_asc,
+                    icon: Icons.sort_by_alpha_rounded,
+                    selected: sortOption == AssetsSortOption.nameAsc,
+                    onClick: () =>
+                        setState(() => sortOption = AssetsSortOption.nameAsc),
+                  ),
+                  ListTileActionItem(
+                    label: t.assets.sort.name_desc,
+                    icon: Icons.sort_by_alpha_rounded,
+                    selected: sortOption == AssetsSortOption.nameDesc,
+                    onClick: () =>
+                        setState(() => sortOption = AssetsSortOption.nameDesc),
+                  ),
+                  ListTileActionItem(
+                    label: t.assets.sort.value_asc,
+                    icon: Icons.trending_up_rounded,
+                    selected: sortOption == AssetsSortOption.valueAsc,
+                    onClick: () =>
+                        setState(() => sortOption = AssetsSortOption.valueAsc),
+                  ),
+                  ListTileActionItem(
+                    label: t.assets.sort.value_desc,
+                    icon: Icons.trending_down_rounded,
+                    selected: sortOption == AssetsSortOption.valueDesc,
+                    onClick: () =>
+                        setState(() => sortOption = AssetsSortOption.valueDesc),
+                  ),
+                ],
+                displayActionItems: [
+                  ListTileActionItem(
+                    label: t.assets.group_by_type,
+                    icon: Icons.view_agenda_rounded,
+                    role: ListTileActionRole.checkbox,
+                    selected: groupByType,
+                    onClick: () => setState(() => groupByType = !groupByType),
+                  ),
+                  ListTileActionItem(
+                    label: t.assets.show_value_variation,
+                    icon: Icons.percent_rounded,
+                    role: ListTileActionRole.checkbox,
+                    selected: showValueVariation,
+                    onClick: () => setState(
+                      () => showValueVariation = !showValueVariation,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: _getAssetsWithValue(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  var assets = snapshot.data!;
+                  assets = _filterAssets(assets);
+                  assets = _sortAssets(assets);
+
+                  if (assets.isEmpty) {
+                    return NoResults(
+                      title: t.general.empty_warn,
+                      noSearchResultsVariation: searchQuery.isNotEmpty,
+                      description: searchQuery.isNotEmpty
+                          ? t.general.search_no_results
+                          : t.assets.empty_description,
+                    );
+                  }
+
+                  return _buildAssetsList(assets);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

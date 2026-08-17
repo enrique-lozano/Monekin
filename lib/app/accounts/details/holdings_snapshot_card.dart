@@ -9,8 +9,8 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -188,20 +188,14 @@ class _PositionTile extends StatelessWidget {
             '${UINumberFormatter.decimal(amountToConvert: position.quantity).getFormattedAmount()}'
             ' · ${t.assets.holdings.avg_cost}: $avgCostText',
           ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              CurrencyDisplayer(
-                amountToConvert: marketValue,
-                currency: currency,
-              ),
-              TrendingValue(
-                percentage: pnlPct,
-                dataTypes: const [TrendingValueDataType.percentage],
-                fontSize: 12,
-              ),
-            ],
+          trailing: TrailingValue(
+            amount: marketValue,
+            currency: currency,
+            secondary: TrendingValue(
+              percentage: pnlPct,
+              dataTypes: const [TrendingValueDataType.percentage],
+              fontSize: 12,
+            ),
           ),
           onTap: () =>
               RouteUtils.pushRoute(SecurityDetailsPage(security: security)),

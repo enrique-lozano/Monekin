@@ -69,8 +69,7 @@ class _BudgetsPageState extends State<BudgetsPage>
               ],
             )
           : null,
-      // On wide layouts the main "create budget" action lives in the app bar
-      // (like the other pages); on mobile it stays as the floating button.
+      // Wide: create action in app bar; mobile: FAB.
       appBarActions: isMobile
           ? null
           : [

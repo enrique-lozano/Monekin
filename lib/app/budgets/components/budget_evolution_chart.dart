@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -74,10 +72,6 @@ class BudgetEvolutionChart extends StatelessWidget {
           }
 
           final points = snapshot.data ?? const <TimeSeriesLabeledPoint>[];
-          final maxValue = points.isEmpty
-              ? 0.0
-              : points.map((e) => e.value).reduce(max);
-          final maxY = max(maxValue + maxValue * 0.1, budget.limitAmount * 1.1);
 
           return StreamBuilder(
             stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
@@ -90,8 +84,7 @@ class BudgetEvolutionChart extends StatelessWidget {
                 valueExtractor: (p) => p.value,
                 currency: userCurrencySnapshot.data,
                 tooltipTitleBuilder: (p) => p.label,
-                minY: 0,
-                maxY: maxY,
+                yAnchorZero: true,
                 extraLinesData: ExtraLinesData(
                   horizontalLines: [
                     HorizontalLine(

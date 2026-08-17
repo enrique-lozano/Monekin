@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
-import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/app/securities/widgets/security_classification_card.dart';
+import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/app/securities/widgets/security_price_form_dialog.dart';
 import 'package:monekin/app/securities/widgets/security_price_import_sheet.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
@@ -20,12 +20,11 @@ import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/editable_time_series_list.dart';
-import 'package:monekin/core/presentation/widgets/equal_height_chart_row.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/evolution_card.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
@@ -33,6 +32,7 @@ import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -130,16 +130,6 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     setState(() {
       _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
       _hoveredPoint = null;
-    });
-  }
-
-  void _openCustomPeriodModal() {
-    openDatePeriodModal(
-      context,
-      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
-    ).then((value) {
-      if (value == null) return;
-      _onPeriodChanged(value);
     });
   }
 
@@ -278,14 +268,16 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
 
         return PageFramework(
           title: security.name,
-          appBarBuilder: (title, tabBar, actions) => AppBar(
-            key: ValueKey('AppBar_$title'),
-            title: PageScrollTitle(
-              secondaryTitle: title,
-              controller: _scrollController,
-            ),
-            bottom: tabBar,
-            actions: actions,
+          subtitle: Text(
+            [
+              security.type.displayName(context),
+              if (security.ticker != null) security.ticker!,
+              security.currencyId,
+            ].join(' · '),
+          ),
+          icon: Hero(
+            tag: widget.securityAvatarHeroTag ?? UniqueKey(),
+            child: SecurityAvatar(security: security, size: 40),
           ),
           appBarActions: [
             MonekinPopupMenuButton(
@@ -319,33 +311,28 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
               ],
             ),
           ],
-          // The ListView spans the full page width (rather than being nested
-          // inside the centered/max-width content) so that on wide screens
-          // the user can scroll from anywhere on the page, not just while
-          // hovering over the centered column.
           body: ListView(
             controller: _scrollController,
-            padding: const EdgeInsets.only(top: 4, bottom: 16),
+            padding: const EdgeInsets.only(top: 16, bottom: 16),
             children: [
-              Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1100),
-                  child: Column(
+              PageContent(
+                child: BreakpointContainer(
+                  lgBuilder: (context) => _buildDesktopLayout(
+                    security,
+                    currency,
+                    positions,
+                    trades,
+                    history,
+                    allPoints,
+                  ),
+                  builder: (context) => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      BreakpointContainer(
-                        lgBuilder: (context) => _buildTopDesktop(
-                          security,
-                          currency,
-                          positions,
-                          allPoints,
-                        ),
-                        builder: (context) => _buildTopMobile(
-                          security,
-                          currency,
-                          positions,
-                          allPoints,
-                        ),
+                      _buildEvolutionCard(security, currency, allPoints),
+                      const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: _buildPositionCard(currency, positions),
                       ),
                       const SizedBox(height: 24),
                       _buildSegmentedSection(
@@ -366,209 +353,84 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     );
   }
 
-  Widget _buildTopMobile(
+  Widget _buildEvolutionCard(
     SecurityInDB security,
     Currency? currency,
-    List<_Position> positions,
     List<_PricePoint> allPoints,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildHeader(security, currency, allPoints),
-        const SizedBox(height: 24),
-        _buildChartSection(currency, allPoints),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _buildPositionCard(currency, positions),
-        ),
-      ],
-    );
-  }
-
-  /// Desktop top block: a two-column row whose columns share the exact same
-  /// height. The left column drives the height with the identity/price/position
-  /// content; the right column holds the chart card, whose chart flexes to fill
-  /// whatever height the left column ends up needing.
-  Widget _buildTopDesktop(
-    SecurityInDB security,
-    Currency? currency,
-    List<_Position> positions,
-    List<_PricePoint> allPoints,
-  ) {
-    return EqualHeightChartRow(
-      info: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildHeader(security, currency, allPoints),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildPositionCard(currency, positions),
-          ),
-        ],
-      ),
-      chart: _buildChartCard(currency, allPoints),
-    );
-  }
-
-  /// The price chart and its period chips, wrapped in a bordered card that
-  /// stretches to fill the height handed to it by [_buildTopDesktop]. The chart
-  /// is set to [TimeSeriesEvolutionChart.expand] so it grows/shrinks with the
-  /// card instead of using a fixed height.
-  Widget _buildChartCard(Currency? currency, List<_PricePoint> allPoints) {
     final visible = _visiblePoints(allPoints);
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(
-            context,
-          ).colorScheme.outlineVariant.withValues(alpha: 0.5),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: TimeSeriesEvolutionChart<_PricePoint>(
-              expand: true,
-              data: visible,
-              dateExtractor: (p) => p.date,
-              valueExtractor: (p) => p.price,
-              currency: currency,
-              showYAxisTitles: false,
-              onHover: (point) => setState(() => _hoveredPoint = point),
-            ),
-          ),
-          const SizedBox(height: 12),
-          if (allPoints.isNotEmpty)
-            DateRangeChips(
-              currentPeriod: _dateRange.datePeriod,
-              oldestDate: allPoints.first.date,
-              onPresetSelected: _onPeriodChanged,
-              onCustomTap: _openCustomPeriodModal,
-              padding: EdgeInsets.zero,
-            ),
-        ],
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Section 1 — Header + chart
-  // ---------------------------------------------------------------------------
-
-  Widget _buildHeader(
-    SecurityInDB security,
-    Currency? currency,
-    List<_PricePoint> allPoints,
-  ) {
-    final t = Translations.of(context);
-    final visible = _visiblePoints(allPoints);
-
     final latestPrice =
         security.currentPrice ?? (visible.isNotEmpty ? visible.last.price : 0);
     final displayPrice = _hoveredPoint?.price ?? latestPrice;
+    final initialPrice = visible.length >= 2 && visible.first.price != 0
+        ? visible.first.price
+        : null;
 
-    double? basePrice;
-    if (visible.length >= 2 && visible.first.price != 0) {
-      basePrice = visible.first.price;
-    }
-
-    double? changeValue;
-    double? changeFraction;
-    if (basePrice != null) {
-      changeValue = displayPrice - basePrice;
-      changeFraction = changeValue / basePrice.abs();
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 12,
-        children: [
-          Hero(
-            tag: widget.securityAvatarHeroTag ?? UniqueKey(),
-            child: SecurityAvatar(security: security, size: 44),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  security.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 2),
-                DefaultTextStyle.merge(
-                  style: Theme.of(context).textTheme.titleLarge!,
-                  child: CurrencyDisplayer(
-                    amountToConvert: displayPrice,
-                    currency: currency,
-                  ),
-                ),
-                if (changeFraction != null)
-                  TrendingValue(
-                    percentage: changeFraction,
-                    value: changeValue,
-                    valueCurrency: currency,
-                    dataTypes: const [
-                      TrendingValueDataType.value,
-                      TrendingValueDataType.percentage,
-                    ],
-                    fontWeight: FontWeight.w600,
-                    padding: const EdgeInsets.only(top: 4),
-                  )
-                else
-                  Text(
-                    t.assets.securities.current_price,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-              ],
-            ),
-          ),
-        ],
+    return EvolutionCard(
+      valueLabel: Translations.of(context).assets.securities.current_price,
+      initialValue: initialPrice,
+      finalValue: displayPrice,
+      currency: currency,
+      chart: TimeSeriesEvolutionChart<_PricePoint>(
+        expand: true,
+        data: visible,
+        dateExtractor: (point) => point.date,
+        valueExtractor: (point) => point.price,
+        currency: currency,
+        showYAxisTitles: false,
+        onHover: (point) => setState(() => _hoveredPoint = point),
       ),
+      currentPeriod: _dateRange.datePeriod,
+      oldestDate: allPoints.isEmpty ? null : allPoints.first.date,
+      showDateSelector: allPoints.isNotEmpty,
+      onPresetSelected: _onPeriodChanged,
     );
   }
 
-  Widget _buildChartSection(Currency? currency, List<_PricePoint> allPoints) {
-    final visible = _visiblePoints(allPoints);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+  Widget _buildDesktopLayout(
+    SecurityInDB security,
+    Currency? currency,
+    List<_Position> positions,
+    List<TransactionInDB> trades,
+    List<SecurityPriceInDB> history,
+    List<_PricePoint> allPoints,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: TimeSeriesEvolutionChart<_PricePoint>(
-            data: visible,
-            dateExtractor: (p) => p.date,
-            valueExtractor: (p) => p.price,
-            currency: currency,
-            showYAxisTitles: false,
-            onHover: (point) => setState(() => _hoveredPoint = point),
+        Expanded(
+          flex: 8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildEvolutionCard(security, currency, allPoints),
+              const SizedBox(height: 16),
+              _buildSegmentedSection(
+                security,
+                currency,
+                positions,
+                trades,
+                history,
+                includeAboutTab: false,
+                horizontalPadding: 0,
+              ),
+            ],
           ),
         ),
-        if (allPoints.isNotEmpty) ...[
-          const SizedBox(height: 12),
-          DateRangeChips(
-            currentPeriod: _dateRange.datePeriod,
-            oldestDate: allPoints.first.date,
-            onPresetSelected: _onPeriodChanged,
-            onCustomTap: _openCustomPeriodModal,
-            padding: EdgeInsets.zero,
+        const SizedBox(width: 16),
+        Expanded(
+          flex: 4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildAbout(security, currency),
+              const SizedBox(height: 16),
+              SecurityClassificationCard(security: security),
+              const SizedBox(height: 16),
+              _buildPositionCard(currency, positions),
+            ],
           ),
-        ],
+        ),
       ],
     );
   }
@@ -648,11 +510,17 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     Currency? currency,
     List<_Position> positions,
     List<TransactionInDB> trades,
-    List<SecurityPriceInDB> history,
-  ) {
+    List<SecurityPriceInDB> history, {
+    bool includeAboutTab = true,
+    double horizontalPadding = 16,
+  }) {
     final t = Translations.of(context);
 
-    final content = switch (_selectedTab) {
+    final selected = !includeAboutTab && _selectedTab == _DetailTab.about
+        ? _DetailTab.positions
+        : _selectedTab;
+
+    final content = switch (selected) {
       _DetailTab.about => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -667,11 +535,12 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     };
 
     final items = [
-      SegmentedTabItem(
-        value: _DetailTab.about,
-        icon: Icons.info_outline_rounded,
-        label: t.assets.securities.tabs.about,
-      ),
+      if (includeAboutTab)
+        SegmentedTabItem(
+          value: _DetailTab.about,
+          icon: Icons.info_outline_rounded,
+          label: t.assets.securities.tabs.about,
+        ),
       SegmentedTabItem(
         value: _DetailTab.positions,
         icon: Icons.account_balance_wallet_outlined,
@@ -693,16 +562,16 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: ExpandingSegmentedTabs<_DetailTab>(
             items: items,
-            selected: _selectedTab,
+            selected: selected,
             onSelected: (v) => setState(() => _selectedTab = v),
           ),
         ),
         const SizedBox(height: 16),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: content,
         ),
       ],
@@ -772,10 +641,6 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
             )
           : Column(
               children: positions.map((p) {
-                final pnlColor = p.data.unrealizedPnl >= 0
-                    ? Colors.green
-                    : Colors.red;
-
                 return ListTile(
                   leading: p.account.displayIcon(context),
                   title: Text(p.account.name),
@@ -786,23 +651,14 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          CurrencyDisplayer(
-                            amountToConvert: p.data.marketValue,
-                            currency: currency,
-                          ),
-                          Text(
-                            UINumberFormatter.percentage(
-                              amountToConvert: p.data.unrealizedPnlPercent,
-                            ).getFormattedAmount(),
-                            style: Theme.of(
-                              context,
-                            ).textTheme.bodySmall!.copyWith(color: pnlColor),
-                          ),
-                        ],
+                      TrailingValue(
+                        amount: p.data.marketValue,
+                        currency: currency,
+                        secondary: TrendingValue(
+                          percentage: p.data.unrealizedPnlPercent,
+                          fontSize: 12,
+                          padding: EdgeInsets.zero,
+                        ),
                       ),
                       if (p.account.trackingMode ==
                           AccountTrackingMode.holdings)
@@ -889,8 +745,8 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
                           '${UINumberFormatter.decimal(amountToConvert: qty.abs()).getFormattedAmount()} × '
                           '${UINumberFormatter.currency(amountToConvert: trade.pricePerUnit ?? 0, currency: currency).getFormattedAmount()}',
                         ),
-                        trailing: CurrencyDisplayer(
-                          amountToConvert: trade.value.abs(),
+                        trailing: TrailingValue(
+                          amount: trade.value.abs(),
                           currency: currency,
                         ),
                         onTap: () => _editTrade(trade),
@@ -933,8 +789,6 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
       items: sorted,
       dateExtractor: (p) => p.date,
       valueExtractor: (p) => p.price,
-      // The security's currency always exists (FK), so it has resolved by the
-      // time this stream-driven builder runs.
       currency: currency!,
       emptyDescription: t.assets.securities.no_price_history,
       onEdit: (p) => _editPricePoint(p, security, currency),

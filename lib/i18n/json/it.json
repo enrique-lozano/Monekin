@@ -1019,7 +1019,6 @@
         "col_symbol": "Simbolo",
         "total_cost": "Costo totale del portafoglio",
         "save": "Salva istantanea",
-        "remove_hint": "Per eliminare una posizione basta eliminare la sua riga: lo snapshot è la foto intera, non un movimento.",
         "delete_title": "Eliminare l'istantanea?",
         "delete_descr": "Questa istantanea verrà rimossa. Se fosse la più recente, le tue posizioni attuali torneranno all'istantanea precedente."
       }

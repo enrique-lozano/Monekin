@@ -1019,7 +1019,6 @@
         "col_symbol": "Szimbólum",
         "total_cost": "Teljes portfólió költség",
         "save": "Pillanatkép mentése",
-        "remove_hint": "Egy pozíció eltávolításához egyszerűen törölje a sorát: a pillanatfelvétel a teljes fénykép, nem pedig egy mozgás.",
         "delete_title": "Törli a pillanatképet?",
         "delete_descr": "Ez a pillanatkép el lesz távolítva. Ha ez volt a legutóbbi, akkor a jelenlegi pozíciói visszaállnak az előző pillanatképre."
       }

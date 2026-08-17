@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 
-/// A two-column desktop layout where [info] (left) drives the row height from
-/// its own content, and [chart] (right) is stretched to that exact same height.
+/// Two-column row where [info] sets the height and [chart] fills it.
 ///
-/// It is implemented with a [Stack] + [Positioned] rather than [IntrinsicHeight]
-/// on purpose: the chart side (and, on the info side, the skeleton `Bone`s and
-/// the date-range chips) rely on widgets that use a [LayoutBuilder] internally
-/// (`fl_chart`, `skeletonizer`, `DateRangeChips`). Those do not support the
-/// intrinsic-sizing protocol and would throw under [IntrinsicHeight]. Here
-/// everything is measured through normal layout: [info] is the only
-/// size-determining (non-positioned) child, and [chart] is a positioned child
-/// that simply fills the resulting height.
+/// Uses a [Stack] instead of [IntrinsicHeight] because chart, skeleton, and
+/// chip widgets rely on [LayoutBuilder] and break intrinsic sizing.
 class EqualHeightChartRow extends StatelessWidget {
   const EqualHeightChartRow({
     super.key,

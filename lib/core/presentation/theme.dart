@@ -174,6 +174,18 @@ ThemeData getThemeData(
       clipBehavior: Clip.hardEdge,
     ),
     listTileTheme: ListTileThemeData(minVerticalPadding: 12),
+    scrollbarTheme: AppUtils.isDesktop
+        ? ScrollbarThemeData(
+            thumbVisibility: const WidgetStatePropertyAll(true),
+            thickness: const WidgetStatePropertyAll(7),
+            radius: const Radius.circular(4),
+            thumbColor: WidgetStateProperty.resolveWith(
+              (states) => theme.colorScheme.onSurfaceVariant.withValues(
+                alpha: states.contains(WidgetState.hovered) ? 0.7 : 0.45,
+              ),
+            ),
+          )
+        : null,
     // On desktop, icon buttons feel more native as compact, slightly-rounded
     // squares instead of the large fully-circular touch targets.
     iconButtonTheme: AppUtils.isDesktop
@@ -194,6 +206,8 @@ ThemeData getThemeData(
         ? AppBarTheme(
             scrolledUnderElevation: 0,
             surfaceTintColor: Colors.transparent,
+            // Desktop icon buttons are compact; keep them off the window edge.
+            actionsPadding: const EdgeInsetsDirectional.only(end: 12),
             shape: Border(
               bottom: BorderSide(
                 color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),

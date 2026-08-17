@@ -94,13 +94,10 @@ class NetWorthEvolutionCard extends StatelessWidget {
           return Center(child: Text(t.general.insufficient_data));
         }
 
-        final maxY = [
-          data.map((p) => p.assets).reduce(max),
-          data.map((p) => p.debts).reduce(max),
-          data.map((p) => p.netWorth).reduce(max),
-        ].reduce(max);
-
-        final yMax = max(maxY * 1.15, 10.0);
+        final domain = computeMonetaryChartYDomain(
+          data.expand((point) => [point.assets, point.debts, point.netWorth]),
+          anchorZero: true,
+        );
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -110,7 +107,8 @@ class NetWorthEvolutionCard extends StatelessWidget {
               child: _NetWorthLineChart(
                 data: data,
                 currency: snapshot.data!.$2,
-                yMax: yMax,
+                yMin: domain.minY,
+                yMax: domain.maxY,
               ),
             ),
             const SizedBox(height: 16),
@@ -143,11 +141,13 @@ class _NetWorthLineChart extends StatefulWidget {
   const _NetWorthLineChart({
     required this.data,
     required this.currency,
+    required this.yMin,
     required this.yMax,
   });
 
   final List<_NetWorthPoint> data;
   final Currency? currency;
+  final double yMin;
   final double yMax;
 
   @override
@@ -183,10 +183,15 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
       dotData: const FlDotData(show: false),
       belowBarData: BarAreaData(
         show: true,
+        applyCutOffY: true,
+        cutOffY: 0,
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [color.withOpacity(0.35), color.withOpacity(0.05)],
+          colors: [
+            color.withValues(alpha: 0.35),
+            color.withValues(alpha: 0.05),
+          ],
         ),
       ),
       spots: data,
@@ -202,12 +207,12 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
       onExit: (_) => _dateHaptics.reset(),
       child: LineChart(
         LineChartData(
-          minY: 0,
+          minY: widget.yMin,
           maxY: widget.yMax,
           gridData: FlGridData(
             show: true,
             drawVerticalLine: false,
-            horizontalInterval: widget.yMax / 5,
+            horizontalInterval: (widget.yMax - widget.yMin) / 5,
           ),
           titlesData: FlTitlesData(
             leftTitles: AxisTitles(

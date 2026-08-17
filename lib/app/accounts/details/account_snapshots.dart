@@ -9,14 +9,15 @@ import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
-import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
+import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -162,19 +163,13 @@ class _SnapshotTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                CurrencyDisplayer(
-                  amountToConvert: data.totalCost,
-                  currency: account.currency,
-                ),
-                Text(
-                  t.assets.holdings.snapshots.cost_label,
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
+            TrailingValue(
+              amount: data.totalCost,
+              currency: account.currency,
+              secondary: Text(
+                t.assets.holdings.snapshots.cost_label,
+                style: theme.textTheme.bodySmall,
+              ),
             ),
             IconButton(
               icon: Icon(
@@ -253,15 +248,13 @@ Future<void> showPortfolioSnapshotEditor(
   AccountSnapshotWithPositions? snapshotToEdit,
   List<SnapshotPosition>? prefillPositions,
 }) {
-  return showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
-    builder: (context) => _SnapshotEditorSheet(
+  return RouteUtils.showResponsiveForm<Object>(
+    _SnapshotEditorSheet(
       account: account,
       snapshotToEdit: snapshotToEdit,
       prefillPositions: prefillPositions,
     ),
+    desktopWidth: 600,
   );
 }
 
@@ -442,35 +435,51 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return StreamBuilder<List<AccountSnapshotWithPositions>>(
-      stream: HoldingService.instance.getAccountSnapshots(widget.account.id),
-      builder: (context, snap) {
-        final snapshots = snap.data ?? const <AccountSnapshotWithPositions>[];
-
-        return ModalContainer(
-          title: _isEditing
-              ? t.assets.holdings.edit_snapshot
-              : t.assets.holdings.snapshots.update_positions,
-          subtitle:
-              '${widget.account.name} · ${t.assets.holdings.snapshots.full_portfolio}',
-          bodyPadding: const EdgeInsets.symmetric(horizontal: 16),
-          footer: BottomSheetFooter(
-            submitText: t.assets.holdings.snapshots.save,
-            submitIcon: Icons.save_rounded,
-            onSaved: _submit,
+    return PageFramework(
+      title: _isEditing
+          ? t.assets.holdings.edit_snapshot
+          : t.assets.holdings.snapshots.update_positions,
+      subtitle: Text(
+        '${widget.account.name} · ${t.assets.holdings.snapshots.full_portfolio}',
+      ),
+      persistentFooterButtons: [
+        PersistentFooterButton(
+          child: FilledButton.icon(
+            style: getMediumButtonStyle(context),
+            onPressed: _submit,
+            icon: const Icon(Icons.save_rounded),
+            label: Text(t.assets.holdings.snapshots.save),
           ),
-          body: LayoutBuilder(
+        ),
+      ],
+      body: StreamBuilder<List<AccountSnapshotWithPositions>>(
+        stream: HoldingService.instance.getAccountSnapshots(widget.account.id),
+        builder: (context, snap) {
+          final snapshots = snap.data ?? const <AccountSnapshotWithPositions>[];
+
+          return LayoutBuilder(
             builder: (context, constraints) {
               return SingleChildScrollView(
-                child: _buildBody(
-                  _columnLayout(constraints.maxWidth),
-                  snapshots,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight - 20,
+                  ),
+                  child: IntrinsicHeight(
+                    child: _buildBody(
+                      _columnLayout(constraints.maxWidth),
+                      snapshots,
+                    ),
+                  ),
                 ),
               );
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -485,7 +494,7 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         !_isEditing && snapshots.any((s) => _isSameDay(s.date, _date));
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -533,7 +542,7 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
           icon: const Icon(Icons.add_circle_outline_rounded),
           label: Text(t.assets.holdings.snapshots.add_position),
         ),
-        const SizedBox(height: 16),
+        const Spacer(),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
@@ -562,14 +571,6 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
             ],
           ),
         ),
-        const SizedBox(height: 12),
-        Text(
-          t.assets.holdings.snapshots.remove_hint,
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.outline,
-          ),
-        ),
-        const SizedBox(height: 16),
       ],
     );
   }
@@ -626,10 +627,14 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   }
 
   Widget _buildRow(_EditorRow row, _ColumnLayout cols) {
+    final t = Translations.of(context);
     final theme = Theme.of(context);
 
     final ticker = row.security.ticker?.trim();
     final hasTicker = ticker != null && ticker.isNotEmpty;
+
+    final parsedQty = double.tryParse(row.quantity.text);
+    final isZeroQty = parsedQty != null && parsedQty == 0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -666,6 +671,20 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
                     ],
                   ),
                 ),
+                if (isZeroQty) ...[
+                  const SizedBox(width: 4),
+                  Tooltip(
+                    message: t.assets.holdings.snapshots.zero_qty_hint,
+                    triggerMode: TooltipTriggerMode.tap,
+                    constraints: BoxConstraints(maxWidth: 200),
+                    showDuration: const Duration(seconds: 6),
+                    child: Icon(
+                      Icons.info_outline_rounded,
+                      size: 18,
+                      color: theme.colorScheme.tertiary,
+                    ),
+                  ),
+                ],
               ],
             ),
           ),

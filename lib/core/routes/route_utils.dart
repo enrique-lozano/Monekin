@@ -31,9 +31,7 @@ abstract class RouteUtils {
     final context = navigatorKey.currentContext;
     if (context == null) return Future.value(null);
 
-    // On wide layouts the form is a right-side drawer pushed on the ROOT
-    // navigator, so its scrim covers the whole window (including the side
-    // navigation), not just the content pane.
+    // Wide: root-nav drawer so the scrim covers the sidebar too.
     if (!AppUtils.isMobileLayout(context)) {
       return rootNavigatorKey.currentState!.push(
         SideDrawerRoute<T>(
@@ -59,7 +57,7 @@ abstract class RouteUtils {
         context: context,
         isScrollControlled: true,
         showDragHandle: true,
-        builder: builder,
+        builder: (context) => ModalPageScope(child: builder(context)),
       );
     }
 
@@ -88,6 +86,7 @@ abstract class RouteUtils {
   static Future<T?> showResponsiveModal<T>(
     BuildContext context, {
     required WidgetBuilder builder,
+    // Minimum popover width. Wider trigger fields expand the popover to match.
     double desktopWidth = 400,
     double desktopMaxHeight = 600,
   }) {
@@ -102,37 +101,12 @@ abstract class RouteUtils {
       );
     }
 
-    Rect? anchorRect;
-    final renderObject = context.findRenderObject();
-    if (renderObject is RenderBox && renderObject.hasSize) {
-      // The popover route is pushed on the root navigator overlay, whose origin
-      // sits below the desktop window bar. Screen-global coordinates from
-      // [localToGlobal] must be converted into that overlay space or the field
-      // highlight (and arrow) render too low.
-      final overlayBox = rootNavigatorKey.currentState?.overlay?.context
-          .findRenderObject();
-      if (overlayBox is RenderBox) {
-        final topLeft = renderObject.localToGlobal(
-          Offset.zero,
-          ancestor: overlayBox,
-        );
-        final bottomRight = renderObject.localToGlobal(
-          renderObject.size.bottomRight(Offset.zero),
-          ancestor: overlayBox,
-        );
-        anchorRect = Rect.fromPoints(topLeft, bottomRight);
-      } else {
-        anchorRect =
-            renderObject.localToGlobal(Offset.zero) & renderObject.size;
-      }
-    }
-
     return rootNavigatorKey.currentState!.push(
       SelectorPopoverRoute<T>(
         builder: builder,
         width: desktopWidth,
         maxHeight: desktopMaxHeight,
-        anchorRect: anchorRect,
+        anchorContext: context,
         barrierLabel: MaterialLocalizations.of(
           wideContext,
         ).modalBarrierDismissLabel,
@@ -140,12 +114,47 @@ abstract class RouteUtils {
     );
   }
 
+  /// Current bounds of [anchorContext]'s render box, expressed in the ROOT
+  /// overlay's coordinate space (where popover routes are painted).
+  ///
+  /// Recomputed on demand (not cached) so the popover card, its highlight
+  /// border and its arrow all keep tracking the trigger widget when the window
+  /// is resized or moved. Returns null if the anchor is gone or not yet laid
+  /// out, in which case the popover falls back to a centered position.
+  static Rect? anchorRectFor(BuildContext anchorContext) {
+    if (!anchorContext.mounted) return null;
+
+    final renderObject = anchorContext.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return null;
+
+    // The popover route is pushed on the root navigator overlay, whose origin
+    // sits below the desktop window bar. Screen-global coordinates from
+    // [localToGlobal] must be converted into that overlay space or the field
+    // highlight (and arrow) render too low.
+    final overlayBox = rootNavigatorKey.currentState?.overlay?.context
+        .findRenderObject();
+    if (overlayBox is RenderBox) {
+      final topLeft = renderObject.localToGlobal(
+        Offset.zero,
+        ancestor: overlayBox,
+      );
+      final bottomRight = renderObject.localToGlobal(
+        renderObject.size.bottomRight(Offset.zero),
+        ancestor: overlayBox,
+      );
+      return Rect.fromPoints(topLeft, bottomRight);
+    }
+
+    return renderObject.localToGlobal(Offset.zero) & renderObject.size;
+  }
+
   static Route<T> _fullscreenDialogRoute<T extends Object>(Widget page) {
     return PageRouteBuilder<T>(
       fullscreenDialog: true,
       transitionDuration: const Duration(milliseconds: 300),
       reverseTransitionDuration: const Duration(milliseconds: 250),
-      pageBuilder: (context, animation, secondaryAnimation) => page,
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          ModalPageScope(child: page),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
           position: Tween(begin: const Offset(0, 1), end: Offset.zero).animate(
@@ -309,6 +318,17 @@ class SideDrawerScope extends InheritedWidget {
   bool updateShouldNotify(SideDrawerScope oldWidget) => false;
 }
 
+class ModalPageScope extends InheritedWidget {
+  const ModalPageScope({super.key, required super.child});
+
+  static bool of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<ModalPageScope>() != null;
+  }
+
+  @override
+  bool updateShouldNotify(ModalPageScope oldWidget) => false;
+}
+
 /// A floating, anchored popover used to present selectors/pickers on wide
 /// layouts (see [RouteUtils.showResponsiveModal]).
 ///
@@ -320,14 +340,18 @@ class SelectorPopoverRoute<T> extends PopupRoute<T> {
     required this.builder,
     required this.width,
     required this.maxHeight,
-    this.anchorRect,
+    this.anchorContext,
     this.barrierLabel,
   });
 
   final WidgetBuilder builder;
   final double width;
   final double maxHeight;
-  final Rect? anchorRect;
+
+  /// Context of the widget that triggered the popover. The anchor rect is
+  /// derived from it live (see [RouteUtils.anchorRectFor]) on every rebuild so
+  /// it survives window resizes/moves instead of being pinned to stale coords.
+  final BuildContext? anchorContext;
 
   // A popover reads as attached to its trigger field, not as a modal takeover,
   // so it does not dim the content behind it. Its elevation/shadow provides the
@@ -351,6 +375,10 @@ class SelectorPopoverRoute<T> extends PopupRoute<T> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
+    final anchorRect = anchorContext == null
+        ? null
+        : RouteUtils.anchorRectFor(anchorContext!);
+
     final geo = _PopoverGeometry.compute(
       screen: MediaQuery.sizeOf(context),
       anchor: anchorRect,
@@ -393,6 +421,11 @@ class SelectorPopoverRoute<T> extends PopupRoute<T> {
     );
 
     final popoverColor = AppColors.of(context).modalBackground;
+    final contentAlignment = switch (geo.side) {
+      _PopoverSide.left || _PopoverSide.right => Alignment.center,
+      _PopoverSide.below => Alignment.topCenter,
+      _PopoverSide.above => Alignment.bottomCenter,
+    };
 
     return Stack(
       children: [
@@ -400,7 +433,7 @@ class SelectorPopoverRoute<T> extends PopupRoute<T> {
         // reads as the popover's origin.
         if (anchorRect != null)
           Positioned.fromRect(
-            rect: anchorRect!.inflate(1),
+            rect: anchorRect.inflate(1),
             child: IgnorePointer(
               child: DecoratedBox(
                 decoration: BoxDecoration(
@@ -423,7 +456,13 @@ class SelectorPopoverRoute<T> extends PopupRoute<T> {
             color: popoverColor,
           ),
 
-        Positioned.fromRect(rect: geo.rect, child: content),
+        Positioned.fromRect(
+          rect: geo.rect,
+          child: Align(
+            alignment: contentAlignment,
+            child: SizedBox(width: geo.rect.width, child: content),
+          ),
+        ),
       ],
     );
   }
@@ -442,12 +481,16 @@ class SelectorPopoverRoute<T> extends PopupRoute<T> {
 
     // Grow the popover out of its trigger field: scaling around the anchor keeps
     // the field highlight and arrow visually pinned while the panel expands.
+    final anchorRect = anchorContext == null
+        ? null
+        : RouteUtils.anchorRectFor(anchorContext!);
+
     final screen = MediaQuery.sizeOf(context);
     final alignment = anchorRect == null
         ? Alignment.center
         : Alignment(
-            (anchorRect!.center.dx / screen.width) * 2 - 1,
-            (anchorRect!.center.dy / screen.height) * 2 - 1,
+            (anchorRect.center.dx / screen.width) * 2 - 1,
+            (anchorRect.center.dy / screen.height) * 2 - 1,
           );
 
     return FadeTransition(
@@ -477,7 +520,7 @@ class _PopoverGeometry {
   final _PopoverSide side;
   final Offset? arrowCenter;
 
-  static const double _margin = 12;
+  static const double _margin = 20;
   static const double _gap = 10;
 
   static _PopoverGeometry compute({
@@ -486,7 +529,8 @@ class _PopoverGeometry {
     required double width,
     required double maxHeight,
   }) {
-    final w = min(width, screen.width - _margin * 2);
+    final desiredWidth = anchor == null ? width : max(width, anchor.width);
+    final w = min(desiredWidth, screen.width - _margin * 2);
 
     if (anchor == null) {
       final h = maxHeight.clamp(160.0, screen.height - _margin * 2);
@@ -528,10 +572,8 @@ class _PopoverGeometry {
     final double left = switch (side) {
       _PopoverSide.left => anchor.left - _gap - w,
       _PopoverSide.right => anchor.right + _gap,
-      _PopoverSide.below || _PopoverSide.above => (anchor.right - w).clamp(
-        _margin,
-        screen.width - w - _margin,
-      ),
+      _PopoverSide.below || _PopoverSide.above =>
+        (anchor.center.dx - w / 2).clamp(_margin, screen.width - w - _margin),
     };
 
     final double top = switch (side) {

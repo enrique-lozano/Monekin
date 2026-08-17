@@ -10,6 +10,58 @@ import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
+typedef MonetaryChartYDomain = ({
+  double minY,
+  double maxY,
+  double areaFillCutoffY,
+});
+
+/// Computes a padded viewport for monetary series without changing their
+/// plotted values. Near-flat series receive a minimum span relative to their
+/// magnitude, so both the line and its area remain visible.
+MonetaryChartYDomain computeMonetaryChartYDomain(
+  Iterable<double> values, {
+  Iterable<double> extraValues = const [],
+  double paddingFraction = 0.12,
+  double minRelativeSpan = 0.02,
+  bool anchorZero = false,
+}) {
+  final finiteValues = [
+    ...values,
+    ...extraValues,
+  ].where((value) => value.isFinite).toList();
+
+  if (finiteValues.isEmpty) {
+    final minY = anchorZero ? 0.0 : -1.0;
+    return (minY: minY, maxY: 1, areaFillCutoffY: minY);
+  }
+
+  final dataMin = finiteValues.reduce(min);
+  final dataMax = finiteValues.reduce(max);
+  final midpoint = (dataMin + dataMax) / 2;
+  final dataRange = dataMax - dataMin;
+  final referenceMagnitude = max(max(dataMin.abs(), dataMax.abs()), 1);
+  final minimumSpan = referenceMagnitude * minRelativeSpan;
+  final paddedSpan = dataRange * (1 + paddingFraction * 2);
+  final viewportSpan = max(max(paddedSpan, minimumSpan), 2);
+
+  var minY = midpoint - viewportSpan / 2;
+  var maxY = midpoint + viewportSpan / 2;
+
+  if (anchorZero) {
+    if (dataMin >= 0) {
+      minY = 0;
+    } else if (dataMax <= 0) {
+      maxY = 0;
+    } else {
+      minY = min(minY, 0);
+      maxY = max(maxY, 0);
+    }
+  }
+
+  return (minY: minY, maxY: maxY, areaFillCutoffY: anchorZero ? 0 : minY);
+}
+
 /// Day step for time-series charts (~100 samples across [timeRange]).
 int timeSeriesChartDayStep(DateTimeRange timeRange) {
   return ((timeRange.end.difference(timeRange.start).inDays) / 100)

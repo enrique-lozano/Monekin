@@ -1040,7 +1040,7 @@
         "col_symbol": "Symbol",
         "total_cost": "Total portfolio cost",
         "save": "Save snapshot",
-        "remove_hint": "To get rid of a position just delete its row: the snapshot is the full photo, not a movement.",
+        "zero_qty_hint": "A quantity of 0 keeps this position in the snapshot. To remove it entirely, delete the row instead.",
         "delete_title": "Delete snapshot?",
         "delete_descr": "This snapshot will be removed. If it was the most recent one, your current positions will fall back to the previous snapshot."
       }

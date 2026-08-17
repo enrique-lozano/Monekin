@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
@@ -12,20 +13,24 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-/// A redesigned income/expense summary card for the dashboard, showing the
-/// accrued value in the selected period and a trend chip comparing it with
-/// the previous period.
-class DashboardFlowCard extends StatelessWidget {
-  const DashboardFlowCard({
+/// Income or expense summary for a period, with a trend chip vs the previous
+/// period. Used on the dashboard and on account details.
+class IncomeExpenseFlowCard extends StatelessWidget {
+  const IncomeExpenseFlowCard({
     super.key,
     required this.type,
     required this.periodState,
     this.filters,
+    this.currency,
   });
 
   final TransactionType type;
   final DatePeriodState periodState;
   final TransactionFilterSet? filters;
+
+  /// When set, amounts are shown in this currency without conversion.
+  /// Otherwise they are converted to the user's preferred currency.
+  final CurrencyInDB? currency;
 
   TransactionFilterSet _filtersForDates(DateTime? min, DateTime? max) {
     return TransactionFilterSet(
@@ -34,6 +39,13 @@ class DashboardFlowCard extends StatelessWidget {
       minDate: min,
       maxDate: max,
       transactionTypes: [type],
+    );
+  }
+
+  Stream<double> _balanceStream(TransactionFilterSet filters) {
+    return TransactionService.instance.getTransactionsValueBalance(
+      filters: filters,
+      convertToPreferredCurrency: currency == null,
     );
   }
 
@@ -48,18 +60,15 @@ class DashboardFlowCard extends StatelessWidget {
 
     final isWide = BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md);
 
-    final currentStream = TransactionService.instance
-        .getTransactionsValueBalance(
-          filters: _filtersForDates(periodState.startDate, periodState.endDate),
-        );
+    final currentStream = _balanceStream(
+      _filtersForDates(periodState.startDate, periodState.endDate),
+    );
 
     final (prevStart, prevEnd) = periodState.getPrevDates();
     final canCompare = prevStart != null && prevEnd != null;
 
     final prevStream = canCompare
-        ? TransactionService.instance.getTransactionsValueBalance(
-            filters: _filtersForDates(prevStart, prevEnd),
-          )
+        ? _balanceStream(_filtersForDates(prevStart, prevEnd))
         : Stream.value(0.0);
 
     return DecoratedBox(
@@ -85,7 +94,7 @@ class DashboardFlowCard extends StatelessWidget {
                 ? TrendingValue(
                     percentage: trendPercentage,
                     inverse: inverse,
-                    chip: true,
+                    style: TrendingValueStyle.chip,
                     afterText: t.home.vs_previous_period,
                     showPercentageDecimals: false,
                     fontSize: 13,
@@ -101,7 +110,7 @@ class DashboardFlowCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(6),
                       decoration: BoxDecoration(
-                        color: color.withOpacity(0.18),
+                        color: color.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Icon(type.icon, color: color, size: 16),
@@ -127,6 +136,7 @@ class DashboardFlowCard extends StatelessWidget {
                   enabled: !hasData,
                   child: CurrencyDisplayer(
                     amountToConvert: hasData ? currentAbs : 9999,
+                    currency: currency,
                     compactView: currentAbs >= 100000,
                     showDecimals: false,
                     integerStyle: Theme.of(context).textTheme.headlineSmall!

@@ -12,6 +12,7 @@ class OutlinedButtonStacked extends StatelessWidget {
     this.alignLeft = false,
     this.padding,
     this.afterWidgetPadding,
+    this.afterWidgetBeside = false,
     this.alignBeside,
     this.filled = false,
     this.transitionWhenFilled = true,
@@ -28,6 +29,11 @@ class OutlinedButtonStacked extends StatelessWidget {
   final bool alignLeft;
   final EdgeInsets? padding;
   final EdgeInsets? afterWidgetPadding;
+
+  /// When true (and [alignBeside] is also true), the [afterWidget] is placed
+  /// on the same line as the title (to its right) instead of below it. Useful
+  /// on wide layouts where there is horizontal room to spare.
+  final bool afterWidgetBeside;
   final bool? alignBeside;
   final bool filled;
   final bool transitionWhenFilled;
@@ -111,18 +117,22 @@ class OutlinedButtonStacked extends StatelessWidget {
                                 maxLines: 2,
                               ),
                             ),
+                            if (afterWidget != null && afterWidgetBeside) ...[
+                              const SizedBox(width: 10),
+                              afterWidget!,
+                            ],
                             infoButton ?? const SizedBox.shrink(),
                           ],
                         ),
-                  afterWidget == null
+                  afterWidget == null || afterWidgetBeside
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 8),
-                  if (afterWidgetPadding == null)
+                  if (afterWidgetPadding == null && !afterWidgetBeside)
                     afterWidget ?? const SizedBox.shrink(),
                 ],
               ),
             ),
-            if (afterWidgetPadding != null)
+            if (afterWidgetPadding != null && !afterWidgetBeside)
               Padding(
                 padding: afterWidgetPadding ?? EdgeInsets.zero,
                 child: afterWidget ?? const SizedBox.shrink(),

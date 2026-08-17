@@ -105,7 +105,24 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
               );
 
         return PageFramework(
-          title: Translations.of(context).budgets.details.title,
+          title: budget.name,
+          subtitle: budget.intervalPeriod == null
+              ? null
+              : Text(budget.intervalPeriod!.allThePeriodsText(context)),
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: 0.2),
+            ),
+            child: Icon(
+              Icons.calculate_rounded,
+              size: 22,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
           tabBar: isMobile
               ? TabBar(
                   controller: _tabController,
@@ -172,7 +189,7 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
               Container(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: TargetHeader(target: budget),
+                child: TargetHeader(target: budget, showIdentity: false),
               ),
               ?segmentedTabs,
               Expanded(

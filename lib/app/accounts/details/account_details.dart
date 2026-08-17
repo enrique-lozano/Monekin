@@ -9,6 +9,7 @@ import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/accounts/details/holdings_snapshot_card.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
+import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/list/transactions.page.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
@@ -19,19 +20,22 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
+import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
-import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
+import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/dates/date_period_modal.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
+import 'package:monekin/core/presentation/widgets/evolution_charts/evolution_card.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/income_expense_flow_card.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -40,7 +44,6 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -67,6 +70,7 @@ class AccountDetailsPage extends StatefulWidget {
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
   final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<double?> _hoveredValue = ValueNotifier(null);
   late DatePeriodState _dateRange;
   _DetailTab _selectedTab = _DetailTab.movements;
 
@@ -79,22 +83,14 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _hoveredValue.dispose();
     super.dispose();
   }
 
   void _onPeriodChanged(DatePeriod period) {
+    _hoveredValue.value = null;
     setState(() {
       _dateRange = _dateRange.copyWith(periodModifier: 0, datePeriod: period);
-    });
-  }
-
-  void _openCustomPeriodModal() {
-    openDatePeriodModal(
-      context,
-      DatePeriodModal(initialDatePeriod: _dateRange.datePeriod),
-    ).then((value) {
-      if (value == null) return;
-      _onPeriodChanged(value);
     });
   }
 
@@ -123,66 +119,45 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
-
     return StreamBuilder(
       stream: AccountService.instance.getAccountById(widget.account.id),
       initialData: widget.account,
       builder: (context, snapshot) {
         final account = snapshot.data ?? widget.account;
         final isInvestment = account.type == AccountType.investment;
-        final isWide = !AppUtils.isMobileLayout(context);
+        final isWide = BreakPoint.of(
+          context,
+        ).isLargerOrEqualTo(BreakpointID.lg);
 
         return PageFramework(
-          title: t.general.details,
-          breadcrumbs: [
-            PageBreadcrumb(
-              t.general.accounts,
-              onTap: () => RouteUtils.popRoute(),
-            ),
-            if (account.groupName != null) PageBreadcrumb(account.groupName!),
-            PageBreadcrumb(account.name),
-          ],
-          appBarBuilder: (title, tabBar, actions) => AppBar(
-            key: ValueKey('AppBar_$title'),
-            title: PageScrollTitle(
-              primaryTitle: title,
-              secondaryTitle: account.name,
-              controller: _scrollController,
-            ),
-            bottom: tabBar,
-            actions: actions,
+          title: account.name,
+          subtitle: Text(
+            [
+              if (account.groupName != null) account.groupName!,
+              account.type.title(context),
+              account.currency.code,
+            ].join(' · '),
+          ),
+          icon: Hero(
+            tag: widget.accountIconHeroTag ?? UniqueKey(),
+            child: account.displayIcon(context),
           ),
           appBarActions: _buildAppBarActions(
             account,
             isInvestment,
             wide: isWide,
           ),
-          // A SingleChildScrollView (not a ListView) is used on purpose: the
-          // page mixes several StreamBuilder-backed sections and a ListView
-          // would wrap each of them in a `_SelectionKeepAlive`, which
-          // re-listens single-subscription streams on reactivation and
-          // throws "Stream has already been listened to". Every section here
-          // is bounded (the movements list is internally limited/paginated).
-          //
-          // The scroll view spans the full page width (rather than being
-          // nested inside the centered/max-width content) so that on wide
-          // screens the user can scroll from anywhere on the page, not just
-          // while hovering over the centered column.
+          // Not ListView: keep-alive would re-listen single-subscription streams.
           body: SingleChildScrollView(
             controller: _scrollController,
             padding: const EdgeInsets.symmetric(
               vertical: 16,
             ).withSafeBottom(context),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 1100),
-                child: BreakpointContainer(
-                  lgBuilder: (context) =>
-                      _buildDesktopLayout(account, isInvestment),
-                  builder: (context) =>
-                      _buildMobileLayout(account, isInvestment),
-                ),
+            child: PageContent(
+              child: BreakpointContainer(
+                lgBuilder: (context) =>
+                    _buildDesktopLayout(account, isInvestment),
+                builder: (context) => _buildMobileLayout(account, isInvestment),
               ),
             ),
           ),
@@ -191,9 +166,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  /// Account actions for the app bar. On wide layouts the quick actions
-  /// (add/withdraw money, transfer, buy/sell...) live here as labelled buttons;
-  /// on mobile they stay in the in-page action grid and only edit/menu show.
   List<Widget> _buildAppBarActions(
     Account account,
     bool isInvestment, {
@@ -205,13 +177,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       navigateBackOnDelete: true,
     ).menu;
 
-    final editButton = IconButton(
-      icon: const Icon(Icons.edit_rounded),
-      tooltip: t.ui_actions.edit,
-      onPressed: () =>
-          RouteUtils.showResponsiveForm(AccountFormPage(account: account)),
-    );
-
     return [
       if (wide) ...[
         for (final action in _resolveQuickActions(account, isInvestment))
@@ -221,7 +186,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               onPressed: action.onTap,
               icon: Icon(action.icon, size: 18, color: action.color),
               label: Text(action.label),
-
               style: OutlinedButton.styleFrom(
                 foregroundColor: Theme.of(context).colorScheme.onSurface,
                 shape: RoundedRectangleBorder(
@@ -251,10 +215,14 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         ),
         const SizedBox(width: 8),
       ],
-      editButton,
+      IconButton(
+        icon: const Icon(Icons.edit_rounded),
+        tooltip: t.ui_actions.edit,
+        onPressed: () =>
+            RouteUtils.showResponsiveForm(AccountFormPage(account: account)),
+      ),
       if (menuActions.isNotEmpty)
         MonekinPopupMenuButton(actionItems: menuActions),
-      const SizedBox(width: 4),
     ];
   }
 
@@ -262,9 +230,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildValueHeader(account, isInvestment),
-        const SizedBox(height: 16),
-        _buildChartSection(account),
+        _buildEvolutionCard(account, isInvestment),
         const SizedBox(height: 20),
         _buildQuickActions(account, isInvestment),
         const SizedBox(height: 16),
@@ -281,242 +247,140 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   }
 
   // ---------------------------------------------------------------------------
-  // Desktop layout: header row with inline action buttons, a combined
-  // value/chart/stats card, and a two-column body (tabs+list / info card).
+  // Desktop layout: an 8/4 grid with account activity and supporting details.
   // ---------------------------------------------------------------------------
 
   Widget _buildDesktopLayout(Account account, bool isInvestment) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        _buildDesktopHeader(account, isInvestment),
-        const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: _buildDesktopValueCard(account, isInvestment),
-        ),
-        const SizedBox(height: 20),
-        _buildDesktopBody(account, isInvestment),
-      ],
-    );
-  }
-
-  Widget _buildDesktopHeader(Account account, bool isInvestment) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: _AccountIdentity(
-              account: account,
-              heroTag: widget.accountIconHeroTag ?? UniqueKey(),
-              iconSize: 44,
-              titleStyle: theme.textTheme.titleLarge,
-              showTrackingMode: true,
-            ),
-          ),
-          const SizedBox(width: 24),
-          _buildValueSection(account, isInvestment),
-          const SizedBox(width: 24),
-          DateRangeChips(
-            currentPeriod: _dateRange.datePeriod,
-            onPresetSelected: _onPeriodChanged,
-            onCustomTap: _openCustomPeriodModal,
-            wrap: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDesktopValueCard(Account account, bool isInvestment) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: cardSurfaceDecoration(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildChartSection(account, showRangeChips: false),
-
-          if (isInvestment) ...[
-            const Divider(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: _buildInvestmentStats(account, horizontalLayout: true),
-            ),
-          ] else ...[
-            const SizedBox(height: 20),
-            _buildIncomeExpenseStats(account),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDesktopBody(Account account, bool isInvestment) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          flex: 2,
-          child: _buildSegmentedSection(
-            account,
-            isInvestment,
-            includeInfoTab: false,
+          flex: 8,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildEvolutionCard(
+                account,
+                isInvestment,
+                footer: isInvestment
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: _buildInvestmentStats(
+                          account,
+                          horizontalLayout: true,
+                        ),
+                      )
+                    : null,
+              ),
+              if (!isInvestment) ...[
+                const SizedBox(height: 16),
+                _buildIncomeExpenseStats(account),
+              ],
+              const SizedBox(height: 16),
+              if (isInvestment)
+                _buildSegmentedSection(
+                  account,
+                  isInvestment,
+                  includeInfoTab: false,
+                  horizontalPadding: 0,
+                )
+              else
+                _buildMovements(account, topGap: false),
+            ],
           ),
         ),
+        const SizedBox(width: 16),
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _buildInfo(account, topGap: false),
-          ),
-        ),
-      ],
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // Header: icon + name + type badge + value + period trend
-  // ---------------------------------------------------------------------------
-
-  Widget _buildValueHeader(Account account, bool isInvestment) {
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _AccountIdentity(
-            account: account,
-            heroTag: widget.accountIconHeroTag ?? UniqueKey(),
-            iconSize: 40,
-            titleStyle: theme.textTheme.titleMedium,
-          ),
-          const SizedBox(height: 16),
-          _buildValueSection(account, isInvestment),
-        ],
-      ),
-    );
-  }
-
-  /// The "VALOR TOTAL" / "SALDO ACTUAL" label, big amount and trend row.
-  /// Shared between the mobile header and the desktop value card.
-  Widget _buildValueSection(Account account, bool isInvestment) {
-    final theme = Theme.of(context);
-    final endDate = _dateRange.endDate;
-    final startDate = _dateRange.startDate;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          isInvestment
-              ? t.account.total_value.toUpperCase()
-              : t.account.current_balance.toUpperCase(),
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: theme.colorScheme.outline,
-            letterSpacing: 0.4,
-          ),
-        ),
-        const SizedBox(height: 2),
-        StreamBuilder<double>(
-          initialData: 0,
-          stream: AccountService.instance.getAccountMoney(
-            account: account,
-            date: endDate,
-          ),
-          builder: (context, endSnapshot) {
-            final endValue = endSnapshot.data ?? 0;
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DefaultTextStyle.merge(
-                  style: theme.textTheme.headlineMedium!,
-                  child: CurrencyDisplayer(
-                    amountToConvert: endValue,
-                    currency: account.currency,
+          flex: 4,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildInfo(account, topGap: false),
+              if (!isInvestment) ...[
+                const SizedBox(height: 16),
+                CardWithHeader(
+                  title: t.stats.by_categories,
+                  subtitle: _dateRange.getText(context),
+                  bodyPadding: const EdgeInsets.only(bottom: 12),
+                  body: PieChartByCategories(
+                    datePeriodState: _dateRange,
+                    filters: TransactionFilterSet(accountsIDs: [account.id]),
+                    showList: true,
                   ),
                 ),
-                const SizedBox(height: 2),
-                _buildTrendRow(account, endValue, startDate),
               ],
-            );
-          },
+            ],
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildTrendRow(Account account, double endValue, DateTime? startDate) {
-    // An all-time period has no starting point to compare the balance against.
-    if (startDate == null) return const SizedBox.shrink();
+  Widget _buildEvolutionCard(
+    Account account,
+    bool isInvestment, {
+    Widget? footer,
+  }) {
+    return StreamBuilder<({double endValue, double? startValue})>(
+      initialData: (endValue: 0, startValue: null),
+      stream: _watchAccountValues(account),
+      builder: (context, snapshot) {
+        final values = snapshot.data!;
 
-    return StreamBuilder<double>(
-      stream: AccountService.instance.getAccountMoney(
-        account: account,
-        date: startDate,
-      ),
-      builder: (context, startSnapshot) {
-        if (!startSnapshot.hasData) return const SizedBox.shrink();
-
-        final startValue = startSnapshot.data!;
-        final change = endValue - startValue;
-        final pct = startValue == 0 ? 0.0 : change / startValue.abs();
-
-        return TrendingValue(
-          percentage: pct,
-          value: change,
-          valueCurrency: account.currency,
-          dataTypes: const [
-            TrendingValueDataType.value,
-            TrendingValueDataType.percentage,
-          ],
-          fontWeight: FontWeight.w600,
+        return EvolutionCard(
+          valueLabel: isInvestment
+              ? t.account.total_value
+              : t.account.current_balance,
+          initialValue: values.startValue,
+          finalValue: values.endValue,
+          highlightedValue: _hoveredValue,
+          currency: account.currency,
+          chart: _buildEvolutionChart(account),
+          currentPeriod: _dateRange.datePeriod,
+          onPresetSelected: _onPeriodChanged,
+          footer: footer,
         );
       },
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Chart + range chips
-  // ---------------------------------------------------------------------------
+  Stream<({double endValue, double? startValue})> _watchAccountValues(
+    Account account,
+  ) {
+    final startDate = _dateRange.startDate;
+    final endDate = _dateRange.endDate;
 
-  Widget _buildChartSection(Account account, {bool showRangeChips = true}) {
+    if (startDate == null) {
+      return AccountService.instance
+          .getAccountMoney(account: account, date: endDate)
+          .map((endValue) => (endValue: endValue, startValue: null));
+    }
+
+    return Rx.combineLatest2(
+      AccountService.instance.getAccountMoney(account: account, date: endDate),
+      AccountService.instance.getAccountMoney(
+        account: account,
+        date: startDate,
+      ),
+      (double endValue, double startValue) =>
+          (endValue: endValue, startValue: startValue),
+    );
+  }
+
+  Widget _buildEvolutionChart(Account account) {
     final chartRange = DateTimeRange(
       start: _dateRange.startDate ?? account.date,
       end: _dateRange.endDate ?? DateTime.now(),
     );
 
-    return Column(
-      children: [
-        SizedBox(
-          height: 150,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: FundEvolutionLineChart(
-              accountsIds: [account.id],
-              filters: TransactionFilterSet(accountsIDs: [account.id]),
-              showYAxisTitles: false,
-              timeRange: chartRange,
-              loadingWidget: const Center(child: CircularProgressIndicator()),
-            ),
-          ),
-        ),
-        if (showRangeChips) ...[
-          const SizedBox(height: 12),
-          DateRangeChips(
-            currentPeriod: _dateRange.datePeriod,
-            onPresetSelected: _onPeriodChanged,
-            onCustomTap: _openCustomPeriodModal,
-          ),
-        ],
-      ],
+    return FundEvolutionLineChart(
+      accountsIds: [account.id],
+      filters: TransactionFilterSet(accountsIDs: [account.id]),
+      showYAxisTitles: false,
+      expand: true,
+      timeRange: chartRange,
+      loadingWidget: const Center(child: CircularProgressIndicator()),
+      onHover: (point) => _hoveredValue.value = point?.value,
     );
   }
 
@@ -541,9 +405,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  /// Resolves the account's primary quick actions (buy/sell, add/withdraw
-  /// money, update snapshot, transfer...) depending on its type and tracking
-  /// mode. Shared by the mobile icon-grid and the desktop header buttons.
+  /// Resolves quick actions shared by the mobile grid and desktop app bar.
   List<_QuickAction> _resolveQuickActions(Account account, bool isInvestment) {
     final disabled = account.isClosed;
 
@@ -679,23 +541,27 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   // ---------------------------------------------------------------------------
 
   Widget _buildIncomeExpenseStats(Account account) {
+    final filters = TransactionFilterSet(accountsIDs: [account.id]);
+
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: _RangeAmountCard(
-              account: account,
+            child: IncomeExpenseFlowCard(
               type: TransactionType.income,
-              dateRange: _dateRange,
+              periodState: _dateRange,
+              filters: filters,
+              currency: account.currency,
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: _RangeAmountCard(
-              account: account,
+            child: IncomeExpenseFlowCard(
               type: TransactionType.expense,
-              dateRange: _dateRange,
+              periodState: _dateRange,
+              filters: filters,
+              currency: account.currency,
             ),
           ),
         ],
@@ -703,11 +569,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  /// [horizontalLayout] renders the composition bar/legend and the
-  /// cost/P&L figures side by side (used inside the desktop value card,
-  /// which already provides its own container/padding) instead of the
-  /// default stacked layout wrapped in its own decorated container (used on
-  /// mobile).
+  /// Side-by-side composition + cost/P&L on desktop; stacked card on mobile.
   Widget _buildInvestmentStats(
     Account account, {
     bool horizontalLayout = false,
@@ -897,12 +759,12 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   // Segmented section: movements / info / holdings
   // ---------------------------------------------------------------------------
 
-  /// [includeInfoTab] is false on desktop, where the account info is shown
-  /// as a persistent card next to this section instead of behind a tab.
+  /// [includeInfoTab] is false on desktop when info is a persistent sidebar card.
   Widget _buildSegmentedSection(
     Account account,
     bool isInvestment, {
     bool includeInfoTab = true,
+    double horizontalPadding = 16,
   }) {
     if (!isInvestment && _selectedTab == _DetailTab.holdings) {
       _selectedTab = _DetailTab.movements;
@@ -948,7 +810,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       children: [
         if (showTabs)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             child: ExpandingSegmentedTabs<_DetailTab>(
               items: items,
               selected: selected,
@@ -956,17 +818,14 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
             ),
           ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           child: content,
         ),
       ],
     );
   }
 
-  /// [topGap] adds the spacing normally left below the tab bar. It's
-  /// disabled when this section is shown standalone (e.g. the desktop body
-  /// for non-investment accounts, where there is no tab bar), so it aligns
-  /// with the info card next to it instead of sitting slightly lower.
+  /// [topGap] is false when shown without tabs, to align with the sidebar.
   Widget _buildMovements(Account account, {bool topGap = true}) {
     const transactionsToShow = 8;
 
@@ -1026,9 +885,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     );
   }
 
-  /// [topGap] adds the spacing normally left below the tab bar. It's
-  /// disabled when this card is shown standalone (e.g. the desktop sidebar),
-  /// where it should align with the tab bar itself instead.
+  /// [topGap] is false when shown without tabs, to align with the sidebar.
   Widget _buildInfo(Account account, {bool topGap = true}) {
     return Column(
       children: [
@@ -1055,6 +912,18 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               LabelValueInfoListItem(
                 label: t.account.types.title,
                 value: Text(account.type.title(context)),
+                trailing: Icon(account.type.icon, size: 22),
+              ),
+              LabelValueInfoListItem(
+                label: t.currencies.currency,
+                value: Text(
+                  '${account.currency.code} · ${account.currency.name}',
+                ),
+                trailing: ClipOval(
+                  child: Currency.fromDB(
+                    currencyInDB: account.currency,
+                  ).displayFlagIcon(size: 24),
+                ),
               ),
               if (account.iban != null)
                 _buildCopyableTile(t.account.form.iban, account.iban!),
@@ -1076,106 +945,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
 // ---------------------------------------------------------------------------
 // Small building blocks
 // ---------------------------------------------------------------------------
-
-/// The account icon, its name and a single meta line describing it
-/// (type · currency). Shared by the mobile and the desktop headers, which
-/// differ in the icon size, the title style and how much fits in the meta
-/// line.
-class _AccountIdentity extends StatelessWidget {
-  const _AccountIdentity({
-    required this.account,
-    required this.heroTag,
-    required this.iconSize,
-    required this.titleStyle,
-    this.showTrackingMode = false,
-  });
-
-  final Account account;
-  final Object heroTag;
-  final double iconSize;
-  final TextStyle? titleStyle;
-
-  /// Only enabled on wide layouts: on a phone the meta line has no room
-  /// left for it once the text is scaled up or translated.
-  final bool showTrackingMode;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isInvestment = account.type == AccountType.investment;
-    final metaColor = theme.colorScheme.outline;
-
-    final meta = [
-      account.type.title(context),
-      if (isInvestment && showTrackingMode) account.trackingMode.title(context),
-      account.currency.code,
-    ].join(' · ');
-
-    return Row(
-      children: [
-        Hero(
-          tag: heroTag,
-          child: account.displayIcon(context, size: iconSize),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Flexible(
-                    child: Text(
-                      account.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: titleStyle,
-                    ),
-                  ),
-                  if (account.isClosed) ...[
-                    const SizedBox(width: 6),
-                    Tooltip(
-                      message:
-                          '${t.account.close_date}: ${DateFormat.yMMMd().format(account.closingDate!)}',
-                      triggerMode: TooltipTriggerMode.tap,
-                      child: const Icon(
-                        Icons.archive_outlined,
-                        size: 16,
-                        color: Colors.amber,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-              const SizedBox(height: 2),
-              Row(
-                children: [
-                  Icon(
-                    account.type.icon,
-                    size: 13,
-                    color: isInvestment ? theme.colorScheme.primary : metaColor,
-                  ),
-                  const SizedBox(width: 4),
-                  Flexible(
-                    child: Text(
-                      meta,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: metaColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _QuickAction extends StatelessWidget {
   const _QuickAction({
@@ -1308,91 +1077,6 @@ class _RatioBar extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _RangeAmountCard extends StatelessWidget {
-  const _RangeAmountCard({
-    required this.account,
-    required this.type,
-    required this.dateRange,
-  });
-
-  final Account account;
-  final TransactionType type;
-  final DatePeriodState dateRange;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isIncome = type == TransactionType.income;
-
-    final filters = TransactionFilterSet(
-      accountsIDs: [account.id],
-      transactionTypes: [type],
-      minDate: dateRange.startDate,
-      maxDate: dateRange.endDate,
-    );
-
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            (isIncome ? t.account.range_income : t.account.range_expense)
-                .toUpperCase(),
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.outline,
-            ),
-          ),
-          const SizedBox(height: 4),
-          StreamBuilder<double>(
-            stream: TransactionService.instance.getTransactionsValueBalance(
-              filters: filters,
-              convertToPreferredCurrency: false,
-            ),
-            builder: (context, snapshot) {
-              final value = (snapshot.data ?? 0).abs();
-
-              return DefaultTextStyle.merge(
-                style: theme.textTheme.titleLarge!,
-                child: CurrencyDisplayer(
-                  amountToConvert: value,
-                  currency: account.currency,
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 2),
-          StreamBuilder<int>(
-            stream: TransactionService.instance.countTransactions(
-              filters: filters,
-            ),
-            builder: (context, snapshot) {
-              final count = snapshot.data ?? 0;
-
-              return Text(
-                count == 0
-                    ? (isIncome
-                          ? t.account.no_income_range
-                          : t.account.no_expense_range)
-                    : t.account.movements_count(n: count),
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: count == 0
-                      ? theme.colorScheme.outline
-                      : (isIncome ? Colors.green : Colors.red),
-                ),
-              );
-            },
-          ),
-        ],
       ),
     );
   }
