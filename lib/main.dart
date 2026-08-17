@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,23 @@ void main() async {
 
   debugPaintSizeEnabled = false;
   runApp(InitializeApp(key: appStateKey));
+
+  _setupDesktopWindow();
+}
+
+/// Configures the desktop window (min size + initial size) once bitsdojo's
+/// custom-frame window is ready.
+void _setupDesktopWindow() {
+  if (kIsWeb || !AppUtils.isDesktop) return;
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1280, 720);
+
+    appWindow.minSize = const Size(420, 500);
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
 
 // ignore: library_private_types_in_public_api
