@@ -20,6 +20,7 @@ import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -325,25 +326,41 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
                     history,
                     allPoints,
                   ),
-                  builder: (context) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildEvolutionCard(security, currency, allPoints),
-                      const SizedBox(height: 16),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: _buildPositionCard(currency, positions),
-                      ),
-                      const SizedBox(height: 24),
-                      _buildSegmentedSection(
-                        security,
-                        currency,
-                        positions,
-                        trades,
-                        history,
-                      ),
-                    ],
-                  ),
+                  builder: (context) {
+                    final evolutionCard = _buildEvolutionCard(
+                      security,
+                      currency,
+                      allPoints,
+                    );
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (BreakPoint.of(
+                          context,
+                        ).isLargerOrEqualTo(BreakpointID.md))
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: evolutionCard,
+                          )
+                        else
+                          evolutionCard,
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: _buildPositionCard(currency, positions),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildSegmentedSection(
+                          security,
+                          currency,
+                          positions,
+                          trades,
+                          history,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],

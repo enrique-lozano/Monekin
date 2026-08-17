@@ -24,6 +24,7 @@ import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/page_content.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
@@ -859,11 +860,24 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   ) {
     final resolvedAsset = asset ?? widget.asset;
 
+    final evolutionCard = _buildEvolutionCard(
+      context,
+      valuations,
+      resolvedAsset,
+      transactions,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 16,
       children: [
-        _buildEvolutionCard(context, valuations, resolvedAsset, transactions),
+        if (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md))
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: evolutionCard,
+          )
+        else
+          evolutionCard,
         if (resolvedAsset.linkedDebtId != null)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

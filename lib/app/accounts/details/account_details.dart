@@ -227,10 +227,18 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
   }
 
   Widget _buildMobileLayout(Account account, bool isInvestment) {
+    final evolutionCard = _buildEvolutionCard(account, isInvestment);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildEvolutionCard(account, isInvestment),
+        if (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.md))
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: evolutionCard,
+          )
+        else
+          evolutionCard,
         const SizedBox(height: 20),
         _buildQuickActions(account, isInvestment),
         const SizedBox(height: 16),
