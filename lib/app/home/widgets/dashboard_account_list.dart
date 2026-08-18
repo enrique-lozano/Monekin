@@ -7,6 +7,7 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -24,6 +25,10 @@ class DashboardAccountList extends StatelessWidget {
 
   final DatePeriodState dateRangeService;
 
+  void _openCreateAccountForm() {
+    RouteUtils.showResponsiveForm(const AccountFormPage());
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -35,17 +40,19 @@ class DashboardAccountList extends StatelessWidget {
       builder: (context, snapshot) {
         final accounts = snapshot.data;
         final rows = accounts == null ? null : groupAccounts(accounts);
+        final isEmpty = rows != null && rows.isEmpty;
         final hasHiddenRows = (rows?.length ?? 0) > _maxRowsToShow;
 
         return CardWithHeader(
           title: t.home.my_accounts,
-          bodyPadding: const EdgeInsets.only(top: 4, bottom: 8),
+          bodyPadding: isEmpty
+              ? EdgeInsets.zero
+              : const EdgeInsets.only(top: 4, bottom: 8),
           headerAction: hasHiddenRows
               ? CardHeaderAction(
                   icon: const Icon(Icons.add_rounded),
                   text: t.account.form.create,
-                  onTap: () =>
-                      RouteUtils.showResponsiveForm(const AccountFormPage()),
+                  onTap: _openCreateAccountForm,
                 )
               : null,
           footer: hasHiddenRows
@@ -55,27 +62,50 @@ class DashboardAccountList extends StatelessWidget {
                       RouteUtils.pushRoute(const AllAccountsPage()),
                 )
               : null,
-          body: Column(
-            children: [
-              if (rows == null)
-                for (var i = 0; i < 3; i++) const _AccountRowSkeleton()
-              else
-                for (final row in rows.take(_maxRowsToShow))
-                  if (row.groupName == null || row.accounts.length == 1)
-                    _AccountRow(
-                      account: row.accounts.first,
-                      dateRangeService: dateRangeService,
-                    )
-                  else
-                    _AccountGroupRow(
-                      groupName: row.groupName!,
-                      accounts: row.accounts,
-                      dateRangeService: dateRangeService,
-                    ),
-            ],
-          ),
+          body: _buildBody(context, rows),
         );
       },
+    );
+  }
+
+  Widget _buildBody(BuildContext context, List<AccountRowData>? rows) {
+    final t = Translations.of(context);
+
+    if (rows == null) {
+      return Column(
+        children: [for (var i = 0; i < 3; i++) const _AccountRowSkeleton()],
+      );
+    }
+
+    if (rows.isEmpty) {
+      return NoResults(
+        showIllustration: false,
+        icon: Icons.account_balance_wallet_outlined,
+        title: t.home.no_accounts,
+        description: t.home.no_accounts_descr,
+        bottom: TextButton.icon(
+          onPressed: _openCreateAccountForm,
+          icon: const Icon(Icons.add_rounded),
+          label: Text(t.account.form.create),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final row in rows.take(_maxRowsToShow))
+          if (row.groupName == null || row.accounts.length == 1)
+            _AccountRow(
+              account: row.accounts.first,
+              dateRangeService: dateRangeService,
+            )
+          else
+            _AccountGroupRow(
+              groupName: row.groupName!,
+              accounts: row.accounts,
+              dateRangeService: dateRangeService,
+            ),
+      ],
     );
   }
 }

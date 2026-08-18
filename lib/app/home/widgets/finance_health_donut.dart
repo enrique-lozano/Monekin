@@ -68,8 +68,7 @@ class FinanceHealthCard extends StatelessWidget {
                         const SizedBox(height: 6),
                         Text(
                           data.getHealthyScoreReviewDescr(context),
-                          style: Theme.of(context).textTheme.bodySmall!
-                              .copyWith(color: AppColors.of(context).textHint),
+                          style: Theme.of(context).textTheme.bodySmall,
                           maxLines: 4,
                           overflow: TextOverflow.ellipsis,
                         ),

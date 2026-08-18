@@ -1,9 +1,14 @@
+import 'dart:async';
+import 'dart:ui' show lerpDouble;
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/animations/animate_fab.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/empty_app_bar.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
+
+part 'page_framework_mobile.dart';
 
 class PageFramework extends StatelessWidget {
   const PageFramework({
@@ -44,36 +49,36 @@ class PageFramework extends StatelessWidget {
   static EdgeInsetsGeometry? get _actionsPadding =>
       AppUtils.isDesktop ? const EdgeInsetsDirectional.only(end: 12) : null;
 
+  bool get _hasIdentityExtras => subtitle != null || icon != null;
+
   bool _usesSingleRowHeader(BuildContext context) =>
       SideDrawerScope.of(context) || ModalPageScope.of(context);
 
+  Color _foregroundColor(BuildContext context) =>
+      appBarForegroundColor ?? Theme.of(context).colorScheme.onSurface;
+
+  Color _subtitleColor(BuildContext context) {
+    return appBarForegroundColor?.withValues(alpha: 0.85) ??
+        Theme.of(context).extension<AppColors>()?.textHint ??
+        Theme.of(context).colorScheme.onSurfaceVariant;
+  }
+
   Widget _buildHeaderContent(BuildContext context, {bool singleRow = false}) {
     final theme = Theme.of(context);
-    final foregroundColor =
-        appBarForegroundColor ?? theme.colorScheme.onSurface;
-
-    TextStyle? textStyle = singleRow
-        ? theme.textTheme.titleLarge
-        : subtitle != null && icon != null
+    final foreground = _foregroundColor(context);
+    final compactTitle = singleRow || (subtitle != null && icon != null);
+    final baseStyle = compactTitle
         ? theme.textTheme.titleLarge
         : AppUtils.isMobileLayout(context)
         ? theme.textTheme.headlineLarge
         : theme.textTheme.headlineSmall;
-
-    textStyle = textStyle?.copyWith(
-      color: foregroundColor,
-      fontWeight: FontWeight.bold,
-    );
 
     return Row(
       spacing: 12,
       children: [
         if (icon != null)
           IconTheme.merge(
-            data: IconThemeData(
-              size: singleRow ? 24 : 32,
-              color: foregroundColor,
-            ),
+            data: IconThemeData(size: singleRow ? 24 : 32, color: foreground),
             child: icon!,
           ),
         Expanded(
@@ -85,15 +90,15 @@ class PageFramework extends StatelessWidget {
                 title ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: textStyle,
+                style: baseStyle?.copyWith(
+                  color: foreground,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               if (subtitle != null)
                 DefaultTextStyle(
                   style: theme.textTheme.labelMedium!.copyWith(
-                    color:
-                        appBarForegroundColor?.withValues(alpha: 0.85) ??
-                        theme.extension<AppColors>()?.textHint ??
-                        theme.colorScheme.onSurfaceVariant,
+                    color: _subtitleColor(context),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -106,81 +111,37 @@ class PageFramework extends StatelessWidget {
     );
   }
 
-  PreferredSizeWidget? _buildAppBar(BuildContext context) {
-    if (enableAppBar) {
-      final singleRow = _usesSingleRowHeader(context);
-      final resolvedLeading =
-          leading ?? (singleRow ? const CloseButton() : null);
-
-      if (singleRow) {
-        return AppBar(
-          key: ValueKey('AppBar_${title ?? ''}'),
-          toolbarHeight: subtitle != null || icon != null ? 76 : 56,
-          titleSpacing: icon != null ? 0 : null,
-          leading: resolvedLeading,
-          title: _buildHeaderContent(context, singleRow: true),
-          bottom: tabBar,
-          backgroundColor: appBarBackgroundColor,
-          foregroundColor: appBarForegroundColor,
-          actions: appBarActions,
-          actionsPadding: _actionsPadding,
-        );
-      }
-
-      if (!AppUtils.isMobileLayout(context)) {
-        return AppBar(
-          key: ValueKey('AppBar_${title ?? ''}'),
-          toolbarHeight: subtitle != null || icon != null ? 76 : 56,
-          titleSpacing: icon != null ? 0 : null,
-          leading: resolvedLeading,
-          title: _buildHeaderContent(context),
-          bottom: tabBar,
-          backgroundColor: appBarBackgroundColor,
-          foregroundColor: appBarForegroundColor,
-          actions: appBarActions,
-          actionsPadding: _actionsPadding,
-        );
-      }
-
-      return _buildMobileAppBar(context, 0);
-    }
-
-    if (appBarBackgroundColor != null) {
-      return EmptyAppBar(
-        key: ValueKey('empty_app_bar_$appBarBackgroundColor'),
-        color: appBarBackgroundColor!,
-      );
-    }
-
-    return null;
-  }
-
-  PreferredSizeWidget _buildMobileAppBar(
-    BuildContext context,
-    double collapseProgress,
-  ) {
-    final resolvedLeading =
-        leading ?? (SideDrawerScope.of(context) ? const CloseButton() : null);
-    final headerHeight =
-        _MobilePageHeader.expandedHeaderHeight * (1 - collapseProgress);
-
+  PreferredSizeWidget _buildStaticAppBar(
+    BuildContext context, {
+    required bool singleRow,
+  }) {
     return AppBar(
       key: ValueKey('AppBar_${title ?? ''}'),
-      leading: resolvedLeading,
-      title: Opacity(
-        opacity: collapseProgress,
-        child: Text(title ?? '', maxLines: 1, overflow: TextOverflow.ellipsis),
-      ),
-      bottom: _MobilePageHeader(
-        header: _buildHeaderContent(context),
-        headerHeight: headerHeight,
-        headerOpacity: 1 - collapseProgress,
-        tabBar: tabBar,
-      ),
+      toolbarHeight: _hasIdentityExtras ? 76 : 56,
+      titleSpacing: icon != null ? 0 : null,
+      leading: leading ?? (singleRow ? const CloseButton() : null),
+      title: _buildHeaderContent(context, singleRow: singleRow),
+      bottom: tabBar,
       backgroundColor: appBarBackgroundColor,
       foregroundColor: appBarForegroundColor,
       actions: appBarActions,
       actionsPadding: _actionsPadding,
+    );
+  }
+
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
+    if (!enableAppBar) {
+      return appBarBackgroundColor == null
+          ? null
+          : EmptyAppBar(
+              key: ValueKey('empty_app_bar_$appBarBackgroundColor'),
+              color: appBarBackgroundColor!,
+            );
+    }
+
+    return _buildStaticAppBar(
+      context,
+      singleRow: _usesSingleRowHeader(context),
     );
   }
 
@@ -206,97 +167,15 @@ class PageFramework extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (enableAppBar &&
+    final collapsible =
+        enableAppBar &&
         AppUtils.isMobileLayout(context) &&
-        !_usesSingleRowHeader(context)) {
-      return PageNavigationFrameworkSafeArea(
-        child: _CollapsibleMobilePageScaffold(page: this),
-      );
-    }
+        !_usesSingleRowHeader(context);
 
-    return PageNavigationFrameworkSafeArea(child: _buildScaffold(context));
-  }
-}
-
-class _MobilePageHeader extends StatelessWidget implements PreferredSizeWidget {
-  const _MobilePageHeader({
-    required this.header,
-    required this.headerHeight,
-    required this.headerOpacity,
-    this.tabBar,
-  });
-
-  static const expandedHeaderHeight = 64.0;
-
-  final Widget header;
-  final double headerHeight;
-  final double headerOpacity;
-  final TabBar? tabBar;
-
-  @override
-  Size get preferredSize =>
-      Size.fromHeight(headerHeight + (tabBar?.preferredSize.height ?? 0));
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SizedBox(
-          height: headerHeight,
-          child: ClipRect(
-            child: Opacity(
-              opacity: headerOpacity,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: header,
-              ),
-            ),
-          ),
-        ),
-        ?tabBar,
-      ],
-    );
-  }
-}
-
-class _CollapsibleMobilePageScaffold extends StatefulWidget {
-  const _CollapsibleMobilePageScaffold({required this.page});
-
-  final PageFramework page;
-
-  @override
-  State<_CollapsibleMobilePageScaffold> createState() =>
-      _CollapsibleMobilePageScaffoldState();
-}
-
-class _CollapsibleMobilePageScaffoldState
-    extends State<_CollapsibleMobilePageScaffold> {
-  double _collapseProgress = 0;
-
-  bool _onScroll(ScrollNotification notification) {
-    if (notification.metrics.axis != Axis.vertical) return false;
-
-    final nextProgress =
-        (notification.metrics.pixels / _MobilePageHeader.expandedHeaderHeight)
-            .clamp(0.0, 1.0);
-
-    if ((nextProgress - _collapseProgress).abs() > 0.001) {
-      setState(() => _collapseProgress = nextProgress);
-    }
-
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.page._buildScaffold(
-      context,
-      appBar: widget.page._buildMobileAppBar(context, _collapseProgress),
-      scaffoldBody: NotificationListener<ScrollNotification>(
-        onNotification: _onScroll,
-        child: widget.page.body,
-      ),
+    return PageNavigationFrameworkSafeArea(
+      child: collapsible
+          ? _CollapsibleMobilePageScaffold(page: this)
+          : _buildScaffold(context),
     );
   }
 }

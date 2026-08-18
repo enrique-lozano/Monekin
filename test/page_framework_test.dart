@@ -43,15 +43,33 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     var appBar = tester.widget<AppBar>(find.byType(AppBar));
-    expect(appBar.preferredSize.height, 120);
-    expect((appBar.title! as Opacity).opacity, 0);
+    expect(appBar.preferredSize.height, 124);
+    expect(find.text('Account title'), findsOneWidget);
+    expect(
+      tester
+          .widget<Transform>(
+            find.byKey(const ValueKey('page_framework_collapsing_title')),
+          )
+          .transform
+          .getMaxScaleOnAxis(),
+      closeTo(24 / 22, 0.05),
+    );
 
     await tester.drag(find.byType(ListView), const Offset(0, -100));
     await tester.pump();
 
     appBar = tester.widget<AppBar>(find.byType(AppBar));
     expect(appBar.preferredSize.height, 56);
-    expect((appBar.title! as Opacity).opacity, 1);
+    expect(find.text('Account title'), findsOneWidget);
+    expect(
+      tester
+          .widget<Transform>(
+            find.byKey(const ValueKey('page_framework_collapsing_title')),
+          )
+          .transform
+          .getMaxScaleOnAxis(),
+      closeTo(1.0, 0.01),
+    );
   });
 
   testWidgets('horizontal scrolling does not collapse the mobile header', (
@@ -75,8 +93,8 @@ void main() {
     await tester.pump();
 
     final appBar = tester.widget<AppBar>(find.byType(AppBar));
-    expect(appBar.preferredSize.height, 120);
-    expect((appBar.title! as Opacity).opacity, 0);
+    expect(appBar.preferredSize.height, 124);
+    expect(find.text('Account title'), findsOneWidget);
   });
 
   testWidgets('mobile tab bar remains pinned after identity collapse', (
@@ -96,7 +114,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     var appBar = tester.widget<AppBar>(find.byType(AppBar));
-    expect(appBar.preferredSize.height, 168);
+    expect(appBar.preferredSize.height, 172);
 
     await tester.drag(find.byType(ListView), const Offset(0, -100));
     await tester.pump();
@@ -104,6 +122,7 @@ void main() {
     appBar = tester.widget<AppBar>(find.byType(AppBar));
     expect(appBar.preferredSize.height, 104);
     expect(find.byType(TabBar), findsOneWidget);
+    expect(find.text('Account title'), findsOneWidget);
   });
 
   testWidgets('desktop keeps the single tall toolbar', (tester) async {
@@ -172,4 +191,43 @@ void main() {
 
     debugDefaultTargetPlatformOverride = null;
   });
+
+  testWidgets('mobile title stays a single label while collapsing', (
+    tester,
+  ) async {
+    setSurfaceSize(tester, const Size(400, 800));
+    await tester.pumpWidget(buildPage());
+    await tester.pump(const Duration(milliseconds: 300));
+
+    await tester.drag(find.byType(ListView), const Offset(0, -32));
+    await tester.pump();
+
+    expect(find.text('Account title'), findsOneWidget);
+    final appBar = tester.widget<AppBar>(find.byType(AppBar));
+    expect(appBar.preferredSize.height, greaterThan(56));
+    expect(appBar.preferredSize.height, lessThan(124));
+  });
+
+  testWidgets(
+    'short pages snap the identity header back when they cannot collapse',
+    (tester) async {
+      setSurfaceSize(tester, const Size(400, 800));
+      await tester.pumpWidget(
+        buildPage(
+          body: ListView(
+            children: const [SizedBox(height: 24, child: Text('Item 0'))],
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      await tester.drag(find.byType(ListView), const Offset(0, -80));
+      await tester.pump();
+      await tester.pumpAndSettle();
+
+      final appBar = tester.widget<AppBar>(find.byType(AppBar));
+      expect(appBar.preferredSize.height, 124);
+      expect(find.text('Account title'), findsOneWidget);
+    },
+  );
 }

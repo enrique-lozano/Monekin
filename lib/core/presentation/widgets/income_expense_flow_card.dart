@@ -140,12 +140,7 @@ class IncomeExpenseFlowCard extends StatelessWidget {
                     compactView: currentAbs >= 100000,
                     showDecimals: false,
                     integerStyle: Theme.of(context).textTheme.headlineSmall!
-                        .copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: currentAbs > 0
-                              ? color
-                              : Theme.of(context).colorScheme.onSurface,
-                        ),
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
                 if (!isWide && trend != null) ...[

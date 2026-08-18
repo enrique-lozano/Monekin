@@ -437,7 +437,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 color: assetColor.withAlpha(38),
                 shape: BoxShape.circle,
               ),
-              child: Icon(asset.assetType.icon(), color: assetColor, size: 22),
+              child: Icon(asset.assetType.icon(), color: assetColor),
             ),
           ),
           appBarActions: [
