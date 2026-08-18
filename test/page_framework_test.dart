@@ -125,6 +125,27 @@ void main() {
     expect(find.text('Account title'), findsOneWidget);
   });
 
+  testWidgets('omitting a title keeps a compact actions-only app bar', (
+    tester,
+  ) async {
+    setSurfaceSize(tester, const Size(400, 800));
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: PageFramework(
+          appBarActions: [
+            IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
+          ],
+          body: SizedBox(),
+        ),
+      ),
+    );
+
+    final appBar = tester.widget<AppBar>(find.byType(AppBar));
+    expect(appBar.preferredSize.height, 56);
+    expect(appBar.title, isNull);
+    expect(find.byIcon(Icons.more_vert), findsOneWidget);
+  });
+
   testWidgets('desktop keeps the single tall toolbar', (tester) async {
     setSurfaceSize(tester, const Size(1200, 800));
     await tester.pumpWidget(buildPage());

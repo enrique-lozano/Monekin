@@ -286,25 +286,6 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             );
 
         return PageFramework(
-          title: transaction.displayName(context),
-          subtitle: transaction.recurrentInfo.isNoRecurrent
-              ? Text(
-                  transaction.date.year == currentYear
-                      ? DateFormat.MMMMEEEEd().format(transaction.date)
-                      : DateFormat.yMMMEd().format(transaction.date),
-                )
-              : Row(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: 4,
-                  children: [
-                    const Icon(Icons.repeat_rounded, size: 14),
-                    Text(transaction.recurrentInfo.formText(context)),
-                  ],
-                ),
-          icon: Hero(
-            tag: widget.heroTag ?? UniqueKey(),
-            child: transaction.getDisplayIcon(context, size: 38),
-          ),
           appBarActions: [
             MonekinPopupMenuButton(
               actionItems: transactionDetailsActions
@@ -327,6 +308,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                   children: [
                     Column(
                       children: [
+                        Hero(
+                          tag: widget.heroTag ?? UniqueKey(),
+                          child: transaction.getDisplayIcon(context, size: 44),
+                        ),
+                        const SizedBox(height: 12),
                         DefaultTextStyle.merge(
                           style: Theme.of(context).textTheme.headlineMedium!
                               .copyWith(
@@ -350,6 +336,50 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             currency: transaction.account.currency,
                           ),
                         ),
+                        const SizedBox(height: 4),
+                        Text(
+                          transaction.displayName(context),
+                          softWrap: true,
+                          overflow: TextOverflow.fade,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        if (transaction.recurrentInfo.isNoRecurrent)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Text(
+                              transaction.date.year == currentYear
+                                  ? DateFormat.MMMMEEEEd().format(
+                                      transaction.date,
+                                    )
+                                  : DateFormat.yMMMEd().format(
+                                      transaction.date,
+                                    ),
+                            ),
+                          )
+                        else
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 4,
+                              children: [
+                                Icon(
+                                  Icons.repeat_rounded,
+                                  size: 14,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                Text(
+                                  transaction.recurrentInfo.formText(context),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 16),

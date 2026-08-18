@@ -49,6 +49,8 @@ class PageFramework extends StatelessWidget {
   static EdgeInsetsGeometry? get _actionsPadding =>
       AppUtils.isDesktop ? const EdgeInsetsDirectional.only(end: 12) : null;
 
+  bool get _hasTitle => title != null && title!.isNotEmpty;
+
   bool get _hasIdentityExtras => subtitle != null || icon != null;
 
   bool _usesSingleRowHeader(BuildContext context) =>
@@ -120,7 +122,9 @@ class PageFramework extends StatelessWidget {
       toolbarHeight: _hasIdentityExtras ? 76 : 56,
       titleSpacing: icon != null ? 0 : null,
       leading: leading ?? (singleRow ? const CloseButton() : null),
-      title: _buildHeaderContent(context, singleRow: singleRow),
+      title: _hasTitle
+          ? _buildHeaderContent(context, singleRow: singleRow)
+          : null,
       bottom: tabBar,
       backgroundColor: appBarBackgroundColor,
       foregroundColor: appBarForegroundColor,
@@ -169,6 +173,7 @@ class PageFramework extends StatelessWidget {
   Widget build(BuildContext context) {
     final collapsible =
         enableAppBar &&
+        _hasTitle &&
         AppUtils.isMobileLayout(context) &&
         !_usesSingleRowHeader(context);
 
