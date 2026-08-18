@@ -506,6 +506,7 @@
     "DETAILS": {
       "title": "循环交易",
       "descr": "此交易的未来的动作显示如下。您可以接受第一个动作或跳过此动作",
+      "generated-transaction-status": "接受后的状态：{{status}}",
       "last-payment-info": "此动作是循环规则的最后一个，因此当确认此动作后，这一循环规则将被自动删除",
       "delete-header": "删除循环交易",
       "delete-message": "此操作无法撤回，不会影响您已确认/付款的交易"

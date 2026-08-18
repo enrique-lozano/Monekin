@@ -207,6 +207,32 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
               padding: EdgeInsetsGeometry.symmetric(horizontal: 12),
               child: Text(t.recurrent_transactions.details.descr),
             ),
+            if (transaction.status != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
+                child: Row(
+                  spacing: 8,
+                  children: [
+                    Icon(
+                      transaction.status.icon,
+                      color: transaction.status.color,
+                      size: 18,
+                    ),
+                    Flexible(
+                      child: Text(
+                        t.recurrent_transactions.details
+                            .generated_transaction_status(
+                              status: transaction.status.displayName(context),
+                            ),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             Column(
               children: [
                 ...transaction

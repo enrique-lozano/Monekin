@@ -495,7 +495,7 @@ class TransactionFormController extends ChangeNotifier {
       accountID: postingFrom!.id,
       value: signedValue,
       isHidden: false,
-      status: date.compareTo(DateTime.now()) > 0
+      status: recurrentRule.isNoRecurrent && date.compareTo(DateTime.now()) > 0
           ? TransactionStatus.pending
           : status,
       notes: notesController.text.isEmpty ? null : notesController.text,
@@ -503,7 +503,8 @@ class TransactionFormController extends ChangeNotifier {
       intervalEach: recurrentRule.intervalEach,
       intervalPeriod: recurrentRule.intervalPeriod,
       endDate: recurrentRule.ruleRecurrentLimit?.endDate,
-      remainingTransactions: recurrentRule.ruleRecurrentLimit?.remainingIterations,
+      remainingTransactions:
+          recurrentRule.ruleRecurrentLimit?.remainingIterations,
       valueInDestiny: transactionType.isTransfer
           ? valueInDestinyToNumber
           : null,

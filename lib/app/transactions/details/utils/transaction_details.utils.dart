@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -40,6 +41,27 @@ List<ListTileActionItem> getPayActions(
   ];
 }
 
+TransactionInDB buildAcceptedTransaction(
+  MoneyTransaction transaction, {
+  required DateTime datetime,
+}) {
+  const nullValue = drift.Value(null);
+
+  return transaction.copyWith(
+    date: datetime,
+    status: drift.Value(
+      transaction.recurrentInfo.isRecurrent ? transaction.status : null,
+    ),
+    id: transaction.recurrentInfo.isRecurrent ? generateUUID() : transaction.id,
+
+    // The new transaction will be no-recurrent always
+    intervalEach: nullValue,
+    intervalPeriod: nullValue,
+    endDate: nullValue,
+    remainingTransactions: nullValue,
+  );
+}
+
 Future<void> _payTransaction(
   BuildContext context,
   MoneyTransaction transaction, {
@@ -63,18 +85,9 @@ Future<void> _payTransaction(
     return;
   }
 
-  const nullValue = drift.Value(null);
-
-  final transactionToPost = transaction.copyWith(
-    date: datetime,
-    status: nullValue,
-    id: transaction.recurrentInfo.isRecurrent ? generateUUID() : transaction.id,
-
-    // The new transaction will be no-recurrent always
-    intervalEach: nullValue,
-    intervalPeriod: nullValue,
-    endDate: nullValue,
-    remainingTransactions: nullValue,
+  final transactionToPost = buildAcceptedTransaction(
+    transaction,
+    datetime: datetime,
   );
 
   final transactionService = TransactionService.instance;
@@ -85,7 +98,7 @@ Future<void> _payTransaction(
 
   if (transactionResult <= 0) return;
 
-  // Transaction created/updated successfully with a new empty status
+  // Recurring occurrences preserve the rule status; one-offs become stateless.
 
   if (transaction.recurrentInfo.isRecurrent) {
     if (transaction.isOnLastPayment) {

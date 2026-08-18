@@ -506,6 +506,7 @@
     "DETAILS": {
       "title": "Recurrent transaction",
       "descr": "The next moves for this transaction are shown below. You can accept the first move or skip this move",
+      "generated-transaction-status": "Status when accepted: {{status}}",
       "last-payment-info": "This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action",
       "delete-header": "Delete recurring transaction",
       "delete-message": "This action is irreversible and will not affect transactions you have already confirmed/paid for"

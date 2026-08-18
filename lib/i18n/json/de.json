@@ -506,6 +506,7 @@
     "DETAILS": {
       "title": "Wiederkehrende Transaktion",
       "descr": "Die nächsten Schritte für diese Transaktion werden unten angezeigt. Du kannst den ersten Schritt akzeptieren oder diesen Schritt auslassen",
+      "generated-transaction-status": "Status bei Annahme: {{status}}",
       "last-payment-info": "Diese Bewegung ist die letzte der wiederkehrenden Regel, daher wird diese Regel beim Bestätigen dieser Aktion automatisch gelöscht",
       "delete-header": "Wiederkehrende Transaktion löschen",
       "delete-message": "Diese Aktion ist unumkehrbar und hat keinen Einfluss auf Transaktionen, die Du bereits bestätigt/bezahlt habst"

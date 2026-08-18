@@ -506,6 +506,7 @@
     "DETAILS": {
       "title": "Transaction récurrente",
       "descr": "Les prochains mouvements pour cette transaction sont indiqués ci-dessous. Vous pouvez accepter le premier mouvement ou l'ignorer",
+      "generated-transaction-status": "Statut à l’acceptation : {{status}}",
       "last-payment-info": "Ce mouvement est le dernier de la règle récurrente, cette règle sera donc automatiquement supprimée lors de la confirmation de cette action",
       "delete-header": "Supprimer la transaction récurrente",
       "delete-message": "Cette action est irréversible et n'affectera pas les transactions que vous avez déjà confirmées/payées"
