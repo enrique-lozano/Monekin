@@ -506,6 +506,7 @@
     "DETAILS": {
       "title": "Tekrarlayan işlem",
       "descr": "Bu işlem için sonraki hareketler aşağıda gösterilmektedir. İlk hareketi kabul edebilir veya bu hareketi atlayabilirsiniz",
+      "generated-transaction-status": "Kabul edildiğindeki durum: {{status}}",
       "last-payment-info": "Bu hareket, tekrar kuralının sonuncusudur, bu nedenle bu eylemi onaylarken bu kural otomatik olarak silinecektir",
       "delete-header": "Tekrarlayan işlemi sil",
       "delete-message": "Bu eylem geri alınamaz ve zaten onayladığınız/ödediğiniz işlemleri etkilemez"

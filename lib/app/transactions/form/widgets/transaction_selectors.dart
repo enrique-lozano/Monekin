@@ -24,7 +24,9 @@ class TransactionStatusSelector extends StatelessWidget {
     final c = context.watch<TransactionFormController>();
     final date = c.date;
     final status = c.status;
-    final isSelectorDisabled = date.compareTo(DateTime.now()) > 0;
+    final isRecurrent = c.recurrentRule.isRecurrent;
+    final isSelectorDisabled =
+        !isRecurrent && date.compareTo(DateTime.now()) > 0;
 
     final selectedStatus = isSelectorDisabled
         ? TransactionStatus.pending
@@ -38,7 +40,13 @@ class TransactionStatusSelector extends StatelessWidget {
           color: selectedStatus.color.withOpacity(isSelectorDisabled ? 0.3 : 1),
         ),
       ),
-      title: Text(selectedStatus.displayName(context)),
+      title: Text(
+        isRecurrent
+            ? t.recurrent_transactions.details.generated_transaction_status(
+                status: selectedStatus.displayName(context),
+              )
+            : selectedStatus.displayName(context),
+      ),
       enabled: !isSelectorDisabled,
       onTap: () {
         unfocusCurrentFocusedItem(context);

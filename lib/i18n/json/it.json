@@ -506,6 +506,7 @@
     "DETAILS": {
       "title": "Transazione ricorrente",
       "descr": "I prossimi movimenti per questa transazione sono mostrati di seguito. Puoi accettare il primo movimento o saltarlo",
+      "generated-transaction-status": "Stato all'accettazione: {{status}}",
       "last-payment-info": "Questo movimento è l'ultimo della regola ricorrente, quindi questa regola verrà automaticamente eliminata confermando questa azione",
       "delete-header": "Elimina transazione ricorrente",
       "delete-message": "Questa azione è irreversibile e non influenzerà le transazioni che hai già confermato/pagato"

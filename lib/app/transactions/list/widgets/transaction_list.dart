@@ -57,11 +57,15 @@ class TransactionListComponentState extends State<TransactionListComponent> {
     listScrollController = widget.scrollController ?? ScrollController();
 
     listScrollController.addListener(() {
-      if (listScrollController.offset >=
-              listScrollController.position.maxScrollExtent &&
-          !listScrollController.position.outOfRange) {
+      final scrollPosition = listScrollController.position;
+
+      if (listScrollController.offset >= scrollPosition.maxScrollExtent &&
+          !scrollPosition.outOfRange) {
         currentPage += 1;
-        setState(() {});
+
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
   }
