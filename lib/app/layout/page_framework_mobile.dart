@@ -192,39 +192,13 @@ class _CollapsibleMobilePageScaffold extends StatefulWidget {
 }
 
 class _CollapsibleMobilePageScaffoldState
-    extends State<_CollapsibleMobilePageScaffold>
-    with SingleTickerProviderStateMixin {
+    extends State<_CollapsibleMobilePageScaffold> {
   double _progress = 0;
-  double _snapFrom = 0;
-  var _ignoreScroll = false;
-  var _keepExpanded = false;
-  late final AnimationController _snap;
 
   PageFramework get _page => widget.page;
 
   double get _headerHeight =>
       _MobilePageHeader.expandedHeight(hasSubtitle: _page.subtitle != null);
-
-  @override
-  void initState() {
-    super.initState();
-    _snap = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 180),
-    )..addListener(_onSnapTick);
-  }
-
-  @override
-  void dispose() {
-    _snap.dispose();
-    super.dispose();
-  }
-
-  void _onSnapTick() {
-    _setProgress(
-      lerpDouble(_snapFrom, 0, Curves.easeOutCubic.transform(_snap.value))!,
-    );
-  }
 
   void _setProgress(double value) {
     if (!mounted) return;
@@ -233,49 +207,15 @@ class _CollapsibleMobilePageScaffoldState
     setState(() => _progress = next);
   }
 
-  void _cancelSnap() {
-    if (!_snap.isAnimating) return;
-    _snap.stop();
-    _ignoreScroll = false;
-    if (_keepExpanded) _setProgress(0);
-  }
-
-  void _snapOpen() {
-    if (_progress <= 0.001) return;
-    _snap.stop();
-    _snapFrom = _progress;
-    _ignoreScroll = true;
-    _keepExpanded = true;
-    unawaited(
-      _snap.forward(from: 0).whenComplete(() {
-        if (mounted && !_snap.isAnimating) _ignoreScroll = false;
-      }),
-    );
-  }
-
   bool _onScroll(ScrollNotification notification) {
     if (notification.metrics.axis != Axis.vertical) return false;
-    if (notification is ScrollStartNotification) _cancelSnap();
-    if (_ignoreScroll) return false;
 
     final metrics = notification.metrics;
-    if (_keepExpanded) {
-      if (metrics.pixels > 0.5) return false;
-      _keepExpanded = false;
-    }
-
     if (_progress == 0 && metrics.maxScrollExtent < _headerHeight) {
       return false;
     }
 
     _setProgress(metrics.pixels / _headerHeight);
-
-    final stuckMidCollapse =
-        notification is ScrollEndNotification &&
-        _progress > 0 &&
-        _progress < 1 &&
-        metrics.pixels >= metrics.maxScrollExtent - 0.5;
-    if (stuckMidCollapse) _snapOpen();
 
     return false;
   }

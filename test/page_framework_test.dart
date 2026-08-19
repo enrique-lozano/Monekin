@@ -230,24 +230,24 @@ void main() {
   });
 
   testWidgets(
-    'short pages snap the identity header back when they cannot collapse',
+    'limited scrolling leaves the identity header partially collapsed',
     (tester) async {
       setSurfaceSize(tester, const Size(400, 800));
       await tester.pumpWidget(
         buildPage(
           body: ListView(
-            children: const [SizedBox(height: 24, child: Text('Item 0'))],
+            children: const [SizedBox(height: 750, child: Text('Item 0'))],
           ),
         ),
       );
       await tester.pump(const Duration(milliseconds: 300));
 
       await tester.drag(find.byType(ListView), const Offset(0, -80));
-      await tester.pump();
       await tester.pumpAndSettle();
 
       final appBar = tester.widget<AppBar>(find.byType(AppBar));
-      expect(appBar.preferredSize.height, 124);
+      expect(appBar.preferredSize.height, greaterThan(56));
+      expect(appBar.preferredSize.height, lessThan(124));
       expect(find.text('Account title'), findsOneWidget);
     },
   );
