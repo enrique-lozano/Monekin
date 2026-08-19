@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/window_bar.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
+import 'package:monekin/core/presentation/widgets/user_profile_builder.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 
@@ -39,35 +39,37 @@ class SideNavigationDrawer extends StatelessWidget {
         ),
         footer: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Row(
-            spacing: 12,
-            children: [
-              UserAvatar(
-                avatar: appStateSettings[SettingKey.avatar],
-                backgroundColor: AppColors.of(
-                  context,
-                ).onConsistentPrimary.darken(0.25),
-                border: Border.all(
-                  width: 2,
-                  color: AppColors.of(context).onConsistentPrimary,
-                ),
-              ),
-              Expanded(
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(0),
-                  title: Text(
-                    appStateSettings[SettingKey.userName] ?? 'User',
-                    softWrap: false,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      fontSize: 18,
-                      overflow: TextOverflow.fade,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+          child: UserProfileBuilder(
+            builder: (context, userName, avatar) => Row(
+              spacing: 12,
+              children: [
+                UserAvatar(
+                  avatar: avatar,
+                  backgroundColor: AppColors.of(
+                    context,
+                  ).onConsistentPrimary.darken(0.25),
+                  border: Border.all(
+                    width: 2,
+                    color: AppColors.of(context).onConsistentPrimary,
                   ),
-                  subtitle: Text('Thanks for trust us ❤️'),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(0),
+                    title: Text(
+                      userName ?? 'User',
+                      softWrap: false,
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        fontSize: 18,
+                        overflow: TextOverflow.fade,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    subtitle: Text('Thanks for trust us ❤️'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         children: List.generate(drawerActions.length, (index) {

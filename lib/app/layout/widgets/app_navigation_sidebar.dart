@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/widgets/app_navigation_drawer.dart';
 import 'package:monekin/app/layout/window_bar.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
+import 'package:monekin/core/presentation/widgets/user_profile_builder.dart';
 import 'package:monekin/core/routes/content_modal_observer.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -102,14 +102,16 @@ class AppNavigationSidebarState extends State<AppNavigationSidebar> {
               trailing: Container(
                 margin: const EdgeInsets.symmetric(vertical: 16),
                 alignment: Alignment.bottomCenter,
-                child: UserAvatar(
-                  avatar: appStateSettings[SettingKey.avatar],
-                  backgroundColor: AppColors.of(
-                    context,
-                  ).onConsistentPrimary.darken(0.25),
-                  border: Border.all(
-                    width: 2,
-                    color: AppColors.of(context).onConsistentPrimary,
+                child: UserProfileBuilder(
+                  builder: (context, userName, avatar) => UserAvatar(
+                    avatar: avatar,
+                    backgroundColor: AppColors.of(
+                      context,
+                    ).onConsistentPrimary.darken(0.25),
+                    border: Border.all(
+                      width: 2,
+                      color: AppColors.of(context).onConsistentPrimary,
+                    ),
                   ),
                 ),
               ),

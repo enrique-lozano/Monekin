@@ -14,7 +14,6 @@ import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
@@ -31,6 +30,7 @@ import 'package:monekin/core/presentation/widgets/income_expense_flow_card.dart'
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
+import 'package:monekin/core/presentation/widgets/user_profile_builder.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
@@ -465,37 +465,39 @@ class _DashboardPageState extends State<DashboardPage> {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            UserAvatar(avatar: appStateSettings[SettingKey.avatar]),
-            const SizedBox(width: 12),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    _welcomeGreeting,
-                    softWrap: false,
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                      color: AppColors.of(context).textHint,
-                      overflow: TextOverflow.fade,
+        child: UserProfileBuilder(
+          builder: (context, userName, avatar) => Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              UserAvatar(avatar: avatar),
+              const SizedBox(width: 12),
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _welcomeGreeting,
+                      softWrap: false,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: AppColors.of(context).textHint,
+                        overflow: TextOverflow.fade,
+                      ),
                     ),
-                  ),
-                  Text(
-                    appStateSettings[SettingKey.userName] ?? 'User',
-                    softWrap: false,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      overflow: TextOverflow.fade,
+                    Text(
+                      userName ?? 'User',
+                      softWrap: false,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        overflow: TextOverflow.fade,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
