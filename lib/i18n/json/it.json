@@ -264,7 +264,10 @@
       "text.other": "Potresti sopravvivere circa <b>{{ n }} mesi</b> senza entrate a questo tasso di spesa.",
       "text.infinite": "Potresti sopravvivere circa <b>tutta la vita</b> senza entrate a questo tasso di spesa.",
       "suggestion": "Ricorda che è consigliabile mantenere questo rapporto al di sopra dei 5 mesi almeno. Se vedi che non hai un cuscinetto di risparmio sufficiente, riduci le spese non necessarie.",
-      "insufficient_data": "Sembra che non abbiamo abbastanza spese per calcolare quanti mesi potresti sopravvivere senza entrate. Inserisci alcune transazioni e torna qui per controllare la tua salute finanziaria"
+      "insufficient_data": "Sembra che non abbiamo abbastanza spese per calcolare quanti mesi potresti sopravvivere senza entrate. Inserisci alcune transazioni e torna qui per controllare la tua salute finanziaria",
+      "valueShort": "{{n}} mesi",
+      "formula": "Denaro disponibile sui tuoi conti ÷ le tue spese mensili medie in questo periodo.",
+      "unlock": "Registra almeno 4 transazioni in questo periodo, alcune delle quali spese."
     },
     "savingsPercentage": {
       "title": "Percentuale di risparmio",
@@ -275,8 +278,79 @@
         "bad": "Sei riuscito a risparmiare il <b>{{value}}%</b> del tuo reddito durante questo periodo. Tuttavia, pensiamo che tu possa fare ancora molto di più!",
         "very_bad": "Wow, non sei riuscito a risparmiare nulla durante questo periodo."
       },
-      "suggestion": "Ricorda che è consigliabile risparmiare almeno il 15-20% di ciò che guadagni."
-    }
+      "suggestion": "Ricorda che è consigliabile risparmiare almeno il 15-20% di ciò che guadagni.",
+      "formula": "(Entrate − spese) ÷ entrate, tutto all'interno del periodo selezionato.",
+      "insufficient_data": "In questo periodo non c'è abbastanza attività per giudicare quanta parte del tuo denaro trattieni.",
+      "unlock": "Registra un'entrata in questo periodo, oppure almeno 10 transazioni di qualsiasi tipo."
+    },
+    "debtToAssetRatio": {
+      "title": "Rapporto debiti-attività",
+      "subtitle": "Quanta parte di ciò che possiedi è compensata dai debiti in corso",
+      "text": {
+        "value": "I tuoi debiti in corso sono il <b>{{value}}%</b> delle tue attività lorde.",
+        "no_assets": "Hai debiti in corso ma nessuna attività registrata a coprirli."
+      },
+      "suggestion": "Un rapporto più basso significa in genere che riesci a coprire meglio i tuoi debiti con ciò che possiedi.",
+      "insufficient_data": "Non stai ancora registrando debiti né attività, quindi non c'è un bilancio da valutare.",
+      "formula": "Debiti in corso ÷ attività lorde, entrambi alla fine del periodo selezionato.",
+      "unlock": "Aggiungi uno dei tuoi debiti o una delle tue attività (una casa, un'auto...)."
+    },
+    "netWorthTrend": {
+      "title": "Andamento del patrimonio netto",
+      "subtitle": "Come è cambiato il tuo patrimonio netto in questo periodo",
+      "text": {
+        "positive": "Il tuo patrimonio netto è aumentato del <b>{{value}}%</b> in questo periodo.",
+        "negative": "Il tuo patrimonio netto è diminuito del <b>{{value}}%</b> in questo periodo.",
+        "flat": "Il tuo patrimonio netto è rimasto invariato in questo periodo."
+      },
+      "suggestion": "Un patrimonio netto in crescita costante mostra che le tue attività aumentano più rapidamente dei tuoi debiti.",
+      "insufficient_data": "Il tuo patrimonio netto era zero all'inizio di questo periodo, quindi non c'è un riferimento con cui confrontarlo.",
+      "formula": "(Patrimonio netto attuale − patrimonio netto all'inizio del periodo) ÷ patrimonio netto all'inizio del periodo.",
+      "unlock": "Continua a usare Monekin, oppure scegli un periodo che inizi quando già registravi del denaro."
+    },
+    "investmentRatio": {
+      "title": "Rapporto di investimento",
+      "subtitle": "Quale parte delle tue entrate hai messo in titoli in questo periodo",
+      "text": {
+        "value": "Hai messo il <b>{{value}}%</b> delle tue entrate in titoli in questo periodo.",
+        "none": "In questo periodo non hai messo denaro in titoli."
+      },
+      "suggestion": "Investire regolarmente una parte delle tue entrate aiuta il tuo denaro a crescere più dell'inflazione.",
+      "formula": "Importo investito in titoli ÷ entrate, entrambi all'interno del periodo selezionato.",
+      "insufficient_data": "In questo periodo non avevi nessun conto di investimento aperto, quindi non possiamo misurare questa parte delle tue finanze.",
+      "unlock": "Apri un conto di investimento, oppure scegli un periodo in cui uno di essi era già aperto."
+    },
+    "howCalculated": {
+      "action": "Come si calcola il tuo voto",
+      "intro": "Il tuo voto combina questi 5 indicatori, ognuno con il proprio peso. Quando per uno di essi non ci sono ancora dati sufficienti, il suo peso viene distribuito proporzionalmente tra gli altri, così il tuo voto può comunque arrivare a 100.",
+      "notAvailable": "Non ancora conteggiato"
+    },
+    "composition": {
+      "earned": "Ottenuti",
+      "earnedDescr": "Punti che hai già guadagnato con i dati di questo periodo.",
+      "pending": "A portata",
+      "pendingDescr": "Quello che ti manca negli indicatori che oggi possiamo misurare.",
+      "paused": "Non misurati",
+      "pausedDescr": "{{indicators}}: non li usi ancora, quindi non possiamo misurare i loro punti.",
+      "scoreExplanation": "Il tuo voto ({{score}}) tiene conto solo dei {{measurable}} punti che oggi possiamo misurare, quindi quelli che non possiamo misurare non ti penalizzano.",
+      "total": "Totale"
+    },
+    "lowReliability": "Questo voto si basa solo su <b>{{measurable}} dei {{total}} indicatori</b>, quindi prendilo come una prima bozza: più ne usi, più si avvicinerà alla tua realtà.",
+    "shortRange": "Un periodo <b>più breve di un mese</b> lascia fuori stipendi e bollette, il che distorce indicatori come la tua percentuale di risparmio. Allargalo per un voto più stabile.",
+    "unreliableShort": "Poco affidabile",
+    "pointsContribution": "Contribuisce con {{earned}} di {{total}} pt",
+    "pointsOfTotal": "{{earned}} di {{total}} pt",
+    "pointsShort": "{{value}} pt",
+    "pausedPoints": "{{total}} pt non misurati",
+    "pausedShort": "Non misurato",
+    "aboutIndicator": "Su questo indicatore",
+    "formulaLabel": "Come si calcola",
+    "howToUnlock": "Come sbloccarlo",
+    "indicatorsLabel": "Indicatori",
+    "yourOwnPast": "Il tuo passato",
+    "noComparisonNote": "Questa app è tua e solo tua: non ti confrontiamo mai con altri utenti, ti confrontiamo con te stesso.",
+    "previousPeriodLabel": "Periodo precedente",
+    "nowLabel": "Adesso"
   },
   "STATS": {
     "title": "Statistiche",

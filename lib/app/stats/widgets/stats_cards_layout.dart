@@ -47,12 +47,8 @@ class StatsCardsLayout extends StatelessWidget {
   Widget _column(List<Widget> items) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (var i = 0; i < items.length; i++) ...[
-          if (i > 0) SizedBox(height: spacing),
-          items[i],
-        ],
-      ],
+      spacing: spacing,
+      children: items,
     );
   }
 }

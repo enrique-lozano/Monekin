@@ -77,7 +77,21 @@ class ModalContainer extends StatelessWidget {
           // ---------------
           if (isPopover)
             const SizedBox(height: 8)
-          else ...[
+          else if (isInSideDrawer) ...[
+            AppBar(
+              primary: false,
+              leading: const CloseButton(),
+              titleSpacing: 0,
+              title: titleBuilder != null ? titleBuilder!(title) : Text(title),
+              actions: endWidget != null ? [endWidget!] : null,
+            ),
+            if (subtitle != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: Text(subtitle!),
+              ),
+            const SizedBox(height: 16),
+          ] else ...[
             Padding(
               padding: EdgeInsets.fromLTRB(
                 16,

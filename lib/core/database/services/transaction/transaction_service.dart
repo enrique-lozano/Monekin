@@ -194,6 +194,34 @@ class TransactionService {
     ).map((event) => event.valueSum);
   }
 
+  /// Gross amount spent buying securities (investment-type transactions with
+  /// a negative value), returned as a positive number. Sells are excluded, so
+  /// unlike [getTransactionsValueBalance] this isn't netted against proceeds
+  /// from selling other positions.
+  Stream<double> getInvestmentBuyVolume({
+    required TransactionFilterSet filters,
+    bool convertToPreferredCurrency = true,
+    DateTime? exchDate,
+  }) {
+    final exchangeDate = exchDate ?? DateTime.now();
+
+    final predicate = filters
+        .copyWith(transactionTypes: [TransactionType.investment])
+        .toTransactionExpression(
+          extraFilters: (t, account, accountCurrency, ra, raCurrency, c, pc) =>
+              [t.value.isSmallerThanValue(0)],
+        );
+
+    return db
+        .countTransactions(predicate: predicate, date: exchangeDate)
+        .watchSingle()
+        .map(
+          (res) =>
+              (convertToPreferredCurrency ? res.sumInPrefCurrency : res.sum)
+                  .abs(),
+        );
+  }
+
   Stream<TransactionQueryStatResult> _countTransactions({
     TransactionFilterSet predicate = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,

@@ -269,7 +269,10 @@
       "text.other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos a este ritmo de gasto.",
       "text.infinite": "Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.",
       "suggestion": "Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.",
-      "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera"
+      "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera",
+      "valueShort": "{{n}} meses",
+      "formula": "Dinero disponible en tus cuentas ÷ tu gasto medio mensual en este periodo.",
+      "unlock": "Registra al menos 4 transacciones en este periodo, algunas de ellas gastos."
     },
     "savingsPercentage": {
       "title": "Porcentaje de ahorro",
@@ -280,8 +283,79 @@
         "bad": "Has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!",
         "very_bad": "Vaya, no has conseguido ahorrar nada durante este periodo."
       },
-      "suggestion": "Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas."
-    }
+      "suggestion": "Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.",
+      "formula": "(Ingresos − gastos) ÷ ingresos, todo dentro del rango seleccionado.",
+      "insufficient_data": "No hay suficiente actividad en este periodo para valorar qué parte de tu dinero conservas.",
+      "unlock": "Registra un ingreso dentro de este periodo, o al menos 10 transacciones de cualquier tipo."
+    },
+    "debtToAssetRatio": {
+      "title": "Ratio deuda-activos",
+      "subtitle": "Cuánta parte de lo que tienes está compensada por deuda pendiente",
+      "text": {
+        "value": "Tu deuda pendiente es el <b>{{value}}%</b> de tus activos brutos.",
+        "no_assets": "Tienes deuda pendiente pero no hay activos registrados que la respalden."
+      },
+      "suggestion": "Un ratio más bajo generalmente significa que puedes cubrir mejor tus deudas con lo que posees.",
+      "insufficient_data": "Todavía no llevas el seguimiento de ninguna deuda ni activo, así que no hay balance que valorar.",
+      "formula": "Deuda pendiente ÷ activos brutos, ambos a fecha de fin del rango seleccionado.",
+      "unlock": "Añade una de tus deudas o uno de tus activos (una casa, un coche...)."
+    },
+    "netWorthTrend": {
+      "title": "Tendencia del patrimonio",
+      "subtitle": "Cómo cambió tu patrimonio durante este periodo",
+      "text": {
+        "positive": "Tu patrimonio aumentó un <b>{{value}}%</b> durante este periodo.",
+        "negative": "Tu patrimonio disminuyó un <b>{{value}}%</b> durante este periodo.",
+        "flat": "Tu patrimonio se mantuvo sin cambios durante este periodo."
+      },
+      "suggestion": "Un patrimonio que crece de forma constante indica que tus activos aumentan más rápido que tus deudas.",
+      "insufficient_data": "Tu patrimonio era cero cuando empezó este periodo, así que no hay punto de partida con el que compararlo.",
+      "formula": "(Patrimonio ahora − patrimonio al inicio del rango) ÷ patrimonio al inicio del rango.",
+      "unlock": "Sigue usando Monekin, o elige un rango que empiece cuando ya tenías algo de dinero registrado."
+    },
+    "investmentRatio": {
+      "title": "Ratio de inversión",
+      "subtitle": "Qué parte de tus ingresos destinaste a inversiones en este periodo",
+      "text": {
+        "value": "Destinaste el <b>{{value}}%</b> de tus ingresos a inversiones durante este periodo.",
+        "none": "No has destinado dinero a inversiones durante este periodo."
+      },
+      "suggestion": "Invertir una parte de tus ingresos de forma regular ayuda a que tu dinero crezca más rápido que la inflación.",
+      "formula": "Cantidad invertida en valores ÷ ingresos, ambos dentro del rango seleccionado.",
+      "insufficient_data": "No tenías ninguna cuenta de inversión abierta durante este periodo, así que no podemos medir esta parte de tus finanzas.",
+      "unlock": "Abre una cuenta de inversión, o elige un rango en el que ya tuvieras alguna abierta."
+    },
+    "howCalculated": {
+      "action": "Cómo se calcula tu nota",
+      "intro": "Tu nota combina estos 5 indicadores, cada uno con su propio peso. Cuando no hay datos suficientes para alguno todavía, su peso se reparte proporcionalmente entre el resto, para que tu nota pueda seguir llegando a 100.",
+      "notAvailable": "Aún no se cuenta"
+    },
+    "composition": {
+      "earned": "Conseguidos",
+      "earnedDescr": "Puntos que ya has ganado con los datos de este rango.",
+      "pending": "Por conseguir",
+      "pendingDescr": "Lo que te falta en los indicadores que sí se pueden medir hoy.",
+      "paused": "Sin medir",
+      "pausedDescr": "{{indicators}}: no los usas todavía, así que no podemos medir sus puntos.",
+      "scoreExplanation": "Tu nota ({{score}}) solo tiene en cuenta los {{measurable}} puntos que hoy podemos medir, así que los que no podemos medir no te penalizan.",
+      "total": "Total"
+    },
+    "lowReliability": "Esta nota se apoya solo en <b>{{measurable}} de los {{total}} indicadores</b>, así que tómatela como un primer boceto: cuantos más uses, más se ajustará a tu realidad.",
+    "shortRange": "Un rango <b>menor de un mes</b> deja fuera nóminas y recibos, lo que distorsiona indicadores como tu tasa de ahorro. Amplíalo para ver una nota más estable.",
+    "unreliableShort": "Poco fiable",
+    "pointsContribution": "Aporta {{earned}} de {{total}} pts",
+    "pointsOfTotal": "{{earned}} de {{total}} pts",
+    "pointsShort": "{{value}} pts",
+    "pausedPoints": "{{total}} pts sin medir",
+    "pausedShort": "Sin medir",
+    "aboutIndicator": "Sobre este indicador",
+    "formulaLabel": "Cómo se calcula",
+    "howToUnlock": "Cómo desbloquearlo",
+    "indicatorsLabel": "Indicadores",
+    "yourOwnPast": "Tu propio pasado",
+    "noComparisonNote": "La app es tuya y solo tuya: no te comparamos con otros usuarios, te comparamos contigo.",
+    "previousPeriodLabel": "Periodo anterior",
+    "nowLabel": "Ahora"
   },
   "STATS": {
     "title": "Estadísticas",

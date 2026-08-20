@@ -264,7 +264,10 @@
       "text.other": "Ezzel a költési aránnyal körülbelül <b>{{ n }} hónapot</b> tudna túlélni jövedelem nélkül.",
       "text.infinite": "Ezzel a költési aránnyal nagyjából <b>az egész életében</b> meg tudna élni jövedelem nélkül.",
       "suggestion": "Ne feledje, hogy célszerű ezt az arányt mindig legalább 5 hónap felett tartani. Ha úgy látja, hogy nem rendelkezik elegendő megtakarítási tartalékkal, csökkentse a felesleges kiadásokat.",
-      "insufficient_data": "Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét."
+      "insufficient_data": "Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét.",
+      "valueShort": "{{n}} hónap",
+      "formula": "A számláin elérhető pénz ÷ az átlagos havi kiadása ebben az időszakban.",
+      "unlock": "Rögzítsen legalább 4 tranzakciót ebben az időszakban, néhányat kiadásként."
     },
     "savingsPercentage": {
       "title": "Megtakarítási százalék",
@@ -275,8 +278,79 @@
         "bad": "Ebben az időszakban sikerült megtakarítania a jövedelmének <b>{{value}}%-át</b>. Úgy gondoljuk azonban, hogy ennél még sokkal többet is tehet!",
         "very_bad": "Hűha, sajnos ebben az időszakban semmit sem sikerült megtakarítania."
       },
-      "suggestion": "Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani."
-    }
+      "suggestion": "Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani.",
+      "formula": "(Bevételek − kiadások) ÷ bevételek, mind a kiválasztott időszakon belül.",
+      "insufficient_data": "Ebben az időszakban nincs elég mozgás ahhoz, hogy megítélhessük, a pénzének mekkora részét tartja meg.",
+      "unlock": "Rögzítsen egy bevételt ebben az időszakban, vagy legalább 10 tranzakciót bármilyen típusból."
+    },
+    "debtToAssetRatio": {
+      "title": "Adósság-vagyon arány",
+      "subtitle": "A vagyonának mekkora részét ellensúlyozza a fennálló adóssága",
+      "text": {
+        "value": "A fennálló adóssága a bruttó vagyonának <b>{{value}}%</b>-a.",
+        "no_assets": "Van fennálló adóssága, de nincs rögzített vagyona, ami fedezné."
+      },
+      "suggestion": "Az alacsonyabb arány általában azt jelenti, hogy jobban fedezni tudja az adósságait a vagyonából.",
+      "insufficient_data": "Még nem követ nyomon adósságot vagy vagyontárgyat, így nincs mit értékelni.",
+      "formula": "Fennálló adósság ÷ bruttó vagyon, mindkettő a kiválasztott időszak végén.",
+      "unlock": "Adja meg valamelyik adósságát vagy vagyontárgyát (egy házat, egy autót...)."
+    },
+    "netWorthTrend": {
+      "title": "Nettó vagyon trendje",
+      "subtitle": "Hogyan változott a nettó vagyona ebben az időszakban",
+      "text": {
+        "positive": "A nettó vagyona <b>{{value}}%</b>-kal nőtt ebben az időszakban.",
+        "negative": "A nettó vagyona <b>{{value}}%</b>-kal csökkent ebben az időszakban.",
+        "flat": "A nettó vagyona nem változott ebben az időszakban."
+      },
+      "suggestion": "A folyamatosan növekvő nettó vagyon azt jelzi, hogy a vagyona gyorsabban nő, mint az adóssága.",
+      "insufficient_data": "A nettó vagyona nulla volt ennek az időszaknak az elején, így nincs mihez hasonlítani.",
+      "formula": "(Mostani nettó vagyon − az időszak eleji nettó vagyon) ÷ az időszak eleji nettó vagyon.",
+      "unlock": "Használja tovább a Monekint, vagy válasszon olyan időszakot, amelynek kezdetén már követett valamennyi pénzt."
+    },
+    "investmentRatio": {
+      "title": "Befektetési arány",
+      "subtitle": "A bevételének mekkora részét fektette értékpapírba ebben az időszakban",
+      "text": {
+        "value": "A bevételének <b>{{value}}%</b>-át fektette értékpapírba ebben az időszakban.",
+        "none": "Ebben az időszakban nem fektetett pénzt értékpapírba."
+      },
+      "suggestion": "Ha rendszeresen befekteti a bevétele egy részét, a pénze gyorsabban nő, mint az infláció.",
+      "formula": "Értékpapírba fektetett összeg ÷ bevétel, mindkettő a kiválasztott időszakon belül.",
+      "insufficient_data": "Ebben az időszakban nem volt nyitott befektetési számlája, így nem tudjuk mérni a pénzügyeinek ezt a részét.",
+      "unlock": "Nyisson befektetési számlát, vagy válasszon olyan időszakot, amelyben már nyitva volt egy."
+    },
+    "howCalculated": {
+      "action": "Hogyan számoljuk ki az értékelését",
+      "intro": "Az értékelése ezt az 5 mutatót vonja össze, mindegyiket a saját súlyával. Ha valamelyikhez még nincs elég adat, a súlya arányosan szétoszlik a többi között, így az értékelése továbbra is elérheti a 100-at.",
+      "notAvailable": "Még nem számít bele"
+    },
+    "composition": {
+      "earned": "Megszerezve",
+      "earnedDescr": "Pontok, amelyeket már megszerzett ennek az időszaknak az adataiból.",
+      "pending": "Elérhető",
+      "pendingDescr": "Ami még hiányzik azoknál a mutatóknál, amelyeket ma mérni tudunk.",
+      "paused": "Nem mérhető",
+      "pausedDescr": "{{indicators}}: ezeket még nem használja, így a pontjaikat nem tudjuk mérni.",
+      "scoreExplanation": "Az értékelése ({{score}}) csak azt a {{measurable}} pontot veszi figyelembe, amit ma mérni tudunk, így a nem mérhetők nem rontják le.",
+      "total": "Összesen"
+    },
+    "lowReliability": "Ez az értékelés csak <b>{{measurable}} mutatón alapul az {{total}} közül</b>, tekintse hát első vázlatnak: minél többet használ, annál közelebb kerül a valóságához.",
+    "shortRange": "Az <b>egy hónapnál rövidebb</b> időszak kihagyja a fizetéseket és a számlákat, ami elrontja az olyan mutatókat, mint a megtakarítási százalék. Bővítse ki egy stabilabb értékeléshez.",
+    "unreliableShort": "Kevéssé megbízható",
+    "pointsContribution": "{{earned}} pontot ad a(z) {{total}}-ból",
+    "pointsOfTotal": "{{earned}} / {{total}} pont",
+    "pointsShort": "{{value}} pont",
+    "pausedPoints": "{{total}} pont nem mérhető",
+    "pausedShort": "Nem mérhető",
+    "aboutIndicator": "Erről a mutatóról",
+    "formulaLabel": "Hogyan számoljuk",
+    "howToUnlock": "Hogyan oldható fel",
+    "indicatorsLabel": "Mutatók",
+    "yourOwnPast": "A saját múltja",
+    "noComparisonNote": "Ez az alkalmazás csak az Öné: soha nem hasonlítjuk össze más felhasználókkal, hanem önmagával.",
+    "previousPeriodLabel": "Előző időszak",
+    "nowLabel": "Most"
   },
   "STATS": {
     "title": "Statisztika",

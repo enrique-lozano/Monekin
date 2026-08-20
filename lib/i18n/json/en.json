@@ -266,7 +266,10 @@
       "text.other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending.",
       "text.infinite": "You could survive approximately <b>all your life</b> without income at this rate of spending.",
       "suggestion": "Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.",
-      "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health"
+      "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health",
+      "valueShort": "{{n}} months",
+      "formula": "Money available in your accounts ÷ your average monthly expenses in this period.",
+      "unlock": "Record at least 4 transactions, some of them expenses, within this period."
     },
     "savingsPercentage": {
       "title": "Savings percentage",
@@ -277,8 +280,79 @@
         "bad": "You have managed to save <b>{{value}}%</b> of your income during this period. However, we think you can still do much more!",
         "very_bad": "Wow, you haven't managed to save anything during this period."
       },
-      "suggestion": "Remember that it is advisable to save at least 15-20% of what you earn."
-    }
+      "suggestion": "Remember that it is advisable to save at least 15-20% of what you earn.",
+      "formula": "(Income − expenses) ÷ income, all within the selected range.",
+      "insufficient_data": "There is not enough activity in this period to judge how much of your money you keep.",
+      "unlock": "Record one income within this period, or at least 10 transactions of any kind."
+    },
+    "debtToAssetRatio": {
+      "title": "Debt-to-asset ratio",
+      "subtitle": "How much of what you own is offset by outstanding debt",
+      "text": {
+        "value": "Your outstanding debt is <b>{{value}}%</b> of your gross assets.",
+        "no_assets": "You have outstanding debt but no recorded assets to back it."
+      },
+      "suggestion": "A lower ratio generally means you are better able to cover your debts with what you own.",
+      "insufficient_data": "You are not tracking any debt or asset yet, so there is no balance sheet to judge.",
+      "formula": "Outstanding debt ÷ gross assets, both as of the end of the selected range.",
+      "unlock": "Add one of your debts or one of your assets (a house, a car...)."
+    },
+    "netWorthTrend": {
+      "title": "Net worth trend",
+      "subtitle": "How your net worth changed during this period",
+      "text": {
+        "positive": "Your net worth increased by <b>{{value}}%</b> during this period.",
+        "negative": "Your net worth decreased by <b>{{value}}%</b> during this period.",
+        "flat": "Your net worth remained unchanged during this period."
+      },
+      "suggestion": "A steadily growing net worth shows that your assets are increasing faster than your debts.",
+      "insufficient_data": "Your net worth was zero when this period started, so there is no baseline to compare it with.",
+      "formula": "(Net worth now − net worth at the start of the range) ÷ net worth at the start of the range.",
+      "unlock": "Keep using Monekin, or pick a range that starts once you already had some money tracked."
+    },
+    "investmentRatio": {
+      "title": "Investment ratio",
+      "subtitle": "What part of your income you put into securities in this period",
+      "text": {
+        "value": "You put <b>{{value}}%</b> of your income into securities during this period.",
+        "none": "You haven't put any money into securities during this period."
+      },
+      "suggestion": "Investing part of your income regularly helps your money grow faster than inflation.",
+      "formula": "Amount invested in securities ÷ income, both within the selected range.",
+      "insufficient_data": "You had no investment account open during this period, so we can't measure this part of your finances.",
+      "unlock": "Open an investment account, or pick a range in which one of them was already open."
+    },
+    "howCalculated": {
+      "action": "How your score is calculated",
+      "intro": "Your score blends these 5 indicators, each with its own weight. When there isn't enough data for one of them yet, its weight is shared proportionally among the rest, so your score can still reach 100.",
+      "notAvailable": "Not counted yet"
+    },
+    "composition": {
+      "earned": "Earned",
+      "earnedDescr": "Points you have already won with the data of this range.",
+      "pending": "Within reach",
+      "pendingDescr": "What you are still missing in the indicators we can measure today.",
+      "paused": "Not measured",
+      "pausedDescr": "{{indicators}}: you don't use them yet, so we cannot measure their points.",
+      "scoreExplanation": "Your score ({{score}}) only takes into account the {{measurable}} points we can measure today, so the ones we cannot measure are not dragging it down.",
+      "total": "Total"
+    },
+    "lowReliability": "This score leans on <b>{{measurable}} of the {{total}} indicators</b> only, so take it as a first sketch: the more of them you use, the closer it will get to your reality.",
+    "shortRange": "A range <b>shorter than a month</b> leaves out paydays and bills, which distorts indicators such as your savings rate. Widen it for a steadier score.",
+    "unreliableShort": "Low reliability",
+    "pointsContribution": "Contributes {{earned}} of {{total}} pts",
+    "pointsOfTotal": "{{earned}} of {{total}} pts",
+    "pointsShort": "{{value}} pts",
+    "pausedPoints": "{{total}} pts not measured",
+    "pausedShort": "Not measured",
+    "aboutIndicator": "About this indicator",
+    "formulaLabel": "How it's calculated",
+    "howToUnlock": "How to unlock it",
+    "indicatorsLabel": "Indicators",
+    "yourOwnPast": "Your own past",
+    "noComparisonNote": "This app is yours and yours only: we never compare you with other users, we compare you with yourself.",
+    "previousPeriodLabel": "Previous period",
+    "nowLabel": "Now"
   },
   "STATS": {
     "title": "Statistics",

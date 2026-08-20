@@ -264,7 +264,10 @@
       "text.other": "Bu harcama oranında yaklaşık <b>{{ n }} ay</b> gelir olmadan yaşayabilirsiniz.",
       "text.infinite": "Bu harcama oranında yaklaşık <b>tüm hayatınız boyunca</b> gelir olmadan yaşayabilirsiniz.",
       "suggestion": "Bu oranın her zaman en az 5 ayın üzerinde tutulması gerektiğini unutmayın. Yeterli birikiminiz olmadığını görürseniz, gereksiz harcamaları azaltın.",
-      "insufficient_data": "Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin"
+      "insufficient_data": "Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin",
+      "valueShort": "{{n}} ay",
+      "formula": "Hesaplarınızdaki kullanılabilir para ÷ bu dönemdeki ortalama aylık giderleriniz.",
+      "unlock": "Bu dönemde en az 4 işlem kaydedin, bunların bir kısmı gider olsun."
     },
     "savingsPercentage": {
       "title": "Tasarruf yüzdesi",
@@ -275,8 +278,79 @@
         "bad": "Bu dönemde gelirinizin <b>{{value}}%</b>'sini tasarruf etmeyi başardınız. Ancak, hala çok daha fazlasını yapabileceğinizi düşünüyoruz!",
         "very_bad": "Vay canına, bu dönemde hiçbir şey biriktirmeyi başaramadınız."
       },
-      "suggestion": "Kazandığınızın en az %15-20'sini biriktirmenin tavsiye edildiğini unutmayın."
-    }
+      "suggestion": "Kazandığınızın en az %15-20'sini biriktirmenin tavsiye edildiğini unutmayın.",
+      "formula": "(Gelir − gider) ÷ gelir, hepsi seçili aralık içinde.",
+      "insufficient_data": "Bu dönemde, paranızın ne kadarını elinizde tuttuğunuzu değerlendirmek için yeterli hareket yok.",
+      "unlock": "Bu dönemde bir gelir kaydedin ya da herhangi bir türden en az 10 işlem girin."
+    },
+    "debtToAssetRatio": {
+      "title": "Borç-varlık oranı",
+      "subtitle": "Sahip olduklarınızın ne kadarı ödenmemiş borçla dengeleniyor",
+      "text": {
+        "value": "Ödenmemiş borcunuz brüt varlıklarınızın <b>%{{value}}</b>'i kadar.",
+        "no_assets": "Ödenmemiş borcunuz var ama bunu karşılayacak kayıtlı bir varlığınız yok."
+      },
+      "suggestion": "Daha düşük bir oran genellikle borçlarınızı sahip olduklarınızla daha rahat karşılayabildiğiniz anlamına gelir.",
+      "insufficient_data": "Henüz hiçbir borç veya varlık takip etmiyorsunuz, bu yüzden değerlendirilecek bir bilanço yok.",
+      "formula": "Ödenmemiş borç ÷ brüt varlıklar, ikisi de seçili aralığın sonu itibarıyla.",
+      "unlock": "Borçlarınızdan birini veya varlıklarınızdan birini ekleyin (bir ev, bir araba...)."
+    },
+    "netWorthTrend": {
+      "title": "Net varlık eğilimi",
+      "subtitle": "Net varlığınızın bu dönemde nasıl değiştiği",
+      "text": {
+        "positive": "Net varlığınız bu dönemde <b>%{{value}}</b> arttı.",
+        "negative": "Net varlığınız bu dönemde <b>%{{value}}</b> azaldı.",
+        "flat": "Net varlığınız bu dönemde değişmedi."
+      },
+      "suggestion": "İstikrarlı biçimde büyüyen bir net varlık, varlıklarınızın borçlarınızdan daha hızlı arttığını gösterir.",
+      "insufficient_data": "Bu dönemin başında net varlığınız sıfırdı, bu yüzden karşılaştırılacak bir başlangıç noktası yok.",
+      "formula": "(Şimdiki net varlık − aralığın başındaki net varlık) ÷ aralığın başındaki net varlık.",
+      "unlock": "Monekin'i kullanmaya devam edin ya da halihazırda bir miktar paranızı takip ettiğiniz bir tarihte başlayan bir aralık seçin."
+    },
+    "investmentRatio": {
+      "title": "Yatırım oranı",
+      "subtitle": "Bu dönemde gelirinizin ne kadarını menkul kıymetlere ayırdınız",
+      "text": {
+        "value": "Bu dönemde gelirinizin <b>%{{value}}</b>'ini menkul kıymetlere ayırdınız.",
+        "none": "Bu dönemde menkul kıymetlere hiç para ayırmadınız."
+      },
+      "suggestion": "Gelirinizin bir kısmını düzenli olarak yatırmak, paranızın enflasyondan hızlı büyümesine yardımcı olur.",
+      "formula": "Menkul kıymetlere yatırılan tutar ÷ gelir, ikisi de seçili aralık içinde.",
+      "insufficient_data": "Bu dönemde açık bir yatırım hesabınız yoktu, bu yüzden finansal durumunuzun bu kısmını ölçemiyoruz.",
+      "unlock": "Bir yatırım hesabı açın ya da bunlardan birinin zaten açık olduğu bir aralık seçin."
+    },
+    "howCalculated": {
+      "action": "Notunuz nasıl hesaplanıyor",
+      "intro": "Notunuz, her biri kendi ağırlığıyla bu 5 göstergeyi birleştirir. Bunlardan biri için henüz yeterli veri yoksa, ağırlığı diğerleri arasında oransal olarak paylaşılır, böylece notunuz yine 100'e ulaşabilir.",
+      "notAvailable": "Henüz sayılmıyor"
+    },
+    "composition": {
+      "earned": "Kazanılan",
+      "earnedDescr": "Bu aralığın verileriyle çoktan kazandığınız puanlar.",
+      "pending": "Ulaşılabilir",
+      "pendingDescr": "Bugün ölçebildiğimiz göstergelerde size eksik kalan puanlar.",
+      "paused": "Ölçülemeyen",
+      "pausedDescr": "{{indicators}}: bunları henüz kullanmıyorsunuz, bu yüzden puanlarını ölçemiyoruz.",
+      "scoreExplanation": "Notunuz ({{score}}) yalnızca bugün ölçebildiğimiz {{measurable}} puanı dikkate alıyor, dolayısıyla ölçemediklerimiz notunuzu düşürmüyor.",
+      "total": "Toplam"
+    },
+    "lowReliability": "Bu not yalnızca <b>{{total}} göstergeden {{measurable}} tanesine</b> dayanıyor, o yüzden onu bir ilk taslak olarak görün: ne kadar çoğunu kullanırsanız gerçeğinize o kadar yaklaşır.",
+    "shortRange": "<b>Bir aydan kısa</b> bir aralık maaşları ve faturaları dışarıda bırakır, bu da tasarruf yüzdeniz gibi göstergeleri bozar. Daha istikrarlı bir not için aralığı genişletin.",
+    "unreliableShort": "Az güvenilir",
+    "pointsContribution": "{{total}} puanın {{earned}} tanesini katıyor",
+    "pointsOfTotal": "{{earned}}/{{total}} puan",
+    "pointsShort": "{{value}} puan",
+    "pausedPoints": "{{total}} puan ölçülemiyor",
+    "pausedShort": "Ölçülemiyor",
+    "aboutIndicator": "Bu gösterge hakkında",
+    "formulaLabel": "Nasıl hesaplanıyor",
+    "howToUnlock": "Nasıl açılır",
+    "indicatorsLabel": "Göstergeler",
+    "yourOwnPast": "Kendi geçmişiniz",
+    "noComparisonNote": "Bu uygulama yalnızca size ait: sizi asla başka kullanıcılarla değil, kendinizle karşılaştırırız.",
+    "previousPeriodLabel": "Önceki dönem",
+    "nowLabel": "Şimdi"
   },
   "STATS": {
     "title": "İstatistikler",

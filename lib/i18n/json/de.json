@@ -264,7 +264,10 @@
       "text.other": "Du könntest ungefähr <b>{{ n }} Monate</b> ohne Einkommen bei dieser Ausgabenrate überleben.",
       "text.infinite": "Du könntest ungefähr <b>Dein ganzes Leben lang</b> ohne Einkommen bei dieser Ausgabenrate überleben.",
       "suggestion": "Denke daran, dass es ratsam ist, dieses Verhältnis immer mindestens über 5 Monate zu halten. Wenn Du feststellst, dass Du nicht über ein ausreichendes Sparpolster verfügst, solltest Du unnötige Ausgaben reduzieren.",
-      "insufficient_data": "Offenbar haben wir nicht genügend Ausgaben, um zu berechnen, wie viele Monate Du ohne Einkommen überleben könntest. Gib ein paar Transaktionen ein und komme hierher zurück, um Deine Finanzen zu überprüfen."
+      "insufficient_data": "Offenbar haben wir nicht genügend Ausgaben, um zu berechnen, wie viele Monate Du ohne Einkommen überleben könntest. Gib ein paar Transaktionen ein und komme hierher zurück, um Deine Finanzen zu überprüfen.",
+      "valueShort": "{{n}} Monate",
+      "formula": "Verfügbares Geld auf Deinen Konten ÷ Deine durchschnittlichen monatlichen Ausgaben in diesem Zeitraum.",
+      "unlock": "Erfasse in diesem Zeitraum mindestens 4 Transaktionen, davon einige Ausgaben."
     },
     "savingsPercentage": {
       "title": "Sparprozentsatz",
@@ -275,8 +278,79 @@
         "bad": "Du hast es geschafft <b>{{value}}%</b> Deines Einkommens in diesem Zeitraum zu sparen . ",
         "very_bad": "Wow, du hast es in dieser Zeit nicht geschafft, etwas zu sparen."
       },
-      "suggestion": "Denk daran, dass es ratsam ist, mindestens 15-20 % Deines Einkommens zu sparen."
-    }
+      "suggestion": "Denk daran, dass es ratsam ist, mindestens 15-20 % Deines Einkommens zu sparen.",
+      "formula": "(Einnahmen − Ausgaben) ÷ Einnahmen, jeweils innerhalb des ausgewählten Zeitraums.",
+      "insufficient_data": "In diesem Zeitraum gibt es nicht genügend Bewegungen, um zu beurteilen, wie viel von Deinem Geld Du behältst.",
+      "unlock": "Erfasse in diesem Zeitraum eine Einnahme oder mindestens 10 Transaktionen beliebiger Art."
+    },
+    "debtToAssetRatio": {
+      "title": "Schulden-Vermögens-Verhältnis",
+      "subtitle": "Welcher Teil Deines Besitzes durch offene Schulden aufgewogen wird",
+      "text": {
+        "value": "Deine offenen Schulden entsprechen <b>{{value}}%</b> Deines Bruttovermögens.",
+        "no_assets": "Du hast offene Schulden, aber kein erfasstes Vermögen, das sie deckt."
+      },
+      "suggestion": "Ein niedrigeres Verhältnis bedeutet in der Regel, dass Du Deine Schulden besser mit Deinem Besitz decken kannst.",
+      "insufficient_data": "Du erfasst noch keine Schulden oder Vermögenswerte, daher gibt es keine Bilanz zu bewerten.",
+      "formula": "Offene Schulden ÷ Bruttovermögen, jeweils zum Ende des ausgewählten Zeitraums.",
+      "unlock": "Füge eine Deiner Schulden oder einen Deiner Vermögenswerte hinzu (ein Haus, ein Auto...)."
+    },
+    "netWorthTrend": {
+      "title": "Vermögensentwicklung",
+      "subtitle": "Wie sich Dein Nettovermögen in diesem Zeitraum verändert hat",
+      "text": {
+        "positive": "Dein Nettovermögen ist in diesem Zeitraum um <b>{{value}}%</b> gestiegen.",
+        "negative": "Dein Nettovermögen ist in diesem Zeitraum um <b>{{value}}%</b> gesunken.",
+        "flat": "Dein Nettovermögen ist in diesem Zeitraum unverändert geblieben."
+      },
+      "suggestion": "Ein stetig wachsendes Nettovermögen zeigt, dass Dein Besitz schneller wächst als Deine Schulden.",
+      "insufficient_data": "Dein Nettovermögen war zu Beginn dieses Zeitraums null, daher gibt es keine Ausgangsbasis für einen Vergleich.",
+      "formula": "(Nettovermögen jetzt − Nettovermögen am Anfang des Zeitraums) ÷ Nettovermögen am Anfang des Zeitraums.",
+      "unlock": "Nutze Monekin weiter oder wähle einen Zeitraum, der beginnt, als Du schon Geld erfasst hattest."
+    },
+    "investmentRatio": {
+      "title": "Investitionsquote",
+      "subtitle": "Welchen Teil Deines Einkommens Du in diesem Zeitraum in Wertpapiere gesteckt hast",
+      "text": {
+        "value": "Du hast in diesem Zeitraum <b>{{value}}%</b> Deines Einkommens in Wertpapiere gesteckt.",
+        "none": "Du hast in diesem Zeitraum kein Geld in Wertpapiere gesteckt."
+      },
+      "suggestion": "Einen Teil Deines Einkommens regelmäßig zu investieren hilft Deinem Geld, schneller als die Inflation zu wachsen.",
+      "formula": "In Wertpapiere investierter Betrag ÷ Einkommen, jeweils innerhalb des ausgewählten Zeitraums.",
+      "insufficient_data": "In diesem Zeitraum war kein Anlagekonto offen, daher können wir diesen Teil Deiner Finanzen nicht messen.",
+      "unlock": "Eröffne ein Anlagekonto oder wähle einen Zeitraum, in dem eines davon schon offen war."
+    },
+    "howCalculated": {
+      "action": "Wie Deine Note berechnet wird",
+      "intro": "Deine Note kombiniert diese 5 Indikatoren, jeder mit seinem eigenen Gewicht. Wenn für einen davon noch nicht genügend Daten vorliegen, wird sein Gewicht anteilig auf die übrigen verteilt, damit Deine Note weiterhin 100 erreichen kann.",
+      "notAvailable": "Noch nicht gezählt"
+    },
+    "composition": {
+      "earned": "Erreicht",
+      "earnedDescr": "Punkte, die Du mit den Daten dieses Zeitraums schon erreicht hast.",
+      "pending": "Erreichbar",
+      "pendingDescr": "Was Dir bei den Indikatoren fehlt, die wir heute messen können.",
+      "paused": "Nicht messbar",
+      "pausedDescr": "{{indicators}}: Du nutzt sie noch nicht, daher können wir ihre Punkte nicht messen.",
+      "scoreExplanation": "Deine Note ({{score}}) berücksichtigt nur die {{measurable}} Punkte, die wir heute messen können, daher ziehen die nicht messbaren sie nicht nach unten.",
+      "total": "Gesamt"
+    },
+    "lowReliability": "Diese Note stützt sich nur auf <b>{{measurable}} von {{total}} Indikatoren</b>, betrachte sie also als ersten Entwurf: je mehr Du davon nutzt, desto näher kommt sie Deiner Realität.",
+    "shortRange": "Ein Zeitraum von <b>weniger als einem Monat</b> lässt Gehälter und Rechnungen außen vor, was Indikatoren wie Deinen Sparprozentsatz verzerrt. Erweitere ihn für eine stabilere Note.",
+    "unreliableShort": "Wenig verlässlich",
+    "pointsContribution": "Trägt {{earned}} von {{total}} Pkt. bei",
+    "pointsOfTotal": "{{earned}} von {{total}} Pkt.",
+    "pointsShort": "{{value}} Pkt.",
+    "pausedPoints": "{{total}} Pkt. nicht messbar",
+    "pausedShort": "Nicht messbar",
+    "aboutIndicator": "Über diesen Indikator",
+    "formulaLabel": "Wie er berechnet wird",
+    "howToUnlock": "Wie Du ihn freischaltest",
+    "indicatorsLabel": "Indikatoren",
+    "yourOwnPast": "Deine eigene Vergangenheit",
+    "noComparisonNote": "Diese App ist ganz allein Deine: wir vergleichen Dich nie mit anderen Nutzern, wir vergleichen Dich mit Dir selbst.",
+    "previousPeriodLabel": "Vorheriger Zeitraum",
+    "nowLabel": "Jetzt"
   },
   "STATS": {
     "title": "Statistiken",

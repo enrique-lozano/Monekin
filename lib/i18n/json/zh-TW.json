@@ -264,7 +264,10 @@
       "text.other": "以這樣的支出速度，如果沒有收入，您大約可以生存 <b>{{n}}個月</b>。",
       "text.infinite": "以這樣的支出速度，如果沒有收入，您大約可以<b>一生</b>生存。",
       "suggestion": "請記住，建議始終將此比率保持在至少 5 個月以上。如果您發現自己沒有足夠的儲蓄緩衝，請減少不必要的開支。",
-      "insufficient_data": "看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況"
+      "insufficient_data": "看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況",
+      "valueShort": "{{n}} 個月",
+      "formula": "您帳戶中的可用資金 ÷ 這段期間的平均每月支出。",
+      "unlock": "在這段期間內記錄至少 4 筆交易，其中一部分為支出。"
     },
     "savingsPercentage": {
       "title": "儲蓄百分比",
@@ -275,8 +278,79 @@
         "bad": "在此期間，您已成功節省了收入的 <b>{{value}}%</b>。但是，我們認為您還可以做得更多！",
         "very_bad": "哇哦，這段時間你什麼都沒保存下來。"
       },
-      "suggestion": "請記住，建議將收入的至少 15-20% 存起來。"
-    }
+      "suggestion": "請記住，建議將收入的至少 15-20% 存起來。",
+      "formula": "（收入 − 支出）÷ 收入，皆在所選期間內。",
+      "insufficient_data": "這段期間的記錄不足，無法判斷您留下了多少錢。",
+      "unlock": "在這段期間內記錄一筆收入，或任何類型的至少 10 筆交易。"
+    },
+    "debtToAssetRatio": {
+      "title": "負債資產比",
+      "subtitle": "您所擁有的資產中有多少被未償還的債務抵銷",
+      "text": {
+        "value": "您未償還的債務占總資產的 <b>{{value}}%</b>。",
+        "no_assets": "您有未償還的債務，但沒有記錄任何資產來支撐它。"
+      },
+      "suggestion": "比率越低，通常表示您越有能力用自己擁有的資產償還債務。",
+      "insufficient_data": "您還沒有記錄任何債務或資產，因此沒有資產負債情況可供評估。",
+      "formula": "未償還債務 ÷ 總資產，皆以所選期間的結束日為準。",
+      "unlock": "新增一筆您的債務或一項您的資產（房子、汽車……）。"
+    },
+    "netWorthTrend": {
+      "title": "淨資產趨勢",
+      "subtitle": "這段期間內您的淨資產變化情況",
+      "text": {
+        "positive": "這段期間內您的淨資產成長了 <b>{{value}}%</b>。",
+        "negative": "這段期間內您的淨資產減少了 <b>{{value}}%</b>。",
+        "flat": "這段期間內您的淨資產沒有變化。"
+      },
+      "suggestion": "淨資產穩定成長代表您的資產成長速度快於債務。",
+      "insufficient_data": "這段期間開始時您的淨資產為零，因此沒有可供比較的基準。",
+      "formula": "（目前淨資產 − 期間開始時的淨資產）÷ 期間開始時的淨資產。",
+      "unlock": "繼續使用 Monekin，或選擇一個開始時您已記錄部分資金的期間。"
+    },
+    "investmentRatio": {
+      "title": "投資比例",
+      "subtitle": "這段期間內您將收入的多少投入了證券",
+      "text": {
+        "value": "這段期間內您將收入的 <b>{{value}}%</b> 投入了證券。",
+        "none": "這段期間內您沒有將任何資金投入證券。"
+      },
+      "suggestion": "定期投資一部分收入，有助於讓您的錢成長得比通膨更快。",
+      "formula": "投入證券的金額 ÷ 收入，皆在所選期間內。",
+      "insufficient_data": "這段期間內您沒有開立的投資帳戶，因此我們無法衡量您財務的這一部分。",
+      "unlock": "開立一個投資帳戶，或選擇一個其中已有投資帳戶處於開立狀態的期間。"
+    },
+    "howCalculated": {
+      "action": "您的分數是如何計算的",
+      "intro": "您的分數綜合了這 5 項指標，每項都有各自的權重。當其中某項還沒有足夠的資料時，它的權重會按比例分攤給其餘指標，因此您的分數仍然可以達到 100。",
+      "notAvailable": "尚未計入"
+    },
+    "composition": {
+      "earned": "已取得",
+      "earnedDescr": "您已經憑這段期間的資料拿到的分數。",
+      "pending": "可爭取",
+      "pendingDescr": "在我們目前能夠衡量的指標中，您還差的分數。",
+      "paused": "無法衡量",
+      "pausedDescr": "{{indicators}}：您還沒有使用它們，因此我們無法衡量它們的分數。",
+      "scoreExplanation": "您的分數（{{score}}）只考慮了我們目前能衡量的 {{measurable}} 分，因此無法衡量的部分不會拉低它。",
+      "total": "總計"
+    },
+    "lowReliability": "這個分數僅依據 <b>{{total}} 項指標中的 {{measurable}} 項</b>，請把它當作初步草稿：您使用的指標越多，它就越貼近您的真實情況。",
+    "shortRange": "<b>短於一個月</b>的期間會漏掉薪水和帳單，因而使儲蓄百分比等指標失真。請擴大範圍以取得更穩定的分數。",
+    "unreliableShort": "可靠性低",
+    "pointsContribution": "貢獻 {{total}} 分中的 {{earned}} 分",
+    "pointsOfTotal": "{{earned}}/{{total}} 分",
+    "pointsShort": "{{value}} 分",
+    "pausedPoints": "{{total}} 分無法衡量",
+    "pausedShort": "無法衡量",
+    "aboutIndicator": "關於此指標",
+    "formulaLabel": "如何計算",
+    "howToUnlock": "如何解鎖",
+    "indicatorsLabel": "指標",
+    "yourOwnPast": "您自己的過去",
+    "noComparisonNote": "這個應用程式只屬於您：我們從不把您與其他使用者比較，只把您與自己比較。",
+    "previousPeriodLabel": "上一期間",
+    "nowLabel": "現在"
   },
   "STATS": {
     "title": "統計數據",

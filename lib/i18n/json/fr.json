@@ -264,7 +264,10 @@
       "text.other": "Vous pourriez survivre environ <b>{{ n }} mois</b> sans revenus avec ce niveau de dépenses.",
       "text.infinite": "Vous pourriez survivre <b>toute votre vie</b> sans revenus avec ce niveau de dépenses.",
       "suggestion": "N'oubliez pas qu'il est recommandé de garder ce ratio au-dessus d'au moins 5 mois. Si vous voyez que vous n'avez pas un coussin d'épargne suffisant, réduisez les dépenses inutiles.",
-      "insufficient_data": "On dirait que nous n'avons pas assez de dépenses pour calculer combien de mois vous pourriez survivre sans revenus. Saisissez quelques transactions et revenez ici pour vérifier votre santé financière."
+      "insufficient_data": "On dirait que nous n'avons pas assez de dépenses pour calculer combien de mois vous pourriez survivre sans revenus. Saisissez quelques transactions et revenez ici pour vérifier votre santé financière.",
+      "valueShort": "{{n}} mois",
+      "formula": "Argent disponible sur vos comptes ÷ vos dépenses mensuelles moyennes sur cette période.",
+      "unlock": "Enregistrez au moins 4 transactions sur cette période, dont quelques dépenses."
     },
     "savingsPercentage": {
       "title": "Pourcentage d'épargne",
@@ -275,8 +278,79 @@
         "bad": "Vous avez réussi à épargner <b>{{value}} %</b> de vos revenus sur cette période. Cependant, nous pensons que vous pouvez encore faire beaucoup mieux !",
         "very_bad": "Oups, vous n'avez réussi à rien épargner sur cette période."
       },
-      "suggestion": "N'oubliez pas qu'il est conseillé d'épargner au moins 15 à 20 % de ce que vous gagnez."
-    }
+      "suggestion": "N'oubliez pas qu'il est conseillé d'épargner au moins 15 à 20 % de ce que vous gagnez.",
+      "formula": "(Revenus − dépenses) ÷ revenus, le tout sur la période sélectionnée.",
+      "insufficient_data": "Il n'y a pas assez d'activité sur cette période pour juger quelle part de votre argent vous conservez.",
+      "unlock": "Enregistrez un revenu sur cette période, ou au moins 10 transactions de n'importe quel type."
+    },
+    "debtToAssetRatio": {
+      "title": "Ratio dette-actifs",
+      "subtitle": "Quelle part de ce que vous possédez est compensée par vos dettes en cours",
+      "text": {
+        "value": "Vos dettes en cours représentent <b>{{value}} %</b> de vos actifs bruts.",
+        "no_assets": "Vous avez des dettes en cours mais aucun actif enregistré pour les couvrir."
+      },
+      "suggestion": "Un ratio plus faible signifie en général que vous êtes mieux en mesure de couvrir vos dettes avec ce que vous possédez.",
+      "insufficient_data": "Vous ne suivez encore aucune dette ni aucun actif, il n'y a donc pas de bilan à évaluer.",
+      "formula": "Dettes en cours ÷ actifs bruts, les deux à la fin de la période sélectionnée.",
+      "unlock": "Ajoutez une de vos dettes ou un de vos actifs (une maison, une voiture...)."
+    },
+    "netWorthTrend": {
+      "title": "Tendance du patrimoine net",
+      "subtitle": "Comment votre patrimoine net a évolué sur cette période",
+      "text": {
+        "positive": "Votre patrimoine net a augmenté de <b>{{value}} %</b> sur cette période.",
+        "negative": "Votre patrimoine net a diminué de <b>{{value}} %</b> sur cette période.",
+        "flat": "Votre patrimoine net est resté inchangé sur cette période."
+      },
+      "suggestion": "Un patrimoine net qui croît régulièrement montre que vos actifs augmentent plus vite que vos dettes.",
+      "insufficient_data": "Votre patrimoine net était nul au début de cette période, il n'y a donc aucune base de comparaison.",
+      "formula": "(Patrimoine net actuel − patrimoine net au début de la période) ÷ patrimoine net au début de la période.",
+      "unlock": "Continuez à utiliser Monekin, ou choisissez une période qui commence quand vous suiviez déjà un peu d'argent."
+    },
+    "investmentRatio": {
+      "title": "Ratio d'investissement",
+      "subtitle": "Quelle part de vos revenus vous avez placée en titres sur cette période",
+      "text": {
+        "value": "Vous avez placé <b>{{value}} %</b> de vos revenus en titres sur cette période.",
+        "none": "Vous n'avez placé aucun argent en titres sur cette période."
+      },
+      "suggestion": "Investir régulièrement une partie de vos revenus aide votre argent à croître plus vite que l'inflation.",
+      "formula": "Montant investi en titres ÷ revenus, les deux sur la période sélectionnée.",
+      "insufficient_data": "Vous n'aviez aucun compte d'investissement ouvert sur cette période, nous ne pouvons donc pas mesurer cette partie de vos finances.",
+      "unlock": "Ouvrez un compte d'investissement, ou choisissez une période pendant laquelle l'un d'eux était déjà ouvert."
+    },
+    "howCalculated": {
+      "action": "Comment votre note est calculée",
+      "intro": "Votre note combine ces 5 indicateurs, chacun avec son propre poids. Quand l'un d'eux ne dispose pas encore d'assez de données, son poids est réparti proportionnellement entre les autres, pour que votre note puisse toujours atteindre 100.",
+      "notAvailable": "Pas encore compté"
+    },
+    "composition": {
+      "earned": "Obtenus",
+      "earnedDescr": "Points que vous avez déjà gagnés avec les données de cette période.",
+      "pending": "À portée",
+      "pendingDescr": "Ce qu'il vous manque sur les indicateurs que nous pouvons mesurer aujourd'hui.",
+      "paused": "Non mesurés",
+      "pausedDescr": "{{indicators}} : vous ne les utilisez pas encore, nous ne pouvons donc pas mesurer leurs points.",
+      "scoreExplanation": "Votre note ({{score}}) ne tient compte que des {{measurable}} points que nous pouvons mesurer aujourd'hui, ceux que nous ne pouvons pas mesurer ne la pénalisent donc pas.",
+      "total": "Total"
+    },
+    "lowReliability": "Cette note ne repose que sur <b>{{measurable}} des {{total}} indicateurs</b>, prenez-la donc comme une première esquisse : plus vous en utiliserez, plus elle collera à votre réalité.",
+    "shortRange": "Une période <b>de moins d'un mois</b> laisse de côté salaires et factures, ce qui déforme des indicateurs comme votre taux d'épargne. Élargissez-la pour une note plus stable.",
+    "unreliableShort": "Peu fiable",
+    "pointsContribution": "Apporte {{earned}} pts sur {{total}}",
+    "pointsOfTotal": "{{earned}} pts sur {{total}}",
+    "pointsShort": "{{value}} pts",
+    "pausedPoints": "{{total}} pts non mesurés",
+    "pausedShort": "Non mesuré",
+    "aboutIndicator": "À propos de cet indicateur",
+    "formulaLabel": "Comment il est calculé",
+    "howToUnlock": "Comment le débloquer",
+    "indicatorsLabel": "Indicateurs",
+    "yourOwnPast": "Votre propre passé",
+    "noComparisonNote": "Cette application n'est qu'à vous : nous ne vous comparons jamais aux autres utilisateurs, nous vous comparons à vous-même.",
+    "previousPeriodLabel": "Période précédente",
+    "nowLabel": "Maintenant"
   },
   "STATS": {
     "title": "Statistiques",

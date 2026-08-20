@@ -1,10 +1,13 @@
 import 'dart:math';
 
-import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/debts/debt_service.dart';
+import 'package:monekin/core/database/services/net_worth/net_worth_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -29,12 +32,15 @@ class FinanceHealthAttrScore {
     return weight * score! / 100;
   }
 
-  String weightedValueString({int decimalPlaces = 0}) {
+  String weightedValueString({int decimalPlaces = 1}) {
     final toConvert = weightedValue;
 
     if (toConvert == null) return 'NA';
 
-    return toConvert.toStringAsFixed(decimalPlaces);
+    return FinanceHealthData.pointsString(
+      toConvert,
+      decimalPlaces: decimalPlaces,
+    );
   }
 
   String getScoreReviewTitle(
@@ -51,30 +57,76 @@ class FinanceHealthData {
   /// Number of months you could survive without any income
   final double? monthsWithoutIncome;
 
-  /// Percentage of income that is not spent
-  final double savingsPercentage;
+  /// Percentage of income that is not spent. Null when there was no income in
+  /// the period, since there is nothing to save from
+  final double? savingsPercentage;
+
+  /// Outstanding debt divided by gross assets
+  final double? debtToAssetRatio;
+
+  /// Relative net worth change across the selected period
+  final double? netWorthTrend;
+
+  /// Percentage of income that was put into securities (gross buys) during this
+  /// period. Null for users that do not invest at all
+  final double? investmentRatio;
 
   const FinanceHealthData({
     required this.monthsWithoutIncome,
     required this.savingsPercentage,
+    required this.debtToAssetRatio,
+    required this.netWorthTrend,
+    required this.investmentRatio,
   });
 
   /// Wheter or not the healthy score is calculable (i.e. has a value)
   bool get healthyScoreCalculable => healthyScore != null;
 
+  List<FinanceHealthAttrScore> get allScores => [
+    savingPercentageScore,
+    monthsWithoutIncomeScore,
+    debtToAssetScore,
+    netWorthTrendScore,
+    investmentRatioScore,
+  ];
+
+  /// Weight of every pillar, no matter if it can be measured or not (100)
+  int get totalWeight => allScores.fold(0, (sum, score) => sum + score.weight);
+
+  /// Weight of the pillars that can be measured with the data of this period
+  int get measurableWeight => allScores
+      .where((score) => !score.canNotBeCalculated)
+      .fold(0, (sum, score) => sum + score.weight);
+
+  /// Weight of the pillars that are on hold because the user does not track
+  /// that part of their finances yet
+  int get pausedWeight => totalWeight - measurableWeight;
+
+  /// Points already earned, on the [totalWeight] scale
+  double get earnedPoints => allScores
+      .where((score) => !score.canNotBeCalculated)
+      .fold(0, (sum, score) => sum + score.weightedValue!);
+
+  /// Points that are still within reach in the pillars we can measure today
+  double get pendingPoints => measurableWeight - earnedPoints;
+
+  /// Number of pillars that can be measured with the data of this period
+  int get measurableScoresCount =>
+      allScores.where((score) => !score.canNotBeCalculated).length;
+
+  /// Whether less than half of the weight can be measured, so the score leans
+  /// on too few indicators to be taken at face value
+  bool get hasLowReliability => measurableWeight < totalWeight * 0.55;
+
+  /// Least amount of weight that has to be measurable for the score to be
+  /// published, instead of renormalizing a couple of secondary indicators into
+  /// a full grade
+  static const int minMeasurableWeight = 42;
+
   double? get healthyScore {
-    if ([
-      savingPercentageScore,
-      monthsWithoutIncomeScore,
-    ].any((element) => element.canNotBeCalculated)) {
-      return null;
-    }
+    if (measurableWeight < minMeasurableWeight) return null;
 
-    final score =
-        savingPercentageScore.weightedValue! +
-        monthsWithoutIncomeScore.weightedValue!;
-
-    return clampDouble(score, 0, 100);
+    return clampDouble(earnedPoints / measurableWeight * 100, 0, 100);
   }
 
   String healthyScoreString({int decimalPlaces = 0}) {
@@ -82,37 +134,109 @@ class FinanceHealthData {
 
     if (toConvert == null) return 'NA';
 
-    return toConvert.toStringAsFixed(decimalPlaces);
+    return pointsString(toConvert, decimalPlaces: decimalPlaces);
   }
+
+  /// Formats an amount of points, dropping the decimals when they add nothing
+  /// (so a full 15 is not displayed as "15.0").
+  static String pointsString(double points, {int decimalPlaces = 1}) =>
+      points == points.roundToDouble()
+      ? points.toStringAsFixed(0)
+      : points.toStringAsFixed(decimalPlaces);
 
   FinanceHealthAttrScore get monthsWithoutIncomeScore {
     return FinanceHealthAttrScore(
       score: monthsWithoutIncome == null
           ? null
-          : min(monthsWithoutIncome! * 10, 100),
+          : 100 * (1 - exp(-monthsWithoutIncome! / 6)),
       weight: monthsWithoutIncomeWeight,
     );
   }
 
   FinanceHealthAttrScore get savingPercentageScore {
+    final savingsPercentage = this.savingsPercentage;
+
+    if (savingsPercentage == null) {
+      return FinanceHealthAttrScore(
+        score: null,
+        weight: savingPercentageWeight,
+      );
+    }
+
     late double toReturn;
 
     if (savingsPercentage <= 10.109) {
       // To desmos: \frac{100}{1+e^{-5-0.95\left(x-\ 15\right)}}-2
       toReturn = 100 / (1 + exp(-5 - 0.95 * (savingsPercentage - 15))) - 2;
+    } else {
+      // To desmos: \frac{100}{1+e^{-1.25+-0.2\left(x-\ 15\right)}}
+      toReturn = 100 / (1 + exp(-1.25 - 0.2 * (savingsPercentage - 15))) - 2;
     }
 
-    // To desmos: \frac{100}{1+e^{-1.25+-0.2\left(x-\ 15\right)}}
-    toReturn = 100 / (1 + exp(-1.25 - 0.2 * (savingsPercentage - 15))) - 2;
-
     return FinanceHealthAttrScore(
-      score: toReturn,
+      score: clampDouble(toReturn / _sigmoidCeiling * 100, 0, 100),
       weight: savingPercentageWeight,
     );
   }
 
-  final int savingPercentageWeight = 50;
-  final int monthsWithoutIncomeWeight = 50;
+  FinanceHealthAttrScore get debtToAssetScore {
+    return FinanceHealthAttrScore(
+      score: debtToAssetRatio == null
+          ? null
+          : clampDouble(100 * exp(-1.5 * debtToAssetRatio!), 0, 100),
+      weight: debtToAssetRatioWeight,
+    );
+  }
+
+  FinanceHealthAttrScore get netWorthTrendScore {
+    return FinanceHealthAttrScore(
+      score: netWorthTrend == null
+          ? null
+          : 100 / (1 + exp(-5 * netWorthTrend!)),
+      weight: netWorthTrendWeight,
+    );
+  }
+
+  FinanceHealthAttrScore get investmentRatioScore {
+    final investmentRatio = this.investmentRatio;
+
+    if (investmentRatio == null) {
+      return FinanceHealthAttrScore(score: null, weight: investmentRatioWeight);
+    }
+
+    // Same sigmoid shape as [savingPercentageScore], stretched so that
+    // [investmentRatioForFullScore] already earns every point of the pillar
+    double curve(double ratio) =>
+        100 / (1 + exp(-1.25 - 0.2 * (ratio - 15))) - 2;
+
+    final toReturn =
+        curve(investmentRatio) / curve(investmentRatioForFullScore) * 100;
+
+    return FinanceHealthAttrScore(
+      score: clampDouble(toReturn, 0, 100),
+      weight: investmentRatioWeight,
+    );
+  }
+
+  /// The sigmoids used by the savings and investment pillars are shifted down
+  /// by 2 points so their lower end reaches zero. That shift also lowers their
+  /// upper end, so scores are stretched back over this ceiling to let a great
+  /// period earn the full weight of the pillar.
+  static const double _sigmoidCeiling = 98;
+
+  /// Share of the income invested that already earns every point of the
+  /// investment pillar. Going further is not extra credit: it usually means
+  /// deploying savings from previous periods, and the risk of leaving yourself
+  /// without a cash cushion is already measured by the survival rate.
+  static const double investmentRatioForFullScore = 25;
+
+  // Runway and savings percentage are the most telling signals of day-to-day
+  // financial health, so they carry the most weight.
+  final int monthsWithoutIncomeWeight = 30;
+  final int savingPercentageWeight = 30;
+  final int debtToAssetRatioWeight = 15;
+  final int netWorthTrendWeight = 15;
+  final int investmentRatioWeight = 10;
 
   static Color getHealthyValueColor(double? healthyValue) =>
       healthyValue == null
@@ -144,12 +268,13 @@ class FinanceHealthData {
     }
   }
 
-  String getHealthyScoreReviewTitle(BuildContext context) =>
-      getHealthyValueReviewTitle(
-        context,
-        value: healthyScore,
-        genderContext: GenderContext.female,
-      );
+  String getHealthyScoreReviewTitle(BuildContext context) {
+    return getHealthyValueReviewTitle(
+      context,
+      value: healthyScore,
+      genderContext: GenderContext.female,
+    );
+  }
 
   static String getHealthyValueReviewTitle(
     BuildContext context, {
@@ -235,43 +360,125 @@ class FinanceHealthService {
     );
   }
 
-  /// Returns a number (from 0 to 100) with the user's savings percentage for a given period (if specified)
-  Stream<double> getSavingPercentage({required TransactionFilterSet filters}) {
-    return StreamZip([
+  /// Returns a number (from 0 to 100) with the user's savings percentage for a
+  /// given period (if specified), or null when the period does not hold enough
+  /// activity to judge it
+  Stream<double?> getSavingPercentage({required TransactionFilterSet filters}) {
+    return Rx.combineLatest3(
       TransactionService.instance.getTransactionsValueBalance(
         filters: filters.copyWith(transactionTypes: [TransactionType.income]),
       ),
       TransactionService.instance.getTransactionsValueBalance(
         filters: filters.copyWith(transactionTypes: [TransactionType.expense]),
       ),
-    ]).map((res) {
-      final income = res[0];
-      final expense = res[1];
+      TransactionService.instance.countTransactions(filters: filters),
+      (income, expense, transactionCount) {
+        if (income <= 0) return transactionCount >= 10 ? 0.0 : null;
 
-      double result = 0;
-      if (income == 0 || (income == 0 && expense == 0)) {
-        return result;
-      } else {
-        result = ((income + expense) / income) * 100;
-      }
+        return max(((income + expense) / income) * 100, 0);
+      },
+    );
+  }
 
-      if (result <= 0) {
-        result = 0;
-      }
+  /// Outstanding debt over gross assets, or null while the user does not track
+  /// any debt nor asset
+  Stream<double?> getDebtToAssetRatio({required TransactionFilterSet filters}) {
+    final date = filters.maxDate ?? DateTime.now();
 
-      return result;
-    });
+    return Rx.combineLatest4(
+      NetWorthService.instance.getGrossAssetsAtDate(date, trFilters: filters),
+      NetWorthService.instance.getTotalDebtsInPreferredCurrency(
+        exchangeRateAsOf: date,
+      ),
+      DebtService.instance.getDebts(limit: 1).map((debts) => debts.isNotEmpty),
+      AssetService.instance
+          .getAssets(limit: 1)
+          .map((assets) => assets.isNotEmpty),
+      (grossAssets, debts, hasAnyDebt, hasAnyAsset) {
+        if (!hasAnyDebt && !hasAnyAsset) return null;
+        if (grossAssets <= 0 && debts <= 0) return null;
+        if (grossAssets <= 0) return double.infinity;
+
+        return debts / grossAssets;
+      },
+    );
+  }
+
+  /// Relative net worth change between the start and the end of [filters]'
+  /// date range
+  Stream<double?> getNetWorthTrend({required TransactionFilterSet filters}) {
+    final now = filters.maxDate ?? DateTime.now();
+    final past = filters.minDate ?? kDefaultFirstSelectableDate;
+
+    return Rx.combineLatest2(
+      NetWorthService.instance.getNetWorthAtDate(now, trFilters: filters),
+      NetWorthService.instance.getNetWorthAtDate(past, trFilters: filters),
+      (nowNetWorth, pastNetWorth) {
+        if (pastNetWorth == 0) return null;
+
+        return (nowNetWorth - pastNetWorth) / pastNetWorth.abs();
+      },
+    );
+  }
+
+  /// Percentage of income put into securities (gross buys, not netted against
+  /// sells) during [filters]' date range. Null when no investment account was
+  /// open in that range
+  Stream<double?> getInvestmentRatio({required TransactionFilterSet filters}) {
+    final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
+    final maxDate = filters.maxDate ?? DateTime.now();
+
+    return Rx.combineLatest3(
+      TransactionService.instance.getTransactionsValueBalance(
+        filters: filters.copyWith(transactionTypes: [TransactionType.income]),
+      ),
+      TransactionService.instance.getInvestmentBuyVolume(filters: filters),
+      AccountService.instance
+          .getAccounts(
+            predicate: (acc, curr) =>
+                acc.type.equalsValue(AccountType.investment),
+          )
+          .map(
+            (accounts) => accounts.any(
+              (account) =>
+                  !account.date.isAfter(maxDate) &&
+                  (account.closingDate == null ||
+                      !account.closingDate!.isBefore(minDate)) &&
+                  (filters.accountsIDs?.contains(account.id) ?? true),
+            ),
+          ),
+      (income, investedAmount, hasInvestmentAccount) {
+        if (!hasInvestmentAccount) return null;
+        if (income <= 0) return investedAmount > 0 ? 100.0 : 0.0;
+
+        return investedAmount / income * 100;
+      },
+    );
   }
 
   /// Return a decimal number between 0 and 100 with the healthy value
   Stream<FinanceHealthData> getHealthyValue({
     required TransactionFilterSet filters,
   }) {
-    return Rx.combineLatest2(
+    return Rx.combineLatest5(
       getMonthsWithoutIncome(filters: filters),
       getSavingPercentage(filters: filters),
-      (res0, res1) =>
-          FinanceHealthData(monthsWithoutIncome: res0, savingsPercentage: res1),
+      getDebtToAssetRatio(filters: filters),
+      getNetWorthTrend(filters: filters),
+      getInvestmentRatio(filters: filters),
+      (
+        monthsWithoutIncome,
+        savingsPercentage,
+        debtToAssetRatio,
+        netWorthTrend,
+        investmentRatio,
+      ) => FinanceHealthData(
+        monthsWithoutIncome: monthsWithoutIncome,
+        savingsPercentage: savingsPercentage,
+        debtToAssetRatio: debtToAssetRatio,
+        netWorthTrend: netWorthTrend,
+        investmentRatio: investmentRatio,
+      ),
     );
   }
 }

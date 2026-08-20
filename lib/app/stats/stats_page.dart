@@ -264,6 +264,7 @@ class _StatsPageState extends State<StatsPage>
                             minDate: dateRangeService.startDate,
                             maxDate: dateRangeService.endDate,
                           ),
+                          dateRangeService: dateRangeService,
                         ),
                       ]),
                       buildContainerWithPadding([
