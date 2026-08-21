@@ -89,23 +89,59 @@ void main() {
 
     test('investment ratio score rewards a higher share of income invested, '
         'and plateaus once that share is healthy', () {
-      final none = createData(investmentRatio: 0).investmentRatioScore.score!;
+      final none = createData(
+        monthsWithoutIncome: 5,
+        investmentRatio: 0,
+      ).investmentRatioScore.score!;
       final fifteenPercent = createData(
+        monthsWithoutIncome: 5,
         investmentRatio: 15,
       ).investmentRatioScore.score!;
       final healthy = createData(
+        monthsWithoutIncome: 5,
         investmentRatio: FinanceHealthData.investmentRatioForFullScore,
       ).investmentRatioScore.score!;
       final everything = createData(
+        monthsWithoutIncome: 5,
         investmentRatio: 100,
       ).investmentRatioScore.score!;
 
+      expect(none, 0);
       expect(none, lessThan(fifteenPercent));
       expect(fifteenPercent, lessThan(healthy));
       expect(healthy, 100);
       // Investing beyond the healthy share is not extra credit: the risk of
       // running out of cash is the survival rate's business
       expect(everything, healthy);
+    });
+
+    test('investment score unlocks with five months of runway', () {
+      const ratio = FinanceHealthData.investmentRatioForFullScore;
+      final noRunway = createData(
+        monthsWithoutIncome: 0,
+        investmentRatio: ratio,
+      ).investmentRatioScore.score!;
+      final halfway = createData(
+        monthsWithoutIncome: 2.5,
+        investmentRatio: ratio,
+      ).investmentRatioScore.score!;
+      final funded = createData(
+        monthsWithoutIncome: FinanceHealthData.emergencyFundTargetMonths,
+        investmentRatio: ratio,
+      ).investmentRatioScore.score!;
+
+      expect(noRunway, 0);
+      expect(halfway, closeTo(50, 0.01));
+      expect(funded, 100);
+    });
+
+    test('investment score pauses when runway cannot be measured', () {
+      final score = createData(
+        monthsWithoutIncome: null,
+        investmentRatio: 25,
+      ).investmentRatioScore;
+
+      expect(score.canNotBeCalculated, isTrue);
     });
 
     test('runway and savings percentage carry the largest weights', () {

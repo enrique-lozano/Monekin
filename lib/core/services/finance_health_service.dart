@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/asset_service.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/net_worth/net_worth_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
@@ -205,21 +206,30 @@ class FinanceHealthData {
 
   FinanceHealthAttrScore get investmentRatioScore {
     final investmentRatio = this.investmentRatio;
+    final monthsWithoutIncome = this.monthsWithoutIncome;
 
-    if (investmentRatio == null) {
+    if (investmentRatio == null || monthsWithoutIncome == null) {
       return FinanceHealthAttrScore(score: null, weight: investmentRatioWeight);
     }
 
     // Same sigmoid shape as [savingPercentageScore], stretched so that
-    // [investmentRatioForFullScore] already earns every point of the pillar
+    // [investmentRatioForFullScore] already earns every point of the pillar.
+    // Subtracting curve(0) makes investing nothing worth exactly zero.
     double curve(double ratio) =>
         100 / (1 + exp(-1.25 - 0.2 * (ratio - 15))) - 2;
 
-    final toReturn =
-        curve(investmentRatio) / curve(investmentRatioForFullScore) * 100;
+    final baseScore =
+        (curve(investmentRatio) - curve(0)) /
+        (curve(investmentRatioForFullScore) - curve(0)) *
+        100;
+    final emergencyFundProgress = clampDouble(
+      monthsWithoutIncome / emergencyFundTargetMonths,
+      0,
+      1,
+    );
 
     return FinanceHealthAttrScore(
-      score: clampDouble(toReturn, 0, 100),
+      score: clampDouble(baseScore, 0, 100) * emergencyFundProgress,
       weight: investmentRatioWeight,
     );
   }
@@ -235,6 +245,9 @@ class FinanceHealthData {
   /// deploying savings from previous periods, and the risk of leaving yourself
   /// without a cash cushion is already measured by the survival rate.
   static const double investmentRatioForFullScore = 25;
+
+  /// Runway that unlocks the full investment-ratio score.
+  static const double emergencyFundTargetMonths = 5;
 
   // Runway and savings percentage are the most telling signals of day-to-day
   // financial health, so they carry the most weight.
@@ -524,32 +537,62 @@ class FinanceHealthService {
     final minDate = filters.minDate ?? kDefaultFirstSelectableDate;
     final maxDate = filters.maxDate ?? DateTime.now();
 
-    return Rx.combineLatest3(
-      TransactionService.instance.getTransactionsValueBalance(
-        filters: filters.copyWith(transactionTypes: [TransactionType.income]),
-      ),
-      TransactionService.instance.getInvestmentBuyVolume(filters: filters),
-      AccountService.instance
-          .getAccounts(
-            predicate: (acc, curr) =>
-                acc.type.equalsValue(AccountType.investment),
+    return filters.accounts().switchMap((accounts) {
+      final investmentAccounts = accounts
+          .where(
+            (account) =>
+                account.type == AccountType.investment &&
+                !account.date.isAfter(maxDate) &&
+                (account.closingDate == null ||
+                    !account.closingDate!.isBefore(minDate)),
           )
-          .map(
-            (accounts) => accounts.any(
-              (account) =>
-                  !account.date.isAfter(maxDate) &&
-                  (account.closingDate == null ||
-                      !account.closingDate!.isBefore(minDate)) &&
-                  (filters.accountsIDs?.contains(account.id) ?? true),
-            ),
-          ),
-      (income, investedAmount, hasInvestmentAccount) {
-        if (!hasInvestmentAccount) return null;
-        if (income <= 0) return investedAmount > 0 ? 100.0 : 0.0;
+          .toList();
 
-        return investedAmount / income * 100;
-      },
-    );
+      if (investmentAccounts.isEmpty) return Stream.value(null);
+
+      final transactionAccountIds = investmentAccounts
+          .where(
+            (account) =>
+                account.trackingMode == AccountTrackingMode.transactions,
+          )
+          .map((account) => account.id)
+          .toList();
+      final holdingsAccountIds = investmentAccounts
+          .where(
+            (account) => account.trackingMode == AccountTrackingMode.holdings,
+          )
+          .map((account) => account.id)
+          .toList();
+
+      final transactionBuys = transactionAccountIds.isEmpty
+          ? Stream.value(0.0)
+          : TransactionService.instance.getInvestmentBuyVolume(
+              filters: filters.copyWith(
+                accountsIDs: transactionAccountIds,
+                includeReceivingAccountsInAccountFilters: false,
+              ),
+            );
+      final snapshotContributions = HoldingService.instance
+          .getSnapshotInvestmentContributions(
+            accountIds: holdingsAccountIds,
+            minDate: minDate,
+            maxDate: maxDate,
+          );
+
+      return Rx.combineLatest3(
+        TransactionService.instance.getTransactionsValueBalance(
+          filters: filters.copyWith(transactionTypes: [TransactionType.income]),
+        ),
+        transactionBuys,
+        snapshotContributions,
+        (income, transactionAmount, snapshotAmount) {
+          final investedAmount = transactionAmount + snapshotAmount;
+          if (income <= 0) return investedAmount > 0 ? 100.0 : 0.0;
+
+          return investedAmount / income * 100;
+        },
+      );
+    });
   }
 
   /// Return a decimal number between 0 and 100 with the healthy value

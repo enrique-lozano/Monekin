@@ -321,9 +321,12 @@
         "none": "No has destinado dinero a inversiones durante este periodo."
       },
       "suggestion": "Invertir una parte de tus ingresos de forma regular ayuda a que tu dinero crezca más rápido que la inflación.",
-      "formula": "Cantidad invertida en valores ÷ ingresos, ambos dentro del rango seleccionado.",
+      "build_emergency_fund": "Prioriza primero tu fondo de emergencia. Cada mes de colchón, hasta cinco, desbloquea progresivamente los puntos obtenidos por tu ratio de inversión.",
+      "runway_insufficient_data": "No podemos puntuar este ratio hasta que podamos calcular tu colchón de emergencia.",
+      "formula": "Compras brutas de valores y aumentos positivos del coste base registrados mediante snapshots ÷ ingresos, todo dentro del rango seleccionado.",
       "insufficient_data": "No tenías ninguna cuenta de inversión abierta durante este periodo, así que no podemos medir esta parte de tus finanzas.",
-      "unlock": "Abre una cuenta de inversión, o elige un rango en el que ya tuvieras alguna abierta."
+      "unlock": "Abre una cuenta de inversión, o elige un rango en el que ya tuvieras alguna abierta.",
+      "runway_unlock": "Elige un rango con al menos 4 transacciones y algún gasto registrado para poder calcular tu colchón de emergencia."
     },
     "howCalculated": {
       "action": "Cómo se calcula tu nota",

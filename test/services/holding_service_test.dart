@@ -663,5 +663,92 @@ void main() {
       );
       expect(await service.getHolding('acc-e', 'sec-e').first, isNull);
     });
+
+    test(
+      'snapshot contributions count only positive cost-basis changes',
+      () async {
+        await insertAccount('acc-c', AccountTrackingMode.holdings);
+        await insertSecurity('sec-ca', currentPrice: 500);
+        await insertSecurity('sec-cb', currentPrice: 500);
+
+        await service.saveAccountSnapshot(
+          accountId: 'acc-c',
+          date: DateTime(2026, 1, 1),
+          positions: [
+            (securityId: 'sec-ca', quantity: 10, avgCostPrice: 10),
+            (securityId: 'sec-cb', quantity: 10, avgCostPrice: 10),
+          ],
+        );
+        await service.saveAccountSnapshot(
+          accountId: 'acc-c',
+          date: DateTime(2026, 2, 1),
+          positions: [
+            (securityId: 'sec-ca', quantity: 20, avgCostPrice: 10),
+            (securityId: 'sec-cb', quantity: 5, avgCostPrice: 10),
+          ],
+        );
+        await service.saveAccountSnapshot(
+          accountId: 'acc-c',
+          date: DateTime(2026, 3, 1),
+          positions: [
+            (securityId: 'sec-ca', quantity: 20, avgCostPrice: 10),
+            (securityId: 'sec-cb', quantity: 15, avgCostPrice: 10),
+          ],
+        );
+
+        final contributions = await service
+            .getSnapshotInvestmentContributions(
+              accountIds: const ['acc-c'],
+              minDate: DateTime(2026, 2, 1),
+              maxDate: DateTime(2026, 3, 1),
+              convertToPreferred: false,
+            )
+            .first;
+
+        // +100 in sec-ca in February and +100 in sec-cb in March. The sale
+        // and the securities' unrelated market price do not affect the result.
+        expect(contributions, closeTo(200, 0.001));
+      },
+    );
+
+    test('snapshot contributions respect account and date filters', () async {
+      for (final id in ['acc-f1', 'acc-f2']) {
+        await insertAccount(id, AccountTrackingMode.holdings);
+      }
+      await insertSecurity('sec-f', currentPrice: 10);
+
+      for (final id in ['acc-f1', 'acc-f2']) {
+        await service.saveAccountSnapshot(
+          accountId: id,
+          date: DateTime(2026, 1, 1),
+          positions: [(securityId: 'sec-f', quantity: 10, avgCostPrice: 10)],
+        );
+        await service.saveAccountSnapshot(
+          accountId: id,
+          date: DateTime(2026, 2, 1),
+          positions: [(securityId: 'sec-f', quantity: 20, avgCostPrice: 10)],
+        );
+      }
+
+      final selected = await service
+          .getSnapshotInvestmentContributions(
+            accountIds: const ['acc-f1'],
+            minDate: DateTime(2026, 2, 1),
+            maxDate: DateTime(2026, 2, 28),
+            convertToPreferred: false,
+          )
+          .first;
+      final outsideRange = await service
+          .getSnapshotInvestmentContributions(
+            accountIds: const ['acc-f1', 'acc-f2'],
+            minDate: DateTime(2026, 3, 1),
+            maxDate: DateTime(2026, 3, 31),
+            convertToPreferred: false,
+          )
+          .first;
+
+      expect(selected, closeTo(100, 0.001));
+      expect(outsideRange, 0);
+    });
   });
 }

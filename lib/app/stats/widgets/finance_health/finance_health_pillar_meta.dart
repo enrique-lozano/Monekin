@@ -118,9 +118,25 @@ List<FinanceHealthPillarMeta> buildFinanceHealthPillars(
           value: investmentRatio.toStringAsFixed(2),
         )
       : t.financial_health.investment_ratio.text.none;
+  final investmentScore = data.investmentRatioScore;
+  final investmentPausedForRunway =
+      investmentRatio != null && monthsWithoutIncome == null;
 
   String describe(String text, String suggestion, {required bool isPaused}) =>
       isPaused ? text : '$text\n\n$suggestion';
+
+  final investmentDescription = investmentPausedForRunway
+      ? '$investmentRatioText\n\n'
+            '${t.financial_health.investment_ratio.runway_insufficient_data}'
+      : describe(
+          investmentRatioText,
+          monthsWithoutIncome != null &&
+                  monthsWithoutIncome <
+                      FinanceHealthData.emergencyFundTargetMonths
+              ? t.financial_health.investment_ratio.build_emergency_fund
+              : t.financial_health.investment_ratio.suggestion,
+          isPaused: investmentScore.canNotBeCalculated,
+        );
 
   final pillars = [
     FinanceHealthPillarMeta(
@@ -192,16 +208,14 @@ List<FinanceHealthPillarMeta> buildFinanceHealthPillars(
       title: t.financial_health.investment_ratio.title,
       aboutText: t.financial_health.investment_ratio.subtitle,
       formulaText: t.financial_health.investment_ratio.formula,
-      unlockText: t.financial_health.investment_ratio.unlock,
+      unlockText: investmentPausedForRunway
+          ? t.financial_health.investment_ratio.runway_unlock
+          : t.financial_health.investment_ratio.unlock,
       valueText: investmentRatio == null
           ? '—'
           : '${investmentRatio.toStringAsFixed(0)} %',
-      descriptionHtml: describe(
-        investmentRatioText,
-        t.financial_health.investment_ratio.suggestion,
-        isPaused: investmentRatio == null,
-      ),
-      attrScore: data.investmentRatioScore,
+      descriptionHtml: investmentDescription,
+      attrScore: investmentScore,
       prevAttrScore: previous?.investmentRatioScore,
     ),
   ];

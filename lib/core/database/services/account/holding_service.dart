@@ -706,6 +706,76 @@ class HoldingService {
     });
   }
 
+  /// Gross capital added to holdings-mode accounts through snapshots in the
+  /// selected range.
+  ///
+  /// The first snapshot of each account is its opening position and is not
+  /// treated as a contribution. Later snapshots are compared position by
+  /// position with their predecessor. Only positive cost-basis changes count,
+  /// so sales and market-price changes do not reduce or inflate the result.
+  Stream<double> getSnapshotInvestmentContributions({
+    required Iterable<String> accountIds,
+    required DateTime minDate,
+    required DateTime maxDate,
+    bool convertToPreferred = true,
+  }) {
+    final ids = accountIds.toList();
+    if (ids.isEmpty) return Stream.value(0);
+
+    return Rx.combineLatestList(ids.map(getAccountSnapshots)).switchMap((
+      snapshotsByAccount,
+    ) {
+      final contributions =
+          <({double amount, String currencyId, DateTime date})>[];
+
+      for (final accountSnapshots in snapshotsByAccount) {
+        final snapshots = accountSnapshots.reversed.toList();
+
+        for (var i = 1; i < snapshots.length; i++) {
+          final current = snapshots[i];
+          if (current.date.isBefore(minDate) || current.date.isAfter(maxDate)) {
+            continue;
+          }
+
+          final previousCosts = {
+            for (final position in snapshots[i - 1].positions)
+              position.row.securityID: position.cost,
+          };
+
+          for (final position in current.positions) {
+            final increase =
+                position.cost - (previousCosts[position.row.securityID] ?? 0);
+            if (increase <= 0) continue;
+
+            contributions.add((
+              amount: increase,
+              currencyId: position.security.currencyId,
+              date: current.date,
+            ));
+          }
+        }
+      }
+
+      if (contributions.isEmpty) return Stream.value(0);
+      if (!convertToPreferred) {
+        return Stream.value(
+          contributions.fold<double>(0, (sum, item) => sum + item.amount),
+        );
+      }
+
+      return Rx.combineLatestList(
+        contributions.map(
+          (item) => ExchangeRateService.instance
+              .calculateExchangeRateToPreferredCurrency(
+                amount: item.amount,
+                fromCurrency: item.currencyId,
+                date: item.date,
+              ),
+        ),
+      ).map((values) => values.fold<double>(0, (sum, value) => sum + value));
+    });
+  }
+
   /// The snapshot in effect at [date] (the most recent on or before it, defaults
   /// to now) with its positions, or `null` if the account has no snapshot yet.
   Stream<AccountSnapshotWithPositions?> getEffectiveSnapshot(

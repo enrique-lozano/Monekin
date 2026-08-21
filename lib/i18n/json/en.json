@@ -318,9 +318,12 @@
         "none": "You haven't put any money into securities during this period."
       },
       "suggestion": "Investing part of your income regularly helps your money grow faster than inflation.",
-      "formula": "Amount invested in securities ÷ income, both within the selected range.",
+      "build_emergency_fund": "Prioritize your emergency fund first. Each month of runway, up to five, progressively unlocks the points earned by your investment ratio.",
+      "runway_insufficient_data": "We can't score this ratio until your emergency runway can be measured.",
+      "formula": "Gross security purchases and positive cost-basis increases recorded in portfolio snapshots ÷ income, all within the selected range.",
       "insufficient_data": "You had no investment account open during this period, so we can't measure this part of your finances.",
-      "unlock": "Open an investment account, or pick a range in which one of them was already open."
+      "unlock": "Open an investment account, or pick a range in which one of them was already open.",
+      "runway_unlock": "Pick a range with at least 4 transactions and some recorded expenses so your emergency runway can be measured."
     },
     "howCalculated": {
       "action": "How your score is calculated",
