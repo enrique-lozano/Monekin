@@ -8,6 +8,7 @@ import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/pie_chart_center_shade.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -143,12 +144,11 @@ class NetWorthCompositionCard extends StatelessWidget {
           return Center(child: Text(t.general.insufficient_data));
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 260,
-              child: PieChart(
+        final chart = SizedBox(
+          height: 260,
+          child: Stack(
+            children: [
+              PieChart(
                 PieChartData(
                   startDegreeOffset: -90,
                   borderData: FlBorderData(show: false),
@@ -157,34 +157,70 @@ class NetWorthCompositionCard extends StatelessWidget {
                   sections: sections,
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 12,
-              runSpacing: 8,
+              const PieChartCenterShade(centerSpaceRadius: 40),
+            ],
+          ),
+        );
+
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isRow = constraints.maxWidth >= 520;
+
+            final legendItems = [
+              _buildLegend(
+                context,
+                t.account.cash,
+                totalCash,
+                Theme.of(context).colorScheme.primary,
+                fullWidth: isRow,
+              ),
+              _buildLegend(
+                context,
+                t.account.investments,
+                totalInvestments,
+                Theme.of(context).colorScheme.secondary,
+                fullWidth: isRow,
+              ),
+              _buildLegend(
+                context,
+                t.assets.title,
+                totalAssets,
+                Theme.of(context).colorScheme.tertiary,
+                fullWidth: isRow,
+              ),
+            ];
+
+            if (isRow) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(child: chart),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 12,
+                        children: legendItems,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildLegend(
-                  context,
-                  t.account.cash,
-                  totalCash,
-                  Theme.of(context).colorScheme.primary,
-                ),
-                _buildLegend(
-                  context,
-                  t.account.investments,
-                  totalInvestments,
-                  Theme.of(context).colorScheme.secondary,
-                ),
-                _buildLegend(
-                  context,
-                  t.assets.title,
-                  totalAssets,
-                  Theme.of(context).colorScheme.tertiary,
-                ),
+                chart,
+                const SizedBox(height: 12),
+                Wrap(spacing: 12, runSpacing: 8, children: legendItems),
+                const SizedBox(height: 16),
               ],
-            ),
-            const SizedBox(height: 16),
-          ],
+            );
+          },
         );
       },
     );
@@ -203,10 +239,18 @@ class NetWorthCompositionCard extends StatelessWidget {
     BuildContext context,
     String label,
     double value,
-    Color color,
-  ) {
+    Color color, {
+    required bool fullWidth,
+  }) {
+    final labelWidget = Text(
+      label,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: Theme.of(context).textTheme.bodyMedium,
+    );
+
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
       children: [
         Container(
           width: 12,
@@ -214,13 +258,9 @@ class NetWorthCompositionCard extends StatelessWidget {
           decoration: BoxDecoration(shape: BoxShape.circle, color: color),
         ),
         const SizedBox(width: 8),
-        Row(
-          children: [
-            Text(label, style: Theme.of(context).textTheme.bodyMedium),
-            const SizedBox(width: 6),
-            CurrencyDisplayer(amountToConvert: value),
-          ],
-        ),
+        if (fullWidth) Expanded(child: labelWidget) else labelWidget,
+        const SizedBox(width: 6),
+        CurrencyDisplayer(amountToConvert: value),
       ],
     );
   }

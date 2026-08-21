@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
+import 'package:monekin/app/stats/widgets/period_value_header.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/net_worth/net_worth_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
@@ -75,6 +76,16 @@ class NetWorthEvolutionCard extends StatelessWidget {
         .first;
   }
 
+  /// Growth of the net worth along the range. Divided by the absolute initial
+  /// value so that a negative net worth getting better still trends up. NaN
+  /// when there was nothing to grow from.
+  double _relativeChange({required double from, required double to}) {
+    const eps = 1e-10;
+    if (from.abs() < eps) return to.abs() < eps ? 0 : double.nan;
+
+    return (to - from) / from.abs();
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -102,6 +113,15 @@ class NetWorthEvolutionCard extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            PeriodValueHeader(
+              label: t.stats.final_net_worth,
+              value: data.last.netWorth,
+              relativeChange: _relativeChange(
+                from: data.first.netWorth,
+                to: data.last.netWorth,
+              ),
+            ),
+            const SizedBox(height: 24),
             SizedBox(
               height: 260,
               child: _NetWorthLineChart(
@@ -118,7 +138,7 @@ class NetWorthEvolutionCard extends StatelessWidget {
               children: [
                 EvolutionChartLegendItem(
                   color: Theme.of(context).colorScheme.primary,
-                  label: t.assets.title,
+                  label: t.stats.net_worth_gross,
                 ),
                 EvolutionChartLegendItem(
                   color: Theme.of(context).colorScheme.error,
@@ -126,7 +146,7 @@ class NetWorthEvolutionCard extends StatelessWidget {
                 ),
                 EvolutionChartLegendItem(
                   color: Theme.of(context).colorScheme.secondary,
-                  label: t.stats.net_worth,
+                  label: t.stats.net_worth_net,
                 ),
               ],
             ),
@@ -161,12 +181,12 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
     final t = Translations.of(context);
     switch (index) {
       case 0:
-        return t.assets.title;
+        return t.stats.net_worth_gross;
       case 1:
         return t.debts.display(n: 2);
       case 2:
       default:
-        return t.stats.net_worth;
+        return t.stats.net_worth_net;
     }
   }
 

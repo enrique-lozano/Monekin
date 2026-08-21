@@ -9,6 +9,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/pie_chart_center_shade.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -398,18 +399,7 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
                     ],
                   ),
                 ),
-                Center(
-                  child: Container(
-                    width: 35 * 2.25,
-                    height: 35 * 2.25,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surface.withOpacity(0.1),
-                    ),
-                  ),
-                ),
+                const PieChartCenterShade(centerSpaceRadius: 35),
                 Center(
                   child: Text(
                     t.general.insufficient_data,
@@ -472,6 +462,7 @@ class _PortfolioCompositionCardState extends State<PortfolioCompositionCard> {
                             ],
                           ),
                         ),
+                        const PieChartCenterShade(centerSpaceRadius: 60),
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [

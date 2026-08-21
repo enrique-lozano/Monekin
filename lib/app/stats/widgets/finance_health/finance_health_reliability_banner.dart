@@ -60,7 +60,14 @@ class _FinanceHealthReliabilityBannerState
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.info_outline_rounded, size: 18, color: accent),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Icon(
+                          Icons.info_outline_rounded,
+                          size: 18,
+                          color: accent,
+                        ),
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: HTMLText(

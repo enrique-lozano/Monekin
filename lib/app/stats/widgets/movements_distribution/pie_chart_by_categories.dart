@@ -18,6 +18,7 @@ import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart'
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/pie_chart_center_shade.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -299,20 +300,8 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                           sections: showingSections(dataItems),
                         ),
                       ),
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: centerRadius * 2.25,
-                            height: centerRadius * 2.25,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.surface.withOpacity(0.1),
-                            ),
-                          ),
-                        ),
+                      PieChartCenterShade(
+                        centerSpaceRadius: centerRadius.toDouble(),
                       ),
                     ],
                   ),
