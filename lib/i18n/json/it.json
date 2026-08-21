@@ -295,18 +295,18 @@
       "formula": "Debiti in corso ÷ attività lorde, entrambi alla fine del periodo selezionato.",
       "unlock": "Aggiungi uno dei tuoi debiti o una delle tue attività (una casa, un'auto...)."
     },
-    "netWorthTrend": {
-      "title": "Andamento del patrimonio netto",
-      "subtitle": "Come è cambiato il tuo patrimonio netto in questo periodo",
+    "cashFlowConsistency": {
+      "title": "Costanza del flusso di cassa",
+      "subtitle": "In quale parte di questo periodo hai speso entro le tue entrate",
       "text": {
-        "positive": "Il tuo patrimonio netto è aumentato del <b>{{value}}%</b> in questo periodo.",
-        "negative": "Il tuo patrimonio netto è diminuito del <b>{{value}}%</b> in questo periodo.",
-        "flat": "Il tuo patrimonio netto è rimasto invariato in questo periodo."
+        "good": "Hai speso entro le tue possibilità nel <b>{{value}}%</b> di questo periodo. Il tuo flusso di cassa è stabile.",
+        "normal": "Hai speso entro le tue possibilità nel <b>{{value}}%</b> di questo periodo.",
+        "bad": "Hai speso entro le tue possibilità solo nel <b>{{value}}%</b> di questo periodo, quindi il tuo flusso di cassa oscilla molto."
       },
-      "suggestion": "Un patrimonio netto in crescita costante mostra che le tue attività aumentano più rapidamente dei tuoi debiti.",
-      "insufficient_data": "Il tuo patrimonio netto era zero all'inizio di questo periodo, quindi non c'è un riferimento con cui confrontarlo.",
-      "formula": "(Patrimonio netto attuale − patrimonio netto all'inizio del periodo) ÷ patrimonio netto all'inizio del periodo.",
-      "unlock": "Continua a usare Monekin, oppure scegli un periodo che inizi quando già registravi del denaro."
+      "suggestion": "Distribuire i pagamenti grossi e mantenere un ritmo costante rende le tue finanze molto più prevedibili.",
+      "insufficient_data": "Non c'è abbastanza attività distribuita in questo intervallo per capire quanto sia stabile il tuo flusso di cassa.",
+      "formula": "Dividiamo l'intervallo in più parti e distribuiamo le tue entrate tra di esse. In ogni parte, spendere al massimo quello che ti spetta la conta per intero; spenderne il doppio non conta nulla, e nel mezzo conta in proporzione.",
+      "unlock": "Scegli un intervallo con attività in almeno 3 delle sue parti."
     },
     "investmentRatio": {
       "title": "Rapporto di investimento",

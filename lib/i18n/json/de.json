@@ -295,18 +295,18 @@
       "formula": "Offene Schulden ÷ Bruttovermögen, jeweils zum Ende des ausgewählten Zeitraums.",
       "unlock": "Füge eine Deiner Schulden oder einen Deiner Vermögenswerte hinzu (ein Haus, ein Auto...)."
     },
-    "netWorthTrend": {
-      "title": "Vermögensentwicklung",
-      "subtitle": "Wie sich Dein Nettovermögen in diesem Zeitraum verändert hat",
+    "cashFlowConsistency": {
+      "title": "Beständigkeit des Cashflows",
+      "subtitle": "In welchem Teil dieses Zeitraums Deine Ausgaben innerhalb Deiner Einnahmen blieben",
       "text": {
-        "positive": "Dein Nettovermögen ist in diesem Zeitraum um <b>{{value}}%</b> gestiegen.",
-        "negative": "Dein Nettovermögen ist in diesem Zeitraum um <b>{{value}}%</b> gesunken.",
-        "flat": "Dein Nettovermögen ist in diesem Zeitraum unverändert geblieben."
+        "good": "In <b>{{value}}%</b> dieses Zeitraums hast Du innerhalb Deiner Möglichkeiten ausgegeben. Dein Cashflow ist stabil.",
+        "normal": "In <b>{{value}}%</b> dieses Zeitraums hast Du innerhalb Deiner Möglichkeiten ausgegeben.",
+        "bad": "Nur in <b>{{value}}%</b> dieses Zeitraums hast Du innerhalb Deiner Möglichkeiten ausgegeben, Dein Cashflow schwankt also stark."
       },
-      "suggestion": "Ein stetig wachsendes Nettovermögen zeigt, dass Dein Besitz schneller wächst als Deine Schulden.",
-      "insufficient_data": "Dein Nettovermögen war zu Beginn dieses Zeitraums null, daher gibt es keine Ausgangsbasis für einen Vergleich.",
-      "formula": "(Nettovermögen jetzt − Nettovermögen am Anfang des Zeitraums) ÷ Nettovermögen am Anfang des Zeitraums.",
-      "unlock": "Nutze Monekin weiter oder wähle einen Zeitraum, der beginnt, als Du schon Geld erfasst hattest."
+      "suggestion": "Große Zahlungen zu verteilen und ein gleichmäßiges Tempo zu halten macht Deine Finanzen deutlich planbarer.",
+      "insufficient_data": "In diesem Zeitraum ist zu wenig Aktivität verteilt, um die Stabilität Deines Cashflows zu beurteilen.",
+      "formula": "Wir teilen den Zeitraum in mehrere Abschnitte und verteilen Deine Einnahmen darauf. Gibst Du in einem Abschnitt höchstens Deinen Anteil aus, zählt er ganz; beim Doppelten zählt er gar nicht, dazwischen anteilig.",
+      "unlock": "Wähle einen Zeitraum mit Aktivität in mindestens 3 seiner Abschnitte."
     },
     "investmentRatio": {
       "title": "Investitionsquote",

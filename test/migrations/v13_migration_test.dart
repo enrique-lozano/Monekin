@@ -33,14 +33,15 @@ Database migrateSample() {
   final db = sqlite3.open(tmp.path);
   addTearDown(db.dispose);
 
-  final statements = splitSQLStatements(
-    File('assets/sql/migrations/v13.sql').readAsStringSync(),
-  ).where(
-    (s) => !RegExp(
-      r'^\s*PRAGMA\s+foreign_keys',
-      caseSensitive: false,
-    ).hasMatch(s),
-  );
+  final statements =
+      splitSQLStatements(
+        File('assets/sql/migrations/v13.sql').readAsStringSync(),
+      ).where(
+        (s) => !RegExp(
+          r'^\s*PRAGMA\s+foreign_keys',
+          caseSensitive: false,
+        ).hasMatch(s),
+      );
 
   db.execute('PRAGMA foreign_keys = OFF');
   db.execute('BEGIN');
@@ -160,23 +161,25 @@ void main() {
     // must convert to a security (with price history) but no holding.
     const securityId = 'sec_a2b7c9d0-1111-4222-8333-444455556666';
 
-    final sec = db.select(
-      'SELECT currentPrice FROM securities WHERE id = ?',
-      [securityId],
-    );
+    final sec = db.select('SELECT currentPrice FROM securities WHERE id = ?', [
+      securityId,
+    ]);
     expect(sec, isNotEmpty, reason: 'unlinked stock should become a security');
 
-    final holdings = db.select(
-      'SELECT 1 FROM holdings WHERE securityID = ?',
-      [securityId],
-    );
+    final holdings = db.select('SELECT 1 FROM holdings WHERE securityID = ?', [
+      securityId,
+    ]);
     expect(holdings, isEmpty, reason: 'unlinked security must have no holding');
 
     final priceHistory = db.select(
       'SELECT 1 FROM securityPrices WHERE securityID = ?',
       [securityId],
     );
-    expect(priceHistory, isNotEmpty, reason: 'its valuations become price points');
+    expect(
+      priceHistory,
+      isNotEmpty,
+      reason: 'its valuations become price points',
+    );
   });
 
   test('a financial asset without valuations gets one seed price point', () {
@@ -202,10 +205,9 @@ void main() {
     expect(points.length, 1, reason: 'exactly one seed point');
     expect((points.first['price'] as num).toDouble(), 500);
 
-    final holdings = db.select(
-      'SELECT 1 FROM holdings WHERE securityID = ?',
-      [securityId],
-    );
+    final holdings = db.select('SELECT 1 FROM holdings WHERE securityID = ?', [
+      securityId,
+    ]);
     expect(holdings, isEmpty);
   });
 
@@ -217,10 +219,9 @@ void main() {
     // a single seeded portfolio snapshot mirroring the holding (no trades).
     const accountId = 'acc_robo';
 
-    final acct = db.select(
-      'SELECT trackingMode FROM accounts WHERE id = ?',
-      [accountId],
-    );
+    final acct = db.select('SELECT trackingMode FROM accounts WHERE id = ?', [
+      accountId,
+    ]);
     expect(acct.first['trackingMode'], 'holdings');
 
     final trades = db.select(
@@ -292,9 +293,7 @@ void main() {
   test('migration file has no semicolons inside comments', () {
     // A ';' in a comment would be split by the app's statement splitter and
     // corrupt the following statement (this regression bit us once already).
-    final lines = File(
-      'assets/sql/migrations/v13.sql',
-    ).readAsLinesSync();
+    final lines = File('assets/sql/migrations/v13.sql').readAsLinesSync();
 
     final offenders = <String>[];
     for (final line in lines) {

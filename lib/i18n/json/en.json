@@ -297,18 +297,18 @@
       "formula": "Outstanding debt ÷ gross assets, both as of the end of the selected range.",
       "unlock": "Add one of your debts or one of your assets (a house, a car...)."
     },
-    "netWorthTrend": {
-      "title": "Net worth trend",
-      "subtitle": "How your net worth changed during this period",
+    "cashFlowConsistency": {
+      "title": "Cash-flow consistency",
+      "subtitle": "How much of this period you kept your spending within your income",
       "text": {
-        "positive": "Your net worth increased by <b>{{value}}%</b> during this period.",
-        "negative": "Your net worth decreased by <b>{{value}}%</b> during this period.",
-        "flat": "Your net worth remained unchanged during this period."
+        "good": "You spent within your means during <b>{{value}}%</b> of this period. Your cash flow is steady.",
+        "normal": "You spent within your means during <b>{{value}}%</b> of this period.",
+        "bad": "You only spent within your means during <b>{{value}}%</b> of this period, so your cash flow swings a lot."
       },
-      "suggestion": "A steadily growing net worth shows that your assets are increasing faster than your debts.",
-      "insufficient_data": "Your net worth was zero when this period started, so there is no baseline to compare it with.",
-      "formula": "(Net worth now − net worth at the start of the range) ÷ net worth at the start of the range.",
-      "unlock": "Keep using Monekin, or pick a range that starts once you already had some money tracked."
+      "suggestion": "Spreading the big payments and keeping a similar pace all along makes your finances far more predictable.",
+      "insufficient_data": "There is not enough activity spread along this range to tell how steady your cash flow is.",
+      "formula": "We split the range into several parts and share out your income between them. In each part, spending at most what falls to you counts in full, spending twice as much counts as nothing, and in between counts proportionally.",
+      "unlock": "Pick a range with activity in at least 3 of its parts."
     },
     "investmentRatio": {
       "title": "Investment ratio",

@@ -95,21 +95,20 @@ List<FinanceHealthPillarMeta> buildFinanceHealthPillars(
       ? '∞'
       : '${(debtToAssetRatio * 100).toStringAsFixed(0)} %';
 
-  final netWorthTrend = data.netWorthTrend;
-  final netWorthTrendText = netWorthTrend == null
-      ? t.financial_health.net_worth_trend.insufficient_data
-      : netWorthTrend > 0
-      ? t.financial_health.net_worth_trend.text.positive(
-          value: (netWorthTrend * 100).toStringAsFixed(1),
+  final cashFlowConsistency = data.cashFlowConsistency;
+  final cashFlowConsistencyText = cashFlowConsistency == null
+      ? t.financial_health.cash_flow_consistency.insufficient_data
+      : cashFlowConsistency >= 80
+      ? t.financial_health.cash_flow_consistency.text.good(
+          value: cashFlowConsistency.toStringAsFixed(0),
         )
-      : netWorthTrend < 0
-      ? t.financial_health.net_worth_trend.text.negative(
-          value: (netWorthTrend.abs() * 100).toStringAsFixed(1),
+      : cashFlowConsistency >= 50
+      ? t.financial_health.cash_flow_consistency.text.normal(
+          value: cashFlowConsistency.toStringAsFixed(0),
         )
-      : t.financial_health.net_worth_trend.text.flat;
-  final netWorthTrendValueText = netWorthTrend == null
-      ? '—'
-      : '${netWorthTrend > 0 ? '+' : ''}${(netWorthTrend * 100).toStringAsFixed(1)} %';
+      : t.financial_health.cash_flow_consistency.text.bad(
+          value: cashFlowConsistency.toStringAsFixed(0),
+        );
 
   final investmentRatio = data.investmentRatio;
   final investmentRatioText = investmentRatio == null
@@ -172,19 +171,21 @@ List<FinanceHealthPillarMeta> buildFinanceHealthPillars(
       prevAttrScore: previous?.debtToAssetScore,
     ),
     FinanceHealthPillarMeta(
-      icon: Icons.show_chart_rounded,
-      title: t.financial_health.net_worth_trend.title,
-      aboutText: t.financial_health.net_worth_trend.subtitle,
-      formulaText: t.financial_health.net_worth_trend.formula,
-      unlockText: t.financial_health.net_worth_trend.unlock,
-      valueText: netWorthTrendValueText,
+      icon: Icons.bar_chart_rounded,
+      title: t.financial_health.cash_flow_consistency.title,
+      aboutText: t.financial_health.cash_flow_consistency.subtitle,
+      formulaText: t.financial_health.cash_flow_consistency.formula,
+      unlockText: t.financial_health.cash_flow_consistency.unlock,
+      valueText: cashFlowConsistency == null
+          ? '—'
+          : '${cashFlowConsistency.toStringAsFixed(0)} %',
       descriptionHtml: describe(
-        netWorthTrendText,
-        t.financial_health.net_worth_trend.suggestion,
-        isPaused: netWorthTrend == null,
+        cashFlowConsistencyText,
+        t.financial_health.cash_flow_consistency.suggestion,
+        isPaused: cashFlowConsistency == null,
       ),
-      attrScore: data.netWorthTrendScore,
-      prevAttrScore: previous?.netWorthTrendScore,
+      attrScore: data.cashFlowConsistencyScore,
+      prevAttrScore: previous?.cashFlowConsistencyScore,
     ),
     FinanceHealthPillarMeta(
       icon: Icons.candlestick_chart_outlined,

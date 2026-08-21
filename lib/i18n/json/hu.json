@@ -295,18 +295,18 @@
       "formula": "Fennálló adósság ÷ bruttó vagyon, mindkettő a kiválasztott időszak végén.",
       "unlock": "Adja meg valamelyik adósságát vagy vagyontárgyát (egy házat, egy autót...)."
     },
-    "netWorthTrend": {
-      "title": "Nettó vagyon trendje",
-      "subtitle": "Hogyan változott a nettó vagyona ebben az időszakban",
+    "cashFlowConsistency": {
+      "title": "Pénzáramlás egyenletessége",
+      "subtitle": "Az időszak mekkora részében maradt a költése a bevételein belül",
       "text": {
-        "positive": "A nettó vagyona <b>{{value}}%</b>-kal nőtt ebben az időszakban.",
-        "negative": "A nettó vagyona <b>{{value}}%</b>-kal csökkent ebben az időszakban.",
-        "flat": "A nettó vagyona nem változott ebben az időszakban."
+        "good": "Az időszak <b>{{value}}%</b>-ában a lehetőségein belül költött. A pénzáramlása kiegyensúlyozott.",
+        "normal": "Az időszak <b>{{value}}%</b>-ában a lehetőségein belül költött.",
+        "bad": "Az időszaknak csak a <b>{{value}}%</b>-ában költött a lehetőségein belül, így a pénzáramlása erősen ingadozik."
       },
-      "suggestion": "A folyamatosan növekvő nettó vagyon azt jelzi, hogy a vagyona gyorsabban nő, mint az adóssága.",
-      "insufficient_data": "A nettó vagyona nulla volt ennek az időszaknak az elején, így nincs mihez hasonlítani.",
-      "formula": "(Mostani nettó vagyon − az időszak eleji nettó vagyon) ÷ az időszak eleji nettó vagyon.",
-      "unlock": "Használja tovább a Monekint, vagy válasszon olyan időszakot, amelynek kezdetén már követett valamennyi pénzt."
+      "suggestion": "A nagy kifizetések elosztása és az egyenletes tempó sokkal kiszámíthatóbbá teszi a pénzügyeit.",
+      "insufficient_data": "Ebben az időszakban nincs elég elosztott aktivitás ahhoz, hogy megítéljük a pénzáramlás egyenletességét.",
+      "formula": "Az időszakot több szakaszra osztjuk, és elosztjuk köztük a bevételeit. Ha egy szakaszban legfeljebb a rá jutó részt költi el, az teljesen számít; ha a kétszeresét, egyáltalán nem, a kettő között pedig arányosan.",
+      "unlock": "Válasszon olyan időszakot, amelynek legalább 3 szakaszában van aktivitás."
     },
     "investmentRatio": {
       "title": "Befektetési arány",

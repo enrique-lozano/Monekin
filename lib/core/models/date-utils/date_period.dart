@@ -45,19 +45,23 @@ class DatePeriod {
     periodicity: Periodicity.values.byName(json['periodicity'] as String),
     lastDays: json['lastDays'] as int,
     customDateRange: (
-    json['customDateRangeStart'] != null
-      ? DateTime.fromMillisecondsSinceEpoch(json['customDateRangeStart'] as int)
-      : null,
-    json['customDateRangeEnd'] != null
-      ? DateTime.fromMillisecondsSinceEpoch(json['customDateRangeEnd'] as int)
-      : null,
+      json['customDateRangeStart'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              json['customDateRangeStart'] as int,
+            )
+          : null,
+      json['customDateRangeEnd'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              json['customDateRangeEnd'] as int,
+            )
+          : null,
     ),
   );
 
   String toJsonString() => jsonEncode(toJson());
 
   factory DatePeriod.fromJsonString(String raw) =>
-    DatePeriod.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      DatePeriod.fromJson(jsonDecode(raw) as Map<String, dynamic>);
 
   @override
   String toString() {

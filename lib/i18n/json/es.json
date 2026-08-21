@@ -300,18 +300,18 @@
       "formula": "Deuda pendiente ÷ activos brutos, ambos a fecha de fin del rango seleccionado.",
       "unlock": "Añade una de tus deudas o uno de tus activos (una casa, un coche...)."
     },
-    "netWorthTrend": {
-      "title": "Tendencia del patrimonio",
-      "subtitle": "Cómo cambió tu patrimonio durante este periodo",
+    "cashFlowConsistency": {
+      "title": "Consistencia del flujo",
+      "subtitle": "Qué parte de este periodo mantuviste el gasto dentro de tus ingresos",
       "text": {
-        "positive": "Tu patrimonio aumentó un <b>{{value}}%</b> durante este periodo.",
-        "negative": "Tu patrimonio disminuyó un <b>{{value}}%</b> durante este periodo.",
-        "flat": "Tu patrimonio se mantuvo sin cambios durante este periodo."
+        "good": "Gastaste dentro de tus posibilidades durante el <b>{{value}}%</b> de este periodo. Tu flujo de caja es estable.",
+        "normal": "Gastaste dentro de tus posibilidades durante el <b>{{value}}%</b> de este periodo.",
+        "bad": "Solo gastaste dentro de tus posibilidades durante el <b>{{value}}%</b> de este periodo, así que tu flujo de caja da muchos bandazos."
       },
-      "suggestion": "Un patrimonio que crece de forma constante indica que tus activos aumentan más rápido que tus deudas.",
-      "insufficient_data": "Tu patrimonio era cero cuando empezó este periodo, así que no hay punto de partida con el que compararlo.",
-      "formula": "(Patrimonio ahora − patrimonio al inicio del rango) ÷ patrimonio al inicio del rango.",
-      "unlock": "Sigue usando Monekin, o elige un rango que empiece cuando ya tenías algo de dinero registrado."
+      "suggestion": "Repartir los pagos grandes y mantener un ritmo parecido a lo largo del tiempo hace que tus finanzas sean mucho más predecibles.",
+      "insufficient_data": "No hay suficiente actividad repartida a lo largo de este rango como para saber si tu flujo de caja es estable.",
+      "formula": "Dividimos el rango en varios tramos y repartimos tus ingresos entre ellos. En cada tramo, gastar como mucho lo que te toca lo suma entero; gastar el doble no suma nada, y entre medias suma de forma proporcional.",
+      "unlock": "Elige un rango con actividad en al menos 3 de sus tramos."
     },
     "investmentRatio": {
       "title": "Ratio de inversión",

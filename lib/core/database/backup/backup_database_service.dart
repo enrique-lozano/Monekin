@@ -216,6 +216,9 @@ class BackupDatabaseService {
   }
 
   Future<List<List<String>>> processCsv(String csvData) async {
-    return csv.decode(csvData).map((row) => row.map((e) => e.toString()).toList()).toList();
+    return csv
+        .decode(csvData)
+        .map((row) => row.map((e) => e.toString()).toList())
+        .toList();
   }
 }

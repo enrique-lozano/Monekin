@@ -56,14 +56,14 @@ void main() {
           monthsWithoutIncome: 8,
           savingsPercentage: 24,
           debtToAssetRatio: 0.3,
-          netWorthTrend: 0.1,
+          cashFlowConsistency: 75,
           investmentRatio: 12,
         ),
         previous: const FinanceHealthData(
           monthsWithoutIncome: 6,
           savingsPercentage: 18,
           debtToAssetRatio: 0.4,
-          netWorthTrend: 0.05,
+          cashFlowConsistency: 60,
           investmentRatio: 8,
         ),
       ),
@@ -84,7 +84,7 @@ void main() {
       monthsWithoutIncome: 8,
       savingsPercentage: null,
       debtToAssetRatio: 0.3,
-      netWorthTrend: 0.1,
+      cashFlowConsistency: 75,
       investmentRatio: null,
     );
 

@@ -37,12 +37,16 @@ class _FinanceHealthDetailsState extends State<FinanceHealthDetails> {
 
     final currentStream = FinanceHealthService().getHealthyValue(
       filters: widget.filters,
+      dateRange: widget.dateRangeService,
     );
     final previousStream = canCompare
         ? FinanceHealthService().getHealthyValue(
             filters: widget.filters.copyWith(
               minDate: prevStart,
               maxDate: prevEnd,
+            ),
+            dateRange: widget.dateRangeService.copyWith(
+              periodModifier: widget.dateRangeService.periodModifier - 1,
             ),
           )
         : Stream<FinanceHealthData?>.value(null);

@@ -37,6 +37,7 @@ class FinanceHealthCard extends StatelessWidget {
             minDate: dateRangeService.startDate,
             maxDate: dateRangeService.endDate,
           ),
+          dateRange: dateRangeService,
         ),
         builder: (context, snapshot) {
           final data = snapshot.data;

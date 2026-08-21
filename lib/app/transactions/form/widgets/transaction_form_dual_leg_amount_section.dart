@@ -127,10 +127,9 @@ class _DualLegBody extends StatelessWidget {
                   },
                   showReset: topOut ? sourceMismatch : destMismatch,
                   onReset: topOut
-                      ? () =>
-                            c.alignTransferSourceFromInverseConverted(
-                              expectedSource,
-                            )
+                      ? () => c.alignTransferSourceFromInverseConverted(
+                          expectedSource,
+                        )
                       : c.clearTransferDestinationOverride,
                 ),
               ],

@@ -1,18 +1,13 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
-import 'package:monekin/core/models/date-utils/date_period.dart';
+import 'package:monekin/core/models/date-utils/date_period_segments.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/date-utils/period_type.dart';
-import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
@@ -56,9 +51,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
   int touchedBarGroupIndex = -1;
   int touchedRodDataIndex = -1;
 
-  Future<IncomeExpenseChartDataItem?> getDataByPeriods(
-    DateTime? startDate,
-    DateTime? endDate,
+  Future<IncomeExpenseChartDataItem> getDataByPeriods(
     DatePeriodState range,
   ) async {
     final transactionService = TransactionService.instance;
@@ -69,14 +62,6 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
     final List<double> income = [];
     final List<double> expense = [];
     final List<double> balance = [];
-
-    final effectiveStart =
-        startDate ??
-        (accounts.isNotEmpty
-            ? accounts.map((e) => e.date).min
-            : DateTime(DateTime.now().year - 3));
-
-    final effectiveEnd = endDate ?? DateTime.now();
 
     Future<double> getIncomeData(DateTime start, DateTime end) {
       return transactionService
@@ -106,128 +91,19 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
           .first;
     }
 
-    Future<void> addPeriodData({
-      required DateTime start,
-      required DateTime end,
-      required String shortTitle,
-      required String longTitle,
-    }) async {
-      final incomeValue = await getIncomeData(start, end);
-      final expenseValue = await getExpenseData(start, end);
+    final segments = range.splitIntoSegments(
+      oldestDate: accounts.isEmpty ? null : accounts.map((e) => e.date).min,
+    );
 
-      shortTitles.add(shortTitle);
-      longTitles.add(longTitle);
+    for (final segment in segments) {
+      final incomeValue = await getIncomeData(segment.start, segment.end);
+      final expenseValue = await getExpenseData(segment.start, segment.end);
+
+      shortTitles.add(segment.shortTitle);
+      longTitles.add(segment.longTitle);
       income.add(incomeValue);
       expense.add(expenseValue);
       balance.add(incomeValue + expenseValue);
-    }
-
-    if (range.datePeriod.periodType == PeriodType.cycle) {
-      if (endDate == null || startDate == null) {
-        throw Exception('Dates cannot be null');
-      }
-
-      switch (range.datePeriod.periodicity) {
-        case Periodicity.month:
-          final ranges = [
-            [1, 6],
-            [6, 10],
-            [10, 15],
-            [15, 20],
-            [20, 25],
-            [25, null],
-          ];
-
-          for (final r in ranges) {
-            final start = DateTime(startDate.year, startDate.month, r[0]!);
-            final end = DateTime(
-              start.year,
-              r[1] == null ? start.month + 1 : start.month,
-              r[1] ?? 1,
-            );
-
-            await addPeriodData(
-              start: start,
-              end: end,
-              shortTitle: "${r[0]}-${r[1] ?? ''}",
-              longTitle:
-                  '${DateFormat.MMMd().format(start)} - ${DateFormat.MMMd().format(end)}',
-            );
-          }
-          break;
-
-        case Periodicity.year:
-          for (
-            var i = startDate.month;
-            i <= endDate.subtract(const Duration(milliseconds: 1)).month;
-            i++
-          ) {
-            final start = DateTime(startDate.year, i);
-            final end = DateTime(start.year, i + 1);
-
-            await addPeriodData(
-              start: start,
-              end: end,
-              shortTitle: DateFormat.MMM().format(start),
-              longTitle: DateFormat.MMMM().format(start),
-            );
-          }
-          break;
-
-        case Periodicity.week:
-          for (var i = 0; i < DateTime.daysPerWeek; i++) {
-            final start = startDate.add(Duration(days: i));
-            final end = start.add(const Duration(days: 1));
-
-            await addPeriodData(
-              start: start,
-              end: end,
-              shortTitle: DateFormat.E().format(start),
-              longTitle: DateFormat.yMMMEd().format(start),
-            );
-          }
-          break;
-
-        default:
-          break;
-      }
-    } else if (range.datePeriod.periodType == PeriodType.dateRange ||
-        range.datePeriod.periodType == PeriodType.lastDays) {
-      final dayDiff = effectiveEnd.difference(effectiveStart).inDays;
-
-      final Periodicity? periodicity = dayDiff <= 7
-          ? Periodicity.week
-          : dayDiff <= 31
-          ? Periodicity.month
-          : dayDiff <= 365 && effectiveStart.year == effectiveEnd.year
-          ? Periodicity.year
-          : null;
-
-      return getDataByPeriods(
-        effectiveStart,
-        effectiveEnd,
-        DatePeriodState(
-          datePeriod: periodicity != null
-              ? DatePeriod.withPeriods(periodicity)
-              : const DatePeriod.allTime(),
-        ),
-      );
-    } else {
-      for (
-        int year = max(effectiveStart.year, DateTime.now().year - 5);
-        year <= effectiveEnd.year;
-        year++
-      ) {
-        final start = DateTime(year);
-        final end = DateTime(year + 1);
-
-        await addPeriodData(
-          start: start,
-          end: end,
-          shortTitle: DateFormat.y().format(start),
-          longTitle: DateFormat.y().format(start),
-        );
-      }
     }
 
     return IncomeExpenseChartDataItem(
@@ -297,11 +173,7 @@ class _BalanceBarChartState extends State<BalanceBarChart> {
         stream: CurrencyService.instance.ensureAndGetPreferredCurrency(),
         builder: (context, userCurrencySnapshot) {
           return FutureBuilder(
-            future: getDataByPeriods(
-              widget.dateRange.startDate,
-              widget.dateRange.endDate,
-              widget.dateRange,
-            ),
+            future: getDataByPeriods(widget.dateRange),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return const Column(

@@ -295,18 +295,18 @@
       "formula": "Ödenmemiş borç ÷ brüt varlıklar, ikisi de seçili aralığın sonu itibarıyla.",
       "unlock": "Borçlarınızdan birini veya varlıklarınızdan birini ekleyin (bir ev, bir araba...)."
     },
-    "netWorthTrend": {
-      "title": "Net varlık eğilimi",
-      "subtitle": "Net varlığınızın bu dönemde nasıl değiştiği",
+    "cashFlowConsistency": {
+      "title": "Nakit akışı istikrarı",
+      "subtitle": "Bu dönemin ne kadarında harcamalarınız gelirinizin içinde kaldı",
       "text": {
-        "positive": "Net varlığınız bu dönemde <b>%{{value}}</b> arttı.",
-        "negative": "Net varlığınız bu dönemde <b>%{{value}}</b> azaldı.",
-        "flat": "Net varlığınız bu dönemde değişmedi."
+        "good": "Bu dönemin <b>%{{value}}</b> kadarında imkanlarınız dahilinde harcadınız. Nakit akışınız istikrarlı.",
+        "normal": "Bu dönemin <b>%{{value}}</b> kadarında imkanlarınız dahilinde harcadınız.",
+        "bad": "Bu dönemin yalnızca <b>%{{value}}</b> kadarında imkanlarınız dahilinde harcadınız, yani nakit akışınız çok dalgalanıyor."
       },
-      "suggestion": "İstikrarlı biçimde büyüyen bir net varlık, varlıklarınızın borçlarınızdan daha hızlı arttığını gösterir.",
-      "insufficient_data": "Bu dönemin başında net varlığınız sıfırdı, bu yüzden karşılaştırılacak bir başlangıç noktası yok.",
-      "formula": "(Şimdiki net varlık − aralığın başındaki net varlık) ÷ aralığın başındaki net varlık.",
-      "unlock": "Monekin'i kullanmaya devam edin ya da halihazırda bir miktar paranızı takip ettiğiniz bir tarihte başlayan bir aralık seçin."
+      "suggestion": "Büyük ödemeleri yaymak ve benzer bir tempoyu korumak finansmanınızı çok daha öngörülebilir kılar.",
+      "insufficient_data": "Bu aralığa nakit akışınızın ne kadar istikrarlı olduğunu anlamaya yetecek kadar hareket yayılmamış.",
+      "formula": "Aralığı birkaç bölüme ayırıp gelirinizi bunlara dağıtıyoruz. Bir bölümde size düşen kadar veya daha az harcamak o bölümü tam kazandırır, iki katını harcamak hiç kazandırmaz, arası ise orantılı sayılır.",
+      "unlock": "En az 3 bölümünde hareket olan bir aralık seçin."
     },
     "investmentRatio": {
       "title": "Yatırım oranı",

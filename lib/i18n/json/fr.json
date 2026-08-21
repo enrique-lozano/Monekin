@@ -295,18 +295,18 @@
       "formula": "Dettes en cours ÷ actifs bruts, les deux à la fin de la période sélectionnée.",
       "unlock": "Ajoutez une de vos dettes ou un de vos actifs (une maison, une voiture...)."
     },
-    "netWorthTrend": {
-      "title": "Tendance du patrimoine net",
-      "subtitle": "Comment votre patrimoine net a évolué sur cette période",
+    "cashFlowConsistency": {
+      "title": "Régularité du flux",
+      "subtitle": "Quelle part de cette période vos dépenses sont restées dans vos revenus",
       "text": {
-        "positive": "Votre patrimoine net a augmenté de <b>{{value}} %</b> sur cette période.",
-        "negative": "Votre patrimoine net a diminué de <b>{{value}} %</b> sur cette période.",
-        "flat": "Votre patrimoine net est resté inchangé sur cette période."
+        "good": "Vous avez dépensé selon vos moyens pendant <b>{{value}} %</b> de cette période. Votre flux de trésorerie est stable.",
+        "normal": "Vous avez dépensé selon vos moyens pendant <b>{{value}} %</b> de cette période.",
+        "bad": "Vous n'avez dépensé selon vos moyens que pendant <b>{{value}} %</b> de cette période, votre flux de trésorerie est donc très irrégulier."
       },
-      "suggestion": "Un patrimoine net qui croît régulièrement montre que vos actifs augmentent plus vite que vos dettes.",
-      "insufficient_data": "Votre patrimoine net était nul au début de cette période, il n'y a donc aucune base de comparaison.",
-      "formula": "(Patrimoine net actuel − patrimoine net au début de la période) ÷ patrimoine net au début de la période.",
-      "unlock": "Continuez à utiliser Monekin, ou choisissez une période qui commence quand vous suiviez déjà un peu d'argent."
+      "suggestion": "Étaler les gros paiements et garder un rythme régulier rend vos finances beaucoup plus prévisibles.",
+      "insufficient_data": "Il n'y a pas assez d'activité répartie sur cette période pour juger la régularité de votre flux de trésorerie.",
+      "formula": "Nous découpons la période en plusieurs parties et y répartissons vos revenus. Dans chaque partie, dépenser au plus ce qui vous revient la valide entièrement ; en dépenser le double ne rapporte rien, et entre les deux le décompte est proportionnel.",
+      "unlock": "Choisissez une période avec de l'activité dans au moins 3 de ses parties."
     },
     "investmentRatio": {
       "title": "Ratio d'investissement",

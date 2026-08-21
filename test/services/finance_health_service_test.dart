@@ -6,14 +6,14 @@ void main() {
     double? monthsWithoutIncome,
     double? savingsPercentage = 20,
     double? debtToAssetRatio,
-    double? netWorthTrend,
+    double? cashFlowConsistency,
     double? investmentRatio = 0,
   }) {
     return FinanceHealthData(
       monthsWithoutIncome: monthsWithoutIncome,
       savingsPercentage: savingsPercentage,
       debtToAssetRatio: debtToAssetRatio,
-      netWorthTrend: netWorthTrend,
+      cashFlowConsistency: cashFlowConsistency,
       investmentRatio: investmentRatio,
     );
   }
@@ -70,16 +70,21 @@ void main() {
       expect(fullyLeveraged, closeTo(22.31, 0.01));
     });
 
-    test('net worth trend gives a flat trend a neutral score', () {
-      expect(createData(netWorthTrend: 0).netWorthTrendScore.score, 50);
+    test('cash-flow consistency maps straight to its score', () {
       expect(
-        createData(netWorthTrend: 0.2).netWorthTrendScore.score,
-        closeTo(73.11, 0.01),
+        createData(cashFlowConsistency: 0).cashFlowConsistencyScore.score,
+        0,
       );
       expect(
-        createData(netWorthTrend: -0.2).netWorthTrendScore.score,
-        closeTo(26.89, 0.01),
+        createData(cashFlowConsistency: 83.3).cashFlowConsistencyScore.score,
+        closeTo(83.3, 0.01),
       );
+
+      final perfect = createData(
+        cashFlowConsistency: 100,
+      ).cashFlowConsistencyScore;
+
+      expect(perfect.weightedValue, closeTo(perfect.weight, 0.01));
     });
 
     test('investment ratio score rewards a higher share of income invested, '
@@ -109,7 +114,7 @@ void main() {
       expect(data.monthsWithoutIncomeWeight, 30);
       expect(data.savingPercentageWeight, 30);
       expect(data.debtToAssetRatioWeight, 15);
-      expect(data.netWorthTrendWeight, 15);
+      expect(data.cashFlowConsistencyWeight, 15);
       expect(data.investmentRatioWeight, 10);
     });
 
@@ -117,7 +122,7 @@ void main() {
       final data = createData(
         monthsWithoutIncome: null,
         debtToAssetRatio: 0.2,
-        netWorthTrend: null,
+        cashFlowConsistency: null,
         investmentRatio: null,
       );
 
@@ -199,7 +204,7 @@ void main() {
       final data = createData(
         monthsWithoutIncome: 6,
         debtToAssetRatio: 0.5,
-        netWorthTrend: 0.2,
+        cashFlowConsistency: 80,
         investmentRatio: 10,
       );
 
@@ -207,7 +212,7 @@ void main() {
         data.savingPercentageScore,
         data.monthsWithoutIncomeScore,
         data.debtToAssetScore,
-        data.netWorthTrendScore,
+        data.cashFlowConsistencyScore,
         data.investmentRatioScore,
       ];
       final totalWeight = scores.fold<int>(0, (sum, s) => sum + s.weight);

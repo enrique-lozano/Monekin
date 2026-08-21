@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -8,6 +9,10 @@ import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/net_worth/net_worth_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/date-utils/date_period_segments.dart';
+import 'package:monekin/core/models/date-utils/date_period_state.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -64,8 +69,9 @@ class FinanceHealthData {
   /// Outstanding debt divided by gross assets
   final double? debtToAssetRatio;
 
-  /// Relative net worth change across the selected period
-  final double? netWorthTrend;
+  /// Percentage of the period (measured over its segments) in which the
+  /// spending stayed within the share of the income that falls in them
+  final double? cashFlowConsistency;
 
   /// Percentage of income that was put into securities (gross buys) during this
   /// period. Null for users that do not invest at all
@@ -75,7 +81,7 @@ class FinanceHealthData {
     required this.monthsWithoutIncome,
     required this.savingsPercentage,
     required this.debtToAssetRatio,
-    required this.netWorthTrend,
+    required this.cashFlowConsistency,
     required this.investmentRatio,
   });
 
@@ -86,7 +92,7 @@ class FinanceHealthData {
     savingPercentageScore,
     monthsWithoutIncomeScore,
     debtToAssetScore,
-    netWorthTrendScore,
+    cashFlowConsistencyScore,
     investmentRatioScore,
   ];
 
@@ -188,12 +194,12 @@ class FinanceHealthData {
     );
   }
 
-  FinanceHealthAttrScore get netWorthTrendScore {
+  /// The metric is already the percentage of the period kept within budget, so
+  /// it maps to the score without any curve in between.
+  FinanceHealthAttrScore get cashFlowConsistencyScore {
     return FinanceHealthAttrScore(
-      score: netWorthTrend == null
-          ? null
-          : 100 / (1 + exp(-5 * netWorthTrend!)),
-      weight: netWorthTrendWeight,
+      score: cashFlowConsistency,
+      weight: cashFlowConsistencyWeight,
     );
   }
 
@@ -235,7 +241,7 @@ class FinanceHealthData {
   final int monthsWithoutIncomeWeight = 30;
   final int savingPercentageWeight = 30;
   final int debtToAssetRatioWeight = 15;
-  final int netWorthTrendWeight = 15;
+  final int cashFlowConsistencyWeight = 15;
   final int investmentRatioWeight = 10;
 
   static Color getHealthyValueColor(double? healthyValue) =>
@@ -404,21 +410,111 @@ class FinanceHealthService {
     );
   }
 
-  /// Relative net worth change between the start and the end of [filters]'
-  /// date range
-  Stream<double?> getNetWorthTrend({required TransactionFilterSet filters}) {
-    final now = filters.maxDate ?? DateTime.now();
-    final past = filters.minDate ?? kDefaultFirstSelectableDate;
+  /// Percentage of [dateRange] in which the spending stayed within the income,
+  /// measured over the same segments that the "by periods" bar chart draws.
+  ///
+  /// The income of the whole range is spread across the segments proportionally
+  /// to the days elapsed in each one instead of being read segment by segment.
+  /// Otherwise the segment where the payday lands would be the only one in the
+  /// green, and the pillar would end up measuring when the user gets paid.
+  /// Spending that share or less earns the whole segment, spending twice as
+  /// much earns nothing, and in between the credit is proportional.
+  ///
+  /// Segments that have not started yet are out of the picture, and the ones
+  /// without activity neither add nor subtract.
+  ///
+  /// Null when there is not enough of a pattern to read: fewer than
+  /// [_minConsistencySegments] segments with activity, or no income to spread
+  Stream<double?> getCashFlowConsistency({
+    required TransactionFilterSet filters,
+    required DatePeriodState dateRange,
+  }) {
+    final now = DateTime.now();
 
-    return Rx.combineLatest2(
-      NetWorthService.instance.getNetWorthAtDate(now, trFilters: filters),
-      NetWorthService.instance.getNetWorthAtDate(past, trFilters: filters),
-      (nowNetWorth, pastNetWorth) {
-        if (pastNetWorth == 0) return null;
+    return filters.accounts().switchMap((accounts) {
+      // Segments that have barely started are left out: they hold too few
+      // transactions for their balance to mean anything, and their spending
+      // would be compared against a whole segment worth of income
+      final segments = dateRange
+          .splitIntoSegments(
+            oldestDate: accounts.isEmpty
+                ? null
+                : accounts.map((account) => account.date).min,
+            includeFutureSegments: false,
+          )
+          .where(
+            (segment) =>
+                segment.elapsedDaysAt(now) >= _minConsistencySegmentDays,
+          )
+          .toList();
 
-        return (nowNetWorth - pastNetWorth) / pastNetWorth.abs();
-      },
+      if (segments.length < _minConsistencySegments) {
+        return Stream.value(null);
+      }
+
+      return TransactionService.instance
+          .getTransactions(
+            filters: filters.copyWith(
+              transactionTypes: [
+                TransactionType.income,
+                TransactionType.expense,
+              ],
+              status: TransactionStatus.getStatusThatCountsForStats(
+                filters.status,
+              ),
+              minDate: segments.first.start,
+              maxDate: segments.last.end,
+            ),
+          )
+          .map((transactions) => _consistencyOf(segments, transactions));
+    });
+  }
+
+  double? _consistencyOf(
+    List<DatePeriodSegment> segments,
+    List<MoneyTransaction> transactions,
+  ) {
+    final now = DateTime.now();
+
+    final income = List.filled(segments.length, 0.0);
+    final expense = List.filled(segments.length, 0.0);
+
+    for (final transaction in transactions) {
+      final index = segments.indexWhere(
+        (segment) => segment.contains(transaction.date),
+      );
+
+      if (index == -1) continue;
+
+      if (transaction.type == TransactionType.income) {
+        income[index] += transaction.currentValueInPreferredCurrency;
+      } else {
+        expense[index] += transaction.currentValueInPreferredCurrency.abs();
+      }
+    }
+
+    final active = [
+      for (var i = 0; i < segments.length; i++)
+        if (income[i] != 0 || expense[i] != 0) i,
+    ];
+
+    if (active.length < _minConsistencySegments) return null;
+
+    final totalIncome = active.fold(0.0, (sum, i) => sum + income[i]);
+    if (totalIncome <= 0) return null;
+
+    final totalDays = active.fold(
+      0,
+      (sum, i) => sum + segments[i].elapsedDaysAt(now),
     );
+
+    final earned = active.fold(0.0, (sum, i) {
+      final share = totalIncome * segments[i].elapsedDaysAt(now) / totalDays;
+
+      return sum + clampDouble(2 - expense[i] / share, 0, 1);
+    });
+
+    return earned / active.length * 100;
   }
 
   /// Percentage of income put into securities (gross buys, not netted against
@@ -459,26 +555,34 @@ class FinanceHealthService {
   /// Return a decimal number between 0 and 100 with the healthy value
   Stream<FinanceHealthData> getHealthyValue({
     required TransactionFilterSet filters,
+    required DatePeriodState dateRange,
   }) {
     return Rx.combineLatest5(
       getMonthsWithoutIncome(filters: filters),
       getSavingPercentage(filters: filters),
       getDebtToAssetRatio(filters: filters),
-      getNetWorthTrend(filters: filters),
+      getCashFlowConsistency(filters: filters, dateRange: dateRange),
       getInvestmentRatio(filters: filters),
       (
         monthsWithoutIncome,
         savingsPercentage,
         debtToAssetRatio,
-        netWorthTrend,
+        cashFlowConsistency,
         investmentRatio,
       ) => FinanceHealthData(
         monthsWithoutIncome: monthsWithoutIncome,
         savingsPercentage: savingsPercentage,
         debtToAssetRatio: debtToAssetRatio,
-        netWorthTrend: netWorthTrend,
+        cashFlowConsistency: cashFlowConsistency,
         investmentRatio: investmentRatio,
       ),
     );
   }
 }
+
+/// Segments with fewer days than this hold too few transactions for their
+/// balance to mean anything: a single weekly shop would sink the day it lands on
+const _minConsistencySegmentDays = 3;
+
+/// Fewer segments with activity than this leave no pattern to read
+const _minConsistencySegments = 3;
