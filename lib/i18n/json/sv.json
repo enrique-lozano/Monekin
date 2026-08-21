@@ -1,0 +1,1136 @@
+{
+  "UI-ACTIONS": {
+    "cancel": "Avbryt",
+    "confirm": "Bekräfta",
+    "continue_text": "Fortsätt",
+    "save": "Spara",
+    "save_changes": "Spara ändringar",
+    "close_and_save": "Spara och stäng",
+    "add": "Lägg till",
+    "edit": "Redigera",
+    "delete": "Ta bort",
+    "see-more": "Visa mer",
+    "select-all": "Markera alla",
+    "deselect-all": "Avmarkera alla",
+    "select": "Välj",
+    "search": "Sök",
+    "filter": "Filtrera",
+    "reset": "Återställ",
+    "submit": "Skicka",
+    "next": "Nästa",
+    "previous": "Föregående",
+    "back": "Tillbaka",
+    "reload": "Ladda om",
+    "view": "Visa",
+    "download": "Ladda ner",
+    "upload": "Ladda upp",
+    "retry": "Försök igen",
+    "copy": "Kopiera",
+    "paste": "Klistra in",
+    "undo": "Ångra",
+    "redo": "Gör om",
+    "open": "Öppna",
+    "close": "Stäng",
+    "apply": "Tillämpa",
+    "discard": "Förkasta",
+    "refresh": "Uppdatera",
+    "share": "Dela"
+  },
+  "GENERAL": {
+    "or": "eller",
+    "understood": "Förstått",
+    "unspecified": "Ospecificerat",
+    "quick_actions": "Snabbåtgärder",
+    "details": "Detaljer",
+    "balance": "Saldo",
+    "account": "Konto",
+    "accounts": "Konton",
+    "categories": "Kategorier",
+    "category": "Kategori",
+    "today": "Idag",
+    "yesterday": "Igår",
+    "filters": "Filter",
+    "empty-warn": "Hoppsan! Det är väldigt tomt här",
+    "search-no-results": "Inga objekt matchar dina sökkriterier",
+    "insufficient-data": "Otillräcklig data",
+    "show-more-fields": "Visa fler fält",
+    "show-less-fields": "Visa färre fält",
+    "tap-to-search": "Tryck för att söka",
+    "delete_success": "Objektet togs bort",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Lämna utan att spara?",
+      "message": "Du har osparade ändringar. Är du säker på att du vill lämna utan att spara dem?"
+    },
+    "CLIPBOARD": {
+      "success": "{{x}} kopierades till urklipp",
+      "error": "Fel vid kopiering"
+    },
+    "TIME": {
+      "start-date": "Startdatum",
+      "end-date": "Slutdatum",
+      "from-date": "Från datum",
+      "until-date": "Till datum",
+      "date": "Datum",
+      "datetime": "Datum och tid",
+      "time": "Tid",
+      "each": "Var",
+      "after": "Efter",
+      "RANGES": {
+        "display": "Tidsintervall",
+        "it-repeat": "Upprepas",
+        "it-ends": "Slutar",
+        "forever": "För alltid",
+        "TYPES": {
+          "cycle": "Cykler",
+          "last_days": "Senaste dagarna",
+          "last_days_form": "{{x}} föregående dagar",
+          "all": "Alltid",
+          "date_range": "Anpassat intervall"
+        },
+        "each-range": {
+          "one": "Var {{range}}",
+          "other": "Var {{n}}:e {{range}}"
+        },
+        "each-range-until-date": {
+          "one": "Var {{range}} fram till {{day}}",
+          "other": "Var {{n}}:e {{range}} fram till {{day}}"
+        },
+        "each-range-until-times": {
+          "one": "Var {{range}} {{limit}} gånger",
+          "other": "Var {{n}}:e {{range}} {{limit}} gånger"
+        },
+        "each-range-until-once": {
+          "one": "Var {{range}} en gång",
+          "other": "Var {{n}}:e {{range}} en gång"
+        },
+        "month": {
+          "one": "Månad",
+          "other": "Månader"
+        },
+        "year": {
+          "one": "År",
+          "other": "År"
+        },
+        "day": {
+          "one": "Dag",
+          "other": "Dagar"
+        },
+        "week": {
+          "one": "Vecka",
+          "other": "Veckor"
+        }
+      },
+      "PERIODICITY": {
+        "display": "Återkommande",
+        "no-repeat": "Upprepas inte",
+        "repeat": {
+          "one": "Upprepning",
+          "other": "Upprepningar"
+        },
+        "diary": "Dagligen",
+        "monthly": "Månadsvis",
+        "annually": "Årsvis",
+        "quaterly": "Kvartalsvis",
+        "weekly": "Veckovis",
+        "custom": "Anpassad",
+        "infinite": "Alltid"
+      },
+      "CURRENT": {
+        "Monthly": "Denna månad",
+        "Annually": "Detta år",
+        "Quaterly": "Detta kvartal",
+        "Weekly": "Denna vecka",
+        "Infinite": "För alltid",
+        "Custom": "Anpassat intervall"
+      },
+      "ALL": {
+        "diary": "Varje dag",
+        "Monthly": "Varje månad",
+        "Annually": "Varje år",
+        "Quaterly": "Varje kvartal",
+        "Weekly": "Varje vecka"
+      }
+    },
+    "TRANSACTION-ORDER": {
+      "display": "Sortera transaktioner",
+      "Category": "Efter kategori",
+      "Quantity": "Efter belopp",
+      "Date": "Efter datum"
+    },
+    "VALIDATIONS": {
+      "form_error": "Åtgärda de markerade fälten för att fortsätta",
+      "required": "Obligatoriskt fält",
+      "positive": "Måste vara positivt",
+      "min_number": "Måste vara större än {{x}}",
+      "max_number": "Måste vara mindre än {{x}}"
+    }
+  },
+  "INTRO": {
+    "start": "Starta",
+    "skip": "Hoppa över",
+    "next": "Nästa",
+    "select-your-currency": "Välj din valuta",
+    "welcome.subtitle": "Din personliga ekonomihanterare",
+    "welcome.subtitle2": "100 % öppen, 100 % gratis",
+    "welcome.footer": "Genom att logga in godkänner du applikationens <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>integritetspolicy</a> och <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>användarvillkor</a>",
+    "offline.descr.title": "OFFLINE-KONTO:",
+    "offline.descr": "Din data lagras endast på din enhet och är säker så länge du inte avinstallerar appen eller byter telefon. För att förhindra dataförlust rekommenderas det att göra en säkerhetskopia regelbundet via appens inställningar.",
+    "offline.start": "Starta session offline",
+    "sl1Title": "Välj din valuta",
+    "sl1Descr": "Din standardvaluta används i rapporter och allmänna diagram. Du kan ändra valuta och appspråk senare, när som helst, i appens inställningar",
+    "sl2Title": "Säkert, privat och pålitligt",
+    "sl2Descr": "Din data är bara din. Vi lagrar informationen direkt på din enhet, utan att den passerar externa servrar. Det gör det möjligt att använda appen även utan internet",
+    "sl2Descr2": "Dessutom är applikationens källkod publik – vem som helst kan bidra till den och se hur den fungerar",
+    "lastSlideTitle": "Allt klart",
+    "lastSlideDescr": "Med Monekin kan du äntligen nå den ekonomiska frihet du önskar dig. Du får diagram, budgetar, tips, statistik och mycket mer om dina pengar.",
+    "lastSlideDescr2": "Vi hoppas att du kommer att trivas! Tveka inte att kontakta oss vid frågor, förslag..."
+  },
+  "HOME": {
+    "title": "Översikt",
+    "filter-transactions": "Filtrera transaktioner",
+    "hello-day": "God morgon,",
+    "hello-night": "God natt,",
+    "total-balance": "Totalt saldo",
+    "my-accounts": "Mina konton",
+    "active-accounts": "Aktiva konton",
+    "no-accounts": "Inga konton skapade ännu",
+    "no-accounts.descr": "Börja använda allt Monekin har att erbjuda. Skapa minst ett konto för att börja lägga till transaktioner",
+    "last-transactions": "Senaste transaktioner",
+    "should-create-account.header": "Hoppsan!",
+    "should-create-account.message": "Du måste ha minst ett icke-arkiverat konto innan du kan börja skapa transaktioner"
+  },
+  "FINANCIAL-HEALTH": {
+    "display": "Ekonomisk hälsa",
+    "review": {
+      "very_good(context=GenderContext)": { "male,female": "Mycket bra!" },
+      "good(context=GenderContext)": { "male,female": "Bra" },
+      "normal(context=GenderContext)": { "male,female": "Genomsnittlig" },
+      "bad(context=GenderContext)": { "male,female": "Sådär" },
+      "very_bad(context=GenderContext)": { "male,female": "Mycket dålig" },
+      "insufficient_data(context=GenderContext)": { "male,female": "Otillräcklig data" },
+      "descr": {
+        "insufficient_data": "Det verkar som att vi inte har tillräckligt med utgifter för att beräkna din ekonomiska hälsa. Lägg till några utgifter/inkomster under den här perioden så kan vi hjälpa dig!",
+        "very_good": "Grattis! Din ekonomiska hälsa är fantastisk. Vi hoppas att du fortsätter din goda svit och fortsätter lära dig med Monekin",
+        "good": "Toppen! Din ekonomiska hälsa är god. Besök analysfliken för att se hur du kan spara ännu mer!",
+        "normal": "Din ekonomiska hälsa ligger ungefär i nivå med resten av befolkningen för den här perioden",
+        "bad": "Det verkar som att din ekonomiska situation inte är den bästa ännu. Utforska resten av diagrammen för att lära dig mer om din ekonomi",
+        "very_bad": "Hmm, din ekonomiska hälsa ligger långt under vad den borde vara. Utforska resten av diagrammen för att lära dig mer om din ekonomi"
+      }
+    },
+    "monthsWithoutIncome": {
+      "title": "Överlevnadsgrad",
+      "subtitle": "Utifrån ditt saldo, hur länge du skulle klara dig utan inkomst",
+      "text.zero": "Du skulle inte klara dig en månad utan inkomst i den här utgiftstakten!",
+      "text.one": "Du skulle knappt klara dig ungefär en månad utan inkomst i den här utgiftstakten!",
+      "text.other": "Du skulle klara dig ungefär <b>{{ n }} månader</b> utan inkomst i den här utgiftstakten.",
+      "text.infinite": "Du skulle klara dig ungefär <b>hela livet</b> utan inkomst i den här utgiftstakten.",
+      "suggestion": "Kom ihåg att det rekommenderas att alltid hålla den här kvoten över minst 5 månader. Om du ser att du inte har en tillräcklig sparbuffert, minska onödiga utgifter.",
+      "insufficient_data": "Det verkar som att vi inte har tillräckligt med utgifter för att beräkna hur många månader du skulle klara dig utan inkomst. Lägg in några transaktioner och kom tillbaka hit för att kontrollera din ekonomiska hälsa"
+    },
+    "savingsPercentage": {
+      "title": "Sparandegrad",
+      "subtitle": "Hur stor del av din inkomst som inte spenderas under perioden",
+      "text": {
+        "good": "Grattis! Du har lyckats spara <b>{{value}}%</b> av din inkomst under den här perioden. Det verkar som att du redan är expert – fortsätt så!",
+        "normal": "Grattis, du har lyckats spara <b>{{value}}%</b> av din inkomst under den här perioden.",
+        "bad": "Du har lyckats spara <b>{{value}}%</b> av din inkomst under den här perioden. Men vi tror att du kan göra ännu mer!",
+        "very_bad": "Oj, du har inte lyckats spara någonting under den här perioden."
+      },
+      "suggestion": "Kom ihåg att det rekommenderas att spara minst 15–20 % av det du tjänar."
+    }
+  },
+  "STATS": {
+    "title": "Statistik",
+    "balance": "Saldo",
+    "final-balance": "Slutsaldo",
+    "balance-by-account": "Saldo per konto",
+    "balance-by-account-subtitle": "Var har jag mest av mina pengar?",
+    "balance-by-currency": "Saldo per valuta",
+    "balance-by-currency-subtitle": "Hur mycket pengar har jag i utländsk valuta?",
+    "balance-evolution": "Saldoutveckling",
+    "balance-evolution-subtitle": "Har jag mer pengar än förut?",
+    "net-worth": "Nettoförmögenhet",
+    "net-worth-subtitle": "Skillnaden mellan vad du äger och vad du är skyldig.",
+    "net-worth-composition": "Nettoförmögenhetens sammansättning",
+    "net-worth-composition-subtitle": "Fördelning mellan konton, investeringar och skulder.",
+    "compared-to-previous-period": "Jämfört med föregående period",
+    "cash-flow": "Kassaflöde",
+    "cash-flow-subtitle": "Spenderar jag mindre än jag tjänar?",
+    "by-periods": "Efter perioder",
+    "by-categories": "Efter kategorier",
+    "by-tags": "Efter etiketter",
+    "distribution": "Fördelning",
+    "finance-health-resume": "Sammanfattning",
+    "finance-health-breakdown": "Detaljvy"
+  },
+  "ICON-SELECTOR": {
+    "name": "Namn:",
+    "icon": "Ikon",
+    "color": "Färg",
+    "select-icon": "Välj en ikon",
+    "select-color": "Välj en färg",
+    "custom-color": "Anpassad färg",
+    "current-color-selection": "Nuvarande val",
+    "select-account-icon": "Identifiera ditt konto",
+    "select-category-icon": "Identifiera din kategori",
+    "SCOPES": {
+      "transport": "Transport",
+      "money": "Pengar",
+      "food": "Mat",
+      "medical": "Hälsa",
+      "entertainment": "Nöje",
+      "technology": "Teknik",
+      "other": "Övrigt",
+      "logos/financial_institutions": "Finansinstitut"
+    }
+  },
+  "TRANSACTION": {
+    "display": { "one": "Transaktion", "other": "Transaktioner" },
+    "create": "Ny transaktion",
+    "new.income": "Ny inkomst",
+    "new.expense": "Ny utgift",
+    "new.success": "Transaktionen skapades",
+    "edit": "Redigera transaktion",
+    "edit.success": "Transaktionen redigerades",
+    "edit.multiple": "Redigera transaktioner",
+    "edit.multiple.success": "{{ x }} transaktioner redigerades",
+    "duplicate": "Klona transaktion",
+    "duplicate.short": "Klona",
+    "duplicate.warning-message": "En identisk transaktion skapas med samma datum. Vill du fortsätta?",
+    "duplicate.success": "Transaktionen klonades",
+    "delete": "Ta bort transaktion",
+    "delete.warning-message": "Den här åtgärden går inte att ångra. Dina kontons aktuella saldo och all din statistik beräknas om",
+    "delete.success": "Transaktionen togs bort",
+    "delete.multiple": "Ta bort transaktioner",
+    "delete.multiple.warning-message": "Den här åtgärden går inte att ångra och tar bort {{ x }} transaktioner. Dina kontons aktuella saldo och all din statistik beräknas om",
+    "delete.multiple.success": "{{x}} transaktioner togs bort",
+    "details": "Transaktionsdetaljer",
+    "select": "Välj en transaktion",
+    "NEXT-PAYMENTS": {
+      "accept": "Acceptera",
+      "skip": "Hoppa över",
+      "skip.success": "Transaktionen hoppades över",
+      "skip-dialog.title": "Hoppa över transaktion",
+      "skip-dialog.msg": "Den här åtgärden går inte att ångra. Vi flyttar datumet för nästa transaktion till {{date}}",
+      "accept-today": "Acceptera idag",
+      "accept-in-required-date": "Acceptera på angivet datum ({{date}})",
+      "accept-dialog.title": "Acceptera transaktion",
+      "accept-dialog.msg-single": "Transaktionens nya status blir tom. Du kan när som helst redigera statusen för den här transaktionen igen",
+      "accept-dialog.msg": "Den här åtgärden skapar en ny transaktion med datumet {{date}}. Du kan se detaljerna för den här transaktionen på transaktionssidan",
+      "recurrent-rule-finished": "Den återkommande regeln har slutförts, det finns inga fler betalningar att göra!"
+    },
+    "LIST": {
+      "all": "Alla transaktioner",
+      "empty": "Inga transaktioner hittades att visa här. Lägg till några transaktioner i appen så kanske du har mer tur nästa gång.",
+      "searcher.placeholder": "Sök på kategori, beskrivning...",
+      "searcher.no-results": "Inga transaktioner matchar sökkriterierna",
+      "loading": "Laddar fler transaktioner...",
+      "selected.short": { "one": "{{n}} vald", "other": "{{n}} valda" },
+      "selected.long": {
+        "one": "{{n}} transaktion vald",
+        "other": "{{n}} transaktioner valda"
+      },
+      "BULK_EDIT": {
+        "dates": "Redigera datum",
+        "categories": "Redigera kategorier",
+        "status": "Redigera statusar",
+        "tags": "Redigera etiketter"
+      }
+    },
+    "FILTERS": {
+      "title": "Transaktionsfilter",
+      "from_value": "Från belopp",
+      "to_value": "Upp till belopp",
+      "from_value_def": "Från {{ x }}",
+      "to_value_def": "Upp till {{ x }}",
+      "from_date_def": "Från {{ date }}",
+      "to_date_def": "Fram till {{ date }}",
+      "reset": "Återställ filter",
+      "saved": {
+        "title": "Sparade filter",
+        "new_title": "Nytt filter",
+        "edit_title": "Redigera filter",
+        "name_label": "Filternamn",
+        "name_hint": "Mitt anpassade filter",
+        "save_dialog_title": "Spara filter",
+        "save_tooltip": "Spara aktuellt filter",
+        "load_tooltip": "Läs in sparat filter",
+        "empty_title": "Inga sparade filter hittades",
+        "empty_description": "Spara filter här för att snabbt komma åt dem senare.",
+        "save_success": "Filtret sparades",
+        "delete_success": "Filtret togs bort"
+      }
+    },
+    "FORM": {
+      "VALIDATORS": {
+        "zero": "Värdet på en transaktion kan inte vara lika med noll",
+        "date-max": "Det valda datumet ligger efter dagens datum. Transaktionen läggs till som väntande",
+        "date-after-account-creation": "Du kan inte skapa en transaktion vars datum ligger före kontots skapandedatum",
+        "negative-transfer": "En överförings monetära värde kan inte vara negativt",
+        "transfer-between-same-accounts": "Käll- och målkontot kan inte vara samma"
+      },
+      "title": "Transaktionstitel",
+      "title.short": "Titel",
+      "value": "Transaktionens värde",
+      "tap-to-see-more": "Tryck för att se fler detaljer",
+      "no-tags": "-- Inga etiketter --",
+      "description": "Beskrivning",
+      "description-info": "Tryck här för att ange en mer detaljerad beskrivning om den här transaktionen",
+      "exchange-to-preferred-title": "Växelkurs till {{ currency }}",
+      "exchange-to-preferred-in-date": "På transaktionsdatumet",
+      "extra-info-section": "Extra information",
+      "negative-balance-warning": "Det här beloppet är högre än det valda kontots aktuella saldo. Om du sparar skapas ett negativt saldo, vilket kan snedvrida statistiken."
+    },
+    "REVERSED": {
+      "title": "Omvänd transaktion",
+      "title.short": "Omvänd tr.",
+      "description-for-expenses": "Trots att det är en utgiftstransaktion har den ett positivt belopp. Den här typen av transaktioner kan användas för att representera återbetalning av en tidigare registrerad utgift, till exempel en återbetalning eller betalning av en skuld.",
+      "description-for-incomes": "Trots att det är en inkomsttransaktion har den ett negativt belopp. Den här typen av transaktioner kan användas för att makulera eller korrigera en felaktigt registrerad inkomst, för att spegla en återbetalning av pengar eller för att registrera betalning av skulder."
+    },
+    "STATUS": {
+      "display": { "one": "Status", "other": "Statusar" },
+      "display_long": "Transaktionsstatus",
+      "tr_status": "{{ status }} transaktion",
+      "none": "Ingen status",
+      "none.descr": "Transaktion utan specifik status",
+      "reconciled": "Avstämd",
+      "reconciled.descr": "Den här transaktionen har redan validerats och motsvarar en verklig transaktion från din bank",
+      "unreconciled": "Ej avstämd",
+      "unreconciled.descr": "Den här transaktionen har ännu inte validerats och syns därför inte ännu på dina verkliga bankkonton. Den räknas dock med vid beräkning av saldon och statistik i Monekin",
+      "pending": "Väntande",
+      "pending.descr": "Den här transaktionen är väntande och tas därför inte med i beräkningen av saldon och statistik",
+      "voided": "Makulerad",
+      "voided.descr": "Makulerad/avbruten transaktion på grund av betalningsfel eller annan anledning. Den tas inte med i beräkningen av saldon och statistik"
+    },
+    "TYPES": {
+      "display": { "one": "Transaktionstyp", "other": "Transaktionstyper" },
+      "income": { "one": "Inkomst", "other": "Inkomster" },
+      "expense": { "one": "Utgift", "other": "Utgifter" },
+      "transfer": { "one": "Överföring", "other": "Överföringar" },
+      "investment": { "one": "Investering", "other": "Investeringar" }
+    }
+  },
+  "TRANSFER": {
+    "display": "Överföring",
+    "transfers": "Överföringar",
+    "transfer-to": "Överför till {{ account }}",
+    "create": "Ny överföring",
+    "need-two-accounts.warning.header": "Hoppsan!",
+    "need-two-accounts.warning.message": "Minst två konton krävs för att utföra den här åtgärden. Om du behöver justera eller redigera det aktuella saldot för det här kontot, tryck på redigeringsknappen",
+    "FORM": {
+      "from": "Källkonto",
+      "to": "Målkonto",
+      "VALUE-IN-DESTINY": {
+        "title": "Överfört belopp vid destinationen",
+        "amount-short": "{{amount}} till målkontot"
+      }
+    }
+  },
+  "RECURRENT-TRANSACTIONS": {
+    "title": "Återkommande transaktioner",
+    "title.short": "Åter. transaktioner",
+    "empty": "Det verkar som att du inte har några återkommande transaktioner. Skapa en månatlig, årlig eller veckovis återkommande transaktion så visas den här",
+    "total-expense.title": "Total utgift per period",
+    "total-expense.descr": "* Utan hänsyn till start- och slutdatum för varje upprepning",
+    "DETAILS": {
+      "title": "Återkommande transaktion",
+      "descr": "Nästa transaktioner för den här återkommande regeln visas nedan. Du kan acceptera den första transaktionen eller hoppa över den",
+      "last-payment-info": "Den här transaktionen är den sista i den återkommande regeln, så regeln tas automatiskt bort när du bekräftar den här åtgärden",
+      "delete-header": "Ta bort återkommande transaktion",
+      "delete-message": "Den här åtgärden går inte att ångra och påverkar inte transaktioner du redan har bekräftat/betalat"
+    },
+    "STATUS": {
+      "delayed_by": "Försenad med {{x}} dagar",
+      "coming_in": "Om {{x}} dagar"
+    }
+  },
+  "ACCOUNT": {
+    "details": "Kontodetaljer",
+    "date": "Öppningsdatum",
+    "close_date": "Stängningsdatum",
+    "reopen": "Öppna kontot igen",
+    "reopen.short": "Öppna igen",
+    "reopen.descr": "Är du säker på att du vill öppna det här kontot igen?",
+    "balance": "Kontosaldo",
+    "n_transactions": "Antal transaktioner",
+    "add_money": "Sätt in pengar",
+    "withdraw_money": "Ta ut pengar",
+    "correct_balance": "Korrigera saldo",
+    "no-accounts": "Inga konton hittades att visa här. Lägg till ett konto genom att trycka på '+'-knappen längst ner",
+    "TYPES": {
+      "title": "Kontotyp",
+      "warning": "När kontotypen har valts kan den inte ändras i framtiden",
+      "normal": "Vanligt konto",
+      "normal.descr": "Användbart för att registrera din vardagsekonomi. Det är den vanligaste kontotypen och låter dig lägga till utgifter, inkomster...",
+      "saving": "Sparkonto",
+      "saving.descr": "Du kan bara sätta in och ta ut pengar från det via andra konton. Perfekt för att börja spara pengar",
+      "investment": "Investeringskonto",
+      "investment.descr": "Ett mäklarkonto, en kryptobörs eller ett portföljkonto som kan hålla tillgångar. Följ ditt investerade kapital och uppdatera varje tillgångs värde manuellt via värderingar"
+    },
+    "FORM": {
+      "name": "Kontonamn",
+      "name.placeholder": "T.ex.: Sparkonto",
+      "notes": "Anteckningar",
+      "notes.placeholder": "Skriv några anteckningar/en beskrivning om det här kontot",
+      "initial-balance": "Ingående saldo",
+      "current-balance": "Aktuellt saldo",
+      "create": "Skapa konto",
+      "edit": "Redigera konto",
+      "currency-not-found-warn": "Du har ingen information om växelkurser för den här valutan. 1,0 kommer att användas som standardväxelkurs. Du kan ändra detta i inställningarna",
+      "already-exists": "Det finns redan ett annat med samma namn – ange ett annat",
+      "tr-before-opening-date": "Det finns transaktioner på det här kontot med ett datum före öppningsdatumet",
+      "iban": "IBAN",
+      "swift": "SWIFT",
+      "include-in-net-worth": "Inkludera i nettoförmögenhet",
+      "include-in-net-worth.descr": "Lägg till det här kontot i beräkningen av total nettoförmögenhet",
+      "correct_balance_description": "Att justera saldot ändrar kontots ingående värde. Den här korrigeringen kommer inte att synas i din statistik.",
+      "valuation_before_creation_date": "Det finns värderingar på det här kontot med ett datum före skapandedatumet"
+    },
+    "DELETE": {
+      "warning-header": "Ta bort konto?",
+      "warning-text": "Den här åtgärden tar bort det här kontot och alla dess transaktioner",
+      "success": "Kontot togs bort"
+    },
+    "CLOSE": {
+      "title": "Stäng konto",
+      "title.short": "Stäng",
+      "warn": "Det här kontot syns inte längre i vissa listor, och du kan inte skapa transaktioner på det med ett datum senare än det som anges nedan. Åtgärden påverkar inte några transaktioner eller saldon, och du kan öppna kontot igen när som helst. ",
+      "should-have-zero-balance": "Kontot måste ha ett aktuellt saldo på 0 för att kunna stängas. Redigera kontot innan du fortsätter",
+      "should-have-no-transactions": "Det här kontot har transaktioner efter det angivna stängningsdatumet. Ta bort dem eller ändra kontots stängningsdatum innan du fortsätter",
+      "success": "Kontot stängdes",
+      "unarchive-succes": "Kontot öppnades igen"
+    },
+    "SELECT": {
+      "one": "Välj ett konto",
+      "all": "Alla konton",
+      "multiple": "Välj konton"
+    }
+  },
+  "CURRENCIES": {
+    "currency-converter": "Valutaomvandlare",
+    "currency": "Valuta",
+    "currency-settings": "Valutainställningar",
+    "currency-manager": "Valutahanterare",
+    "currency-manager.descr": "Konfigurera din valuta och dess växelkurser mot andra",
+    "preferred-currency": "Föredragen/basvaluta",
+    "tap-to-change-preferred-currency": "Tryck för att ändra",
+    "change-preferred-currency-title": "Ändra föredragen valuta",
+    "change-preferred-currency-msg": "All statistik och alla budgetar visas i den här valutan från och med nu. Konton och transaktioner behåller den valuta de hade. Alla sparade växelkurser tas bort om du utför den här åtgärden. Vill du fortsätta?",
+    "EXCHANGE-RATE-FORM": {
+      "equal-to-preferred-warn": "Valutan kan inte vara samma som användarens valuta",
+      "override-existing-warn": "En växelkurs för den här valutan på det här datumet finns redan. Om du fortsätter skrivs den föregående över",
+      "specify-a-currency": "Ange en valuta",
+      "add": "Lägg till växelkurs",
+      "add-success": "Växelkursen lades till",
+      "edit": "Redigera växelkurs",
+      "edit-success": "Växelkursen redigerades",
+      "remove-all": "Ta bort alla växelkurser",
+      "remove-all-warning": "Den här åtgärden går inte att ångra och tar bort alla växelkurser för den här valutan"
+    },
+    "TYPES": {
+      "display": "Valutatyp",
+      "fiat": "FIAT",
+      "crypto": "Kryptovaluta",
+      "other": "Annat"
+    },
+    "CURRENCY-FORM": {
+      "name": "Visningsnamn",
+      "code": "Valutakod",
+      "symbol": "Symbol",
+      "decimal-digits": "Decimaler",
+      "create": "Skapa valuta",
+      "create-success": "Valutan skapades",
+      "edit": "Redigera valuta",
+      "edit-success": "Valutan redigerades",
+      "delete": "Ta bort valuta",
+      "delete-success": "Valutan togs bort",
+      "already-exists": "En valuta med den här koden finns redan. Du kanske vill redigera den istället"
+    },
+    "delete-all-success": "Växelkurserna togs bort",
+    "historical": "Historiska kurser",
+    "historical-empty": "Inga historiska växelkurser hittades för den här valutan",
+    "exchange-rate": "Växelkurs",
+    "exchange-rates": "Växelkurser",
+    "min-exchange-rate": "Lägsta växelkurs",
+    "max-exchange-rate": "Högsta växelkurs",
+    "empty": "Lägg till växelkurser här så att våra diagram blir mer exakta om du har konton i andra valutor än din basvaluta",
+    "select-a-currency": "Välj en valuta",
+    "search": "Sök på namn eller valutakod"
+  },
+  "TAGS": {
+    "display": { "one": "Etikett", "other": "Etiketter" },
+    "FORM": {
+      "name": "Etikettnamn",
+      "name-hint": "T.ex.: Mat",
+      "forbidden-char-error": "Namnet får inte innehålla ';'",
+      "description": "Beskrivning"
+    },
+    "SELECT": {
+      "title": "Välj etiketter",
+      "all": "Alla etiketter"
+    },
+    "empty-list": "Du har inte skapat några etiketter ännu. Etiketter och kategorier är ett bra sätt att kategorisera dina transaktioner",
+    "no-tags": "Du har inte skapat några etiketter ännu. Gå till inställningarna för att skapa en etikett.",
+    "without-tags": "Utan etiketter",
+    "add": "Lägg till etikett",
+    "create": "Skapa etikett",
+    "create.success": "Etiketten skapades",
+    "already-exists": "Det här etikettnamnet finns redan. Du kanske vill redigera det istället",
+    "edit": "Redigera etikett",
+    "edit.success": "Etiketten redigerades",
+    "delete.success": "Kategorin togs bort",
+    "delete-warning-header": "Ta bort etikett?",
+    "delete-warning-message": "Den här åtgärden tar inte bort transaktioner som har den här etiketten."
+  },
+  "CATEGORIES": {
+    "unknown": "Okänd kategori",
+    "create": "Skapa kategori",
+    "create.success": "Kategorin skapades",
+    "new-category": "Ny kategori",
+    "already-exists": "Namnet på den här kategorin finns redan. Du kanske vill redigera den istället",
+    "edit": "Redigera kategori",
+    "edit.success": "Kategorin redigerades",
+    "name": "Kategorinamn",
+    "type": "Kategorityp",
+    "both-types": "Båda typerna",
+    "subcategories": "Underkategorier",
+    "subcategories.add": "Lägg till underkategori",
+    "make-parent": "Gör till kategori",
+    "make-child": "Gör till underkategori",
+    "make-child.warning1": "Den här kategorin och dess underkategorier blir underkategorier till <b>{{destiny}}</b>.",
+    "make-child.warning2": "Deras transaktioner <b>({{x}})</b> flyttas till de nya underkategorierna som skapas inom kategorin <b>{{destiny}}</b>.",
+    "make-child.success": "Underkategorierna skapades",
+    "merge": "Slå ihop med en annan kategori",
+    "merge.warning1": "Alla transaktioner ({{x}}) kopplade till kategorin <b>{{from}}</b> flyttas till kategorin <b>{{destiny}}</b>",
+    "merge.warning2": "Kategorin <b>{{from}}</b> tas bort permanent.",
+    "merge.success": "Kategorierna slogs ihop",
+    "delete.success": "Kategorin togs bort",
+    "delete-warning-header": "Ta bort kategori?",
+    "delete-warning-message": "Den här åtgärden tar permanent bort alla transaktioner <b>({{x}})</b> kopplade till den här kategorin.",
+    "SELECT": {
+      "title": "Välj kategorier",
+      "select-one": "Välj en kategori",
+      "select-subcategory": "Välj en underkategori",
+      "without-subcategory": "Utan underkategori",
+      "all": "Alla kategorier",
+      "all.short": "Alla"
+    }
+  },
+  "BUDGETS": {
+    "title": "Budgetar",
+    "status": "Budgetstatus",
+    "repeated": "Återkommande",
+    "one-time": "Engångs",
+    "actives": "Aktiva",
+    "from-budgeted": "kvar av ",
+    "days-left": "dagar kvar",
+    "days-to-start": "dagar kvar till start",
+    "since-expiration": "dagar sedan förfallodatum",
+    "no-budgets": "Det verkar inte finnas några budgetar att visa i det här avsnittet. Börja med att skapa en budget genom att trycka på knappen nedan",
+    "delete": "Ta bort budget",
+    "delete-warning": "Den här åtgärden går inte att ångra. Kategorier och transaktioner kopplade till den här budgeten tas inte bort",
+    "FORM": {
+      "title": "Lägg till en budget",
+      "name": "Budgetnamn",
+      "value": "Gränsbelopp",
+      "create": "Lägg till budget",
+      "create-success": "Budgeten skapades",
+      "edit": "Redigera budget",
+      "edit-success": "Budgeten redigerades",
+      "negative-warn": "Budgetar kan inte ha ett negativt belopp"
+    },
+    "DETAILS": {
+      "title": "Budgetdetaljer",
+      "statistics": "Statistik",
+      "budget-value": "Budgeterat",
+      "expend-evolution": "Utgiftsutveckling",
+      "no-transactions": "Det verkar som att du inte har gjort några utgifter kopplade till den här budgeten"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktiv budget",
+      "past": "Avslutad budget",
+      "future": "Framtida budget"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "På rätt spår",
+        "active-overspending": "Överspenderar",
+        "active-indeterminate": "Aktiv",
+        "success": "Uppnådd",
+        "fail": "Budget överskriden"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Du kan spendera {{ dailyAmount }} per dag under de återstående {{ remainingDays }} dagarna",
+        "active-overspending": "För att komma tillbaka på rätt spår bör du begränsa dina utgifter till {{ dailyAmount }} per dag under de återstående {{ remainingDays }} dagarna",
+        "active-indeterminate": "Du har {{ amount }} kvar att spendera.",
+        "active-exceeded": "Du har redan överskridit din budgetgräns med {{ amount }}. Om du inte hittar några inkomster för den här budgeten bör du sluta spendera för resten av perioden",
+        "success": "Bra jobbat! Den här budgeten har redan slutförts framgångsrikt. Fortsätt skapa budgetar för att hantera dina utgifter",
+        "fail": "Du överskred budgeten med {{ amount }}. Försök vara mer försiktig nästa gång!"
+      }
+    }
+  },
+  "GOALS": {
+    "title": "Mål",
+    "status": "Målstatus",
+    "type": {
+      "display": "Måltyp",
+      "income": {
+        "title": "Sparmål",
+        "descr": "Idealiskt för att spara pengar. Du lyckas när saldot går över ditt mål."
+      },
+      "expense": {
+        "title": "Utgiftsmål",
+        "descr": "Håll koll på hur mycket du spenderar och sikta på att nå ett målbelopp. Fungerar bra för donationer, välgörenhet, nöjesutgifter..."
+      }
+    },
+    "empty_title": "Inga mål hittades",
+    "empty_description": "Skapa ett nytt mål för att börja följa ditt sparande!",
+    "delete": "Ta bort mål",
+    "delete_warning": "Den här åtgärden går inte att ångra. Kategorier och transaktioner kopplade till det här målet tas inte bort",
+    "FORM": {
+      "new_title": "Nytt mål",
+      "edit_title": "Redigera mål",
+      "target_amount": "Målbelopp",
+      "initial_amount": "Ingångsbelopp",
+      "name": "Namn",
+      "name_hint": "Mitt sparmål",
+      "create_success": "Målet skapades",
+      "edit_success": "Målet redigerades",
+      "negative_warn": "Målbeloppet kan inte vara negativt"
+    },
+    "DETAILS": {
+      "title": "Måldetaljer",
+      "statistics": "Statistik",
+      "goal_value": "Målbelopp",
+      "evolution": "Utveckling",
+      "no_transactions": "Det verkar som att du inte har gjort några transaktioner kopplade till det här målet"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Aktivt mål",
+      "past": "Avslutat mål",
+      "future": "Framtida mål"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "På rätt spår",
+        "active-behind-schedule": "Efter tidsplan",
+        "active-indeterminate": "Aktivt",
+        "success": "Mål uppnått",
+        "fail": "Mål misslyckades"
+      },
+      "DESCRIPTION": {
+        "active-on-track": "Du är på god väg mot ditt mål! Du behöver spara {{ dailyAmount }} per dag under de återstående {{ remainingDays }} dagarna",
+        "active-behind-schedule": "Du ligger efter tidsplanen. Du behöver spara {{ dailyAmount }} per dag för att nå ditt mål om {{ remainingDays }} dagar",
+        "active-indeterminate": "Du behöver {{ amount }} till för att nå ditt mål.",
+        "success": "Grattis! Du nådde ditt mål.",
+        "fail": "Du missade ditt mål med {{ amount }}."
+      }
+    }
+  },
+  "DEBTS": {
+    "display": { "one": "Skuld", "other": "Skulder" },
+    "FORM": {
+      "name": "Skuldens namn",
+      "initial_amount": "Ingångsbelopp",
+      "total_amount": "Totalbelopp",
+      "step_initial_value": "Ingångsvärde",
+      "step_details": "Detaljer",
+      "from_transaction": {
+        "title": "Från en transaktion",
+        "tap_to_select": "Tryck för att välja en transaktion"
+      },
+      "from_amount": {
+        "title": "Från ett ingångsbelopp",
+        "description": "Det här beloppet räknas inte som en utgift/inkomst i statistiken. Det används för att beräkna saldon och nettoförmögenhet"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Utlånat",
+      "borrowed": "Lånat"
+    },
+    "STATUS": {
+      "active": "Aktiv",
+      "close": "Stängd"
+    },
+    "DETAILS": {
+      "collected_amount": "Insamlat belopp",
+      "remaining": "Återstår",
+      "no_deadline": "Ingen deadline",
+      "in_days": "Om {{x}} dagar",
+      "due_today": "Förfaller idag",
+      "days_ago": "för {{x}} dagar sedan",
+      "overdue_by": "Försenad med {{x}} dagar",
+      "per_day": "/ dag",
+      "no_transactions": "Inga transaktioner hittades för den här skulden"
+    },
+    "EMPTY": {
+      "no_debts_active": "Inga aktiva skulder hittades. Börja med att skapa en ny skuld genom att trycka på knappen nedan",
+      "no_debts_closed": "Inga stängda skulder hittades. En skuld stängs när du har fått in alla pengar från den eller betalat tillbaka allt du var skyldig."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Redigera skuld",
+        "success": "Skulden redigerades"
+      },
+      "delete": {
+        "warning_header": "Ta bort den här skulden?",
+        "warning_text": "Den här åtgärden går inte att ångra. Kopplade transaktioner tas inte bort men kommer inte längre att vara associerade med den här skulden."
+      },
+      "add_register": {
+        "title": "Lägg till transaktion",
+        "success": "Transaktionen lades till",
+        "fab_label": "Lägg till post",
+        "modal_title": "Lägg till post för den här skulden",
+        "modal_subtitle": "Välj ett av följande alternativ för att koppla en transaktion till den här skulden"
+      },
+      "link_transaction": {
+        "title": "Koppla befintlig transaktion",
+        "description": "Välj en befintlig post för att koppla den till den här skulden",
+        "success": "Transaktionen kopplades till skulden",
+        "creating": "Du skapar en transaktion kopplad till skulden <b>{{ name }}</b>"
+      },
+      "unlink_transaction": {
+        "title": "Koppla bort från skuld",
+        "warning_text": "Den här transaktionen kommer inte längre att vara associerad med den här skulden.",
+        "success": "Transaktionen kopplades bort från skulden"
+      },
+      "new_transaction": {
+        "title": "Lägg till ny transaktion",
+        "description": "Lägg manuellt till eller minska skulden genom att skapa en ny transaktion kopplad till den här skulden"
+      },
+      "create": {
+        "title": "Skapa skuld",
+        "success": "Skulden skapades"
+      }
+    }
+  },
+  "ASSETS": {
+    "title": "Tillgångar",
+    "empty_description": "Du har inte skapat några tillgångar ännu. Tillgångar som fastigheter, fordon eller samlarobjekt kan följas med sina värderingar",
+    "create": "Lägg till tillgång",
+    "create_success": "Tillgången skapades",
+    "edit_success": "Tillgången redigerades",
+    "delete": "Ta bort tillgång",
+    "delete_success": "Tillgången togs bort",
+    "delete_confirmation": "Den här åtgärden går inte att ångra. Alla värderingar för den här tillgången tas också bort.",
+    "profit": "Vinst",
+    "profit_percent": "Avkastning %",
+    "total_value": "Tillgångarnas totala värde",
+    "amount_invested": "Du har {{ X }} av det här kontot investerat",
+    "TYPES": {
+      "stocks": "Aktier",
+      "funds": "Fonder",
+      "crypto": "Krypto",
+      "real_estate": "Fastigheter",
+      "vehicle": "Fordon",
+      "jewelry_art": "Smycken och konst",
+      "other": "Övrigt"
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Koppla transaktion",
+        "modal_title": "Koppla transaktion till tillgång",
+        "modal_subtitle": "Välj hur du vill associera en transaktion med den här tillgången"
+      },
+      "link_transaction": {
+        "title": "Koppla befintlig inkomst eller utgift",
+        "description": "Associera inkomst- eller utgiftsposter kopplade till den här tillgången, t.ex. köp, försäljningar eller underhåll. Det hjälper till att organisera historiken och förbättra statistiken, men ändrar inte tillgångens aktuella värde.",
+        "success": "Transaktionen kopplades"
+      },
+      "new_investment_transaction": {
+        "title": "Skapa investeringstransaktion",
+        "description": "Flytta pengar mellan ett konto och den här tillgången. Att köpa lägger till medel och ökar din investering; att sälja tar ut medel och minskar den. Du kan uppdatera tillgångens värdering i enlighet med detta."
+      }
+    },
+    "DETAILS": {
+      "select_account": "Välj ett konto",
+      "buy": "Köp",
+      "sell": "Sälj",
+      "update_value": "Uppdatera värde",
+      "trade_sheet_title_buy": "Köp (lägg till tillgång)",
+      "trade_sheet_title_sell": "Sälj (minska tillgång)",
+      "trade_sheet_update_value_info": "Värdet på den här tillgången uppdateras till {{ value }} för det valda datumet",
+      "trade_sheet_update_linked_asset_value_info": "Värdet på tillgången som är kopplad till den här transaktionen uppdateras till {{ value }} för det valda datumet",
+      "trade_sheet_update_following_valuations": "Uppdatera senare värderingar",
+      "trade_sheet_update_following_valuations_description": "Justera värderingar för den här tillgången daterade efter det valda datumet.",
+      "trade_sheet_valuation_current_value_label": "Aktuellt värde",
+      "trade_sheet_valuation_create_new_title": "Skapa ny värdering",
+      "trade_sheet_valuation_adjust_current_description": "Justera tillgångens aktuella värde",
+      "trade_form_asset_column": "Tillgång",
+      "trade_valuation_notice": "En värdering uppdateras för det här datumet för att spegla det här beloppet.",
+      "notes_optional": "Anteckningar (valfritt)",
+      "performance_sheet_title": "Utveckling",
+      "performance_return": "Periodens avkastning",
+      "performance_return_help": "Vinst eller förlust från marknadsrörelser, inte från pengar du sätter in eller tar ut. Om värdet bara ökade för att du satte in mer förblir detta nära noll.",
+      "performance_invested_value": "Investerat värde",
+      "performance_invested_value_caption": "Totalt kapital i den här tillgången: startvärde plus kopplade köp och försäljningar.",
+      "performance_value_diff": "Värdeförändring",
+      "performance_value_diff_caption": "Hur mycket tillgångens värde har förändrats från periodens start fram till nu."
+    },
+    "FORM": {
+      "asset_type": "Tillgångstyp",
+      "linked_account": "Kopplat konto (valfritt)",
+      "name": "Tillgångens namn",
+      "name_required": "Ange ett namn för tillgången",
+      "description": "Beskrivning",
+      "initial_value": "Ingångsvärde",
+      "initial_value_required": "Ange ett ingångsvärde",
+      "initial_value_invalid": "Ange ett giltigt tal",
+      "currency": "Valuta",
+      "select_currency": "Välj en valuta",
+      "creation_date": "Skapandedatum",
+      "acquisition_date": "Anskaffningsdatum",
+      "creation_date_before_linked_account": "Tillgångens datum kan inte ligga före det kopplade kontots skapandedatum",
+      "edit": "Redigera tillgång",
+      "create": "Skapa tillgång",
+      "already_exists": "En tillgång med det här namnet finns redan. Du kanske vill redigera den istället",
+      "valuation_before_creation_date": "Det finns värderingar på den här tillgången med ett datum före anskaffningsdatumet"
+    },
+    "VALUATION": {
+      "history": "Värderingshistorik",
+      "no_valuations": "Inga värderingar registrerade ännu. Börja med att lägga till den första värderingen",
+      "add_valuation": "Lägg till värdering",
+      "edit_valuation": "Redigera värdering",
+      "value": "Värde",
+      "net_contribution": "Nettobidrag",
+      "value_required": "Ange ett värde",
+      "value_invalid": "Ange ett giltigt tal",
+      "update_value_success": "Värderingen lades till",
+      "edit_valuation_success": "Värderingen uppdaterades",
+      "delete_valuation_success": "Värderingen togs bort",
+      "delete_all_valuations": "Ta bort alla värderingar",
+      "delete_all_valuations_success": "Alla värderingar togs bort"
+    },
+    "SORT": {
+      "name_asc": "Namn (A–Ö)",
+      "name_desc": "Namn (Ö–A)",
+      "value_asc": "Värde (lägst först)",
+      "value_desc": "Värde (högst först)"
+    }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Aktiv",
+    "past": "Avslutad",
+    "future": "Framtida"
+  },
+  "BACKUP": {
+    "no_file_selected": "Ingen fil vald",
+    "no_directory_selected": "Ingen mapp vald",
+    "EXPORT": {
+      "title": "Exportera din data",
+      "title.short": "Exportera",
+      "type-of-export": "Typ av export",
+      "other-options": "Alternativ",
+      "all": "Fullständig säkerhetskopia",
+      "all.descr": "Exportera all din data (konton, transaktioner, budgetar, inställningar...). Importera dem igen när som helst så att du inte förlorar något.",
+      "transactions": "Säkerhetskopia av transaktioner",
+      "transactions.descr": "Exportera dina transaktioner som CSV så att du enklare kan analysera dem i andra program eller applikationer.",
+      "transactions-to-export": {
+        "one": "1 transaktion att exportera",
+        "other": "{{ n }} transaktioner att exportera"
+      },
+      "description": "Ladda ner din data i olika format",
+      "send_file": "Skicka fil",
+      "see_folder": "Visa mapp",
+      "success": "Filen sparades i {{x}}",
+      "error": "Fel vid nedladdning av filen. Kontakta utvecklaren via lozin.technologies@gmail.com"
+    },
+    "IMPORT": {
+      "title": "Importera din data",
+      "title.short": "Importera",
+      "restore-backup": "Återställ säkerhetskopia",
+      "restore-backup-descr": "Importera en tidigare sparad databas från Monekin. Den här åtgärden ersätter all nuvarande appdata med den nya datan",
+      "restore-backup-warn.description": "När du importerar en ny databas förlorar du all data som för närvarande är sparad i appen. Det rekommenderas att göra en säkerhetskopia innan du fortsätter. Ladda inte upp filer här vars ursprung du inte känner till – ladda bara upp filer som du själv tidigare har laddat ner från Monekin",
+      "restore-backup-warn.title": "Skriv över all data",
+      "select-other-file": "Välj en annan fil",
+      "tap-to-select-file": "Tryck för att välja en fil",
+      "MANUAL-IMPORT": {
+        "title": "Manuell import",
+        "descr": "Importera transaktioner manuellt från en .csv-fil",
+        "defaultAccount": "Standardkonto",
+        "removeDefaultAccount": "Ta bort standardkonto",
+        "defaultCategory": "Standardkategori",
+        "defaultTags": "Standardetiketter",
+        "select-a-column": "Välj en kolumn från .csv-filen",
+        "date-format": "Datumformat",
+        "note-column": "Anteckningskolumn",
+        "title-column": "Titelkolumn",
+        "tag-separator": "Etikettavgränsare i .csv-filen",
+        "steps": [
+          "Välj din fil",
+          "Kolumn för belopp",
+          "Kolumn för konto",
+          "Kolumn för kategori",
+          "Kolumn för etiketter",
+          "Kolumn för datum",
+          "Övriga kolumner"
+        ],
+        "steps-descr": [
+          "Välj en .csv-fil från din enhet. Se till att den har en första rad som beskriver namnet på varje kolumn.",
+          "Välj kolumnen där varje transaktions belopp anges. Använd negativa värden för utgifter och positiva värden för inkomster.",
+          "Välj kolumnen där kontot som varje transaktion tillhör anges. Du kan också välja ett standardkonto ifall vi inte hittar det konto du vill ha. Om inget standardkonto anges skapar vi ett med samma namn.",
+          "Ange kolumnen där transaktionens kategorinamn finns. Du måste ange en standardkategori så att vi kan tilldela transaktioner den här kategorin ifall kategorin inte kan hittas.",
+          "Ange kolumnen där transaktionens etiketter finns. Om ingen anges skapas transaktionerna med standardetiketter.",
+          "Välj kolumnen där varje transaktions datum anges. Om ingen anges skapas transaktionerna med dagens datum.",
+          "Ange kolumnerna för andra valfria transaktionsattribut."
+        ],
+        "success": "{{x}} transaktioner importerades"
+      },
+      "success": "Importen slutfördes",
+      "error": "Fel vid import av filen. Kontakta utvecklaren via lozin.technologies@gmail.com"
+    },
+    "ABOUT": {
+      "title": "Information om din databas",
+      "create-date": "Skapandedatum",
+      "modify-date": "Senast ändrad",
+      "last-backup": "Senaste säkerhetskopia",
+      "size": "Storlek"
+    }
+  },
+  "SETTINGS": {
+    "title_long": "Inställningar och anpassning",
+    "title_short": "Inställningar",
+    "description": "Tema, språk, data med mera",
+    "edit_profile": "Redigera profil",
+    "GENERAL": {
+      "menu_title": "Allmänna inställningar",
+      "menu_descr": "Språk, integritet med mera",
+      "show_all_decimals": "Visa alla decimaler",
+      "show_all_decimals_descr": "Om alla decimaler ska visas även när det finns avslutande nollor",
+      "LANGUAGE": {
+        "section": "Språk och texter",
+        "title": "Appspråk",
+        "descr": "Språk som texterna visas i appen",
+        "help": "Om du vill bidra till översättningarna av den här appen kan du läsa <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>vår guide</a>"
+      },
+      "LOCALE": {
+        "title": "Region",
+        "auto": "System",
+        "descr": "Ställ in formatet som ska användas för datum, siffror...",
+        "warn": "Appen uppdateras när du byter region",
+        "first_day_of_week": "Veckans första dag"
+      }
+    },
+    "APP_STRUCTURES": {
+      "title": "App-strukturer",
+      "tags": "Definiera etiketter för att bättre organisera dina transaktioner",
+      "categories": "Organisation av kategorier och underkategorier",
+      "accounts": "Hantera och redigera dina konton",
+      "filters": "Konfigurera globala filter som du kan använda för transaktioner och statistik"
+    },
+    "SECURITY": {
+      "title": "Säkerhet",
+      "private_mode_at_launch": "Privat läge vid start",
+      "private_mode_at_launch_descr": "Starta appen i privat läge som standard",
+      "private_mode": "Privat läge",
+      "private_mode_descr": "Dölj alla monetära värden",
+      "private_mode_activated": "Privat läge aktiverat",
+      "private_mode_deactivated": "Privat läge inaktiverat"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Transaktioner",
+      "menu_descr": "Konfigurera beteende och utseende för alla transaktionsrelaterade funktioner",
+      "title": "Transaktionsinställningar",
+      "STYLE": {
+        "title": "Transaktionsstil",
+        "subtitle": "Konfigurera hur transaktioner ser ut i appens olika listor",
+        "show_tags": "Visa etiketter",
+        "show_time": "Visa tid"
+      },
+      "SWIPE_ACTIONS": {
+        "title": "Svepåtgärder",
+        "choose_description": "Välj vilken åtgärd som ska utlösas när du sveper ett transaktionsobjekt i listan i den här riktningen",
+        "swipe_left": "Svep vänster",
+        "swipe_right": "Svep höger",
+        "none": "Ingen åtgärd",
+        "toggle_reconciled": "Växla avstämd",
+        "toggle_pending": "Växla väntande",
+        "toggle_voided": "Växla makulerad",
+        "toggle_unreconciled": "Växla ej avstämd",
+        "remove_status": "Ta bort status"
+      },
+      "DEFAULT_VALUES": {
+        "title": "Standardvärden för formulär",
+        "page_title": "Ny transaktion: Standardvärden för formulär",
+        "reuse_last_transaction": "Återanvänd värden från senaste transaktionen",
+        "reuse_last_transaction_descr": "Fyll automatiskt i formuläret med vissa värden från den senast skapade transaktionen",
+        "fields_to_reuse": "Fält att återanvända",
+        "reuse_last_values_modal_descr": "Välj de fält som ska förifyllas med värden från den senast skapade transaktionen.",
+        "default_values_separator": "Standardvärden",
+        "default_category": "Standardkategori",
+        "default_status": "Standardstatus",
+        "default_tags": "Standardetiketter",
+        "no_tags_selected": "Inga etiketter valda"
+      },
+      "DEFAULT_TYPE": {
+        "title": "Standardtyp",
+        "modal_title": "Välj standardtyp"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Tema och stil",
+      "menu_descr": "Färgscheman, teckensnitt och andra globala visuella inställningar",
+      "theme_and_colors": "Tema och färger",
+      "THEME": {
+        "title": "Tema",
+        "auto": "System",
+        "light": "Ljust",
+        "dark": "Mörkt"
+      },
+      "amoled_mode": "AMOLED-läge",
+      "amoled_mode_descr": "Använd en helsvart bakgrund när det är möjligt. Det hjälper batteriet något på enheter med AMOLED-skärmar",
+      "dynamic_colors": "Dynamiska färger",
+      "dynamic_colors_descr": "Använd systemets accentfärg när det är möjligt",
+      "accent_color": "Accentfärg",
+      "accent_color_descr": "Välj färgen som appen ska använda för att framhäva vissa delar av gränssnittet",
+      "text": "Text",
+      "font": "Teckensnitt",
+      "font_platform": "Plattform"
+    }
+  },
+  "MORE": {
+    "title": "Mer",
+    "title_long": "Fler åtgärder",
+    "DATA": {
+      "display": "Data",
+      "display.descr": "Exportera och importera din data så att du inte förlorar något",
+      "delete-all": "Ta bort min data",
+      "delete-all-header1": "Stopp där padawan ⚠️⚠️",
+      "delete-all-message1": "Är du säker på att du vill fortsätta? All din data tas bort permanent och kan inte återställas",
+      "delete-all-header2": "Ett sista steg ⚠️⚠️",
+      "delete-all-message2": "Genom att ta bort ett konto tar du bort alla dina lagrade personuppgifter. Dina konton, transaktioner, budgetar och kategorier tas bort och kan inte återställas. Godkänner du?"
+    },
+    "ABOUT_US": {
+      "display": "Appinformation",
+      "description": "Hitta Monekins villkor, viktig information och kontakta oss genom att rapportera buggar eller dela idéer",
+      "LEGAL": {
+        "display": "Juridisk information",
+        "privacy": "Integritetspolicy",
+        "terms": "Användarvillkor",
+        "licenses": "Licenser"
+      },
+      "PROJECT": {
+        "display": "Projekt",
+        "contributors": "Medarbetare",
+        "contributors.descr": "Alla utvecklare som har fått Monekin att växa",
+        "contact": "Kontakta oss"
+      }
+    },
+    "HELP_US": {
+      "display": "Hjälp oss",
+      "description": "Ta reda på hur du kan hjälpa Monekin att bli bättre och bättre",
+      "rate-us": "Betygsätt oss",
+      "rate-us.descr": "Alla betyg är välkomna!",
+      "share": "Dela Monekin",
+      "share.descr": "Dela vår app med vänner och familj",
+      "share.text": "Monekin! Den bästa appen för privatekonomi. Ladda ner den här",
+      "thanks": "Tack!",
+      "thanks_long": "Dina bidrag till Monekin och andra open source-projekt, stora som små, gör fantastiska projekt som detta möjliga. Tack för att du tog dig tid att bidra.",
+      "donate": "Gör en donation",
+      "donate.descr": "Med din donation hjälper du appen att fortsätta få förbättringar. Vad är ett bättre sätt att tacka för arbetet än att bjuda mig på en kaffe?",
+      "donate.success": "Donationen genomfördes. Tack så mycket för ditt bidrag! ❤️",
+      "donate.err": "Hoppsan! Det verkar ha uppstått ett fel vid mottagandet av din betalning",
+      "report": "Rapportera buggar, lämna förslag..."
+    }
+  }
+}
