@@ -340,27 +340,42 @@ class TransactionFormController extends ChangeNotifier {
       if (acc != null) fromAccount = acc;
     }
 
-    if (fromAccount == null) {
+    if (_prefillToAccount != null) {
+      transferAccount = _prefillToAccount;
+    }
+
+    // On a transfer the source can't be the same account as the destination.
+    // Drop a source that collides with a prefilled destination so it gets
+    // re-picked below with a different account.
+    if (transactionType.isTransfer &&
+        fromAccount != null &&
+        fromAccount!.id == transferAccount?.id) {
+      fromAccount = null;
+    }
+
+    if (fromAccount == null ||
+        (transactionType.isTransfer && transferAccount == null)) {
       final accounts = await AccountService.instance
           .getAccounts(
             predicate: (acc, curr) => buildDriftExpr([
               acc.isSaving.equals(false),
               acc.closingDate.isNull(),
             ]),
-            limit: transactionType.isTransfer ? 2 : 1,
+            limit: transactionType.isTransfer ? 3 : 1,
           )
           .first;
 
-      if (accounts.isNotEmpty) {
-        fromAccount = accounts[0];
-        if (transactionType.isTransfer && accounts.length > 1) {
-          transferAccount = accounts[1];
-        }
+      if (fromAccount == null) {
+        fromAccount =
+            accounts.firstWhereOrNull((a) => a.id != transferAccount?.id) ??
+            accounts.firstOrNull;
       }
-    }
 
-    if (_prefillToAccount != null) {
-      transferAccount = _prefillToAccount;
+      if (transactionType.isTransfer && transferAccount == null) {
+        transferAccount = accounts.firstWhereOrNull(
+          (a) => a.id != fromAccount?.id,
+        );
+      }
     }
 
     String? categoryIdToLoad;

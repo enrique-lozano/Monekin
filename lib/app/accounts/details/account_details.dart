@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
+import 'package:monekin/app/accounts/balance_correction_modal.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
@@ -10,7 +11,6 @@ import 'package:monekin/app/accounts/details/holdings_snapshot_card.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/fund_evolution_info.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/app/transactions/list/transactions.page.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
@@ -171,11 +171,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     bool isInvestment, {
     required bool wide,
   }) {
-    final menuActions = AccountDetailsActions.getAccountDetailsActions(
+    final menuActions = AccountDetailsActions.getAccountMenuActions(
       context,
       account: account,
       navigateBackOnDelete: true,
-    ).menu;
+    );
 
     return [
       if (wide) ...[
@@ -427,11 +427,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           color: Colors.green,
           onTap: disabled
               ? null
-              : () => RouteUtils.showResponsiveForm(
-                  TransactionFormPage(
-                    mode: TransactionType.income,
-                    fromAccount: account,
-                  ),
+              : () => AccountDetailsActions.navigateToTransferOrWarn(
+                  context,
+                  toAccount: account,
                 ),
         ),
         _QuickAction(
@@ -440,21 +438,20 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           color: Colors.red,
           onTap: disabled
               ? null
-              : () => RouteUtils.showResponsiveForm(
-                  TransactionFormPage(
-                    mode: TransactionType.expense,
-                    fromAccount: account,
-                  ),
-                ),
-        ),
-        _QuickAction(
-          icon: TransactionType.transfer.icon,
-          label: t.transfer.create,
-          onTap: disabled
-              ? null
               : () => AccountDetailsActions.navigateToTransferOrWarn(
                   context,
                   fromAccount: account,
+                ),
+        ),
+        _QuickAction(
+          icon: Icons.balance_rounded,
+          label: t.account.correct_balance,
+          onTap: disabled
+              ? null
+              : () => RouteUtils.showResponsiveSheet(
+                  context: context,
+                  builder: (context) =>
+                      BalanceCorrectionModal(account: account),
                 ),
         ),
       ];

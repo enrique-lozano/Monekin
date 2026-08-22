@@ -1,6 +1,5 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
-import 'package:monekin/app/accounts/balance_correction_modal.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
@@ -44,79 +43,15 @@ abstract class AccountDetailsActions {
     }
   }
 
-  static ({
-    List<ListTileActionItem> primary,
-    List<ListTileActionItem> desktopChips,
-    List<ListTileActionItem> menu,
-  })
-  getAccountDetailsActions(
+  /// Actions shown in the account's three-dot overflow menu.
+  static List<ListTileActionItem> getAccountMenuActions(
     BuildContext context, {
     required Account account,
     bool navigateBackOnDelete = false,
   }) {
     final t = Translations.of(context);
-    final isInvestment = account.type == AccountType.investment;
 
-    final List<ListTileActionItem> primary = [];
-    final List<ListTileActionItem> desktopChips = [];
-    final List<ListTileActionItem> menu = [];
-
-    final correctBalanceAction = ListTileActionItem(
-      label: t.account.correct_balance,
-      icon: Icons.balance_rounded,
-      onClick: account.isClosed
-          ? null
-          : () => RouteUtils.showResponsiveSheet(
-              context: context,
-              builder: (context) => BalanceCorrectionModal(account: account),
-            ),
-    );
-
-    // --- Primary actions (shown as chips) ---
-
-    if (!isInvestment) {
-      primary.add(correctBalanceAction);
-
-      primary.add(
-        ListTileActionItem(
-          label: t.transfer.create,
-          icon: TransactionType.transfer.icon,
-          onClick: account.isClosed
-              ? null
-              : () => navigateToTransferOrWarn(context, fromAccount: account),
-        ),
-      );
-    } else {
-      primary.add(
-        ListTileActionItem(
-          label: t.account.add_money,
-          icon: Icons.add_rounded,
-          onClick: account.isClosed
-              ? null
-              : () => navigateToTransferOrWarn(context, toAccount: account),
-        ),
-      );
-
-      primary.add(
-        ListTileActionItem(
-          label: t.account.withdraw_money,
-          icon: Icons.remove_rounded,
-          onClick: account.isClosed
-              ? null
-              : () => navigateToTransferOrWarn(context, fromAccount: account),
-        ),
-      );
-    }
-
-    // --- Desktop-only chips (shown next to primary chips on wider screens) ---
-
-    if (isInvestment) {
-      desktopChips.add(correctBalanceAction);
-    }
-
-    // --- Menu actions (shown in three-dot popup) ---
-
-    menu.add(
+    return [
       ListTileActionItem(
         label: account.isClosed
             ? t.account.reopen_short
@@ -142,9 +77,6 @@ abstract class AccountDetailsActions {
           );
         },
       ),
-    );
-
-    menu.add(
       ListTileActionItem(
         label: t.ui_actions.delete,
         icon: Icons.delete,
@@ -157,9 +89,7 @@ abstract class AccountDetailsActions {
           );
         },
       ),
-    );
-
-    return (primary: primary, desktopChips: desktopChips, menu: menu);
+    ];
   }
 
   static void showReopenAccountDialog(BuildContext context, Account account) {
