@@ -987,8 +987,8 @@ class _LinkedAssetCard extends StatelessWidget {
 
         return TranslucentTransactionStatusCard(
           color: assetColor,
-          icon: Debt.icon,
-          title: 'Linked Asset',
+          icon: asset.assetType.icon(),
+          title: t.assets.linked_asset,
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -1031,7 +1031,7 @@ class _LinkedAssetCard extends StatelessWidget {
                         foregroundColor: AppColors.of(context).danger,
                       ),
                       icon: const Icon(Icons.link_off_rounded, size: 18),
-                      label: Text(t.debts.actions.unlink_transaction.title),
+                      label: Text(t.assets.actions.unlink_transaction.title),
                       onPressed: () async {
                         await AssetService.instance.unlinkTransactionFromAsset(
                           transaction.id,

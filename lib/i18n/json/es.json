@@ -47,6 +47,7 @@
     "showing": "Mostrando",
     "understood": "Entendido",
     "unspecified": "Sin especificar",
+    "min_one_entry_required": "Debe quedar al menos un valor",
     "quick_actions": "Acciones rápidas",
     "details": "Detalles",
     "balance": "Balance",
@@ -1024,6 +1025,7 @@
   },
   "ASSETS": {
     "title": "Activos",
+    "linked_asset": "Activo vinculado",
     "empty_description": "Aún no has creado ningún activo. Se puede realizar un seguimiento de activos como bienes raíces, vehículos o objetos de colección con sus valoraciones.",
     "create": "Agregar activo",
     "ADD": {
@@ -1121,7 +1123,7 @@
       "empty_description": "Aún no has añadido ningún valor. Añade una acción, fondo o cripto para empezar a seguir tu cartera.",
       "total_value": "Valor de la cartera",
       "group_by_type": "Agrupar por tipo de valor",
-      "current_price": "Precio actual",
+      "price": "Precio",
       "market_value": "Valor de mercado",
       "units_held": "Unidades",
       "unrealized_pnl": "P&L no realizado",
@@ -1183,6 +1185,9 @@
       },
       "link_transaction": {
         "success": "Transacción vinculada correctamente"
+      },
+      "unlink_transaction": {
+        "title": "Desvincular del activo"
       }
     },
     "DETAILS": {
@@ -1222,10 +1227,17 @@
       "initial_value": "Valor inicial",
       "initial_value_required": "Por favor ingrese un valor inicial",
       "initial_value_invalid": "Por favor ingresa un número válido",
+      "acquisition_info": "Información de la adquisición",
+      "purchase_value": "Valor de compra",
+      "purchase_value_option": "Indicar el valor de compra",
+      "purchase_value_help": "Si se deja vacío, se usará la primera valoración como precio de compra.",
+      "current_value": "Valor actual",
+      "current_value_help": "Opcional. Crea una valoración con la fecha de hoy.",
       "link_acquisition_transaction": "Vincular una transacción de compra",
       "link_acquisition_transaction_descr": "Elige el gasto que representa la compra de este activo. Su importe (convertido a la divisa del activo) y su fecha se usarán como valor inicial y fecha de adquisición",
       "acquisition_transaction": "Transacción de adquisición",
       "creation_date_before_acquisition_transaction": "La fecha de adquisición no puede ser anterior a la fecha de la transacción vinculada",
+      "acquisition_date_from_transaction": "La fecha de adquisición se toma de la transacción vinculada y no se puede editar. Desvincula la transacción para cambiarla.",
       "currency": "Divisa",
       "select_currency": "Por favor seleccione una moneda",
       "creation_date": "Fecha de creación",
@@ -1242,7 +1254,7 @@
       "edit_valuation": "Editar valoración",
       "value": "Valor",
       "net_contribution": "Aportación neta",
-      "net_contribution_help": "El dinero que has aportado a este activo: su valor inicial más cualquier transacción de compra/venta vinculada. Es independiente de los cambios del valor de mercado, que registras manualmente mediante las valoraciones.",
+      "net_contribution_help": "El dinero que has aportado a este activo: su valor inicial más cualquier transacción vinculada. Es independiente de los cambios del valor de mercado, que registras manualmente mediante las valoraciones.",
       "value_required": "Por favor introduce un valor",
       "value_invalid": "Por favor ingresa un número válido",
       "update_value_success": "Valoración agregada exitosamente",

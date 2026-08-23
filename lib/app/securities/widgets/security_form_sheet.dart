@@ -111,8 +111,12 @@ class _SecurityFormPageState extends State<_SecurityFormPage> {
   late final _tickerController = TextEditingController(
     text: widget.securityToEdit?.ticker ?? '',
   );
+  // Only shown on creation (mandatory), so it starts empty. On edit the price
+  // is managed from the price-history section and this controller is unused.
   late final _priceController = TextEditingController(
-    text: (widget.securityToEdit?.currentPrice ?? 0).toString(),
+    text: widget.securityToEdit != null
+        ? (widget.securityToEdit!.currentPrice ?? 0).toString()
+        : '',
   );
   late final _notesController = TextEditingController(
     text: widget.securityToEdit?.notes ?? '',
@@ -553,7 +557,7 @@ class _SecurityFormPageState extends State<_SecurityFormPage> {
             amountController: _priceController,
             currency: _currency,
             amountLabel: t.assets.holdings.current_price,
-            isRequired: false,
+            isRequired: true,
             onCurrencySelected: (newCurrency) {
               setState(() => _currency = newCurrency);
             },

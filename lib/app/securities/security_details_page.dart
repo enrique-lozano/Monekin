@@ -384,7 +384,7 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
         : null;
 
     return EvolutionCard(
-      valueLabel: Translations.of(context).assets.securities.current_price,
+      valueLabel: Translations.of(context).assets.securities.price,
       initialValue: initialPrice,
       finalValue: displayPrice,
       currency: currency,
@@ -810,6 +810,7 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
       emptyDescription: t.assets.securities.no_price_history,
       onEdit: (p) => _editPricePoint(p, security, currency),
       onDelete: (p) => _deletePricePoint(p),
+      preventDeletingLast: true,
     );
   }
 

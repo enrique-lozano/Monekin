@@ -47,6 +47,7 @@
     "showing": "Showing",
     "understood": "Understood",
     "unspecified": "Unspecified",
+    "min_one_entry_required": "At least one value must remain",
     "quick_actions": "Quick actions",
     "details": "Details",
     "balance": "Balance",
@@ -1037,6 +1038,7 @@
   },
   "ASSETS": {
     "title": "Assets",
+    "linked_asset": "Linked asset",
     "empty_description": "You haven't created any assets yet. Assets like real estate, vehicles, or collectibles can be tracked with their valuations",
     "create": "Add asset",
     "ADD": {
@@ -1134,7 +1136,7 @@
       "empty_description": "You haven't added any securities yet. Add a stock, fund or crypto to start tracking your portfolio.",
       "total_value": "Portfolio value",
       "group_by_type": "Group by security type",
-      "current_price": "Current price",
+      "price": "Price",
       "market_value": "Market value",
       "units_held": "Units held",
       "unrealized_pnl": "Unrealized P&L",
@@ -1196,6 +1198,9 @@
       },
       "link_transaction": {
         "success": "Transaction linked successfully"
+      },
+      "unlink_transaction": {
+        "title": "Unlink from asset"
       }
     },
     "DETAILS": {
@@ -1235,10 +1240,17 @@
       "initial_value": "Initial value",
       "initial_value_required": "Please enter an initial value",
       "initial_value_invalid": "Please enter a valid number",
+      "acquisition_info": "Acquisition details",
+      "purchase_value": "Purchase value",
+      "purchase_value_option": "Enter the purchase value",
+      "purchase_value_help": "If left empty, the first valuation is used as the purchase price.",
+      "current_value": "Current value",
+      "current_value_help": "Optional. Records a valuation dated today.",
       "link_acquisition_transaction": "Link a purchase transaction",
       "link_acquisition_transaction_descr": "Choose the expense that represents buying this asset. Its amount (converted to the asset's currency) and date will be used as the initial value and acquisition date",
       "acquisition_transaction": "Acquisition transaction",
       "creation_date_before_acquisition_transaction": "The acquisition date cannot be before the linked transaction's date",
+      "acquisition_date_from_transaction": "The acquisition date is set from the linked transaction and can't be edited. Unlink the transaction to change it.",
       "currency": "Currency",
       "select_currency": "Please select a currency",
       "creation_date": "Creation date",
@@ -1255,7 +1267,7 @@
       "edit_valuation": "Edit valuation",
       "value": "Value",
       "net_contribution": "Net contribution",
-      "net_contribution_help": "Cash you've put into this asset: its starting value plus any linked buy/sell transactions. It's separate from market-value changes, which you record manually via valuations.",
+      "net_contribution_help": "Cash you've put into this asset: its starting value plus any linked transactions. It's separate from market-value changes, which you record manually via valuations.",
       "value_required": "Please enter a value",
       "value_invalid": "Please enter a valid number",
       "update_value_success": "Valuation added successfully",

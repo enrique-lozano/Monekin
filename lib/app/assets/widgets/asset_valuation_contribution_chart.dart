@@ -28,8 +28,7 @@ class AssetValuationContributionChart extends StatefulWidget {
     required this.valuationLabel,
     required this.netContributionLabel,
     this.netContributionHelpText,
-    this.transactionDates = const [],
-    this.transactionsLabel,
+    this.showNetContribution = true,
     this.onHover,
     this.timeRange,
     this.expand = false,
@@ -44,14 +43,10 @@ class AssetValuationContributionChart extends StatefulWidget {
   /// legend item.
   final String? netContributionHelpText;
 
-  /// Dates of the transactions linked to the asset. A small marker is drawn
-  /// at the bottom of the chart for each one that falls within the visible
-  /// range.
-  final List<DateTime> transactionDates;
-
-  /// Legend label for the transaction markers. Only shown when at least one
-  /// marker is visible.
-  final String? transactionsLabel;
+  /// Whether to draw the net-contribution line (and its legend). Hidden when it
+  /// would be a flat, uninformative line (no linked transactions beyond the
+  /// acquisition).
+  final bool showNetContribution;
 
   final void Function(AssetValuationContributionPoint?)? onHover;
   final DateTimeRange? timeRange;
@@ -91,50 +86,17 @@ class _AssetValuationContributionChartState
     final contributionSpots = chartSeries.contributionSpots;
     final domain = computeMonetaryChartYDomain([
       ...valuationSpots.map((spot) => spot.y),
-      ...contributionSpots.map((spot) => spot.y),
+      if (widget.showNetContribution)
+        ...contributionSpots.map((spot) => spot.y),
     ]);
 
-    final isNotEnoughData = sortedPoints.length <= 2;
-
-    final visibleRange = _effectiveTimeRange(sortedPoints);
-    final markerColor = colorScheme.onSurfaceVariant;
-    final markerDates = isNotEnoughData || visibleRange == null
-        ? const <DateTime>[]
-        : widget.transactionDates
-              .map((date) => date.justDay())
-              .toSet()
-              .where(
-                (date) =>
-                    !date.isBefore(visibleRange.start) &&
-                    date.isBefore(visibleRange.end),
-              )
-              .toList();
+    final isNotEnoughData = sortedPoints.length < 2;
 
     final chart = LineChart(
       LineChartData(
         minY: isNotEnoughData ? null : domain.minY,
         maxY: isNotEnoughData ? null : domain.maxY,
         gridData: const FlGridData(show: true, drawVerticalLine: false),
-        extraLinesData: markerDates.isEmpty
-            ? null
-            : ExtraLinesData(
-                verticalLines: markerDates
-                    .map(
-                      (date) => VerticalLine(
-                        x: date.millisecondsSinceEpoch.toDouble(),
-                        color: Colors.transparent,
-                        strokeWidth: 0,
-                        label: VerticalLineLabel(
-                          show: true,
-                          alignment: Alignment.bottomCenter,
-                          padding: EdgeInsets.zero,
-                          style: TextStyle(color: markerColor, fontSize: 9),
-                          labelResolver: (_) => '●',
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
         lineTouchData: isNotEnoughData
             ? const LineTouchData(enabled: false)
             : LineTouchData(
@@ -152,6 +114,12 @@ class _AssetValuationContributionChartState
                       touchedSpots: touchedSpots,
                       currency: widget.currency,
                       lineLabel: (barIndex) => _lineLabel(context, barIndex),
+                      // Always show the value line first, then the net
+                      // contribution, so the rows don't swap when the lines
+                      // cross (barIndex 1 = valuation, 0 = net contribution).
+                      barIndexOrder: widget.showNetContribution
+                          ? const [1, 0]
+                          : null,
                     );
                   },
                 ),
@@ -185,27 +153,28 @@ class _AssetValuationContributionChartState
         ),
         borderData: FlBorderData(show: false),
         lineBarsData: [
-          LineChartBarData(
-            spots: isNotEnoughData
-                ? const [FlSpot(0, 2), FlSpot(1, 2.5), FlSpot(2, 2.6)]
-                : contributionSpots,
-            isCurved: true,
-            curveSmoothness: 0.05,
-            color: isNotEnoughData
-                ? colorScheme.outlineVariant
-                : netContributionColor,
-            barWidth: 2,
-            isStrokeCapRound: true,
-            dotData: const FlDotData(show: false),
-            belowBarData: BarAreaData(
-              show: true,
-              applyCutOffY: !isNotEnoughData,
-              cutOffY: domain.areaFillCutoffY,
+          if (widget.showNetContribution)
+            LineChartBarData(
+              spots: isNotEnoughData
+                  ? const [FlSpot(0, 2), FlSpot(1, 2.5), FlSpot(2, 2.6)]
+                  : contributionSpots,
+              isCurved: true,
+              curveSmoothness: 0.05,
               color: isNotEnoughData
-                  ? colorScheme.outlineVariant.withAlpha(10)
-                  : netContributionColor.withAlpha(50),
+                  ? colorScheme.outlineVariant
+                  : netContributionColor,
+              barWidth: 2,
+              isStrokeCapRound: true,
+              dotData: const FlDotData(show: false),
+              belowBarData: BarAreaData(
+                show: true,
+                applyCutOffY: !isNotEnoughData,
+                cutOffY: domain.areaFillCutoffY,
+                color: isNotEnoughData
+                    ? colorScheme.outlineVariant.withAlpha(10)
+                    : netContributionColor.withAlpha(50),
+              ),
             ),
-          ),
           LineChartBarData(
             spots: isNotEnoughData
                 ? const [FlSpot(0, 3), FlSpot(1, 2.7), FlSpot(2, 4)]
@@ -264,29 +233,27 @@ class _AssetValuationContributionChartState
       spacing: 6,
       children: [
         widget.expand ? Expanded(child: chartWithOverlay) : chartWithOverlay,
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Wrap(
-            spacing: 12,
-            runSpacing: 6,
-            children: [
-              EvolutionChartLegendItem(
-                color: valuationColor,
-                label: widget.valuationLabel,
-              ),
-              EvolutionChartLegendItem(
-                color: netContributionColor,
-                label: widget.netContributionLabel,
-                helpText: widget.netContributionHelpText,
-              ),
-              if (markerDates.isNotEmpty && widget.transactionsLabel != null)
+        // With only the value line there's nothing to disambiguate, so the
+        // single-item legend is dropped.
+        if (widget.showNetContribution)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 6,
+              children: [
                 EvolutionChartLegendItem(
-                  color: markerColor,
-                  label: widget.transactionsLabel!,
+                  color: valuationColor,
+                  label: widget.valuationLabel,
                 ),
-            ],
+                EvolutionChartLegendItem(
+                  color: netContributionColor,
+                  label: widget.netContributionLabel,
+                  helpText: widget.netContributionHelpText,
+                ),
+              ],
+            ),
           ),
-        ),
       ],
     );
   }
@@ -351,6 +318,12 @@ class _AssetValuationContributionChartState
   }
 
   String _lineLabel(BuildContext context, int index) {
+    // With the net-contribution line hidden, the valuation line is the only
+    // bar, so it sits at index 0.
+    if (!widget.showNetContribution) {
+      return widget.valuationLabel;
+    }
+
     switch (index) {
       case 0:
         return widget.netContributionLabel;

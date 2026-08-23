@@ -104,15 +104,15 @@ class _AssetsListPageState extends State<AssetsListPage> {
       }
 
       final streams = assets.map((asset) {
-        return AssetValuationService.instance
-            .getAssetProfit(asset)
-            .map(
-              (profit) => (
-                asset: asset,
-                value: asset.initialValue + profit.value,
-                valueVariation: profit.percent,
-              ),
-            );
+        return CombineLatestStream.combine2(
+          AssetValuationService.instance.getCurrentAssetValue(asset),
+          AssetValuationService.instance.getAssetProfit(asset),
+          (currentValue, profit) => (
+            asset: asset,
+            value: currentValue,
+            valueVariation: profit.percent,
+          ),
+        );
       });
 
       return CombineLatestStream.list(streams);

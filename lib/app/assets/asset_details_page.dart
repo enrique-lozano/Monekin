@@ -85,25 +85,72 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     super.dispose();
   }
 
+  /// The effective **purchase value** used to seed the chart's first point and
+  /// the net-contribution base. Mirrors
+  /// [AssetValuationService.getEffectivePurchaseValue] but resolves it
+  /// synchronously over the already-loaded [valuations]/[transactions].
+  ///
+  /// Resolved, in priority order, from: a real valuation on the acquisition day
+  /// (a manually entered purchase value is stored as such), else the linked
+  /// acquisition transaction amount, else the legacy [AssetInDB.initialValue]
+  /// when non-zero, else the earliest valuation ("as if the purchase price
+  /// equalled the first valuation"). Returns `null` when there's no information
+  /// at all, so callers can drop the synthetic point entirely.
+  double? _effectivePurchaseValue(
+    List<AssetValuationInDB> valuations,
+    List<MoneyTransaction> transactions,
+  ) {
+    final creationDay = widget.asset.creationDate.justDay();
+
+    final onCreationDay = valuations.firstWhereOrNull(
+      (v) => v.date.justDay() == creationDay,
+    );
+    if (onCreationDay != null) return onCreationDay.value;
+
+    final acquisition = transactions.firstWhereOrNull(
+      (tx) =>
+          AssetValuationService.statusAffectsValuation(tx) &&
+          AssetValuationService.isAcquisitionTransaction(tx, widget.asset),
+    );
+    if (acquisition != null) return -acquisition.value;
+
+    if (widget.asset.initialValue != 0) return widget.asset.initialValue;
+
+    if (valuations.isNotEmpty) {
+      return valuations.reduce((a, b) => a.date.isBefore(b.date) ? a : b).value;
+    }
+
+    return null;
+  }
+
   /// Merges the asset's real [valuations] with a synthetic point for its
-  /// initial value at creation. If a real valuation already exists on the
-  /// asset's creation day, the synthetic point is dropped: otherwise, since
+  /// purchase value at the acquisition date. If a real valuation already exists
+  /// on the acquisition day, the synthetic point is dropped: otherwise, since
   /// it's timestamped with the exact creation time while manually-added
   /// valuations are timestamped at midnight, it could sort *after* that real
   /// valuation and silently override it when the chart samples that day.
+  ///
+  /// When the purchase value is unspecified (no acquisition transaction, no
+  /// legacy initial value) it defaults to the earliest valuation, so the chart
+  /// starts flat at the first known value instead of dropping to 0.
   List<AssetValuationInDB> _valuationsWithInitial(
     List<AssetValuationInDB> valuations,
+    List<MoneyTransaction> transactions,
   ) {
     final hasValuationOnCreationDay = valuations.any(
       (v) => v.date.justDay() == widget.asset.creationDate.justDay(),
     );
 
+    final purchaseValue = hasValuationOnCreationDay
+        ? null
+        : _effectivePurchaseValue(valuations, transactions);
+
     return [
-      if (!hasValuationOnCreationDay)
+      if (purchaseValue != null)
         AssetValuationInDB(
           id: 'INITIAL_VALUE',
           date: widget.asset.creationDate,
-          value: widget.asset.initialValue,
+          value: purchaseValue,
           assetId: widget.asset.id,
         ),
       ...valuations,
@@ -112,9 +159,10 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
   List<AssetValuationInDB> _buildFilteredChartData(
     List<AssetValuationInDB> valuations,
+    List<MoneyTransaction> transactions,
   ) {
     return _dateRange.filterTimeSeries(
-      _valuationsWithInitial(valuations),
+      _valuationsWithInitial(valuations, transactions),
       dateExtractor: (valuation) => valuation.date,
     );
   }
@@ -123,31 +171,40 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
     required List<AssetValuationInDB> valuations,
     required List<MoneyTransaction> transactions,
   }) {
-    final allValuations = _valuationsWithInitial(valuations);
+    final allValuations = _valuationsWithInitial(valuations, transactions);
 
-    final filteredValuations = _buildFilteredChartData(valuations);
+    final filteredValuations = _buildFilteredChartData(
+      valuations,
+      transactions,
+    );
     if (filteredValuations.isEmpty) {
       return const [];
     }
 
     final firstVisibleDate = filteredValuations.first.date;
-    final txSorted =
+
+    // Every linked transaction feeds the net-contribution line, the acquisition
+    // included. When an acquisition is linked, its amount (not the possibly
+    // stale [AssetInDB.initialValue]) is the contribution base, so migrated data
+    // where the two disagree still adds up correctly; only when there's no
+    // linked acquisition does the effective purchase value seed the base.
+    final linkedSorted =
         transactions
-            .where(
-              (tx) =>
-                  AssetValuationService.statusAffectsValuation(tx) &&
-                  !AssetValuationService.isAcquisitionTransaction(
-                    tx,
-                    widget.asset,
-                  ),
-            )
+            .where((tx) => AssetValuationService.statusAffectsValuation(tx))
             .toList()
           ..sort((a, b) => a.date.compareTo(b.date));
 
+    final hasAcquisition = linkedSorted.any(
+      (tx) => AssetValuationService.isAcquisitionTransaction(tx, widget.asset),
+    );
+    final purchaseValue =
+        _effectivePurchaseValue(valuations, transactions) ?? 0.0;
+    final baseContribution = hasAcquisition ? 0.0 : purchaseValue;
+
     // Cumulative invested capital at (and including) [date].
     double netContributionAt(DateTime date) {
-      var net = widget.asset.initialValue;
-      for (final tx in txSorted) {
+      var net = baseContribution;
+      for (final tx in linkedSorted) {
         if (tx.date.isAfter(date)) break;
         net += AssetValuationService.valuationDeltaForTransaction(tx);
       }
@@ -171,7 +228,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         stepDates.add(valuation.date);
       }
     }
-    for (final tx in txSorted) {
+    for (final tx in linkedSorted) {
       if (!tx.date.isBefore(firstVisibleDate)) {
         stepDates.add(tx.date);
       }
@@ -181,20 +238,17 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
     return sortedDates.map((date) {
       final latestValuation = latestValuationAt(date);
-      final baseValue = latestValuation?.value ?? widget.asset.initialValue;
-      final baseNet = latestValuation == null
-          ? widget.asset.initialValue
-          : netContributionAt(latestValuation.date);
-      final net = netContributionAt(date);
 
-      // Carry the last explicit valuation forward, but lift it by any capital
-      // invested since that valuation, so a purchase recorded without a fresh
-      // valuation still shows on the value line instead of leaving it flat
-      // until the next valuation is entered.
+      // The value line is derived **solely** from the valuation history (the
+      // last explicit valuation carried forward), matching how the asset's
+      // value is reported everywhere else (see
+      // [AssetValuationService.getAssetValueAtDate]). Linked transactions never
+      // inflate the value: they only feed the separate net-contribution line
+      // below, used as the invested-capital reference for performance.
       return AssetValuationContributionPoint(
         date: date,
-        valuation: baseValue + (net - baseNet),
-        netContribution: net,
+        valuation: latestValuation?.value ?? purchaseValue,
+        netContribution: netContributionAt(date),
       );
     }).toList();
   }
@@ -221,20 +275,25 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
 
   double _netContributionNow({
     required Asset asset,
+    required List<AssetValuationInDB> valuations,
     required List<MoneyTransaction> transactions,
   }) {
-    var net = asset.initialValue;
-    final sorted =
-        transactions
-            .where(
-              (tx) =>
-                  tx.assetID == asset.id &&
-                  AssetValuationService.statusAffectsValuation(tx) &&
-                  !AssetValuationService.isAcquisitionTransaction(tx, asset),
-            )
-            .toList()
-          ..sort((a, b) => a.date.compareTo(b.date));
-    for (final tx in sorted) {
+    final linked = transactions
+        .where(
+          (tx) =>
+              tx.assetID == asset.id &&
+              AssetValuationService.statusAffectsValuation(tx),
+        )
+        .toList();
+
+    final hasAcquisition = linked.any(
+      (tx) => AssetValuationService.isAcquisitionTransaction(tx, asset),
+    );
+
+    final purchaseValue =
+        _effectivePurchaseValue(valuations, transactions) ?? 0.0;
+    var net = hasAcquisition ? 0.0 : purchaseValue;
+    for (final tx in linked) {
       net += AssetValuationService.valuationDeltaForTransaction(tx);
     }
     return net;
@@ -690,6 +749,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           currentValue: valueSnapshot.data ?? resolvedAsset.initialValue,
           netContributionNow: _netContributionNow(
             asset: resolvedAsset,
+            valuations: valuations,
             transactions: transactions,
           ),
         );
@@ -726,6 +786,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                 value: CurrencyDisplayer(
                   amountToConvert: _netContributionNow(
                     asset: resolvedAsset,
+                    valuations: valuations,
                     transactions: transactions,
                   ),
                   currency: resolvedAsset.currency,
@@ -770,9 +831,9 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
   }
 
   /// Links an existing income/expense transaction to [asset]. From now on,
-  /// linking a transaction requires it to already exist; only one dated
-  /// on/before the asset's creation date (the acquisition) may ever be
-  /// linked (see [AssetValuationService.isAcquisitionTransaction]).
+  /// linking a transaction requires it to already exist; only one dated on the
+  /// same day as (or before) the asset's creation date (the acquisition) may
+  /// ever be linked (see [AssetValuationService.isAcquisitionTransaction]).
   void _linkTransaction(
     BuildContext context,
     Asset asset,
@@ -789,8 +850,8 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         transactionTypes: [TransactionType.income, TransactionType.expense],
         assetIds: [],
         minDate: hasAcquisitionTransaction
-            ? asset.creationDate.add(const Duration(seconds: 1))
-            : null,
+            ? asset.creationDate.justDay().add(const Duration(days: 1))
+            : asset.creationDate.justDay(),
       ),
       onTransactionSelected: (transaction) async {
         try {
@@ -848,6 +909,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
         emptyDescription: t.assets.valuation.no_valuations,
         onEdit: (v) => _editValuation(v, resolvedAsset),
         onDelete: _deleteValuation,
+        preventDeletingLast: true,
       ),
     );
   }
@@ -977,11 +1039,25 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
       );
     }
 
-    final allChartData = _valuationsWithInitial(valuations);
+    final allChartData = _valuationsWithInitial(
+      valuations,
+      transactions ?? const [],
+    );
     final chartData = _buildChartPoints(
       valuations: valuations,
       transactions: transactions ?? const [],
     );
+
+    // The net-contribution line only carries information once there's a linked
+    // transaction beyond the acquisition; otherwise it's a flat line matching
+    // the base contribution, so it's hidden to keep the chart clean.
+    final showNetContribution = (transactions ?? const <MoneyTransaction>[])
+        .any(
+          (tx) =>
+              tx.assetID == asset.id &&
+              AssetValuationService.statusAffectsValuation(tx) &&
+              !AssetValuationService.isAcquisitionTransaction(tx, asset),
+        );
 
     return StreamBuilder<double>(
       stream: AssetValuationService.instance.getCurrentAssetValue(asset),
@@ -991,6 +1067,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
           currentValue: currentValue,
           netContributionNow: _netContributionNow(
             asset: asset,
+            valuations: valuations,
             transactions: transactions ?? const [],
           ),
         );
@@ -1018,10 +1095,7 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
             valuationLabel: t.assets.valuation.value,
             netContributionLabel: t.assets.valuation.net_contribution,
             netContributionHelpText: t.assets.valuation.net_contribution_help,
-            transactionDates: (transactions ?? const [])
-                .map((transaction) => transaction.date)
-                .toList(),
-            transactionsLabel: t.transaction.display(n: 2),
+            showNetContribution: showNetContribution,
             onHover: _handleChartHover,
           ),
           currentPeriod: _dateRange.datePeriod,
@@ -1242,10 +1316,14 @@ class _AssetDetailsPageState extends State<AssetDetailsPage> {
                   ),
                 ),
                 LabelValueInfoListItem(
-                  label: t.assets.form.initial_value,
-                  value: CurrencyDisplayer(
-                    amountToConvert: resolvedAsset.initialValue,
-                    currency: resolvedAsset.currency,
+                  label: t.assets.form.purchase_value,
+                  value: StreamBuilder<double>(
+                    stream: AssetValuationService.instance
+                        .getEffectivePurchaseValue(resolvedAsset),
+                    builder: (context, snap) => CurrencyDisplayer(
+                      amountToConvert: snap.data ?? resolvedAsset.initialValue,
+                      currency: resolvedAsset.currency,
+                    ),
                   ),
                   trailing: acquisitionTransaction != null
                       ? const Icon(Icons.chevron_right, size: 18)

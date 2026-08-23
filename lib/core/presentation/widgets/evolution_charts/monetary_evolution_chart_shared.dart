@@ -4,10 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 typedef MonetaryChartYDomain = ({
@@ -173,20 +173,36 @@ List<LineTooltipItem> buildMultiLineCurrencyLineTooltipItems(
   required List<LineBarSpot> touchedSpots,
   required CurrencyInDB? currency,
   required String Function(int barIndex) lineLabel,
+  List<int>? barIndexOrder,
 }) {
   if (touchedSpots.isEmpty) {
     return const [];
   }
 
-  final point = touchedSpots.first.x.toInt();
+  // fl_chart hands the touched spots in an order that flips whenever two lines
+  // cross, making the tooltip rows jump around. When [barIndexOrder] is given,
+  // the rows are shown in that fixed order (by [LineBarSpot.barIndex]) so the
+  // layout stays stable regardless of which line is on top at that x.
+  final orderedSpots = barIndexOrder == null
+      ? touchedSpots
+      : (List<LineBarSpot>.from(touchedSpots)..sort((a, b) {
+          int rank(int barIndex) {
+            final index = barIndexOrder.indexOf(barIndex);
+            return index == -1 ? barIndexOrder.length : index;
+          }
+
+          return rank(a.barIndex).compareTo(rank(b.barIndex));
+        }));
+
+  final point = orderedSpots.first.x.toInt();
 
   final date = DateTime.fromMillisecondsSinceEpoch(point);
   const dataTextStyle = TextStyle(fontSize: 12, height: 1.25);
 
   return [
-    ...touchedSpots.mapIndexed((index, spot) {
+    ...orderedSpots.mapIndexed((index, spot) {
       return LineTooltipItem(
-        index == 0 ? '${DateFormat.MMMd().format(date)}\n' : '',
+        index == 0 ? '${getMMMdDateFormatBasedOnYear(date).text}\n' : '',
         const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, height: 2),
         children: [
           TextSpan(
