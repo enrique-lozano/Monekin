@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/theme.dart';
@@ -108,10 +110,19 @@ abstract class MonekinSnackbar {
 
     final context = snackbarKey.currentContext;
     final showAsToast = context != null && !AppUtils.isMobileLayout(context);
-    final screenWidth = context == null
+
+    // Snackbars are laid out by the page's Scaffold, which only spans the area
+    // at the right of the navigation sidebar, so the margins have to be
+    // measured against that area and not against the whole window.
+    final sidebarWidth =
+        (navigationSidebarKey.currentContext?.findRenderObject() as RenderBox?)
+            ?.size
+            .width ??
+        0;
+    final availableWidth = context == null
         ? 0.0
-        : MediaQuery.sizeOf(context).width;
-    final toastWidth = screenWidth > 380 ? 380.0 : screenWidth;
+        : MediaQuery.sizeOf(context).width - sidebarWidth;
+    final toastWidth = min(380.0, availableWidth - 32);
 
     return _getScaffoldMessenger(options).showSnackBar(
       SnackBar(
@@ -120,7 +131,7 @@ abstract class MonekinSnackbar {
         behavior: showAsToast ? SnackBarBehavior.floating : null,
         margin: showAsToast
             ? EdgeInsets.only(
-                left: screenWidth - toastWidth - 16,
+                left: max(0, availableWidth - toastWidth - 16),
                 right: 16,
                 bottom: 16,
               )
