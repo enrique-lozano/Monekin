@@ -374,6 +374,18 @@ WHERE a.trackingMode = 'transactions'
     WHERE t.securityID = h.securityID AND t.accountID = h.accountID AND t.type = 'N'
   );
 
+-- 7e-ter. Clear leftover links to converted financial assets from
+--         non-investment transactions (types E/I/T). Pre-v13 an ordinary
+--         income or expense could be linked to a financial asset to drive its
+--         valuation. That model is gone in v13, and the asset row is about to
+--         be deleted, so we drop the dangling link to keep foreign keys valid
+--         (the transaction, its amount and category stay untouched). Type 'N'
+--         trades were already repointed to the security in step 7d.
+UPDATE transactions
+SET assetID = NULL
+WHERE type != 'N'
+  AND assetID IN (SELECT id FROM assets WHERE assetType IN ('stocks', 'funds', 'crypto'));
+
 -- 7f. Remove the converted financial assets and their valuations.
 DELETE FROM valuations
 WHERE assetId IN (SELECT id FROM assets WHERE assetType IN ('stocks', 'funds', 'crypto'));
