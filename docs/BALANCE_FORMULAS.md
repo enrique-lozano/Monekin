@@ -145,7 +145,7 @@ Optional transaction filters can be passed through for stats consistency (`Trans
 
 ### 5.2 Liabilities (debts)
 
-**Debts** is the sum of each debt’s **remaining** balance, converted to the preferred currency. Conversion uses exchange rates as of the same date $t$ used on the chart point; remaining amounts follow the live debt ledger (same behaviour as the net-worth chart).
+**Debts** is the sum of each debt’s **remaining** balance, converted to the preferred currency: debts the user **borrowed** add to the total, while debts the user **lent** out are receivables and subtract from it ($\text{Debts}(t) = \sum \text{Remaining}(\text{borrowed}) - \sum \text{Remaining}(\text{lent})$). Conversion uses exchange rates as of the same date $t$ used on the chart point; remaining amounts follow the live debt ledger (same behaviour as the net-worth chart).
 
 > **Implementation:** `NetWorthService.getTotalDebtsInPreferredCurrency(exchangeRateAsOf: t)`.
 
