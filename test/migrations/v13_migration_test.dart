@@ -17,7 +17,13 @@ List<String> splitSQLStatements(String sqliteStr) {
 /// Applies `assets/sql/migrations/v13.sql` to a copy of the v12 sample DB the
 /// same way the app does (statement split, FK pragmas stripped, FK off around
 /// the batch) and returns the migrated, open database.
-Database migrateSample() {
+Database migrateSample() => migrateSampleMutated(null);
+
+/// Same as [migrateSample], but runs [mutate] on the copied v12 database
+/// *before* applying the migration. Lets a test inject legacy/dirty rows (e.g.
+/// an asset stored with the old camelCase enum name) and assert the migration
+/// still succeeds.
+Database migrateSampleMutated(void Function(Database db)? mutate) {
   final sample = File('assets/sql/samples/v12_sample.db');
   expect(sample.existsSync(), isTrue, reason: 'v12 sample DB missing');
 
@@ -32,6 +38,8 @@ Database migrateSample() {
 
   final db = sqlite3.open(tmp.path);
   addTearDown(db.dispose);
+
+  if (mutate != null) mutate(db);
 
   final statements =
       splitSQLStatements(
@@ -54,6 +62,19 @@ Database migrateSample() {
 
   expect(fkViolations, isEmpty, reason: 'FK violations after migrating to v13');
   return db;
+}
+
+/// Inserts a physical asset carrying the given raw `assetType` string into the
+/// copied v12 DB (reusing an existing currency), so tests can feed the migration
+/// legacy enum encodings.
+void insertLegacyAsset(Database db, String id, String assetType) {
+  db.execute(
+    '''
+    INSERT INTO assets (id, name, description, currencyId, initialValue, creationDate, assetType, linkedAccountID)
+    VALUES (?, ?, NULL, (SELECT code FROM currencies LIMIT 1), 1000, '2024-01-01', ?, NULL)
+    ''',
+    [id, 'Legacy $id', assetType],
+  );
 }
 
 void main() {
@@ -306,6 +327,73 @@ void main() {
       offenders,
       isEmpty,
       reason: 'comment lines must not contain ";":\n${offenders.join('\n')}',
+    );
+  });
+
+  test('legacy camelCase assetType values migrate to the snake_case enum', () {
+    // v12 added `assets.assetType` WITHOUT a CHECK, so real databases carry the
+    // old Dart enum name ('realEstate', ...) instead of its databaseValue
+    // ('real_estate', ...). Copying it verbatim used to fail the CHECK on the
+    // rebuilt `assets` table and roll the whole migration back to v12.
+    final db = migrateSampleMutated((db) {
+      insertLegacyAsset(db, 'legacy_re', 'realEstate');
+      insertLegacyAsset(db, 'legacy_pm', 'preciousMetal');
+      insertLegacyAsset(db, 'legacy_ja', 'jewelryArt');
+      insertLegacyAsset(db, 'legacy_ve', 'vehicle');
+    });
+
+    String typeOf(String id) => db.select(
+      'SELECT assetType FROM assets WHERE id = ?',
+      [id],
+    ).first['assetType'] as String;
+
+    expect(typeOf('legacy_re'), 'real_estate');
+    expect(typeOf('legacy_pm'), 'precious_metal');
+    expect(typeOf('legacy_ja'), 'jewelry_art');
+    expect(typeOf('legacy_ve'), 'vehicle');
+  });
+
+  test('an unrecognized assetType falls back to "other" instead of aborting', () {
+    final db = migrateSampleMutated(
+      (db) => insertLegacyAsset(db, 'legacy_unknown', 'someFutureType'),
+    );
+
+    final type = db.select(
+      'SELECT assetType FROM assets WHERE id = ?',
+      ['legacy_unknown'],
+    ).first['assetType'] as String;
+
+    expect(type, 'other');
+  });
+
+  test('two same-day valuations of a financial asset collapse to one price', () {
+    // The app keeps one valuation per day in Dart, not via a DB constraint on
+    // DATE(date), so a dirty DB can hold two valuations that collapse to the
+    // same calendar day. Without dedup they'd violate the unique index on
+    // securityPrices(securityID, date) and abort the migration.
+    final db = migrateSampleMutated((db) {
+      db.execute('''
+        INSERT INTO assets (id, name, description, currencyId, initialValue, creationDate, assetType, linkedAccountID)
+        VALUES ('dirty_fin', 'Dirty Fund', NULL, (SELECT code FROM currencies LIMIT 1), 100, '2024-01-01', 'funds', NULL)
+      ''');
+      db.execute(
+        "INSERT INTO valuations (id, assetId, date, value) VALUES ('dv_early', 'dirty_fin', '2024-03-10T09:00:00.000', 110)",
+      );
+      db.execute(
+        "INSERT INTO valuations (id, assetId, date, value) VALUES ('dv_late', 'dirty_fin', '2024-03-10T18:00:00.000', 120)",
+      );
+    });
+
+    final prices = db.select(
+      "SELECT date, price FROM securityPrices WHERE securityID = 'sec_dirty_fin'",
+    );
+
+    expect(prices.length, 1, reason: 'same-day valuations collapse to one row');
+    expect(prices.first['date'], '2024-03-10');
+    expect(
+      (prices.first['price'] as num).toDouble(),
+      120,
+      reason: 'the latest value of the day wins',
     );
   });
 }
