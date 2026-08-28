@@ -269,13 +269,7 @@ FROM assets a
 WHERE a.assetType IN ('stocks', 'funds', 'crypto');
 
 -- 7b. Valuations of those assets become price-history points. Dates are
---     normalized to date-only (one observation per calendar day). The app
---     keeps at most one valuation per asset per day, but it enforces that in
---     Dart (not with a DB constraint on DATE(date)), so a dirty database could
---     still hold two valuations that collapse to the same calendar day and
---     violate the unique index on securityPrices(securityID, date). INSERT OR
---     IGNORE plus the newest-first ordering keeps the latest value of the day
---     and drops the rest instead of aborting the whole migration.
+--     normalized to date-only (one observation per calendar day).
 INSERT OR IGNORE INTO securityPrices (id, securityID, date, price)
 SELECT 'sph_' || v.id, 'sec_' || v.assetId, DATE(v.date), v.value
 FROM valuations v
