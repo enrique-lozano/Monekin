@@ -1136,7 +1136,7 @@
       "empty_description": "您尚未新增任何證券。新增股票、基金或加密貨幣以開始追蹤您的投資組合。",
       "total_value": "投資組合價值",
       "group_by_type": "按安全類型分組",
-      "price": "price",
+      "price": "價格",
       "market_value": "市場價值",
       "units_held": "持有單位",
       "unrealized_pnl": "未實現損益",
