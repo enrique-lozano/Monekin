@@ -17,7 +17,7 @@
     "deselect-all": "取消全選",
     "select": "選擇",
     "search": "搜尋",
-    "filter": "過濾",
+    "filter": "篩選",
     "sort": "排序",
     "display_options": "顯示選項",
     "reset": "重設",
@@ -43,6 +43,8 @@
   },
   "GENERAL": {
     "or": "或",
+    "of": "／",
+    "showing": "正在顯示",
     "understood": "明白了",
     "unspecified": "未指定",
     "min_one_entry_required": "至少需保留一個值",
@@ -55,7 +57,7 @@
     "category": "類別",
     "today": "今天",
     "yesterday": "昨天",
-    "filters": "過濾",
+    "filters": "篩選",
     "empty-warn": "哦！這裡非常空",
     "search-no-results": "沒有符合您搜索條件的商品",
     "insufficient-data": "數據不足",
@@ -165,10 +167,10 @@
     },
     "VALIDATIONS": {
       "form_error": "修正表單中指示的欄位以繼續",
-      "required": "必填項目",
-      "positive": "應該是積極的",
-      "min_number": "應該大於{{x}}",
-      "max_number": "應小於{{x}}"
+      "required": "此欄位必填",
+      "positive": "必須大於 0",
+      "min_number": "必須大於 {{x}}",
+      "max_number": "必須小於 {{x}}"
     }
   },
   "INTRO": {
@@ -193,7 +195,7 @@
   },
   "HOME": {
     "title": "儀表板",
-    "filter-transactions": "過濾交易",
+    "filter-transactions": "篩選交易",
     "hello-day": "早安，",
     "hello-night": "晚安，",
     "welcome-back-1": "歡迎回來！",
@@ -216,8 +218,8 @@
       "quarter": "3月",
       "half-year": "6月",
       "year": "1年",
-      "max": "MAX",
-      "custom": "風俗"
+      "max": "最大值",
+      "custom": "自訂範圍"
     },
     "my-accounts": "我的帳戶",
     "active-accounts": "活躍帳戶",
@@ -231,16 +233,16 @@
     "display": "財務健康",
     "review": {
       "very_good(context=GenderContext)": {
-        "male,female": "很好！"
+        "male,female": "非常好！"
       },
       "good(context=GenderContext)": {
-        "male,female": "好"
+        "male,female": "良好"
       },
       "normal(context=GenderContext)": {
-        "male,female": "平均"
+        "male,female": "一般"
       },
       "bad(context=GenderContext)": {
-        "male,female": "一般"
+        "male,female": "尚可"
       },
       "very_bad(context=GenderContext)": {
         "male,female": "非常糟糕"
@@ -249,26 +251,26 @@
         "male,female": "數據不足"
       },
       "descr": {
-        "insufficient_data": "看起來我們沒有足夠的收入來計算您的財務健康狀況。添加這段時間的一些收入/收入，以便我們能夠幫助您！",
-        "very_good": "恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習",
-        "good": "太棒了！您的財務狀況良好。請訪問分析選項卡，了解如何節省更多！",
-        "normal": "您的財務健康狀況或多或少處於這一時期其他人口的平均水平",
-        "bad": "看來您的財務狀況還不是最好的。探索其餘圖表以了解更多有關您財務狀況的信息",
-        "very_bad": "嗯，您的財務健康狀況遠低於應有的水平。探索其餘圖表以了解有關您財務狀況的更多信息"
+        "insufficient_data": "看起來沒有足夠的收入來計算您的財務健康狀況。請在此期間新增收入/收入，讓我們能夠幫助您！",
+        "very_good": "恭喜！您的財務狀況非常好。我們希望您繼續保持良好的勢頭，並繼續與 Monekin 一起學習成長",
+        "good": "太棒了！您的財務狀況良好。請訪問分析頁面，了解如何能存下更多錢！",
+        "normal": "在此期間您的財務狀況與一般人差不多。",
+        "bad": "看來您的財務狀況還不是最佳狀態。探索其他圖表以深入了解您的財務狀況。",
+        "very_bad": "嗯...您的財務狀況遠低於應有的水準。探索其他圖表以深入了解您的財務狀況。"
       }
     },
     "monthsWithoutIncome": {
       "title": "存活率",
-      "subtitle": "考慮到您的餘額，您可以在沒有收入的情況下度過多長時間",
-      "text.zero": "按照這樣的開支，沒有收入你一個月都活不下去！",
-      "text.one": "按照這樣的收入，如果沒有收入，你幾乎無法生存大約一個月！",
-      "text.other": "以這樣的支出速度，如果沒有收入，您大約可以生存 <b>{{n}}個月</b>。",
-      "text.infinite": "以這樣的支出速度，如果沒有收入，您大約可以<b>一生</b>生存。",
-      "suggestion": "請記住，建議始終將此比率保持在至少 5 個月以上。如果您發現自己沒有足夠的儲蓄緩衝，請減少不必要的開支。",
-      "insufficient_data": "看來我們沒有足夠的開支來計算您在沒有收入的情況下可以生存多少個月。輸入幾筆交易，然後回到這裡檢查您的財務狀況",
+      "subtitle": "依據您的餘額，在沒收入的情況下可以維持多久的時間",
+      "text.zero": "依照目前的支出情況，連一個月都活不下去！",
+      "text.one": "依照目前的支出情況，差不多可以維持 1 個月！",
+      "text.other": "依照目前的支出情況，可以在沒有收入的情況下，大約可以維持<b> {{n}} 個月</b>。",
+      "text.infinite": "依照目前的支出情況，可以在沒有收入的情況下，大約可以維持<b>一生</b>。",
+      "suggestion": "請注意，建議將此比例維持在 5 個月以上會比較保險。如果發現沒有足夠的儲蓄緩衝，請減少不必要的支出。",
+      "insufficient_data": "沒有足夠的支出來計算您在沒有收入的情況下可以生存多少個月。請輸入幾筆交易，然後回到這裡檢查您的財務狀況",
       "valueShort": "{{n}} 個月",
       "formula": "您帳戶中的可用資金 ÷ 這段期間的平均每月支出。",
-      "unlock": "在這段期間內記錄至少 4 筆交易，其中一部分為支出。"
+      "unlock": "在這段期間內記錄至少 4 筆交易，須包含支出。"
     },
     "savingsPercentage": {
       "title": "儲蓄百分比",
@@ -280,7 +282,7 @@
         "very_bad": "哇哦，這段時間你什麼都沒保存下來。"
       },
       "suggestion": "請記住，建議將收入的至少 15-20% 存起來。",
-      "formula": "（收入 − 支出）÷ 收入，皆在所選期間內。",
+      "formula": "(收入 − 支出) ÷ 收入，皆在所選期間內。",
       "insufficient_data": "這段期間的記錄不足，無法判斷您留下了多少錢。",
       "unlock": "在這段期間內記錄一筆收入，或任何類型的至少 10 筆交易。"
     },
@@ -291,10 +293,10 @@
         "value": "您未償還的債務占總資產的 <b>{{value}}%</b>。",
         "no_assets": "您有未償還的債務，但沒有記錄任何資產來支撐它。"
       },
-      "suggestion": "比率越低，通常表示您越有能力用自己擁有的資產償還債務。",
+      "suggestion": "比例越低，通常表示您越有能力用自己擁有的資產償還債務。",
       "insufficient_data": "您還沒有記錄任何債務或資產，因此沒有資產負債情況可供評估。",
       "formula": "未償還債務 ÷ 總資產，皆以所選期間的結束日為準。",
-      "unlock": "新增一筆您的債務或一項您的資產（房子、汽車……）。"
+      "unlock": "新增一筆您的債務或一項您的資產(房子、汽車...)。"
     },
     "cashFlowConsistency": {
       "title": "現金流穩定度",
@@ -311,15 +313,18 @@
     },
     "investmentRatio": {
       "title": "投資比例",
-      "subtitle": "這段期間內您將收入的多少投入了證券",
+      "subtitle": "這段期間內將收入的多少用於投資",
       "text": {
-        "value": "這段期間內您將收入的 <b>{{value}}%</b> 投入了證券。",
-        "none": "這段期間內您沒有將任何資金投入證券。"
+        "value": "這段期間內將收入的 <b>{{value}}%</b> 用於投資。",
+        "none": "這段期間內沒有將任何資金用於投資。"
       },
-      "suggestion": "定期投資一部分收入，有助於讓您的錢成長得比通膨更快。",
-      "formula": "投入證券的金額 ÷ 收入，皆在所選期間內。",
-      "insufficient_data": "這段期間內您沒有開立的投資帳戶，因此我們無法衡量您財務的這一部分。",
-      "unlock": "開立一個投資帳戶，或選擇一個其中已有投資帳戶處於開立狀態的期間。"
+      "suggestion": "定期將部分收入用於投資，有助於讓您的資產成長速度超過通貨膨脹。",
+      "build_emergency_fund": "請先優先建立您的緊急預備金。存活月數每增加一個月（最多五個月），就會逐步解鎖投資比例所獲得的分數。",
+      "runway_insufficient_data": "在能夠衡量您的應急緩衝期之前，我們無法為這個比例評分。",
+      "formula": "在所選範圍內：投資組合中記錄的總投資金額與正成本基礎增加額 ÷ 總收入。",
+      "insufficient_data": "這段期間內您沒有開立的投資帳戶，因此我們無法衡量您財務的這些部分。",
+      "unlock": "開立一個投資帳戶，或選擇一個其中已有投資帳戶處於開立狀態的期間。",
+      "runway_unlock": "請選擇一個包含至少 4 筆交易且有記錄支出的期間，以便衡量您的應急緩衝期。"
     },
     "howCalculated": {
       "action": "您的分數是如何計算的",
@@ -333,7 +338,7 @@
       "pendingDescr": "在我們目前能夠衡量的指標中，您還差的分數。",
       "paused": "無法衡量",
       "pausedDescr": "{{indicators}}：您還沒有使用它們，因此我們無法衡量它們的分數。",
-      "scoreExplanation": "您的分數（{{score}}）只考慮了我們目前能衡量的 {{measurable}} 分，因此無法衡量的部分不會拉低它。",
+      "scoreExplanation": "您的分數({{score}})只考慮了我們目前能衡量的 {{measurable}} 分，因此無法衡量的部分不會拉低它。",
       "total": "總計"
     },
     "lowReliability": "這個分數僅依據 <b>{{total}} 項指標中的 {{measurable}} 項</b>，請把它當作初步草稿：您使用的指標越多，它就越貼近您的真實情況。",
@@ -368,17 +373,17 @@
     "net-worth-subtitle": "The difference between what you own and what you owe.",
     "net-worth-gross": "總資產",
     "net-worth-net": "淨資產",
-    "net-worth-composition": "Net worth composition",
-    "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
-    "portfolio": "資料夾",
-    "portfolio-composition": "投資組合構成",
+    "net-worth-composition": "淨資產組合",
+    "net-worth-composition-subtitle": "帳戶、投資與債務之間的分布。",
+    "portfolio": "投資組合",
+    "portfolio-composition": "投資組合成分",
     "portfolio-composition-subtitle": "您的投資如何在您的所有帳戶中分配。",
     "portfolio-heat-map": "熱力圖",
     "portfolio-heat-map-subtitle": "方塊越大，持倉越大。顏色越綠，表現越好。",
     "daily-performance": "每日",
-    "compared-to-previous-period": "與上一时期相比",
+    "compared-to-previous-period": "與上一時期相比",
     "cash-flow": "現金流",
-    "cash-flow-subtitle": "我的支出是否少于我的收入？",
+    "cash-flow-subtitle": "我的支出是否少於我的收入？",
     "by-periods": "按時期",
     "by-categories": "按類別",
     "by-tags": "按標籤",
@@ -414,7 +419,7 @@
     },
     "create": "新交易",
     "new.income": "新收入",
-    "new.expense": "新開支",
+    "new.expense": "新支出",
     "new.success": "交易建立成功",
     "edit": "編輯交易",
     "edit.success": "交易編輯成功",
@@ -453,6 +458,18 @@
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",
+      "FILTERED_EMPTY": {
+        "title": "沒有符合這些篩選條件的交易",
+        "description": {
+          "one": "您的 {{n}} 筆交易紀錄仍然存在，只是不符合目前篩選條件。請嘗試擴大範圍或移除篩選條件。",
+          "other": "所有 {{n}} 筆交易紀錄仍然存在，只是不符合目前篩選條件。請嘗試擴大範圍或移除篩選條件。"
+        },
+        "clear": {
+          "one": "移除篩選條件",
+          "other": "移除{{n}}個篩選條件"
+        },
+        "expand-dates": "顯示所有日期"
+      },
       "selected.short": {
         "one": "{{n}}已選取",
         "other": "{{n}}已選取"
@@ -461,6 +478,11 @@
         "one": "已選擇{{n}}筆交易",
         "other": "已選擇{{n}}筆交易"
       },
+      "selected_of": {
+        "one": "已選 {{n}} 筆，共 {{total}} 筆",
+        "other": "已選 {{n}} 筆，共 {{total}} 筆"
+      },
+      "shown": "已顯示",
       "BULK_EDIT": {
         "dates": "編輯日期",
         "categories": "編輯類別",
@@ -469,32 +491,36 @@
       }
     },
     "FILTERS": {
-      "title": "交易過濾器",
+      "title": "交易篩選器",
       "from_value": "從金額",
       "to_value": "最多金額",
       "from_value_def": "來自{{x}}",
       "to_value_def": "最多{{x}}",
       "from_date_def": "從{{date}}開始",
       "to_date_def": "截至{{date}}",
-      "reset": "重置過濾器",
+      "reset": "重置篩選器",
+      "inapplicable_here": {
+        "one": "<b>1</b>當前的篩選條件無法套用於此圖。",
+        "other": "<b>{{n}}</b>當前的篩選條件無法套用於此圖。"
+      },
       "saved": {
-        "title": "已儲存的過濾器",
-        "new_title": "新增過濾器",
-        "edit_title": "編輯過濾器",
-        "name_label": "過濾器名稱",
-        "name_hint": "我的自訂過濾器",
-        "save_dialog_title": "儲存過濾器",
-        "save_tooltip": "儲存目前的過濾器",
-        "load_tooltip": "載入已儲存的過濾器",
-        "empty_title": "未找到已儲存的過濾器",
-        "empty_description": "在此儲存過濾器以便稍後快速存取。",
+        "title": "已儲存的篩選器",
+        "new_title": "新增篩選器",
+        "edit_title": "編輯篩選器",
+        "name_label": "篩選器名稱",
+        "name_hint": "我的自訂篩選器",
+        "save_dialog_title": "儲存篩選器",
+        "save_tooltip": "儲存目前的篩選器",
+        "load_tooltip": "載入已儲存的篩選器",
+        "empty_title": "未找到已儲存的篩選器",
+        "empty_description": "在此儲存篩選器以便稍後快速存取。",
         "save_success": "篩選器儲存成功",
         "delete_success": "篩選器刪除成功"
       }
     },
     "FORM": {
       "VALIDATORS": {
-        "zero": "一筆交易的價值不能等於零",
+        "zero": "交易的價值不能等於零",
         "date-max": "所選日期晚於當前日期。交易將新增為待處理",
         "date-after-account-creation": "您無法建立日期早於所屬帳戶建立日期的交易",
         "negative-transfer": "轉帳的貨幣價值不能為負數",
@@ -612,10 +638,10 @@
     "investments": "投資",
     "cash": "現金",
     "total_cost": "總成本",
-    "total_cost_help": "您為目前持有的證券支付的費用（其加權平均購買成本），而不是其當前市場價值。",
+    "total_cost_help": "您為目前持有的證券支付的費用(其加權平均購買成本)，而不是其當前市場價值。",
     "unrealized_pnl_help": "您仍持有的證券的帳面損益：當前市場價值減去總成本。只有當你出售時它才會實現。",
     "range_income": "收入",
-    "range_expense": "開支",
+    "range_expense": "支出",
     "no_income_range": "本期無收入",
     "no_expense_range": "本期無費用",
     "movements_count": "{{n}} 個動作",
@@ -637,16 +663,14 @@
       "saving": "儲蓄帳戶",
       "saving.descr": "您只能從其他帳戶中添加和提取資金。非常適合開始存錢",
       "investment": "投資帳戶",
-      "investment.descr": "可包含資產的券商、加密貨幣交易所或投資組合帳戶。追蹤投資本金，並透過估值手動更新每個資產的價值",
-      "normal": "普通帳戶",
-      "normal.descr": "對於記錄您的日常財務很有用。這是最常見的帳戶，它可以讓您添加支出、收入..."
+      "investment.descr": "可包含資產的券商、加密貨幣交易所或投資組合帳戶。追蹤投資本金，並透過估值手動更新每個資產的價值"
     },
     "TRACKING_MODES": {
       "title": "追蹤模式",
       "transactions": "交易",
       "transactions_descr": "頭寸是根據您的買入和賣出交易自動計算的。",
       "holdings": "控股",
-      "holdings_descr": "以帶有日期的快照形式手動輸入您的頭寸（數量和平均成本）。",
+      "holdings_descr": "以帶有日期的快照形式手動輸入您的頭寸(數量和平均成本)。",
       "switch_warn": "每種追蹤模式使用不同的資料來源計算持倉。儲存時，你目前的持倉會轉換到新模式；更早的日期將依該模式已有的歷史資料估值。"
     },
     "FORM": {
@@ -973,7 +997,7 @@
     },
     "EMPTY": {
       "no_debts_active": "未發現活躍債務。首先點擊下面的按鈕建立新債務",
-      "no_debts_closed": "未發現已結清的債務。當您收回所有債務或支付所有所欠債務时，債務就结束了。"
+      "no_debts_closed": "未發現已結清的債務。當您收回所有債務或支付所有所欠債務時，債務就结束了。"
     },
     "ACTIONS": {
       "edit": {
@@ -1014,6 +1038,7 @@
   },
   "ASSETS": {
     "title": "資產",
+    "linked_asset": "關聯資產",
     "empty_description": "您還沒有創建任何資產。可以追蹤房地產、車輛或收藏品等資產的估值",
     "create": "新增資產",
     "ADD": {
@@ -1029,9 +1054,8 @@
     "profit_percent": "返回 %",
     "total_value": "資產總值",
     "group_by_type": "按資產類型分組",
-    "price": "價格",
     "show_value_variation": "顯示百分比變化",
-    "amount_invested": "您已投資該帳戶的 {{ X }}",
+    "amount_invested": "您已投資該帳戶的{{X}}",
     "TYPES": {
       "stocks": "股票",
       "funds": "基金",
@@ -1050,7 +1074,7 @@
       "other": "自訂資產"
     },
     "SECURITY_TYPES": {
-      "stock": "庫存",
+      "stock": "股票",
       "fund": "基金/ETF",
       "crypto": "Crypto"
     },
@@ -1066,7 +1090,7 @@
       "choose_security": "選擇證券",
       "create_security": "建立新證券",
       "security_name": "證券名稱",
-      "ticker": "股票代碼/符號（可選）",
+      "ticker": "股票代碼/符號(可選)",
       "security_type": "證券類型",
       "current_price": "現價",
       "quantity": "數量",
@@ -1099,6 +1123,7 @@
         "col_symbol": "代碼",
         "total_cost": "投資組合總成本",
         "save": "儲存快照",
+        "zero_qty_hint": "數量為 0 時仍會將此持倉保留在快照中。若要完全移除，請刪除該列。",
         "delete_title": "刪除快照？",
         "delete_descr": "該快照將會被刪除。如果是最新的，您目前的部位將回落到上一個快照。"
       }
@@ -1111,7 +1136,7 @@
       "empty_description": "您尚未新增任何證券。新增股票、基金或加密貨幣以開始追蹤您的投資組合。",
       "total_value": "投資組合價值",
       "group_by_type": "按安全類型分組",
-      "current_price": "現價",
+      "price": "價格",
       "market_value": "市場價值",
       "units_held": "持有單位",
       "unrealized_pnl": "未實現損益",
@@ -1169,10 +1194,13 @@
     },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Link transaction"
+        "button_label": "連結交易"
       },
       "link_transaction": {
-        "success": "Transaction linked successfully"
+        "success": "交易已成功連結"
+      },
+      "unlink_transaction": {
+        "title": "取消與資產的連結"
       }
     },
     "DETAILS": {
@@ -1184,7 +1212,7 @@
       "select_account": "選擇一個帳戶",
       "update_value": "更新值",
       "trade_form_asset_column": "資產",
-      "notes_optional": "註釋（可選）",
+      "notes_optional": "註釋(可選)",
       "performance_title": "表現",
       "performance_return": "區間報酬",
       "performance_return_help": "來自市場漲跌的收益或虧損，不包括你存入或取出的錢。若市值上漲只是因為多存了錢，此項會接近零。",
@@ -1195,12 +1223,19 @@
     },
     "FORM": {
       "asset_type": "資產類型",
-      "linked_account": "關聯帳戶（可選）",
+      "linked_account": "關聯帳戶(可選)",
       "linked_liability": "連帶責任",
       "link_existing_liability": "連結現有責任",
       "no_liabilities": "您還沒有任何負債。",
       "name": "資產名稱",
       "name_required": "請輸入資產名稱",
+      "NAME_HINTS": {
+        "real_estate": "海邊小屋、市區公寓...",
+        "vehicle": "Tesla Model 3、家庭廂型車...",
+        "precious_metal": "金條、銀幣...",
+        "jewelry_art": "Rolex Daytona、畢卡索版畫...",
+        "other": "復古吉他、網域名稱..."
+      },
       "description": "描述",
       "initial_value": "初始值",
       "initial_value_required": "請輸入初始值",
@@ -1212,7 +1247,7 @@
       "current_value": "目前價值",
       "current_value_help": "可選。將以今天的日期記錄一次估值。",
       "link_acquisition_transaction": "連結購買交易",
-      "link_acquisition_transaction_descr": "選擇代表購買該資產的費用。其金額（轉換為資產的貨幣）和日期將用作初始值和購買日期",
+      "link_acquisition_transaction_descr": "選擇代表購買該資產的費用。其金額(轉換為資產的貨幣)和日期將用作初始值和購買日期",
       "acquisition_transaction": "收購交易",
       "creation_date_before_acquisition_transaction": "收購日期不能早於關聯交易日期",
       "acquisition_date_from_transaction": "購買日期取自關聯交易，無法編輯。取消關聯該交易即可修改。",
@@ -1242,10 +1277,10 @@
       "delete_all_valuations_success": "所有估價已成功刪除"
     },
     "SORT": {
-      "name_asc": "名稱（A-Z）",
-      "name_desc": "名稱（Z-A）",
-      "value_asc": "數值（最低的在前）",
-      "value_desc": "數值（最高的在前）"
+      "name_asc": "名稱(A-Z)",
+      "name_desc": "名稱(Z-A)",
+      "value_asc": "數值(最低的在前)",
+      "value_desc": "數值(最高的在前)"
     }
   },
   "TARGET_TIMELINE_STATUSES": {
@@ -1262,7 +1297,7 @@
       "type-of-export": "出口類型",
       "other-options": "選項",
       "all": "完整備份",
-      "all.descr": "匯出您的所有資料（帳戶、交易、預算、設定...）。隨時重新匯入它們，這樣您就不會丟失任何內容。",
+      "all.descr": "匯出您的所有資料(帳戶、交易、預算、設定...)。隨時重新匯入它們，這樣您就不會丟失任何內容。",
       "transactions": "交易備份",
       "transactions.descr": "以 CSV 格式匯出您的交易，以便您可以在其他程式或應用程式中更輕鬆地分析它們。",
       "transactions-to-export": {
@@ -1356,7 +1391,7 @@
       "tags": "定義標籤以更好地組織您的交易",
       "categories": "類別和子類別組織",
       "accounts": "管理和編輯您的帳戶",
-      "filters": "配置可用於事務和統計的全域過濾器"
+      "filters": "配置可用於事務和統計的全域篩選器"
     },
     "SECURITY": {
       "title": "安全",
@@ -1417,7 +1452,7 @@
         "light": "明亮主題",
         "dark": "黑暗主題"
       },
-      "amoled_mode": "MOLED 模式",
+      "amoled_mode": "AMOLED 模式",
       "amoled_mode_descr": "盡可能使用純黑色壁紙。這對 AMOLED 螢幕設備的電池略有幫助",
       "dynamic_colors": "動態色彩",
       "dynamic_colors_descr": "盡可能使用系統強調色",
