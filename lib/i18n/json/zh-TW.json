@@ -43,7 +43,7 @@
   },
   "GENERAL": {
     "or": "或",
-    "of": "的",
+    "of": "／",
     "showing": "正在顯示",
     "understood": "明白了",
     "unspecified": "未指定",
@@ -319,7 +319,7 @@
         "none": "這段期間內沒有將任何資金用於投資。"
       },
       "suggestion": "定期將部分收入用於投資，有助於讓您的資產成長速度超過通貨膨脹。",
-      "build_emergency_fund": "首先要確保你的應急基金充足。有 1 個月緩衝(最多 5 個月)，就可以獲得投資比例分數。",
+      "build_emergency_fund": "請先優先建立您的緊急預備金。存活月數每增加一個月（最多五個月），就會逐步解鎖投資比例所獲得的分數。",
       "runway_insufficient_data": "在能夠衡量您的應急緩衝期之前，我們無法為這個比例評分。",
       "formula": "在所選範圍內：投資組合中記錄的總投資金額與正成本基礎增加額 ÷ 總收入。",
       "insufficient_data": "這段期間內您沒有開立的投資帳戶，因此我們無法衡量您財務的這些部分。",
@@ -374,7 +374,7 @@
     "net-worth-gross": "總資產",
     "net-worth-net": "淨資產",
     "net-worth-composition": "淨資產組合",
-    "net-worth-composition-subtitle": "淨資產組合。",
+    "net-worth-composition-subtitle": "帳戶、投資與債務之間的分布。",
     "portfolio": "投資組合",
     "portfolio-composition": "投資組合成分",
     "portfolio-composition-subtitle": "您的投資如何在您的所有帳戶中分配。",
@@ -462,7 +462,7 @@
         "title": "沒有符合這些篩選條件的交易",
         "description": {
           "one": "您的 {{n}} 筆交易紀錄仍然存在，只是不符合目前篩選條件。請嘗試擴大範圍或移除篩選條件。",
-          "other": "所有 {{n}} 筆交易紀錄仍然存在，只是不符合目前篩選條件。請嘗試擴大範圍或移除篩選條件。."
+          "other": "所有 {{n}} 筆交易紀錄仍然存在，只是不符合目前篩選條件。請嘗試擴大範圍或移除篩選條件。"
         },
         "clear": {
           "one": "移除篩選條件",
@@ -479,10 +479,10 @@
         "other": "已選擇{{n}}筆交易"
       },
       "selected_of": {
-        "one": "已選的{{n}}，共{{total}}份",
-        "other": "已選的{{n}}，共{{total}}份"
+        "one": "已選 {{n}} 筆，共 {{total}} 筆",
+        "other": "已選 {{n}} 筆，共 {{total}} 筆"
       },
-      "shown": "shown",
+      "shown": "已顯示",
       "BULK_EDIT": {
         "dates": "編輯日期",
         "categories": "編輯類別",
@@ -1038,7 +1038,7 @@
   },
   "ASSETS": {
     "title": "資產",
-    "linked_asset": "Linked asset",
+    "linked_asset": "關聯資產",
     "empty_description": "您還沒有創建任何資產。可以追蹤房地產、車輛或收藏品等資產的估值",
     "create": "新增資產",
     "ADD": {
@@ -1123,7 +1123,7 @@
         "col_symbol": "代碼",
         "total_cost": "投資組合總成本",
         "save": "儲存快照",
-        "zero_qty_hint": "A quantity of 0 keeps this position in the snapshot. To remove it entirely, delete the row instead.",
+        "zero_qty_hint": "數量為 0 時仍會將此持倉保留在快照中。若要完全移除，請刪除該列。",
         "delete_title": "刪除快照？",
         "delete_descr": "該快照將會被刪除。如果是最新的，您目前的部位將回落到上一個快照。"
       }
@@ -1194,13 +1194,13 @@
     },
     "ACTIONS": {
       "add_register": {
-        "button_label": "Link transaction"
+        "button_label": "連結交易"
       },
       "link_transaction": {
-        "success": "Transaction linked successfully"
-              },
+        "success": "交易已成功連結"
+      },
       "unlink_transaction": {
-        "title": "Unlink from asset"
+        "title": "取消與資產的連結"
       }
     },
     "DETAILS": {
@@ -1230,13 +1230,13 @@
       "name": "資產名稱",
       "name_required": "請輸入資產名稱",
       "NAME_HINTS": {
-        "real_estate": "Beach house, Downtown flat...",
-        "vehicle": "Tesla Model 3, Family van...",
-        "precious_metal": "Gold bars, Silver coins...",
-        "jewelry_art": "Rolex Daytona, Picasso print...",
-        "other": "Vintage guitar, Web domain..."
+        "real_estate": "海邊小屋、市區公寓...",
+        "vehicle": "Tesla Model 3、家庭廂型車...",
+        "precious_metal": "金條、銀幣...",
+        "jewelry_art": "Rolex Daytona、畢卡索版畫...",
+        "other": "復古吉他、網域名稱..."
       },
-      "description": "Description",
+      "description": "描述",
       "initial_value": "初始值",
       "initial_value_required": "請輸入初始值",
       "initial_value_invalid": "請輸入有效號碼",
