@@ -36,8 +36,6 @@ import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-import '../../core/models/transaction/transaction_type.enum.dart';
-
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({super.key, this.account});
 
@@ -296,6 +294,45 @@ class _AccountFormPageState extends State<AccountFormPage> {
     super.dispose();
   }
 
+  /// The account type tile. A [locked] one is greyed out and, instead of
+  /// opening the selector, tells why it can't be changed.
+  Widget _buildAccountTypeField({bool locked = false}) {
+    final t = Translations.of(context);
+
+    final field = ListTileField(
+      leading: Icon(
+        _type.icon,
+        color: locked
+            ? Theme.of(context).disabledColor
+            : Theme.of(context).colorScheme.primary,
+      ),
+      title: t.account.types.title,
+      subtitle: _type.title(context),
+      trailing: locked
+          ? Tooltip(
+              message: t.account.types.locked_warn,
+              child: const Icon(Icons.lock_outline),
+            )
+          : const Icon(Icons.chevron_right),
+      onTap: locked
+          ? () => MonekinSnackbar.info(
+              SnackbarParams(t.account.types.locked_warn),
+            )
+          : () async {
+              final selected = await showAccountTypeSelector(
+                context,
+                selectedType: _type,
+              );
+
+              if (selected != null) {
+                setState(() => _type = selected);
+              }
+            },
+    );
+
+    return locked ? Opacity(opacity: 0.6, child: field) : field;
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -537,58 +574,25 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     );
                   }
 
-                  // Account type selector stream: include spacing only when visible
-                  formChildren.add(
-                    StreamBuilder(
-                      stream: _accountToEdit == null
-                          ? Stream.value(true)
-                          : TransactionService.instance
-                                .countTransactions(
-                                  filters: TransactionFilterSet(
-                                    transactionTypes: [
-                                      TransactionType.expense,
-                                      TransactionType.income,
-                                    ],
-                                    accountsIDs: [_accountToEdit.id],
-                                  ),
-                                )
-                                .map((count) => count == 0),
-                      builder: (context, snapshot) {
-                        final hasTransactions =
-                            !snapshot.hasData || snapshot.data! == false;
-                        final isInvestmentEdit =
-                            _accountToEdit?.type == AccountType.investment;
+                  // Account type. Any account can become an investment one,
+                  // but the way back is only offered while there is nothing
+                  // investment-specific that would be left unreachable.
+                  final investmentAccountId =
+                      _accountToEdit?.type == AccountType.investment
+                      ? _accountToEdit!.id
+                      : null;
 
-                        if (hasTransactions || isInvestmentEdit) {
-                          return const SizedBox.shrink();
-                        }
-
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTileField(
-                              leading: Icon(
-                                _type.icon,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              title: t.account.types.title,
-                              subtitle: _type.title(context),
-                              trailing: const Icon(Icons.chevron_right),
-                              onTap: () async {
-                                final selected = await showAccountTypeSelector(
-                                  context,
-                                  selectedType: _type,
-                                );
-                                if (selected != null) {
-                                  setState(() => _type = selected);
-                                }
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                          ],
-                        );
-                      },
-                    ),
+                  add(
+                    investmentAccountId == null
+                        ? _buildAccountTypeField()
+                        : StreamBuilder(
+                            stream: HoldingService.instance
+                                .hasInvestmentRecords(investmentAccountId),
+                            builder: (context, snapshot) =>
+                                _buildAccountTypeField(
+                                  locked: snapshot.data ?? true,
+                                ),
+                          ),
                   );
 
                   // Savings flag (only relevant for money accounts)

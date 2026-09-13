@@ -471,6 +471,47 @@ void main() {
     });
   });
 
+  group('hasInvestmentRecords', () {
+    setUp(() async {
+      await insertAccount(accountId, AccountTrackingMode.transactions);
+      await insertSecurity(securityId, currentPrice: 100);
+    });
+
+    test('is false for an account without any investment data', () async {
+      expect(await service.hasInvestmentRecords(accountId).first, isFalse);
+    });
+
+    test('is true with a position', () async {
+      await insertHolding(accountId, securityId, quantity: 5, avgCost: 10);
+
+      expect(await service.hasInvestmentRecords(accountId).first, isTrue);
+    });
+
+    test('is true with a trade', () async {
+      await insertTrade(quantity: 5, price: 10, date: DateTime(2026, 1, 1));
+
+      expect(await service.hasInvestmentRecords(accountId).first, isTrue);
+    });
+
+    test('is true with a snapshot, even an empty one', () async {
+      await saveSnapshot(
+        accountId: accountId,
+        date: DateTime(2026, 1, 1),
+        positions: [],
+        cash: 100,
+      );
+
+      expect(await service.hasInvestmentRecords(accountId).first, isTrue);
+    });
+
+    test('ignores the records of other accounts', () async {
+      await insertAccount('acc-other', AccountTrackingMode.transactions);
+      await insertHolding('acc-other', securityId, quantity: 5, avgCost: 10);
+
+      expect(await service.hasInvestmentRecords(accountId).first, isFalse);
+    });
+  });
+
   group('per-holding valuation at date', () {
     test('transactions mode reports market and cost basis at date', () async {
       await insertAccount(accountId, AccountTrackingMode.transactions);
