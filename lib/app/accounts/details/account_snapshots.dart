@@ -621,24 +621,24 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         ),
         const SizedBox(height: 16),
         if (_rows.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(
-              t.assets.holdings.snapshots.empty_portfolio,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _addPosition,
+              icon: const Icon(Icons.add_circle_outline_rounded),
+              label: Text(t.assets.holdings.snapshots.add_first_position),
             ),
           )
         else ...[
           _buildTableHeader(cols),
           ..._rows.map((row) => _buildRow(row, cols)),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _addPosition,
+            icon: const Icon(Icons.add_circle_outline_rounded),
+            label: Text(t.assets.holdings.snapshots.add_position),
+          ),
         ],
-        const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: _addPosition,
-          icon: const Icon(Icons.add_circle_outline_rounded),
-          label: Text(t.assets.holdings.snapshots.add_position),
-        ),
         const SizedBox(height: 16),
         const Spacer(),
         Container(
