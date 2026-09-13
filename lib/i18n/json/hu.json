@@ -639,7 +639,8 @@
       "investment": "Befektetési számla",
       "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla, amely eszközöket tartalmazhat. Kövesse nyomon befektetett tőkéjét, és frissítse minden eszköz értékét manuálisan értékelésekkel",
       "normal": "Normál számla",
-      "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását..."
+      "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...",
+      "locked_warn": "Ez a számla már nem tudja megváltoztatni a típusát, mert már vannak befektetései, ügyletei vagy pillanatfelvételei."
     },
     "TRACKING_MODES": {
       "title": "Követési mód",

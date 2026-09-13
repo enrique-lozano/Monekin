@@ -650,7 +650,8 @@
       "saving": "Cuenta de ahorros",
       "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
       "investment": "Cuenta de inversión",
-      "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones"
+      "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones",
+      "locked_warn": "Esta cuenta ya no puede cambiar de tipo, porque ya tiene posiciones, operaciones o instantáneas."
     },
     "TRACKING_MODES": {
       "title": "Modo de seguimiento",
