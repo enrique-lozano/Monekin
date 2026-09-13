@@ -56,6 +56,7 @@
     "today": "Oggi",
     "yesterday": "Ieri",
     "filters": "Filtri",
+    "all": "Tutte",
     "empty-warn": "Ops! È davvero vuoto",
     "search-no-results": "Nessun articolo corrisponde ai tuoi criteri di ricerca",
     "insufficient-data": "Dati insufficienti",
@@ -453,6 +454,10 @@
       "searcher.placeholder": "Cerca per categoria, descrizione...",
       "searcher.no-results": "Nessuna transazione trovata corrispondente ai criteri di ricerca",
       "loading": "Caricamento di altre transazioni...",
+      "upcoming": {
+        "one": "{{n}} transazione in arrivo",
+        "other": "{{n}} transazioni in arrivo"
+      },
       "selected.short": {
         "one": "{{n}} selezionato",
         "other": "{{n}} selezionati"
@@ -579,7 +584,10 @@
     "title": "Transazioni ricorrenti",
     "title.short": "Trans. ric.",
     "empty": "Sembra che tu non abbia transazioni ricorrenti. Crea una transazione ricorrente mensile, annuale o settimanale e apparirà qui",
+    "empty-for-type": "Non hai nessuna transazione ricorrente di questo tipo. Cambia il filtro qui sopra per vedere il resto delle tue ricorrenze",
     "total-expense.title": "Spesa totale per periodo",
+    "total-income.title": "Entrata totale per periodo",
+    "total-all.title": "Totale per periodo",
     "total-expense.descr": "* Senza considerare la data di inizio e fine di ciascuna ricorrenza",
     "DETAILS": {
       "title": "Transazione ricorrente",

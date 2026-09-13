@@ -58,6 +58,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "filters": "篩選",
+    "all": "全部",
     "empty-warn": "哦！這裡非常空",
     "search-no-results": "沒有符合您搜索條件的商品",
     "insufficient-data": "數據不足",
@@ -458,6 +459,10 @@
       "searcher.placeholder": "按類別、描述搜尋...",
       "searcher.no-results": "未找到符合搜尋條件的交易",
       "loading": "正在加載更多交易...",
+      "upcoming": {
+        "one": "{{n}} 筆即將到期的交易",
+        "other": "{{n}} 筆即將到期的交易"
+      },
       "FILTERED_EMPTY": {
         "title": "沒有符合這些篩選條件的交易",
         "description": {
@@ -605,7 +610,10 @@
     "title": "經常交易",
     "title.short": "經常交易",
     "empty": "您似乎沒有任何經常交易。建立每月、每年或每週的經常交易，它將顯示在此處",
+    "empty-for-type": "您沒有此類型的循環交易。請變更上方的篩選條件以查看其餘的循環交易",
     "total-expense.title": "每個期間的總收入",
+    "total-income.title": "每個期間的總收入",
+    "total-all.title": "每個期間的總計",
     "total-expense.descr": "*不考慮每次重複的開始和結束日期",
     "DETAILS": {
       "title": "經常交易",

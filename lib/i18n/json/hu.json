@@ -56,6 +56,7 @@
     "today": "Ma",
     "yesterday": "Tegnap",
     "filters": "Szűrők",
+    "all": "Összes",
     "empty-warn": "Hoppá! Ez nagyon üres.",
     "search-no-results": "Egyetlen elem sem felel meg a keresési feltételeknek",
     "insufficient-data": "Hiányos adatok",
@@ -453,6 +454,10 @@
       "searcher.placeholder": "Keresés kategória, leírás alapján...",
       "searcher.no-results": "Nincs a keresési feltételeknek megfelelő tranzakció",
       "loading": "További tranzakciók betöltése...",
+      "upcoming": {
+        "one": "{{n}} közelgő tranzakció",
+        "other": "{{n}} közelgő tranzakció"
+      },
       "selected.short": {
         "one": "{{n}} kiválasztva",
         "other": "{{n}} kiválasztva"
@@ -579,7 +584,10 @@
     "title": "Ismétlődő tranzakciók",
     "title.short": "Ism. tranzakciók",
     "empty": "Úgy tűnik, hogy nincsenek ismétlődő tranzakciói. Hozzon létre havi, éves vagy heti ismétlődő tranzakciót, és az itt fog megjelenni.",
+    "empty-for-type": "Nincs ilyen típusú ismétlődő tranzakciója. Módosítsa a fenti szűrőt a többi ismétlődés megtekintéséhez",
     "total-expense.title": "Összes kiadás periódusonként",
+    "total-income.title": "Összes bevétel periódusonként",
+    "total-all.title": "Összesen periódusonként",
     "total-expense.descr": "* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül",
     "DETAILS": {
       "title": "Ismétlődő tranzakció",
