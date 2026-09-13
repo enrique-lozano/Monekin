@@ -103,6 +103,31 @@ class HoldingService {
     return _selectHolding(accountId, securityId).watchSingleOrNull();
   }
 
+  /// Whether an account holds anything that only makes sense in an investment
+  /// account: positions, trades (type `'N'`) or portfolio snapshots.
+  ///
+  /// Turning such an account back into a money one would keep those rows
+  /// counting towards its balance with no UI left to see or edit them, so the
+  /// account type is locked while this is `true`.
+  Stream<bool> hasInvestmentRecords(String accountId) {
+    return db
+        .customSelect(
+          '''
+          SELECT EXISTS(
+            SELECT 1 FROM holdings WHERE accountID = ?1
+            UNION ALL
+            SELECT 1 FROM accountSnapshots WHERE accountID = ?1
+            UNION ALL
+            SELECT 1 FROM transactions WHERE accountID = ?1 AND type = 'N'
+          ) AS hasRecords
+          ''',
+          variables: [Variable.withString(accountId)],
+          readsFrom: {db.holdings, db.accountSnapshots, db.transactions},
+        )
+        .watchSingle()
+        .map((row) => row.read<int>('hasRecords') == 1);
+  }
+
   SimpleSelectStatement<Holdings, HoldingInDB> _selectHolding(
     String accountId,
     String securityId,

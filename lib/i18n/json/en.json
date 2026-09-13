@@ -671,7 +671,8 @@
       "saving": "Savings account",
       "saving.descr": "Money only comes in or out via transfers from other accounts. Perfect to start saving.",
       "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange, or portfolio account that holds cash plus financial holdings (stocks, funds, crypto...)."
+      "investment.descr": "A broker, crypto exchange, or portfolio account that holds cash plus financial holdings (stocks, funds, crypto...).",
+      "locked_warn": "This account can no longer change its type, since it already has holdings, trades or snapshots."
     },
     "TRACKING_MODES": {
       "title": "Tracking mode",

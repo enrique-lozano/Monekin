@@ -647,7 +647,8 @@
       "investment": "Conto investimento",
       "investment.descr": "Un conto broker, exchange di criptovalute o portafoglio che può contenere asset. Tieni traccia del tuo capitale investito e aggiorna il valore di ogni asset manualmente tramite valutazioni",
       "normal": "Conto normale",
-      "normal.descr": "Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate..."
+      "normal.descr": "Utile per registrare le tue finanze quotidiane. È il conto più comune, ti permette di aggiungere spese, entrate...",
+      "locked_warn": "Questo conto non può più cambiare tipo, perché ha già partecipazioni, operazioni o istantanee."
     },
     "TRACKING_MODES": {
       "title": "Modalità di tracciamento",

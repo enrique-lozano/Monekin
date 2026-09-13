@@ -647,7 +647,8 @@
       "investment": "Investmentkonto",
       "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto, das Vermögenswerte enthalten kann. Erfasse Dein investiertes Kapital und aktualisiere die Werte einzelner Vermögenswerte manuell über Bewertungen",
       "normal": "Normales Konto",
-      "normal.descr": "Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen"
+      "normal.descr": "Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen",
+      "locked_warn": "Dieses Konto kann seinen Typ nicht mehr ändern, da es bereits Bestände, Trades oder Snapshots enthält."
     },
     "TRACKING_MODES": {
       "title": "Tracking-Modus",

@@ -647,7 +647,8 @@
       "investment": "Yatırım hesabı",
       "investment.descr": "Birden fazla varlık içerebilen bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve her varlığın değerini değerlemeler aracılığıyla manuel olarak güncelleyin",
       "normal": "Normal hesap",
-      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır..."
+      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
+      "locked_warn": "Bu hesabın türü artık değiştirilemez, çünkü zaten varlıkları, işlemleri veya anlık görüntüleri var."
     },
     "TRACKING_MODES": {
       "title": "İzleme modu",

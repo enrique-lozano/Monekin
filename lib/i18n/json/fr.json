@@ -647,7 +647,8 @@
       "investment": "Compte d'investissement",
       "investment.descr": "Un compte de courtier, d'échange de cryptomonnaies ou un portefeuille pouvant contenir des actifs. Suivez votre capital investi et mettez à jour la valeur de chaque actif manuellement via des évaluations",
       "normal": "Compte normal",
-      "normal.descr": "Utile pour enregistrer vos finances du quotidien. C'est le type de compte le plus courant, il vous permet d'ajouter des dépenses, des recettes..."
+      "normal.descr": "Utile pour enregistrer vos finances du quotidien. C'est le type de compte le plus courant, il vous permet d'ajouter des dépenses, des recettes...",
+      "locked_warn": "Ce compte ne peut plus changer de type, car il possède déjà des avoirs, des opérations ou des instantanés."
     },
     "TRACKING_MODES": {
       "title": "Mode de suivi",
