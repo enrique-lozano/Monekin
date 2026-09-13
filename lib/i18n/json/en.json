@@ -1104,7 +1104,7 @@
       "edit_snapshot": "Edit snapshot",
       "SNAPSHOTS": {
         "history_title": "Snapshot history",
-        "history_intro": "Each snapshot stores the full portfolio for a date. When looking at a day, the most recent one on or before it is applied.",
+        "history_intro": "Each snapshot stores the full account state for a given date. Select one to edit it.",
         "count": "{{n}} snapshots",
         "new_snapshot": "New",
         "no_snapshots": "No snapshots yet",
@@ -1122,7 +1122,7 @@
         "cash_label": "Cash",
         "balance_effect_description": "This snapshot is used to calculate balances and stats until the next one. Position values continue to follow market prices, while transactions and transfers after this date change its cash. If no later snapshot is added, these rules continue indefinitely.",
         "overwrite_warning": "A snapshot already exists on this date. Saving will overwrite it.",
-        "add_position": "Add another position",
+        "add_position": "Add position",
         "col_symbol": "Symbol",
         "total_cost": "Total portfolio cost",
         "snapshot_total": "Total at cost",

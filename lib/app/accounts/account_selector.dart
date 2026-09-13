@@ -31,12 +31,14 @@ class AccountSelectorModal extends StatefulWidget {
     required this.allowMultiSelection,
     required this.filterSavingAccounts,
     this.includeArchivedAccounts = true,
+    this.trackingMode,
     this.selectedAccounts = const [],
   });
 
   final bool allowMultiSelection;
   final bool filterSavingAccounts;
   final bool includeArchivedAccounts;
+  final AccountTrackingMode? trackingMode;
 
   final List<Account> selectedAccounts;
 
@@ -86,6 +88,8 @@ class _AccountSelectorModalState extends State<AccountSelectorModal>
                 acc.name.contains(searchValue),
                 if (widget.filterSavingAccounts) acc.isSaving.equals(false),
                 if (!widget.includeArchivedAccounts) acc.closingDate.isNull(),
+                if (widget.trackingMode != null)
+                  acc.trackingMode.equalsValue(widget.trackingMode!),
               ]),
             ),
             builder: (context, snapshot) {
