@@ -299,35 +299,40 @@ class _AccountFormPageState extends State<AccountFormPage> {
   Widget _buildAccountTypeField({bool locked = false}) {
     final t = Translations.of(context);
 
-    final field = ListTileField(
-      leading: Icon(
-        _type.icon,
-        color: locked
-            ? Theme.of(context).disabledColor
-            : Theme.of(context).colorScheme.primary,
-      ),
-      title: t.account.types.title,
-      subtitle: _type.title(context),
-      trailing: locked
-          ? Tooltip(
-              message: t.account.types.locked_warn,
-              child: const Icon(Icons.lock_outline),
-            )
-          : const Icon(Icons.chevron_right),
-      onTap: locked
-          ? () => MonekinSnackbar.info(
-              SnackbarParams(t.account.types.locked_warn),
-            )
-          : () async {
-              final selected = await showAccountTypeSelector(
-                context,
-                selectedType: _type,
-              );
+    // The tile gets its own context so that the selector popover anchors to it
+    // and not to the whole form (on wide layouts it is positioned and sized
+    // after the render box of the widget that opened it).
+    final field = Builder(
+      builder: (context) => ListTileField(
+        leading: Icon(
+          _type.icon,
+          color: locked
+              ? Theme.of(context).disabledColor
+              : Theme.of(context).colorScheme.primary,
+        ),
+        title: t.account.types.title,
+        subtitle: _type.title(context),
+        trailing: locked
+            ? Tooltip(
+                message: t.account.types.locked_warn,
+                child: const Icon(Icons.lock_outline),
+              )
+            : const Icon(Icons.chevron_right),
+        onTap: locked
+            ? () => MonekinSnackbar.info(
+                SnackbarParams(t.account.types.locked_warn),
+              )
+            : () async {
+                final selected = await showAccountTypeSelector(
+                  context,
+                  selectedType: _type,
+                );
 
-              if (selected != null) {
-                setState(() => _type = selected);
-              }
-            },
+                if (selected != null) {
+                  setState(() => _type = selected);
+                }
+              },
+      ),
     );
 
     return locked ? Opacity(opacity: 0.6, child: field) : field;
