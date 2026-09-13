@@ -53,14 +53,77 @@ class SnackbarParams {
   );
 }
 
+/// Hosts an isolated [ScaffoldMessenger] for a subtree that is presented on top
+/// of the page (a side drawer), and makes [MonekinSnackbar] target it while it
+/// is on screen.
+///
+/// A [ScaffoldMessenger] lays its snackbars out in **every** [Scaffold]
+/// registered under it, so without this scope a drawer would render its own
+/// copy of each snackbar, measured for the whole window and squeezed into the
+/// width of the panel.
+class SnackbarScope extends StatefulWidget {
+  const SnackbarScope({super.key, required this.child});
+
+  final Widget child;
+
+  /// Mounted scopes, outermost first.
+  static final List<_SnackbarScopeState> _scopes = [];
+
+  static _SnackbarScopeState? get _innermost {
+    for (final scope in _scopes.reversed) {
+      if (scope._messengerKey.currentState != null) return scope;
+    }
+
+    return null;
+  }
+
+  /// Messenger of the innermost scope on screen, or null when there is none.
+  static ScaffoldMessengerState? get messenger =>
+      _innermost?._messengerKey.currentState;
+
+  /// Context of [messenger], to measure the area its snackbars live in.
+  static BuildContext? get messengerContext =>
+      _innermost?._messengerKey.currentContext;
+
+  @override
+  State<SnackbarScope> createState() => _SnackbarScopeState();
+}
+
+class _SnackbarScopeState extends State<SnackbarScope> {
+  final _messengerKey = GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+    SnackbarScope._scopes.add(this);
+  }
+
+  @override
+  void dispose() {
+    SnackbarScope._scopes.remove(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaffoldMessenger(key: _messengerKey, child: widget.child);
+  }
+}
+
 abstract class MonekinSnackbar {
   /// Whether to show snackbars at the top of the screen using global snackbar
   /// or at the bottom using ScaffoldMessenger.
   static bool get showAtTopDefault => false;
 
+  /// Where the next snackbar goes: the drawer the user is working in, or the
+  /// app itself when no drawer is open.
+  static BuildContext? get _context =>
+      SnackbarScope.messengerContext ?? snackbarKey.currentContext;
+
   /// Private method to get ScaffoldMessenger and optionally clear previous snackbars
   static ScaffoldMessengerState _getScaffoldMessenger(SnackbarParams options) {
-    final scaffoldMessenger = snackbarKey.currentState;
+    final scaffoldMessenger =
+        SnackbarScope.messenger ?? snackbarKey.currentState;
 
     if (scaffoldMessenger == null || scaffoldMessenger.mounted == false) {
       Logger.printDebug(
@@ -108,17 +171,20 @@ abstract class MonekinSnackbar {
       return snackbarResult;
     }
 
-    final context = snackbarKey.currentContext;
+    final context = _context;
     final showAsToast = context != null && !AppUtils.isMobileLayout(context);
 
     // Snackbars are laid out by the page's Scaffold, which only spans the area
     // at the right of the navigation sidebar, so the margins have to be
-    // measured against that area and not against the whole window.
-    final sidebarWidth =
-        (navigationSidebarKey.currentContext?.findRenderObject() as RenderBox?)
-            ?.size
-            .width ??
-        0;
+    // measured against that area and not against the whole window. A drawer
+    // lays them out inside its own panel, where the sidebar is not in the way.
+    final sidebarWidth = SnackbarScope.messengerContext != null
+        ? 0.0
+        : (navigationSidebarKey.currentContext?.findRenderObject()
+                      as RenderBox?)
+                  ?.size
+                  .width ??
+              0;
     final availableWidth = context == null
         ? 0.0
         : MediaQuery.sizeOf(context).width - sidebarWidth;
@@ -158,14 +224,16 @@ abstract class MonekinSnackbar {
   }
 
   static error(SnackbarParams options) {
+    final context = _context!;
+
     return MonekinSnackbar.openSnackbar(
       options: options,
-      bgColor: isAppInLightBrightness(snackbarKey.currentContext!)
-          ? Theme.of(snackbarKey.currentContext!).colorScheme.errorContainer
-          : Theme.of(snackbarKey.currentContext!).colorScheme.error,
-      textColor: isAppInLightBrightness(snackbarKey.currentContext!)
-          ? Theme.of(snackbarKey.currentContext!).colorScheme.error
-          : Theme.of(snackbarKey.currentContext!).colorScheme.errorContainer,
+      bgColor: isAppInLightBrightness(context)
+          ? Theme.of(context).colorScheme.errorContainer
+          : Theme.of(context).colorScheme.error,
+      textColor: isAppInLightBrightness(context)
+          ? Theme.of(context).colorScheme.error
+          : Theme.of(context).colorScheme.errorContainer,
       iconData: Icons.error_outline,
     );
   }
