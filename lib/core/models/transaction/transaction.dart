@@ -192,28 +192,37 @@ class MoneyTransaction extends TransactionInDB {
   double getUnifiedMoneyForAPeriod({
     required Periodicity periodicity,
     bool convertToPreferredCurrency = true,
-  }) {
-    double baseValue = convertToPreferredCurrency
-        ? currentValueInPreferredCurrency
-        : value;
+  }) => _spreadOverAPeriod(
+    convertToPreferredCurrency ? currentValueInPreferredCurrency : value,
+    periodicity: periodicity,
+  );
 
+  /// Like [getUnifiedMoneyForAPeriod], but with the balance that this
+  /// transaction causes to the user accounts, so that a transfer between two of
+  /// them does not count as money going out
+  double getUnifiedBalanceForAPeriod({required Periodicity periodicity}) =>
+      _spreadOverAPeriod(
+        getCurrentBalanceInPreferredCurrency(),
+        periodicity: periodicity,
+      );
+
+  /// Spread [amount] over [periodicity] following the recurrency rule of this
+  /// transaction. Non-recurrent transactions return the amount untouched
+  double _spreadOverAPeriod(double amount, {required Periodicity periodicity}) {
     if (recurrentInfo.isNoRecurrent) {
-      return baseValue;
+      return amount;
     }
 
-    final intervalEachDivider = recurrentInfo.intervalEach ?? 1;
-
-    baseValue = baseValue / intervalEachDivider;
-
-    if (recurrentInfo.intervalPeriod != null) {
-      return baseValue *
-          Periodicity.getConversionFactor(
-            recurrentInfo.intervalPeriod!,
-            periodicity,
-          );
+    if (recurrentInfo.intervalPeriod == null) {
+      throw Exception('We could not calculate this value');
     }
 
-    throw Exception('We could not calculate this value');
+    return amount /
+        (recurrentInfo.intervalEach ?? 1) *
+        Periodicity.getConversionFactor(
+          recurrentInfo.intervalPeriod!,
+          periodicity,
+        );
   }
 
   bool get isOnLastPayment => getNextDatesOfRecurrency(limit: 2).length == 1;

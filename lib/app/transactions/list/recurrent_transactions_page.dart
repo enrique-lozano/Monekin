@@ -174,7 +174,7 @@ class _RecurrentTransactionPageState extends State<RecurrentTransactionPage> {
                                   (event) => event
                                       .map(
                                         (transaction) => transaction
-                                            .getUnifiedMoneyForAPeriod(
+                                            .getUnifiedBalanceForAPeriod(
                                               periodicity: periodicity,
                                             ),
                                       )
