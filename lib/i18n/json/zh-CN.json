@@ -1092,7 +1092,7 @@
         "update": "更新",
         "update_positions": "更新职位",
         "full_portfolio": "完整的投资组合",
-        "editor_intro": "告诉我们您的投资组合在 {{date}} 的情况。您输入的数值将用于计算从该日期到下一个快照期间的余额和统计数据。",
+        "snapshot_contents_description": "告诉我们您的投资组合在 {{date}} 的情况。您输入的数值将用于计算从该日期到下一个快照期间的余额和统计数据。",
         "date_label": "快照日期",
         "overwrite_warning": "该日期已存在快照。保存后将被覆盖。",
         "add_position": "添加另一个位置",

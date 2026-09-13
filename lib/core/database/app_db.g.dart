@@ -10385,8 +10385,18 @@ class AccountSnapshots extends Table
     requiredDuringInsert: true,
     $customConstraints: 'NOT NULL',
   );
+  static const VerificationMeta _cashMeta = const VerificationMeta('cash');
+  late final GeneratedColumn<double> cash = GeneratedColumn<double>(
+    'cash',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: 'NOT NULL DEFAULT 0',
+    defaultValue: const CustomExpression('0'),
+  );
   @override
-  List<GeneratedColumn> get $columns => [id, accountID, date];
+  List<GeneratedColumn> get $columns => [id, accountID, date, cash];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -10420,6 +10430,12 @@ class AccountSnapshots extends Table
     } else if (isInserting) {
       context.missing(_dateMeta);
     }
+    if (data.containsKey('cash')) {
+      context.handle(
+        _cashMeta,
+        cash.isAcceptableOrUnknown(data['cash']!, _cashMeta),
+      );
+    }
     return context;
   }
 
@@ -10445,6 +10461,10 @@ class AccountSnapshots extends Table
         DriftSqlType.dateTime,
         data['${effectivePrefix}date'],
       )!,
+      cash: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}cash'],
+      )!,
     );
   }
 
@@ -10466,10 +10486,17 @@ class AccountSnapshotInDB extends DataClass
 
   /// Date of this portfolio snapshot (one snapshot per account per date)
   final DateTime date;
+
+  /// Cash the account held at the snapshot date, in the account currency. The
+  /// snapshot is the account's authoritative state on its date, so this value
+  /// (and not the transaction ledger) sets the cash side of the balance from
+  /// that date on. Transactions dated after it accumulate on top of it.
+  final double cash;
   const AccountSnapshotInDB({
     required this.id,
     required this.accountID,
     required this.date,
+    required this.cash,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -10477,6 +10504,7 @@ class AccountSnapshotInDB extends DataClass
     map['id'] = Variable<String>(id);
     map['accountID'] = Variable<String>(accountID);
     map['date'] = Variable<DateTime>(date);
+    map['cash'] = Variable<double>(cash);
     return map;
   }
 
@@ -10485,6 +10513,7 @@ class AccountSnapshotInDB extends DataClass
       id: Value(id),
       accountID: Value(accountID),
       date: Value(date),
+      cash: Value(cash),
     );
   }
 
@@ -10497,6 +10526,7 @@ class AccountSnapshotInDB extends DataClass
       id: serializer.fromJson<String>(json['id']),
       accountID: serializer.fromJson<String>(json['accountID']),
       date: serializer.fromJson<DateTime>(json['date']),
+      cash: serializer.fromJson<double>(json['cash']),
     );
   }
   @override
@@ -10506,6 +10536,7 @@ class AccountSnapshotInDB extends DataClass
       'id': serializer.toJson<String>(id),
       'accountID': serializer.toJson<String>(accountID),
       'date': serializer.toJson<DateTime>(date),
+      'cash': serializer.toJson<double>(cash),
     };
   }
 
@@ -10513,16 +10544,19 @@ class AccountSnapshotInDB extends DataClass
     String? id,
     String? accountID,
     DateTime? date,
+    double? cash,
   }) => AccountSnapshotInDB(
     id: id ?? this.id,
     accountID: accountID ?? this.accountID,
     date: date ?? this.date,
+    cash: cash ?? this.cash,
   );
   AccountSnapshotInDB copyWithCompanion(AccountSnapshotsCompanion data) {
     return AccountSnapshotInDB(
       id: data.id.present ? data.id.value : this.id,
       accountID: data.accountID.present ? data.accountID.value : this.accountID,
       date: data.date.present ? data.date.value : this.date,
+      cash: data.cash.present ? data.cash.value : this.cash,
     );
   }
 
@@ -10531,37 +10565,42 @@ class AccountSnapshotInDB extends DataClass
     return (StringBuffer('AccountSnapshotInDB(')
           ..write('id: $id, ')
           ..write('accountID: $accountID, ')
-          ..write('date: $date')
+          ..write('date: $date, ')
+          ..write('cash: $cash')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, accountID, date);
+  int get hashCode => Object.hash(id, accountID, date, cash);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is AccountSnapshotInDB &&
           other.id == this.id &&
           other.accountID == this.accountID &&
-          other.date == this.date);
+          other.date == this.date &&
+          other.cash == this.cash);
 }
 
 class AccountSnapshotsCompanion extends UpdateCompanion<AccountSnapshotInDB> {
   final Value<String> id;
   final Value<String> accountID;
   final Value<DateTime> date;
+  final Value<double> cash;
   final Value<int> rowid;
   const AccountSnapshotsCompanion({
     this.id = const Value.absent(),
     this.accountID = const Value.absent(),
     this.date = const Value.absent(),
+    this.cash = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AccountSnapshotsCompanion.insert({
     required String id,
     required String accountID,
     required DateTime date,
+    this.cash = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        accountID = Value(accountID),
@@ -10570,12 +10609,14 @@ class AccountSnapshotsCompanion extends UpdateCompanion<AccountSnapshotInDB> {
     Expression<String>? id,
     Expression<String>? accountID,
     Expression<DateTime>? date,
+    Expression<double>? cash,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (accountID != null) 'accountID': accountID,
       if (date != null) 'date': date,
+      if (cash != null) 'cash': cash,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -10584,12 +10625,14 @@ class AccountSnapshotsCompanion extends UpdateCompanion<AccountSnapshotInDB> {
     Value<String>? id,
     Value<String>? accountID,
     Value<DateTime>? date,
+    Value<double>? cash,
     Value<int>? rowid,
   }) {
     return AccountSnapshotsCompanion(
       id: id ?? this.id,
       accountID: accountID ?? this.accountID,
       date: date ?? this.date,
+      cash: cash ?? this.cash,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -10606,6 +10649,9 @@ class AccountSnapshotsCompanion extends UpdateCompanion<AccountSnapshotInDB> {
     if (date.present) {
       map['date'] = Variable<DateTime>(date.value);
     }
+    if (cash.present) {
+      map['cash'] = Variable<double>(cash.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -10618,6 +10664,7 @@ class AccountSnapshotsCompanion extends UpdateCompanion<AccountSnapshotInDB> {
           ..write('id: $id, ')
           ..write('accountID: $accountID, ')
           ..write('date: $date, ')
+          ..write('cash: $cash, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -22847,6 +22894,7 @@ typedef $AccountSnapshotsCreateCompanionBuilder =
       required String id,
       required String accountID,
       required DateTime date,
+      Value<double> cash,
       Value<int> rowid,
     });
 typedef $AccountSnapshotsUpdateCompanionBuilder =
@@ -22854,6 +22902,7 @@ typedef $AccountSnapshotsUpdateCompanionBuilder =
       Value<String> id,
       Value<String> accountID,
       Value<DateTime> date,
+      Value<double> cash,
       Value<int> rowid,
     });
 
@@ -22915,6 +22964,11 @@ class $AccountSnapshotsFilterComposer
 
   ColumnFilters<DateTime> get date => $composableBuilder(
     column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get cash => $composableBuilder(
+    column: $table.cash,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -22986,6 +23040,11 @@ class $AccountSnapshotsOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<double> get cash => $composableBuilder(
+    column: $table.cash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $AccountsOrderingComposer get accountID {
     final $AccountsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -23024,6 +23083,9 @@ class $AccountSnapshotsAnnotationComposer
 
   GeneratedColumn<DateTime> get date =>
       $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<double> get cash =>
+      $composableBuilder(column: $table.cash, builder: (column) => column);
 
   $AccountsAnnotationComposer get accountID {
     final $AccountsAnnotationComposer composer = $composerBuilder(
@@ -23105,11 +23167,13 @@ class $AccountSnapshotsTableManager
                 Value<String> id = const Value.absent(),
                 Value<String> accountID = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
+                Value<double> cash = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountSnapshotsCompanion(
                 id: id,
                 accountID: accountID,
                 date: date,
+                cash: cash,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -23117,11 +23181,13 @@ class $AccountSnapshotsTableManager
                 required String id,
                 required String accountID,
                 required DateTime date,
+                Value<double> cash = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountSnapshotsCompanion.insert(
                 id: id,
                 accountID: accountID,
                 date: date,
+                cash: cash,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

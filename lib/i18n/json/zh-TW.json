@@ -1116,7 +1116,7 @@
         "update": "更新",
         "update_positions": "更新職位",
         "full_portfolio": "完整的投資組合",
-        "editor_intro": "告訴我們您的投資組合在 {{date}} 的情況。您輸入的數值將用於計算從該日期到下一個快照期間的餘額和統計資料。",
+        "snapshot_contents_description": "告訴我們您的投資組合在 {{date}} 的情況。您輸入的數值將用於計算從該日期到下一個快照期間的餘額和統計資料。",
         "date_label": "快照日期",
         "overwrite_warning": "此日期已存在快照。儲存後將被覆蓋。",
         "add_position": "新增另一個位置",

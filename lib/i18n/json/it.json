@@ -1092,7 +1092,7 @@
         "update": "Aggiornamento",
         "update_positions": "Aggiorna posizioni",
         "full_portfolio": "portafoglio completo",
-        "editor_intro": "Indicaci com'è composto il tuo portafoglio il {{date}}. I valori inseriti verranno usati per calcolare saldi e statistiche da questa data fino alla tua prossima istantanea.",
+        "snapshot_contents_description": "Indicaci com'è composto il tuo portafoglio il {{date}}. I valori inseriti verranno usati per calcolare saldi e statistiche da questa data fino alla tua prossima istantanea.",
         "date_label": "Data dell'istantanea",
         "overwrite_warning": "Esiste già un'istantanea per questa data. Salvando verrà sovrascritta.",
         "add_position": "Aggiungi un'altra posizione",
