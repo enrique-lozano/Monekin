@@ -56,6 +56,7 @@
     "today": "Bugün",
     "yesterday": "Dün",
     "filters": "Filtreler",
+    "all": "Tümü",
     "empty-warn": "Ups! Burası çok boş",
     "search-no-results": "Arama kriterlerinizle eşleşen öğe yok",
     "insufficient-data": "Yetersiz veri",
@@ -453,6 +454,10 @@
       "searcher.placeholder": "Kategoriye, açıklamaya göre ara...",
       "searcher.no-results": "Arama kriterlerine uyan işlem bulunamadı",
       "loading": "Daha fazla işlem yükleniyor...",
+      "upcoming": {
+        "one": "{{n}} yaklaşan işlem",
+        "other": "{{n}} yaklaşan işlem"
+      },
       "selected.short": {
         "one": "{{n}} seçildi",
         "other": "{{n}} seçildi"
@@ -579,7 +584,10 @@
     "title": "Tekrarlayan işlemler",
     "title.short": "Tekr. işl.",
     "empty": "Görünüşe göre tekrarlayan herhangi bir işleminiz yok. Aylık, yıllık veya haftalık tekrarlayan bir işlem oluşturun, burada görünecektir",
+    "empty-for-type": "Bu türde tekrarlayan bir işleminiz yok. Diğer tekrarlarınızı görmek için yukarıdaki filtreyi değiştirin",
     "total-expense.title": "Dönem başına toplam gider",
+    "total-income.title": "Dönem başına toplam gelir",
+    "total-all.title": "Dönem başına toplam",
     "total-expense.descr": "* Her tekrarın başlangıç ​​ve bitiş tarihi dikkate alınmadan",
     "DETAILS": {
       "title": "Tekrarlayan işlem",

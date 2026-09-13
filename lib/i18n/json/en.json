@@ -58,6 +58,7 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
+    "all": "All",
     "empty-warn": "Oops! This is very empty",
     "search-no-results": "No items match your search criteria",
     "insufficient-data": "Insufficient data",
@@ -458,6 +459,10 @@
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions...",
+      "upcoming": {
+        "one": "{{n}} upcoming transaction",
+        "other": "{{n}} upcoming transactions"
+      },
       "FILTERED_EMPTY": {
         "title": "No transactions with these filters",
         "description": {
@@ -605,7 +610,10 @@
     "title": "Recurrent transactions",
     "title.short": "Rec. transactions",
     "empty": "It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here",
+    "empty-for-type": "You don't have any recurring transaction of this type. Change the filter above to see the rest of your recurrences",
     "total-expense.title": "Total expense per period",
+    "total-income.title": "Total income per period",
+    "total-all.title": "Total per period",
     "total-expense.descr": "* Without considering the start and end date of each recurrence",
     "DETAILS": {
       "title": "Recurrent transaction",

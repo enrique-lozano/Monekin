@@ -56,6 +56,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "filters": "筛选",
+    "all": "全部",
     "empty-warn": "喔！这里什么都没有",
     "search-no-results": "没有符合您搜索条件的商品",
     "insufficient-data": "数据不足",
@@ -453,6 +454,10 @@
       "searcher.placeholder": "按类别、描述等搜索",
       "searcher.no-results": "未找到符合搜索条件的交易",
       "loading": "正在加载更多的交易……",
+      "upcoming": {
+        "one": "{{n}} 笔即将到期的交易",
+        "other": "{{n}} 笔即将到期的交易"
+      },
       "selected.short": {
         "one": "已选择 {{n}}",
         "other": "已选择 {{n}}"
@@ -579,7 +584,10 @@
     "title": "循环交易",
     "title.short": "循环交易",
     "empty": "您似乎没有任何循环交易。创建一个每周、每月或每年的循环交易，它会在此显示",
+    "empty-for-type": "您没有此类型的循环交易。请更改上方的筛选条件以查看其余的循环交易",
     "total-expense.title": "每一周期的总开支",
+    "total-income.title": "每一周期的总收入",
+    "total-all.title": "每一周期的总计",
     "total-expense.descr": "* 不考虑每一循环的起止日期",
     "DETAILS": {
       "title": "循环交易",

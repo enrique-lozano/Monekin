@@ -56,6 +56,7 @@
     "today": "Heute",
     "yesterday": "Gestern",
     "filters": "Filter",
+    "all": "Alle",
     "empty-warn": "Ops! Das ist sehr leer",
     "search-no-results": "Keine Artikel entsprechen Ihren Suchkriterien",
     "insufficient-data": "Unzureichende Daten",
@@ -453,6 +454,10 @@
       "searcher.placeholder": "Suche nach Kategorie, Beschreibung...",
       "searcher.no-results": "Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen",
       "loading": "Weitere Transaktionen werden geladen...",
+      "upcoming": {
+        "one": "{{n}} anstehende Transaktion",
+        "other": "{{n}} anstehende Transaktionen"
+      },
       "selected.short": {
         "one": "{{n}} ausgewählt",
         "other": "{{n}} ausgewählt"
@@ -579,7 +584,10 @@
     "title": "Wiederkehrende Transaktionen",
     "title.short": "Wiederk. Transakt.",
     "empty": "Anscheinend hast Du keine wiederkehrenden Transaktionen. Erstelle eine monatliche, jährliche oder wöchentliche wiederkehrende Transaktion, die hier angezeigt wird.",
+    "empty-for-type": "Sie haben keine wiederkehrende Transaktion dieser Art. Ändern Sie den Filter oben, um den Rest Ihrer Wiederholungen zu sehen",
     "total-expense.title": "Gesamtausgaben pro Periode",
+    "total-income.title": "Gesamteinnahmen pro Periode",
+    "total-all.title": "Gesamt pro Periode",
     "total-expense.descr": "* Ohne Berücksichtigung des Start- und Enddatums jeder Wiederholung",
     "DETAILS": {
       "title": "Wiederkehrende Transaktion",

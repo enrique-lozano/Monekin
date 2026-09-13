@@ -9,6 +9,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
+import 'package:monekin/core/models/transaction/next_pay_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -92,6 +93,33 @@ class TransactionListTile extends StatelessWidget {
 
   bool get showPeriodicityInfo =>
       periodicityInfo != null && transaction.recurrentInfo.isRecurrent;
+
+  /// Whether to warn that the date of a payment still to be made has passed
+  bool get showDelayedPayStatus =>
+      !showPeriodicityInfo &&
+      transaction.nextPayStatus == NextPayStatus.delayed;
+
+  /// Small icon displayed next to the title. Recurrency rules always show the
+  /// repeat icon: their status describes the transaction that will be created
+  /// when the payment is accepted, not the rule itself, so displaying it here
+  /// would make an unpaid recurrency look like it was already settled
+  Widget? buildTitleIcon(BuildContext context) {
+    if (transaction.recurrentInfo.isRecurrent) {
+      return Icon(
+        Icons.repeat,
+        color: Theme.of(context).colorScheme.primary,
+        size: 12,
+      );
+    }
+
+    if (transaction.status == null) return null;
+
+    return Icon(
+      transaction.status.icon,
+      color: transaction.status.color.darken(0.1),
+      size: 12,
+    );
+  }
 
   void showTransactionActions(
     BuildContext context,
@@ -228,16 +256,9 @@ class TransactionListTile extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (transaction.status != null ||
-                            transaction.recurrentInfo.isRecurrent) ...[
+                        if (buildTitleIcon(context) case final titleIcon?) ...[
                           const SizedBox(width: 4),
-                          Icon(
-                            transaction.status?.icon ?? Icons.repeat,
-                            size: 12,
-                            color:
-                                transaction.status?.color.darken(0.1) ??
-                                Theme.of(context).colorScheme.primary,
-                          ),
+                          titleIcon,
                         ],
                         if (transaction.isReversed) ...[
                           const SizedBox(width: 6),
@@ -246,6 +267,10 @@ class TransactionListTile extends StatelessWidget {
                             size: 12,
                             color: AppColors.of(context).brand,
                           ),
+                        ],
+                        if (showDelayedPayStatus) ...[
+                          const SizedBox(width: 6),
+                          buildNextPayStatusChip(context),
                         ],
                       ],
                     ),
@@ -363,6 +388,10 @@ class TransactionListTile extends StatelessWidget {
         transaction.tags.isNotEmpty &&
         appStateSettings[SettingKey.transactionTileShowTags] == '1';
 
+    // On the recurrent transactions page the periodicity block already conveys
+    // the recurrency, so the title stays clean
+    final titleIcon = periodicityInfo != null ? null : buildTitleIcon(context);
+
     final tileContent = ListTile(
       title: Row(
         mainAxisSize: MainAxisSize.max,
@@ -378,18 +407,7 @@ class TransactionListTile extends StatelessWidget {
                     overflow: TextOverflow.fade,
                   ),
                 ),
-                if ((transaction.status != null ||
-                        transaction.recurrentInfo.isRecurrent) &&
-                    periodicityInfo == null) ...[
-                  const SizedBox(width: 4),
-                  Icon(
-                    transaction.status?.icon ?? Icons.repeat,
-                    color:
-                        transaction.status?.color.darken(0.1) ??
-                        Theme.of(context).colorScheme.primary,
-                    size: 12,
-                  ),
-                ],
+                if (titleIcon != null) ...[const SizedBox(width: 4), titleIcon],
                 if (transaction.isReversed) ...[
                   const SizedBox(width: 6),
                   Icon(
@@ -505,8 +523,14 @@ class TransactionListTile extends StatelessWidget {
             ),
 
             // ----------------- RIGHT SIDE -----------------
-            if (!showDateTime && !showPeriodicityInfo && showTime)
+            // The delay warning takes the place of the time: both together
+            // leave the row too cramped
+            if (!showDateTime &&
+                !showPeriodicityInfo &&
+                !showDelayedPayStatus &&
+                showTime)
               Text(DateFormat.Hm().format(transaction.date)),
+            if (showDelayedPayStatus) buildNextPayStatusChip(context),
             if (showPeriodicityInfo)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,

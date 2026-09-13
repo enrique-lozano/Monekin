@@ -56,6 +56,7 @@
     "today": "Aujourd'hui",
     "yesterday": "Hier",
     "filters": "Filtres",
+    "all": "Toutes",
     "empty-warn": "Oups ! C'est très vide",
     "search-no-results": "Aucun élément ne correspond à vos critères de recherche",
     "insufficient-data": "Données insuffisantes",
@@ -453,6 +454,10 @@
       "searcher.placeholder": "Rechercher par catégorie, description...",
       "searcher.no-results": "Aucune transaction ne correspond aux critères de recherche",
       "loading": "Chargement de nouvelles transactions...",
+      "upcoming": {
+        "one": "{{n}} transaction à venir",
+        "other": "{{n}} transactions à venir"
+      },
       "selected.short": {
         "one": "{{n}} sélectionnée",
         "other": "{{n}} sélectionnées"
@@ -579,7 +584,10 @@
     "title": "Transactions récurrentes",
     "title.short": "Trans. récurrentes",
     "empty": "Il semble que vous n'ayez pas de transactions récurrentes. Créez une transaction récurrente mensuelle, annuelle ou hebdomadaire et elle apparaîtra ici",
+    "empty-for-type": "Vous n'avez aucune transaction récurrente de ce type. Modifiez le filtre ci-dessus pour voir le reste de vos récurrences",
     "total-expense.title": "Dépense totale par période",
+    "total-income.title": "Revenu total par période",
+    "total-all.title": "Total par période",
     "total-expense.descr": "* Sans tenir compte de la date de début et de fin de chaque récurrence",
     "DETAILS": {
       "title": "Transaction récurrente",
