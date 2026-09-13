@@ -793,8 +793,14 @@ class HoldingService {
   }
 
   /// Creates or replaces the portfolio snapshot for ([accountId], [date]) with
-  /// [positions] (rows with quantity <= 0 are dropped), then rebuilds the
-  /// account's current `holdings` from its latest snapshot.
+  /// [positions] (rows with quantity <= 0 are dropped) and [cash], then rebuilds
+  /// the account's current `holdings` from its latest snapshot.
+  ///
+  /// [cash] is the account's cash balance on [date], in the account currency. A
+  /// snapshot is the account's authoritative state on its date, so this value
+  /// anchors the cash side of the balance from [date] on (see
+  /// `AccountService.getAccountCash`). Pass the cash the account is currently
+  /// believed to have if the intent is only to update the positions.
   ///
   /// When editing an existing snapshot, pass its id as [replaceSnapshotId]; it
   /// is removed first so its date can change freely (and any snapshot already on
@@ -804,6 +810,7 @@ class HoldingService {
     required DateTime date,
     required List<({String securityId, double quantity, double avgCostPrice})>
     positions,
+    required double cash,
     String? replaceSnapshotId,
   }) async {
     await db.transaction(() async {
@@ -826,6 +833,7 @@ class HoldingService {
               id: snapshotId,
               accountID: accountId,
               date: date,
+              cash: cash,
             ),
           );
 
@@ -913,7 +921,9 @@ class HoldingService {
   /// account's securities disappear from balances and charts.
   ///
   /// - to `holdings`: the positions become a portfolio snapshot dated [date]
-  ///   (defaults to now), which is what holdings mode values them from.
+  ///   (defaults to now), which is what holdings mode values them from. Pass
+  ///   the account's cash balance at [date] as [snapshotCash] (see
+  ///   `AccountService.getAccountCash`).
   /// - to `transactions`: every position that has no trade history in this
   ///   account gets an anchor buy of the units held at their average cost. The
   ///   trade moves no cash (the money already left the account when the
@@ -931,6 +941,7 @@ class HoldingService {
     required AccountTrackingMode to,
     DateTime? date,
     String? anchorTradeTitle,
+    double snapshotCash = 0,
   }) async {
     final positions = await (db.select(
       db.holdings,
@@ -944,6 +955,7 @@ class HoldingService {
       await saveAccountSnapshot(
         accountId: accountId,
         date: effectiveDate,
+        cash: snapshotCash,
         positions: [
           for (final p in positions)
             (

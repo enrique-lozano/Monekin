@@ -22,6 +22,7 @@ ACCOUNT  (type: money | investment)
    │
    └─ trackingMode = holdings
           portfolio SNAPSHOT (one per date) ──positions──► HOLDING (mirror of latest)
+                                            └─cash───────► anchors the cash balance
 
 HOLDING ──────► SECURITY  (stock | fund | crypto)
                 ├─ currentPrice + priceDate     ← the latest known price
@@ -47,7 +48,7 @@ The single most important idea: **assets and securities are different things**. 
 | **Price history** | What a security was worth on a given day | `securityPrices` |
 | **Holding** | *You* own N units of a security in a given account | `holdings` |
 | **Trade** | A buy or a sell that moved cash and changed a holding | `transactions` (type `N`) |
-| **Snapshot** | A photo of an account's whole portfolio on a date | `accountSnapshots` + `holdingSnapshots` |
+| **Snapshot** | A photo of an account's whole state on a date: its positions and its cash | `accountSnapshots` + `holdingSnapshots` |
 | **Asset** | A physical thing you own: a flat, a car, gold | `assets` |
 | **Valuation** | What an asset was worth on a given day | `assetValuations` |
 | **Classification** | How a security is labelled for portfolio reporting | `taxonomies`, `taxonomyCategories`, `securityTaxonomyAssignments` |
@@ -58,18 +59,20 @@ Two types: **money** (cash only) and **investment** (cash *plus* positions in se
 
 An investment account is not a separate world: it still has a normal cash ledger with income, expenses and transfers. The portfolio sits on top of that cash.
 
-> **Implementation:** `accounts.type` (`money` | `investment`), `accounts.isSaving`. An account's total value is opening balance + cash ledger + holdings market value — see `AccountService.getAccountMoney()`.
+> **Implementation:** `accounts.type` (`money` | `investment`), `accounts.isSaving`. An account's total value is its cash (opening balance + cash ledger, or whatever its latest snapshot declares — see [Portfolio snapshot](#27-portfolio-snapshot)) plus its holdings market value. `AccountService.getAccountMoney()` / `getAccountCash()`.
 
 ### 2.2 Tracking mode
 
 Only meaningful for investment accounts, and it answers one question: *where does the app get your positions from?*
 
 - **Transactions mode** — you record every buy and sell. The app replays them in order and derives how many units you hold and what you paid on average. This is the accurate, detailed option: it knows your cost basis, your realized cash flow and your full trade history.
-- **Holdings mode** — you never record trades. Instead you periodically enter a **snapshot**: "on this date my portfolio was X units of A and Y units of B, bought at these average prices". This is the low-effort option, and the right one when your broker only shows you a current position and you don't want to reconstruct years of history.
+- **Holdings mode** — you never record trades. Instead you periodically enter a **snapshot**: "on this date my account was X units of A, Y units of B bought at these average prices, and this much cash". This is the low-effort option, and the right one when your broker only shows you a current position and you don't want to reconstruct years of history.
 
-The two modes are mutually exclusive per account, and you can switch: converting carries your current positions over to whatever the new mode reads from, so nothing disappears from your balances.
+The difference runs deeper than where positions come from. In transactions mode every number is *derived* from flows you recorded, so the ledger is the authority. In holdings mode you *state* the result, so the snapshot is the authority — including for cash. Income, expenses and transfers keep working in holdings mode, and keep their history: they accumulate on top of the last snapshot.
 
-> **Implementation:** `AccountTrackingMode` (`transactions` | `holdings`) in `lib/core/models/account/account.dart`. Switching is `HoldingService.convertTrackingMode()`, which either writes a snapshot dated today or creates zero-cash anchor buys for positions with no trade history. It does not save the account row; the caller does that.
+The two modes are mutually exclusive per account, and you can switch. Nothing is deleted either way: converting carries your current positions (and cash) over to whatever the new mode reads from, and your transactions and snapshots are both preserved even while only one of them decides the balance.
+
+> **Implementation:** `AccountTrackingMode` (`transactions` | `holdings`) in `lib/core/models/account/account.dart`. Switching is `HoldingService.convertTrackingMode()`, which either writes a snapshot dated today (with the account's current cash, so the balance doesn't move) or creates zero-cash anchor buys for positions with no trade history. It does not save the account row; the caller does that.
 
 ### 2.3 Security
 
@@ -116,11 +119,15 @@ Cost basis follows a **weighted average**, not FIFO lots: buying moves the avera
 
 ### 2.7 Portfolio snapshot
 
-A snapshot is **the complete state of one account's portfolio on one date** — not a single position. This matters: when valuing the account at a date, the app takes the most recent snapshot on or before that date and treats it as the whole truth. A security missing from that snapshot is considered *not held*, which is how you record having sold something: you simply leave it out of the next snapshot.
+A snapshot is **the complete state of one account on one date** — not a single position. This matters: when valuing the account at a date, the app takes the most recent snapshot on or before that date and treats it as the whole truth. A security missing from that snapshot is considered *not held*, which is how you record having sold something: you simply leave it out of the next snapshot.
 
-One snapshot per account per date. A snapshot with no positions is legal and means "the portfolio was empty that day".
+That truth covers the **cash** too. A snapshot says how much uninvested money the account held that day, and from then on that figure is the cash balance. Transactions dated later still count on top of it, so interest, dividends, fees and transfers keep behaving normally.
 
-> **Implementation:** `accountSnapshots` (unique on `accountID` + `date`) with child rows in `holdingSnapshots`. `HoldingService.saveAccountSnapshot()` replaces any snapshot on that date and then calls `syncHoldingsFromLatestSnapshot()`, which rebuilds the `holdings` rows so the rest of the app keeps reading a single, uniform "current position" source.
+Two limits on how far that truth reaches. It only settles the **cash**: the positions it declares are quantities, still priced at whatever date you ask about, so the account's value keeps moving with the market between snapshots. And it only reaches **forward**: dates earlier than your first snapshot are valued from the ledger alone, for good, so snapshotting today never rewrites last year.
+
+One snapshot per account per date. A snapshot with no positions is legal and means "the portfolio was empty that day" (it can still declare cash).
+
+> **Implementation:** `accountSnapshots` (unique on `accountID` + `date`, with a `cash` column in the account currency) and child rows in `holdingSnapshots`. `HoldingService.saveAccountSnapshot()` replaces any snapshot on that date and then calls `syncHoldingsFromLatestSnapshot()`, which rebuilds the `holdings` rows so the rest of the app keeps reading a single, uniform "current position" source. The cash side is applied by `AccountService._getSnapshotCashAdjustment()` — see [Snapshot anchor](./BALANCE_FORMULAS.md#13-snapshot-anchor) in BALANCE_FORMULAS.md.
 
 ### 2.8 Asset
 
@@ -138,7 +145,7 @@ Buying an asset is usually recorded as a normal expense transaction linked to it
 
 The asset equivalent of a price observation: what the asset was worth on a date. The value at date *t* is the latest valuation on or before *t*, or the initial value if there is none, or 0 before the asset existed.
 
-> **Implementation:** `assetValuations`, unique on `assetId` + `date`. See §2 of [BALANCE_FORMULAS.md](./BALANCE_FORMULAS.md).
+> **Implementation:** `assetValuations`, unique on `assetId` + `date`. See [Assets](./BALANCE_FORMULAS.md#3-assets) in BALANCE_FORMULAS.md.
 
 ### 2.10 Classification (taxonomies)
 
@@ -190,9 +197,9 @@ The universe of positions comes from your *activity*, not from the current `hold
 
 **Recording a purchase (transactions mode).** Open the account → *Buy* → pick or create a security → enter units and price per unit. The app writes an `N` transaction for the cash and recomputes the holding. Selling is the mirror image; selling everything leaves a holding of zero units.
 
-**Keeping a portfolio up to date (holdings mode).** Open the account → *Snapshots* → *New*. Enter every position you hold that day with its quantity and average cost. Anything you leave out is treated as sold. Repeat whenever you feel like it: the app values every day in between using the last snapshot before it.
+**Keeping a portfolio up to date (holdings mode).** Open the account → *Snapshots* → *New*. Enter the cash the account holds that day and every position, with its quantity and average cost. The cash field arrives prefilled with what the app believes you have, so confirming an unchanged snapshot never moves your balance; correct it when your broker says otherwise. Anything you leave out of the positions is treated as sold. Repeat whenever you feel like it: the app values every day in between using the last snapshot before it.
 
-**Switching modes.** Change the tracking mode on the account form. Positions are carried over — to a snapshot dated today, or to anchor buys that create the position without moving cash.
+**Switching modes.** Change the tracking mode on the account form. Positions are carried over — to a snapshot dated today (carrying the current cash with them), or to anchor buys that create the position without moving cash.
 
 **Buying a flat with a mortgage.** Create the debt, create the asset, link them, and record the down payment as a normal expense. The asset page then shows value, outstanding debt and net value; net worth counts the asset once and subtracts the debt.
 
@@ -231,11 +238,14 @@ This does not compromise the offline-first promise: requests only happen while y
 - An `N` transaction must have an `assetID` or a `securityID`, and must have no category, no receiving account and no destination value. A non-`N` transaction must have exactly one of category / receiving account.
 - `holdings` is unique per (account, security); `accountSnapshots` is unique per (account, date); `holdingSnapshots` is unique per (snapshot, security).
 - Holdings are always **derived**, never authoritative: transactions mode rebuilds them from trades, holdings mode mirrors the latest snapshot. Never patch a holding in place — call `recomputeHolding()` or `syncHoldingsFromLatestSnapshot()`.
-- Monetary values on holding/snapshot models are in the **security's** currency. Conversion happens in the services that aggregate them, using the exchange rate as of the same date.
+- Monetary values on holding/snapshot models are in the **security's** currency. Conversion happens in the services that aggregate them, using the exchange rate as of the same date. The one exception is `accountSnapshots.cash`, which is in the **account's** currency — it is cash, not an instrument.
+- A snapshot's cash is authoritative from its date on, so never write a snapshot without deciding what it should say about cash: `saveAccountSnapshot()` requires it, and passing the account's current cash (`AccountService.getAccountCash()`) is what leaves the balance untouched.
 - Assets and accounts are disjoint: an asset is never inside an account, so net worth adds every asset on top of every account balance without any double-counting rule to remember.
 - Enum columns store `databaseValue`, not the Dart identifier. Renaming an enum value is a migration.
 
-### Where this came from (schema v13)
+### Where this came from (schema v13 & v14)
+
+**v14** gave `accountSnapshots` its `cash` column. Until then a holdings-mode account declared its positions but took its cash from the ledger, so entering a position added market value that nothing had paid for and the balance jumped on that date and every later one. Every existing snapshot was backfilled with the ledger cash of its account on the snapshot date, which is exactly what the app computed before, so the upgrade moves no balance and deletes nothing.
 
 Before v13, stocks and funds were `assets` with an `assetType` of `stocks`/`funds`/`crypto` linked to an account through `assets.linkedAccountID`. v13 split that in two: those rows became a **security** plus a **holding**, their valuations became price history, and their investment transactions became security trades. Migrated positions get a synthetic anchor trade labelled *"Opening position"*, and their average cost is seeded from the security's price, so a freshly migrated portfolio starts at zero P&L instead of showing a fictional gain. With the split done, `linkedAccountID` was dropped: holdings are now the only way something lives inside an account.
 
@@ -251,7 +261,7 @@ The migration is destructive and one-way; a backup is written before it runs. Se
 | **Market value** | What those units are worth today (`quantity × current price`) |
 | **Unrealized P&L** | Market value − cost basis: the gain you'd book if you sold now |
 | **Weighted-average cost** | One blended purchase price per position, instead of tracking individual lots (FIFO) |
-| **Snapshot** | The full state of an account's portfolio on a date |
+| **Snapshot** | The full state of an account on a date: its positions and its cash |
 | **Anchor trade** | A synthetic zero-cash buy that recreates a position with no trade history |
 | **Basis points** | Hundredths of a percent; taxonomy weights use them (10 000 = 100%) |
 | **Taxonomy** | A classification dimension (asset class, region, industry, risk) |

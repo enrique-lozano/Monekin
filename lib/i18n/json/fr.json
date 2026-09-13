@@ -1092,7 +1092,7 @@
         "update": "Mise à jour",
         "update_positions": "Mettre à jour les postes",
         "full_portfolio": "portefeuille complet",
-        "editor_intro": "Indiquez-nous à quoi ressemble votre portefeuille le {{date}}. Les valeurs saisies serviront à calculer les soldes et les statistiques à partir de cette date jusqu'à votre prochain instantané.",
+        "snapshot_contents_description": "Indiquez-nous à quoi ressemble votre portefeuille le {{date}}. Les valeurs saisies serviront à calculer les soldes et les statistiques à partir de cette date jusqu'à votre prochain instantané.",
         "date_label": "Date de l'instantané",
         "overwrite_warning": "Un instantané existe déjà à cette date. L'enregistrement l'écrasera.",
         "add_position": "Ajouter un autre poste",

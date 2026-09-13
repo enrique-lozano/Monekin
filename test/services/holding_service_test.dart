@@ -102,6 +102,25 @@ void main() {
         );
   }
 
+  /// [HoldingService.saveAccountSnapshot] with a cash balance of 0 by default,
+  /// since most of these tests only care about the positions.
+  Future<void> saveSnapshot({
+    required String accountId,
+    required DateTime date,
+    required List<({String securityId, double quantity, double avgCostPrice})>
+    positions,
+    double cash = 0,
+    String? replaceSnapshotId,
+  }) {
+    return service.saveAccountSnapshot(
+      accountId: accountId,
+      date: date,
+      positions: positions,
+      cash: cash,
+      replaceSnapshotId: replaceSnapshotId,
+    );
+  }
+
   Future<void> insertPricePoint(String security, double price, DateTime date) {
     return db
         .into(db.securityPrices)
@@ -245,12 +264,12 @@ void main() {
       await insertAccount('acc-h', AccountTrackingMode.holdings);
       await insertSecurity('sec-h', currentPrice: 50);
 
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-h',
         date: DateTime(2026, 1, 1),
         positions: [(securityId: 'sec-h', quantity: 2, avgCostPrice: 40)],
       );
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-h',
         date: DateTime(2026, 2, 1),
         positions: [(securityId: 'sec-h', quantity: 5, avgCostPrice: 42)],
@@ -385,11 +404,15 @@ void main() {
         accountId: accountId,
         to: AccountTrackingMode.holdings,
         date: DateTime(2026, 6, 1),
+        // The account's cash goes into the snapshot too, or the switch would
+        // leave it declaring none and drop that money from the balance.
+        snapshotCash: 250,
       );
 
       final snapshot =
           (await service.getAccountSnapshots(accountId).first).single;
       expect(snapshot.date, DateTime(2026, 6, 1));
+      expect(snapshot.cash, 250);
       expect(snapshot.positions.single.row.quantity, 10);
       expect(snapshot.positions.single.row.avgCostPrice, 100);
     });
@@ -398,7 +421,7 @@ void main() {
       await insertAccount('acc-c', AccountTrackingMode.holdings);
       await insertSecurity('sec-c', currentPrice: 60);
 
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-c',
         date: DateTime(2026, 1, 1),
         positions: [(securityId: 'sec-c', quantity: 3, avgCostPrice: 50)],
@@ -531,12 +554,12 @@ void main() {
       await insertAccount('acc-h3', AccountTrackingMode.holdings);
       await insertSecurity('sec-h3', currentPrice: 50);
 
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-h3',
         date: DateTime(2026, 1, 1),
         positions: [(securityId: 'sec-h3', quantity: 2, avgCostPrice: 40)],
       );
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-h3',
         date: DateTime(2026, 2, 1),
         positions: [(securityId: 'sec-h3', quantity: 5, avgCostPrice: 42)],
@@ -556,16 +579,60 @@ void main() {
   });
 
   group('portfolio snapshots', () {
+    test('store the declared cash alongside the positions', () async {
+      await insertAccount('acc-cash', AccountTrackingMode.holdings);
+      await insertSecurity('sec-cash', currentPrice: 10);
+
+      await saveSnapshot(
+        accountId: 'acc-cash',
+        date: DateTime(2026, 1, 1),
+        cash: 1664,
+        positions: [(securityId: 'sec-cash', quantity: 2, avgCostPrice: 40)],
+      );
+
+      var snapshot =
+          (await service.getAccountSnapshots('acc-cash').first).single;
+      expect(snapshot.cash, 1664);
+
+      // Editing replaces the cash as well.
+      await saveSnapshot(
+        accountId: 'acc-cash',
+        date: DateTime(2026, 1, 1),
+        cash: -72,
+        replaceSnapshotId: snapshot.id,
+        positions: [(securityId: 'sec-cash', quantity: 2, avgCostPrice: 40)],
+      );
+
+      snapshot = (await service.getAccountSnapshots('acc-cash').first).single;
+      expect(snapshot.cash, -72);
+    });
+
+    test('an empty portfolio can still declare cash', () async {
+      await insertAccount('acc-cash-only', AccountTrackingMode.holdings);
+
+      await saveSnapshot(
+        accountId: 'acc-cash-only',
+        date: DateTime(2026, 1, 1),
+        cash: 500,
+        positions: const [],
+      );
+
+      final snapshot =
+          (await service.getAccountSnapshots('acc-cash-only').first).single;
+      expect(snapshot.isEmpty, isTrue);
+      expect(snapshot.cash, 500);
+    });
+
     test('mirror the latest snapshot into the holdings', () async {
       await insertAccount('acc-h2', AccountTrackingMode.holdings);
       await insertSecurity('sec-h2', currentPrice: 10);
 
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-h2',
         date: DateTime(2026, 1, 1),
         positions: [(securityId: 'sec-h2', quantity: 2, avgCostPrice: 40)],
       );
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-h2',
         date: DateTime(2026, 2, 1),
         positions: [(securityId: 'sec-h2', quantity: 5, avgCostPrice: 42)],
@@ -602,7 +669,7 @@ void main() {
         await insertSecurity('sec-b', currentPrice: 20);
 
         // Jan: two positions.
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: 'acc-m',
           date: DateTime(2026, 1, 1),
           positions: [
@@ -611,7 +678,7 @@ void main() {
           ],
         );
         // Feb: only sec-a remains (sec-b was dropped -> sold).
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: 'acc-m',
           date: DateTime(2026, 2, 1),
           positions: [(securityId: 'sec-a', quantity: 3, avgCostPrice: 10)],
@@ -648,7 +715,7 @@ void main() {
       await insertAccount('acc-e', AccountTrackingMode.holdings);
       await insertSecurity('sec-e', currentPrice: 10);
 
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-e',
         date: DateTime(2026, 1, 1),
         positions: [(securityId: 'sec-e', quantity: 2, avgCostPrice: 10)],
@@ -656,7 +723,7 @@ void main() {
       expect(await service.getHolding('acc-e', 'sec-e').first, isNotNull);
 
       // A later empty snapshot means "nothing held from this date on".
-      await service.saveAccountSnapshot(
+      await saveSnapshot(
         accountId: 'acc-e',
         date: DateTime(2026, 2, 1),
         positions: const [],
@@ -671,7 +738,7 @@ void main() {
         await insertSecurity('sec-ca', currentPrice: 500);
         await insertSecurity('sec-cb', currentPrice: 500);
 
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: 'acc-c',
           date: DateTime(2026, 1, 1),
           positions: [
@@ -679,7 +746,7 @@ void main() {
             (securityId: 'sec-cb', quantity: 10, avgCostPrice: 10),
           ],
         );
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: 'acc-c',
           date: DateTime(2026, 2, 1),
           positions: [
@@ -687,7 +754,7 @@ void main() {
             (securityId: 'sec-cb', quantity: 5, avgCostPrice: 10),
           ],
         );
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: 'acc-c',
           date: DateTime(2026, 3, 1),
           positions: [
@@ -718,12 +785,12 @@ void main() {
       await insertSecurity('sec-f', currentPrice: 10);
 
       for (final id in ['acc-f1', 'acc-f2']) {
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: id,
           date: DateTime(2026, 1, 1),
           positions: [(securityId: 'sec-f', quantity: 10, avgCostPrice: 10)],
         );
-        await service.saveAccountSnapshot(
+        await saveSnapshot(
           accountId: id,
           date: DateTime(2026, 2, 1),
           positions: [(securityId: 'sec-f', quantity: 20, avgCostPrice: 10)],

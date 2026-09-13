@@ -1092,7 +1092,7 @@
         "update": "Frissítés",
         "update_positions": "Frissítse a pozíciókat",
         "full_portfolio": "teljes portfólió",
-        "editor_intro": "Mondd el, hogyan néz ki a portfóliód ekkor: {{date}}. A megadott értékeket a rendszer az egyenlegek és statisztikák kiszámításához használja ettől a dátumtól a következő pillanatfelvételig.",
+        "snapshot_contents_description": "Mondd el, hogyan néz ki a portfóliód ekkor: {{date}}. A megadott értékeket a rendszer az egyenlegek és statisztikák kiszámításához használja ettől a dátumtól a következő pillanatfelvételig.",
         "date_label": "Pillanatfelvétel dátuma",
         "overwrite_warning": "Ehhez a dátumhoz már tartozik pillanatfelvétel. Mentéskor felülíródik.",
         "add_position": "Adjon hozzá egy másik pozíciót",

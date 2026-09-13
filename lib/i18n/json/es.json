@@ -1103,7 +1103,7 @@
         "update": "Actualizar",
         "update_positions": "Actualizar posiciones",
         "full_portfolio": "cartera completa",
-        "editor_intro": "Indícanos cómo se compone tu cartera para el día {{date}}. Los valores que introduzcas en esta instantánea se usarán para calcular balances y estadísticas desde esta fecha hasta la de tu próxima instantánea.",
+        "snapshot_contents_description": "Indícanos cómo se compone tu cartera para el día {{date}}. Los valores que introduzcas en esta instantánea se usarán para calcular balances y estadísticas desde esta fecha hasta la de tu próxima instantánea.",
         "date_label": "Fecha de la instantánea",
         "overwrite_warning": "Ya existe una instantánea en esta fecha. Al guardar, se sustituirá.",
         "add_position": "Añadir otra posición",

@@ -1,21 +1,40 @@
+import 'dart:io';
+
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:sqlite3/sqlite3.dart';
 
-/// `v13_sample.db` is a hand-maintained fixture the maintainer imports to test
-/// the app with realistic data. It is already at the current schema version, so
-/// importing it runs no migration: any drift from the real schema only shows up
-/// as a crash at import time. These tests catch it here instead.
+/// `assets/sql/samples/v<schemaVersion>_sample.db` is a hand-maintained fixture
+/// the maintainer imports to test the app with realistic data. It is always the
+/// sample for the *current* schema version, so importing it runs no migration:
+/// any drift from the real schema only shows up as a crash at import time.
+/// These tests catch it here instead.
+///
+/// The path is derived from `AppDB.schemaVersion` on purpose: bumping the
+/// version without shipping a matching sample fails right here, instead of
+/// silently leaving the old fixture untested.
 void main() {
   late Database sample;
   late AppDB app;
 
   setUp(() {
-    sample = sqlite3.open('assets/sql/samples/v13_sample.db');
     app = AppDB.forTesting(NativeDatabase.memory());
-    addTearDown(sample.close);
     addTearDown(app.close);
+
+    final path = 'assets/sql/samples/v${app.schemaVersion}_sample.db';
+
+    expect(
+      File(path).existsSync(),
+      isTrue,
+      reason:
+          'Missing $path. The schema version was bumped to '
+          '${app.schemaVersion}, so the import sample has to be regenerated '
+          'for it (migrate the previous one and update its dbVersion).',
+    );
+
+    sample = sqlite3.open(path);
+    addTearDown(sample.close);
   });
 
   test(

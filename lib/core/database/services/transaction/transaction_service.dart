@@ -234,8 +234,8 @@ class TransactionService {
             .map((e) => e.index)
             .contains(TransactionType.transfer.index)) {
       // Transfers need origin/destination split; other types use a straight SUM in
-      // `countTransactions`. When types are unspecified, include investment here so
-      // callers get one balance stream (investment was previously easy to omit).
+      // `countTransactions`. When types are unspecified, include investment so
+      // callers get one balance stream covering every non-transfer type.
       return Rx.combineLatest(
         [
           // INCOME, EXPENSE, AND INVESTMENT (non-transfer ledger)

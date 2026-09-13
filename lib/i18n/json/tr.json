@@ -1092,7 +1092,7 @@
         "update": "Güncelleme",
         "update_positions": "Pozisyonları güncelle",
         "full_portfolio": "tam portföy",
-        "editor_intro": "{{date}} tarihinde portföyünüzün nasıl göründüğünü bize bildirin. Girdiğiniz değerler, bu tarihten sonraki anlık görüntünüze kadar bakiyeleri ve istatistikleri hesaplamak için kullanılacaktır.",
+        "snapshot_contents_description": "{{date}} tarihinde portföyünüzün nasıl göründüğünü bize bildirin. Girdiğiniz değerler, bu tarihten sonraki anlık görüntünüze kadar bakiyeleri ve istatistikleri hesaplamak için kullanılacaktır.",
         "date_label": "Anlık görüntü tarihi",
         "overwrite_warning": "Bu tarih için zaten bir anlık görüntü var. Kaydettiğinizde üzerine yazılacak.",
         "add_position": "Başka bir pozisyon ekle",

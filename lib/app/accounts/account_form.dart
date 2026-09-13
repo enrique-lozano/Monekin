@@ -161,14 +161,17 @@ class _AccountFormPageState extends State<AccountFormPage> {
     }
 
     if (_accountToEdit != null) {
-      // Each tracking mode values the account from a different source (trades
-      // vs. portfolio snapshots), so the positions have to be moved across or
-      // the account would suddenly be worth nothing.
+      // Each tracking mode reads positions from a different source (trades vs.
+      // portfolio snapshots). Holdings mode also takes cash from the snapshot,
+      // so the current cash is written into it as well.
       if (accountToSubmit.trackingMode != _accountToEdit.trackingMode) {
         await HoldingService.instance.convertTrackingMode(
           accountId: accountToSubmit.id,
           to: accountToSubmit.trackingMode,
           anchorTradeTitle: t.assets.holdings.opening_position,
+          snapshotCash: await accountService
+              .getAccountCash(account: _accountToEdit)
+              .first,
         );
       }
 

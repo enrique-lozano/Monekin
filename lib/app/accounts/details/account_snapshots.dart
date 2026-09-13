@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart'
@@ -5,7 +7,9 @@ import 'package:monekin/app/accounts/details/holdings_card.dart'
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
+import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -16,6 +20,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -131,10 +136,18 @@ class _SnapshotTile extends StatelessWidget {
         .map((p) => p.security.ticker ?? p.security.name)
         .join(', ');
 
-    final subtitle = data.isEmpty
+    final cash = UINumberFormatter.currency(
+      amountToConvert: data.cash,
+      currency: account.currency,
+    ).getFormattedAmount();
+
+    final positions = data.isEmpty
         ? t.assets.holdings.snapshots.empty_portfolio
         : '${t.assets.holdings.snapshots.positions_count(n: data.positionsCount)}'
               '${tickers.isEmpty ? '' : ' · $tickers'}';
+
+    final subtitle =
+        '$positions · ${t.assets.holdings.snapshots.cash_label}: $cash';
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -313,6 +326,7 @@ class _SnapshotEditorSheet extends StatefulWidget {
 
 class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   final List<_EditorRow> _rows = [];
+  final TextEditingController _cash = TextEditingController();
   late DateTime _date;
 
   bool get _isEditing => widget.snapshotToEdit != null;
@@ -333,6 +347,12 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         ),
       );
     }
+
+    if (_isEditing) {
+      _cash.text = _plainNumber(widget.snapshotToEdit!.cash);
+    } else {
+      unawaited(_prefillCashFromLedger(_date));
+    }
   }
 
   @override
@@ -340,8 +360,27 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     for (final row in _rows) {
       row.dispose();
     }
+    _cash.dispose();
     super.dispose();
   }
+
+  /// Seeds the cash field with what the app believes the account held on
+  /// [date], so confirming the snapshot unchanged never moves the balance and
+  /// the user only has to type when the broker says something different.
+  Future<void> _prefillCashFromLedger(DateTime date) async {
+    final cash = await AccountService.instance
+        .getAccountCash(account: widget.account, date: date)
+        .first;
+
+    if (!mounted) return;
+    setState(() {
+      _cash.text = _plainNumber(
+        cash.roundWithDecimals(widget.account.currency.decimalPlaces),
+      );
+    });
+  }
+
+  double get _cashValue => double.tryParse(_cash.text) ?? 0;
 
   double get _totalCost => _rows.fold(0, (sum, r) => sum + r.cost);
 
@@ -377,8 +416,9 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
       a.year == b.year && a.month == b.month && a.day == b.day;
 
   /// When creating a new snapshot, picking a date should load whatever was
-  /// in effect on that date (the most recent snapshot on or before it), so
-  /// you always start editing from the right baseline instead of today's.
+  /// in effect on that date (the most recent snapshot on or before it, plus the
+  /// cash the account held then), so you always start editing from the right
+  /// baseline instead of today's.
   void _onDateSelected(
     DateTime value,
     List<AccountSnapshotWithPositions> snapshots,
@@ -387,6 +427,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
       _date = value;
 
       if (_isEditing) return;
+
+      unawaited(_prefillCashFromLedger(value));
 
       final effective = snapshots
           .cast<AccountSnapshotWithPositions?>()
@@ -412,10 +454,31 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     });
   }
 
+  /// The editor is a form, not a tutorial: what a snapshot is and what its cash
+  /// means live behind this, so the fields stay uncluttered.
+  Future<void> _showInfo() async {
+    final t = Translations.of(context);
+
+    await confirmDialog(
+      context,
+      dialogTitle: t.assets.holdings.snapshots.how_it_works,
+      icon: Icons.help_outline_rounded,
+      contentParagraphs: [
+        Text(
+          t.assets.holdings.snapshots.snapshot_contents_description(
+            date: DateFormat.yMMMd().format(_date),
+          ),
+        ),
+        Text(t.assets.holdings.snapshots.balance_effect_description),
+      ],
+    );
+  }
+
   Future<void> _submit() async {
     await HoldingService.instance.saveAccountSnapshot(
       accountId: widget.account.id,
       date: _date,
+      cash: _cashValue,
       replaceSnapshotId: widget.snapshotToEdit?.id,
       positions: _rows
           .map(
@@ -442,6 +505,13 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
       subtitle: Text(
         '${widget.account.name} · ${t.assets.holdings.snapshots.full_portfolio}',
       ),
+      appBarActions: [
+        IconButton(
+          icon: const Icon(Icons.help_outline_rounded),
+          tooltip: t.assets.holdings.snapshots.how_it_works,
+          onPressed: _showInfo,
+        ),
+      ],
       persistentFooterButtons: [
         PersistentFooterButton(
           child: FilledButton.icon(
@@ -497,13 +567,6 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          t.assets.holdings.snapshots.editor_intro(
-            date: DateFormat.yMMMd().format(_date),
-          ),
-          style: theme.textTheme.bodySmall,
-        ),
-        const SizedBox(height: 16),
         DateTimeFormField(
           decoration: InputDecoration(
             suffixIcon: const Icon(Icons.event),
@@ -522,6 +585,20 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
             mode: InlineInfoCardMode.info,
           ),
         ],
+        const SizedBox(height: 16),
+        TextFormField(
+          controller: _cash,
+          textAlign: TextAlign.end,
+          keyboardType: const TextInputType.numberWithOptions(
+            decimal: true,
+            signed: true,
+          ),
+          decoration: InputDecoration(
+            labelText: '${t.assets.holdings.snapshots.cash_label} *',
+            suffixText: widget.account.currency.symbol,
+          ),
+          onChanged: (_) => setState(() {}),
+        ),
         const SizedBox(height: 16),
         if (_rows.isEmpty)
           Padding(
@@ -549,26 +626,56 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
             color: theme.colorScheme.primary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: [
-              Text(
-                t.assets.holdings.snapshots.total_cost.toUpperCase(),
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.primary,
-                  fontWeight: FontWeight.w700,
-                ),
+              _buildSummaryRow(
+                t.assets.holdings.snapshots.cash_label,
+                _cashValue,
               ),
-              DefaultTextStyle.merge(
-                style: theme.textTheme.titleMedium!.copyWith(
-                  color: theme.colorScheme.primary,
-                ),
-                child: CurrencyDisplayer(
-                  amountToConvert: _totalCost,
-                  currency: widget.account.currency,
-                ),
+              const SizedBox(height: 4),
+              _buildSummaryRow(
+                t.assets.holdings.snapshots.total_cost,
+                _totalCost,
+              ),
+              const Divider(height: 16),
+              _buildSummaryRow(
+                t.assets.holdings.snapshots.snapshot_total,
+                _cashValue + _totalCost,
+                emphasized: true,
               ),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSummaryRow(
+    String label,
+    double amount, {
+    bool emphasized = false,
+  }) {
+    final theme = Theme.of(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: theme.colorScheme.primary,
+            fontWeight: emphasized ? FontWeight.w700 : FontWeight.w500,
+          ),
+        ),
+        DefaultTextStyle.merge(
+          style:
+              (emphasized
+                      ? theme.textTheme.titleMedium!
+                      : theme.textTheme.bodyMedium!)
+                  .copyWith(color: theme.colorScheme.primary),
+          child: CurrencyDisplayer(
+            amountToConvert: amount,
+            currency: widget.account.currency,
           ),
         ),
       ],

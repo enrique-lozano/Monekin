@@ -74,7 +74,7 @@ class HoldingsSnapshotCard extends StatelessWidget {
               body: Column(
                 children: [
                   if (current != null)
-                    _CurrentSnapshotBanner(snapshot: current)
+                    _CurrentSnapshotBanner(snapshot: current, account: account)
                   else
                     Padding(
                       padding: const EdgeInsets.all(24),
@@ -98,14 +98,20 @@ class HoldingsSnapshotCard extends StatelessWidget {
 }
 
 class _CurrentSnapshotBanner extends StatelessWidget {
-  const _CurrentSnapshotBanner({required this.snapshot});
+  const _CurrentSnapshotBanner({required this.snapshot, required this.account});
 
   final AccountSnapshotWithPositions snapshot;
+  final Account account;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
+
+    final cash = UINumberFormatter.currency(
+      amountToConvert: snapshot.cash,
+      currency: account.currency,
+    ).getFormattedAmount();
 
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 4),
@@ -136,11 +142,8 @@ class _CurrentSnapshotBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  snapshot.isEmpty
-                      ? t.assets.holdings.snapshots.empty_portfolio
-                      : t.assets.holdings.snapshots.positions_count(
-                          n: snapshot.positionsCount,
-                        ),
+                  '${snapshot.isEmpty ? t.assets.holdings.snapshots.empty_portfolio : t.assets.holdings.snapshots.positions_count(n: snapshot.positionsCount)}'
+                  ' · ${t.assets.holdings.snapshots.cash_label}: $cash',
                   style: theme.textTheme.bodySmall,
                 ),
               ],

@@ -1092,7 +1092,7 @@
         "update": "Aktualisieren",
         "update_positions": "Positionen aktualisieren",
         "full_portfolio": "komplettes Portfolio",
-        "editor_intro": "Sag uns, wie dein Portfolio am {{date}} aussieht. Die eingegebenen Werte werden verwendet, um Salden und Statistiken von diesem Datum bis zu deinem nächsten Snapshot zu berechnen.",
+        "snapshot_contents_description": "Sag uns, wie dein Portfolio am {{date}} aussieht. Die eingegebenen Werte werden verwendet, um Salden und Statistiken von diesem Datum bis zu deinem nächsten Snapshot zu berechnen.",
         "date_label": "Snapshot-Datum",
         "overwrite_warning": "Für dieses Datum ist bereits ein Snapshot vorhanden. Beim Speichern wird er überschrieben.",
         "add_position": "Fügen Sie eine weitere Position hinzu",
