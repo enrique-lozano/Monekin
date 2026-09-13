@@ -163,7 +163,6 @@ class _PositionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final security = position.security;
 
     final marketValue = position.quantity * (security.currentPrice ?? 0);
@@ -186,10 +185,14 @@ class _PositionTile extends StatelessWidget {
 
         return ListTile(
           leading: SecurityAvatar(security: security),
-          title: Text(security.name),
+          title: Text(
+            security.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           subtitle: Text(
             '${UINumberFormatter.decimal(amountToConvert: position.quantity).getFormattedAmount()}'
-            ' · ${t.assets.holdings.avg_cost}: $avgCostText',
+            ' × $avgCostText',
           ),
           trailing: TrailingValue(
             amount: marketValue,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart'
     show showSecurityPicker;
 import 'package:monekin/app/layout/page_framework.dart';
@@ -17,10 +18,10 @@ import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
+import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -41,10 +42,23 @@ String _plainNumber(double value) {
 /// Lists every portfolio snapshot of an investment account (newest first),
 /// marking the one currently in effect. Snapshots can be added, edited or
 /// deleted. A snapshot is the complete portfolio photo for a date.
-class AccountSnapshotsPage extends StatelessWidget {
+class AccountSnapshotsPage extends StatefulWidget {
   const AccountSnapshotsPage({super.key, required this.account});
 
   final Account account;
+
+  @override
+  State<AccountSnapshotsPage> createState() => _AccountSnapshotsPageState();
+}
+
+class _AccountSnapshotsPageState extends State<AccountSnapshotsPage> {
+  late Account account;
+
+  @override
+  void initState() {
+    super.initState();
+    account = widget.account;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +80,14 @@ class AccountSnapshotsPage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             children: [
-              Text(account.name, style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 4),
+              ListTileField(
+                title: t.general.account,
+                subtitle: account.name,
+                leading: account.displayIcon(context),
+                trailing: const Icon(Icons.expand_more_rounded),
+                onTap: () => unawaited(_selectAccount(context)),
+              ),
+              const SizedBox(height: 12),
               Text(
                 t.assets.holdings.snapshots.history_intro,
                 style: Theme.of(context).textTheme.bodySmall,
@@ -114,6 +134,22 @@ class AccountSnapshotsPage extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _selectAccount(BuildContext context) async {
+    final selection = await showAccountSelectorBottomSheet(
+      context,
+      AccountSelectorModal(
+        allowMultiSelection: false,
+        filterSavingAccounts: false,
+        trackingMode: AccountTrackingMode.holdings,
+        selectedAccounts: [account],
+      ),
+    );
+
+    if (selection == null || selection.isEmpty || !mounted) return;
+
+    setState(() => account = selection.first);
+  }
 }
 
 class _SnapshotTile extends StatelessWidget {
@@ -132,59 +168,71 @@ class _SnapshotTile extends StatelessWidget {
     final t = Translations.of(context);
     final theme = Theme.of(context);
 
-    final tickers = data.positions
-        .map((p) => p.security.ticker ?? p.security.name)
-        .join(', ');
-
-    final cash = UINumberFormatter.currency(
-      amountToConvert: data.cash,
-      currency: account.currency,
-    ).getFormattedAmount();
-
     final positions = data.isEmpty
         ? t.assets.holdings.snapshots.empty_portfolio
-        : '${t.assets.holdings.snapshots.positions_count(n: data.positionsCount)}'
-              '${tickers.isEmpty ? '' : ' · $tickers'}';
-
-    final subtitle =
-        '$positions · ${t.assets.holdings.snapshots.cash_label}: $cash';
+        : t.assets.holdings.snapshots.positions_count(n: data.positionsCount);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
+      clipBehavior: Clip.antiAlias,
       child: ListTile(
-        title: Wrap(
-          spacing: 8,
-          runSpacing: 4,
-          crossAxisAlignment: WrapCrossAlignment.center,
+        contentPadding: const EdgeInsets.only(left: 16, right: 4),
+        title: Row(
           children: [
-            Text(
-              DateFormat.yMMMd().format(data.date),
-              style: theme.textTheme.titleSmall,
-            ),
-            _Badge(label: t.assets.holdings.snapshots.manual),
-            if (isCurrent)
-              _Badge(
-                label: t.assets.holdings.snapshots.current,
-                color: theme.colorScheme.primary,
+            if (isCurrent) ...[
+              Tooltip(
+                message: t.assets.holdings.snapshots.current,
+                child: Icon(
+                  Icons.adjust_rounded,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
               ),
+              const SizedBox(width: 6),
+            ],
+            Expanded(
+              child: Text(
+                DateFormat.yMMMd().format(data.date),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleSmall,
+              ),
+            ),
           ],
         ),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 2),
-          child: Text(subtitle, maxLines: 2, overflow: TextOverflow.ellipsis),
+          child: Text(positions, maxLines: 1, overflow: TextOverflow.ellipsis),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
+          spacing: 4,
           children: [
-            TrailingValue(
-              amount: data.totalCost,
-              currency: account.currency,
-              secondary: Text(
-                t.assets.holdings.snapshots.cost_label,
-                style: theme.textTheme.bodySmall,
+            StreamBuilder(
+              stream: AccountService.instance.getAccountMoney(
+                account: account,
+                date: data.date,
               ),
+              builder: (context, balanceSnapshot) {
+                if (!balanceSnapshot.hasData) {
+                  return const SizedBox.square(
+                    dimension: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  );
+                }
+
+                return TrailingValue(
+                  amount: balanceSnapshot.data!,
+                  currency: account.currency,
+                  secondary: Text(
+                    t.account.balance,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                );
+              },
             ),
             IconButton(
+              visualDensity: VisualDensity.compact,
               icon: Icon(
                 Icons.delete_outline_rounded,
                 color: theme.colorScheme.error,
@@ -217,34 +265,6 @@ class _SnapshotTile extends StatelessWidget {
     if (confirmed != true) return;
 
     await HoldingService.instance.deleteAccountSnapshot(data.id, account.id);
-  }
-}
-
-class _Badge extends StatelessWidget {
-  const _Badge({required this.label, this.color});
-
-  final String label;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = color ?? Theme.of(context).colorScheme.outline;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: c.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-          color: c,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.4,
-        ),
-      ),
-    );
   }
 }
 
@@ -601,24 +621,25 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         ),
         const SizedBox(height: 16),
         if (_rows.isEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            child: Text(
-              t.assets.holdings.snapshots.empty_portfolio,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: _addPosition,
+              icon: const Icon(Icons.add_circle_outline_rounded),
+              label: Text(t.assets.holdings.snapshots.add_first_position),
             ),
           )
         else ...[
           _buildTableHeader(cols),
           ..._rows.map((row) => _buildRow(row, cols)),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _addPosition,
+            icon: const Icon(Icons.add_circle_outline_rounded),
+            label: Text(t.assets.holdings.snapshots.add_position),
+          ),
         ],
-        const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: _addPosition,
-          icon: const Icon(Icons.add_circle_outline_rounded),
-          label: Text(t.assets.holdings.snapshots.add_position),
-        ),
+        const SizedBox(height: 16),
         const Spacer(),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

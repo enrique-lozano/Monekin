@@ -678,11 +678,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
               dataTypes: const [TrendingValueDataType.value],
               fontSize: theme.textTheme.titleMedium!.fontSize!,
               fontWeight: FontWeight.w600,
+              padding: EdgeInsets.zero,
             ),
             TrendingValue(
               percentage: pnlPct,
               dataTypes: const [TrendingValueDataType.percentage],
               fontSize: theme.textTheme.bodySmall!.fontSize!,
+              padding: EdgeInsets.zero,
             ),
           ],
         );

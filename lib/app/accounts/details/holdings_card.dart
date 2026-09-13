@@ -117,10 +117,14 @@ class _HoldingTile extends StatelessWidget {
 
         return ListTile(
           leading: SecurityAvatar(security: security),
-          title: Text(security.name),
+          title: Text(
+            security.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           subtitle: Text(
             '${UINumberFormatter.decimal(amountToConvert: data.quantity).getFormattedAmount()}'
-            ' · ${t.assets.holdings.avg_cost}: $avgCostText',
+            ' × $avgCostText',
           ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
