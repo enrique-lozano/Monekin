@@ -113,8 +113,14 @@ class DatePeriodState {
         );
 
       case PeriodType.lastDays:
-        final currentEndDate = DateTime.now().copyWith(
-          day: currentDayOfMonth + periodModifier * datePeriod.lastDays,
+        // The end bound is exclusive and must be the start of the next day,
+        // not the current instant. Otherwise the ranges are frozen at build
+        // time and a transaction created right after is left out until the
+        // widget rebuilds.
+        final currentEndDate = DateTime(
+          currentYear,
+          currentMonth,
+          currentDayOfMonth + 1 + periodModifier * datePeriod.lastDays,
         );
 
         return (
