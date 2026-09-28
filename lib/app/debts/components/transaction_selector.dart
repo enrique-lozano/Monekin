@@ -84,6 +84,7 @@ class _TransactionSelectorModalState extends State<TransactionSelectorModal> {
                 child: TransactionListComponent(
                   filters: _filters,
                   isScrollable: true,
+                  separateUpcoming: false,
                   scrollController: scrollController,
                   showGroupDivider: false,
                   listPadding: EdgeInsets.only(
