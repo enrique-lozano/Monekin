@@ -88,7 +88,7 @@ dev_dependencies:
   drift_dev: ^2.34.0
   slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^15.0.1
-  freezed: ^3.2.5
+  freezed: ^4.0.0-dev.3
 
 flutter_launcher_icons:
   image_path: 'assets/resources/appIcon.png'
