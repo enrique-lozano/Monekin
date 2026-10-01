@@ -653,9 +653,9 @@
     "TRACKING_MODES": {
       "title": "Tracking-Modus",
       "transactions": "Transaktionen",
-      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet.",
+      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet. Am besten, wenn Sie eine vollständige Handelshistorie haben (oder führen möchten) und eine genaue Kostenbasis wünschen.",
       "holdings": "Bestände",
-      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten).",
+      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten). Am besten, wenn Sie nur Ihre aktuelle Position kennen und nicht jeden Trade protokollieren möchten. Ihre Einnahmen, Ausgaben und Überweisungen auf diesem Konto werden in beiden Modi weiterhin ganz normal erfasst.",
       "switch_warn": "Jeder Modus berechnet Ihre Positionen aus einer anderen Quelle. Beim Speichern werden Ihre aktuellen Positionen in den neuen Modus übertragen. Frühere Zeitpunkte werden mit dem Verlauf bewertet, den dieser Modus bereits hat."
     },
     "FORM": {

@@ -653,9 +653,9 @@
     "TRACKING_MODES": {
       "title": "Modalità di tracciamento",
       "transactions": "Transazioni",
-      "transactions_descr": "Le posizioni vengono calcolate automaticamente dalle tue operazioni di acquisto e vendita.",
+      "transactions_descr": "Le posizioni vengono calcolate automaticamente dalle tue operazioni di acquisto e vendita. Ideale se hai (o vuoi mantenere) uno storico completo delle operazioni e desideri un costo base accurato.",
       "holdings": "Partecipazioni",
-      "holdings_descr": "Inserisci manualmente le tue posizioni come istantanee datate (quantità e costo medio).",
+      "holdings_descr": "Inserisci manualmente le tue posizioni come istantanee datate (quantità e costo medio). Ideale se conosci solo la tua posizione attuale e non vuoi registrare ogni operazione. Le tue entrate, uscite e trasferimenti su questo conto continuano a essere tracciati normalmente in entrambe le modalità.",
       "switch_warn": "Ogni modalità calcola le tue posizioni da una fonte diversa. Al salvataggio, le tue posizioni attuali verranno convertite nella nuova modalità. Le date precedenti saranno valorizzate con lo storico già presente in quella modalità."
     },
     "FORM": {

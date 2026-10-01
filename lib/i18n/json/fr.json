@@ -653,9 +653,9 @@
     "TRACKING_MODES": {
       "title": "Mode de suivi",
       "transactions": "Transactions",
-      "transactions_descr": "Les positions sont calculées automatiquement à partir de vos transactions d'achat et de vente.",
+      "transactions_descr": "Les positions sont calculées automatiquement à partir de vos transactions d'achat et de vente. Idéal si vous disposez (ou souhaitez conserver) d'un historique complet des transactions et voulez un coût de revient précis.",
       "holdings": "Avoirs",
-      "holdings_descr": "Saisissez manuellement vos positions sous forme de clichés datés (quantité et coût moyen).",
+      "holdings_descr": "Saisissez manuellement vos positions sous forme de clichés datés (quantité et coût moyen). Idéal si vous ne connaissez que votre position actuelle et ne voulez pas enregistrer chaque transaction. Vos revenus, dépenses et transferts sur ce compte continuent d'être suivis normalement dans les deux modes.",
       "switch_warn": "Chaque mode calcule vos positions à partir d'une source différente. Lors de l'enregistrement, vos positions actuelles seront converties vers le nouveau mode. Les dates antérieures seront valorisées avec l'historique dont ce mode dispose déjà."
     },
     "FORM": {
