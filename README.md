@@ -8,7 +8,7 @@
   <h1 align="center">Monekin - Official repository</h1>
 
   <p align="center">
-    Monekin is a 100% Open Source app that tries to make personal finances easier. Fast, simple, without ads, without the need for an Internet connection and with a groundbreaking design, that's Monekin.
+    Monekin — a 100% open source app that makes personal finances easier. Fast, simple, offline-first, no ads, and a groundbreaking design.
     <br />
     <a href="#about-the-project"><strong>Start exploring »</strong></a>
     <br />
