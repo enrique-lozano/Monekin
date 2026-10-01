@@ -664,9 +664,9 @@
     "TRACKING_MODES": {
       "title": "Modo de seguimiento",
       "transactions": "Transacciones",
-      "transactions_descr": "Las posiciones se calculan automáticamente a partir de tus operaciones de compra y venta.",
+      "transactions_descr": "Las posiciones se calculan automáticamente a partir de tus operaciones de compra y venta. Ideal si tienes (o quieres mantener) un historial completo de operaciones y buscas un coste base preciso.",
       "holdings": "Posiciones",
-      "holdings_descr": "Introduce tus posiciones manualmente como snapshots con fecha (cantidad y coste medio).",
+      "holdings_descr": "Introduce tus posiciones manualmente como snapshots con fecha (cantidad y coste medio). Ideal si solo conoces tu posición actual y no quieres registrar cada operación. Tus ingresos, gastos y transferencias en esta cuenta se siguen registrando con normalidad en ambos modos.",
       "switch_warn": "Cada modo calcula tus posiciones a partir de una fuente distinta. Al guardar, tus posiciones actuales se convertirán al nuevo modo. Las fechas anteriores se valorarán con el historial que ya tenga ese modo."
     },
     "FORM": {

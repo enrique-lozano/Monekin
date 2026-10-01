@@ -677,9 +677,9 @@
     "TRACKING_MODES": {
       "title": "Tracking mode",
       "transactions": "Transactions",
-      "transactions_descr": "Positions are calculated automatically from your buy and sell trades.",
+      "transactions_descr": "Positions are calculated automatically from your buy and sell trades. Best if you have (or want to keep) a full trade history and want accurate cost basis.",
       "holdings": "Holdings",
-      "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost).",
+      "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost). Best if you only know your current position and don't want to log every trade. Your income, expenses and transfers on this account are still tracked as normal either way.",
       "switch_warn": "Each mode calculates your positions from a different source. When you save, your current positions are converted to the new mode. Earlier dates will be valued using the history that mode already has."
     },
     "FORM": {

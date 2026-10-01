@@ -653,9 +653,9 @@
     "TRACKING_MODES": {
       "title": "İzleme modu",
       "transactions": "İşlemler",
-      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır.",
+      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır. Eksiksiz bir işlem geçmişiniz varsa (veya tutmak istiyorsanız) ve doğru bir maliyet esası istiyorsanız en iyi seçenektir.",
       "holdings": "Holdingler",
-      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin.",
+      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin. Yalnızca mevcut pozisyonunuzu biliyorsanız ve her işlemi kaydetmek istemiyorsanız en iyi seçenektir. Bu hesaptaki gelir, gider ve transferleriniz her iki modda da normal şekilde takip edilmeye devam eder.",
       "switch_warn": "Her mod pozisyonlarınızı farklı bir kaynaktan hesaplar. Kaydettiğinizde mevcut pozisyonlarınız yeni moda dönüştürülür. Daha önceki tarihler, o modun halihazırda sahip olduğu geçmişe göre değerlenir."
     },
     "FORM": {

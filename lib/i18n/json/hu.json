@@ -653,9 +653,9 @@
     "TRACKING_MODES": {
       "title": "Követési mód",
       "transactions": "Tranzakciók",
-      "transactions_descr": "A pozíciókat a rendszer automatikusan számítja ki az Ön vételi és eladási kereskedéseiből.",
+      "transactions_descr": "A pozíciókat a rendszer automatikusan számítja ki az Ön vételi és eladási kereskedéseiből. Ez a legjobb választás, ha teljes kereskedési előzménnyel rendelkezik (vagy szeretne vezetni), és pontos bekerülési értéket szeretne.",
       "holdings": "Holdingok",
-      "holdings_descr": "Adja meg pozícióit manuálisan keltezett pillanatképként (mennyiség és átlagos költség).",
+      "holdings_descr": "Adja meg pozícióit manuálisan keltezett pillanatképként (mennyiség és átlagos költség). Ez a legjobb választás, ha csak az aktuális pozícióját ismeri, és nem szeretné rögzíteni minden egyes kereskedését. A számlán zajló bevételeket, kiadásokat és átutalásokat mindkét módban továbbra is a szokásos módon követi a rendszer.",
       "switch_warn": "Minden mód más forrásból számítja ki a pozícióidat. Mentéskor a jelenlegi pozícióid átkerülnek az új módba. A korábbi dátumokat az adott mód már meglévő előzményei alapján értékeljük."
     },
     "FORM": {
