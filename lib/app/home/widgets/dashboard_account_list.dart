@@ -49,13 +49,11 @@ class DashboardAccountList extends StatelessWidget {
           bodyPadding: isEmpty
               ? EdgeInsets.zero
               : const EdgeInsets.only(top: 4, bottom: 8),
-          headerAction: hasHiddenRows
-              ? CardHeaderAction(
-                  icon: const Icon(Icons.add_rounded),
-                  text: t.account.form.create,
-                  onTap: _openCreateAccountForm,
-                )
-              : null,
+          headerAction: CardHeaderAction(
+            icon: const Icon(Icons.add_rounded),
+            text: t.account.form.create,
+            onTap: _openCreateAccountForm,
+          ),
           footer: hasHiddenRows
               ? CardFooterWithSingleButton(
                   text: t.ui_actions.see_all_count(n: accounts!.length),
