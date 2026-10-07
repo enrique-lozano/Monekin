@@ -41,15 +41,10 @@ transactions, stats, budgets), taking a screenshot of each. It's driven by
 
 With an Android emulator (or device) running, from the repository root:
 
-    % ./scripts/generate_screenshots.sh          # every locale
-    % ./scripts/generate_screenshots.sh en es    # only these locales
+    > scripts\generate_screenshots.bat          :: every locale
+    > scripts\generate_screenshots.bat en es    :: only these locales
 
 This uses `flutter drive`, not `flutter test`, since taking and saving
 screenshots to disk needs the driver/target split (`flutter test` alone
 can't write files on the host). Always review the generated images before
 committing — demo data, device frame and status bar can vary by emulator.
-
-
-    
-   
-
