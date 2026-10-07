@@ -178,7 +178,7 @@
     "next": "Далі",
     "select-your-currency": "Виберіть вашу валюту",
     "welcome.subtitle": "Ваш особистий фінансовий менеджер",
-    "welcome.subtitle2": "100% відкритий, 100% безкоштовний",
+    "welcome.subtitle2": "100% відкритий, 100% приватний",
     "welcome.footer": "Увійшовши в систему, ви погоджуєтеся з <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Політикою конфіденційності</a> та <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Умовами використання</a> додатка",
     "offline.descr.title": "ОФЛАЙН-РЕЖИМ:",
     "offline.descr": "Ваші дані будуть збережені тільки на вашому пристрої, поки ви не видалите програму або не зміните телефон. Щоб запобігти втраті даних, рекомендується регулярно робити резервні копії з налаштувань програми.",

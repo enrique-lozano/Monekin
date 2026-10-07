@@ -70,7 +70,6 @@ class TransactionStatusSelector extends StatelessWidget {
 
 class _TransactionStatusButtonSelector extends StatelessWidget {
   const _TransactionStatusButtonSelector({
-    super.key,
     required this.status,
     required this.onClick,
     required this.isSelected,

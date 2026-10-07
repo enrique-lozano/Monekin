@@ -91,6 +91,9 @@ So far you should have pushed your work to your working branch and have tested t
 > [!IMPORTANT]
 > This project doesn't have QA, so you are the QA! Please test your implementation carefully.
 
+> [!NOTE]
+> Keep the PR title a clean, prefix-free sentence (not `feat: ...` / `fix: ...`). Labels, not the title, are what categorizes it for the release notes.
+
 ## Questions?
 
 If you have any doubts or need further guidance, feel free to ask! You can:
