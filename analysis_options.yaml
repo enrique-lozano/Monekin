@@ -4,6 +4,7 @@ analyzer:
   exclude:
     - '**/*.freezed.dart'
     - '**/*.mocks.dart'
+    - 'lib/i18n/generated/**'
   errors:
     missing_required_param: warning
     missing_return: warning
