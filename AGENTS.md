@@ -270,6 +270,17 @@ Before completing any task:
 - There is no separate QA — **you are the QA**. Test carefully on supported platforms.
 - Do not create commits unless explicitly asked. When asked to commit AI-generated work, add the trailer `Includes-AI-Code: true` to the commit message.
 
+### Writing on GitHub (PRs, comments, commits, issues)
+
+Everything posted to GitHub must read as if a project developer wrote it for any reader, now or in a year.
+
+- **No conversation.** Don't address the maintainer or reply to chat instructions ("as you asked", "your setup", "you'd be able to run"). Write for a neutral reader.
+- **Describe the final state, not your edits.** Say what the PR does and why. Don't narrate revisions ("Switched X → Y", "Updated per feedback", "Now it..."). If a follow-up comment is needed, state the change and the reason as a fact: "Uses a `.bat` script, consistent with `scripts/build_all.bat`."
+- **Leave out agent-only context.** Never mention your sandbox, missing tools/emulators/SDKs, permissions, or "this environment". If something wasn't verified, show it the way a dev would: leave the checklist item unchecked, or write "Not tested on a device yet."
+- **No filler or hedging.** No "Great question", "I'd most want you to...", "Let me know if...", or summaries of what you just did.
+- **Keep it short.** Follow `.github/PULL_REQUEST_TEMPLATE.md`. Prefer editing the PR description over posting a new comment when the scope changes.
+- **Check before posting.** Ask: "Would a dev on this project write this sentence?" If not, rewrite or remove it.
+
 ---
 
 ## Plan Mode
