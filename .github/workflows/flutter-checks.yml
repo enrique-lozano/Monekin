@@ -33,8 +33,15 @@ jobs:
       - name: Generate translations
         run: dart run slang
 
+      # --no-fatal-infos: the codebase currently has ~180 pre-existing
+      # info-level issues (mostly deprecated Flutter APIs like
+      # withOpacity/WillPopScope). Fixing all of them is a separate effort
+      # from "turn CI on", so this still catches errors and warnings (both
+      # fatal by default), while leaving that backlog visible in the log
+      # without blocking every PR on it. Remove this flag once that backlog
+      # is cleared.
       - name: Analyze
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Run tests
         run: flutter test
