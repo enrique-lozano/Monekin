@@ -15,7 +15,6 @@ linter:
     use_key_in_widget_constructors: false
     avoid_void_async: true
     cancel_subscriptions: true
-    package_api_docs: true
     prefer_final_in_for_each: true
     prefer_single_quotes: true
     test_types_in_equals: true

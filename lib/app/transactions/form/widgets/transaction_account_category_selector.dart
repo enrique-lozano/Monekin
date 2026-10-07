@@ -170,7 +170,6 @@ class _AccountCard extends StatelessWidget {
     required this.title,
     required this.value,
     required this.onTap,
-    this.subtitle,
     this.leading,
     this.showChevron = true,
     this.position = _CardPosition.single,
@@ -178,7 +177,6 @@ class _AccountCard extends StatelessWidget {
 
   final String title;
   final String? value;
-  final Widget? subtitle;
   final Widget? leading;
   final VoidCallback onTap;
   final bool showChevron;
@@ -256,20 +254,7 @@ class _AccountCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: subtitle != null ? 2 : 8),
-                  if (subtitle != null)
-                    SizedBox(
-                      width: double.infinity,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: subtitle != null
-                            ? DefaultTextStyle(
-                                style: theme.textTheme.bodySmall!,
-                                child: subtitle!,
-                              )
-                            : const SizedBox.shrink(),
-                      ),
-                    ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),
