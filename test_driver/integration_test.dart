@@ -1,7 +1,7 @@
 // Driver used to run the integration tests with `flutter drive` and save
 // any screenshot taken with `binding.takeScreenshot(name)` to disk.
 //
-// Used by `scripts/generate_screenshots.sh` to regenerate the store
+// Used by `scripts/generate_screenshots.bat` to regenerate the store
 // screenshots in `app-marketplaces/screenshots/<locale>/Screenshots/`.
 //
 // Note: `--dart-define` flags passed to `flutter drive` only reach the app

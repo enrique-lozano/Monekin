@@ -270,13 +270,13 @@ Future<void> fillWithDemoData() async {
     Logger.printDebug(
       'Adjusting account balance (current: $currentBalance)...',
     );
-    await db
-        .update(db.accounts)
-        .write(
-          _accountsToCreate.first.copyWith(
-            iniValue: _accountsToCreate.first.iniValue - currentBalance,
-          ),
-        );
+    await (db.update(
+      db.accounts,
+    )..where((a) => a.id.equals(_cashAccountID))).write(
+      _accountsToCreate.first.copyWith(
+        iniValue: _accountsToCreate.first.iniValue - currentBalance,
+      ),
+    );
   }
 
   Logger.printDebug('Demo data seeding finished.');

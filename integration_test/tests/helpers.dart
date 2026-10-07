@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
@@ -46,4 +50,37 @@ Future<void> openMorePage(WidgetTester tester) async {
   await tester.pumpAndSettle();
 
   expect(find.byType(MoreActionsPage), findsOneWidget);
+}
+
+/// Takes a screenshot named [name] (picked up by `test_driver/integration_test.dart`).
+///
+/// `binding.takeScreenshot` only has a native implementation on mobile, so on
+/// desktop the frame is rendered from the Flutter layer tree and handed to the
+/// driver through the same `reportData` entry the binding would have used.
+Future<void> takeScreenshot(
+  IntegrationTestWidgetsFlutterBinding binding,
+  WidgetTester tester,
+  String name,
+) async {
+  if (Platform.isAndroid || Platform.isIOS) {
+    await binding.takeScreenshot(name);
+    return;
+  }
+
+  final renderView = tester.binding.renderViews.first;
+  final layer = renderView.debugLayer! as OffsetLayer;
+
+  final bytes = await tester.runAsync(() async {
+    // The root layer already carries the device pixel ratio transform.
+    final image = await layer.toImage(Offset.zero & tester.view.physicalSize);
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    return data!.buffer.asUint8List();
+  });
+
+  binding.reportData ??= <String, dynamic>{};
+  final screenshots = (binding.reportData!['screenshots'] ??= <dynamic>[]);
+  (screenshots as List<dynamic>).add(<String, dynamic>{
+    'screenshotName': name,
+    'bytes': bytes,
+  });
 }

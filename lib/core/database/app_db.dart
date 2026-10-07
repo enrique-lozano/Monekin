@@ -45,8 +45,13 @@ class AppDB extends _$AppDB {
     required this.logStatements,
   }) : super(openConnection(dbName, logStatements: logStatements));
 
+  /// Overridable with `--dart-define=MONEKIN_DB_NAME=...` so tools (e.g. the
+  /// store screenshots script) never touch the user's real database.
   static final AppDB instance = AppDB._(
-    dbName: 'database.db',
+    dbName: const String.fromEnvironment(
+      'MONEKIN_DB_NAME',
+      defaultValue: 'database.db',
+    ),
     inMemory: false,
     logStatements: false,
   );
