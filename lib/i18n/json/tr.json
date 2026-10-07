@@ -178,7 +178,7 @@
     "next": "İleri",
     "select-your-currency": "Para birimini seçin",
     "welcome.subtitle": "Kişisel finans yöneticiniz",
-    "welcome.subtitle2": "%100 açık, %100 ücretsiz",
+    "welcome.subtitle2": "%100 açık, %100 özel",
     "welcome.footer": "Giriş yaparak, uygulamanın <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Gizlilik Politikası</a> ve <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Kullanım Şartları</a>'nı kabul etmiş olursunuz",
     "offline.descr.title": "ÇEVRİMDIŞI HESAP:",
     "offline.descr": "Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.",
