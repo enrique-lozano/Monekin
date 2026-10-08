@@ -427,22 +427,25 @@ class TransactionFormController extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  /// Net ledger effect of the draft on [fromAccount] (matches how balances aggregate rows).
+  /// Account whose balance the draft can reduce (the transfer source, honoring the flow direction).
+  Account? get balanceWarningAccount =>
+      transactionType.isTransfer ? effectiveTransferFromAccount : fromAccount;
+
+  /// Net ledger effect of the draft on [balanceWarningAccount] (matches how balances aggregate rows).
   double draftEffectOnFromAccountLedger() {
     if (transactionType == TransactionType.expense) {
       return transactionValue * -1;
     }
     if (transactionType == TransactionType.transfer) {
-      if (_dualLegFlowReversed) return transactionValue.abs();
       return -transactionValue.abs();
     }
     return transactionValue;
   }
 
-  /// Ledger effect of the row being edited on [fromAccount], if it matches the edited row's account.
+  /// Ledger effect of the row being edited on [balanceWarningAccount], if it matches the edited row's account.
   double? get oldEffectOnFromAccountLedgerForEdit {
     final edit = _transactionToEdit;
-    final from = fromAccount;
+    final from = balanceWarningAccount;
     if (edit == null || from == null) return null;
     if (edit.account.id != from.id) return null;
     if (edit.type == TransactionType.transfer) {
