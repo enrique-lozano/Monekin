@@ -178,7 +178,7 @@
     "next": "Suivant",
     "select-your-currency": "Sélectionnez votre devise",
     "welcome.subtitle": "Votre gestionnaire de finances personnelles",
-    "welcome.subtitle2": "100 % open, 100 % gratuit",
+    "welcome.subtitle2": "100 % open, 100 % privé",
     "welcome.footer": "En vous connectant, vous acceptez la <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>politique de confidentialité</a> et les <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>conditions d'utilisation</a> de l'application",
     "offline.descr.title": "COMPTE HORS LIGNE :",
     "offline.descr": "Vos données ne seront stockées que sur votre appareil, et seront en sécurité tant que vous ne désinstallez pas l'application ou ne changez pas de téléphone. Pour éviter toute perte de données, il est recommandé de réaliser régulièrement une sauvegarde depuis les paramètres de l'application.",

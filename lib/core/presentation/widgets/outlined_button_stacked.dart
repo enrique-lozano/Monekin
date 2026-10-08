@@ -150,20 +150,15 @@ class _OutlinedContainer extends StatelessWidget {
     this.filled = false,
     this.borderRadius = 15,
     this.borderColor,
-    this.enabled = true,
-    super.key,
   });
 
   final Widget child;
   final bool filled;
   final double borderRadius;
   final Color? borderColor;
-  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
-    if (enabled == false) return child;
-
     final buttonColor = borderColor ?? Theme.of(context).colorScheme.secondary;
 
     return AnimatedContainer(

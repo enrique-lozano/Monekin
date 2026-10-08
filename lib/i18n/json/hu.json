@@ -178,7 +178,7 @@
     "next": "Tovább",
     "select-your-currency": "Válassza ki a pénznemet",
     "welcome.subtitle": "Az Ön személyes pénzügyi menedzsere",
-    "welcome.subtitle2": "100% -ban nyitott, és 100% -ban ingyenes",
+    "welcome.subtitle2": "100% -ban nyitott, és 100% -ban privát",
     "welcome.footer": "A bejelentkezéssel elfogadja az <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Felhasználási feltételeit</a>",
     "offline.descr.title": "OFFLINE SZÁMLA:",
     "offline.descr": "Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.",

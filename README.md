@@ -77,10 +77,10 @@ So, I decided to create one myself. After months of development and hard work, M
 - **📊 Powerful Analytics** - Rich statistics, charts, and a Financial Health score that looks at savings, debt, cash flow, and investing.
 - **🎨 Custom Categories & Icons** - Unlimited categories and subcategories, with hundreds of beautiful icons to make them yours.
 - **💱 Multi-Currency** - 50+ currencies with exchange rates you can customize.
-- **💾 Local Backups & Data Control** - Unlimited local backups you own and restore on any device. No servers, no subscriptions.
+- **💾 Local Backups & Data Control** - Unlimited local backups you own and restore on any device.
 - **📴 Works Offline** - Full functionality with no internet connection required, anytime, anywhere.
 - **🔓 Open Source** - Fully transparent and community-driven, so you can trust it and help shape it.
-- **✨ Free, Forever** - No ads, no hidden fees. Just your finances.
+- **✨ No Ads, No Tracking** - Your data stays yours. Just your finances.
 
 ### 🛠 Tech Stack
 
