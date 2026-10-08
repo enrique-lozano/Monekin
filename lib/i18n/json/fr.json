@@ -574,6 +574,10 @@
     "FORM": {
       "from": "Compte d'origine",
       "to": "Compte de destination",
+      "label-from": "De",
+      "label-to": "Vers",
+      "custom-amounts": "Montants personnalisés",
+      "difference": "de différence",
       "VALUE-IN-DESTINY": {
         "title": "Montant transféré au compte de destination",
         "amount-short": "{{amount}} vers le compte cible"

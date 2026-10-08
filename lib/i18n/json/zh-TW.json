@@ -600,6 +600,10 @@
     "FORM": {
       "from": "原始帳戶",
       "to": "目的地帳戶",
+      "label-from": "轉出",
+      "label-to": "轉入",
+      "custom-amounts": "自訂金額",
+      "difference": "差額",
       "VALUE-IN-DESTINY": {
         "title": "目的地轉帳金额",
         "amount-short": "{{amount}}至目標帳户"
