@@ -122,6 +122,11 @@ class TransactionFormController extends ChangeNotifier {
   /// When true, money flows from the bottom leg to the top leg (transfer).
   bool _dualLegFlowReversed = false;
 
+  /// Transfer: when false both legs stay linked through the exchange rate.
+  bool _customTransferAmounts = false;
+
+  bool get customTransferAmounts => _customTransferAmounts;
+
   TextEditingController get amountTextController => _amountTextController;
 
   bool get isEditMode => _transactionToEdit != null;
@@ -767,6 +772,7 @@ class TransactionFormController extends ChangeNotifier {
 
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
+    _customTransferAmounts = transaction.valueInDestiny != null;
 
     syncAmountFieldFromTransactionValue();
   }
@@ -889,6 +895,35 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
+  /// Turning it off re-links the destination to the source amount.
+  void setCustomTransferAmounts(bool v) {
+    if (_customTransferAmounts == v) return;
+    _customTransferAmounts = v;
+    if (!v) valueInDestinyController.clear();
+    _safeNotify();
+  }
+
+  /// Linked mode: sets the destination amount by deriving the source from [rate].
+  void applyTransferDestinationLinked(double amount, {required double rate}) {
+    final decimals = effectiveTransferFromAccount?.currency.decimalPlaces ?? 2;
+    final source = rate > 0 ? amount.abs() / rate : amount.abs();
+    transactionValue = double.parse(source.toStringAsFixed(decimals));
+    syncAmountFieldFromTransactionValue();
+    valueInDestinyController.clear();
+    _safeNotify();
+  }
+
+  /// Ledger effect of the transfer being edited on [accountId].
+  double oldTransferEffectOn(String accountId) {
+    final edit = _transactionToEdit;
+    if (edit == null || edit.type != TransactionType.transfer) return 0;
+    if (edit.account.id == accountId) return -edit.value;
+    if (edit.receivingAccount?.id == accountId) {
+      return edit.valueInDestiny ?? edit.value;
+    }
+    return 0;
+  }
+
   /// Sets the source debit to [inverseConvertedSource] (already in the origin
   /// account currency) and clears an explicit destiny amount so the pair is
   /// consistent again.
@@ -916,9 +951,12 @@ class TransactionFormController extends ChangeNotifier {
     );
   }
 
+  /// When [linkedRate] is set the entered amount drives the source leg
+  /// instead of overriding the destination.
   void openTransferDestinationAmountSelector(
     BuildContext context, {
     required double defaultDestinationAmount,
+    double? linkedRate,
   }) {
     final tr = Translations.of(context);
     final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
@@ -930,10 +968,14 @@ class TransactionFormController extends ChangeNotifier {
         enableSignToggleButton: false,
         currency: effectiveTransferToAccount?.currency,
         onSubmit: (amount) {
-          applyTransferDestinationAmount(
-            amount,
-            defaultDestinationAmount: defaultDestinationAmount,
-          );
+          if (linkedRate != null) {
+            applyTransferDestinationLinked(amount, rate: linkedRate);
+          } else {
+            applyTransferDestinationAmount(
+              amount,
+              defaultDestinationAmount: defaultDestinationAmount,
+            );
+          }
           RouteUtils.popRoute();
         },
       ),
