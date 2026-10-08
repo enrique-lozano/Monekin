@@ -447,6 +447,10 @@ class TransactionFormController extends ChangeNotifier {
     final edit = _transactionToEdit;
     final from = balanceWarningAccount;
     if (edit == null || from == null) return null;
+    if (edit.type == TransactionType.transfer &&
+        edit.receivingAccount?.id == from.id) {
+      return edit.valueInDestiny ?? edit.value;
+    }
     if (edit.account.id != from.id) return null;
     if (edit.type == TransactionType.transfer) {
       return -edit.value;
