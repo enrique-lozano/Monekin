@@ -106,7 +106,6 @@ class _DualLegBody extends StatelessWidget {
             account: from,
             isOutflow: topOut,
             amount: topAmount,
-            balanceDelta: topOut ? -sourceAmount : destAmount,
             onTapAccount: () => c.pickFromAccount(context),
             onTapAmount: () => openAmount(isSource: topOut),
           ),
@@ -149,7 +148,6 @@ class _DualLegBody extends StatelessWidget {
               account: to,
               isOutflow: !topOut,
               amount: bottomAmount,
-              balanceDelta: topOut ? destAmount : -sourceAmount,
               onTapAccount: () => c.pickTransferAccount(context),
               onTapAmount: () => openAmount(isSource: !topOut),
             ),
@@ -179,7 +177,6 @@ class _DualLegCard extends StatelessWidget {
     required this.account,
     required this.isOutflow,
     required this.amount,
-    required this.balanceDelta,
     required this.onTapAccount,
     required this.onTapAmount,
   });
@@ -188,9 +185,6 @@ class _DualLegCard extends StatelessWidget {
   final Account? account;
   final bool isOutflow;
   final double amount;
-
-  /// Signed change this transfer causes on [account]'s balance.
-  final double balanceDelta;
   final VoidCallback onTapAccount;
   final VoidCallback onTapAmount;
 
@@ -273,10 +267,7 @@ class _DualLegCard extends StatelessWidget {
                     flex: 2,
                     child: account == null
                         ? const SizedBox.shrink()
-                        : _BalancePreview(
-                            account: account,
-                            delta: balanceDelta,
-                          ),
+                        : _BalancePreview(account: account),
                   ),
                   const SizedBox(width: 8),
                   Flexible(
@@ -305,14 +296,12 @@ class _DualLegCard extends StatelessWidget {
 }
 
 class _BalancePreview extends StatelessWidget {
-  const _BalancePreview({required this.account, required this.delta});
+  const _BalancePreview({required this.account});
 
   final Account account;
-  final double delta;
 
   @override
   Widget build(BuildContext context) {
-    final c = context.read<TransactionFormController>();
     final theme = Theme.of(context);
     final style = theme.textTheme.bodyMedium;
 
@@ -322,27 +311,13 @@ class _BalancePreview extends StatelessWidget {
         final balance = snap.data;
         if (balance == null) return const SizedBox.shrink();
 
-        final after = balance + delta - c.oldTransferEffectOn(account.id);
-
         return FittedBox(
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerStart,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 4,
-            children: [
-              Text(
-                _formatMoney(balance, account.currency),
-                maxLines: 1,
-                style: style,
-              ),
-              Icon(Icons.arrow_forward_rounded, size: 12, color: style?.color),
-              Text(
-                _formatMoney(after, account.currency),
-                maxLines: 1,
-                style: style,
-              ),
-            ],
+          child: Text(
+            _formatMoney(balance, account.currency),
+            maxLines: 1,
+            style: style,
           ),
         );
       },
@@ -448,39 +423,43 @@ class _CustomAmountsChip extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final color = active ? scheme.primary : scheme.onSurfaceVariant;
 
-    return Material(
-      color: active
-          ? scheme.primary.withValues(alpha: 0.12)
-          : Colors.transparent,
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: active ? scheme.primary : scheme.outlineVariant,
+    return Semantics(
+      button: true,
+      toggled: active,
+      child: Material(
+        color: active
+            ? scheme.primary.withValues(alpha: 0.12)
+            : Colors.transparent,
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: active ? scheme.primary : scheme.outlineVariant,
+          ),
         ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 6,
-            children: [
-              Icon(
-                active ? Icons.link_off_rounded : Icons.link_rounded,
-                size: 16,
-                color: color,
-              ),
-              Text(
-                Translations.of(context).transfer.form.custom_amounts,
-                maxLines: 1,
-                softWrap: false,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 6,
+              children: [
+                Icon(
+                  active ? Icons.link_off_rounded : Icons.link_rounded,
+                  size: 16,
                   color: color,
-                  fontWeight: FontWeight.w600,
                 ),
-              ),
-            ],
+                Text(
+                  Translations.of(context).transfer.form.custom_amounts,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

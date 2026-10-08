@@ -916,17 +916,6 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
-  /// Ledger effect of the transfer being edited on [accountId].
-  double oldTransferEffectOn(String accountId) {
-    final edit = _transactionToEdit;
-    if (edit == null || edit.type != TransactionType.transfer) return 0;
-    if (edit.account.id == accountId) return -edit.value;
-    if (edit.receivingAccount?.id == accountId) {
-      return edit.valueInDestiny ?? edit.value;
-    }
-    return 0;
-  }
-
   /// Sets the source debit to [inverseConvertedSource] (already in the origin
   /// account currency) and clears an explicit destiny amount so the pair is
   /// consistent again.
