@@ -72,7 +72,8 @@ Future<void> takeScreenshot(
 
   final bytes = await tester.runAsync(() async {
     // The root layer already carries the device pixel ratio transform.
-    final image = await layer.toImage(Offset.zero & tester.view.physicalSize);
+    final size = tester.view.physicalSize;
+    final image = await layer.toImage(Offset.zero & size);
     final data = await image.toByteData(format: ui.ImageByteFormat.png);
     return data!.buffer.asUint8List();
   });

@@ -240,12 +240,16 @@ class TrendingValue extends StatelessWidget {
         ],
         if (afterText != null) ...[
           SizedBox(width: fontSize * 0.3),
-          Text(
-            afterText!,
-            style: TextStyle(
-              fontSize: fontSize * 0.85,
-              fontWeight: FontWeight.w600,
-              color: textColor.withOpacity(0.7),
+          Flexible(
+            child: Text(
+              afterText!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: fontSize * 0.85,
+                fontWeight: FontWeight.w600,
+                color: textColor.withOpacity(0.7),
+              ),
             ),
           ),
         ],

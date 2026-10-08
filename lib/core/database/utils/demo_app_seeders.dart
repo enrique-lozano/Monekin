@@ -40,7 +40,7 @@ final List<AccountInDB> _accountsToCreate = [
     currencyId: _prefCurrencyCode,
     iniValue: 5000,
     date: DateTime(2023),
-    iconId: 'bank',
+    iconId: 'account_balance',
   ),
 ];
 
@@ -49,21 +49,140 @@ final List<TagInDB> _tagsToCreate = [
   const TagInDB(id: 'tag2', name: 'Work', color: '33FF57', displayOrder: 2),
 ];
 
-final TransactionFilterSetInDB _defaultBudgetFilterSet =
+final List<TransactionFilterSetInDB> _budgetFilterSetsToCreate = [
+  for (final categoryId in ['2', '5', '4', '3'])
     TransactionFilterSetInDB(
-      id: generateUUID(),
-      categoriesIds: ['2'], // Food & Dining
-    );
+      id: 'budget_filter_$categoryId',
+      categoriesIds: [categoryId],
+    ),
+];
 
 final List<BudgetInDB> _budgetsToCreate = [
-  BudgetInDB(
-    id: 'budget1',
-    name: 'Monthly Food',
-    limitAmount: 500,
-    intervalPeriod: Periodicity.month,
-    filterID: _defaultBudgetFilterSet.id,
-  ),
+  for (final (name, limit, categoryId) in [
+    ('Monthly Food', 500.0, '2'),
+    ('Transport', 150.0, '5'),
+    ('Leisure', 120.0, '4'),
+    ('Shopping', 200.0, '3'),
+  ])
+    BudgetInDB(
+      id: 'budget_$categoryId',
+      name: name,
+      limitAmount: limit,
+      intervalPeriod: Periodicity.month,
+      filterID: 'budget_filter_$categoryId',
+    ),
 ];
+
+/// Upcoming payments of the subscriptions / recurrent transactions page.
+List<TransactionInDB> _recurrentTransactionsToCreate() {
+  final today = DateTime.now();
+
+  TransactionInDB recurrent({
+    required String title,
+    required double value,
+    required String categoryId,
+    required int nextPaymentInDays,
+    Periodicity period = Periodicity.month,
+    String accountId = _bankAccountID,
+  }) {
+    return TransactionInDB(
+      id: generateUUID(),
+      date: DateTime(
+        today.year,
+        today.month,
+        today.day,
+      ).add(Duration(days: nextPaymentInDays, hours: 9)),
+      accountID: accountId,
+      value: -value,
+      type: TransactionType.expense,
+      categoryID: categoryId,
+      title: title,
+      isHidden: false,
+      intervalPeriod: period,
+      intervalEach: 1,
+    );
+  }
+
+  return [
+    recurrent(
+      title: 'Rent',
+      value: 850,
+      categoryId: '6_1', // Rental
+      nextPaymentInDays: 3,
+    ),
+    recurrent(
+      title: 'Netflix',
+      value: 12.99,
+      categoryId: '4_4', // TV-shows and movies
+      nextPaymentInDays: 5,
+    ),
+    recurrent(
+      title: 'Spotify',
+      value: 10.99,
+      categoryId: '4_3', // Music
+      nextPaymentInDays: 9,
+    ),
+    recurrent(
+      title: 'Internet',
+      value: 39.9,
+      categoryId: '6_4',
+      nextPaymentInDays: 12,
+    ),
+    recurrent(
+      title: 'Phone',
+      value: 15.9,
+      categoryId: '6_5',
+      nextPaymentInDays: 14,
+    ),
+    recurrent(
+      title: 'Gym',
+      value: 29.9,
+      categoryId: '1_3', // Fitness
+      nextPaymentInDays: 17,
+      accountId: _cashAccountID,
+    ),
+    recurrent(
+      title: 'Electricity',
+      value: 62.5,
+      categoryId: '6_3',
+      nextPaymentInDays: 21,
+    ),
+    recurrent(
+      title: 'Car insurance',
+      value: 240,
+      categoryId: '5_4',
+      nextPaymentInDays: 40,
+      period: Periodicity.year,
+    ),
+  ];
+}
+
+/// Currency of the demo exchange rates (never the preferred one).
+String get demoForeignCurrencyCode =>
+    _prefCurrencyCode == 'USD' ? 'EUR' : 'USD';
+
+/// Monthly exchange rate history (last 6 months) of a currency other than the
+/// preferred one, as `1 unit = rate preferred currency`.
+List<ExchangeRateInDB> _exchangeRatesToCreate() {
+  final foreignCode = demoForeignCurrencyCode;
+  final baseRate = _prefCurrencyCode == 'USD' ? 1.09 : 0.92;
+  final today = DateTime.now();
+  final random = Random();
+
+  return [
+    for (var i = 5; i >= 0; i--)
+      ExchangeRateInDB(
+        id: generateUUID(),
+        date: DateTime(today.year, today.month - i, 1),
+        currencyCode: foreignCode,
+        exchangeRate: double.parse(
+          (baseRate * (1 + (random.nextDouble() - 0.5) * 0.08)).toStringAsFixed(
+            4,
+          ),
+        ),
+      ),
+  ];
+}
 
 Future<void> fillWithDemoData() async {
   Logger.printDebug('Starting demo data seeding...');
@@ -250,10 +369,14 @@ Future<void> fillWithDemoData() async {
   await db.batch((batch) {
     batch.insertAll(db.accounts, _accountsToCreate);
     batch.insertAll(db.tags, _tagsToCreate);
-    batch.insertAll(db.transactionFilterSets, [_defaultBudgetFilterSet]);
+    batch.insertAll(db.transactionFilterSets, _budgetFilterSetsToCreate);
     batch.insertAll(db.budgets, _budgetsToCreate);
-    batch.insertAll(db.transactions, transactions);
+    batch.insertAll(db.transactions, [
+      ...transactions,
+      ..._recurrentTransactionsToCreate(),
+    ]);
     batch.insertAll(db.transactionTags, transactionTags);
+    batch.insertAll(db.exchangeRates, _exchangeRatesToCreate());
   });
 
   Logger.printDebug('Seed completed successfully!');
