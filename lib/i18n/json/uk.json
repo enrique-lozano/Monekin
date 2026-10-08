@@ -574,6 +574,10 @@
     "FORM": {
       "from": "Початковий рахунок",
       "to": "Цільовий рахунок",
+      "label-from": "Звідки",
+      "label-to": "Куди",
+      "custom-amounts": "Власні суми",
+      "difference": "різниця",
       "VALUE-IN-DESTINY": {
         "title": "Сума переказу в пункті призначення",
         "amount-short": "{{amount}} на цільовий рахунок"
