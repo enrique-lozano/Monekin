@@ -39,3 +39,10 @@ double getPercentBetweenDates(DateTimeRange timeRange, DateTime timeToCheck) {
 
   return (text: dateFormat.format(date), dateFormat: dateFormat);
 }
+
+/// Short date label (e.g. "Oct 1"), adding the year only if it's not the
+/// current one
+String getShortDateLabel(DateTime date) {
+  return (date.year == currentYear ? DateFormat.MMMd() : DateFormat.yMMMd())
+      .format(date);
+}

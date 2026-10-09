@@ -163,10 +163,9 @@ class FinancialTargetCard extends StatelessWidget {
 }
 
 class TargetHeader extends StatelessWidget {
-  const TargetHeader({required this.target, this.showIdentity = true});
+  const TargetHeader({required this.target});
 
   final FinancialTarget target;
-  final bool showIdentity;
 
   @override
   Widget build(BuildContext context) {
@@ -179,36 +178,35 @@ class TargetHeader extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (showIdentity)
-              Hero(
-                tag: 'target_card_${target.id}_header_info',
-                child: Row(
-                  spacing: 8,
-                  children: [
-                    if (target is Goal)
-                      Container(
-                        padding: const EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: (target as Goal).type
-                              .color(context)
-                              .lightenPastel(amount: .25),
-                        ),
-                        child: Icon(
-                          Goal.icon,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
+            Hero(
+              tag: 'target_card_${target.id}_header_info',
+              child: Row(
+                spacing: 8,
+                children: [
+                  if (target is Goal)
+                    Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: (target as Goal).type
+                            .color(context)
+                            .lightenPastel(amount: .25),
                       ),
-                    Text(
-                      target.name,
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
+                      child: Icon(
+                        Goal.icon,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
-                  ],
-                ),
+                  Text(
+                    target.name,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
+            ),
             _buildMoneyValueLine(context),
           ],
         ),

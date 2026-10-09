@@ -887,14 +887,6 @@
         "active-indeterminate": "Activo",
         "success": "Objetivo cumplido",
         "fail": "Presupuesto excedido"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Puedes gastar {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes para cumplir con el presupuesto",
-        "active-overspending": "Para volver al camino correcto, deberías limitar tu gasto a {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes de este presuesto",
-        "active-indeterminate": "Te queda {{ amount }} para gastar.",
-        "active-exceeded": "Ya has excedido el límite de tu presupuesto por {{ amount }}. Si no encuentras ningún ingreso para este presupuesto, deberías dejar de gastar durante el resto de su periodo",
-        "success": "¡Buen trabajo! Este presupuesto ha finalizado con éxito. Sigue creando presupuestos para gestionar tus gastos",
-        "fail": "Has excedido el presupuesto por {{ amount }}. ¡Intenta tener más cuidado la próxima vez!"
       }
     }
   },
@@ -946,14 +938,32 @@
         "active-indeterminate": "Activo",
         "success": "Objetivo alcanzado",
         "fail": "Objetivo fallido"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "¡Vas por buen camino! Tienes que ahorrar {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes",
-        "active-behind-schedule": "Vas con retraso. Tienes que ahorrar {{ dailyAmount }} al día para alcanzar tu objetivo en {{ remainingDays }} días",
-        "active-indeterminate": "Necesitas {{ amount }} más para alcanzar tu objetivo.",
-        "success": "¡Felicidades! Has alcanzado tu objetivo.",
-        "fail": "No has alcanzado tu objetivo por {{ amount }}."
       }
+    }
+  },
+  "TARGETS": {
+    "left": "restantes",
+    "over": "de exceso",
+    "spent": "gastado",
+    "saved": "ahorrado",
+    "CHART": {
+      "spent": "Gastado",
+      "saved": "Ahorrado",
+      "projected": "Proyección",
+      "pace": "Ritmo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "al día, queda {{n}} día",
+        "other": "al día, quedan {{n}} días"
+      },
+      "per-day-short": "al día",
+      "per-day-help": "Cuánto puedes añadir cada día hasta el final del periodo para alcanzar la cantidad objetivo",
+      "above-pace": "sobre el ritmo",
+      "below-pace": "bajo el ritmo",
+      "pace-help": "Diferencia entre la cantidad actual y la esperada a día de hoy si se repartiera de forma uniforme durante todo el periodo",
+      "projected": "proyectado",
+      "projected-help": "Cantidad estimada al final del periodo si se mantiene el ritmo actual"
     }
   },
   "DEBTS": {
