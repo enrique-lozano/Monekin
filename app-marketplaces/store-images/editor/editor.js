@@ -9,15 +9,33 @@ const langSelect = document.getElementById('lang');
 const status = document.getElementById('status');
 const main = document.getElementById('slides');
 
-langSelect.innerHTML = config.languages.map((l) => `<option>${l}</option>`).join('');
-langSelect.value = new URLSearchParams(location.search).get('lang') ?? config.languages[0];
+// Only languages whose captures exist, as the rest would export empty phones.
+const languages = (
+  await Promise.all(config.languages.map(async (l) => ((await hasCaptures(l)) ? l : null)))
+).filter(Boolean);
+
+if (languages.length === 0) {
+  document.querySelector('nav').hidden = true;
+  main.innerHTML = `
+    <div class="empty">
+      <h2>No captures generated yet</h2>
+      <p>Run this from the repository root, with an emulator or device running:</p>
+      <code>scripts\\generate_screenshots.bat</code>
+      <p>Then reload this page.</p>
+    </div>`;
+  throw new Error('No captures found in app-marketplaces/screenshots/<lang>/Screenshots/');
+}
+
+langSelect.innerHTML = languages.map((l) => `<option>${l}</option>`).join('');
+const requested = new URLSearchParams(location.search).get('lang');
+langSelect.value = languages.includes(requested) ? requested : languages[0];
 langSelect.onchange = () => {
   history.replaceState(null, '', `?lang=${langSelect.value}`);
   showPreviews(langSelect.value);
 };
 
 document.getElementById('export-lang').onclick = () => exportLanguages([langSelect.value]);
-document.getElementById('export-all').onclick = () => exportLanguages(config.languages);
+document.getElementById('export-all').onclick = () => exportLanguages(languages);
 
 await showPreviews(langSelect.value);
 
@@ -81,6 +99,12 @@ async function run(task) {
 
 function fileName(index) {
   return `${String(index + 1).padStart(2, '0')}.png`;
+}
+
+/** Whether the screenshots test has run for `lang`. */
+async function hasCaptures(lang) {
+  const res = await fetch(`../../screenshots/${lang}/Screenshots/01_dashboard.png`, { method: 'HEAD' });
+  return res.ok;
 }
 
 async function fetchJson(path) {

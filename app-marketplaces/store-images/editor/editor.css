@@ -5,6 +5,7 @@ nav {
   display: flex; align-items: center; gap: 12px;
   padding: 14px 32px; background: #121317; border-bottom: 1px solid #2c2f36;
 }
+nav[hidden] { display: none; }
 nav b { margin-right: auto; font-size: 17px; }
 nav select, nav button, figcaption button {
   font: inherit; color: inherit; background: #2c2f36; border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer;
@@ -21,3 +22,12 @@ figcaption { display: flex; align-items: center; justify-content: space-between;
 /* Previews are the real 1080x1920 slide, scaled down */
 .preview { width: 324px; height: 576px; overflow: hidden; border-radius: 14px; background: #000; }
 .preview .slide { transform: scale(.3); transform-origin: 0 0; }
+
+/* Shown when no language has captures yet */
+.empty {
+  margin: auto; min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; color: #9aa3b5;
+}
+.empty h2 { margin: 0; color: #fff; font-size: 26px; }
+.empty p { margin: 0; }
+.empty code { padding: 12px 20px; border-radius: 8px; background: #2c2f36; color: #fff; font-size: 17px; user-select: all; }
