@@ -28,11 +28,10 @@
 /* ---------- Slide ---------- */
 
 .slide {
-  /* Brand colors. Navy and coin come from the app icon, periwinkle from the
-     primary color of the app UI. */
+  /* Brand colors, taken from the app icon */
   --navy: #0f3375;
+  --navy-deep: #081d47;
   --sky: #cce4fd;
-  --periwinkle: #b3c1ec;
   --coin: #fdca40;
 
   --serif: 'Fraunces', Georgia, serif;
@@ -72,11 +71,29 @@
     linear-gradient(180deg, #e3f0fe, var(--sky));
 }
 
-/* Deeper blue, alternated with `light` so consecutive images look different */
-.slide.periwinkle {
+/* Brand navy, alternated with `light` so consecutive images look different */
+.slide.navy {
   background:
-    radial-gradient(90% 55% at 0% 0%, #d6ddf6, transparent 70%),
-    linear-gradient(180deg, #c9d3f2, var(--periwinkle));
+    radial-gradient(90% 55% at 100% 0%, #1f4a9a, transparent 70%),
+    linear-gradient(170deg, var(--navy), var(--navy-deep));
+  color: #fff;
+
+  /* No marker: yellow text reads better on navy */
+  & h1 em {
+    background: none;
+    color: var(--coin);
+  }
+
+  /* Lighter rim and darker shadow, so the frame doesn't melt into the background */
+  & .phone {
+    box-shadow:
+      0 50px 90px -24px rgb(0 0 0 / 60%),
+      inset 0 0 0 2px #6b7385;
+  }
+
+  & .features span {
+    opacity: 0.75;
+  }
 }
 
 /* ---------- Texts ---------- */
@@ -108,7 +125,7 @@
   letter-spacing: -2.5px;
   text-wrap: balance;
 
-  /* Highlighted words, with a coin-yellow marker stroke */
+  /* Highlighted words, with a coin-yellow marker stroke (yellow text on navy) */
   & em {
     --marker: color-mix(in srgb, var(--coin) 75%, transparent);
 
