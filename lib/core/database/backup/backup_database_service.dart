@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/services/taxonomy/taxonomy_service.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:path/path.dart' as path;
@@ -68,11 +69,13 @@ class BackupDatabaseService {
     ];
 
     for (final transaction in data) {
-      final toAdd = [
+      final category = transaction.category;
+
+      List<String> buildRow(double amount, Account account) => [
         // ID
         transaction.id,
         // Amount
-        transaction.value.toStringAsFixed(2),
+        amount.toStringAsFixed(2),
         // Date
         dateFormatter.format(transaction.date),
         // Title
@@ -80,27 +83,33 @@ class BackupDatabaseService {
         // Notes
         transaction.notes ?? '',
         // Account
-        transaction.account.name,
+        account.name,
         // Currency
-        transaction.account.currencyId,
+        account.currencyId,
         // Category
-        if (transaction.isIncomeOrExpense)
-          (transaction.category!.parentCategory != null
-              ? transaction.category!.parentCategory!.name
-              : transaction.category!.name),
+        if (transaction.isTransfer)
+          'TRANSFER'
+        else if (transaction.isInvestment)
+          'INVESTMENT'
+        else
+          category?.parentCategory?.name ?? category?.name ?? '',
         // Subcategory
-        if (transaction.isTransfer) 'TRANSFER',
-        if (transaction.isInvestment) 'INVESTMENT',
-        (transaction.category?.parentCategory != null
-            ? transaction.category?.name
-            : ''),
+        category?.parentCategory != null ? category!.name : '',
         // Tags
         transaction.tags.map((e) => e.name).join(listSeparator),
       ];
-      processedData.add(toAdd);
 
       if (transaction.isTransfer) {
-        processedData.add(toAdd);
+        // One row per account, signed so each account's rows add up
+        processedData.add(buildRow(-transaction.value, transaction.account));
+        processedData.add(
+          buildRow(
+            transaction.valueInDestiny ?? transaction.value,
+            transaction.receivingAccount!,
+          ),
+        );
+      } else {
+        processedData.add(buildRow(transaction.value, transaction.account));
       }
     }
     final csvData = Csv(fieldDelimiter: fieldSeparator).encode(processedData);
