@@ -15,7 +15,7 @@ cd /d "%~dp0..\app-marketplaces\screenshots\store-images"
 
 if not defined BROWSER set "BROWSER=%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"
 if not exist "%BROWSER%" (
-    echo Browser not found: %BROWSER%
+    echo Browser not found: !BROWSER!
     exit /b 1
 )
 
