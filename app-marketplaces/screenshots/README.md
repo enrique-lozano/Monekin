@@ -2,21 +2,27 @@
 
 This is one of the parts where we most appreciate your help. The presentation in the Google Play is important to achieve a greater number of downloads.
 
-Within this directory, you will see a folder for each supported language in the google play tab. Inside each language folder we have a screenshots directory, where the screenshots used to create the presentation images are found, a powerpoint, with which these screenshots have been laid out, and finally, a "mockups" folder with the slides of this exported powerpoint png format. In more detail, the structure is as follows:
+The store images are generated in two steps:
+
+1. **Captures**: `scripts\generate_screenshots.bat` runs the app with demo data and saves raw captures to `<lang>/Screenshots/` (see `integration_test/README.md`).
+2. **Store images**: `scripts\render_store_images.bat` lays those captures out with the HTML templates in `store-images/` and saves the final 1080x1920 images to `<lang>/StoreImages/`.
 
 ```
+- store-images
+    - slides.html / slides.css / slides.js   (templates, one function per image in slides.js)
+    - copy
+         - en.js                             (texts of each image, one file per language)
+    - fonts
 - lang1
-    - powerpoint (used to create the png images)
-    - mockups
-         - final_image1.png
-         - final_image2.png
-    - screenshots
-         - screenshot_to_insert_in_ppt1.png
-         - screenshot_to_insert_in_ppt2.png
-- lang2
-    - powerpoint (used to create the png images)
-    ......
-    ......
+    - Screenshots                            (raw captures, step 1)
+    - StoreImages                            (final images, step 2)
 ```
 
-If you are going to add or modify any files, please try to keep this pattern as much as possible (it does not matter how the images are named within the directories). You can also add your data exported from the application to the `seeders` folder, so that we can replicate how you have done the screenshots in a simple way
+## Editing the store images
+
+- Open `store-images/slides.html` in a browser to preview every image of every language at once. Reload after any change.
+- Texts live in `store-images/copy/<lang>.js`. Wrap a word in `<em>` to highlight it. To add a language, copy `en.js`, translate it and add its `<script>` tag to `slides.html`.
+- Layout lives in `store-images/slides.js`. Each image is built from a few helpers: `phone()` (a device with a capture), `zoom()` (a magnified crop of a capture) and stickers.
+- The renderer uses Microsoft Edge by default. Set `BROWSER` to the path of another Chromium browser to change it.
+
+The `Mockup.pptx` and `Mockups/` folders are the old, manually made images, kept until the new ones are published.

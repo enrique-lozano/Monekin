@@ -28,3 +28,4 @@ scripts\generate_screenshots.bat all      :: every locale
 - `tests/screenshots/screenshots_config.dart` holds the typed settings (simulated platform, viewport, image names). The simulated platform decides whether the window bar and scrollbars appear.
 - The run uses its own `screenshots.db`, reset on every run, so your real Monekin data is never touched.
 - Review the generated images before committing: demo data, device frame and status bar vary by emulator.
+- Then run `scripts\render_store_images.bat` to turn the captures into the final store images (see `app-marketplaces/screenshots/README.md`).
