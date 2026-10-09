@@ -19,28 +19,20 @@ class _FakeTarget implements FinancialTarget {
   );
 
   @override
-  bool get isActive {
-    final now = DateTime.now();
-    return !now.isBefore(range.start) && now.isBefore(range.end);
-  }
-
-  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 void main() {
   test('computes the pace figures of an active target', () {
-    final now = DateTime.now();
-    // 31-day period with today as its 9th day
-    final start = DateTime(now.year, now.month, now.day - 8);
     final target = _FakeTarget(
-      DateTimeRange(
-        start: start,
-        end: DateTime(start.year, start.month, start.day + 31),
-      ),
+      DateTimeRange(start: DateTime(2026, 10, 1), end: DateTime(2026, 11, 1)),
     );
 
-    final pace = TargetPace.of(target, currentValue: 100)!;
+    final pace = TargetPace.of(
+      target,
+      currentValue: 100,
+      now: DateTime(2026, 10, 9, 15),
+    )!;
 
     expect(pace.remainingDays, 22);
     expect(pace.dailyAmountLeft, closeTo(18.18, 0.01));
@@ -48,15 +40,18 @@ void main() {
     expect(pace.projectedValue, closeTo(344.44, 0.01));
   });
 
-  test('returns null for targets that are not active', () {
-    final now = DateTime.now();
+  test('returns null outside the target period', () {
     final target = _FakeTarget(
-      DateTimeRange(
-        start: DateTime(now.year - 1, 1, 1),
-        end: DateTime(now.year - 1, 2, 1),
-      ),
+      DateTimeRange(start: DateTime(2026, 10, 1), end: DateTime(2026, 11, 1)),
     );
 
-    expect(TargetPace.of(target, currentValue: 100), isNull);
+    expect(
+      TargetPace.of(target, currentValue: 100, now: DateTime(2026, 11, 1)),
+      isNull,
+    );
+    expect(
+      TargetPace.of(target, currentValue: 100, now: DateTime(2026, 9, 30)),
+      isNull,
+    );
   });
 }

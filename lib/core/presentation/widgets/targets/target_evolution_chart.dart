@@ -11,6 +11,7 @@ import 'package:monekin/core/models/goal/goal.dart';
 import 'package:monekin/core/models/goal/goal_type.enum.dart';
 import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
 import 'package:monekin/core/models/mixins/target_pace.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -315,10 +316,12 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
               maxIncluded: false,
               getTitlesWidget: (value, meta) => SideTitleWidget(
                 meta: meta,
-                child: Text(
-                  formatAmount(value),
-                  maxLines: 1,
-                  style: smallAxisTitleStyle(context),
+                child: BlurBasedOnPrivateMode(
+                  child: Text(
+                    formatAmount(value),
+                    maxLines: 1,
+                    style: smallAxisTitleStyle(context),
+                  ),
                 ),
               ),
             ),

@@ -18,16 +18,21 @@ class TargetPace {
   final double currentValue;
   final double targetAmount;
 
-  /// Returns `null` if the target is not active or has no end date.
+  /// Returns `null` if [now] is outside the target period or it has no end
+  /// date.
   static TargetPace? of(
     FinancialTarget target, {
     required double currentValue,
     DateTime? now,
   }) {
     final range = target.periodState.toDateTimeRange;
-    if (range == null || !target.isActive) return null;
-
     now ??= DateTime.now();
+    if (range == null ||
+        now.isBefore(range.start) ||
+        !now.isBefore(range.end)) {
+      return null;
+    }
+
     final totalDays = range.end.dayDifference(range.start);
     if (totalDays <= 0) return null;
 
