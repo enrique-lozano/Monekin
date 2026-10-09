@@ -7,7 +7,8 @@
 //                                         "left top width height", as % of the capture.
 //   <store-icon name="lock">              One of the ICONS below.
 //
-// Position and size elements with inline `style` (left, top, width, rotate...).
+// Position and size elements with inline `style` (left/right, top, width, rotate...).
+// Add `class="center"` to center an element horizontally instead of setting `left`.
 
 const ICONS = {
   lock: '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
@@ -56,10 +57,10 @@ export async function renderSlide(html, { slideId, lang, texts }) {
   return slide;
 }
 
-/** Swaps a custom tag for a `tag` element that keeps its inline style. */
+/** Swaps a custom tag for a `tag` element that keeps its classes and inline style. */
 function replaceWith(el, tag, className) {
   const node = document.createElement(tag);
-  node.className = className;
+  node.className = `${className} ${el.getAttribute('class') ?? ''}`.trim();
   node.setAttribute('style', el.getAttribute('style') ?? '');
   node.append(...el.childNodes);
   el.replaceWith(node);
@@ -81,13 +82,12 @@ function loadCapture(container, lang, shot) {
   });
 }
 
+/** Sizes the capture in % of the zoom box, so the box `width` can be any CSS value. */
 function cropZoom(zoom, img, el) {
   const [left, top, width, height] = el.getAttribute('crop').split(' ').map((v) => parseFloat(v) / 100);
-  const boxWidth = parseFloat(zoom.style.width);
-  const scale = boxWidth / (width * img.naturalWidth);
 
-  zoom.style.height = `${height * img.naturalHeight * scale}px`;
-  img.style.width = `${img.naturalWidth * scale}px`;
-  img.style.left = `${-left * img.naturalWidth * scale}px`;
-  img.style.top = `${-top * img.naturalHeight * scale}px`;
+  zoom.style.aspectRatio = `${width * img.naturalWidth} / ${height * img.naturalHeight}`;
+  img.style.width = `${100 / width}%`;
+  img.style.left = `${(-left / width) * 100}%`;
+  img.style.top = `${(-top / height) * 100}%`;
 }

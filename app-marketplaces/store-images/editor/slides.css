@@ -25,6 +25,8 @@
 }
 .slide * { box-sizing: border-box; margin: 0; padding: 0; }
 .slide > * { position: absolute; }
+/* Centers an element horizontally, whatever its width */
+.slide > .center { left: 50%; translate: -50% 0; }
 
 /* ---------- Backgrounds (<store-slide background="...">) ---------- */
 

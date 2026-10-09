@@ -12,7 +12,10 @@ nav select, nav button, figcaption button {
 }
 nav button:hover, figcaption button:hover { background: #3b3f48; }
 nav button:disabled { opacity: .5; cursor: wait; }
-#status { min-width: 200px; text-align: right; color: #9aa3b5; }
+#status { color: #9aa3b5; }
+nav button[hidden] { display: none; }
+#open-folder { background: #fdca40; color: #0f3375; }
+#open-folder:hover { background: #ffd866; }
 
 main { display: flex; flex-wrap: wrap; gap: 32px; padding: 32px; }
 

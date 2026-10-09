@@ -15,7 +15,7 @@ From the repository root:
 dart app-marketplaces/store-images/editor/server.dart
 ```
 
-Open the printed URL. You'll see every image of the selected language. Use **Export** on an image, or export a whole language at once. Reload the page after editing any file.
+Open the printed URL. You'll see every image of the selected language. Use **Export** on an image, or export a whole language at once, then **Open folder** to see the results in your file explorer. Reload the page after editing any file.
 
 ```
 app-marketplaces/
@@ -31,7 +31,7 @@ app-marketplaces/
 
 ### Editing a slide
 
-Slides are plain HTML plus a few custom tags. Position elements with inline `style`, in pixels of the 1080x1920 canvas:
+Slides are plain HTML plus a few custom tags. Position elements with inline `style`, in pixels of the 1080x1920 canvas. Use `class="center"` to center an element horizontally, and `right` instead of `left` for elements near the right edge, so changing a `width` doesn't require recalculating positions:
 
 ```html
 <store-slide background="light">                       <!-- light, pale or navy -->
@@ -40,10 +40,10 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
   </header>
 
   <!-- Device showing screenshots/<lang>/Screenshots/01_dashboard.png -->
-  <store-phone shot="01_dashboard" style="left: 190px; top: 660px; width: 700px; rotate: -4deg"></store-phone>
+  <store-phone shot="01_dashboard" class="center" style="top: 660px; width: 700px"></store-phone>
 
   <!-- Magnified part of a capture. crop = "left top width height", in % of the capture -->
-  <store-zoom shot="01_dashboard" crop="0 11 77 12" style="left: 50px; top: 980px; width: 600px"></store-zoom>
+  <store-zoom shot="01_dashboard" crop="0 11 77 12" style="right: 50px; top: 980px; width: 600px; rotate: -4deg"></store-zoom>
 </store-slide>
 ```
 

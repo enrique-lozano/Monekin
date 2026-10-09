@@ -8,6 +8,7 @@ const slideHtml = Object.fromEntries(
 const langSelect = document.getElementById('lang');
 const status = document.getElementById('status');
 const main = document.getElementById('slides');
+const openFolder = document.getElementById('open-folder');
 
 // Only languages whose captures exist, as the rest would export empty phones.
 const languages = (
@@ -31,6 +32,7 @@ const requested = new URLSearchParams(location.search).get('lang');
 langSelect.value = languages.includes(requested) ? requested : languages[0];
 langSelect.onchange = () => {
   history.replaceState(null, '', `?lang=${langSelect.value}`);
+  openFolder.hidden = true;
   showPreviews(langSelect.value);
 };
 
@@ -46,7 +48,7 @@ async function showPreviews(lang) {
   for (const [i, id] of config.slides.entries()) {
     const figure = document.createElement('figure');
     figure.innerHTML = `<figcaption>${fileName(i)} · ${id}<button>Export</button></figcaption><div class="preview"></div>`;
-    figure.querySelector('button').onclick = () => run(() => exportSlide(lang, i, texts));
+    figure.querySelector('button').onclick = () => run(() => exportSlide(lang, i, texts), lang);
     main.append(figure);
 
     figure.querySelector('.preview').append(await renderSlide(slideHtml[id], { slideId: id, lang, texts }));
@@ -59,7 +61,7 @@ async function exportLanguages(langs) {
       const texts = await fetchJson(`../texts/${lang}.json`);
       for (const i of config.slides.keys()) await exportSlide(lang, i, texts);
     }
-  });
+  }, langs.length === 1 ? langs[0] : null);
 }
 
 /** Renders the slide at full size off-screen and saves it through server.dart. */
@@ -82,13 +84,23 @@ async function exportSlide(lang, index, texts) {
   }
 }
 
-/** Disables the buttons while `task` runs and reports how it went. */
-async function run(task) {
+/**
+ * Disables the buttons while `task` runs and reports how it went. When the
+ * export is of a single language, offers to open its folder afterwards.
+ */
+async function run(task, lang) {
   const buttons = document.querySelectorAll('button');
   buttons.forEach((b) => (b.disabled = true));
+  openFolder.hidden = true;
   try {
     await task();
-    status.textContent = 'Saved to app-marketplaces/screenshots/<lang>/StoreImages/';
+    status.textContent = lang
+      ? `✓ Saved to screenshots/${lang}/StoreImages/`
+      : '✓ Saved to screenshots/<lang>/StoreImages/';
+    if (lang) {
+      openFolder.hidden = false;
+      openFolder.onclick = () => fetch(`/open/${lang}`, { method: 'POST' });
+    }
   } catch (e) {
     status.textContent = `Error: ${e.message}`;
     throw e;
