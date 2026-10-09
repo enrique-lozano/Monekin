@@ -67,15 +67,18 @@ class DatePeriodState {
             DateTime(currentYear, currentMonth + periodModifier, 1),
             DateTime(currentYear, currentMonth + 1 + periodModifier, 1),
           ),
+          // From Monday at midnight to the next Monday at midnight
           Periodicity.week => (
-            DateTime.now()
-                .subtract(Duration(days: DateTime.now().weekday - 1))
-                .add(Duration(days: 7 * periodModifier)),
-            DateTime.now()
-                .add(
-                  Duration(days: DateTime.daysPerWeek - DateTime.now().weekday),
-                )
-                .add(Duration(days: 7 * periodModifier)),
+            DateTime(
+              currentYear,
+              currentMonth,
+              currentDayOfMonth - currentWeekday + 1 + 7 * periodModifier,
+            ),
+            DateTime(
+              currentYear,
+              currentMonth,
+              currentDayOfMonth - currentWeekday + 8 + 7 * periodModifier,
+            ),
           ),
           Periodicity.day => (
             DateTime(

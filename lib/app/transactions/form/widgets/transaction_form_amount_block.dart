@@ -42,7 +42,7 @@ class TransactionFormAmountBlock extends StatelessWidget {
 
   static Widget insufficientBalanceWarning(BuildContext context) {
     final c = context.read<TransactionFormController>();
-    final from = c.fromAccount;
+    final from = c.balanceWarningAccount;
     if (from == null || c.transactionValue <= 0) {
       return const SizedBox.shrink();
     }

@@ -574,6 +574,10 @@
     "FORM": {
       "from": "Eredeti számla",
       "to": "Célszámla",
+      "label-from": "Honnan",
+      "label-to": "Hová",
+      "custom-amounts": "Egyéni összegek",
+      "difference": "különbség",
       "VALUE-IN-DESTINY": {
         "title": "A rendeltetési helyre átutalt összeg",
         "amount-short": "{{amount}} a célszámlához"
@@ -872,14 +876,6 @@
         "active-indeterminate": "Aktív",
         "success": "Teljesítve",
         "fail": "Költségvetés túllépve"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Naponta {{ dailyAmount }} összeget költhet a hátralévő {{ remainingDays }} napban",
-        "active-overspending": "Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi {{ dailyAmount }} összegre a hátralévő {{ remainingDays }} napban",
-        "active-indeterminate": "Még {{ amount }} elkölthető.",
-        "active-exceeded": "Már túllépte a költségvetési keretet {{ amount }} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében",
-        "success": "Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez",
-        "fail": "Túllépte a költségvetést {{ amount }} összeggel. Próbáljon meg óvatosabb lenni legközelebb!"
       }
     }
   },
@@ -931,14 +927,32 @@
         "active-indeterminate": "Aktív",
         "success": "A cél elérve",
         "fail": "A gól nem sikerült"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Jó úton haladsz a cél felé! Naponta {{ dailyAmount }} összeget kell megtakarítania a fennmaradó {{ remainingDays }} napig",
-        "active-behind-schedule": "Lemaradsz a menetrendről. Naponta {{ dailyAmount }} összeget kell megtakarítania, hogy {{ remainingDays }} napon belül elérje célját",
-        "active-indeterminate": "További {{ amount }} kell a cél eléréséhez.",
-        "success": "Gratulálok! Elérted a célodat.",
-        "fail": "{{ amount }} értékkel eltévesztette a célt."
       }
+    }
+  },
+  "TARGETS": {
+    "left": "maradt",
+    "over": "túllépés",
+    "spent": "elköltve",
+    "saved": "megtakarítva",
+    "CHART": {
+      "spent": "Elköltve",
+      "saved": "Megtakarítva",
+      "projected": "Előrejelzés",
+      "pace": "Ütem"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "naponta, {{n}} nap van hátra",
+        "other": "naponta, {{n}} nap van hátra"
+      },
+      "per-day-short": "naponta",
+      "per-day-help": "Mennyit adhatsz még hozzá naponta az időszak végéig a célösszeg eléréséhez",
+      "above-pace": "ütem felett",
+      "below-pace": "ütem alatt",
+      "pace-help": "A jelenlegi összeg és a mai napig várt összeg különbsége, ha egyenletesen oszlana el a teljes időszakra",
+      "projected": "előrejelzés",
+      "projected-help": "Becsült összeg az időszak végén, ha a jelenlegi ütem folytatódik"
     }
   },
   "DEBTS": {

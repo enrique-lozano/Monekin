@@ -600,6 +600,10 @@
     "FORM": {
       "from": "原始帳戶",
       "to": "目的地帳戶",
+      "label-from": "轉出",
+      "label-to": "轉入",
+      "custom-amounts": "自訂金額",
+      "difference": "差額",
       "VALUE-IN-DESTINY": {
         "title": "目的地轉帳金额",
         "amount-short": "{{amount}}至目標帳户"
@@ -896,14 +900,6 @@
         "active-indeterminate": "積極的",
         "success": "已達成",
         "fail": "超出預算"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "在剩餘的 {{ remainingDays }} 天裡，您每天可以花費{{ dailyAmount }}",
-        "active-overspending": "為了回到正軌，您應該在剩餘的{{ remainingDays }} 天裡將每天的支出限制在 {{ dailyAmount }}",
-        "active-indeterminate": "您還剩 {{ amount }} 可以消費。",
-        "active-exceeded": "您已經超出了預算限額{{ amount }}。如果您找不到此預算的任何收入，您應該在其剩餘期間停止支出",
-        "success": "做得好！該預算已成功完成。繼續創建預算以管理您的支出",
-        "fail": "您超出了預算{{ amount }}。下次請更加小心！"
       }
     }
   },
@@ -955,14 +951,31 @@
         "active-indeterminate": "積極的",
         "success": "目標達成",
         "fail": "目標失敗"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "您正在尋找目標的軌道上！您必須在剩餘的{{ remainingDays }}天內每天節省{{ dailyAmount }}",
-        "active-behind-schedule": "你落後於計劃了。您必須每天節省{{ dailyAmount }}才能在{{ remainingDays }} 天後達到您的目標",
-        "active-indeterminate": "您還需要{{ amount }}才能實現目標。",
-        "success": "恭喜！你達到了你的目標。",
-        "fail": "您與目標相差了{{ amount }}。"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "剩餘",
+    "over": "超出",
+    "spent": "已花費",
+    "saved": "已儲蓄",
+    "CHART": {
+      "spent": "已花費",
+      "saved": "已儲蓄",
+      "projected": "預測",
+      "pace": "進度"
+    },
+    "STATS": {
+      "per-day": {
+        "other": "每天，剩餘 {{n}} 天"
+      },
+      "per-day-short": "每天",
+      "per-day-help": "為達到目標金額，在週期結束前每天還可以增加的金額",
+      "above-pace": "高於進度",
+      "below-pace": "低於進度",
+      "pace-help": "目前金額與按整個週期平均分配時截至今天的預期金額之間的差額",
+      "projected": "預測",
+      "projected-help": "如果維持目前進度，週期結束時的估計金額"
     }
   },
   "DEBTS": {

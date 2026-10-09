@@ -308,6 +308,7 @@ class _TimeSeriesEvolutionChartState<T>
                 : spots,
             isCurved: true,
             curveSmoothness: 0.05,
+            preventCurveOverShooting: true,
             color: isNotEnoughData
                 ? Theme.of(context).colorScheme.outlineVariant
                 : lineColor,

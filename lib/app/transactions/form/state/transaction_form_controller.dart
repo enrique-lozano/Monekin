@@ -122,6 +122,11 @@ class TransactionFormController extends ChangeNotifier {
   /// When true, money flows from the bottom leg to the top leg (transfer).
   bool _dualLegFlowReversed = false;
 
+  /// Transfer: when false both legs stay linked through the exchange rate.
+  bool _customTransferAmounts = false;
+
+  bool get customTransferAmounts => _customTransferAmounts;
+
   TextEditingController get amountTextController => _amountTextController;
 
   bool get isEditMode => _transactionToEdit != null;
@@ -422,23 +427,30 @@ class TransactionFormController extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  /// Net ledger effect of the draft on [fromAccount] (matches how balances aggregate rows).
+  /// Account whose balance the draft can reduce (the transfer source, honoring the flow direction).
+  Account? get balanceWarningAccount =>
+      transactionType.isTransfer ? effectiveTransferFromAccount : fromAccount;
+
+  /// Net ledger effect of the draft on [balanceWarningAccount] (matches how balances aggregate rows).
   double draftEffectOnFromAccountLedger() {
     if (transactionType == TransactionType.expense) {
       return transactionValue * -1;
     }
     if (transactionType == TransactionType.transfer) {
-      if (_dualLegFlowReversed) return transactionValue.abs();
       return -transactionValue.abs();
     }
     return transactionValue;
   }
 
-  /// Ledger effect of the row being edited on [fromAccount], if it matches the edited row's account.
+  /// Ledger effect of the row being edited on [balanceWarningAccount], if it matches the edited row's account.
   double? get oldEffectOnFromAccountLedgerForEdit {
     final edit = _transactionToEdit;
-    final from = fromAccount;
+    final from = balanceWarningAccount;
     if (edit == null || from == null) return null;
+    if (edit.type == TransactionType.transfer &&
+        edit.receivingAccount?.id == from.id) {
+      return edit.valueInDestiny ?? edit.value;
+    }
     if (edit.account.id != from.id) return null;
     if (edit.type == TransactionType.transfer) {
       return -edit.value;
@@ -767,6 +779,7 @@ class TransactionFormController extends ChangeNotifier {
 
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
+    _customTransferAmounts = transaction.valueInDestiny != null;
 
     syncAmountFieldFromTransactionValue();
   }
@@ -889,6 +902,24 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
+  /// Turning it off re-links the destination to the source amount.
+  void setCustomTransferAmounts(bool v) {
+    if (_customTransferAmounts == v) return;
+    _customTransferAmounts = v;
+    if (!v) valueInDestinyController.clear();
+    _safeNotify();
+  }
+
+  /// Linked mode: sets the destination amount by deriving the source from [rate].
+  void applyTransferDestinationLinked(double amount, {required double rate}) {
+    final decimals = effectiveTransferFromAccount?.currency.decimalPlaces ?? 2;
+    final source = rate > 0 ? amount.abs() / rate : amount.abs();
+    transactionValue = double.parse(source.toStringAsFixed(decimals));
+    syncAmountFieldFromTransactionValue();
+    valueInDestinyController.clear();
+    _safeNotify();
+  }
+
   /// Sets the source debit to [inverseConvertedSource] (already in the origin
   /// account currency) and clears an explicit destiny amount so the pair is
   /// consistent again.
@@ -916,9 +947,12 @@ class TransactionFormController extends ChangeNotifier {
     );
   }
 
+  /// When [linkedRate] is set the entered amount drives the source leg
+  /// instead of overriding the destination.
   void openTransferDestinationAmountSelector(
     BuildContext context, {
     required double defaultDestinationAmount,
+    double? linkedRate,
   }) {
     final tr = Translations.of(context);
     final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
@@ -930,10 +964,14 @@ class TransactionFormController extends ChangeNotifier {
         enableSignToggleButton: false,
         currency: effectiveTransferToAccount?.currency,
         onSubmit: (amount) {
-          applyTransferDestinationAmount(
-            amount,
-            defaultDestinationAmount: defaultDestinationAmount,
-          );
+          if (linkedRate != null) {
+            applyTransferDestinationLinked(amount, rate: linkedRate);
+          } else {
+            applyTransferDestinationAmount(
+              amount,
+              defaultDestinationAmount: defaultDestinationAmount,
+            );
+          }
           RouteUtils.popRoute();
         },
       ),
