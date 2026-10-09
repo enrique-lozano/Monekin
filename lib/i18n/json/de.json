@@ -574,6 +574,10 @@
     "FORM": {
       "from": "Origin-Konto",
       "to": "Zielkonto",
+      "label-from": "Von",
+      "label-to": "Nach",
+      "custom-amounts": "Individuelle Beträge",
+      "difference": "Differenz",
       "VALUE-IN-DESTINY": {
         "title": "Am Zielkonto überwiesener Betrag",
         "amount-short": "{{amount}} zum Zielkonto"

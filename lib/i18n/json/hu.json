@@ -574,6 +574,10 @@
     "FORM": {
       "from": "Eredeti számla",
       "to": "Célszámla",
+      "label-from": "Honnan",
+      "label-to": "Hová",
+      "custom-amounts": "Egyéni összegek",
+      "difference": "különbség",
       "VALUE-IN-DESTINY": {
         "title": "A rendeltetési helyre átutalt összeg",
         "amount-short": "{{amount}} a célszámlához"

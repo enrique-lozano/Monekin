@@ -574,6 +574,10 @@
     "FORM": {
       "from": "Kaynak hesap",
       "to": "Hedef hesap",
+      "label-from": "Nereden",
+      "label-to": "Nereye",
+      "custom-amounts": "Özel tutarlar",
+      "difference": "fark",
       "VALUE-IN-DESTINY": {
         "title": "Hedefte aktarılan miktar",
         "amount-short": "Hedef hesaba {{amount}}"

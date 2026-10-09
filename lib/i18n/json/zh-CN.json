@@ -574,6 +574,10 @@
     "FORM": {
       "from": "转出账户",
       "to": "转入账户",
+      "label-from": "转出",
+      "label-to": "转入",
+      "custom-amounts": "自定义金额",
+      "difference": "差额",
       "VALUE-IN-DESTINY": {
         "title": "转账数额",
         "amount-short": "{{amount}} 至目标账户"

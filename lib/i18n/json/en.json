@@ -600,6 +600,10 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
+      "label-from": "From",
+      "label-to": "To",
+      "custom-amounts": "Custom amounts",
+      "difference": "difference",
       "VALUE-IN-DESTINY": {
         "title": "Amount transferred at destination",
         "amount-short": "{{amount}} to target account"

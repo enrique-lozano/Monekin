@@ -587,6 +587,10 @@
     "FORM": {
       "from": "Cuenta origen",
       "to": "Cuenta destino",
+      "label-from": "Desde",
+      "label-to": "Hacia",
+      "custom-amounts": "Importes personalizados",
+      "difference": "de diferencia",
       "VALUE-IN-DESTINY": {
         "title": "Cantidad transferida en destino",
         "amount-short": "{{amount}} a cuenta de destino"
