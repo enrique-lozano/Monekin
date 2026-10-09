@@ -197,6 +197,7 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
     return LineChartBarData(
       isCurved: true,
       curveSmoothness: 0.1,
+      preventCurveOverShooting: true,
       color: color,
       barWidth: 3,
       isStrokeCapRound: true,
