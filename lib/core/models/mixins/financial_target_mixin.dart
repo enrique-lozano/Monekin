@@ -12,6 +12,10 @@ abstract interface class FinancialTarget {
   String get name;
   TransactionFilterSet get trFilters;
   double get targetAmount;
+
+  /// Amount the target starts with, before any transaction is counted
+  double get initialValue;
+
   FinancialTargetDirection get targetDirection;
   DatePeriodState get periodState;
 
@@ -40,6 +44,9 @@ abstract interface class FinancialTarget {
 ///
 /// Budgets are always of type Expense → -balance <= target
 mixin FinancialTargetMixin implements FinancialTarget {
+  @override
+  double get initialValue => 0;
+
   /// Get the amount of money relative to this target for a given date
   Stream<double> getValueOnDate(DateTime? date) {
     date ??= DateTime.now();
@@ -50,6 +57,8 @@ mixin FinancialTargetMixin implements FinancialTarget {
           if (targetDirection.isInverted) {
             res = res * -1;
           }
+
+          res += initialValue;
 
           if (res <= 0) {
             return 0.0;

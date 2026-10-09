@@ -204,7 +204,10 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
     final lines = <LineChartBarData>[
       if (hasRange)
         LineChartBarData(
-          spots: [const FlSpot(0, 0), FlSpot(total, target.targetAmount)],
+          spots: [
+            FlSpot(0, target.initialValue),
+            FlSpot(total, target.targetAmount),
+          ],
           color: targetColor.withValues(alpha: 0.75),
           barWidth: 1.5,
           dashArray: _paceDash,

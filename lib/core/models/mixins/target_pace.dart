@@ -11,12 +11,17 @@ class TargetPace {
     required this.elapsedDays,
     required this.currentValue,
     required this.targetAmount,
+    required this.initialValue,
   });
 
   final int totalDays;
   final int elapsedDays;
   final double currentValue;
   final double targetAmount;
+
+  /// Starting amount of the target. Pace and projection only apply to the
+  /// progress made on top of it.
+  final double initialValue;
 
   /// Returns `null` if [now] is outside the target period or it has no end
   /// date.
@@ -41,16 +46,19 @@ class TargetPace {
       elapsedDays: (now.dayDifference(range.start) + 1).clamp(1, totalDays),
       currentValue: currentValue,
       targetAmount: target.targetAmount,
+      initialValue: target.initialValue,
     );
   }
 
   int get remainingDays => totalDays - elapsedDays;
 
   /// Value expected by today if the target were spread evenly.
-  double get expectedValue => targetAmount * elapsedDays / totalDays;
+  double get expectedValue =>
+      initialValue + (targetAmount - initialValue) * elapsedDays / totalDays;
 
   /// Value at the end of the period if the current pace continues.
-  double get projectedValue => currentValue * totalDays / elapsedDays;
+  double get projectedValue =>
+      initialValue + (currentValue - initialValue) * totalDays / elapsedDays;
 
   double get amountLeft => targetAmount - currentValue;
 
