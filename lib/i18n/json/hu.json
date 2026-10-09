@@ -946,6 +946,7 @@
         "one": "naponta, {{n}} nap van hátra",
         "other": "naponta, {{n}} nap van hátra"
       },
+      "per-day-short": "naponta",
       "per-day-help": "Mennyit adhatsz még hozzá naponta az időszak végéig a célösszeg eléréséhez",
       "above-pace": "ütem felett",
       "below-pace": "ütem alatt",

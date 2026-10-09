@@ -969,6 +969,7 @@
       "per-day": {
         "other": "每天，剩餘 {{n}} 天"
       },
+      "per-day-short": "每天",
       "per-day-help": "為達到目標金額，在週期結束前每天還可以增加的金額",
       "above-pace": "高於進度",
       "below-pace": "低於進度",

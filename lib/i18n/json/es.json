@@ -957,6 +957,7 @@
         "one": "al día, queda {{n}} día",
         "other": "al día, quedan {{n}} días"
       },
+      "per-day-short": "al día",
       "per-day-help": "Cuánto puedes añadir cada día hasta el final del periodo para alcanzar la cantidad objetivo",
       "above-pace": "sobre el ritmo",
       "below-pace": "bajo el ritmo",

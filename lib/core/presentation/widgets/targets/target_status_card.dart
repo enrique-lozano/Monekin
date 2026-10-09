@@ -122,6 +122,7 @@ class FinancialTargetStatusCard extends StatelessWidget {
           children: [
             Row(
               spacing: 8,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: FittedBox(
@@ -170,8 +171,10 @@ class FinancialTargetStatusCard extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
             Row(
               spacing: 8,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: DefaultTextStyle.merge(
@@ -328,34 +331,39 @@ class _TargetPaceStats extends StatelessWidget {
         ? pace.projectedValue <= target.targetAmount
         : pace.projectedValue >= target.targetAmount;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: 12,
-      children: [
-        _TargetStat(
-          icon: Icons.calendar_today_rounded,
-          amount: pace.dailyAmountLeft,
-          showDecimals: true,
-          label: t.per_day(n: pace.remainingDays),
-          helpText: t.per_day_help,
-        ),
-        _TargetStat(
-          icon: paceDiff > 0
-              ? Icons.trending_up_rounded
-              : Icons.trending_down_rounded,
-          color: isPaceGood ? appColors.success : Colors.orange,
-          amount: paceDiff.abs(),
-          label: paceDiff > 0 ? t.above_pace : t.below_pace,
-          helpText: t.pace_help,
-        ),
-        _TargetStat(
-          icon: Icons.show_chart_rounded,
-          color: isProjectionGood ? null : Colors.orange,
-          amount: pace.projectedValue,
-          label: t.projected,
-          helpText: t.projected_help,
-        ),
-      ],
+    const divider = VerticalDivider(width: 1);
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _TargetStat(
+            icon: Icons.calendar_today_rounded,
+            amount: pace.dailyAmountLeft,
+            showDecimals: true,
+            label: t.per_day_short,
+            helpText: '${t.per_day_help}\n${t.per_day(n: pace.remainingDays)}',
+          ),
+          divider,
+          _TargetStat(
+            icon: paceDiff > 0
+                ? Icons.trending_up_rounded
+                : Icons.trending_down_rounded,
+            color: isPaceGood ? appColors.success : Colors.orange,
+            amount: paceDiff.abs(),
+            label: paceDiff > 0 ? t.above_pace : t.below_pace,
+            helpText: t.pace_help,
+          ),
+          divider,
+          _TargetStat(
+            icon: Icons.show_chart_rounded,
+            color: isProjectionGood ? null : Colors.orange,
+            amount: pace.projectedValue,
+            label: t.projected,
+            helpText: t.projected_help,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -382,48 +390,59 @@ class _TargetStat extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final hintColor = AppColors.of(context).textHint;
 
+    final accent = color ?? hintColor;
+
     return Expanded(
-      child: Tooltip(
-        message: helpText,
-        triggerMode: TooltipTriggerMode.tap,
-        constraints: const BoxConstraints(maxWidth: 250),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 4,
-          children: [
-            Icon(icon, size: 20, color: color ?? hintColor),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: CurrencyDisplayer(
-                amountToConvert: amount,
-                showDecimals: showDecimals,
-                integerStyle: textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
+      child: Column(
+        children: [
+          DecoratedBox(
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(6),
+              child: Icon(icon, size: 18, color: accent),
+            ),
+          ),
+          const SizedBox(height: 10),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: CurrencyDisplayer(
+              amountToConvert: amount,
+              showDecimals: showDecimals,
+              integerStyle: textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: color,
               ),
             ),
-            Text.rich(
-              TextSpan(
-                text: '$label ',
-                children: [
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
+          ),
+          const SizedBox(height: 2),
+          Text.rich(
+            TextSpan(
+              text: '$label ',
+              children: [
+                WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Tooltip(
+                    message: helpText,
+                    triggerMode: TooltipTriggerMode.tap,
+                    constraints: const BoxConstraints(maxWidth: 250),
                     child: Icon(
                       Icons.info_outline_rounded,
                       size: 13,
                       color: hintColor,
                     ),
                   ),
-                ],
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: textTheme.labelMedium!.copyWith(color: hintColor),
+                ),
+              ],
             ),
-          ],
-        ),
+            maxLines: 2,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: textTheme.labelMedium!.copyWith(color: hintColor),
+          ),
+        ],
       ),
     );
   }

@@ -946,6 +946,7 @@
         "one": "günlük, {{n}} gün kaldı",
         "other": "günlük, {{n}} gün kaldı"
       },
+      "per-day-short": "günlük",
       "per-day-help": "Hedef tutara ulaşmak için dönem sonuna kadar her gün daha ne kadar ekleyebileceğiniz",
       "above-pace": "tempo üstünde",
       "below-pace": "tempo altında",

@@ -946,6 +946,7 @@
         "one": "al giorno, {{n}} giorno rimasto",
         "other": "al giorno, {{n}} giorni rimasti"
       },
+      "per-day-short": "al giorno",
       "per-day-help": "Quanto puoi ancora aggiungere ogni giorno fino alla fine del periodo per raggiungere l'importo obiettivo",
       "above-pace": "sopra il ritmo",
       "below-pace": "sotto il ritmo",

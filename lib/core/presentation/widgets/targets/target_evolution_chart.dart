@@ -104,7 +104,10 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 12,
           children: [
-            _buildLegend(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: _buildLegend(context),
+            ),
             SizedBox(
               height: 200,
               child: snapshot.hasData
@@ -222,10 +225,9 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
           spots: data.actual,
           color: actualColor,
           barWidth: 2.5,
-          isStepLineChart: true,
-          lineChartStepData: const LineChartStepData(
-            stepDirection: LineChartStepData.stepDirectionForward,
-          ),
+          isCurved: true,
+          curveSmoothness: 0.1,
+          preventCurveOverShooting: true,
           dotData: FlDotData(
             checkToShowDot: (spot, _) => spot.x == todayX,
             getDotPainter: (spot, _, _, _) => FlDotCirclePainter(
@@ -332,7 +334,7 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
         ),
         lineTouchData: LineTouchData(
           enabled: actualBarIndex >= 0,
-          getTouchedSpotIndicator: (bar, indexes) => bar.isStepLineChart
+          getTouchedSpotIndicator: (bar, indexes) => bar.dashArray == null
               ? defaultTouchedIndicators(bar, indexes)
               : [for (final _ in indexes) null],
           touchTooltipData: LineTouchTooltipData(

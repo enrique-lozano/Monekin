@@ -946,6 +946,7 @@
         "one": "par jour, {{n}} jour restant",
         "other": "par jour, {{n}} jours restants"
       },
+      "per-day-short": "par jour",
       "per-day-help": "Combien vous pouvez encore ajouter chaque jour jusqu'à la fin de la période pour atteindre le montant cible",
       "above-pace": "au-dessus du rythme",
       "below-pace": "en dessous du rythme",

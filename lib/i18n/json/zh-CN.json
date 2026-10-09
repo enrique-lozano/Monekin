@@ -945,6 +945,7 @@
       "per-day": {
         "other": "每天，剩余 {{n}} 天"
       },
+      "per-day-short": "每天",
       "per-day-help": "为达到目标金额，在周期结束前每天还可以增加的金额",
       "above-pace": "高于进度",
       "below-pace": "低于进度",

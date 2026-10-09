@@ -970,6 +970,7 @@
         "one": "per day, {{n}} day left",
         "other": "per day, {{n}} days left"
       },
+      "per-day-short": "per day",
       "per-day-help": "How much you can still add each day until the end of the period to reach the target amount",
       "above-pace": "above pace",
       "below-pace": "below pace",

@@ -946,6 +946,7 @@
         "one": "pro Tag, noch {{n}} Tag",
         "other": "pro Tag, noch {{n}} Tage"
       },
+      "per-day-short": "pro Tag",
       "per-day-help": "Wie viel du bis zum Ende des Zeitraums täglich noch hinzufügen kannst, um den Zielbetrag zu erreichen",
       "above-pace": "über dem Tempo",
       "below-pace": "unter dem Tempo",
