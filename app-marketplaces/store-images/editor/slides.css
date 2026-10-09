@@ -5,53 +5,62 @@
   src: url(fonts/Fraunces.ttf);
   font-weight: 100 900;
 }
+
 @font-face {
   font-family: 'Fraunces';
   src: url(fonts/Fraunces-Italic.ttf);
   font-weight: 100 900;
   font-style: italic;
 }
+
 @font-face {
   font-family: 'Nunito';
   src: url(../../../assets/fonts/Nunito/Nunito-SemiBold.ttf);
   font-weight: 600;
 }
+
 @font-face {
   font-family: 'Nunito';
   src: url(../../../assets/fonts/Nunito/Nunito-Bold.ttf);
   font-weight: 700;
 }
 
+/* ---------- Slide ---------- */
+
 .slide {
-  /* Brand colors, taken from the app icon */
+  /* Brand colors. Navy and coin come from the app icon, periwinkle from the
+     primary color of the app UI. */
   --navy: #0f3375;
-  --navy-deep: #081d47;
   --sky: #cce4fd;
+  --periwinkle: #b3c1ec;
   --coin: #fdca40;
 
   --serif: 'Fraunces', Georgia, serif;
   --sans: 'Nunito', system-ui, sans-serif;
-  --shadow: 0 50px 90px -24px rgba(8, 29, 71, 0.45);
+  --shadow: 0 50px 90px -24px color-mix(in srgb, var(--navy) 45%, transparent);
 
+  position: relative;
   width: 1080px;
   height: 1920px;
-  position: relative;
   overflow: hidden;
   color: var(--navy);
   font-family: var(--sans);
-}
-.slide * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-.slide > * {
-  position: absolute;
-}
-/* Centers an element horizontally, whatever its width */
-.slide > .center {
-  left: 50%;
-  translate: -50% 0;
+
+  & * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  & > * {
+    position: absolute;
+  }
+
+  /* Centers an element horizontally, whatever its width */
+  & > .center {
+    left: 50%;
+    translate: -50% 0;
+  }
 }
 
 /* ---------- Backgrounds (<store-slide background="...">) ---------- */
@@ -62,93 +71,81 @@
     radial-gradient(100% 60% at 100% 100%, #b5d6fb, transparent 70%),
     linear-gradient(180deg, #e3f0fe, var(--sky));
 }
-/* Almost white, to rest the eye between colored slides */
-.slide.pale {
+
+/* Deeper blue, alternated with `light` so consecutive images look different */
+.slide.periwinkle {
   background:
-    radial-gradient(90% 55% at 0% 0%, #fff, transparent 70%),
-    radial-gradient(80% 50% at 100% 90%, #dcebfd, transparent 70%), #f3f8fe;
-}
-/* Brand navy, to make a slide stand out */
-.slide.navy {
-  background:
-    radial-gradient(90% 55% at 100% 0%, #1f4a9a, transparent 70%),
-    linear-gradient(170deg, var(--navy), var(--navy-deep));
-  color: #fff;
+    radial-gradient(90% 55% at 0% 0%, #d6ddf6, transparent 70%),
+    linear-gradient(180deg, #c9d3f2, var(--periwinkle));
 }
 
 /* ---------- Texts ---------- */
 
 .slide header {
-  left: 80px;
-  right: 80px;
+  inset-inline: 80px;
   text-align: center;
+
+  &.left {
+    text-align: left;
+  }
+
+  & p {
+    margin-top: 28px;
+    font: 700 40px/1.3 var(--sans);
+    opacity: 0.7;
+    text-wrap: balance;
+  }
+
+  & p.kicker {
+    margin: 0 0 18px;
+    font: italic 600 48px var(--serif);
+    opacity: 0.6;
+  }
 }
-.slide header.left {
-  text-align: left;
-}
+
 .slide h1 {
   font: 700 112px/1.02 var(--serif);
   letter-spacing: -2.5px;
   text-wrap: balance;
-}
-/* Highlighted words: a coin-yellow marker stroke, or plain yellow on navy */
-.slide h1 em {
-  font-style: italic;
-  font-weight: 600;
-  background: linear-gradient(
-    transparent 60%,
-    rgba(253, 202, 64, 0.75) 60%,
-    rgba(253, 202, 64, 0.75) 90%,
-    transparent 90%
-  );
-  padding: 0 0.08em;
-  box-decoration-break: clone;
-}
-.slide.navy h1 em {
-  background: none;
-  color: var(--coin);
-}
-.slide header p {
-  font: 700 40px/1.3 var(--sans);
-  margin-top: 28px;
-  opacity: 0.7;
-  text-wrap: balance;
-}
-.slide header p.kicker {
-  font: italic 600 48px var(--serif);
-  opacity: 0.6;
-  margin: 0 0 18px;
+
+  /* Highlighted words, with a coin-yellow marker stroke */
+  & em {
+    --marker: color-mix(in srgb, var(--coin) 75%, transparent);
+
+    padding-inline: 0.08em;
+    font-style: italic;
+    font-weight: 600;
+    background: linear-gradient(transparent 60%, var(--marker) 60% 90%, transparent 90%);
+    box-decoration-break: clone;
+  }
 }
 
 /* ---------- <store-phone> ---------- */
 
 /* Slim bezel and no camera: captures have no status bar, so a notch would cover app content */
 .phone {
-  border-radius: 7.6% / 3.6%;
   padding: 1.3%;
+  border-radius: 7.6% / 3.6%;
   background: #16181d;
   box-shadow:
     var(--shadow),
     inset 0 0 0 2px #3a3e47;
-}
-/* Lighter rim so the frame doesn't melt into the navy background */
-.slide.navy .phone {
-  box-shadow:
-    0 50px 90px -24px rgba(0, 0, 0, 0.6),
-    inset 0 0 0 2px #6b7385;
-}
-/* The capture sets the screen height, so it's never cropped */
-.phone .screen {
-  border-radius: 6.4% / 3%;
-  overflow: hidden;
-  background: #fff;
-}
-.phone .screen img {
-  width: 100%;
-  display: block;
-}
-.phone .missing {
-  aspect-ratio: 1080 / 2208;
+
+  /* The capture sets the screen height, so it's never cropped */
+  & .screen {
+    overflow: hidden;
+    border-radius: 6.4% / 3%;
+    background: #fff;
+  }
+
+  & .screen img {
+    display: block;
+    width: 100%;
+  }
+
+  & .missing {
+    aspect-ratio: 1080 / 2208;
+  }
 }
 
 /* ---------- <store-zoom> ---------- */
@@ -161,30 +158,25 @@
   box-shadow:
     var(--shadow),
     0 0 0 10px #fff;
-}
-.zoom img {
-  position: absolute;
-  display: block;
+
+  & img {
+    position: absolute;
+    display: block;
+  }
 }
 
 /* Shown instead of a capture that doesn't exist yet */
 .missing {
+  display: grid;
+  place-items: center;
   width: 100%;
   height: 100%;
   min-height: 120px;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  background: repeating-linear-gradient(
-    45deg,
-    #fde8e8,
-    #fde8e8 20px,
-    #fff 20px,
-    #fff 40px
-  );
+  padding: 20px;
+  background: repeating-linear-gradient(45deg, #fde8e8 0 20px, #fff 20px 40px);
   color: #b3261e;
   font: 700 30px var(--sans);
-  padding: 20px;
+  text-align: center;
 }
 
 /* ---------- Decorations ---------- */
@@ -200,20 +192,17 @@
   color: var(--navy);
   font: 700 40px var(--sans);
   white-space: nowrap;
-  box-shadow: 0 18px 40px -12px rgba(8, 29, 71, 0.35);
-}
-.sticker.dark {
-  background: var(--navy);
-  color: #fff;
-}
-.sticker.yellow {
-  background: var(--coin);
-  color: var(--navy);
-}
-.sticker svg {
-  width: 40px;
-  height: 40px;
-  flex: none;
+  box-shadow: 0 18px 40px -12px color-mix(in srgb, var(--navy) 35%, transparent);
+
+  &.yellow {
+    background: var(--coin);
+  }
+
+  & svg {
+    flex: none;
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* Yellow circles like the coins of the app icon. Set the size with `width`. */
@@ -224,32 +213,32 @@
 }
 
 .features {
-  width: 470px;
-  list-style: none;
   display: flex;
   flex-direction: column;
   gap: 40px;
-}
+  width: 470px;
+  list-style: none;
 
-.features svg {
-  width: 92px;
-  height: 92px;
-  padding: 21px;
-  margin-bottom: 18px;
-  border-radius: 28px;
-  background: var(--sky);
-  color: var(--navy);
-}
-.features b {
-  display: block;
-  font: 700 46px var(--sans);
-}
-.features span {
-  display: block;
-  font: 600 34px/1.25 var(--sans);
-  opacity: 0.65;
-  margin-top: 4px;
-}
-.slide.navy .features span {
-  opacity: 0.75;
+  & svg {
+    width: 92px;
+    height: 92px;
+    padding: 21px;
+    margin-bottom: 18px;
+    border-radius: 28px;
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--navy) 30%, transparent);
+  }
+
+  & b {
+    display: block;
+    font: 700 46px var(--sans);
+  }
+
+  & span {
+    display: block;
+    margin-top: 4px;
+    font: 600 34px/1.25 var(--sans);
+    opacity: 0.65;
+  }
 }

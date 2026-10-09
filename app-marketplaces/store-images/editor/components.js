@@ -1,6 +1,6 @@
 // Turns the custom tags used in slides/*.html into plain HTML:
 //
-//   <store-slide background="sky">        Slide canvas. Backgrounds live in slides.css.
+//   <store-slide background="light">      Slide canvas. Backgrounds live in slides.css.
 //   <store-text key="title">              Text of texts/<lang>.json → "<slide id>" → key.
 //   <store-phone shot="01_dashboard">     Device showing <lang>/Screenshots/01_dashboard.png.
 //   <store-zoom shot="..." crop="...">    Magnified part of a capture. `crop` is
