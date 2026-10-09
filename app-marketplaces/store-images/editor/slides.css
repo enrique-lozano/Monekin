@@ -1,9 +1,26 @@
 /* Look of the store images. Every slide is a 1080x1920 canvas (Google Play portrait). */
 
-@font-face { font-family: 'Fraunces'; src: url(fonts/Fraunces.ttf); font-weight: 100 900; }
-@font-face { font-family: 'Fraunces'; src: url(fonts/Fraunces-Italic.ttf); font-weight: 100 900; font-style: italic; }
-@font-face { font-family: 'Nunito'; src: url(../../../assets/fonts/Nunito/Nunito-SemiBold.ttf); font-weight: 600; }
-@font-face { font-family: 'Nunito'; src: url(../../../assets/fonts/Nunito/Nunito-Bold.ttf); font-weight: 700; }
+@font-face {
+  font-family: 'Fraunces';
+  src: url(fonts/Fraunces.ttf);
+  font-weight: 100 900;
+}
+@font-face {
+  font-family: 'Fraunces';
+  src: url(fonts/Fraunces-Italic.ttf);
+  font-weight: 100 900;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url(../../../assets/fonts/Nunito/Nunito-SemiBold.ttf);
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url(../../../assets/fonts/Nunito/Nunito-Bold.ttf);
+  font-weight: 700;
+}
 
 .slide {
   /* Brand colors, taken from the app icon */
@@ -14,7 +31,7 @@
 
   --serif: 'Fraunces', Georgia, serif;
   --sans: 'Nunito', system-ui, sans-serif;
-  --shadow: 0 50px 90px -24px rgba(8, 29, 71, .45);
+  --shadow: 0 50px 90px -24px rgba(8, 29, 71, 0.45);
 
   width: 1080px;
   height: 1920px;
@@ -23,46 +40,85 @@
   color: var(--navy);
   font-family: var(--sans);
 }
-.slide * { box-sizing: border-box; margin: 0; padding: 0; }
-.slide > * { position: absolute; }
+.slide * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.slide > * {
+  position: absolute;
+}
 /* Centers an element horizontally, whatever its width */
-.slide > .center { left: 50%; translate: -50% 0; }
+.slide > .center {
+  left: 50%;
+  translate: -50% 0;
+}
 
 /* ---------- Backgrounds (<store-slide background="...">) ---------- */
 
 /* Brand light blue, the main background */
 .slide.light {
-  background: radial-gradient(100% 60% at 100% 100%, #b5d6fb, transparent 70%),
-              linear-gradient(180deg, #e3f0fe, var(--sky));
+  background:
+    radial-gradient(100% 60% at 100% 100%, #b5d6fb, transparent 70%),
+    linear-gradient(180deg, #e3f0fe, var(--sky));
 }
 /* Almost white, to rest the eye between colored slides */
 .slide.pale {
-  background: radial-gradient(90% 55% at 0% 0%, #fff, transparent 70%),
-              radial-gradient(80% 50% at 100% 90%, #dcebfd, transparent 70%),
-              #f3f8fe;
+  background:
+    radial-gradient(90% 55% at 0% 0%, #fff, transparent 70%),
+    radial-gradient(80% 50% at 100% 90%, #dcebfd, transparent 70%), #f3f8fe;
 }
 /* Brand navy, to make a slide stand out */
 .slide.navy {
-  background: radial-gradient(90% 55% at 100% 0%, #1f4a9a, transparent 70%),
-              linear-gradient(170deg, var(--navy), var(--navy-deep));
+  background:
+    radial-gradient(90% 55% at 100% 0%, #1f4a9a, transparent 70%),
+    linear-gradient(170deg, var(--navy), var(--navy-deep));
   color: #fff;
 }
 
 /* ---------- Texts ---------- */
 
-.slide header { left: 80px; right: 80px; text-align: center; }
-.slide header.left { text-align: left; }
-.slide h1 { font: 700 112px/1.02 var(--serif); letter-spacing: -2.5px; text-wrap: balance; }
+.slide header {
+  left: 80px;
+  right: 80px;
+  text-align: center;
+}
+.slide header.left {
+  text-align: left;
+}
+.slide h1 {
+  font: 700 112px/1.02 var(--serif);
+  letter-spacing: -2.5px;
+  text-wrap: balance;
+}
 /* Highlighted words: a coin-yellow marker stroke, or plain yellow on navy */
 .slide h1 em {
-  font-style: italic; font-weight: 600;
-  background: linear-gradient(transparent 60%, rgba(253, 202, 64, .75) 60%, rgba(253, 202, 64, .75) 90%, transparent 90%);
-  padding: 0 .08em;
+  font-style: italic;
+  font-weight: 600;
+  background: linear-gradient(
+    transparent 60%,
+    rgba(253, 202, 64, 0.75) 60%,
+    rgba(253, 202, 64, 0.75) 90%,
+    transparent 90%
+  );
+  padding: 0 0.08em;
   box-decoration-break: clone;
 }
-.slide.navy h1 em { background: none; color: var(--coin); }
-.slide header p { font: 700 40px/1.3 var(--sans); margin-top: 28px; opacity: .7; text-wrap: balance; }
-.slide header p.kicker { font: italic 600 48px var(--serif); opacity: .6; margin: 0 0 18px; }
+.slide.navy h1 em {
+  background: none;
+  color: var(--coin);
+}
+.slide header p {
+  font: 700 40px/1.3 var(--sans);
+  margin-top: 28px;
+  opacity: 0.7;
+  text-wrap: balance;
+}
+.slide header p.kicker {
+  font: italic 600 48px var(--serif);
+  opacity: 0.6;
+  margin: 0 0 18px;
+}
 
 /* ---------- <store-phone> ---------- */
 
@@ -71,14 +127,29 @@
   border-radius: 7.6% / 3.6%;
   padding: 1.3%;
   background: #16181d;
-  box-shadow: var(--shadow), inset 0 0 0 2px #3a3e47;
+  box-shadow:
+    var(--shadow),
+    inset 0 0 0 2px #3a3e47;
 }
 /* Lighter rim so the frame doesn't melt into the navy background */
-.slide.navy .phone { box-shadow: 0 50px 90px -24px rgba(0, 0, 0, .6), inset 0 0 0 2px #6b7385; }
+.slide.navy .phone {
+  box-shadow:
+    0 50px 90px -24px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 2px #6b7385;
+}
 /* The capture sets the screen height, so it's never cropped */
-.phone .screen { border-radius: 6.4% / 3%; overflow: hidden; background: #fff; }
-.phone .screen img { width: 100%; display: block; }
-.phone .missing { aspect-ratio: 1080 / 2208; }
+.phone .screen {
+  border-radius: 6.4% / 3%;
+  overflow: hidden;
+  background: #fff;
+}
+.phone .screen img {
+  width: 100%;
+  display: block;
+}
+.phone .missing {
+  aspect-ratio: 1080 / 2208;
+}
 
 /* ---------- <store-zoom> ---------- */
 
@@ -87,43 +158,98 @@
   overflow: hidden;
   border-radius: 36px;
   background: #fff;
-  box-shadow: var(--shadow), 0 0 0 10px #fff;
+  box-shadow:
+    var(--shadow),
+    0 0 0 10px #fff;
 }
-.zoom img { position: absolute; display: block; }
+.zoom img {
+  position: absolute;
+  display: block;
+}
 
 /* Shown instead of a capture that doesn't exist yet */
 .missing {
-  width: 100%; height: 100%; min-height: 120px; display: grid; place-items: center; text-align: center;
-  background: repeating-linear-gradient(45deg, #fde8e8, #fde8e8 20px, #fff 20px, #fff 40px);
-  color: #b3261e; font: 700 30px var(--sans); padding: 20px;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: repeating-linear-gradient(
+    45deg,
+    #fde8e8,
+    #fde8e8 20px,
+    #fff 20px,
+    #fff 40px
+  );
+  color: #b3261e;
+  font: 700 30px var(--sans);
+  padding: 20px;
 }
 
 /* ---------- Decorations ---------- */
 
 .sticker {
   z-index: 10;
-  display: flex; align-items: center; gap: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
   padding: 22px 38px;
   border-radius: 999px;
-  background: #fff; color: var(--navy);
-  font: 700 40px var(--sans); white-space: nowrap;
-  box-shadow: 0 18px 40px -12px rgba(8, 29, 71, .35);
+  background: #fff;
+  color: var(--navy);
+  font: 700 40px var(--sans);
+  white-space: nowrap;
+  box-shadow: 0 18px 40px -12px rgba(8, 29, 71, 0.35);
 }
-.sticker.dark { background: var(--navy); color: #fff; }
-.sticker.yellow { background: var(--coin); color: var(--navy); }
-.sticker svg { width: 40px; height: 40px; flex: none; }
+.sticker.dark {
+  background: var(--navy);
+  color: #fff;
+}
+.sticker.yellow {
+  background: var(--coin);
+  color: var(--navy);
+}
+.sticker svg {
+  width: 40px;
+  height: 40px;
+  flex: none;
+}
 
 /* Yellow circles like the coins of the app icon. Set the size with `width`. */
-.coin { aspect-ratio: 1; border-radius: 50%; background: var(--coin); }
-
-.swatches { left: 0; right: 0; display: flex; justify-content: center; gap: 26px; }
-.swatches span { width: 74px; height: 74px; border-radius: 50%; box-shadow: 0 0 0 8px #fff, 0 12px 30px -8px rgba(8, 29, 71, .35); }
-
-.features { width: 470px; list-style: none; display: flex; flex-direction: column; gap: 40px; }
-.features svg {
-  width: 92px; height: 92px; padding: 21px; margin-bottom: 18px;
-  border-radius: 28px; background: var(--sky); color: var(--navy);
+.coin {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--coin);
 }
-.features b { display: block; font: 700 46px var(--sans); }
-.features span { display: block; font: 600 34px/1.25 var(--sans); opacity: .65; margin-top: 4px; }
-.slide.navy .features span { opacity: .75; }
+
+.features {
+  width: 470px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.features svg {
+  width: 92px;
+  height: 92px;
+  padding: 21px;
+  margin-bottom: 18px;
+  border-radius: 28px;
+  background: var(--sky);
+  color: var(--navy);
+}
+.features b {
+  display: block;
+  font: 700 46px var(--sans);
+}
+.features span {
+  display: block;
+  font: 600 34px/1.25 var(--sans);
+  opacity: 0.65;
+  margin-top: 4px;
+}
+.slide.navy .features span {
+  opacity: 0.75;
+}
