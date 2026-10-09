@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -9,16 +10,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
+import 'package:monekin/app/categories/selectors/category_button_selector.dart';
+import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
+import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
+import 'package:monekin/app/transactions/form/transaction_form.page.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/app/transactions/list/recurrent_transactions_page.dart';
 import 'package:monekin/app/transactions/list/transactions.page.dart';
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/account_service.dart';
+import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:monekin/main.dart';
 
@@ -50,6 +61,8 @@ void main() {
     await setupMonekin();
   });
 
+  final styles = _selectStyles();
+
   testWidgets('Capture store screenshots', (tester) async {
     final isDesktop = !Platform.isAndroid && !Platform.isIOS;
 
@@ -74,19 +87,47 @@ void main() {
         await _setAppLocale(locale);
         await _localizeCategories(locale);
 
-        // Restarting the widget tree (not the process) applies the new language
-        // everywhere and brings every screen back to its initial state.
-        await tester.pumpWidget(const SizedBox.shrink());
-        await tester.pumpWidget(const MonekinAppEntryPoint());
-        await tester.pumpAndSettle();
-        expect(find.byType(DashboardPage), findsOneWidget);
+        for (final style in styles) {
+          await _applyStyle(style);
 
-        await _captureLocale(binding, tester, locale);
+          // Restarting the widget tree (not the process) applies the new
+          // language and style everywhere and brings every screen back to its
+          // initial state.
+          await tester.pumpWidget(const SizedBox.shrink());
+          await tester.pumpWidget(const MonekinAppEntryPoint());
+          await tester.pumpAndSettle();
+          expect(find.byType(DashboardPage), findsOneWidget);
+
+          await _captureLocale(binding, tester, locale, style);
+        }
       }
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
   });
+}
+
+List<ScreenshotStyle> _selectStyles() {
+  final all = [
+    ...ScreenshotConfig.fullSetStyles,
+    ...ScreenshotConfig.dashboardOnlyStyles,
+  ];
+  if (ScreenshotConfig.stylesArg == 'all') return all;
+
+  return [
+    for (final id in ScreenshotConfig.stylesArg.split(','))
+      all.firstWhere(
+        (s) => s.id == id,
+        orElse: () => throw ArgumentError('Unknown style: $id'),
+      ),
+  ];
+}
+
+Future<void> _applyStyle(ScreenshotStyle style) async {
+  final settings = UserSettingService.instance;
+  await settings.setItem(SettingKey.themeMode, style.themeMode);
+  await settings.setItem(SettingKey.amoledMode, style.amoled ? '1' : '0');
+  await settings.setItem(SettingKey.accentColor, style.accent);
 }
 
 Future<void> _setAppLocale(AppLocale locale) async {
@@ -174,30 +215,174 @@ Future<void> _collapsePageTitle(WidgetTester tester, Type page) async {
   await tester.pumpAndSettle();
 }
 
+/// Waits (letting real async work such as DB queries run) until [finder] matches.
+Future<void> _pumpUntilFound(WidgetTester tester, Finder finder) async {
+  for (var i = 0; i < 100 && finder.evaluate().isEmpty; i++) {
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 100)),
+    );
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+  await tester.pumpAndSettle();
+  expect(finder, findsWidgets);
+}
+
+Future<void> _openTransactionForm(
+  WidgetTester tester, {
+  required TransactionType mode,
+}) async {
+  // Always the bank account as source so the low-balance warning never shows.
+  final bank = await AccountService.instance.getAccountById('acc2').first;
+  final cash = await AccountService.instance.getAccountById('acc1').first;
+
+  unawaited(
+    RouteUtils.showResponsiveForm(
+      TransactionFormPage(
+        mode: mode,
+        fromAccount: bank,
+        toAccount: mode.isTransfer ? cash : null,
+      ),
+    ),
+  );
+  await tester.pumpAndSettle();
+  expect(find.byType(TransactionFormPage), findsOneWidget);
+}
+
+/// Picks [categoryId] (and optionally one of its subcategories) in the category
+/// sheet the form opens by itself.
+Future<void> _pickCategory(
+  WidgetTester tester, {
+  required String categoryId,
+  String? subcategoryId,
+}) async {
+  final picker = find.byType(CategoryPicker);
+  await _pumpUntilFound(tester, picker);
+
+  Future<String> nameOf(String id) async =>
+      (await CategoryService.instance.getCategoryById(id).first)!.name;
+
+  final categoryIcon = find.descendant(
+    of: find.widgetWithText(CategoryButtonSelector, await nameOf(categoryId)),
+    matching: find.byType(IconDisplayer),
+  );
+  await tester.ensureVisible(categoryIcon);
+  await tester.tap(categoryIcon);
+  await tester.pumpAndSettle();
+
+  if (subcategoryId != null) {
+    await tester.tap(
+      find.widgetWithText(ChoiceChip, await nameOf(subcategoryId)),
+    );
+    await tester.pumpAndSettle();
+  }
+
+  await tester.tap(
+    find.descendant(of: picker, matching: find.text(t.ui_actions.save)),
+  );
+  await tester.pumpAndSettle();
+}
+
+Future<void> _enterAmount(WidgetTester tester, String amount) async {
+  await tester.enterText(
+    find.descendant(
+      of: find.byType(TransactionFormAmountBlock),
+      matching: find.byType(TextField),
+    ),
+    amount,
+  );
+  FocusManager.instance.primaryFocus?.unfocus();
+  await tester.pumpAndSettle();
+}
+
+Future<void> _closeTransactionForm(WidgetTester tester) async {
+  await tester.tap(
+    find.descendant(
+      of: find.byType(TransactionFormPage),
+      matching: find.byIcon(Icons.close),
+    ),
+  );
+  await tester.pumpAndSettle();
+  expect(find.byType(DashboardPage), findsOneWidget);
+}
+
+Future<void> _captureTransactionForms(
+  WidgetTester tester,
+  Future<void> Function(ScreenshotName name) shoot,
+) async {
+  await _openTransactionForm(tester, mode: TransactionType.income);
+  await _pickCategory(tester, categoryId: '10'); // Salary
+  await _enterAmount(tester, '2850');
+  await shoot(ScreenshotName.formIncome);
+  await _closeTransactionForm(tester);
+
+  await _openTransactionForm(tester, mode: TransactionType.expense);
+  await _pickCategory(
+    tester,
+    categoryId: '2',
+    subcategoryId: '2_2', // Groceries
+  );
+  await _enterAmount(tester, '84.5');
+  await shoot(ScreenshotName.formExpense);
+  await _closeTransactionForm(tester);
+
+  // The amount sheet opens by itself on transfers.
+  await _openTransactionForm(tester, mode: TransactionType.transfer);
+  final amountSheet = find.byType(AmountSelector);
+  await _pumpUntilFound(tester, amountSheet);
+  for (final digit in '250'.split('')) {
+    await tester.tap(
+      find.descendant(of: amountSheet, matching: find.text(digit)),
+    );
+    await tester.pumpAndSettle();
+  }
+  await tester.tap(
+    find.descendant(
+      of: amountSheet,
+      matching: find.byIcon(Icons.check_rounded),
+    ),
+  );
+  await tester.pumpAndSettle();
+  await shoot(ScreenshotName.formTransfer);
+  await _closeTransactionForm(tester);
+}
+
+/// Scrolls [finder] to mid-screen so bars pinned at the edges don't cover it.
+Future<void> _tapCentered(WidgetTester tester, Finder finder) async {
+  await Scrollable.ensureVisible(tester.element(finder), alignment: 0.5);
+  await tester.pumpAndSettle();
+  await tester.tap(finder);
+  await tester.pumpAndSettle();
+}
+
 Future<void> _captureLocale(
   IntegrationTestWidgetsFlutterBinding binding,
   WidgetTester tester,
   AppLocale locale,
+  ScreenshotStyle style,
 ) async {
   final dir = '${locale.languageTag}/Screenshots';
+  final suffix = style == ScreenshotConfig.fullSetStyles.first
+      ? ''
+      : '_${style.id}';
 
   Future<void> shoot(ScreenshotName name) =>
-      takeScreenshot(binding, tester, '$dir/${name.fileName}');
+      takeScreenshot(binding, tester, '$dir/${name.fileName}$suffix');
 
   // Dashboard on the 6 months range (also inherited by the stats page below).
   await tester.tap(find.text(t.home.date_ranges.half_year).first);
   await tester.pumpAndSettle();
   await shoot(ScreenshotName.dashboard);
 
+  if (ScreenshotConfig.dashboardOnlyStyles.contains(style)) return;
+
+  await _captureTransactionForms(tester, shoot);
+
   // Stats opened from the dashboard card, so it keeps the dashboard range.
   final healthCardAction = find.descendant(
     of: find.widgetWithText(CardWithHeader, t.financial_health.display),
     matching: find.byType(CardHeaderAction),
   );
-  await tester.ensureVisible(healthCardAction);
-  await tester.pumpAndSettle();
-  await tester.tap(healthCardAction);
-  await tester.pumpAndSettle();
+  await _tapCentered(tester, healthCardAction);
   expect(find.byType(StatsPage), findsOneWidget);
   await _collapsePageTitle(tester, StatsPage);
   await shoot(ScreenshotName.stats);
@@ -231,21 +416,16 @@ Future<void> _captureLocale(
   await tester.tap(find.backButton());
   await tester.pumpAndSettle();
 
-  await tester.tap(find.text(t.recurrent_transactions.title_short));
-  await tester.pumpAndSettle();
+  await _tapCentered(tester, find.text(t.recurrent_transactions.title_short));
   expect(find.byType(RecurrentTransactionPage), findsOneWidget);
   await _collapsePageTitle(tester, RecurrentTransactionPage);
   await shoot(ScreenshotName.subscriptions);
   await tester.tap(find.backButton());
   await tester.pumpAndSettle();
 
-  await tester.tap(find.text(t.currencies.currency_manager));
-  await tester.pumpAndSettle();
+  await _tapCentered(tester, find.text(t.currencies.currency_manager));
   final rateTile = find.widgetWithText(ListTile, demoForeignCurrencyCode).last;
-  await tester.ensureVisible(rateTile);
-  await tester.pumpAndSettle();
-  await tester.tap(rateTile);
-  await tester.pumpAndSettle();
+  await _tapCentered(tester, rateTile);
   expect(find.byType(ExchangeRateDetailsPage), findsOneWidget);
   await _collapsePageTitle(tester, ExchangeRateDetailsPage);
   await shoot(ScreenshotName.exchangeRate);

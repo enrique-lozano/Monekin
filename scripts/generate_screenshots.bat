@@ -16,6 +16,8 @@ setlocal enabledelayedexpansion
 :: Other settings (simulated platform, viewport...) live in
 :: integration_test\tests\screenshots\screenshots_config.dart.
 :: Set the DEVICE env var to pick a device id (see `flutter devices`).
+:: Set the STYLES env var to only capture some styles (comma-separated ids from
+:: that file, e.g. `set STYLES=dark,dark_purple`). Default: all.
 
 cd /d "%~dp0.."
 
@@ -57,9 +59,11 @@ for %%L in (!LOCALES!) do (
 :: ─── Generate ─────────────────────────────────────────────────────────────────
 set "DEVICE_ARG="
 if defined DEVICE set "DEVICE_ARG=-d %DEVICE%"
+set "STYLES_VALUE=all"
+if defined STYLES set "STYLES_VALUE=%STYLES%"
 
 echo.
-echo [Screenshots] Generating for locales: !LOCALES_CSV!
+echo [Screenshots] Generating for locales: !LOCALES_CSV! (styles: !STYLES_VALUE!)
 
 rem One single run (one pub get / device selection / app launch) covers every
 rem locale: the test switches the language between captures.
@@ -68,6 +72,7 @@ call flutter drive !DEVICE_ARG! ^
     --driver=test_driver/integration_test.dart ^
     --target=integration_test/tests/screenshots/screenshots_test.dart ^
     --dart-define=SCREENSHOT_LOCALES=!LOCALES_CSV! ^
+    --dart-define=SCREENSHOT_STYLES=!STYLES_VALUE! ^
     --dart-define=MONEKIN_DB_NAME=screenshots.db
 if errorlevel 1 (
     echo Failed generating screenshots

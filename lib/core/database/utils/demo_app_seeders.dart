@@ -49,11 +49,15 @@ final List<TagInDB> _tagsToCreate = [
   const TagInDB(id: 'tag2', name: 'Work', color: '33FF57', displayOrder: 2),
 ];
 
+/// Budgeted category and its number of subcategories (budgets only match the
+/// exact category ids of their filter).
+const _budgetedCategories = {'2': 2, '5': 5, '4': 4, '3': 3};
+
 final List<TransactionFilterSetInDB> _budgetFilterSetsToCreate = [
-  for (final categoryId in ['2', '5', '4', '3'])
+  for (final MapEntry(:key, :value) in _budgetedCategories.entries)
     TransactionFilterSetInDB(
-      id: 'budget_filter_$categoryId',
-      categoriesIds: [categoryId],
+      id: 'budget_filter_$key',
+      categoriesIds: [key, for (var i = 1; i <= value; i++) '${key}_$i'],
     ),
 ];
 
@@ -157,6 +161,69 @@ List<TransactionInDB> _recurrentTransactionsToCreate() {
   ];
 }
 
+/// Hand-picked latest transactions, each with a different category/icon, so
+/// the top of the transactions list looks varied.
+List<(TransactionInDB, String?)> _recentTransactionsToCreate() {
+  final now = DateTime.now();
+
+  final recent = <(TransactionInDB, String?)>[];
+
+  void add(
+    int daysAgo,
+    int hour,
+    int minute,
+    String title,
+    double value,
+    String categoryId, {
+    String accountId = _bankAccountID,
+    TransactionType type = TransactionType.expense,
+    String? tagId,
+  }) {
+    var date = DateTime(now.year, now.month, now.day - daysAgo, hour, minute);
+    if (date.isAfter(now))
+      date = now.subtract(Duration(minutes: recent.length));
+
+    recent.add((
+      TransactionInDB(
+        id: generateUUID(),
+        date: date,
+        accountID: accountId,
+        value: type == TransactionType.income ? value : -value,
+        type: type,
+        categoryID: categoryId,
+        title: title,
+        isHidden: false,
+        status: TransactionStatus.reconciled,
+      ),
+      tagId,
+    ));
+  }
+
+  add(0, 21, 15, 'Cinema', 20.47, '4_4', tagId: 'tag1');
+  add(0, 13, 40, 'Starbucks', 6.4, '2_1', accountId: _cashAccountID);
+  add(0, 9, 5, 'Zara', 59.9, '3_3');
+  add(1, 19, 30, 'Spotify', 10.99, '4_3');
+  add(1, 14, 10, 'Shell', 48.3, '5_2');
+  add(
+    1,
+    11,
+    20,
+    'Sold old bike',
+    120,
+    '12',
+    type: TransactionType.income,
+    accountId: _cashAccountID,
+  );
+  add(2, 18, 45, 'Pharmacy', 23.15, '1_2', accountId: _cashAccountID);
+  add(2, 12, 30, 'Tesco', 87.6, '2_2');
+  add(3, 17, 0, 'Software License', 49, '3_2', tagId: 'tag2');
+
+  return recent;
+}
+
+/// Days (from today) covered by [_recentTransactionsToCreate].
+const _recentDays = 4;
+
 /// Currency of the demo exchange rates (never the preferred one).
 String get demoForeignCurrencyCode =>
     _prefCurrencyCode == 'USD' ? 'EUR' : 'USD';
@@ -220,6 +287,8 @@ Future<void> fillWithDemoData() async {
       );
     }
 
+    if (i < _recentDays) continue;
+
     if (i < 30) {
       // First month: Realistic transactions
       int numTransactions = random.nextInt(5); // 0 to 4 per day
@@ -239,32 +308,36 @@ Future<void> fillWithDemoData() async {
 
         switch (type) {
           case 0: // Eat out
-            categoryId = '2';
+            categoryId = '2_1';
             title = ["McDonald's", 'Starbucks', 'Burger King'].randomItem();
             amount = 5 + random.nextDouble() * 40;
             if (random.nextDouble() < 0.2) tagId = 'tag1'; // Holidays sometimes
             break;
           case 1: // Groceries
-            categoryId = '2';
+            categoryId = '2_2';
             title = ['Tesco', 'Costco'].randomItem();
             amount = 50 + random.nextDouble() * 100;
             break;
           case 2: // Transport
-            categoryId = '5';
             title = ['Uber', 'Gas', 'Bus Ticket'].randomItem();
+            categoryId = title == 'Gas' ? '5_2' : '5_1';
             amount = 5 + random.nextDouble() * 50;
             if (title == 'Uber' && random.nextBool()) tagId = 'tag2'; // Work
             break;
           case 3: // Leisure
-            categoryId = '4';
             title = ['Netflix', 'Cinema', 'Spotify', 'Bowling'].randomItem();
+            categoryId = switch (title) {
+              'Spotify' => '4_3',
+              'Bowling' => '4',
+              _ => '4_4',
+            };
             amount = 10 + random.nextDouble() * 30;
             if (title == 'Cinema' || title == 'Bowling') {
               tagId = 'tag1';
             } // Holidays
             break;
           case 4: // Work
-            categoryId = '3'; // Purchases/Electronics/Stationery
+            categoryId = '3_2'; // Electronics
             title = [
               'Nokia',
               'Nintendo Store',
@@ -361,6 +434,15 @@ Future<void> fillWithDemoData() async {
           );
         }
       }
+    }
+  }
+
+  for (final (transaction, tagId) in _recentTransactionsToCreate()) {
+    transactions.add(transaction);
+    if (tagId != null) {
+      transactionTags.add(
+        TransactionTag(transactionID: transaction.id, tagID: tagId),
+      );
     }
   }
 
