@@ -35,12 +35,6 @@
   background: radial-gradient(100% 60% at 100% 100%, #b5d6fb, transparent 70%),
               linear-gradient(180deg, #e3f0fe, var(--sky));
 }
-/* Almost white, to rest the eye between colored slides */
-.slide.pale {
-  background: radial-gradient(90% 55% at 0% 0%, #fff, transparent 70%),
-              radial-gradient(80% 50% at 100% 90%, #dcebfd, transparent 70%),
-              #f3f8fe;
-}
 /* Brand navy, to make a slide stand out */
 .slide.navy {
   background: radial-gradient(90% 55% at 100% 0%, #1f4a9a, transparent 70%),
