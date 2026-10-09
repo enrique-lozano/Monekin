@@ -41,7 +41,6 @@ abstract interface class FinancialTarget {
 /// Goals can be of two types:
 ///  - Income/Savings → balance ≥ target
 ///  - Expense        → -balance ≥ target
-///
 /// Budgets are always of type Expense → -balance <= target
 mixin FinancialTargetMixin implements FinancialTarget {
   @override
