@@ -16,6 +16,9 @@ const ICONS = {
   code: '<path d="m8 8-4 4 4 4m8-8 4 4-4 4m-6 3 4-14"/>',
   currency: '<circle cx="9" cy="9" r="6"/><path d="M15.5 9.5a6 6 0 1 1-6 6"/>',
   backup: '<path d="M4 7h16v13H4zM8 7V4h8v3M9 12h6"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+  filter: '<path d="M4 5h16l-6 8v6l-4-2v-4z"/>',
+  tag: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
 };
 
 /** Builds the slide `html` for `lang`. Resolves once every capture has loaded. */
@@ -39,7 +42,7 @@ export async function renderSlide(html, { slideId, lang, texts }) {
 
   for (const el of root.querySelectorAll('store-phone')) {
     const phone = replaceWith(el, 'div', 'phone');
-    phone.innerHTML = '<div class="camera"></div><div class="screen"></div>';
+    phone.innerHTML = '<div class="screen"></div>';
     loads.push(loadCapture(phone.querySelector('.screen'), lang, el.getAttribute('shot')));
   }
 

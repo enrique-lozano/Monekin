@@ -64,23 +64,19 @@
 
 /* ---------- <store-phone> ---------- */
 
+/* Slim bezel and no camera: captures have no status bar, so a notch would cover app content */
 .phone {
-  border-radius: 9% / 4.2%;
-  padding: 2.6%;
-  background: linear-gradient(145deg, #3a3f4a, #15171c);
-  box-shadow: var(--shadow), inset 0 0 0 3px #50566280;
+  border-radius: 7.6% / 3.6%;
+  padding: 1.3%;
+  background: #16181d;
+  box-shadow: var(--shadow), inset 0 0 0 2px #3a3e47;
 }
 /* Lighter rim so the frame doesn't melt into the navy background */
-.slide.navy .features span { opacity: .75; }
-.slide.navy .phone { box-shadow: 0 50px 90px -24px rgba(0, 0, 0, .6), inset 0 0 0 3px #8a93a8; }
+.slide.navy .phone { box-shadow: 0 50px 90px -24px rgba(0, 0, 0, .6), inset 0 0 0 2px #6b7385; }
 /* The capture sets the screen height, so it's never cropped */
-.phone .screen { border-radius: 7.4% / 3.5%; overflow: hidden; background: #fff; }
+.phone .screen { border-radius: 6.4% / 3%; overflow: hidden; background: #fff; }
 .phone .screen img { width: 100%; display: block; }
 .phone .missing { aspect-ratio: 1080 / 2208; }
-.phone .camera {
-  position: absolute; top: 3.6%; left: 50%; width: 3.6%; aspect-ratio: 1; translate: -50%;
-  border-radius: 50%; background: #0a0a0c; box-shadow: 0 0 0 2px #222;
-}
 
 /* ---------- <store-zoom> ---------- */
 
@@ -113,7 +109,7 @@
 }
 .sticker.dark { background: var(--navy); color: #fff; }
 .sticker.yellow { background: var(--coin); color: var(--navy); }
-.sticker svg { width: 40px; height: 40px; }
+.sticker svg { width: 40px; height: 40px; flex: none; }
 
 /* Yellow circles like the coins of the app icon. Set the size with `width`. */
 .coin { aspect-ratio: 1; border-radius: 50%; background: var(--coin); }
@@ -128,3 +124,4 @@
 }
 .features b { display: block; font: 700 46px var(--sans); }
 .features span { display: block; font: 600 34px/1.25 var(--sans); opacity: .65; margin-top: 4px; }
+.slide.navy .features span { opacity: .75; }
