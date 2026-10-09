@@ -7,6 +7,9 @@ The store images are made in two steps:
 1. **Captures**: `scripts\generate_screenshots.bat` runs the app with demo data and saves raw captures to `app-marketplaces/screenshots/<lang>/Screenshots/` (see `integration_test/README.md`).
 2. **Store images**: the editor in this folder lays those captures out and exports the final 1080x1920 images to `app-marketplaces/screenshots/<lang>/StoreImages/01.png`, `02.png`... ready to upload one by one.
 
+> [!NOTE]
+> Only the English store images (`screenshots/en/StoreImages/`) are committed, because the project README shows them. Everything else under `screenshots/` (captures of every language and store images of other languages) is ignored by git: generate it locally with the two steps above. Commit the English images only when publishing new ones to the stores, as every export changes them slightly (demo data dates) and each commit adds them to the history again. Discard them otherwise with `git restore app-marketplaces/screenshots/en/StoreImages/`.
+
 ## Using the editor
 
 From the repository root:
@@ -25,8 +28,8 @@ app-marketplaces/
 │   ├── texts/<lang>.json    Texts of every image, one file per language
 │   └── editor/              Editor, local server and shared styles (rarely needs changes)
 └── screenshots/<lang>/      Generated files (don't edit by hand)
-    ├── Screenshots/         Raw captures from the integration test
-    └── StoreImages/         Final images exported by the editor
+    ├── Screenshots/         Raw captures from the integration test (not committed)
+    └── StoreImages/         Final images exported by the editor (only English is committed)
 ```
 
 ### Editing a slide

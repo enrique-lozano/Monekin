@@ -27,5 +27,5 @@ scripts\generate_screenshots.bat all      :: every locale
 - On Windows desktop run `set DEVICE=windows` first: the app is resized to a phone-like viewport and the frame is captured from Dart.
 - `tests/screenshots/screenshots_config.dart` holds the typed settings (simulated platform, viewport, image names). The simulated platform decides whether the window bar and scrollbars appear.
 - The run uses its own `screenshots.db`, reset on every run, so your real Monekin data is never touched.
-- Review the generated images before committing: demo data, device frame and status bar vary by emulator.
+- The captures are not committed (see `.gitignore`). Review them before exporting the store images: demo data, device frame and status bar vary by emulator.
 - Then use the store images editor to turn the captures into the final store images (see `app-marketplaces/store-images/README.md`).
