@@ -57,8 +57,10 @@ class TargetPace {
       initialValue + (targetAmount - initialValue) * elapsedDays / totalDays;
 
   /// Value at the end of the period if the current pace continues.
-  double get projectedValue =>
-      initialValue + (currentValue - initialValue) * totalDays / elapsedDays;
+  double get projectedValue => max(
+    initialValue + (currentValue - initialValue) * totalDays / elapsedDays,
+    0,
+  );
 
   double get amountLeft => targetAmount - currentValue;
 

@@ -183,6 +183,7 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
 
     final dataMaxY = [
       target.targetAmount,
+      target.initialValue,
       ?pace?.projectedValue,
       ...data.actual.map((s) => s.y),
     ].reduce(max);

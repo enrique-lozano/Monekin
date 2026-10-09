@@ -75,4 +75,19 @@ void main() {
     expect(pace.projectedValue, closeTo(534.44, 0.01));
     expect(pace.dailyAmountLeft, closeTo(9.55, 0.01));
   });
+
+  test('does not project negative values', () {
+    final target = _FakeTarget(
+      DateTimeRange(start: DateTime(2026, 10, 1), end: DateTime(2026, 11, 1)),
+      initialValue: 400,
+    );
+
+    final pace = TargetPace.of(
+      target,
+      currentValue: 0,
+      now: DateTime(2026, 10, 9, 15),
+    )!;
+
+    expect(pace.projectedValue, 0);
+  });
 }
