@@ -74,7 +74,7 @@ function loadCapture(container, lang, shot) {
       container.innerHTML = `<div class="missing">Missing capture<br>${lang}/Screenshots/${shot}.png</div>`;
       resolve(null);
     };
-    img.src = `../${lang}/Screenshots/${shot}.png`;
+    img.src = `../../screenshots/${lang}/Screenshots/${shot}.png`;
   });
 }
 

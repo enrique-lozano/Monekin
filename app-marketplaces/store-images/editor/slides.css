@@ -1,9 +1,9 @@
 /* Look of the store images. Every slide is a 1080x1920 canvas (Google Play portrait). */
 
-@font-face { font-family: 'Fraunces'; src: url(../fonts/Fraunces.ttf); font-weight: 100 900; }
-@font-face { font-family: 'Fraunces'; src: url(../fonts/Fraunces-Italic.ttf); font-weight: 100 900; font-style: italic; }
-@font-face { font-family: 'Nunito'; src: url(../../../../assets/fonts/Nunito/Nunito-SemiBold.ttf); font-weight: 600; }
-@font-face { font-family: 'Nunito'; src: url(../../../../assets/fonts/Nunito/Nunito-Bold.ttf); font-weight: 700; }
+@font-face { font-family: 'Fraunces'; src: url(fonts/Fraunces.ttf); font-weight: 100 900; }
+@font-face { font-family: 'Fraunces'; src: url(fonts/Fraunces-Italic.ttf); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: 'Nunito'; src: url(../../../assets/fonts/Nunito/Nunito-SemiBold.ttf); font-weight: 600; }
+@font-face { font-family: 'Nunito'; src: url(../../../assets/fonts/Nunito/Nunito-Bold.ttf); font-weight: 700; }
 
 .slide {
   --navy: #0f3375;
@@ -56,14 +56,15 @@
 /* ---------- <store-phone> ---------- */
 
 .phone {
-  aspect-ratio: 9 / 19.2;
   border-radius: 9% / 4.2%;
   padding: 2.6%;
   background: linear-gradient(145deg, #3a3f4a, #15171c);
   box-shadow: 0 50px 90px -20px rgba(8, 20, 50, .45), inset 0 0 0 3px #50566280;
 }
-.phone .screen { width: 100%; height: 100%; border-radius: 7.4% / 3.5%; overflow: hidden; background: #fff; }
-.phone .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+/* The capture sets the screen height, so it's never cropped */
+.phone .screen { border-radius: 7.4% / 3.5%; overflow: hidden; background: #fff; }
+.phone .screen img { width: 100%; display: block; }
+.phone .missing { aspect-ratio: 1080 / 2208; }
 .phone .camera {
   position: absolute; top: 3.6%; left: 50%; width: 3.6%; aspect-ratio: 1; translate: -50%;
   border-radius: 50%; background: #0a0a0c; box-shadow: 0 0 0 2px #222;
@@ -104,7 +105,7 @@
 .swatches { left: 0; right: 0; display: flex; justify-content: center; gap: 26px; }
 .swatches span { width: 74px; height: 74px; border-radius: 50%; box-shadow: 0 0 0 8px #fff, 0 12px 30px -8px rgba(0, 0, 0, .35); }
 
-.features { width: 470px; list-style: none; display: flex; flex-direction: column; gap: 54px; }
+.features { width: 470px; list-style: none; display: flex; flex-direction: column; gap: 40px; }
 .features svg {
   width: 92px; height: 92px; padding: 21px; margin-bottom: 18px;
   border-radius: 28px; background: #fff; color: var(--accent);

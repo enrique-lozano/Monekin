@@ -1,14 +1,14 @@
-// Local server for the store images editor (see README.md next to this file).
+// Local server for the store images editor (see ../README.md).
 //
 // Serves the repository, as browsers block `fetch` and image exports on
 // `file://` pages, and saves the images exported from the editor to
 // `app-marketplaces/screenshots/<lang>/StoreImages/`.
 //
-// Run from the repository root: dart app-marketplaces/screenshots/store-images/server.dart
+// Run from the repository root: dart app-marketplaces/store-images/editor/server.dart
 import 'dart:io';
 
 const _port = 8080;
-const _editorPath = '/app-marketplaces/screenshots/store-images/';
+const _editorPath = '/app-marketplaces/store-images/editor/';
 final _exportPath = RegExp(r'^/export/([\w-]+)/([\w-]+\.png)$');
 
 const _mimeTypes = {

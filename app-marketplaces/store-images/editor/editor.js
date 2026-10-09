@@ -1,8 +1,8 @@
 import { renderSlide } from './components.js';
 
-const config = await fetchJson('config.json');
+const config = await fetchJson('../config.json');
 const slideHtml = Object.fromEntries(
-  await Promise.all(config.slides.map(async (id) => [id, await (await fetch(`slides/${id}.html`)).text()])),
+  await Promise.all(config.slides.map(async (id) => [id, await (await fetch(`../slides/${id}.html`)).text()])),
 );
 
 const langSelect = document.getElementById('lang');
@@ -22,7 +22,7 @@ document.getElementById('export-all').onclick = () => exportLanguages(config.lan
 await showPreviews(langSelect.value);
 
 async function showPreviews(lang) {
-  const texts = await fetchJson(`texts/${lang}.json`);
+  const texts = await fetchJson(`../texts/${lang}.json`);
   main.replaceChildren();
 
   for (const [i, id] of config.slides.entries()) {
@@ -38,7 +38,7 @@ async function showPreviews(lang) {
 async function exportLanguages(langs) {
   await run(async () => {
     for (const lang of langs) {
-      const texts = await fetchJson(`texts/${lang}.json`);
+      const texts = await fetchJson(`../texts/${lang}.json`);
       for (const i of config.slides.keys()) await exportSlide(lang, i, texts);
     }
   });
