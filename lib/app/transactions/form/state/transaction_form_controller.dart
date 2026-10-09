@@ -660,11 +660,16 @@ class TransactionFormController extends ChangeNotifier {
       accountID: account.id,
       value: signedCash,
       isHidden: false,
-      status: date.compareTo(DateTime.now()) > 0
+      status: recurrentRule.isNoRecurrent && date.compareTo(DateTime.now()) > 0
           ? TransactionStatus.pending
           : status,
       notes: notesController.text.isEmpty ? null : notesController.text,
       title: resolvedTitle,
+      intervalEach: recurrentRule.intervalEach,
+      intervalPeriod: recurrentRule.intervalPeriod,
+      endDate: recurrentRule.ruleRecurrentLimit?.endDate,
+      remainingTransactions:
+          recurrentRule.ruleRecurrentLimit?.remainingIterations,
       securityID: security.id,
       quantity: signedQty,
       pricePerUnit: price,
