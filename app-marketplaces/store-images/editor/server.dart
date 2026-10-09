@@ -48,7 +48,8 @@ Future<void> main() async {
       final file = File('${_imagesDir(root, export[1]!).path}/${export[2]}');
       await file.parent.create(recursive: true);
       await request.cast<List<int>>().pipe(file.openWrite());
-      stdout.writeln('  ✓ ${export[1]}/${export[2]}');
+      // A file URI is Ctrl+clickable in most terminals, even with spaces in the path.
+      stdout.writeln('  ✓ ${export[1]}/${export[2]}  ${file.uri}');
       request.response.statusCode = HttpStatus.noContent;
     } else if (request.method == 'POST' && open != null) {
       await _openInFileExplorer(_imagesDir(root, open[1]!));
