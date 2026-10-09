@@ -33,6 +33,9 @@ class Goal extends GoalInDB
   double get targetAmount => amount;
 
   @override
+  double get initialValue => initialAmount;
+
+  @override
   bool get isTargetLimit => false;
 
   @override
