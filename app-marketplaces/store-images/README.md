@@ -34,7 +34,7 @@ app-marketplaces/
 Slides are plain HTML plus a few custom tags. Position elements with inline `style`, in pixels of the 1080x1920 canvas:
 
 ```html
-<store-slide background="sky">                         <!-- sky, cream, mist or navy -->
+<store-slide background="light">                       <!-- light, pale or navy -->
   <header style="top: 120px">
     <h1><store-text key="title"></store-text></h1>     <!-- texts/<lang>.json → "<slide>" → "title" -->
   </header>
@@ -49,7 +49,8 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
 
 - Phones take the capture's own aspect ratio, so the screen is never cropped. Keep every phone fully inside the canvas unless it's meant to bleed off an edge.
 - `shot` is a capture name from `ScreenshotName` in `integration_test/tests/screenshots/screenshots_config.dart`, plus the style suffix for the extra styles (e.g. `01_dashboard_dark_purple`). A missing capture shows a striped warning instead.
-- In texts, wrap a word in `<em>` to highlight it. A missing text shows as a yellow `slide.key` mark.
+- Colors come from the app icon (navy, light blue and coin yellow) and live as variables at the top of `editor/slides.css`. Alternate backgrounds so consecutive images don't look the same, and use `<div class="coin">` or `class="sticker yellow"` for touches of yellow.
+- In texts, wrap a word in `<em>` to highlight it (yellow marker on light backgrounds, yellow text on navy). A missing text shows as a yellow `slide.key` mark.
 - To add a language, copy `texts/en.json`, translate it and add it to `config.json`.
 - To add or reorder images, edit `slides` in `config.json`. The order sets the exported file names.
 
