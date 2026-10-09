@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/budget/target_timeline_status.enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -139,88 +137,6 @@ enum TargetProgressStatus {
         case TargetProgressStatus.fail:
           return t.goals.progress.labels.fail;
       }
-    }
-  }
-
-  String description({
-    required BuildContext context,
-    required bool isTargetLimit,
-    CurrencyInDB? currency,
-    double? dailyAmountLeft,
-    required double? amountLeft,
-    int? daysLeft,
-    double? failedByAmount,
-  }) {
-    final t = Translations.of(context);
-
-    final formatter = NumberFormat.currency(
-      symbol: currency?.symbol ?? '',
-      decimalDigits: 0,
-    );
-
-    // Helper to format
-    String amount(double? val) => formatter.format(val ?? 0);
-    int days = daysLeft ?? 0;
-
-    switch (this) {
-      case TargetProgressStatus.onTrack:
-        if (isTargetLimit) {
-          return t.budgets.progress.description.active_on_track(
-            dailyAmount: amount(dailyAmountLeft),
-            remainingDays: days,
-          );
-        } else {
-          return t.goals.progress.description.active_on_track(
-            dailyAmount: amount(dailyAmountLeft),
-            remainingDays: days,
-          );
-        }
-      case TargetProgressStatus.indeterminate:
-        if (isTargetLimit) {
-          return t.budgets.progress.description.active_indeterminate(
-            amount: amount(amountLeft),
-          );
-        } else {
-          return t.goals.progress.description.active_indeterminate(
-            amount: amount(amountLeft),
-          );
-        }
-      case TargetProgressStatus.warning:
-        if (isTargetLimit) {
-          return t.budgets.progress.description.active_overspending(
-            dailyAmount: amount(dailyAmountLeft),
-            remainingDays: days,
-          );
-        } else {
-          return t.goals.progress.description.active_behind_schedule(
-            dailyAmount: amount(dailyAmountLeft),
-            remainingDays: days,
-          );
-        }
-      case TargetProgressStatus.success:
-        if (isTargetLimit) {
-          return t.budgets.progress.description.success;
-        } else {
-          return t.goals.progress.description.success;
-        }
-      case TargetProgressStatus.reached:
-        if (isTargetLimit) {
-          return t.budgets.progress.description.fail(
-            amount: amount(failedByAmount),
-          );
-        } else {
-          return t.goals.progress.description.success;
-        }
-      case TargetProgressStatus.fail:
-        if (isTargetLimit) {
-          return t.budgets.progress.description.fail(
-            amount: amount(failedByAmount),
-          );
-        } else {
-          return t.goals.progress.description.fail(
-            amount: amount(failedByAmount),
-          );
-        }
     }
   }
 }
