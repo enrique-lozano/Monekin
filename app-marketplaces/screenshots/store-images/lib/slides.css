@@ -1,0 +1,114 @@
+/* Look of the store images. Every slide is a 1080x1920 canvas (Google Play portrait). */
+
+@font-face { font-family: 'Fraunces'; src: url(../fonts/Fraunces.ttf); font-weight: 100 900; }
+@font-face { font-family: 'Fraunces'; src: url(../fonts/Fraunces-Italic.ttf); font-weight: 100 900; font-style: italic; }
+@font-face { font-family: 'Nunito'; src: url(../../../../assets/fonts/Nunito/Nunito-SemiBold.ttf); font-weight: 600; }
+@font-face { font-family: 'Nunito'; src: url(../../../../assets/fonts/Nunito/Nunito-Bold.ttf); font-weight: 700; }
+
+.slide {
+  --navy: #0f3375;
+  --ink: #0b1f47;
+  --accent: #2f6fe4;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Nunito', system-ui, sans-serif;
+
+  width: 1080px;
+  height: 1920px;
+  position: relative;
+  overflow: hidden;
+  color: var(--ink);
+  font-family: var(--sans);
+}
+.slide * { box-sizing: border-box; margin: 0; padding: 0; }
+.slide > * { position: absolute; }
+
+/* ---------- Backgrounds (<store-slide background="...">) ---------- */
+
+.slide.sky {
+  background: radial-gradient(120% 70% at 85% 100%, #bcd6f8, transparent 70%),
+              linear-gradient(180deg, #e8f1fd, #d6e6fb);
+}
+.slide.cream {
+  background: radial-gradient(110% 60% at 10% 0%, #fffaf1, transparent 70%),
+              linear-gradient(180deg, #f7f1e6, #e9dcc5);
+}
+.slide.mist {
+  background: radial-gradient(90% 50% at 20% 10%, #fff, transparent 70%),
+              radial-gradient(90% 60% at 100% 80%, #c9dcf7, transparent 70%),
+              linear-gradient(180deg, #eef2f8, #dfe7f3);
+}
+.slide.navy {
+  background: radial-gradient(90% 60% at 100% 0%, #234b9a, transparent 70%),
+              linear-gradient(170deg, #12306f, #071637);
+  color: #fff;
+}
+
+/* ---------- Texts ---------- */
+
+.slide header { left: 80px; right: 80px; text-align: center; }
+.slide header.left { text-align: left; }
+.slide h1 { font: 700 112px/1.02 var(--serif); letter-spacing: -2.5px; text-wrap: balance; }
+.slide h1 em { font-style: italic; font-weight: 600; color: var(--accent); }
+.slide.navy h1 em { color: #8fb6ff; }
+.slide header p { font: 700 40px/1.3 var(--sans); margin-top: 28px; opacity: .72; text-wrap: balance; }
+.slide header p.kicker { font: italic 600 48px var(--serif); opacity: .6; margin: 0 0 18px; }
+
+/* ---------- <store-phone> ---------- */
+
+.phone {
+  aspect-ratio: 9 / 19.2;
+  border-radius: 9% / 4.2%;
+  padding: 2.6%;
+  background: linear-gradient(145deg, #3a3f4a, #15171c);
+  box-shadow: 0 50px 90px -20px rgba(8, 20, 50, .45), inset 0 0 0 3px #50566280;
+}
+.phone .screen { width: 100%; height: 100%; border-radius: 7.4% / 3.5%; overflow: hidden; background: #fff; }
+.phone .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.phone .camera {
+  position: absolute; top: 3.6%; left: 50%; width: 3.6%; aspect-ratio: 1; translate: -50%;
+  border-radius: 50%; background: #0a0a0c; box-shadow: 0 0 0 2px #222;
+}
+
+/* ---------- <store-zoom> ---------- */
+
+.zoom {
+  z-index: 10;
+  overflow: hidden;
+  border-radius: 36px;
+  background: #fff;
+  box-shadow: 0 40px 80px -20px rgba(8, 20, 50, .45), 0 0 0 10px #fff;
+}
+.zoom img { position: absolute; display: block; }
+
+/* Shown instead of a capture that doesn't exist yet */
+.missing {
+  width: 100%; height: 100%; min-height: 120px; display: grid; place-items: center; text-align: center;
+  background: repeating-linear-gradient(45deg, #fde8e8, #fde8e8 20px, #fff 20px, #fff 40px);
+  color: #b3261e; font: 700 30px var(--sans); padding: 20px;
+}
+
+/* ---------- Decorations ---------- */
+
+.sticker {
+  z-index: 10;
+  display: flex; align-items: center; gap: 14px;
+  padding: 22px 38px;
+  border-radius: 999px;
+  background: #fff; color: var(--navy);
+  font: 700 40px var(--sans); white-space: nowrap;
+  box-shadow: 0 18px 40px -12px rgba(8, 20, 50, .35);
+}
+.sticker.dark { background: var(--navy); color: #fff; }
+.sticker svg { width: 40px; height: 40px; }
+
+.swatches { left: 0; right: 0; display: flex; justify-content: center; gap: 26px; }
+.swatches span { width: 74px; height: 74px; border-radius: 50%; box-shadow: 0 0 0 8px #fff, 0 12px 30px -8px rgba(0, 0, 0, .35); }
+
+.features { width: 470px; list-style: none; display: flex; flex-direction: column; gap: 54px; }
+.features svg {
+  width: 92px; height: 92px; padding: 21px; margin-bottom: 18px;
+  border-radius: 28px; background: #fff; color: var(--accent);
+  box-shadow: 0 14px 30px -12px rgba(8, 20, 50, .3);
+}
+.features b { display: block; font: 700 46px var(--sans); }
+.features span { display: block; font: 600 34px/1.25 var(--sans); opacity: .65; margin-top: 4px; }

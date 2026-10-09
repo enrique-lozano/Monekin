@@ -2,27 +2,50 @@
 
 This is one of the parts where we most appreciate your help. The presentation in the Google Play is important to achieve a greater number of downloads.
 
-The store images are generated in two steps:
+The store images are made in two steps:
 
 1. **Captures**: `scripts\generate_screenshots.bat` runs the app with demo data and saves raw captures to `<lang>/Screenshots/` (see `integration_test/README.md`).
-2. **Store images**: `scripts\render_store_images.bat` lays those captures out with the HTML templates in `store-images/` and saves the final 1080x1920 images to `<lang>/StoreImages/`.
+2. **Store images**: the editor in `store-images/` lays those captures out and exports the final 1080x1920 images to `<lang>/StoreImages/01.png`, `02.png`... ready to upload one by one.
+
+## Using the editor
+
+From the repository root:
 
 ```
-- store-images
-    - slides.html / slides.css / slides.js   (templates, one function per image in slides.js)
-    - copy
-         - en.js                             (texts of each image, one file per language)
-    - fonts
-- lang1
-    - Screenshots                            (raw captures, step 1)
-    - StoreImages                            (final images, step 2)
+dart app-marketplaces/screenshots/store-images/server.dart
 ```
 
-## Editing the store images
+Open the printed URL. You'll see every image of the selected language. Use **Export** on an image, or export a whole language at once. Reload the page after editing any file.
 
-- Open `store-images/slides.html` in a browser to preview every image of every language at once. Reload after any change.
-- Texts live in `store-images/copy/<lang>.js`. Wrap a word in `<em>` to highlight it. To add a language, copy `en.js`, translate it and add its `<script>` tag to `slides.html`.
-- Layout lives in `store-images/slides.js`. Each image is built from a few helpers: `phone()` (a device with a capture), `zoom()` (a magnified crop of a capture) and stickers.
-- The renderer uses Microsoft Edge by default. Set `BROWSER` to the path of another Chromium browser to change it.
+```
+store-images/
+├── config.json       Languages and slides, in store order
+├── slides/*.html     One file per image (layout)
+├── texts/<lang>.json Texts of every image, one file per language
+└── lib/              Editor and shared styles (rarely needs changes)
+```
+
+### Editing a slide
+
+Slides are plain HTML plus a few custom tags. Position elements with inline `style`, in pixels of the 1080x1920 canvas:
+
+```html
+<store-slide background="sky">                         <!-- sky, cream, mist or navy -->
+  <header style="top: 120px">
+    <h1><store-text key="title"></store-text></h1>     <!-- texts/<lang>.json → "<slide>" → "title" -->
+  </header>
+
+  <!-- Device showing <lang>/Screenshots/01_dashboard.png -->
+  <store-phone shot="01_dashboard" style="left: 190px; top: 660px; width: 700px; rotate: -4deg"></store-phone>
+
+  <!-- Magnified part of a capture. crop = "left top width height", in % of the capture -->
+  <store-zoom shot="01_dashboard" crop="0 11 77 12" style="left: 50px; top: 980px; width: 600px"></store-zoom>
+</store-slide>
+```
+
+- `shot` is a capture name from `ScreenshotName` in `integration_test/tests/screenshots/screenshots_config.dart`, plus the style suffix for the extra styles (e.g. `01_dashboard_dark_purple`). A missing capture shows a striped warning instead.
+- In texts, wrap a word in `<em>` to highlight it. A missing text shows as a yellow `slide.key` mark.
+- To add a language, copy `texts/en.json`, translate it and add it to `config.json`.
+- To add or reorder images, edit `slides` in `config.json`. The order sets the exported file names.
 
 The `Mockup.pptx` and `Mockups/` folders are the old, manually made images, kept until the new ones are published.

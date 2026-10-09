@@ -1,0 +1,12 @@
+{
+  "languages": ["en", "es"],
+  "slides": [
+    "01-dashboard",
+    "02-transactions",
+    "03-stats",
+    "04-themes",
+    "05-quick-add",
+    "06-planning",
+    "07-privacy"
+  ]
+}

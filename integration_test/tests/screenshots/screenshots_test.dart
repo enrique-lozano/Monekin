@@ -47,15 +47,18 @@ void main() {
       ),
   ];
 
+  // The test wipes and seeds its DB, so it only runs on a disposable one
+  // passed via `--dart-define=MONEKIN_DB_NAME=...`, never the real `database.db`.
+  final usesRealDb = AppDB.instance.dbName == 'database.db';
+
   setUpAll(() async {
-    // Start from a fresh install. Only wipes a DB the script named explicitly,
-    // never the user's real `database.db`.
-    if (AppDB.instance.dbName != 'database.db') {
-      final dbPath = await AppDB.instance.databasePath;
-      for (final suffix in ['', '-wal', '-shm', '-journal']) {
-        final file = File('$dbPath$suffix');
-        if (file.existsSync()) await file.delete();
-      }
+    if (usesRealDb) return;
+
+    // Start from a fresh install.
+    final dbPath = await AppDB.instance.databasePath;
+    for (final suffix in ['', '-wal', '-shm', '-journal']) {
+      final file = File('$dbPath$suffix');
+      if (file.existsSync()) await file.delete();
     }
 
     await setupMonekin();
@@ -78,6 +81,12 @@ void main() {
     try {
       await _setAppLocale(locales.first);
       await startMonekin(tester);
+
+      // Android can only capture the app once its surface is an image.
+      if (Platform.isAndroid) {
+        await binding.convertFlutterSurfaceToImage();
+        await tester.pumpAndSettle();
+      }
 
       // Give the app some data to show instead of empty states.
       await fillWithDemoData();
@@ -104,7 +113,7 @@ void main() {
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
-  });
+  }, skip: usesRealDb);
 }
 
 List<ScreenshotStyle> _selectStyles() {

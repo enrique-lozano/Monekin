@@ -1,0 +1,23 @@
+body { margin: 0; background: #1d1f24; color: #fff; font: 600 15px system-ui, sans-serif; }
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 32px; background: #121317; border-bottom: 1px solid #2c2f36;
+}
+nav b { margin-right: auto; font-size: 17px; }
+nav select, nav button, figcaption button {
+  font: inherit; color: inherit; background: #2c2f36; border: 0; border-radius: 8px; padding: 8px 14px; cursor: pointer;
+}
+nav button:hover, figcaption button:hover { background: #3b3f48; }
+nav button:disabled { opacity: .5; cursor: wait; }
+#status { min-width: 200px; text-align: right; color: #9aa3b5; }
+
+main { display: flex; flex-wrap: wrap; gap: 32px; padding: 32px; }
+
+figure { margin: 0; }
+figcaption { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+
+/* Previews are the real 1080x1920 slide, scaled down */
+.preview { width: 324px; height: 576px; overflow: hidden; border-radius: 14px; background: #000; }
+.preview .slide { transform: scale(.3); transform-origin: 0 0; }
