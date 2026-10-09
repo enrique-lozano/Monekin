@@ -6,6 +6,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
@@ -271,6 +272,8 @@ class HoldingService {
         WHERE t.type = 'N' AND t.securityID IS NOT NULL
           AND a.trackingMode = 'transactions'
           AND t.date <= ?1
+          AND t.intervalPeriod IS NULL
+          AND (t.status IS NULL OR t.status NOT IN ('V', 'P'))
           $tradesAccountFilter
       ),
       -- Running weighted-average cost, mirroring `recomputeHolding`: buys move
@@ -558,6 +561,16 @@ class HoldingService {
     );
   }
 
+  /// Trades that move a position. Recurrent rules (not paid yet) and pending or
+  /// voided trades are left out, as they don't move cash either.
+  static Expression<bool> _countsAsTrade(Transactions t) =>
+      t.intervalPeriod.isNull() &
+      (t.status.isNull() |
+          t.status.isNotInValues([
+            TransactionStatus.voided,
+            TransactionStatus.pending,
+          ]));
+
   /// Replays every security trade of the (account, security) pair in date order
   /// and returns the resulting position: buys move the weighted-average cost,
   /// sells only shrink the quantity, and a position that closes leaves a
@@ -571,7 +584,8 @@ class HoldingService {
               ..where(
                 (t) =>
                     t.accountID.equals(accountId) &
-                    t.securityID.equals(securityId),
+                    t.securityID.equals(securityId) &
+                    _countsAsTrade(t),
               )
               ..orderBy([(t) => OrderingTerm.asc(t.date)]))
             .get();

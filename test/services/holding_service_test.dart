@@ -4,6 +4,8 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 
 void main() {
@@ -28,12 +30,17 @@ void main() {
     required DateTime date,
     String account = accountId,
     String security = securityId,
+    TransactionStatus? status,
+    Periodicity? intervalPeriod,
   }) {
     return db
         .into(db.transactions)
         .insert(
           TransactionInDB(
             id: 'tx-${account}_${security}_${date.microsecondsSinceEpoch}_$quantity',
+            status: status,
+            intervalEach: intervalPeriod == null ? null : 1,
+            intervalPeriod: intervalPeriod,
             date: date,
             accountID: account,
             value: -(quantity * price),
@@ -218,6 +225,37 @@ void main() {
     expect(holding.avgCostPrice, 100);
   });
 
+  test('ignores recurrent rules and pending or voided trades', () async {
+    await insertTrade(quantity: 10, price: 100, date: DateTime(2026, 1, 1));
+    await insertTrade(
+      quantity: 5,
+      price: 50,
+      date: DateTime(2026, 1, 2),
+      intervalPeriod: Periodicity.month,
+    );
+    await insertTrade(
+      quantity: 6,
+      price: 60,
+      date: DateTime(2026, 1, 3),
+      status: TransactionStatus.pending,
+    );
+    await insertTrade(
+      quantity: 7,
+      price: 70,
+      date: DateTime(2026, 1, 4),
+      status: TransactionStatus.voided,
+    );
+
+    await service.recomputeHolding(
+      accountId: accountId,
+      securityId: securityId,
+    );
+
+    final holding = await service.getHolding(accountId, securityId).first;
+    expect(holding!.quantity, 10);
+    expect(holding.avgCostPrice, 100);
+  });
+
   group('time-aware market value', () {
     test(
       'transactions mode uses quantity and price as of the given date',
@@ -257,6 +295,36 @@ void main() {
             )
             .first;
         expect(marValue, closeTo(20 * 300, 0.001));
+      },
+    );
+
+    test(
+      'transactions mode ignores recurrent rules and pending trades',
+      () async {
+        await insertAccount(accountId, AccountTrackingMode.transactions);
+        await insertSecurity(securityId, currentPrice: 100);
+
+        await insertTrade(quantity: 10, price: 100, date: DateTime(2026, 1, 1));
+        await insertTrade(
+          quantity: 5,
+          price: 100,
+          date: DateTime(2026, 1, 2),
+          intervalPeriod: Periodicity.month,
+        );
+        await insertTrade(
+          quantity: 6,
+          price: 100,
+          date: DateTime(2026, 1, 3),
+          status: TransactionStatus.pending,
+        );
+
+        final value = await service
+            .getHoldingsMarketValue(
+              accountIds: [accountId],
+              date: DateTime(2026, 1, 15),
+            )
+            .first;
+        expect(value, closeTo(10 * 100, 0.001));
       },
     );
 
