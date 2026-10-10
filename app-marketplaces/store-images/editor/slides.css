@@ -38,9 +38,11 @@
   --sans: 'Nunito', system-ui, sans-serif;
   --shadow: 0 50px 90px -24px color-mix(in srgb, var(--navy) 45%, transparent);
 
-  /* Distance of the texts from the top or the bottom edge, and side margin */
+  /* Space between the texts and the top or bottom edge, and side margin. Texts
+     at the bottom grow upwards, so that space stays the same whatever the
+     number of lines. */
   --header-top: 115px;
-  --header-bottom: 1550px;
+  --header-bottom: 150px;
   --margin: 80px;
 
   position: relative;
@@ -110,7 +112,8 @@
 
   /* Texts placed below the content instead of above it */
   &.bottom {
-    top: var(--header-bottom);
+    top: auto;
+    bottom: var(--header-bottom);
   }
 
   &.left {
