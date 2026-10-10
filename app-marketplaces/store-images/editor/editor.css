@@ -88,8 +88,27 @@ figure {
 figcaption {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   margin-bottom: 10px;
+
+  & span:first-child {
+    margin-right: auto;
+  }
+}
+
+/* Marks a slide showing English captures because its language has none */
+.fallback {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #fdca40;
+  color: #0f3375;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: help;
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 /* Previews are the real 1080x1920 slide, scaled down */

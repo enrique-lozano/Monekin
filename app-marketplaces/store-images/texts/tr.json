@@ -1,0 +1,38 @@
+{
+  "01-dashboard": {
+    "title": "Paranız, <em>nihayet net.</em>",
+    "subtitle": "Tüm hesaplar, bakiyeler ve eğilimler tek bakışta",
+    "sticker": "%100 gizli"
+  },
+  "02-transactions": {
+    "title": "Her hareket <em>yerli yerinde</em>",
+    "subtitle": "Sınırsız arayın, filtreleyin ve etiketleyin",
+    "search": "Arama",
+    "filters": "Filtreler",
+    "tags": "Etiketler"
+  },
+  "03-stats": {
+    "title": "Paranızın <em>nereye</em> gittiğini görün",
+    "subtitle": "Finansal sağlık puanınız, net değeriniz ve fazlası"
+  },
+  "04-themes": {
+    "title": "Size <em>özel</em> yapın",
+    "subtitle": "Temanızı, renginizi ve yazı tipinizi seçin, keyfini çıkarın!"
+  },
+  "05-quick-add": {
+    "title": "İşlemleri <em>saniyeler içinde</em> ekleyin",
+    "subtitle": "Giderler, gelirler ve transferler"
+  },
+  "06-planning": {
+    "title": "Bütçeler, hedefler ve <em>abonelikler</em>",
+    "subtitle": "Önceden planlayın, hiçbir ödemeyi kaçırmayın"
+  },
+  "07-privacy": {
+    "title": "Verileriniz, <em>yalnızca sizin</em>",
+    "offline": { "title": "Önce çevrimdışı", "text": "Her şey cihazınızda kalır" },
+    "noAds": { "title": "Reklam yok", "text": "Takip yok, reklam yok, asla" },
+    "openSource": { "title": "Açık kaynak", "text": "Şeffaf ve denetlenebilir" },
+    "investments": { "title": "Yatırımlar", "text": "Hisseler, fonlar, kripto ve varlıklar" },
+    "backups": { "title": "Yerel yedekler", "text": "İstediğiniz zaman dışa ve içe aktarın" }
+  }
+}

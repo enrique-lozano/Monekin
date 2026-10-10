@@ -1,5 +1,14 @@
 {
-  "languages": ["en", "es"],
+  "languages": [
+    { "code": "en", "name": "English" },
+    { "code": "es", "name": "Español" },
+    { "code": "tr", "name": "Türkçe" },
+    { "code": "zh-TW", "name": "繁體中文" },
+    { "code": "fr", "name": "Français" },
+    { "code": "pt", "name": "Português" },
+    { "code": "de", "name": "Deutsch" },
+    { "code": "it", "name": "Italiano" }
+  ],
   "slides": [
     "01-dashboard",
     "02-transactions",

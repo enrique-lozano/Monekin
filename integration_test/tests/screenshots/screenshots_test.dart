@@ -140,6 +140,7 @@ Future<void> _applyStyle(ScreenshotStyle style) async {
   await settings.setItem(SettingKey.themeMode, style.themeMode);
   await settings.setItem(SettingKey.amoledMode, style.amoled ? '1' : '0');
   await settings.setItem(SettingKey.accentColor, style.accent);
+  await settings.setItem(SettingKey.font, style.font.toDB());
 }
 
 Future<void> _setAppLocale(AppLocale locale) async {

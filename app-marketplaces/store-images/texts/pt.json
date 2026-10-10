@@ -1,0 +1,38 @@
+{
+  "01-dashboard": {
+    "title": "Seu dinheiro, <em>enfim claro.</em>",
+    "subtitle": "Contas, saldos e tendências num piscar de olhos",
+    "sticker": "100% privado"
+  },
+  "02-transactions": {
+    "title": "Cada movimento, <em>no seu lugar</em>",
+    "subtitle": "Pesquise, filtre e etiquete sem limites",
+    "search": "Pesquisa",
+    "filters": "Filtros",
+    "tags": "Etiquetas"
+  },
+  "03-stats": {
+    "title": "Veja <em>para onde</em> vai seu dinheiro",
+    "subtitle": "Sua nota de saúde financeira, patrimônio e mais"
+  },
+  "04-themes": {
+    "title": "Deixe com <em>a sua cara</em>",
+    "subtitle": "Escolha tema, cor e fonte e aproveite!"
+  },
+  "05-quick-add": {
+    "title": "Adicione transações <em>em segundos</em>",
+    "subtitle": "Despesas, receitas e transferências"
+  },
+  "06-planning": {
+    "title": "Orçamentos, metas e <em>assinaturas</em>",
+    "subtitle": "Planeje e não perca nenhum pagamento"
+  },
+  "07-privacy": {
+    "title": "Seus dados, <em>só seus</em>",
+    "offline": { "title": "Offline primeiro", "text": "Tudo fica no seu dispositivo" },
+    "noAds": { "title": "Sem anúncios", "text": "Sem rastreamento, sem anúncios, nunca" },
+    "openSource": { "title": "Código aberto", "text": "Transparente e auditável" },
+    "investments": { "title": "Investimentos", "text": "Ações, fundos, cripto e bens" },
+    "backups": { "title": "Backups locais", "text": "Exporte e importe quando quiser" }
+  }
+}

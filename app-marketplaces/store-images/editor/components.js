@@ -2,7 +2,8 @@
 //
 //   <store-slide background="light">      Slide canvas. Backgrounds live in slides.css.
 //   <store-text key="title">              Text of texts/<lang>.json → "<slide id>" → key.
-//   <store-phone shot="01_dashboard">     Device showing <lang>/Screenshots/01_dashboard.png.
+//   <store-phone shot="01_dashboard">     Device showing <lang>/Screenshots/01_dashboard.png
+//                                         (or the English one, if that language has none).
 //   <store-zoom shot="..." crop="...">    Magnified part of a capture. `crop` is
 //                                         "left top width height", as % of the capture.
 //   <store-icon name="lock">              One of the ICONS below.
@@ -23,7 +24,10 @@ const ICONS = {
   tag: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
 };
 
-/** Builds the slide `html` for `lang`. Resolves once every capture has loaded. */
+/**
+ * Builds the slide `html` for `lang`. Resolves once every capture has loaded,
+ * with `usesFallback` telling if any of them is the English one.
+ */
 export async function renderSlide(html, { slideId, lang, texts }) {
   // Not a <template>: images inside its inert content never load.
   const wrapper = document.createElement('div');
@@ -50,12 +54,17 @@ export async function renderSlide(html, { slideId, lang, texts }) {
 
   for (const el of root.querySelectorAll('store-zoom')) {
     const zoom = replaceWith(el, 'div', 'zoom');
-    loads.push(loadCapture(zoom, lang, el.getAttribute('shot')).then((img) => img && cropZoom(zoom, img, el)));
+    loads.push(
+      loadCapture(zoom, lang, el.getAttribute('shot')).then((capture) => {
+        if (capture) cropZoom(zoom, capture.img, el);
+        return capture;
+      }),
+    );
   }
 
   const slide = replaceWith(root, 'div', `slide ${root.getAttribute('background') ?? ''}`);
-  await Promise.all(loads);
-  return slide;
+  const captures = await Promise.all(loads);
+  return { slide, usesFallback: captures.some((c) => c?.isFallback) };
 }
 
 /** Swaps a custom tag for a `tag` element that keeps its classes and inline style. */
@@ -68,18 +77,29 @@ function replaceWith(el, tag, className) {
   return node;
 }
 
-/** Puts the capture inside `container`, or a warning if it hasn't been generated. */
-function loadCapture(container, lang, shot) {
+/**
+ * Puts the capture of `lang` inside `container`, falling back to the English
+ * one, or a warning if neither has been generated.
+ */
+async function loadCapture(container, lang, shot) {
   const img = new Image();
   container.append(img);
 
+  for (const candidate of new Set([lang, 'en'])) {
+    if (await loadImage(img, `../../screenshots/${candidate}/Screenshots/${shot}.png`)) {
+      return { img, isFallback: candidate !== lang };
+    }
+  }
+
+  container.innerHTML = `<div class="missing">Missing capture<br>${lang}/Screenshots/${shot}.png</div>`;
+  return null;
+}
+
+function loadImage(img, src) {
   return new Promise((resolve) => {
-    img.onload = () => resolve(img);
-    img.onerror = () => {
-      container.innerHTML = `<div class="missing">Missing capture<br>${lang}/Screenshots/${shot}.png</div>`;
-      resolve(null);
-    };
-    img.src = `../../screenshots/${lang}/Screenshots/${shot}.png`;
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = src;
   });
 }
 
