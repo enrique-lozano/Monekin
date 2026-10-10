@@ -159,13 +159,13 @@
   }
 }
 
-/* Two staggered columns of phones, rotated as a whole. Phones inside take the
+/* Three staggered columns of phones, rotated as a whole. Phones inside take the
    column width, so set the size of the grid with `width` on the grid itself. */
 .phone-grid {
   left: 50%;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 48px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
   width: 1040px;
   translate: -50% 0;
   rotate: -18deg;
@@ -174,9 +174,9 @@
     position: relative;
   }
 
-  /* Second column a bit lower, so the rows don't line up */
-  & .phone:nth-child(even) {
-    top: 260px;
+  /* Middle column a bit lower, so the rows don't line up */
+  & .phone:nth-child(3n + 2) {
+    top: 160px;
   }
 }
 
