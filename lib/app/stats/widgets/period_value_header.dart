@@ -33,6 +33,7 @@ class PeriodValueHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,22 +48,25 @@ class PeriodValueHeader extends StatelessWidget {
                 ),
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                t.stats.compared_to_previous_period,
-                style: const TextStyle(fontSize: 12),
-              ),
-              if (relativeChange == null)
-                const Bone(width: 52, height: 22)
-              else
-                TrendingValue(
-                  percentage: relativeChange!,
-                  fontWeight: headlineStyle.fontWeight!,
-                  fontSize: headlineStyle.fontSize!,
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  t.stats.compared_to_previous_period,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(fontSize: 12),
                 ),
-            ],
+                if (relativeChange == null)
+                  const Bone(width: 52, height: 22)
+                else
+                  TrendingValue(
+                    percentage: relativeChange!,
+                    fontWeight: headlineStyle.fontWeight!,
+                    fontSize: headlineStyle.fontSize!,
+                  ),
+              ],
+            ),
           ),
         ],
       ),
