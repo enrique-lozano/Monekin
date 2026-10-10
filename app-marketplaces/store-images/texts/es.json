@@ -13,7 +13,7 @@
   },
   "03-stats": {
     "title": "Descubre <em>a dónde va</em> tu dinero",
-    "subtitle": "Gráficos y filtros para cada categoría"
+    "subtitle": "Salud financiera, patrimonio y mucho más"
   },
   "04-themes": {
     "kicker": "Claro, oscuro, AMOLED…",
@@ -25,7 +25,7 @@
     "subtitle": "Gastos, ingresos y transferencias"
   },
   "06-planning": {
-    "title": "Presupuestos y <em>suscripciones</em>",
+    "title": "Presupuestos, metas y <em>suscripciones</em>",
     "subtitle": "Adelántate a cada cargo"
   },
   "07-privacy": {
@@ -33,7 +33,7 @@
     "offline": { "title": "Sin conexión", "text": "Todo se guarda en tu dispositivo" },
     "noAds": { "title": "Sin anuncios", "text": "Ni rastreo, ni publicidad" },
     "openSource": { "title": "Código abierto", "text": "Transparente y auditable" },
-    "currencies": { "title": "Multidivisa", "text": "Tipos de cambio integrados" },
+    "investments": { "title": "Inversiones", "text": "Acciones, fondos, cripto y bienes" },
     "backups": { "title": "Copias locales", "text": "Exporta e importa cuando quieras" }
   }
 }

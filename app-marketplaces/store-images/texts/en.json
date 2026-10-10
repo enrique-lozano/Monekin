@@ -13,7 +13,7 @@
   },
   "03-stats": {
     "title": "See <em>where</em> your money goes",
-    "subtitle": "Charts and filters for every category"
+    "subtitle": "Financial health, net worth and much more"
   },
   "04-themes": {
     "kicker": "Light, dark, AMOLED…",
@@ -25,7 +25,7 @@
     "subtitle": "Expenses, income and transfers"
   },
   "06-planning": {
-    "title": "Budgets and <em>subscriptions</em>",
+    "title": "Budgets, goals and <em>subscriptions</em>",
     "subtitle": "Stay ahead of every charge"
   },
   "07-privacy": {
@@ -33,7 +33,7 @@
     "offline": { "title": "Offline-first", "text": "Everything stays on your device" },
     "noAds": { "title": "No ads", "text": "No tracking, no ads, ever" },
     "openSource": { "title": "Open source", "text": "Transparent and auditable" },
-    "currencies": { "title": "Multi-currency", "text": "Built-in exchange rates" },
+    "investments": { "title": "Investments", "text": "Stocks, funds, crypto and assets" },
     "backups": { "title": "Local backups", "text": "Export and import anytime" }
   }
 }

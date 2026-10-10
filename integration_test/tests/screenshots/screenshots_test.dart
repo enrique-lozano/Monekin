@@ -8,11 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:monekin/app/assets/asset_details_page.dart';
+import 'package:monekin/app/assets/assets_list_page.dart';
 import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/categories/selectors/category_button_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
+import 'package:monekin/app/goals/goals_page.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
@@ -395,6 +398,19 @@ Future<void> _captureLocale(
   expect(find.byType(StatsPage), findsOneWidget);
   await _collapsePageTitle(tester, StatsPage);
   await shoot(ScreenshotName.stats);
+
+  await tester.tap(find.text(t.stats.net_worth));
+  await tester.pumpAndSettle();
+  // The composition card loads its data asynchronously.
+  final compositionCard = find.widgetWithText(
+    CardWithHeader,
+    t.stats.net_worth_composition,
+  );
+  await _pumpUntilFound(tester, compositionCard);
+  await shoot(ScreenshotName.netWorth);
+  await Scrollable.ensureVisible(tester.element(compositionCard));
+  await tester.pumpAndSettle();
+  await shoot(ScreenshotName.netWorthComposition);
   // `tester.pageBack()` looks for the English "Back" tooltip, which breaks in
   // every other locale.
   await tester.tap(find.backButton());
@@ -420,6 +436,28 @@ Future<void> _captureLocale(
   expect(find.byType(BudgetDetailsPage), findsOneWidget);
   await _collapsePageTitle(tester, BudgetDetailsPage);
   await shoot(ScreenshotName.budgetDetails);
+  await tester.tap(find.backButton());
+  await tester.pumpAndSettle();
+  await tester.tap(find.backButton());
+  await tester.pumpAndSettle();
+
+  await _tapCentered(tester, find.text(t.goals.title));
+  expect(find.byType(GoalsPage), findsOneWidget);
+  await _pumpUntilFound(tester, find.byType(FinancialTargetCard));
+  await _collapsePageTitle(tester, GoalsPage);
+  await shoot(ScreenshotName.goals);
+  await tester.tap(find.backButton());
+  await tester.pumpAndSettle();
+
+  await _tapCentered(tester, find.text(t.assets.title));
+  expect(find.byType(AssetsListPage), findsOneWidget);
+  final apartment = find.text('Apartment');
+  await _pumpUntilFound(tester, apartment);
+  await tester.tap(apartment.first);
+  await tester.pumpAndSettle();
+  expect(find.byType(AssetDetailsPage), findsOneWidget);
+  await _collapsePageTitle(tester, AssetDetailsPage);
+  await shoot(ScreenshotName.assetDetails);
   await tester.tap(find.backButton());
   await tester.pumpAndSettle();
   await tester.tap(find.backButton());

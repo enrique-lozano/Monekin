@@ -1,11 +1,15 @@
 import 'dart:math';
 
 import 'package:monekin/core/database/app_db.dart';
+import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/asset_type.enum.dart';
+import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
+import 'package:monekin/core/models/goal/goal_type.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/utils/logger.dart';
@@ -13,6 +17,7 @@ import 'package:monekin/core/utils/uuid.dart';
 
 const _cashAccountID = 'acc1';
 const _bankAccountID = 'acc2';
+const _brokerAccountID = 'acc3';
 
 final _prefCurrencyCode =
     appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
@@ -41,6 +46,18 @@ final List<AccountInDB> _accountsToCreate = [
     iniValue: 5000,
     date: DateTime(2023),
     iconId: 'account_balance',
+  ),
+  AccountInDB(
+    id: _brokerAccountID,
+    name: 'Broker',
+    displayOrder: 3,
+    type: AccountType.investment,
+    isSaving: false,
+    trackingMode: AccountTrackingMode.transactions,
+    currencyId: _prefCurrencyCode,
+    iniValue: 20000,
+    date: DateTime(2023),
+    iconId: 'auto_graph',
   ),
 ];
 
@@ -251,6 +268,163 @@ List<ExchangeRateInDB> _exchangeRatesToCreate() {
   ];
 }
 
+/// Same day [months] months ago, without time.
+DateTime _monthsAgo(int months) {
+  final now = DateTime.now();
+  return DateTime(now.year, now.month - months, now.day);
+}
+
+typedef _DemoSecurity = ({
+  String id,
+  String name,
+  String ticker,
+  SecurityType type,
+  double startPrice,
+  double endPrice,
+});
+
+const List<_DemoSecurity> _demoSecurities = [
+  (
+    id: 'sec_vwce',
+    name: 'Vanguard FTSE All-World',
+    ticker: 'VWCE',
+    type: SecurityType.fund,
+    startPrice: 95,
+    endPrice: 128,
+  ),
+  (
+    id: 'sec_aapl',
+    name: 'Apple Inc.',
+    ticker: 'AAPL',
+    type: SecurityType.stock,
+    startPrice: 170,
+    endPrice: 232,
+  ),
+  (
+    id: 'sec_btc',
+    name: 'Bitcoin',
+    ticker: 'BTC',
+    type: SecurityType.crypto,
+    startPrice: 38000,
+    endPrice: 61000,
+  ),
+];
+
+/// Months of monthly price history of each security.
+const _priceHistoryMonths = 24;
+
+/// Buys of the broker account, as (security id, months ago, quantity).
+const _demoTrades = [
+  ('sec_vwce', 18, 60.0),
+  ('sec_aapl', 12, 20.0),
+  ('sec_btc', 10, 0.08),
+  ('sec_vwce', 6, 40.0),
+];
+
+/// Price of [security] [monthsAgo] months ago: steady growth with some ups and
+/// downs, so the charts don't look flat.
+double _priceAt(_DemoSecurity security, int monthsAgo) {
+  final progress = 1 - monthsAgo / _priceHistoryMonths;
+  final trend =
+      security.startPrice *
+      pow(security.endPrice / security.startPrice, progress);
+  final wave = monthsAgo == 0 ? 0 : 0.05 * sin(monthsAgo * 1.7);
+  return double.parse((trend * (1 + wave)).toStringAsFixed(2));
+}
+
+List<SecurityInDB> _securitiesToCreate() => [
+  for (final security in _demoSecurities)
+    SecurityInDB(
+      id: security.id,
+      name: security.name,
+      type: security.type,
+      currencyId: _prefCurrencyCode,
+      ticker: security.ticker,
+      currentPrice: security.endPrice,
+      priceDate: _monthsAgo(0),
+    ),
+];
+
+List<SecurityPriceInDB> _securityPricesToCreate() => [
+  for (final security in _demoSecurities)
+    for (var month = _priceHistoryMonths; month >= 0; month--)
+      SecurityPriceInDB(
+        id: generateUUID(),
+        securityID: security.id,
+        date: _monthsAgo(month),
+        price: _priceAt(security, month),
+      ),
+];
+
+List<AssetInDB> _assetsToCreate() => [
+  AssetInDB(
+    id: 'asset_apartment',
+    name: 'Apartment',
+    currencyId: _prefCurrencyCode,
+    initialValue: 0,
+    creationDate: _monthsAgo(30),
+    assetType: AssetType.realEstate,
+  ),
+  AssetInDB(
+    id: 'asset_car',
+    name: 'Car',
+    currencyId: _prefCurrencyCode,
+    initialValue: 0,
+    creationDate: _monthsAgo(24),
+    assetType: AssetType.vehicle,
+  ),
+];
+
+List<AssetValuationInDB> _assetValuationsToCreate() => [
+  for (final (assetId, monthsAgo, value) in [
+    ('asset_apartment', 30, 145000.0),
+    ('asset_apartment', 18, 151000.0),
+    ('asset_apartment', 6, 158500.0),
+    ('asset_apartment', 0, 163000.0),
+    ('asset_car', 24, 24000.0),
+    ('asset_car', 12, 20500.0),
+    ('asset_car', 0, 17800.0),
+  ])
+    AssetValuationInDB(
+      id: generateUUID(),
+      assetId: assetId,
+      date: _monthsAgo(monthsAgo),
+      value: value,
+    ),
+];
+
+/// Savings goals, both counting incomes (mainly the monthly salary), so they
+/// show some progress.
+final List<TransactionFilterSetInDB> _goalFilterSetsToCreate = [
+  const TransactionFilterSetInDB(
+    id: 'goal_filter_emergency',
+    categoriesIds: ['10'], // Salary
+  ),
+  const TransactionFilterSetInDB(id: 'goal_filter_trip'),
+];
+
+List<GoalInDB> _goalsToCreate() => [
+  GoalInDB(
+    id: 'goal_emergency',
+    name: 'Emergency fund',
+    amount: 12000,
+    initialAmount: 0,
+    startDate: _monthsAgo(4),
+    type: GoalType.income,
+    filterID: 'goal_filter_emergency',
+  ),
+  GoalInDB(
+    id: 'goal_trip',
+    name: 'Trip to Japan',
+    amount: 9000,
+    initialAmount: 0,
+    startDate: _monthsAgo(2),
+    endDate: _monthsAgo(-6),
+    type: GoalType.income,
+    filterID: 'goal_filter_trip',
+  ),
+];
+
 Future<void> fillWithDemoData() async {
   Logger.printDebug('Starting demo data seeding...');
   final db = AppDB.instance;
@@ -459,7 +633,25 @@ Future<void> fillWithDemoData() async {
     ]);
     batch.insertAll(db.transactionTags, transactionTags);
     batch.insertAll(db.exchangeRates, _exchangeRatesToCreate());
+    batch.insertAll(db.securities, _securitiesToCreate());
+    batch.insertAll(db.securityPrices, _securityPricesToCreate());
+    batch.insertAll(db.assets, _assetsToCreate());
+    batch.insertAll(db.assetValuations, _assetValuationsToCreate());
+    batch.insertAll(db.transactionFilterSets, _goalFilterSetsToCreate);
+    batch.insertAll(db.goals, _goalsToCreate());
   });
+
+  // Through the service, so the holdings and the trades stay in sync.
+  for (final (securityId, monthsAgo, quantity) in _demoTrades) {
+    final security = _demoSecurities.firstWhere((s) => s.id == securityId);
+    await HoldingService.instance.buy(
+      accountId: _brokerAccountID,
+      securityId: securityId,
+      quantity: quantity,
+      pricePerUnit: _priceAt(security, monthsAgo),
+      date: _monthsAgo(monthsAgo),
+    );
+  }
 
   Logger.printDebug('Seed completed successfully!');
 

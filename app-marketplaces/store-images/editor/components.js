@@ -16,6 +16,7 @@ const ICONS = {
   noAds: '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
   code: '<path d="m8 8-4 4 4 4m8-8 4 4-4 4m-6 3 4-14"/>',
   currency: '<circle cx="9" cy="9" r="6"/><path d="M15.5 9.5a6 6 0 1 1-6 6"/>',
+  chart: '<path d="M4 4v16h16"/><path d="m8 14 3-4 3 3 5-6"/>',
   backup: '<path d="M4 7h16v13H4zM8 7V4h8v3M9 12h6"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
   filter: '<path d="M4 5h16l-6 8v6l-4-2v-4z"/>',

@@ -14,7 +14,11 @@ enum ScreenshotName {
   exchangeRate('07_exchange_rate'),
   formIncome('08_form_income'),
   formExpense('09_form_expense'),
-  formTransfer('10_form_transfer');
+  formTransfer('10_form_transfer'),
+  netWorth('11_net_worth'),
+  netWorthComposition('11_net_worth_composition'),
+  goals('12_goals'),
+  assetDetails('13_asset_details');
 
   const ScreenshotName(this.fileName);
 
