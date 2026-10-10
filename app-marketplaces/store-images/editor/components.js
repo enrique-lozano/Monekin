@@ -13,7 +13,8 @@
 
 const ICONS = {
   lock: '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
-  offline: '<path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/>',
+  offline:
+    '<path d="M7.5 18h9.75a3.75 3.75 0 0 0 1.1-7.34A6 6 0 0 0 7.2 8.3 4.5 4.5 0 0 0 7.5 18z"/><path d="m3 3 18 18"/>',
   noAds: '<circle cx="12" cy="12" r="9"/><path d="m5.6 5.6 12.8 12.8"/>',
   code: '<path d="m8 8-4 4 4 4m8-8 4 4-4 4m-6 3 4-14"/>',
   currency: '<circle cx="9" cy="9" r="6"/><path d="M15.5 9.5a6 6 0 1 1-6 6"/>',
