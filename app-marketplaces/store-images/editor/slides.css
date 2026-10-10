@@ -112,12 +112,6 @@
     opacity: 0.7;
     text-wrap: balance;
   }
-
-  & p.kicker {
-    margin: 0 0 18px;
-    font: italic 600 48px var(--serif);
-    opacity: 0.6;
-  }
 }
 
 .slide h1 {
@@ -163,6 +157,39 @@
   & .missing {
     aspect-ratio: 1080 / 2208;
   }
+}
+
+/* Two staggered columns of phones, rotated as a whole. Phones inside take the
+   column width, so set the size of the grid with `width` on the grid itself. */
+.phone-grid {
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 48px;
+  width: 1040px;
+  translate: -50% 0;
+  rotate: -18deg;
+
+  & .phone {
+    position: relative;
+  }
+
+  /* Second column a bit lower, so the rows don't line up */
+  & .phone:nth-child(even) {
+    top: 260px;
+  }
+}
+
+/* Fades whatever is behind it into the slide background, from the bottom edge
+   up to `height`. Put it right before the elements that must stay readable. */
+.fade-bottom {
+  inset-inline: 0;
+  bottom: 0;
+  background: linear-gradient(transparent, var(--fade-color, var(--sky)) 55%);
+}
+
+.slide.navy .fade-bottom {
+  --fade-color: var(--navy-deep);
 }
 
 /* ---------- <store-zoom> ---------- */

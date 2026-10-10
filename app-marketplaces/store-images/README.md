@@ -54,7 +54,7 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
 - `shot` is a capture name from `ScreenshotName` in `integration_test/tests/screenshots/screenshots_config.dart`, plus the style suffix for the extra styles (e.g. `01_dashboard_dark_purple`). A missing capture shows a striped warning instead.
 - Colors live as variables at the top of `editor/slides.css`: navy text and coin yellow from the app icon, on light blue or navy backgrounds. Alternate `light` and `navy` so consecutive images don't look the same, and use `<div class="coin">` or `class="sticker yellow"` for touches of yellow.
 - In texts, wrap a word in `<em>` to highlight it (yellow marker on light backgrounds, yellow text on navy). A missing text shows as a yellow `slide.key` mark.
-- To add a language, copy `texts/en.json`, translate it and add it to `config.json`.
+- The languages are the ones of the store listings, in `config.json`. A language without captures uses the English ones, marked with an **EN** badge in the editor, so its images can always be exported. To add a language, copy `texts/en.json`, translate it and add it to `config.json`.
 - To add or reorder images, edit `slides` in `config.json`. The order sets the exported file names.
 
 The `Mockup.pptx` and `Mockups/` folders are the old, manually made images, kept until the new ones are published.

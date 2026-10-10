@@ -10,24 +10,23 @@ const status = document.getElementById('status');
 const main = document.getElementById('slides');
 const openFolder = document.getElementById('open-folder');
 
-// Only languages whose captures exist, as the rest would export empty phones.
-const languages = (
-  await Promise.all(config.languages.map(async (l) => ((await hasCaptures(l)) ? l : null)))
-).filter(Boolean);
+const languages = config.languages.map((l) => l.code);
 
-if (languages.length === 0) {
+// Languages without captures use the English ones, so only stop when even
+// those are missing.
+if (!(await hasCaptures('en'))) {
   document.querySelector('nav').hidden = true;
   main.innerHTML = `
     <div class="empty">
-      <h2>No captures generated yet</h2>
+      <h2>No English captures generated yet</h2>
       <p>Run this from the repository root, with an emulator or device running:</p>
-      <code>scripts\\generate_screenshots.bat</code>
-      <p>Then reload this page.</p>
+      <code>scripts\\generate_screenshots.bat en</code>
+      <p>Other languages use the English captures until theirs are generated. Then reload this page.</p>
     </div>`;
   throw new Error('No captures found in app-marketplaces/screenshots/<lang>/Screenshots/');
 }
 
-langSelect.innerHTML = languages.map((l) => `<option>${l}</option>`).join('');
+langSelect.innerHTML = config.languages.map((l) => `<option value="${l.code}">${l.name}</option>`).join('');
 const requested = new URLSearchParams(location.search).get('lang');
 langSelect.value = languages.includes(requested) ? requested : languages[0];
 langSelect.onchange = () => {
@@ -47,11 +46,19 @@ async function showPreviews(lang) {
 
   for (const [i, id] of config.slides.entries()) {
     const figure = document.createElement('figure');
-    figure.innerHTML = `<figcaption>${fileName(i)} · ${id}<button>Export</button></figcaption><div class="preview"></div>`;
+    figure.innerHTML = `
+      <figcaption>
+        <span>${fileName(i)} · ${id}</span>
+        <span class="fallback" hidden title="No captures in this language yet: showing the English ones">EN</span>
+        <button>Export</button>
+      </figcaption>
+      <div class="preview"></div>`;
     figure.querySelector('button').onclick = () => run(() => exportSlide(lang, i, texts), lang);
     main.append(figure);
 
-    figure.querySelector('.preview').append(await renderSlide(slideHtml[id], { slideId: id, lang, texts }));
+    const { slide, usesFallback } = await renderSlide(slideHtml[id], { slideId: id, lang, texts });
+    figure.querySelector('.preview').append(slide);
+    figure.querySelector('.fallback').hidden = !usesFallback;
   }
 }
 
@@ -69,7 +76,7 @@ async function exportSlide(lang, index, texts) {
   const id = config.slides[index];
   status.textContent = `Exporting ${lang}/${fileName(index)}…`;
 
-  const slide = await renderSlide(slideHtml[id], { slideId: id, lang, texts });
+  const { slide } = await renderSlide(slideHtml[id], { slideId: id, lang, texts });
   const stage = Object.assign(document.createElement('div'), { style: 'position: fixed; left: -99999px; top: 0' });
   stage.append(slide);
   document.body.append(stage);

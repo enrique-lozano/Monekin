@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/painting.dart';
+import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 
@@ -32,6 +33,7 @@ class ScreenshotStyle {
     required this.themeMode,
     required this.accent,
     this.amoled = false,
+    this.font = AppFonts.nunito,
   });
 
   final String id;
@@ -43,6 +45,8 @@ class ScreenshotStyle {
   final String accent;
 
   final bool amoled;
+
+  final AppFonts font;
 }
 
 /// Settings of the screenshot generation. Edit the values here.
@@ -68,16 +72,30 @@ abstract final class ScreenshotConfig {
     // ScreenshotStyle('dark', themeMode: 'dark', accent: brandBlue.toHex()),
   ];
 
-  /// Only the dashboard is captured in these, to show the accent colors.
+  /// Only the dashboard is captured in these, to show the theme, accent color
+  /// and font options.
   static const dashboardOnlyStyles = [
-    ScreenshotStyle('light_green', themeMode: 'light', accent: '388E3C'),
+    ScreenshotStyle(
+      'light_green',
+      themeMode: 'light',
+      accent: '388E3C',
+      font: AppFonts.jost,
+    ),
     ScreenshotStyle('dark_purple', themeMode: 'dark', accent: '8E24AA'),
     ScreenshotStyle(
       'dark_amoled_orange',
       themeMode: 'dark',
       accent: 'FB8C00',
       amoled: true,
+      font: AppFonts.exo,
     ),
+    ScreenshotStyle(
+      'light_red',
+      themeMode: 'light',
+      accent: 'D32F2F',
+      font: AppFonts.cairo,
+    ),
+    ScreenshotStyle('dark_teal', themeMode: 'dark', accent: '00897B'),
   ];
 
   /// Platform the app behaves as. `android` hides the desktop window bar and

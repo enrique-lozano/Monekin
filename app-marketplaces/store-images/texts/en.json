@@ -1,7 +1,7 @@
 {
   "01-dashboard": {
     "title": "Your money, <em>finally clear.</em>",
-    "subtitle": "Balance, trends and financial health at a glance",
+    "subtitle": "Every account, balance and trend at a glance",
     "sticker": "100% private"
   },
   "02-transactions": {
@@ -13,12 +13,11 @@
   },
   "03-stats": {
     "title": "See <em>where</em> your money goes",
-    "subtitle": "Financial health, net worth and much more"
+    "subtitle": "Your financial health score, net worth and more"
   },
   "04-themes": {
-    "kicker": "Light, dark, AMOLED…",
     "title": "Make it <em>yours</em>",
-    "subtitle": "Pick your theme and accent color"
+    "subtitle": "Pick your theme, color and font and enjoy!"
   },
   "05-quick-add": {
     "title": "Add transactions <em>in seconds</em>",
@@ -26,7 +25,7 @@
   },
   "06-planning": {
     "title": "Budgets, goals and <em>subscriptions</em>",
-    "subtitle": "Stay ahead of every charge"
+    "subtitle": "Plan ahead and never miss a payment"
   },
   "07-privacy": {
     "title": "Your data, <em>only yours</em>",

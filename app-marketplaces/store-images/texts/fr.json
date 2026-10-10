@@ -1,0 +1,38 @@
+{
+  "01-dashboard": {
+    "title": "Votre argent, <em>enfin clair.</em>",
+    "subtitle": "Comptes, soldes et tendances en un coup d’œil",
+    "sticker": "100 % privé"
+  },
+  "02-transactions": {
+    "title": "Chaque mouvement, <em>bien rangé</em>",
+    "subtitle": "Recherchez, filtrez et étiquetez sans limites",
+    "search": "Recherche",
+    "filters": "Filtres",
+    "tags": "Étiquettes"
+  },
+  "03-stats": {
+    "title": "Voyez <em>où</em> va votre argent",
+    "subtitle": "Votre score de santé financière, patrimoine et plus"
+  },
+  "04-themes": {
+    "title": "À <em>votre</em> image",
+    "subtitle": "Choisissez thème, couleur et police, et profitez !"
+  },
+  "05-quick-add": {
+    "title": "Ajoutez des transactions <em>en quelques secondes</em>",
+    "subtitle": "Dépenses, revenus et virements"
+  },
+  "06-planning": {
+    "title": "Budgets, objectifs et <em>abonnements</em>",
+    "subtitle": "Anticipez et ne manquez aucun paiement"
+  },
+  "07-privacy": {
+    "title": "Vos données, <em>rien qu’à vous</em>",
+    "offline": { "title": "Hors ligne d’abord", "text": "Tout reste sur votre appareil" },
+    "noAds": { "title": "Sans publicité", "text": "Ni pistage, ni publicité, jamais" },
+    "openSource": { "title": "Open source", "text": "Transparent et vérifiable" },
+    "investments": { "title": "Investissements", "text": "Actions, fonds, crypto et biens" },
+    "backups": { "title": "Sauvegardes locales", "text": "Exportez et importez à tout moment" }
+  }
+}

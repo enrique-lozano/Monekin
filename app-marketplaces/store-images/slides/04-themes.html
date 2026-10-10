@@ -1,13 +1,20 @@
 <store-slide background="light">
-  <header style="top: 110px">
-    <p class="kicker"><store-text key="kicker"></store-text></p>
+  <!-- Every style at the same size, tilted as a diagonal grid that bleeds off
+       the edges, so none looks more important than the rest -->
+  <div class="phone-grid" style="top: -380px; width: 980px">
+    <store-phone shot="01_dashboard"></store-phone>
+    <store-phone shot="01_dashboard_dark_purple"></store-phone>
+    <store-phone shot="01_dashboard_light_green"></store-phone>
+    <store-phone shot="01_dashboard_dark_amoled_orange"></store-phone>
+    <store-phone shot="01_dashboard_light_red"></store-phone>
+    <store-phone shot="01_dashboard_dark_teal"></store-phone>
+  </div>
+
+  <!-- Fades the grid out behind the texts -->
+  <div class="fade-bottom" style="height: 760px"></div>
+
+  <header style="top: 1500px">
     <h1><store-text key="title"></store-text></h1>
     <p><store-text key="subtitle"></store-text></p>
   </header>
-
-  <!-- Listed from back to front -->
-  <store-phone shot="01_dashboard_light_green" style="left: -160px; top: 640px; width: 520px; rotate: -14deg"></store-phone>
-  <store-phone shot="01_dashboard_dark_amoled_orange" style="right: -160px; top: 640px; width: 520px; rotate: 14deg"></store-phone>
-  <store-phone shot="01_dashboard_dark_purple" style="right: 80px; top: 530px; width: 560px; rotate: 6deg"></store-phone>
-  <store-phone shot="01_dashboard" style="left: 90px; top: 490px; width: 600px; rotate: -4deg"></store-phone>
 </store-slide>

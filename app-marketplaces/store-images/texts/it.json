@@ -1,0 +1,38 @@
+{
+  "01-dashboard": {
+    "title": "I tuoi soldi, <em>finalmente chiari.</em>",
+    "subtitle": "Conti, saldi e tendenze a colpo d’occhio",
+    "sticker": "100% privato"
+  },
+  "02-transactions": {
+    "title": "Ogni movimento, <em>al suo posto</em>",
+    "subtitle": "Cerca, filtra ed etichetta senza limiti",
+    "search": "Ricerca",
+    "filters": "Filtri",
+    "tags": "Etichette"
+  },
+  "03-stats": {
+    "title": "Scopri <em>dove</em> vanno i tuoi soldi",
+    "subtitle": "Il tuo punteggio di salute finanziaria, patrimonio e altro"
+  },
+  "04-themes": {
+    "title": "Rendila <em>tua</em>",
+    "subtitle": "Scegli tema, colore e carattere e goditela!"
+  },
+  "05-quick-add": {
+    "title": "Aggiungi transazioni <em>in pochi secondi</em>",
+    "subtitle": "Spese, entrate e trasferimenti"
+  },
+  "06-planning": {
+    "title": "Budget, obiettivi e <em>abbonamenti</em>",
+    "subtitle": "Pianifica e non perdere nessun pagamento"
+  },
+  "07-privacy": {
+    "title": "I tuoi dati, <em>solo tuoi</em>",
+    "offline": { "title": "Prima offline", "text": "Tutto resta sul tuo dispositivo" },
+    "noAds": { "title": "Niente pubblicità", "text": "Nessun tracciamento, nessuna pubblicità, mai" },
+    "openSource": { "title": "Open source", "text": "Trasparente e verificabile" },
+    "investments": { "title": "Investimenti", "text": "Azioni, fondi, cripto e beni" },
+    "backups": { "title": "Backup locali", "text": "Esporta e importa quando vuoi" }
+  }
+}
