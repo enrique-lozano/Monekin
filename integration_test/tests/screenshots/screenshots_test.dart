@@ -42,13 +42,7 @@ import 'screenshots_config.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  final locales = [
-    for (final tag in ScreenshotConfig.localesArg.split(','))
-      AppLocale.values.firstWhere(
-        (l) => l.languageTag == tag,
-        orElse: () => throw ArgumentError('Unknown locale: $tag'),
-      ),
-  ];
+  final captures = _parseCaptures();
 
   // The test wipes and seeds its DB, so it only runs on a disposable one
   // passed via `--dart-define=MONEKIN_DB_NAME=...`, never the real `database.db`.
@@ -82,7 +76,7 @@ void main() {
     debugDefaultTargetPlatformOverride = ScreenshotConfig.simulatedPlatform;
 
     try {
-      await _setAppLocale(locales.first);
+      await _setAppLocale(captures.first.locale);
       await startMonekin(tester);
 
       // Android can only capture the app once its surface is an image.
@@ -91,11 +85,22 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      // Give the app some data to show instead of empty states.
-      await fillWithDemoData();
-      await tester.pumpAndSettle();
+      String? seededCurrency;
+      for (final capture in captures) {
+        // Demo data is created in the preferred currency, so it's seeded again
+        // whenever the currency changes (captures come grouped by currency).
+        if (capture.currency != seededCurrency) {
+          await clearDemoData();
+          await UserSettingService.instance.setItem(
+            SettingKey.preferredCurrency,
+            capture.currency,
+          );
+          await fillWithDemoData();
+          await tester.pumpAndSettle();
+          seededCurrency = capture.currency;
+        }
 
-      for (final locale in locales) {
+        final locale = capture.locale;
         await _setAppLocale(locale);
         await _localizeCategories(locale);
 
@@ -110,13 +115,46 @@ void main() {
           await tester.pumpAndSettle();
           expect(find.byType(DashboardPage), findsOneWidget);
 
-          await _captureLocale(binding, tester, locale, style);
+          await _captureLocale(binding, tester, capture.id, style);
         }
       }
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
   }, skip: usesRealDb);
+}
+
+typedef _Capture = ({String id, AppLocale locale, String currency});
+
+/// [ScreenshotConfig.capturesArg] parsed, grouped by currency so each one is
+/// seeded only once.
+List<_Capture> _parseCaptures() {
+  final captures = [
+    for (final id in ScreenshotConfig.capturesArg.split(',')) _parseCapture(id),
+  ];
+  final currencies = captures.map((c) => c.currency).toSet().toList();
+  return captures..sort(
+    (a, b) => currencies
+        .indexOf(a.currency)
+        .compareTo(currencies.indexOf(b.currency)),
+  );
+}
+
+/// `zh-TW-TWD` → locale `zh-TW`, currency `TWD`.
+_Capture _parseCapture(String id) {
+  final separator = id.lastIndexOf('-');
+  final tag = separator < 0 ? '' : id.substring(0, separator);
+  final currency = separator < 0 ? '' : id.substring(separator + 1);
+
+  final locale = AppLocale.values.firstWhere(
+    (l) => l.languageTag == tag,
+    orElse: () => throw ArgumentError('Unknown app locale in capture: $id'),
+  );
+  if (currency.length != 3) {
+    throw ArgumentError('Missing currency code in capture: $id');
+  }
+
+  return (id: id, locale: locale, currency: currency.toUpperCase());
 }
 
 List<ScreenshotStyle> _selectStyles() {
@@ -295,6 +333,14 @@ Future<void> _pickCategory(
   await tester.pumpAndSettle();
 }
 
+/// [usd] in the demo currency, as typed in the amount fields.
+String _demoAmountText(double usd) {
+  final amount = demoAmount(usd);
+  return amount == amount.roundToDouble()
+      ? amount.toInt().toString()
+      : amount.toString();
+}
+
 Future<void> _enterAmount(WidgetTester tester, String amount) async {
   await tester.enterText(
     find.descendant(
@@ -324,7 +370,7 @@ Future<void> _captureTransactionForms(
 ) async {
   await _openTransactionForm(tester, mode: TransactionType.income);
   await _pickCategory(tester, categoryId: '10'); // Salary
-  await _enterAmount(tester, '2850');
+  await _enterAmount(tester, _demoAmountText(2850));
   await shoot(ScreenshotName.formIncome);
   await _closeTransactionForm(tester);
 
@@ -334,7 +380,7 @@ Future<void> _captureTransactionForms(
     categoryId: '2',
     subcategoryId: '2_2', // Groceries
   );
-  await _enterAmount(tester, '84.5');
+  await _enterAmount(tester, _demoAmountText(84.5));
   await shoot(ScreenshotName.formExpense);
   await _closeTransactionForm(tester);
 
@@ -342,7 +388,7 @@ Future<void> _captureTransactionForms(
   await _openTransactionForm(tester, mode: TransactionType.transfer);
   final amountSheet = find.byType(AmountSelector);
   await _pumpUntilFound(tester, amountSheet);
-  for (final digit in '250'.split('')) {
+  for (final digit in _demoAmountText(250).split('')) {
     await tester.tap(
       find.descendant(of: amountSheet, matching: find.text(digit)),
     );
@@ -370,10 +416,10 @@ Future<void> _tapCentered(WidgetTester tester, Finder finder) async {
 Future<void> _captureLocale(
   IntegrationTestWidgetsFlutterBinding binding,
   WidgetTester tester,
-  AppLocale locale,
+  String captureId,
   ScreenshotStyle style,
 ) async {
-  final dir = '${locale.languageTag}/Screenshots';
+  final dir = 'captures/$captureId';
   final suffix = style == ScreenshotConfig.fullSetStyles.first
       ? ''
       : '_${style.id}';

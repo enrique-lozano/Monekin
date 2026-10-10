@@ -4,11 +4,24 @@ This is one of the parts where we most appreciate your help. The presentation in
 
 The store images are made in two steps:
 
-1. **Captures**: `scripts\generate_screenshots.bat` runs the app with demo data and saves raw captures to `app-marketplaces/screenshots/<lang>/Screenshots/` (see `integration_test/README.md`).
-2. **Store images**: the editor in this folder lays those captures out and exports the final 1080x1920 images to `app-marketplaces/screenshots/<lang>/StoreImages/01.png`, `02.png`... ready to upload one by one.
+1. **Captures**: `scripts\generate_screenshots.bat` runs the app with demo data and saves raw captures to `app-marketplaces/screenshots/captures/<app language>-<currency>/` (see `integration_test/README.md`).
+2. **Store images**: the editor in this folder lays those captures out and exports the final 1080x1920 images to `app-marketplaces/screenshots/store/<set>/01.png`, `02.png`... ready to upload one by one.
+
+## Sets
+
+Each store listing gets a **set** of images, defined in `config.json` with:
+
+| Field | Meaning | Example (`pt-BR`) |
+| --- | --- | --- |
+| `id` | Store listing, and folder of its exported images | `pt-BR` |
+| `texts` | Language of the captions (`texts/<texts>.json`) | `pt` |
+| `app` | Language of the app in the captures | `en` |
+| `currency` | Currency of the demo data in the captures | `BRL` |
+
+Sets with the same `app` and `currency` share captures. Listings without their own set reuse another one when uploading (e.g. `en-US` for `en-AU`, `de-DE` for `de-AT`).
 
 > [!NOTE]
-> Only the English store images (`screenshots/en/StoreImages/`) are committed, because the project README shows them. Everything else under `screenshots/` (captures of every language and store images of other languages) is ignored by git: generate it locally with the two steps above. Commit the English images only when publishing new ones to the stores, as every export changes them slightly (demo data dates) and each commit adds them to the history again. Discard them otherwise with `git restore app-marketplaces/screenshots/en/StoreImages/`.
+> Only the `en-US` store images (`screenshots/store/en-US/`) are committed, because the project README shows them. Everything else under `screenshots/` (captures and the store images of other sets) is ignored by git: generate it locally with the two steps above. Commit the `en-US` images only when publishing new ones to the stores, as every export changes them slightly (demo data dates) and each commit adds them to the history again. Discard them otherwise with `git restore app-marketplaces/screenshots/store/en-US/`.
 
 ## Using the editor
 
@@ -18,18 +31,18 @@ From the repository root:
 dart app-marketplaces/store-images/editor/server.dart
 ```
 
-Open the printed URL. You'll see every image of the selected language. Use **Export** on an image, or export a whole language at once, then **Open folder** to see the results in your file explorer. Reload the page after editing any file.
+Open the printed URL. You'll see every image of the selected set. Use **Export** on an image, or export a whole set at once, then **Open folder** to see the results in your file explorer. Reload the page after editing any file.
 
 ```
 app-marketplaces/
 ├── store-images/            Source of the store images (edit here)
-│   ├── config.json          Languages and slides, in store order
+│   ├── config.json          Sets and slides, in store order
 │   ├── slides/*.html        One file per image (layout)
-│   ├── texts/<lang>.json    Texts of every image, one file per language
+│   ├── texts/<lang>.json    Texts of every image, one file per caption language
 │   └── editor/              Editor, local server and shared styles (rarely needs changes)
-└── screenshots/<lang>/      Generated files (don't edit by hand)
-    ├── Screenshots/         Raw captures from the integration test (not committed)
-    └── StoreImages/         Final images exported by the editor (only English is committed)
+└── screenshots/             Generated files (don't edit by hand)
+    ├── captures/<app>-<currency>/  Raw captures from the integration test (not committed)
+    └── store/<set>/                Final images exported by the editor (only en-US is committed)
 ```
 
 ### Editing a slide
@@ -42,7 +55,7 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
     <h1><store-text key="title"></store-text></h1>     <!-- texts/<lang>.json → "<slide>" → "title" -->
   </header>
 
-  <!-- Device showing screenshots/<lang>/Screenshots/01_dashboard.png -->
+  <!-- Device showing screenshots/captures/<app>-<currency>/01_dashboard.png -->
   <store-phone shot="01_dashboard" class="center" style="top: 660px; width: 700px"></store-phone>
 
   <!-- Magnified part of a capture. crop = "left top width height", in % of the capture -->
@@ -55,7 +68,7 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
 - `shot` is a capture name from `ScreenshotName` in `integration_test/tests/screenshots/screenshots_config.dart`, plus the style suffix for the extra styles (e.g. `01_dashboard_dark_purple`). A missing capture shows a striped warning instead.
 - Colors live as variables at the top of `editor/slides.css`: navy text and coin yellow from the app icon, on light blue or navy backgrounds. Alternate `light` and `navy` so consecutive images don't look the same, and use `<div class="coin">` or `class="sticker yellow"` for touches of yellow.
 - In texts, wrap a word in `<em>` to highlight it (yellow marker on light backgrounds, yellow text on navy). A missing text shows as a yellow `slide.key` mark.
-- The languages are the ones of the store listings, in `config.json`. A language without captures uses the English ones, marked with an **EN** badge in the editor, so its images can always be exported. To add a language, copy `texts/en.json`, translate it and add it to `config.json`.
+- A set without captures uses the `en-USD` ones, marked with an **en-USD** badge in the editor, so its images can always be exported. To add a caption language, copy `texts/en.json` and translate it; to add a set, add it to `config.json`.
 - To add or reorder images, edit `slides` in `config.json`. The order sets the exported file names.
 
 The `Mockup.pptx` and `Mockups/` folders are the old, manually made images, kept until the new ones are published.

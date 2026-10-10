@@ -2,8 +2,8 @@
 //
 // Serves the repository, as browsers block `fetch` and image exports on
 // `file://` pages, saves the images exported from the editor to
-// `app-marketplaces/screenshots/<lang>/StoreImages/` and opens that folder in
-// the file explorer when the editor asks for it.
+// `app-marketplaces/screenshots/store/<set>/` and opens that folder in the file
+// explorer when the editor asks for it.
 //
 // Run from the repository root: dart app-marketplaces/store-images/editor/server.dart
 import 'dart:io';
@@ -76,8 +76,8 @@ Future<void> main() async {
   }
 }
 
-Directory _imagesDir(Directory root, String lang) =>
-    Directory('${root.path}/app-marketplaces/screenshots/$lang/StoreImages');
+Directory _imagesDir(Directory root, String set) =>
+    Directory('${root.path}/app-marketplaces/screenshots/store/$set');
 
 Future<void> _openInFileExplorer(Directory dir) async {
   final command = Platform.isWindows

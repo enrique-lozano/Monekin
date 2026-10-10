@@ -1,13 +1,16 @@
 {
-  "languages": [
-    { "code": "en", "name": "English" },
-    { "code": "es", "name": "Español" },
-    { "code": "tr", "name": "Türkçe" },
-    { "code": "zh-TW", "name": "繁體中文" },
-    { "code": "fr", "name": "Français" },
-    { "code": "pt", "name": "Português" },
-    { "code": "de", "name": "Deutsch" },
-    { "code": "it", "name": "Italiano" }
+  "sets": [
+    { "id": "en-US", "name": "English (US)", "texts": "en", "app": "en", "currency": "USD" },
+    { "id": "es-ES", "name": "Español (España)", "texts": "es", "app": "es", "currency": "EUR" },
+    { "id": "de-DE", "name": "Deutsch", "texts": "de", "app": "de", "currency": "EUR" },
+    { "id": "pt-BR", "name": "Português (Brasil)", "texts": "pt", "app": "en", "currency": "BRL" },
+    { "id": "fr-FR", "name": "Français", "texts": "fr", "app": "fr", "currency": "EUR" },
+    { "id": "en-IN", "name": "English (India)", "texts": "en", "app": "en", "currency": "INR" },
+    { "id": "tr-TR", "name": "Türkçe", "texts": "tr", "app": "tr", "currency": "TRY" },
+    { "id": "it-IT", "name": "Italiano", "texts": "it", "app": "it", "currency": "EUR" },
+    { "id": "en-GB", "name": "English (UK)", "texts": "en", "app": "en", "currency": "GBP" },
+    { "id": "es-419", "name": "Español (Latinoamérica)", "texts": "es", "app": "es", "currency": "MXN" },
+    { "id": "zh-TW", "name": "繁體中文", "texts": "zh-TW", "app": "zh-TW", "currency": "TWD" }
   ],
   "slides": [
     "01-dashboard",

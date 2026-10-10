@@ -9,9 +9,13 @@ setlocal enabledelayedexpansion
 ::     close to what the store listing expects (e.g. a Pixel 6 emulator).
 ::
 :: Usage:
-::   scripts\generate_screenshots.bat             (asks which locales to generate)
-::   scripts\generate_screenshots.bat en es       (only these locales, no prompt)
-::   scripts\generate_screenshots.bat all         (every locale, no prompt)
+::   scripts\generate_screenshots.bat               (captures for every store image set)
+::   scripts\generate_screenshots.bat en-US pt-BR   (only the captures these sets need)
+::
+:: The sets (caption language, app language and demo currency of each store
+:: listing) live in app-marketplaces\store-images\config.json. Sets sharing app
+:: language and currency share captures, saved to
+:: app-marketplaces\screenshots\captures\<app language>-<currency>\.
 ::
 :: Other settings (simulated platform, viewport...) live in
 :: integration_test\tests\screenshots\screenshots_config.dart.
@@ -21,39 +25,12 @@ setlocal enabledelayedexpansion
 
 cd /d "%~dp0.."
 
-:: ─── Pick locales ─────────────────────────────────────────────────────────────
-set "LOCALES="
-set "HAS_ARGS="
-for %%A in (%*) do (
-    set "HAS_ARGS=1"
-    if defined LOCALES (
-        set "LOCALES=!LOCALES! %%A"
-    ) else (
-        set "LOCALES=%%A"
-    )
-)
-
-if not defined HAS_ARGS (
-    set "LOCALES="
-    echo Available locales:
-    for %%F in (lib\i18n\json\*.json) do echo   - %%~nF
-    echo.
-    set /p "LOCALES=Locales to generate, separated by spaces (Enter = all): "
-)
-if "!LOCALES!"=="" set "LOCALES=all"
-
-if /i "!LOCALES!"=="all" (
-    set "LOCALES="
-    for %%F in (lib\i18n\json\*.json) do set "LOCALES=!LOCALES! %%~nF"
-)
-
-set "LOCALES_CSV="
-for %%L in (!LOCALES!) do (
-    if not exist "lib\i18n\json\%%L.json" (
-        echo Unknown locale: %%L
-        exit /b 1
-    )
-    if defined LOCALES_CSV (set "LOCALES_CSV=!LOCALES_CSV!,%%L") else set "LOCALES_CSV=%%L"
+:: ─── Captures needed by the chosen sets ───────────────────────────────────────
+set "CAPTURES="
+for /f "delims=" %%C in ('dart app-marketplaces\store-images\editor\captures_for_sets.dart %*') do set "CAPTURES=%%C"
+if not defined CAPTURES (
+    echo Failed reading the sets from app-marketplaces\store-images\config.json
+    exit /b 1
 )
 
 :: ─── Generate ─────────────────────────────────────────────────────────────────
@@ -63,15 +40,16 @@ set "STYLES_VALUE=all"
 if defined STYLES set "STYLES_VALUE=%STYLES%"
 
 echo.
-echo [Screenshots] Generating for locales: !LOCALES_CSV! (styles: !STYLES_VALUE!)
+echo [Screenshots] Generating captures: !CAPTURES! (styles: !STYLES_VALUE!)
 
 rem One single run (one pub get / device selection / app launch) covers every
-rem locale: the test switches the language between captures.
+rem capture: the test reseeds the demo data for each currency and switches the
+rem language between captures.
 rem A dedicated DB name keeps the run away from the real app database.
 call flutter drive !DEVICE_ARG! ^
     --driver=test_driver/integration_test.dart ^
     --target=integration_test/tests/screenshots/screenshots_test.dart ^
-    --dart-define=SCREENSHOT_LOCALES=!LOCALES_CSV! ^
+    --dart-define=SCREENSHOT_CAPTURES=!CAPTURES! ^
     --dart-define=SCREENSHOT_STYLES=!STYLES_VALUE! ^
     --dart-define=MONEKIN_DB_NAME=screenshots.db
 if errorlevel 1 (
@@ -80,6 +58,7 @@ if errorlevel 1 (
 )
 
 echo.
-echo Done. Review the updated images under app-marketplaces\screenshots\ before committing.
+echo Done. Open the store images editor to review and export them:
+echo   dart app-marketplaces/store-images/editor/server.dart
 
 endlocal

@@ -96,7 +96,7 @@ figcaption {
   }
 }
 
-/* Marks a slide showing English captures because its language has none */
+/* Marks a slide showing the default captures because its set has none */
 .fallback {
   padding: 2px 8px;
   border-radius: 6px;

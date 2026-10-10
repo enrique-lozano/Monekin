@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:drift/drift.dart' show TableInfo, Value;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
@@ -19,8 +20,35 @@ const _cashAccountID = 'acc1';
 const _bankAccountID = 'acc2';
 const _brokerAccountID = 'acc3';
 
-final _prefCurrencyCode =
+/// Read on every use (not cached), so the demo data can be seeded again in
+/// another currency after changing the preferred one.
+String get _prefCurrencyCode =>
     appStateSettings[SettingKey.preferredCurrency] ?? 'USD';
+
+/// Rough value of 1 USD in the preferred currency, so the demo amounts look
+/// plausible in any currency (a salary of 2,800 is fine in dollars, not in
+/// rupees). Currencies not listed keep the dollar amounts.
+const _usdValueIn = {
+  'USD': 1.0,
+  'EUR': 1.0,
+  'GBP': 0.8,
+  'BRL': 5.0,
+  'MXN': 18.0,
+  'TRY': 35.0,
+  'INR': 80.0,
+  'TWD': 32.0,
+};
+
+double get _amountScale => _usdValueIn[_prefCurrencyCode] ?? 1;
+
+/// [amount] (in dollars) in the preferred currency, rounded to a plausible
+/// precision (cents only when the scale is 1, as in the original amounts).
+double demoAmount(double amount) {
+  final scaled = amount * _amountScale;
+  if (_amountScale == 1) return scaled;
+  final step = scaled.abs() >= 1000 ? 10 : 1;
+  return (scaled / step).roundToDouble() * step;
+}
 
 final List<AccountInDB> _accountsToCreate = [
   AccountInDB(
@@ -249,7 +277,11 @@ String get demoForeignCurrencyCode =>
 /// preferred one, as `1 unit = rate preferred currency`.
 List<ExchangeRateInDB> _exchangeRatesToCreate() {
   final foreignCode = demoForeignCurrencyCode;
-  final baseRate = _prefCurrencyCode == 'USD' ? 1.09 : 0.92;
+  final baseRate = switch (_prefCurrencyCode) {
+    'USD' => 1.09, // 1 EUR in USD
+    'EUR' => 0.92, // 1 USD in EUR
+    _ => _amountScale,
+  };
   final today = DateTime.now();
   final random = Random();
 
@@ -424,6 +456,31 @@ List<GoalInDB> _goalsToCreate() => [
     filterID: 'goal_filter_trip',
   ),
 ];
+
+/// Deletes everything [fillWithDemoData] creates, so it can run again (e.g. in
+/// another currency). Categories, currencies and settings are kept.
+Future<void> clearDemoData() async {
+  final db = AppDB.instance;
+  await db.transaction(() async {
+    for (final TableInfo table in [
+      db.transactionTags,
+      db.transactions,
+      db.holdings,
+      db.securityPrices,
+      db.securities,
+      db.assetValuations,
+      db.assets,
+      db.budgets,
+      db.goals,
+      db.transactionFilterSets,
+      db.exchangeRates,
+      db.tags,
+      db.accounts,
+    ]) {
+      await db.delete(table).go();
+    }
+  });
+}
 
 Future<void> fillWithDemoData() async {
   Logger.printDebug('Starting demo data seeding...');
@@ -622,23 +679,46 @@ Future<void> fillWithDemoData() async {
 
   Logger.printDebug('Inserting ${transactions.length} transactions...');
 
+  // Amounts are written in dollars above and scaled here to the preferred
+  // currency (accounts, budgets, goals, transactions, assets and prices).
+  final accounts = [
+    for (final a in _accountsToCreate)
+      a.copyWith(iniValue: demoAmount(a.iniValue)),
+  ];
+  final allTransactions = [
+    for (final t in [...transactions, ..._recurrentTransactionsToCreate()])
+      t.copyWith(value: demoAmount(t.value)),
+  ];
+
   await db.batch((batch) {
-    batch.insertAll(db.accounts, _accountsToCreate);
+    batch.insertAll(db.accounts, accounts);
     batch.insertAll(db.tags, _tagsToCreate);
     batch.insertAll(db.transactionFilterSets, _budgetFilterSetsToCreate);
-    batch.insertAll(db.budgets, _budgetsToCreate);
-    batch.insertAll(db.transactions, [
-      ...transactions,
-      ..._recurrentTransactionsToCreate(),
+    batch.insertAll(db.budgets, [
+      for (final b in _budgetsToCreate)
+        b.copyWith(limitAmount: demoAmount(b.limitAmount)),
     ]);
+    batch.insertAll(db.transactions, allTransactions);
     batch.insertAll(db.transactionTags, transactionTags);
     batch.insertAll(db.exchangeRates, _exchangeRatesToCreate());
-    batch.insertAll(db.securities, _securitiesToCreate());
-    batch.insertAll(db.securityPrices, _securityPricesToCreate());
+    batch.insertAll(db.securities, [
+      for (final s in _securitiesToCreate())
+        s.copyWith(currentPrice: Value(demoAmount(s.currentPrice!))),
+    ]);
+    batch.insertAll(db.securityPrices, [
+      for (final p in _securityPricesToCreate())
+        p.copyWith(price: demoAmount(p.price)),
+    ]);
     batch.insertAll(db.assets, _assetsToCreate());
-    batch.insertAll(db.assetValuations, _assetValuationsToCreate());
+    batch.insertAll(db.assetValuations, [
+      for (final v in _assetValuationsToCreate())
+        v.copyWith(value: demoAmount(v.value)),
+    ]);
     batch.insertAll(db.transactionFilterSets, _goalFilterSetsToCreate);
-    batch.insertAll(db.goals, _goalsToCreate());
+    batch.insertAll(db.goals, [
+      for (final g in _goalsToCreate())
+        g.copyWith(amount: demoAmount(g.amount)),
+    ]);
   });
 
   // Through the service, so the holdings and the trades stay in sync.
@@ -648,7 +728,7 @@ Future<void> fillWithDemoData() async {
       accountId: _brokerAccountID,
       securityId: securityId,
       quantity: quantity,
-      pricePerUnit: _priceAt(security, monthsAgo),
+      pricePerUnit: demoAmount(_priceAt(security, monthsAgo)),
       date: _monthsAgo(monthsAgo),
     );
   }
@@ -658,8 +738,9 @@ Future<void> fillWithDemoData() async {
   Logger.printDebug('Executing minor adjustments...');
   // Adjust account balances:
 
-  double currentBalance = _accountsToCreate.first.iniValue;
-  for (final t in transactions.where((t) => t.accountID == _cashAccountID)) {
+  final cash = accounts.first;
+  double currentBalance = cash.iniValue;
+  for (final t in allTransactions.where((t) => t.accountID == _cashAccountID)) {
     currentBalance += t.value;
   }
 
@@ -667,13 +748,8 @@ Future<void> fillWithDemoData() async {
     Logger.printDebug(
       'Adjusting account balance (current: $currentBalance)...',
     );
-    await (db.update(
-      db.accounts,
-    )..where((a) => a.id.equals(_cashAccountID))).write(
-      _accountsToCreate.first.copyWith(
-        iniValue: _accountsToCreate.first.iniValue - currentBalance,
-      ),
-    );
+    await (db.update(db.accounts)..where((a) => a.id.equals(_cashAccountID)))
+        .write(cash.copyWith(iniValue: cash.iniValue - currentBalance));
   }
 
   Logger.printDebug('Demo data seeding finished.');
