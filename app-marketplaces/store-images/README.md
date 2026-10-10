@@ -70,5 +70,3 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
 - In texts, wrap a word in `<em>` to highlight it (yellow marker on light backgrounds, yellow text on navy). A missing text shows as a yellow `slide.key` mark.
 - A set without captures uses the `en-USD` ones, marked with an **en-USD** badge in the editor, so its images can always be exported. To add a caption language, copy `texts/en.json` and translate it; to add a set, add it to `config.json`.
 - To add or reorder images, edit `slides` in `config.json`. The order sets the exported file names.
-
-The `Mockup.pptx` and `Mockups/` folders are the old, manually made images, kept until the new ones are published.
