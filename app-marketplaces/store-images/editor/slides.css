@@ -38,6 +38,11 @@
   --sans: 'Nunito', system-ui, sans-serif;
   --shadow: 0 50px 90px -24px color-mix(in srgb, var(--navy) 45%, transparent);
 
+  /* Distance of the texts from the top or the bottom edge, and side margin */
+  --header-top: 115px;
+  --header-bottom: 1550px;
+  --margin: 80px;
+
   position: relative;
   width: 1080px;
   height: 1920px;
@@ -99,8 +104,14 @@
 /* ---------- Texts ---------- */
 
 .slide header {
-  inset-inline: 80px;
+  top: var(--header-top);
+  inset-inline: var(--margin);
   text-align: center;
+
+  /* Texts placed below the content instead of above it */
+  &.bottom {
+    top: var(--header-bottom);
+  }
 
   &.left {
     text-align: left;
@@ -159,25 +170,31 @@
   }
 }
 
-/* Three staggered columns of phones, rotated as a whole. Phones inside take the
-   column width, so set the size of the grid with `width` on the grid itself,
-   and how much lower the middle column starts with `--stagger`. */
+/* Three staggered columns of equally sized phones, rotated as a whole. Tune it
+   with these variables (inline on the grid):
+   --phone-width  width of every phone
+   --gap          space between phones
+   --stagger      how much lower the middle column starts, so rows don't line up
+   --tilt         rotation of the whole grid */
 .phone-grid {
+  --phone-width: 340px;
+  --gap: 40px;
+  --stagger: 160px;
+  --tilt: -18deg;
+
   left: 50%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  width: 1040px;
+  grid-template-columns: repeat(3, var(--phone-width));
+  gap: var(--gap);
   translate: -50% 0;
-  rotate: -18deg;
+  rotate: var(--tilt);
 
   & .phone {
     position: relative;
   }
 
-  /* Middle column a bit lower, so the rows don't line up */
   & .phone:nth-child(3n + 2) {
-    top: var(--stagger, 160px);
+    top: var(--stagger);
   }
 }
 

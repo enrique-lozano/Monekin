@@ -38,7 +38,7 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
 
 ```html
 <store-slide background="light">                       <!-- light or navy -->
-  <header style="top: 120px">
+  <header>                                             <!-- class="bottom" to put it below the content -->
     <h1><store-text key="title"></store-text></h1>     <!-- texts/<lang>.json → "<slide>" → "title" -->
   </header>
 
@@ -50,6 +50,7 @@ Slides are plain HTML plus a few custom tags. Position elements with inline `sty
 </store-slide>
 ```
 
+- Shared measures (texts position, margins, colors) are CSS variables at the top of `editor/slides.css`; components such as `.phone-grid` document their own variables, which you can override inline (`style="--phone-width: 360px"`).
 - Phones take the capture's own aspect ratio, so the screen is never cropped. Keep every phone fully inside the canvas unless it's meant to bleed off an edge.
 - `shot` is a capture name from `ScreenshotName` in `integration_test/tests/screenshots/screenshots_config.dart`, plus the style suffix for the extra styles (e.g. `01_dashboard_dark_purple`). A missing capture shows a striped warning instead.
 - Colors live as variables at the top of `editor/slides.css`: navy text and coin yellow from the app icon, on light blue or navy backgrounds. Alternate `light` and `navy` so consecutive images don't look the same, and use `<div class="coin">` or `class="sticker yellow"` for touches of yellow.
