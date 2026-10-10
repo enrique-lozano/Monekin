@@ -885,8 +885,8 @@
         "active-on-track": "Vas bien",
         "active-overspending": "Gastando de más",
         "active-indeterminate": "Activo",
-        "success": "Objetivo cumplido",
-        "fail": "Presupuesto excedido"
+        "success": "Cumplido",
+        "fail": "Excedido"
       }
     }
   },
@@ -936,8 +936,8 @@
         "active-on-track": "En camino",
         "active-behind-schedule": "Por detrás",
         "active-indeterminate": "Activo",
-        "success": "Objetivo alcanzado",
-        "fail": "Objetivo fallido"
+        "success": "Alcanzado",
+        "fail": "Fallido"
       }
     }
   },

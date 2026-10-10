@@ -875,7 +875,7 @@
         "active-overspending": "Перевитрата",
         "active-indeterminate": "Активний",
         "success": "Досягнуто",
-        "fail": "Бюджет перевищено"
+        "fail": "Перевищено"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "На шляху",
         "active-behind-schedule": "Відставання від графіка",
         "active-indeterminate": "Активний",
-        "success": "Мета досягнута",
-        "fail": "Мета не вдалася"
+        "success": "Досягнуто",
+        "fail": "Не вдалося"
       }
     }
   },

@@ -56,10 +56,10 @@
 
 ### 📸 Screenshots
 
-|                                                                                                                    |                                                                                                                    |                                                                                                                    |                                                                                                                    |
-| :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: |
-| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva1.PNG) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva2.PNG) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva3.PNG) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva4.PNG) |
-| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva5.PNG) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva6.PNG) |
+|     |     |     |     |
+| :-: | :-: | :-: | :-: |
+| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/01.png) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/02.png) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/03.png) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/04.png) |
+| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/05.png) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/06.png) | ![7](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/07.png) |     |
 
 ### 🕰 History of Monekin
 

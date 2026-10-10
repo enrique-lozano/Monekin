@@ -1,0 +1,314 @@
+/* Look of the store images. Every slide is a 1080x1920 canvas (Google Play portrait). */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url(fonts/Fraunces.ttf);
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url(fonts/Fraunces-Italic.ttf);
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url(../../../assets/fonts/Nunito/Nunito-SemiBold.ttf);
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url(../../../assets/fonts/Nunito/Nunito-Bold.ttf);
+  font-weight: 700;
+}
+
+/* ---------- Slide ---------- */
+
+.slide {
+  /* Brand colors, taken from the app icon */
+  --navy: #0f3375;
+  --navy-deep: #081d47;
+  --sky: #cce4fd;
+  --coin: #fdca40;
+
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Nunito', system-ui, sans-serif;
+  --shadow: 0 50px 90px -24px color-mix(in srgb, var(--navy) 45%, transparent);
+
+  /* Space between the texts and the top or bottom edge, and side margin. Texts
+     at the bottom grow upwards, so that space stays the same whatever the
+     number of lines. */
+  --header-top: 98px;
+  --header-bottom: 72px;
+  --margin: 80px;
+
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+  color: var(--navy);
+  font-family: var(--sans);
+
+  & * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  & > * {
+    position: absolute;
+  }
+
+  /* Centers an element horizontally, whatever its width */
+  & > .center {
+    left: 50%;
+    translate: -50% 0;
+  }
+}
+
+/* ---------- Backgrounds (<store-slide background="...">) ---------- */
+
+/* Brand light blue, the main background */
+.slide.light {
+  background:
+    radial-gradient(100% 60% at 100% 100%, #b5d6fb, transparent 70%),
+    linear-gradient(180deg, #e3f0fe, var(--sky));
+}
+
+/* Brand navy, alternated with `light` so consecutive images look different */
+.slide.navy {
+  background:
+    radial-gradient(90% 55% at 100% 0%, #1f4a9a, transparent 70%),
+    linear-gradient(170deg, var(--navy), var(--navy-deep));
+  color: #fff;
+
+  /* No marker: yellow text reads better on navy */
+  & h1 em {
+    background: none;
+    color: var(--coin);
+  }
+
+  /* Lighter rim and darker shadow, so the frame doesn't melt into the background */
+  & .phone {
+    box-shadow:
+      0 50px 90px -24px rgb(0 0 0 / 60%),
+      inset 0 0 0 2px #6b7385;
+  }
+
+  & .features span {
+    opacity: 0.75;
+  }
+}
+
+/* ---------- Texts ---------- */
+
+.slide header {
+  top: var(--header-top);
+  inset-inline: var(--margin);
+  text-align: center;
+
+  /* Texts placed below the content instead of above it */
+  &.bottom {
+    top: auto;
+    bottom: var(--header-bottom);
+  }
+
+  &.left {
+    text-align: left;
+  }
+
+  & p {
+    margin-top: 28px;
+    font: 700 40px/1.3 var(--sans);
+    opacity: 0.7;
+    text-wrap: balance;
+  }
+}
+
+.slide h1 {
+  font: 700 112px/1.02 var(--serif);
+  letter-spacing: -2.5px;
+  text-wrap: balance;
+
+  /* Highlighted words, with a coin-yellow marker stroke (yellow text on navy) */
+  & em {
+    --marker: color-mix(in srgb, var(--coin) 75%, transparent);
+
+    padding-inline: 0.08em;
+    font-style: italic;
+    font-weight: 600;
+    background: linear-gradient(
+      transparent 60%,
+      var(--marker) 60% 90%,
+      transparent 90%
+    );
+    box-decoration-break: clone;
+  }
+}
+
+/* ---------- <store-phone> ---------- */
+
+/* Slim bezel and no camera: captures have no status bar, so a notch would cover app content */
+.phone {
+  padding: 1.3%;
+  border-radius: 7.6% / 3.6%;
+  background: #16181d;
+  box-shadow:
+    var(--shadow),
+    inset 0 0 0 2px #3a3e47;
+
+  /* The capture sets the screen height, so it's never cropped */
+  & .screen {
+    overflow: hidden;
+    border-radius: 6.4% / 3%;
+    background: #fff;
+  }
+
+  & .screen img {
+    display: block;
+    width: 100%;
+  }
+
+  & .missing {
+    aspect-ratio: 1080 / 2208;
+  }
+}
+
+/* Three staggered columns of equally sized phones, rotated as a whole. Tune it
+   with these variables (inline on the grid):
+   --phone-width  width of every phone
+   --gap          space between phones
+   --stagger      how much lower the middle column starts, so rows don't line up
+   --tilt         rotation of the whole grid */
+.phone-grid {
+  --phone-width: 340px;
+  --gap: 40px;
+  --stagger: 160px;
+  --tilt: -18deg;
+
+  left: 50%;
+  display: grid;
+  grid-template-columns: repeat(3, var(--phone-width));
+  gap: var(--gap);
+  translate: -50% 0;
+  rotate: var(--tilt);
+
+  & .phone {
+    position: relative;
+  }
+
+  & .phone:nth-child(3n + 2) {
+    top: var(--stagger);
+  }
+}
+
+/* Fades whatever is behind it into the slide background, from the bottom edge
+   up to `height`. Put it right before the elements that must stay readable. */
+.fade-bottom {
+  inset-inline: 0;
+  bottom: 0;
+  background: linear-gradient(transparent, var(--fade-color, var(--sky)) 55%);
+}
+
+.slide.navy .fade-bottom {
+  --fade-color: var(--navy-deep);
+}
+
+/* ---------- <store-zoom> ---------- */
+
+.zoom {
+  z-index: 10;
+  overflow: hidden;
+  border-radius: 36px;
+  background: #fff;
+  box-shadow:
+    var(--shadow),
+    0 0 0 10px #fff;
+
+  & img {
+    position: absolute;
+    display: block;
+  }
+}
+
+/* Shown instead of a capture that doesn't exist yet */
+.missing {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  padding: 20px;
+  background: repeating-linear-gradient(45deg, #fde8e8 0 20px, #fff 20px 40px);
+  color: #b3261e;
+  font: 700 30px var(--sans);
+  text-align: center;
+}
+
+/* ---------- Decorations ---------- */
+
+.sticker {
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 38px;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--navy);
+  font: 700 40px var(--sans);
+  white-space: nowrap;
+  box-shadow: 0 18px 40px -12px color-mix(in srgb, var(--navy) 35%, transparent);
+
+  &.yellow {
+    background: var(--coin);
+  }
+
+  & svg {
+    flex: none;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Yellow circles like the coins of the app icon. Set the size with `width`. */
+.coin {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--coin);
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 470px;
+  list-style: none;
+
+  & svg {
+    width: 92px;
+    height: 92px;
+    padding: 21px;
+    margin-bottom: 18px;
+    border-radius: 28px;
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 14px 30px -12px
+      color-mix(in srgb, var(--navy) 30%, transparent);
+  }
+
+  & b {
+    display: block;
+    font: 700 46px var(--sans);
+  }
+
+  & span {
+    display: block;
+    margin-top: 4px;
+    font: 600 34px/1.25 var(--sans);
+    opacity: 0.65;
+  }
+}

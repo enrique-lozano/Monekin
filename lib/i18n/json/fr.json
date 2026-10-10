@@ -875,7 +875,7 @@
         "active-overspending": "Dépenses excessives",
         "active-indeterminate": "Actif",
         "success": "Atteint",
-        "fail": "Budget dépassé"
+        "fail": "Dépassé"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "En bonne voie",
         "active-behind-schedule": "En retard",
         "active-indeterminate": "Actif",
-        "success": "Objectif atteint",
-        "fail": "Objectif raté"
+        "success": "Atteint",
+        "fail": "Raté"
       }
     }
   },

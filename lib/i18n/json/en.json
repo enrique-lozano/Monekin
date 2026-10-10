@@ -899,7 +899,7 @@
         "active-overspending": "Overspending",
         "active-indeterminate": "Active",
         "success": "Achieved",
-        "fail": "Budget exceeded"
+        "fail": "Exceeded"
       }
     }
   },
@@ -949,8 +949,8 @@
         "active-on-track": "On track",
         "active-behind-schedule": "Behind schedule",
         "active-indeterminate": "Active",
-        "success": "Goal reached",
-        "fail": "Goal failed"
+        "success": "Reached",
+        "fail": "Failed"
       }
     }
   },
