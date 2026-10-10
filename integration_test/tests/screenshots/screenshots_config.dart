@@ -51,11 +51,13 @@ class ScreenshotStyle {
 
 /// Settings of the screenshot generation. Edit the values here.
 abstract final class ScreenshotConfig {
-  /// Comma-separated locale tags to capture. Set via
-  /// `--dart-define=SCREENSHOT_LOCALES=en,es` from `generate_screenshots.bat`.
-  static const localesArg = String.fromEnvironment(
-    'SCREENSHOT_LOCALES',
-    defaultValue: 'en',
+  /// Comma-separated `<app locale>-<currency>` pairs to capture (e.g.
+  /// `en-USD,es-EUR,en-INR`). Each pair is saved to
+  /// `app-marketplaces/screenshots/captures/<pair>/`. Set via
+  /// `--dart-define=SCREENSHOT_CAPTURES=...` from `generate_screenshots.bat`.
+  static const capturesArg = String.fromEnvironment(
+    'SCREENSHOT_CAPTURES',
+    defaultValue: 'en-USD',
   );
 
   /// Comma-separated style ids to capture, or `all`. Set via the `STYLES` env

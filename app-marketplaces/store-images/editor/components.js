@@ -2,8 +2,8 @@
 //
 //   <store-slide background="light">      Slide canvas. Backgrounds live in slides.css.
 //   <store-text key="title">              Text of texts/<lang>.json → "<slide id>" → key.
-//   <store-phone shot="01_dashboard">     Device showing <lang>/Screenshots/01_dashboard.png
-//                                         (or the English one, if that language has none).
+//   <store-phone shot="01_dashboard">     Device showing captures/<capture>/01_dashboard.png of
+//                                         the set (or the en-USD one, if the set has none).
 //   <store-zoom shot="..." crop="...">    Magnified part of a capture. `crop` is
 //                                         "left top width height", as % of the capture.
 //   <store-icon name="lock">              One of the ICONS below.
@@ -26,10 +26,11 @@ const ICONS = {
 };
 
 /**
- * Builds the slide `html` for `lang`. Resolves once every capture has loaded,
- * with `usesFallback` telling if any of them is the English one.
+ * Builds the slide `html` with the `texts` of a set and the captures of its
+ * `capture` folder (e.g. `en-USD`). Resolves once every capture has loaded,
+ * with `usesFallback` telling if any of them is the default en-USD one.
  */
-export async function renderSlide(html, { slideId, lang, texts }) {
+export async function renderSlide(html, { slideId, capture, texts }) {
   // Not a <template>: images inside its inert content never load.
   const wrapper = document.createElement('div');
   wrapper.innerHTML = html.trim();
@@ -50,15 +51,15 @@ export async function renderSlide(html, { slideId, lang, texts }) {
   for (const el of root.querySelectorAll('store-phone')) {
     const phone = replaceWith(el, 'div', 'phone');
     phone.innerHTML = '<div class="screen"></div>';
-    loads.push(loadCapture(phone.querySelector('.screen'), lang, el.getAttribute('shot')));
+    loads.push(loadCapture(phone.querySelector('.screen'), capture, el.getAttribute('shot')));
   }
 
   for (const el of root.querySelectorAll('store-zoom')) {
     const zoom = replaceWith(el, 'div', 'zoom');
     loads.push(
-      loadCapture(zoom, lang, el.getAttribute('shot')).then((capture) => {
-        if (capture) cropZoom(zoom, capture.img, el);
-        return capture;
+      loadCapture(zoom, capture, el.getAttribute('shot')).then((loaded) => {
+        if (loaded) cropZoom(zoom, loaded.img, el);
+        return loaded;
       }),
     );
   }
@@ -78,21 +79,24 @@ function replaceWith(el, tag, className) {
   return node;
 }
 
+/** Captures used when a set has none of its own. */
+export const DEFAULT_CAPTURE = 'en-USD';
+
 /**
- * Puts the capture of `lang` inside `container`, falling back to the English
- * one, or a warning if neither has been generated.
+ * Puts the `capture` folder screenshot inside `container`, falling back to the
+ * default one, or a warning if neither has been generated.
  */
-async function loadCapture(container, lang, shot) {
+async function loadCapture(container, capture, shot) {
   const img = new Image();
   container.append(img);
 
-  for (const candidate of new Set([lang, 'en'])) {
-    if (await loadImage(img, `../../screenshots/${candidate}/Screenshots/${shot}.png`)) {
-      return { img, isFallback: candidate !== lang };
+  for (const candidate of new Set([capture, DEFAULT_CAPTURE])) {
+    if (await loadImage(img, `../../screenshots/captures/${candidate}/${shot}.png`)) {
+      return { img, isFallback: candidate !== capture };
     }
   }
 
-  container.innerHTML = `<div class="missing">Missing capture<br>${lang}/Screenshots/${shot}.png</div>`;
+  container.innerHTML = `<div class="missing">Missing capture<br>captures/${capture}/${shot}.png</div>`;
   return null;
 }
 
