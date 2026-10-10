@@ -5,8 +5,9 @@ setlocal enabledelayedexpansion
 :: integration_test\tests\screenshots\screenshots_test.dart.
 ::
 :: Requirements:
-::   - A running Android emulator (or connected device). Use a device/skin
-::     close to what the store listing expects (e.g. a Pixel 6 emulator).
+::   - A running Android emulator, a connected Android phone or Windows desktop.
+::     A physical phone is much faster: the test runs in profile mode there
+::     (emulators and desktop only support debug).
 ::
 :: Usage:
 ::   scripts\generate_screenshots.bat               (captures for every store image set)
@@ -19,7 +20,9 @@ setlocal enabledelayedexpansion
 ::
 :: Other settings (simulated platform, viewport...) live in
 :: integration_test\tests\screenshots\screenshots_config.dart.
-:: Set the DEVICE env var to pick a device id (see `flutter devices`).
+:: The script asks which device to use when there are several. Set the DEVICE
+:: env var to a device id (see `flutter devices`) to skip the question; it then
+:: runs in debug mode, unless PROFILE=1 is set too.
 :: Set the STYLES env var to only capture some styles (comma-separated ids from
 :: that file, e.g. `set STYLES=dark,dark_purple`). Default: all.
 
@@ -33,14 +36,22 @@ if not defined CAPTURES (
     exit /b 1
 )
 
-:: ─── Generate ─────────────────────────────────────────────────────────────────
+:: ─── Device (and build mode) ─────────────────────────────────────────────────
 set "DEVICE_ARG="
-if defined DEVICE set "DEVICE_ARG=-d %DEVICE%"
+if defined DEVICE (
+    set "DEVICE_ARG=-d %DEVICE%"
+    if "%PROFILE%"=="1" set "DEVICE_ARG=-d %DEVICE% --profile"
+) else (
+    for /f "delims=" %%D in ('dart app-marketplaces\store-images\editor\pick_device.dart') do set "DEVICE_ARG=%%D"
+    if not defined DEVICE_ARG exit /b 1
+)
+
+:: ─── Generate ─────────────────────────────────────────────────────────────────
 set "STYLES_VALUE=all"
 if defined STYLES set "STYLES_VALUE=%STYLES%"
 
 echo.
-echo [Screenshots] Generating captures: !CAPTURES! (styles: !STYLES_VALUE!)
+echo [Screenshots] Generating captures: !CAPTURES! (styles: !STYLES_VALUE!, flags: !DEVICE_ARG!)
 
 rem One single run (one pub get / device selection / app launch) covers every
 rem capture: the test reseeds the demo data for each currency and switches the

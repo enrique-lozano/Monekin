@@ -76,8 +76,10 @@ void main() {
     debugDefaultTargetPlatformOverride = ScreenshotConfig.simulatedPlatform;
 
     try {
-      await _setAppLocale(captures.first.locale);
-      await startMonekin(tester);
+      await _timed('Start and onboarding', () async {
+        await _setAppLocale(captures.first.locale);
+        await startMonekin(tester);
+      });
 
       // Android can only capture the app once its surface is an image.
       if (Platform.isAndroid) {
@@ -87,41 +89,66 @@ void main() {
 
       String? seededCurrency;
       for (final capture in captures) {
+        final captureWatch = Stopwatch()..start();
+
+        // Nothing is on screen while the data changes below, so no stream of
+        // the app rebuilds on every single write.
+        await tester.pumpWidget(const SizedBox.shrink());
+
         // Demo data is created in the preferred currency, so it's seeded again
         // whenever the currency changes (captures come grouped by currency).
         if (capture.currency != seededCurrency) {
-          await clearDemoData();
-          await UserSettingService.instance.setItem(
-            SettingKey.preferredCurrency,
-            capture.currency,
-          );
-          await fillWithDemoData();
-          await tester.pumpAndSettle();
+          await _timed('${capture.currency} demo data', () async {
+            await clearDemoData();
+            await UserSettingService.instance.setItem(
+              SettingKey.preferredCurrency,
+              capture.currency,
+            );
+            await fillWithDemoData();
+          });
           seededCurrency = capture.currency;
         }
 
         final locale = capture.locale;
-        await _setAppLocale(locale);
-        await _localizeCategories(locale);
+        await _timed('${capture.id} language', () async {
+          await _setAppLocale(locale);
+          await _localizeCategories(locale);
+        });
 
         for (final style in styles) {
-          await _applyStyle(style);
+          await _timed('${capture.id} ${style.id}', () async {
+            await _applyStyle(style);
 
-          // Restarting the widget tree (not the process) applies the new
-          // language and style everywhere and brings every screen back to its
-          // initial state.
-          await tester.pumpWidget(const SizedBox.shrink());
-          await tester.pumpWidget(const MonekinAppEntryPoint());
-          await tester.pumpAndSettle();
-          expect(find.byType(DashboardPage), findsOneWidget);
+            // Restarting the widget tree (not the process) applies the new
+            // language and style everywhere and brings every screen back to
+            // its initial state.
+            await tester.pumpWidget(const SizedBox.shrink());
+            await tester.pumpWidget(const MonekinAppEntryPoint());
+            await tester.pumpAndSettle();
+            expect(find.byType(DashboardPage), findsOneWidget);
 
-          await _captureLocale(binding, tester, capture.id, style);
+            await _captureLocale(binding, tester, capture.id, style);
+          });
         }
+
+        _logTime('${capture.id} total', captureWatch.elapsed);
       }
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
   }, skip: usesRealDb);
+}
+
+/// Runs [task] and prints how long it took, to spot slow steps.
+Future<void> _timed(String label, Future<void> Function() task) async {
+  final watch = Stopwatch()..start();
+  await task();
+  _logTime(label, watch.elapsed);
+}
+
+void _logTime(String label, Duration elapsed) {
+  // ignore: avoid_print
+  print('[Screenshots] ${label.padRight(40)} ${elapsed.inMilliseconds} ms');
 }
 
 typedef _Capture = ({String id, AppLocale locale, String currency});
@@ -181,12 +208,13 @@ Future<void> _applyStyle(ScreenshotStyle style) async {
   await settings.setItem(SettingKey.font, style.font.toDB());
 }
 
+/// No global refresh: the app is restarted right after, and reads the saved
+/// language when it starts.
 Future<void> _setAppLocale(AppLocale locale) async {
   await LocaleSettings.setLocale(locale);
   await UserSettingService.instance.setItem(
     SettingKey.appLanguage,
     locale.languageTag,
-    updateGlobalState: true,
   );
 }
 
@@ -236,13 +264,16 @@ Future<void> _localizeCategories(AppLocale locale) async {
   }
 
   // Names are unique, so free them first to avoid clashing with a name that
-  // another category is about to be renamed away from.
-  for (final id in names.keys) {
-    await rename(id, id);
-  }
-  for (final MapEntry(:key, :value) in names.entries) {
-    await rename(key, value);
-  }
+  // another category is about to be renamed away from. A single transaction
+  // notifies the category streams once instead of once per update.
+  await db.transaction(() async {
+    for (final id in names.keys) {
+      await rename(id, id);
+    }
+    for (final MapEntry(:key, :value) in names.entries) {
+      await rename(key, value);
+    }
+  });
 }
 
 /// Collapses the large title of [page] without scrolling its content, by

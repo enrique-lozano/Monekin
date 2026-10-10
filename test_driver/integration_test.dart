@@ -19,15 +19,26 @@ import 'package:path/path.dart' as p;
 const _screenshotsBaseDir = 'app-marketplaces/screenshots';
 
 Future<void> main() async {
+  // On Android the images only reach the driver once the whole test is done,
+  // so the time from the first to the last one is the transfer time.
+  final watch = Stopwatch();
+  var saved = 0;
+
   await integrationDriver(
     onScreenshot: (String screenshotName, List<int> screenshotBytes, [
       Map<String, Object?>? args,
     ]) async {
+      if (!watch.isRunning) watch.start();
+
       final file = File(p.join(_screenshotsBaseDir, '$screenshotName.png'));
       await file.parent.create(recursive: true);
       await file.writeAsBytes(screenshotBytes, flush: true);
+      saved++;
 
       return true;
     },
   );
+
+  // ignore: avoid_print
+  print('[Screenshots] Saved $saved images in ${watch.elapsed.inSeconds} s');
 }
