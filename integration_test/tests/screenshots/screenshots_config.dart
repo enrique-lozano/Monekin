@@ -96,6 +96,12 @@ abstract final class ScreenshotConfig {
       font: AppFonts.cairo,
     ),
     ScreenshotStyle('dark_teal', themeMode: 'dark', accent: '00897B'),
+    ScreenshotStyle(
+      'dark_pink',
+      themeMode: 'dark',
+      accent: 'D81B60',
+      font: AppFonts.jost,
+    ),
   ];
 
   /// Platform the app behaves as. `android` hides the desktop window bar and

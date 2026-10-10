@@ -160,7 +160,8 @@
 }
 
 /* Three staggered columns of phones, rotated as a whole. Phones inside take the
-   column width, so set the size of the grid with `width` on the grid itself. */
+   column width, so set the size of the grid with `width` on the grid itself,
+   and how much lower the middle column starts with `--stagger`. */
 .phone-grid {
   left: 50%;
   display: grid;
@@ -176,7 +177,7 @@
 
   /* Middle column a bit lower, so the rows don't line up */
   & .phone:nth-child(3n + 2) {
-    top: 160px;
+    top: var(--stagger, 160px);
   }
 }
 

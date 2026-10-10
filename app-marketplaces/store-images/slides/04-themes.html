@@ -1,17 +1,24 @@
 <store-slide background="light">
   <!-- Every style at the same size, tilted as a diagonal grid that bleeds off
-       the edges, so none looks more important than the rest -->
-  <div class="phone-grid" style="top: 110px; width: 900px">
-    <store-phone shot="01_dashboard"></store-phone>
+       every edge (and under the texts), so none looks more important than the
+       rest. Light and dark styles alternate; the last row repeats two of them
+       just to fill the corners. -->
+  <div class="phone-grid" style="top: -560px; width: 1440px; --stagger: 300px">
+    <store-phone shot="01_dashboard_light_red"></store-phone>
+    <store-phone shot="01_dashboard_dark_pink"></store-phone>
+    <store-phone shot="01_dashboard_light_green"></store-phone>
+
     <store-phone shot="01_dashboard_dark_purple"></store-phone>
+    <store-phone shot="01_dashboard"></store-phone>
+    <store-phone shot="01_dashboard_dark_teal"></store-phone>
+
     <store-phone shot="01_dashboard_light_green"></store-phone>
     <store-phone shot="01_dashboard_dark_amoled_orange"></store-phone>
     <store-phone shot="01_dashboard_light_red"></store-phone>
-    <store-phone shot="01_dashboard_dark_teal"></store-phone>
   </div>
 
   <!-- Fades the grid out behind the texts -->
-  <div class="fade-bottom" style="height: 460px"></div>
+  <div class="fade-bottom" style="height: 560px"></div>
 
   <header style="top: 1550px">
     <h1><store-text key="title"></store-text></h1>
