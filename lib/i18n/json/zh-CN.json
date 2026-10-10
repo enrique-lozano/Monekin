@@ -875,7 +875,7 @@
         "active-overspending": "超支",
         "active-indeterminate": "积极的",
         "success": "已达成",
-        "fail": "超出预算"
+        "fail": "超出"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "步入正轨",
         "active-behind-schedule": "落后于计划",
         "active-indeterminate": "积极的",
-        "success": "目标达成",
-        "fail": "目标失败"
+        "success": "达成",
+        "fail": "失败"
       }
     }
   },

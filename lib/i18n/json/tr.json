@@ -875,7 +875,7 @@
         "active-overspending": "Aşırı harcama",
         "active-indeterminate": "Aktif",
         "success": "Başarılı",
-        "fail": "Bütçe aşıldı"
+        "fail": "Aşıldı"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "Yolda",
         "active-behind-schedule": "Programın gerisinde",
         "active-indeterminate": "Aktif",
-        "success": "Hedefe ulaşıldı",
-        "fail": "Hedef başarısız oldu"
+        "success": "Ulaşıldı",
+        "fail": "Başarısız oldu"
       }
     }
   },

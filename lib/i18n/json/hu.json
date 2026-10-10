@@ -875,7 +875,7 @@
         "active-overspending": "Túlköltekezés",
         "active-indeterminate": "Aktív",
         "success": "Teljesítve",
-        "fail": "Költségvetés túllépve"
+        "fail": "Túllépve"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "Pályán",
         "active-behind-schedule": "A menetrend lemaradásával",
         "active-indeterminate": "Aktív",
-        "success": "A cél elérve",
-        "fail": "A gól nem sikerült"
+        "success": "Elérve",
+        "fail": "Sikertelen"
       }
     }
   },

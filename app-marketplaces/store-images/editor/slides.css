@@ -41,8 +41,8 @@
   /* Space between the texts and the top or bottom edge, and side margin. Texts
      at the bottom grow upwards, so that space stays the same whatever the
      number of lines. */
-  --header-top: 115px;
-  --header-bottom: 150px;
+  --header-top: 98px;
+  --header-bottom: 72px;
   --margin: 80px;
 
   position: relative;
@@ -140,7 +140,11 @@
     padding-inline: 0.08em;
     font-style: italic;
     font-weight: 600;
-    background: linear-gradient(transparent 60%, var(--marker) 60% 90%, transparent 90%);
+    background: linear-gradient(
+      transparent 60%,
+      var(--marker) 60% 90%,
+      transparent 90%
+    );
     box-decoration-break: clone;
   }
 }
@@ -292,7 +296,8 @@
     border-radius: 28px;
     background: #fff;
     color: var(--navy);
-    box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--navy) 30%, transparent);
+    box-shadow: 0 14px 30px -12px
+      color-mix(in srgb, var(--navy) 30%, transparent);
   }
 
   & b {
