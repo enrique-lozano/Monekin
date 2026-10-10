@@ -457,7 +457,6 @@ Future<void> _captureLocale(
   await tester.tap(apartment.first);
   await tester.pumpAndSettle();
   expect(find.byType(AssetDetailsPage), findsOneWidget);
-  await _collapsePageTitle(tester, AssetDetailsPage);
   await shoot(ScreenshotName.assetDetails);
   await tester.tap(find.backButton());
   await tester.pumpAndSettle();
