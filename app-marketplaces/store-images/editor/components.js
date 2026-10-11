@@ -38,7 +38,10 @@ export async function renderSlide(html, { slideId, capture, texts }) {
   const root = wrapper.firstElementChild;
 
   for (const el of root.querySelectorAll('store-text')) {
-    const value = el.getAttribute('key').split('.').reduce((obj, k) => obj?.[k], texts[slideId]);
+    const value = el
+      .getAttribute('key')
+      .split('.')
+      .reduce((obj, k) => obj?.[k], texts[slideId]);
     el.outerHTML = value ?? `<mark>${slideId}.${el.getAttribute('key')}</mark>`;
   }
 
@@ -52,7 +55,13 @@ export async function renderSlide(html, { slideId, capture, texts }) {
   for (const el of root.querySelectorAll('store-phone')) {
     const phone = replaceWith(el, 'div', 'phone');
     phone.innerHTML = '<div class="screen"></div>';
-    loads.push(loadCapture(phone.querySelector('.screen'), capture, el.getAttribute('shot')));
+    loads.push(
+      loadCapture(
+        phone.querySelector('.screen'),
+        capture,
+        el.getAttribute('shot'),
+      ),
+    );
   }
 
   for (const el of root.querySelectorAll('store-zoom')) {
@@ -65,7 +74,11 @@ export async function renderSlide(html, { slideId, capture, texts }) {
     );
   }
 
-  const slide = replaceWith(root, 'div', `slide ${root.getAttribute('background') ?? ''}`);
+  const slide = replaceWith(
+    root,
+    'div',
+    `slide ${root.getAttribute('background') ?? ''}`,
+  );
   const captures = await Promise.all(loads);
   return { slide, usesFallback: captures.some((c) => c?.isFallback) };
 }
@@ -92,7 +105,12 @@ async function loadCapture(container, capture, shot) {
   container.append(img);
 
   for (const candidate of new Set([capture, DEFAULT_CAPTURE])) {
-    if (await loadImage(img, `../../screenshots/captures/${candidate}/${shot}.png`)) {
+    if (
+      await loadImage(
+        img,
+        `../../screenshots/captures/${candidate}/${shot}.png`,
+      )
+    ) {
       return { img, isFallback: candidate !== capture };
     }
   }
@@ -125,7 +143,10 @@ function contentRight(img, top, height) {
   const { data } = ctx.getImageData(0, 0, w, h);
 
   const differs = (i) =>
-    Math.abs(data[i] - data[(w - 1) * 4]) + Math.abs(data[i + 1] - data[(w - 1) * 4 + 1]) + Math.abs(data[i + 2] - data[(w - 1) * 4 + 2]) > 30;
+    Math.abs(data[i] - data[(w - 1) * 4]) +
+      Math.abs(data[i + 1] - data[(w - 1) * 4 + 1]) +
+      Math.abs(data[i + 2] - data[(w - 1) * 4 + 2]) >
+    30;
 
   for (let x = w - 1; x >= 0; x--) {
     for (let y = 0; y < h; y++) {
@@ -141,12 +162,18 @@ function contentRight(img, top, height) {
  * amounts (e.g. in high-denomination currencies), keeping the left margin on the right.
  */
 function cropZoom(zoom, img, el) {
-  const [left, top, cropWidth, height] = el.getAttribute('crop').split(' ').map((v) => parseFloat(v) / 100);
+  const [left, top, cropWidth, height] = el
+    .getAttribute('crop')
+    .split(' ')
+    .map((v) => parseFloat(v) / 100);
   let width = cropWidth;
 
   if (el.hasAttribute('fit-width')) {
     try {
-      width = Math.max(cropWidth, Math.min(contentRight(img, top, height) + left, 1) - left);
+      width = Math.max(
+        cropWidth,
+        Math.min(contentRight(img, top, height) + left, 1) - left,
+      );
     } catch {
       // Unreadable pixels (opened from file://): keep the given crop
     }
