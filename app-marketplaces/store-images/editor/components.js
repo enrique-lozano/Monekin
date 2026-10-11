@@ -6,6 +6,7 @@
 //                                         the set (or the en-USD one, if the set has none).
 //   <store-zoom shot="..." crop="...">    Magnified part of a capture. `crop` is
 //                                         "left top width height", as % of the capture.
+//                                         Add `fit-width` to widen it if the content is wider.
 //   <store-icon name="lock">              One of the ICONS below.
 //
 // Position and size elements with inline `style` (left/right, top, width, rotate...).
@@ -108,9 +109,48 @@ function loadImage(img, src) {
   });
 }
 
-/** Sizes the capture in % of the zoom box, so the box `width` can be any CSS value. */
+/**
+ * Right edge (0-1) of the last non-background pixel in the `top`..`top + height`
+ * rows of the capture, 0 if the rows are empty. The background is the color of
+ * the top right pixel of that band.
+ */
+function contentRight(img, top, height) {
+  const w = img.naturalWidth;
+  const h = Math.round(height * img.naturalHeight);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  ctx.drawImage(img, 0, -Math.round(top * img.naturalHeight));
+  const { data } = ctx.getImageData(0, 0, w, h);
+
+  const differs = (i) =>
+    Math.abs(data[i] - data[(w - 1) * 4]) + Math.abs(data[i + 1] - data[(w - 1) * 4 + 1]) + Math.abs(data[i + 2] - data[(w - 1) * 4 + 2]) > 30;
+
+  for (let x = w - 1; x >= 0; x--) {
+    for (let y = 0; y < h; y++) {
+      if (differs((y * w + x) * 4)) return (x + 1) / w;
+    }
+  }
+  return 0;
+}
+
+/**
+ * Sizes the capture in % of the zoom box, so the box `width` can be any CSS value.
+ * With `fit-width`, the crop `width` is a minimum: it grows to include wide
+ * amounts (e.g. in high-denomination currencies), keeping the left margin on the right.
+ */
 function cropZoom(zoom, img, el) {
-  const [left, top, width, height] = el.getAttribute('crop').split(' ').map((v) => parseFloat(v) / 100);
+  const [left, top, cropWidth, height] = el.getAttribute('crop').split(' ').map((v) => parseFloat(v) / 100);
+  let width = cropWidth;
+
+  if (el.hasAttribute('fit-width')) {
+    try {
+      width = Math.max(cropWidth, Math.min(contentRight(img, top, height) + left, 1) - left);
+    } catch {
+      // Unreadable pixels (opened from file://): keep the given crop
+    }
+  }
 
   zoom.style.aspectRatio = `${width * img.naturalWidth} / ${height * img.naturalHeight}`;
   img.style.width = `${100 / width}%`;
