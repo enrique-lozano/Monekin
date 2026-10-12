@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
@@ -32,9 +33,6 @@ class TransactionAccountCategorySelector extends StatelessWidget {
     final transferAccount = form.transferAccount;
     final selectedCategory = form.selectedCategory;
     final shakeKey = form.shakeKey;
-    final investmentInstrumentName = form.isSecurityTradeInvestment
-        ? (form.security?.name ?? '…')
-        : null;
 
     if (transactionType.isTransfer) {
       return Stack(
@@ -104,21 +102,14 @@ class TransactionAccountCategorySelector extends StatelessWidget {
           ),
           const SizedBox(width: 2),
           Expanded(
-            child:
-                transactionType.isInvestment && investmentInstrumentName != null
-                ? _AccountCard(
-                    position: _CardPosition.right,
-                    title: t.assets.details.trade_form_asset_column,
-                    value: investmentInstrumentName,
-                    onTap: () {},
-                    showChevron: false,
-                  )
-                : ShakeWidget(
-                    duration: const Duration(milliseconds: 200),
-                    shakeCount: 1,
-                    shakeOffset: 10,
-                    key: shakeKey,
-                    child: _AccountCard(
+            child: ShakeWidget(
+              duration: const Duration(milliseconds: 200),
+              shakeCount: 1,
+              shakeOffset: 10,
+              key: shakeKey,
+              child: form.isSecurityTradeInvestment
+                  ? _buildSecurityCard(context, form)
+                  : _AccountCard(
                       position: _CardPosition.right,
                       title: t.general.category,
                       value: selectedCategory?.name,
@@ -131,10 +122,39 @@ class TransactionAccountCategorySelector extends StatelessWidget {
                       ),
                       onTap: () => form.selectCategory(context),
                     ),
-                  ),
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  /// The security of a trade. It can only be changed while creating one.
+  _AccountCard _buildSecurityCard(
+    BuildContext context,
+    TransactionFormController form,
+  ) {
+    final security = form.security;
+    final canChange = !form.isEditMode;
+
+    // Same box as the account icon: icon size plus the padding of IconDisplayer
+    const iconSize = 24.0;
+    const boxSize = iconSize + 2 * (iconSize / (22 / 6));
+
+    return _AccountCard(
+      position: _CardPosition.right,
+      title: Translations.of(context).assets.holdings.security,
+      value: security?.name,
+      showChevron: canChange,
+      leading: security != null
+          ? SecurityAvatar(security: security, size: boxSize)
+          : IconDisplayer(
+              borderRadius: boxSize,
+              size: iconSize,
+              icon: Icons.question_mark_rounded,
+              mainColor: Theme.of(context).colorScheme.primary,
+            ),
+      onTap: canChange ? () => form.pickSecurity(context) : () {},
     );
   }
 
@@ -170,7 +190,6 @@ class _AccountCard extends StatelessWidget {
     required this.title,
     required this.value,
     required this.onTap,
-    this.subtitle,
     this.leading,
     this.showChevron = true,
     this.position = _CardPosition.single,
@@ -178,7 +197,6 @@ class _AccountCard extends StatelessWidget {
 
   final String title;
   final String? value;
-  final Widget? subtitle;
   final Widget? leading;
   final VoidCallback onTap;
   final bool showChevron;
@@ -256,20 +274,7 @@ class _AccountCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: subtitle != null ? 2 : 8),
-                  if (subtitle != null)
-                    SizedBox(
-                      width: double.infinity,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: subtitle != null
-                            ? DefaultTextStyle(
-                                style: theme.textTheme.bodySmall!,
-                                child: subtitle!,
-                              )
-                            : const SizedBox.shrink(),
-                      ),
-                    ),
+                  const SizedBox(height: 8),
                 ],
               ),
             ),

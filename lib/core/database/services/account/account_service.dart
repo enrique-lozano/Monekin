@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -84,31 +85,16 @@ class AccountService {
       AS $columnName ON $accountTableName.currencyId = $columnName.currencyCode
     ''';
 
-  /// Get the amount of money that an account has in a certain period of time,
-  /// specified in the [date] param. If the [date] param is null, it will return
-  /// the money of the account right now.
+  /// The **cash** side of an account at [date] (defaults to now): its opening
+  /// balance plus its ledger, with portfolio snapshots taking over from the
+  /// ledger where they exist (see [_getSnapshotCashAdjustment]).
   ///
-  /// You can add filters for the transactions that will be taken into account to calculate
-  /// this balance, via the [trFilters] param.
+  /// This is [getAccountMoney] without the market value of the account's
+  /// holdings. Use it to know how much spendable money an account holds, and to
+  /// prefill the cash of a new portfolio snapshot.
   ///
-  /// By default, the returned amount will be in the account currency.
-  ///
-  /// Example:
-  ///
-  /// ```dart
-  /// final account = Account(/*....*/)
-  ///
-  /// final moneyStream = getAccountMoney(
-  ///   account: account,
-  ///   date: DateTime.now(),
-  ///   convertToPreferredCurrency: true,
-  /// );
-  ///
-  /// moneyStream.listen((money) {
-  ///   Logger.printDebug('Money: \$\${money.toStringAsFixed(2)}');
-  /// });
-  /// ```
-  Stream<double> getAccountMoney({
+  /// By default the returned amount is in the account currency.
+  Stream<double> getAccountCash({
     required Account account,
     DateTime? date,
     TransactionFilterSet trFilters = const TransactionFilterSet(),
@@ -142,6 +128,62 @@ class AccountService {
       exchDate: date,
     );
 
+    final snapshotAnchor = _getSnapshotCashAdjustment(
+      accountIds: [account.id],
+      date: date,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+
+    return Rx.combineLatest3(
+      iniStream,
+      ledgerTx,
+      snapshotAnchor,
+      (double ini, double ledger, double anchor) => ini + ledger + anchor,
+    );
+  }
+
+  /// Get the amount of money that an account has in a certain period of time,
+  /// specified in the [date] param. If the [date] param is null, it will return
+  /// the money of the account right now.
+  ///
+  /// The balance is the account's cash ([getAccountCash]) plus the market value
+  /// of the securities it holds.
+  ///
+  /// You can add filters for the transactions that will be taken into account to calculate
+  /// this balance, via the [trFilters] param.
+  ///
+  /// By default, the returned amount will be in the account currency.
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// final account = Account(/*....*/)
+  ///
+  /// final moneyStream = getAccountMoney(
+  ///   account: account,
+  ///   date: DateTime.now(),
+  ///   convertToPreferredCurrency: true,
+  /// );
+  ///
+  /// moneyStream.listen((money) {
+  ///   Logger.printDebug('Money: \$\${money.toStringAsFixed(2)}');
+  /// });
+  /// ```
+  Stream<double> getAccountMoney({
+    required Account account,
+    DateTime? date,
+    TransactionFilterSet trFilters = const TransactionFilterSet(),
+    bool convertToPreferredCurrency = false,
+  }) {
+    date ??= DateTime.now();
+
+    final cash = getAccountCash(
+      account: account,
+      date: date,
+      trFilters: trFilters,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+
     final holdings = HoldingService.instance.getHoldingsMarketValue(
       accountIds: [account.id],
       convertToPreferred: convertToPreferredCurrency,
@@ -151,14 +193,132 @@ class AccountService {
       date: date,
     );
 
-    return Rx.combineLatest3(
-      iniStream,
-      ledgerTx,
+    return Rx.combineLatest2(
+      cash,
       holdings,
-      (double ini, double ledger, double h) =>
-          (ini + ledger + h).roundWithDecimals(account.currency.decimalPlaces),
+      (double c, double h) =>
+          (c + h).roundWithDecimals(account.currency.decimalPlaces),
     );
   }
+
+  /// Correction that lets portfolio snapshots own the **cash** of the accounts
+  /// tracked in [AccountTrackingMode.holdings].
+  ///
+  /// A snapshot states the account's whole state on its date: what it held and
+  /// how much cash it had. From that date on, that declared cash is the cash
+  /// balance. Transactions dated after the snapshot still accumulate on top of
+  /// it, which is what keeps interest, taxes and transfers working.
+  ///
+  /// Applied as an extra additive term in the cash formula:
+  ///
+  /// ```text
+  /// cash(a, t) = Ini(a) + L(a, t) + Adj(a, t)
+  /// Adj(a, t)  = snapshotCash(a, d) - (Ini(a) + L(a, d))
+  /// ```
+  ///
+  /// where `d` is the date of the latest snapshot on or before `t`. The two
+  /// ledgers cancel out, leaving `snapshotCash + the flows posted after d`.
+  /// Accounts with no snapshot on or before `t` contribute 0, so every other
+  /// account keeps its plain ledger balance.
+  ///
+  /// The correction is always computed against the unfiltered ledger (skipping
+  /// voided and pending rows, as balances do everywhere): it anchors the
+  /// account itself, so it is not something a transaction filter can exclude.
+  Stream<double> _getSnapshotCashAdjustment({
+    Iterable<String>? accountIds,
+    required DateTime date,
+    bool convertToPreferredCurrency = false,
+  }) {
+    if (accountIds != null && accountIds.isEmpty) return Stream.value(0.0);
+
+    return db
+        .customSelect(
+          snapshotCashAdjustmentQuery(
+            accountIdsCount: accountIds?.length,
+            rateFactor: convertToPreferredCurrency
+                ? ' * COALESCE(excRate.exchangeRate, 1)'
+                : '',
+            rateJoin: convertToPreferredCurrency
+                ? _joinAccountAndRate(date)
+                : '',
+          ),
+          readsFrom: {
+            db.accounts,
+            db.accountSnapshots,
+            db.transactions,
+            if (convertToPreferredCurrency) db.exchangeRates,
+          },
+          variables: [
+            Variable.withDateTime(date),
+            if (convertToPreferredCurrency) Variable.withDateTime(date),
+            if (accountIds != null)
+              for (final id in accountIds) Variable.withString(id),
+          ],
+        )
+        .watchSingleOrNull()
+        .map(
+          (res) =>
+              (res?.data['adjustment'] as num?)?.roundWithDecimals(8) ?? 0.0,
+        );
+  }
+
+  /// The `SELECT` behind [_getSnapshotCashAdjustment].
+  ///
+  /// The ledger effect of a transaction on an account mirrors how
+  /// [TransactionService.getTransactionsValueBalance] aggregates rows: the
+  /// signed value for income / expense / investment, minus the value on the
+  /// origin of a transfer, and plus `valueInDestiny` on its destination.
+  /// Voided and pending rows never count.
+  ///
+  /// Parameters, in order: the cut-off date, the same date again when
+  /// [rateJoin] is set, then one per account id.
+  ///
+  /// Exposed so tests (and the `v14.sql` backfill they check) can run the same
+  /// query as the app.
+  @visibleForTesting
+  static String snapshotCashAdjustmentQuery({
+    int? accountIdsCount,
+    String rateFactor = '',
+    String rateJoin = '',
+  }) =>
+      """
+    SELECT COALESCE(SUM(
+      (
+        acs.cash
+        - (CASE WHEN accounts.date > acs.date THEN 0 ELSE accounts.iniValue END)
+        - COALESCE(
+            (
+              SELECT SUM(
+                CASE
+                  WHEN t.type != 'T' THEN t.value
+                  WHEN t.accountID = accounts.id THEN -t.value
+                  ELSE COALESCE(t.valueInDestiny, t.value)
+                END
+              )
+              FROM transactions t
+              WHERE (t.status IS NULL OR t.status NOT IN ('V', 'P'))
+                AND t.date <= acs.date
+                AND (
+                  t.accountID = accounts.id
+                  OR (t.type = 'T' AND t.receivingAccountID = accounts.id)
+                )
+            ),
+            0
+          )
+      )$rateFactor
+    ), 0)
+    AS adjustment
+    FROM accounts
+    JOIN accountSnapshots acs
+      ON acs.accountID = accounts.id
+     AND acs.date = (
+           SELECT MAX(acs2.date) FROM accountSnapshots acs2
+            WHERE acs2.accountID = accounts.id AND acs2.date <= ?
+         )
+    $rateJoin
+    WHERE accounts.trackingMode = 'holdings'
+      ${accountIdsCount != null ? 'AND accounts.id IN (${List.filled(accountIdsCount, '?').join(', ')})' : ''}
+    """;
 
   /// Get the amount of money that some accounts have in a certain period of time,
   /// specified in the [date] param. If the [date] param is null, it will return
@@ -168,8 +328,10 @@ class AccountService {
   /// all the user accounts (closed or not).
   ///
   /// Each account contributes its opening balance, its **cash ledger** (income,
-  /// expense, transfers, and investment-type rows) and the market value of its
-  /// **holdings**.
+  /// expense, transfers, and investment-type rows), the market value of its
+  /// **holdings** and, for accounts tracked in [AccountTrackingMode.holdings],
+  /// the cash declared in its latest portfolio snapshot
+  /// ([_getSnapshotCashAdjustment]).
   ///
   /// You can add filters for the transactions that will be taken into account to calculate
   /// this balance, via the [trFilters] param. We will overwrite the accountsIds and the maxDate
@@ -246,11 +408,19 @@ class AccountService {
       date: date,
     );
 
-    return Rx.combineLatest3(
+    final snapshotAnchors = _getSnapshotCashAdjustment(
+      accountIds: accountIds,
+      date: date,
+      convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+
+    return Rx.combineLatest4(
       allAccountsInitialAmount,
       allAccountsTransactionsBalance,
       holdingsMarket,
-      (double ini, double tr, double holdings) => ini + tr + holdings,
+      snapshotAnchors,
+      (double ini, double tr, double holdings, double anchors) =>
+          ini + tr + holdings + anchors,
     );
   }
 

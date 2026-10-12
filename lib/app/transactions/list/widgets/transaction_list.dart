@@ -4,6 +4,8 @@ import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:rxdart/rxdart.dart';
 
 class TransactionListComponent extends StatefulWidget {
   const TransactionListComponent({
@@ -15,6 +17,7 @@ class TransactionListComponent extends StatefulWidget {
     this.onLoading = const Column(children: [LinearProgressIndicator()]),
     required this.onEmptyList,
     this.isScrollable = false,
+    this.separateUpcoming = true,
     this.scrollController,
     this.tileBuilder,
     this.listPadding = const EdgeInsets.all(0),
@@ -36,6 +39,11 @@ class TransactionListComponent extends StatefulWidget {
   final ScrollController? scrollController;
 
   final bool isScrollable;
+
+  /// Whether to pull the transactions that are not settled yet (future ones,
+  /// recurrency rules and the pending ones) into their own section above the
+  /// list. Only takes effect when [isScrollable] is `true`. Defaults to `true`
+  final bool separateUpcoming;
 
   final TransactionListTile Function(MoneyTransaction transaction)? tileBuilder;
 
@@ -94,191 +102,218 @@ class TransactionListComponentState extends State<TransactionListComponent> {
 
   @override
   Widget build(BuildContext context) {
+    if (!widget.isScrollable || !widget.separateUpcoming) {
+      return StreamBuilder(
+        stream: TransactionService.instance.getTransactions(
+          filters: widget.filters,
+          limit: widget.limit * currentPage,
+          orderBy: widget.orderBy,
+        ),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return widget.onLoading;
+          }
+
+          if (snapshot.data!.isEmpty) {
+            return widget.onEmptyList;
+          }
+
+          return buildFlatList(snapshot.data!);
+        },
+      );
+    }
+
     return StreamBuilder(
-      stream: TransactionService.instance.getTransactions(
-        filters: widget.filters,
-        limit: widget.limit * currentPage,
-        orderBy: widget.orderBy,
+      stream: Rx.combineLatest2(
+        TransactionService.instance.getTransactionsBySettlement(
+          settled: false,
+          filters: widget.filters,
+        ),
+        TransactionService.instance.getTransactionsBySettlement(
+          settled: true,
+          filters: widget.filters,
+          orderBy: widget.orderBy,
+          limit: widget.limit * currentPage,
+        ),
+        (upcoming, settled) => (upcoming: upcoming, settled: settled),
       ),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return widget.onLoading;
         }
 
-        final transactions = snapshot.data!;
+        final (:upcoming, :settled) = snapshot.data!;
 
-        if (transactions.isEmpty) {
+        if (upcoming.isEmpty && settled.isEmpty) {
           return widget.onEmptyList;
         }
 
-        if (!widget.isScrollable) {
-          return ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: transactions.length + 1,
-            controller: listScrollController,
-            padding: widget.listPadding,
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                if (!widget.showGroupDivider) return Container();
+        return buildSplittedList(upcoming: upcoming, settled: settled);
+      },
+    );
+  }
 
-                return TransactionListDateSeparator(
-                  filters: widget.filters,
-                  date: transactions[0].date,
-                );
-              }
+  Widget buildFlatList(List<MoneyTransaction> transactions) {
+    return ListView.separated(
+      physics: widget.isScrollable
+          ? null
+          : const NeverScrollableScrollPhysics(),
+      itemCount: transactions.length + 1,
+      controller: listScrollController,
+      padding: widget.listPadding,
+      shrinkWrap: !widget.isScrollable,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          if (!widget.showGroupDivider) return Container();
 
-              final transaction = transactions[index - 1];
-              return buildTile(transaction);
-            },
-            separatorBuilder: (context, index) {
-              if (index == 0 || index >= transactions.length) {
-                return const SizedBox.shrink();
-              }
-
-              if (!widget.showGroupDivider ||
-                  index >= 1 &&
-                      DateUtils.isSameDay(
-                        transactions[index - 1].date,
-                        transactions[index].date,
-                      )) {
-                // Separator between transactions in the same group
-                return const SizedBox.shrink();
-              }
-
-              return TransactionListDateSeparator(
-                filters: widget.filters,
-                date: transactions[index].date,
-              );
-            },
+          return TransactionListDateSeparator(
+            filters: widget.filters,
+            date: transactions[0].date,
           );
         }
 
-        final now = DateTime.now();
-        final futureTransactions = transactions
-            .where((t) => t.date.isAfter(now))
-            .toList();
-        final pastTransactions = transactions
-            .where((t) => !t.date.isAfter(now))
-            .toList();
+        final transaction = transactions[index - 1];
+        return buildTile(transaction);
+      },
+      separatorBuilder: (context, index) {
+        if (index == 0 || index >= transactions.length) {
+          return const SizedBox.shrink();
+        }
 
-        // Reverse future transactions so the one closest to now is at the bottom (index 0 of the sliver)
-        final reversedFutureTransactions = futureTransactions.reversed.toList();
+        if (!widget.showGroupDivider ||
+            index >= 1 &&
+                DateUtils.isSameDay(
+                  transactions[index - 1].date,
+                  transactions[index].date,
+                )) {
+          // Separator between transactions in the same group
+          return const SizedBox.shrink();
+        }
 
-        const centerKey = ValueKey('center-list');
-
-        return CustomScrollView(
-          controller: listScrollController,
-          center: centerKey,
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            if (futureTransactions.isNotEmpty)
-              SliverPadding(
-                padding: widget.listPadding != null
-                    ? widget.listPadding!.copyWith(bottom: 8)
-                    : EdgeInsets.zero,
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final transaction = reversedFutureTransactions[index];
-
-                    bool showHeader = false;
-                    if (widget.showGroupDivider) {
-                      if (index == reversedFutureTransactions.length - 1) {
-                        showHeader = true;
-                      } else {
-                        final nextTransaction =
-                            reversedFutureTransactions[index + 1];
-                        if (!DateUtils.isSameDay(
-                          transaction.date,
-                          nextTransaction.date,
-                        )) {
-                          showHeader = true;
-                        }
-                      }
-                    }
-
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (showHeader)
-                          TransactionListDateSeparator(
-                            filters: widget.filters,
-                            date: transaction.date,
-                          ),
-                        Opacity(opacity: 0.5, child: buildTile(transaction)),
-                      ],
-                    );
-                  }, childCount: reversedFutureTransactions.length),
-                ),
-              ),
-            SliverPadding(
-              padding: widget.listPadding != null
-                  ? widget.listPadding!.copyWith(top: 0)
-                  : EdgeInsets.zero,
-              key: centerKey,
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    if (futureTransactions.isNotEmpty) {
-                      if (index == 0) {
-                        return _FutureTransactionsBanner(
-                          count: futureTransactions.length,
-                        );
-                      }
-                      index = index - 1;
-                    }
-
-                    if (index >= pastTransactions.length) return null;
-
-                    final transaction = pastTransactions[index];
-
-                    bool showHeader = false;
-                    if (widget.showGroupDivider) {
-                      if (index == 0) {
-                        showHeader = true;
-                      } else {
-                        final prevTransaction = pastTransactions[index - 1];
-                        if (!DateUtils.isSameDay(
-                          transaction.date,
-                          prevTransaction.date,
-                        )) {
-                          showHeader = true;
-                        }
-                      }
-                    }
-
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (showHeader)
-                          TransactionListDateSeparator(
-                            filters: widget.filters,
-                            date: transaction.date,
-                          ),
-                        buildTile(transaction),
-                      ],
-                    );
-                  },
-                  childCount:
-                      pastTransactions.length +
-                      (futureTransactions.isNotEmpty ? 1 : 0),
-                ),
-              ),
-            ),
-          ],
+        return TransactionListDateSeparator(
+          filters: widget.filters,
+          date: transactions[index].date,
         );
       },
     );
   }
+
+  /// Renders the [settled] transactions below the viewport anchor and the
+  /// [upcoming] ones above it, so that the user can scroll up to reach the
+  /// payments that are still to be made.
+  ///
+  /// [upcoming] must be sorted oldest-first: within a sliver placed before the
+  /// anchor, the child at index 0 is the one laid out closest to it.
+  Widget buildSplittedList({
+    required List<MoneyTransaction> upcoming,
+    required List<MoneyTransaction> settled,
+  }) {
+    const centerKey = ValueKey('center-list');
+
+    return CustomScrollView(
+      controller: listScrollController,
+      center: centerKey,
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        if (upcoming.isNotEmpty)
+          SliverPadding(
+            padding: widget.listPadding != null
+                ? widget.listPadding!.copyWith(bottom: 8)
+                : EdgeInsets.zero,
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final transaction = upcoming[index];
+
+                bool showHeader = false;
+                if (widget.showGroupDivider) {
+                  if (index == upcoming.length - 1) {
+                    showHeader = true;
+                  } else {
+                    final nextTransaction = upcoming[index + 1];
+                    if (!DateUtils.isSameDay(
+                      transaction.date,
+                      nextTransaction.date,
+                    )) {
+                      showHeader = true;
+                    }
+                  }
+                }
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (showHeader)
+                      TransactionListDateSeparator(
+                        filters: widget.filters,
+                        date: transaction.date,
+                      ),
+                    Opacity(opacity: 0.5, child: buildTile(transaction)),
+                  ],
+                );
+              }, childCount: upcoming.length),
+            ),
+          ),
+        SliverPadding(
+          padding: widget.listPadding != null
+              ? widget.listPadding!.copyWith(top: 0)
+              : EdgeInsets.zero,
+          key: centerKey,
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              if (upcoming.isNotEmpty) {
+                if (index == 0) {
+                  return _UpcomingTransactionsBanner(count: upcoming.length);
+                }
+                index = index - 1;
+              }
+
+              if (index >= settled.length) return null;
+
+              final transaction = settled[index];
+
+              bool showHeader = false;
+              if (widget.showGroupDivider) {
+                if (index == 0) {
+                  showHeader = true;
+                } else {
+                  final prevTransaction = settled[index - 1];
+                  if (!DateUtils.isSameDay(
+                    transaction.date,
+                    prevTransaction.date,
+                  )) {
+                    showHeader = true;
+                  }
+                }
+              }
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (showHeader)
+                    TransactionListDateSeparator(
+                      filters: widget.filters,
+                      date: transaction.date,
+                    ),
+                  buildTile(transaction),
+                ],
+              );
+            }, childCount: settled.length + (upcoming.isNotEmpty ? 1 : 0)),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class _FutureTransactionsBanner extends StatelessWidget {
-  const _FutureTransactionsBanner({required this.count});
+class _UpcomingTransactionsBanner extends StatelessWidget {
+  const _UpcomingTransactionsBanner({required this.count});
 
   final int count;
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+
     final arrowUpIcon = Icon(
       Icons.keyboard_arrow_up_rounded,
       size: 16,
@@ -295,7 +330,7 @@ class _FutureTransactionsBanner extends StatelessWidget {
           arrowUpIcon,
           const Spacer(),
           Text(
-            '$count upcoming transactions',
+            t.transaction.list.upcoming(n: count),
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),

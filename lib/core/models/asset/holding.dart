@@ -45,9 +45,9 @@ class SnapshotPosition {
   double get cost => quantity * avgCostPrice;
 }
 
-/// A portfolio snapshot (the complete state of an investment account's holdings
-/// on a date) together with its positions. Used by accounts tracked in
-/// [AccountTrackingMode.holdings].
+/// A portfolio snapshot (the complete state of an investment account on a date:
+/// its positions and its cash) together with its positions. Used by accounts
+/// tracked in [AccountTrackingMode.holdings].
 class AccountSnapshotWithPositions {
   final AccountSnapshotInDB snapshot;
   final List<SnapshotPosition> positions;
@@ -60,6 +60,10 @@ class AccountSnapshotWithPositions {
   String get id => snapshot.id;
 
   DateTime get date => snapshot.date;
+
+  /// Cash the account held at [date], in the **account** currency. This is what
+  /// the account's cash balance is anchored to from [date] on.
+  double get cash => snapshot.cash;
 
   int get positionsCount => positions.length;
 

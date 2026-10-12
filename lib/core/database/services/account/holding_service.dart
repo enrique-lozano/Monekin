@@ -6,6 +6,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
@@ -101,6 +102,31 @@ class HoldingService {
 
   Stream<HoldingInDB?> getHolding(String accountId, String securityId) {
     return _selectHolding(accountId, securityId).watchSingleOrNull();
+  }
+
+  /// Whether an account holds anything that only makes sense in an investment
+  /// account: positions, trades (type `'N'`) or portfolio snapshots.
+  ///
+  /// Turning such an account back into a money one would keep those rows
+  /// counting towards its balance with no UI left to see or edit them, so the
+  /// account type is locked while this is `true`.
+  Stream<bool> hasInvestmentRecords(String accountId) {
+    return db
+        .customSelect(
+          '''
+          SELECT EXISTS(
+            SELECT 1 FROM holdings WHERE accountID = ?1
+            UNION ALL
+            SELECT 1 FROM accountSnapshots WHERE accountID = ?1
+            UNION ALL
+            SELECT 1 FROM transactions WHERE accountID = ?1 AND type = 'N'
+          ) AS hasRecords
+          ''',
+          variables: [Variable.withString(accountId)],
+          readsFrom: {db.holdings, db.accountSnapshots, db.transactions},
+        )
+        .watchSingle()
+        .map((row) => row.read<int>('hasRecords') == 1);
   }
 
   SimpleSelectStatement<Holdings, HoldingInDB> _selectHolding(
@@ -246,6 +272,8 @@ class HoldingService {
         WHERE t.type = 'N' AND t.securityID IS NOT NULL
           AND a.trackingMode = 'transactions'
           AND t.date <= ?1
+          AND t.intervalPeriod IS NULL
+          AND (t.status IS NULL OR t.status NOT IN ('V', 'P'))
           $tradesAccountFilter
       ),
       -- Running weighted-average cost, mirroring `recomputeHolding`: buys move
@@ -533,6 +561,16 @@ class HoldingService {
     );
   }
 
+  /// Trades that move a position. Recurrent rules (not paid yet) and pending or
+  /// voided trades are left out, as they don't move cash either.
+  static Expression<bool> _countsAsTrade(Transactions t) =>
+      t.intervalPeriod.isNull() &
+      (t.status.isNull() |
+          t.status.isNotInValues([
+            TransactionStatus.voided,
+            TransactionStatus.pending,
+          ]));
+
   /// Replays every security trade of the (account, security) pair in date order
   /// and returns the resulting position: buys move the weighted-average cost,
   /// sells only shrink the quantity, and a position that closes leaves a
@@ -546,7 +584,8 @@ class HoldingService {
               ..where(
                 (t) =>
                     t.accountID.equals(accountId) &
-                    t.securityID.equals(securityId),
+                    t.securityID.equals(securityId) &
+                    _countsAsTrade(t),
               )
               ..orderBy([(t) => OrderingTerm.asc(t.date)]))
             .get();
@@ -793,8 +832,14 @@ class HoldingService {
   }
 
   /// Creates or replaces the portfolio snapshot for ([accountId], [date]) with
-  /// [positions] (rows with quantity <= 0 are dropped), then rebuilds the
-  /// account's current `holdings` from its latest snapshot.
+  /// [positions] (rows with quantity <= 0 are dropped) and [cash], then rebuilds
+  /// the account's current `holdings` from its latest snapshot.
+  ///
+  /// [cash] is the account's cash balance on [date], in the account currency. A
+  /// snapshot is the account's authoritative state on its date, so this value
+  /// anchors the cash side of the balance from [date] on (see
+  /// `AccountService.getAccountCash`). Pass the cash the account is currently
+  /// believed to have if the intent is only to update the positions.
   ///
   /// When editing an existing snapshot, pass its id as [replaceSnapshotId]; it
   /// is removed first so its date can change freely (and any snapshot already on
@@ -804,6 +849,7 @@ class HoldingService {
     required DateTime date,
     required List<({String securityId, double quantity, double avgCostPrice})>
     positions,
+    required double cash,
     String? replaceSnapshotId,
   }) async {
     await db.transaction(() async {
@@ -826,6 +872,7 @@ class HoldingService {
               id: snapshotId,
               accountID: accountId,
               date: date,
+              cash: cash,
             ),
           );
 
@@ -913,7 +960,9 @@ class HoldingService {
   /// account's securities disappear from balances and charts.
   ///
   /// - to `holdings`: the positions become a portfolio snapshot dated [date]
-  ///   (defaults to now), which is what holdings mode values them from.
+  ///   (defaults to now), which is what holdings mode values them from. Pass
+  ///   the account's cash balance at [date] as [snapshotCash] (see
+  ///   `AccountService.getAccountCash`).
   /// - to `transactions`: every position that has no trade history in this
   ///   account gets an anchor buy of the units held at their average cost. The
   ///   trade moves no cash (the money already left the account when the
@@ -931,6 +980,7 @@ class HoldingService {
     required AccountTrackingMode to,
     DateTime? date,
     String? anchorTradeTitle,
+    double snapshotCash = 0,
   }) async {
     final positions = await (db.select(
       db.holdings,
@@ -944,6 +994,7 @@ class HoldingService {
       await saveAccountSnapshot(
         accountId: accountId,
         date: effectiveDate,
+        cash: snapshotCash,
         positions: [
           for (final p in positions)
             (

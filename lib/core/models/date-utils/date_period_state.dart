@@ -67,15 +67,18 @@ class DatePeriodState {
             DateTime(currentYear, currentMonth + periodModifier, 1),
             DateTime(currentYear, currentMonth + 1 + periodModifier, 1),
           ),
+          // From Monday at midnight to the next Monday at midnight
           Periodicity.week => (
-            DateTime.now()
-                .subtract(Duration(days: DateTime.now().weekday - 1))
-                .add(Duration(days: 7 * periodModifier)),
-            DateTime.now()
-                .add(
-                  Duration(days: DateTime.daysPerWeek - DateTime.now().weekday),
-                )
-                .add(Duration(days: 7 * periodModifier)),
+            DateTime(
+              currentYear,
+              currentMonth,
+              currentDayOfMonth - currentWeekday + 1 + 7 * periodModifier,
+            ),
+            DateTime(
+              currentYear,
+              currentMonth,
+              currentDayOfMonth - currentWeekday + 8 + 7 * periodModifier,
+            ),
           ),
           Periodicity.day => (
             DateTime(
@@ -113,8 +116,14 @@ class DatePeriodState {
         );
 
       case PeriodType.lastDays:
-        final currentEndDate = DateTime.now().copyWith(
-          day: currentDayOfMonth + periodModifier * datePeriod.lastDays,
+        // The end bound is exclusive and must be the start of the next day,
+        // not the current instant. Otherwise the ranges are frozen at build
+        // time and a transaction created right after is left out until the
+        // widget rebuilds.
+        final currentEndDate = DateTime(
+          currentYear,
+          currentMonth,
+          currentDayOfMonth + 1 + periodModifier * datePeriod.lastDays,
         );
 
         return (

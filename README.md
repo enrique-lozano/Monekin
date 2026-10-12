@@ -56,10 +56,10 @@
 
 ### 📸 Screenshots
 
-|                                                                                                                    |                                                                                                                    |                                                                                                                    |                                                                                                                    |
-| :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------: |
-| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva1.PNG) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva2.PNG) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva3.PNG) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva4.PNG) |
-| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva5.PNG) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/en/Mockups/Diapositiva6.PNG) |
+|     |     |     |     |
+| :-: | :-: | :-: | :-: |
+| ![1](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/01.png) | ![2](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/02.png) | ![3](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/03.png) | ![4](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/04.png) |
+| ![5](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/05.png) | ![6](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/06.png) | ![7](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/screenshots/store/en-US/07.png) |     |
 
 ### 🕰 History of Monekin
 
@@ -77,10 +77,10 @@ So, I decided to create one myself. After months of development and hard work, M
 - **📊 Powerful Analytics** - Rich statistics, charts, and a Financial Health score that looks at savings, debt, cash flow, and investing.
 - **🎨 Custom Categories & Icons** - Unlimited categories and subcategories, with hundreds of beautiful icons to make them yours.
 - **💱 Multi-Currency** - 50+ currencies with exchange rates you can customize.
-- **💾 Local Backups & Data Control** - Unlimited local backups you own and restore on any device. No servers, no subscriptions.
+- **💾 Local Backups & Data Control** - Unlimited local backups you own and restore on any device.
 - **📴 Works Offline** - Full functionality with no internet connection required, anytime, anywhere.
 - **🔓 Open Source** - Fully transparent and community-driven, so you can trust it and help shape it.
-- **✨ Free, Forever** - No ads, no hidden fees. Just your finances.
+- **✨ No Ads, No Tracking** - Your data stays yours. Just your finances.
 
 ### 🛠 Tech Stack
 

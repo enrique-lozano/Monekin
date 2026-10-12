@@ -5,6 +5,7 @@ import 'package:monekin/core/database/services/debts/debt_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/debt/debt.dart';
+import 'package:monekin/core/models/debt/debt_direction.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -38,6 +39,9 @@ class NetWorthService {
 
   /// Sum of each debt’s **remaining** balance, converted to the preferred currency.
   ///
+  /// Debts the user borrowed add to the total; debts the user lent out are
+  /// receivables, so they subtract from it (net = borrowed − lent).
+  ///
   /// [exchangeRateAsOf] is used only for currency conversion. Remaining amounts
   /// follow [DebtService.getDebtRemainingAmount] (current ledger), matching
   /// [NetWorthEvolutionCard] behaviour.
@@ -61,13 +65,19 @@ class NetWorthService {
         return DebtService.instance.getDebtRemainingAmount(debt).switchMap((
           double remaining,
         ) {
+          // Money the user lent out is owed *to* them (a receivable), so it
+          // must offset what's borrowed rather than add to it.
+          final signedRemaining = debt.type == DebtDirection.lent
+              ? -remaining
+              : remaining;
+
           if (debt.currency.code == pref.code) {
-            return Stream.value(remaining);
+            return Stream.value(signedRemaining);
           }
           return ExchangeRateService.instance
               .calculateExchangeRateToPreferredCurrency(
                 fromCurrency: debt.currency.code,
-                amount: remaining,
+                amount: signedRemaining,
                 date: asOf,
               );
         });

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/budgets/budget_form_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
-import 'package:monekin/app/budgets/components/budget_evolution_chart.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
@@ -17,7 +16,7 @@ import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:monekin/core/presentation/widgets/targets/target_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -106,9 +105,6 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
 
         return PageFramework(
           title: budget.name,
-          subtitle: budget.intervalPeriod == null
-              ? null
-              : Text(budget.intervalPeriod!.allThePeriodsText(context)),
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -186,11 +182,6 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
 
           body: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: TargetHeader(target: budget, showIdentity: false),
-              ),
               ?segmentedTabs,
               Expanded(
                 child: TabBarView(
@@ -225,7 +216,13 @@ class _BudgetDetailsPageState extends State<BudgetDetailsPage>
                                 ),
                                 CardWithHeader(
                                   title: t.budgets.details.expend_evolution,
-                                  body: BudgetEvolutionChart(budget: budget),
+                                  bodyPadding: const EdgeInsets.fromLTRB(
+                                    12,
+                                    4,
+                                    16,
+                                    12,
+                                  ),
+                                  body: TargetEvolutionChart(target: budget),
                                 ),
                               ],
                             ),

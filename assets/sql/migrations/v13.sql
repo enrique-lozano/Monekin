@@ -270,11 +270,12 @@ WHERE a.assetType IN ('stocks', 'funds', 'crypto');
 
 -- 7b. Valuations of those assets become price-history points. Dates are
 --     normalized to date-only (one observation per calendar day).
-INSERT INTO securityPrices (id, securityID, date, price)
+INSERT OR IGNORE INTO securityPrices (id, securityID, date, price)
 SELECT 'sph_' || v.id, 'sec_' || v.assetId, DATE(v.date), v.value
 FROM valuations v
 INNER JOIN assets a ON a.id = v.assetId
-WHERE a.assetType IN ('stocks', 'funds', 'crypto');
+WHERE a.assetType IN ('stocks', 'funds', 'crypto')
+ORDER BY v.date DESC, v.id DESC;
 
 -- 7b-bis. Financial assets without valuations get a single seed point
 --         (date-only).
@@ -413,8 +414,27 @@ CREATE TABLE assets_new (
     linkedDebtId TEXT REFERENCES debts(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
+-- Normalize assetType to the new physical-only snake_case enum. Legacy rows
+-- can hold the old camelCase enum name (e.g. 'realEstate'): the v12 migration
+-- added `assetType` WITHOUT a CHECK, so unnormalized values could slip in
+-- (some builds/backups stored the Dart enum name instead of its databaseValue).
+-- Any value we do not recognize falls back to 'other' so the CHECK on
+-- `assets_new` can never abort the whole migration. Financial types were
+-- already converted and removed in Step 7, so they never reach here.
 INSERT INTO assets_new (id, name, description, currencyId, initialValue, creationDate, assetType, linkedDebtId)
-SELECT id, name, description, currencyId, initialValue, creationDate, assetType, NULL
+SELECT id, name, description, currencyId, initialValue, creationDate,
+    CASE assetType
+        WHEN 'real_estate' THEN 'real_estate'
+        WHEN 'realEstate' THEN 'real_estate'
+        WHEN 'precious_metal' THEN 'precious_metal'
+        WHEN 'preciousMetal' THEN 'precious_metal'
+        WHEN 'jewelry_art' THEN 'jewelry_art'
+        WHEN 'jewelryArt' THEN 'jewelry_art'
+        WHEN 'vehicle' THEN 'vehicle'
+        WHEN 'other' THEN 'other'
+        ELSE 'other'
+    END,
+    NULL
 FROM assets;
 
 DROP TABLE assets;

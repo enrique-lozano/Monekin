@@ -1,0 +1,156 @@
+/* Look of the editor page around the slides. */
+
+:root {
+  --bg: #1d1f24;
+  --bar: #121317;
+  --control: #2c2f36;
+  --control-hover: #3b3f48;
+  --muted: #9aa3b5;
+
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #fff;
+  font: 600 15px system-ui, sans-serif;
+}
+
+:is(nav, figcaption) :is(select, button) {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--control);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--control-hover);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--control);
+  background: var(--bar);
+
+  &[hidden] {
+    display: none;
+  }
+
+  & b {
+    margin-right: auto;
+    font-size: 17px;
+  }
+}
+
+#status {
+  color: var(--muted);
+}
+
+#open-folder {
+  background: #fdca40;
+  color: #0f3375;
+
+  &:hover {
+    background: #ffd866;
+  }
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding: 32px;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  & span:first-child {
+    margin-right: auto;
+  }
+}
+
+/* Marks a slide showing the default captures because its set has none */
+.fallback {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #fdca40;
+  color: #0f3375;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: help;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+/* Previews are the real 1080x1920 slide, scaled down */
+.preview {
+  width: 324px;
+  aspect-ratio: 1080 / 1920;
+  overflow: hidden;
+  border-radius: 14px;
+
+  & .slide {
+    scale: 0.3;
+    transform-origin: 0 0;
+  }
+}
+
+/* Shown when no language has captures yet */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 70vh;
+  margin: auto;
+  color: var(--muted);
+  text-align: center;
+
+  & :is(h2, p) {
+    margin: 0;
+  }
+
+  & h2 {
+    color: #fff;
+    font-size: 26px;
+  }
+
+  & code {
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: var(--control);
+    color: #fff;
+    font-size: 17px;
+    user-select: all;
+  }
+}

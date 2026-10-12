@@ -56,6 +56,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "filters": "筛选",
+    "all": "全部",
     "empty-warn": "喔！这里什么都没有",
     "search-no-results": "没有符合您搜索条件的商品",
     "insufficient-data": "数据不足",
@@ -177,7 +178,7 @@
     "next": "继续",
     "select-your-currency": "选择您的货币",
     "welcome.subtitle": "您的个人财务管家",
-    "welcome.subtitle2": "100% 开放，100% 免费",
+    "welcome.subtitle2": "100% 开放，100% 私密",
     "welcome.footer": "登录即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隐私策略</a>和此应用的<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>使用条款</a>",
     "offline.descr.title": "本地账户：",
     "offline.descr": "您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从应用设置中备份数据。",
@@ -376,7 +377,7 @@
     "portfolio-heat-map": "热力图",
     "portfolio-heat-map-subtitle": "方块越大，持仓越大。颜色越绿，表现越好。",
     "daily-performance": "每日",
-    "compared-to-previous-period": "与上一段时间相比",
+    "compared-to-previous-period": "较上一时期",
     "cash-flow": "现金流",
     "cash-flow-subtitle": "我的支出是否少于我的收入？",
     "by-periods": "按时间段",
@@ -445,6 +446,7 @@
       "accept-dialog.title": "接受交易",
       "accept-dialog.msg-single": "此交易的新状态将为null。您可以随时重新编辑此交易的状态",
       "accept-dialog.msg": "此操作将建立日期为 {{date}} 的新交易。您可以在交易页面查看此交易的详情",
+      "accept-dialog.trade": "{{quantity}} 单位 {{security}}，价格为 {{price}} {{currency}}（最新价格）。您之后可以对其进行编辑。",
       "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
     },
     "LIST": {
@@ -453,6 +455,10 @@
       "searcher.placeholder": "按类别、描述等搜索",
       "searcher.no-results": "未找到符合搜索条件的交易",
       "loading": "正在加载更多的交易……",
+      "upcoming": {
+        "one": "{{n}} 笔即将到期的交易",
+        "other": "{{n}} 笔即将到期的交易"
+      },
       "selected.short": {
         "one": "已选择 {{n}}",
         "other": "已选择 {{n}}"
@@ -569,6 +575,10 @@
     "FORM": {
       "from": "转出账户",
       "to": "转入账户",
+      "label-from": "转出",
+      "label-to": "转入",
+      "custom-amounts": "自定义金额",
+      "difference": "差额",
       "VALUE-IN-DESTINY": {
         "title": "转账数额",
         "amount-short": "{{amount}} 至目标账户"
@@ -579,7 +589,10 @@
     "title": "循环交易",
     "title.short": "循环交易",
     "empty": "您似乎没有任何循环交易。创建一个每周、每月或每年的循环交易，它会在此显示",
+    "empty-for-type": "您没有此类型的循环交易。请更改上方的筛选条件以查看其余的循环交易",
     "total-expense.title": "每一周期的总开支",
+    "total-income.title": "每一周期的总收入",
+    "total-all.title": "每一周期的总计",
     "total-expense.descr": "* 不考虑每一循环的起止日期",
     "DETAILS": {
       "title": "循环交易",
@@ -639,14 +652,15 @@
       "investment": "投资账户",
       "investment.descr": "可包含资产的券商、加密货币交易所或投资组合账户。跟踪投资本金，并通过估值手动更新每个资产的价值",
       "normal": "普通账户",
-      "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……"
+      "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
+      "locked_warn": "该账户已有持仓、交易或快照，因此无法再更改账户类型。"
     },
     "TRACKING_MODES": {
       "title": "追踪模式",
       "transactions": "交易",
-      "transactions_descr": "头寸是根据您的买入和卖出交易自动计算的。",
+      "transactions_descr": "头寸是根据您的买入和卖出交易自动计算的。如果您拥有（或希望保留）完整的交易记录，并且需要精确的成本基础，这是最佳选择。",
       "holdings": "控股",
-      "holdings_descr": "以带日期的快照形式手动输入您的头寸（数量和平均成本）。",
+      "holdings_descr": "以带日期的快照形式手动输入您的头寸（数量和平均成本）。如果您只知道当前持仓，而不想记录每一笔交易，这是最佳选择。无论使用哪种模式，该账户的收入、支出和转账仍会照常记录。",
       "switch_warn": "每种跟踪模式使用不同的数据来源计算持仓。保存时，你当前的持仓会转换到新模式；更早的日期将按该模式已有的历史数据估值。"
     },
     "FORM": {
@@ -862,15 +876,7 @@
         "active-overspending": "超支",
         "active-indeterminate": "积极的",
         "success": "已达成",
-        "fail": "超出预算"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "在剩余的 {{ remainingDays }} 天里，您每天可以花费 {{ dailyAmount }}",
-        "active-overspending": "为了回到正轨，您应该在剩余的 {{ remainingDays }} 天里将每天的支出限制在 {{ dailyAmount }}",
-        "active-indeterminate": "您还剩 {{ amount }} 可以消费。",
-        "active-exceeded": "您已经超出了预算限额 {{ amount }}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出",
-        "success": "干得好！该预算已成功完成。继续创建预算以管理您的支出",
-        "fail": "您超出了预算 {{ amount }}。下次请更加小心！"
+        "fail": "超出"
       }
     }
   },
@@ -920,16 +926,33 @@
         "active-on-track": "步入正轨",
         "active-behind-schedule": "落后于计划",
         "active-indeterminate": "积极的",
-        "success": "目标达成",
-        "fail": "目标失败"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "您正在寻找目标的轨道上！您必须在剩余的 {{ remainingDays }} 天内每天节省 {{ dailyAmount }}",
-        "active-behind-schedule": "你落后于计划了。您必须每天节省 {{ dailyAmount }} 才能在 {{ remainingDays }} 天后达到您的目标",
-        "active-indeterminate": "您还需要 {{ amount }} 才能实现目标。",
-        "success": "恭喜！你达到了你的目标。",
-        "fail": "您与目标相差了 {{ amount }}。"
+        "success": "达成",
+        "fail": "失败"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "剩余",
+    "over": "超出",
+    "spent": "已花费",
+    "saved": "已储蓄",
+    "CHART": {
+      "spent": "已花费",
+      "saved": "已储蓄",
+      "projected": "预测",
+      "pace": "进度"
+    },
+    "STATS": {
+      "per-day": {
+        "other": "每天，剩余 {{n}} 天"
+      },
+      "per-day-short": "每天",
+      "per-day-help": "为达到目标金额，在周期结束前每天还可以增加的金额",
+      "above-pace": "高于进度",
+      "below-pace": "低于进度",
+      "pace-help": "当前金额与按整个周期均匀分配时截至今天的预期金额之间的差额",
+      "projected": "预测",
+      "projected-help": "如果保持当前进度，周期结束时的估计金额"
     }
   },
   "DEBTS": {
@@ -1066,6 +1089,7 @@
       "choose_security": "选择证券",
       "create_security": "创建新证券",
       "security_name": "证券名称",
+      "security": "证券",
       "ticker": "股票代码/符号（可选）",
       "security_type": "证券类型",
       "current_price": "现价",
@@ -1080,7 +1104,7 @@
       "edit_snapshot": "编辑快照",
       "SNAPSHOTS": {
         "history_title": "快照历史记录",
-        "history_intro": "每个快照都存储某个日期的完整投资组合。当查看一天时，是应用该天或之前的最近一天。",
+        "history_intro": "每个快照都会保存账户在指定日期的完整状态。选择一个快照即可编辑。",
         "count": "{{n}} 个快照",
         "new_snapshot": "新的",
         "no_snapshots": "还没有快照",
@@ -1092,13 +1116,19 @@
         "update": "更新",
         "update_positions": "更新职位",
         "full_portfolio": "完整的投资组合",
-        "editor_intro": "告诉我们您的投资组合在 {{date}} 的情况。您输入的数值将用于计算从该日期到下一个快照期间的余额和统计数据。",
+        "how_it_works": "快照的工作方式",
+        "snapshot_contents_description": "快照是此账户在 {{date}} 的完整记录。请输入当日券商显示的未投资现金和所有持仓。未填写的持仓将视为不再持有。",
         "date_label": "快照日期",
+        "cash_label": "现金",
+        "balance_effect_description": "此快照将用于计算余额和统计数据，直至下一个快照生效。持仓价值会继续随市场价格变化，而此日期之后的交易和转账会改变现金余额。如果不再添加新快照，这些规则将一直生效。",
         "overwrite_warning": "该日期已存在快照。保存后将被覆盖。",
-        "add_position": "添加另一个位置",
+        "add_position": "添加另一个持仓",
+        "add_first_position": "添加您的第一个持仓",
         "col_symbol": "代码",
         "total_cost": "投资组合总成本",
+        "snapshot_total": "按成本计算的总额",
         "save": "保存快照",
+        "zero_qty_hint": "数量为 0 时，该持仓仍会保留在快照中。要彻底移除，请删除对应行。",
         "delete_title": "删除快照？",
         "delete_descr": "该快照将被删除。如果是最新的，您当前的仓位将回落到上一个快照。"
       }
@@ -1183,7 +1213,6 @@
       "acquisition_transaction_badge": "获得",
       "select_account": "选择一个帐户",
       "update_value": "更新值",
-      "trade_form_asset_column": "资产",
       "notes_optional": "注释（可选）",
       "performance_title": "表现",
       "performance_return": "区间回报",

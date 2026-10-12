@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/utils/app_utils.dart';
@@ -276,7 +277,11 @@ class SideDrawerRoute<T> extends PopupRoute<T> {
             data: MediaQuery.of(
               context,
             ).copyWith(size: Size(width, MediaQuery.sizeOf(context).height)),
-            child: BreakpointProvider(child: SideDrawerScope(child: child)),
+            child: BreakpointProvider(
+              // The drawer shows its own snackbars, instead of letting the app
+              // messenger squeeze a window-sized one into this panel.
+              child: SnackbarScope(child: SideDrawerScope(child: child)),
+            ),
           ),
         ),
       ),

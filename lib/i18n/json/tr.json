@@ -56,6 +56,7 @@
     "today": "Bugün",
     "yesterday": "Dün",
     "filters": "Filtreler",
+    "all": "Tümü",
     "empty-warn": "Ups! Burası çok boş",
     "search-no-results": "Arama kriterlerinizle eşleşen öğe yok",
     "insufficient-data": "Yetersiz veri",
@@ -177,7 +178,7 @@
     "next": "İleri",
     "select-your-currency": "Para birimini seçin",
     "welcome.subtitle": "Kişisel finans yöneticiniz",
-    "welcome.subtitle2": "%100 açık, %100 ücretsiz",
+    "welcome.subtitle2": "%100 açık, %100 özel",
     "welcome.footer": "Giriş yaparak, uygulamanın <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Gizlilik Politikası</a> ve <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Kullanım Şartları</a>'nı kabul etmiş olursunuz",
     "offline.descr.title": "ÇEVRİMDIŞI HESAP:",
     "offline.descr": "Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.",
@@ -376,7 +377,7 @@
     "portfolio-heat-map": "Isı haritası",
     "portfolio-heat-map-subtitle": "Blok ne kadar büyükse pozisyon o kadar büyüktür. Ne kadar yeşilse o kadar iyi gidiyordur.",
     "daily-performance": "Günlük",
-    "compared-to-previous-period": "Önceki döneme göre",
+    "compared-to-previous-period": "vs önceki dönem",
     "cash-flow": "Nakit akışı",
     "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
     "by-periods": "Dönemlere göre",
@@ -445,6 +446,7 @@
       "accept-dialog.title": "İşlemi kabul et",
       "accept-dialog.msg-single": "İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz",
       "accept-dialog.msg": "Bu eylem {{date}} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz",
+      "accept-dialog.trade": "{{security}} için {{quantity}} birim, {{price}} {{currency}} fiyatından (son fiyat). Daha sonra düzenleyebilirsiniz.",
       "recurrent-rule-finished": "Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!"
     },
     "LIST": {
@@ -453,6 +455,10 @@
       "searcher.placeholder": "Kategoriye, açıklamaya göre ara...",
       "searcher.no-results": "Arama kriterlerine uyan işlem bulunamadı",
       "loading": "Daha fazla işlem yükleniyor...",
+      "upcoming": {
+        "one": "{{n}} yaklaşan işlem",
+        "other": "{{n}} yaklaşan işlem"
+      },
       "selected.short": {
         "one": "{{n}} seçildi",
         "other": "{{n}} seçildi"
@@ -569,6 +575,10 @@
     "FORM": {
       "from": "Kaynak hesap",
       "to": "Hedef hesap",
+      "label-from": "Nereden",
+      "label-to": "Nereye",
+      "custom-amounts": "Özel tutarlar",
+      "difference": "fark",
       "VALUE-IN-DESTINY": {
         "title": "Hedefte aktarılan miktar",
         "amount-short": "Hedef hesaba {{amount}}"
@@ -579,7 +589,10 @@
     "title": "Tekrarlayan işlemler",
     "title.short": "Tekr. işl.",
     "empty": "Görünüşe göre tekrarlayan herhangi bir işleminiz yok. Aylık, yıllık veya haftalık tekrarlayan bir işlem oluşturun, burada görünecektir",
+    "empty-for-type": "Bu türde tekrarlayan bir işleminiz yok. Diğer tekrarlarınızı görmek için yukarıdaki filtreyi değiştirin",
     "total-expense.title": "Dönem başına toplam gider",
+    "total-income.title": "Dönem başına toplam gelir",
+    "total-all.title": "Dönem başına toplam",
     "total-expense.descr": "* Her tekrarın başlangıç ​​ve bitiş tarihi dikkate alınmadan",
     "DETAILS": {
       "title": "Tekrarlayan işlem",
@@ -639,14 +652,15 @@
       "investment": "Yatırım hesabı",
       "investment.descr": "Birden fazla varlık içerebilen bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve her varlığın değerini değerlemeler aracılığıyla manuel olarak güncelleyin",
       "normal": "Normal hesap",
-      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır..."
+      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
+      "locked_warn": "Bu hesabın türü artık değiştirilemez, çünkü zaten varlıkları, işlemleri veya anlık görüntüleri var."
     },
     "TRACKING_MODES": {
       "title": "İzleme modu",
       "transactions": "İşlemler",
-      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır.",
+      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır. Eksiksiz bir işlem geçmişiniz varsa (veya tutmak istiyorsanız) ve doğru bir maliyet esası istiyorsanız en iyi seçenektir.",
       "holdings": "Holdingler",
-      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin.",
+      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin. Yalnızca mevcut pozisyonunuzu biliyorsanız ve her işlemi kaydetmek istemiyorsanız en iyi seçenektir. Bu hesaptaki gelir, gider ve transferleriniz her iki modda da normal şekilde takip edilmeye devam eder.",
       "switch_warn": "Her mod pozisyonlarınızı farklı bir kaynaktan hesaplar. Kaydettiğinizde mevcut pozisyonlarınız yeni moda dönüştürülür. Daha önceki tarihler, o modun halihazırda sahip olduğu geçmişe göre değerlenir."
     },
     "FORM": {
@@ -862,15 +876,7 @@
         "active-overspending": "Aşırı harcama",
         "active-indeterminate": "Aktif",
         "success": "Başarılı",
-        "fail": "Bütçe aşıldı"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Kalan {{ remainingDays }} gün için günde {{ dailyAmount }} harcayabilirsiniz",
-        "active-overspending": "Tekrar rayına oturmak için, kalan {{ remainingDays }} gün boyunca harcamalarınızı günde {{ dailyAmount }} ile sınırlamalısınız",
-        "active-indeterminate": "Harcayabileceğiniz {{ amount }} kaldı.",
-        "active-exceeded": "Bütçe limitinizi {{ amount }} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız",
-        "success": "Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin",
-        "fail": "Bütçeyi {{ amount }} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!"
+        "fail": "Aşıldı"
       }
     }
   },
@@ -920,16 +926,34 @@
         "active-on-track": "Yolda",
         "active-behind-schedule": "Programın gerisinde",
         "active-indeterminate": "Aktif",
-        "success": "Hedefe ulaşıldı",
-        "fail": "Hedef başarısız oldu"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Hedefinizi arama yolundasınız! Kalan {{ remainingDays }} gün boyunca günde {{ dailyAmount }} tasarruf etmelisiniz",
-        "active-behind-schedule": "Programın gerisindesiniz. Hedefinize {{ remainingDays }} gün içinde ulaşmak için günde {{ dailyAmount }} tasarruf etmeniz gerekiyor",
-        "active-indeterminate": "Hedefinize ulaşmak için {{ amount }} daha fazlasına ihtiyacınız var.",
-        "success": "Tebrikler! Hedefine ulaştın.",
-        "fail": "Hedefinizi {{ amount }} kadar kaçırdınız."
+        "success": "Ulaşıldı",
+        "fail": "Başarısız oldu"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "kaldı",
+    "over": "aşıldı",
+    "spent": "harcandı",
+    "saved": "biriktirildi",
+    "CHART": {
+      "spent": "Harcanan",
+      "saved": "Biriktirilen",
+      "projected": "Tahmin",
+      "pace": "Tempo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "günlük, {{n}} gün kaldı",
+        "other": "günlük, {{n}} gün kaldı"
+      },
+      "per-day-short": "günlük",
+      "per-day-help": "Hedef tutara ulaşmak için dönem sonuna kadar her gün daha ne kadar ekleyebileceğiniz",
+      "above-pace": "tempo üstünde",
+      "below-pace": "tempo altında",
+      "pace-help": "Mevcut tutar ile tüm döneme eşit dağıtılsaydı bugüne kadar beklenen tutar arasındaki fark",
+      "projected": "tahmini",
+      "projected-help": "Mevcut tempo devam ederse dönem sonundaki tahmini tutar"
     }
   },
   "DEBTS": {
@@ -1066,6 +1090,7 @@
       "choose_security": "Bir güvenlik seçin",
       "create_security": "Yeni güvenlik oluşturun",
       "security_name": "Güvenlik adı",
+      "security": "Menkul kıymet",
       "ticker": "Ticker / sembol (isteğe bağlı)",
       "security_type": "Güvenlik türü",
       "current_price": "Güncel fiyat",
@@ -1080,7 +1105,7 @@
       "edit_snapshot": "Anlık görüntüyü düzenle",
       "SNAPSHOTS": {
         "history_title": "Anlık görüntü geçmişi",
-        "history_intro": "Her anlık görüntü, bir tarihe ait portföyün tamamını saklar. Bir güne bakıldığında en güncel olanı veya ondan önceki gün uygulanır.",
+        "history_intro": "Her anlık görüntü, belirli bir tarihteki hesap durumunun tamamını saklar. Düzenlemek için birini seçin.",
         "count": "{{n}} anlık görüntü",
         "new_snapshot": "Yeni",
         "no_snapshots": "Henüz anlık görüntü yok",
@@ -1092,13 +1117,19 @@
         "update": "Güncelleme",
         "update_positions": "Pozisyonları güncelle",
         "full_portfolio": "tam portföy",
-        "editor_intro": "{{date}} tarihinde portföyünüzün nasıl göründüğünü bize bildirin. Girdiğiniz değerler, bu tarihten sonraki anlık görüntünüze kadar bakiyeleri ve istatistikleri hesaplamak için kullanılacaktır.",
+        "how_it_works": "Anlık görüntüler nasıl çalışır?",
+        "snapshot_contents_description": "Anlık görüntü, bu hesabın {{date}} tarihindeki eksiksiz kaydıdır. O tarihte aracı kurumunuzda görünen yatırılmamış nakdi ve tüm pozisyonları girin. Eklenmeyen pozisyonlar artık tutulmuyor kabul edilir.",
         "date_label": "Anlık görüntü tarihi",
+        "cash_label": "Nakit",
+        "balance_effect_description": "Bu anlık görüntü, bir sonrakine kadar bakiyeleri ve istatistikleri hesaplamak için kullanılır. Pozisyon değerleri piyasa fiyatlarını izlemeye devam ederken bu tarihten sonraki işlemler ve transferler nakdi değiştirir. Daha sonraki bir anlık görüntü eklenmezse bu kurallar süresiz olarak geçerli kalır.",
         "overwrite_warning": "Bu tarih için zaten bir anlık görüntü var. Kaydettiğinizde üzerine yazılacak.",
         "add_position": "Başka bir pozisyon ekle",
+        "add_first_position": "İlk pozisyonunuzu ekleyin",
         "col_symbol": "Sembol",
         "total_cost": "Toplam portföy maliyeti",
+        "snapshot_total": "Maliyet üzerinden toplam",
         "save": "Anlık görüntüyü kaydet",
+        "zero_qty_hint": "0 miktarı bu pozisyonu anlık görüntüde tutar. Tamamen kaldırmak için bunun yerine satırı silin.",
         "delete_title": "Anlık görüntü silinsin mi?",
         "delete_descr": "Bu anlık görüntü kaldırılacak. En yenisiyse mevcut konumlarınız önceki anlık görüntüye geri dönecektir."
       }
@@ -1183,7 +1214,6 @@
       "acquisition_transaction_badge": "Kazanma",
       "select_account": "Bir hesap seçin",
       "update_value": "Değeri güncelle",
-      "trade_form_asset_column": "Varlık",
       "notes_optional": "Notlar (isteğe bağlı)",
       "performance_title": "Performance",
       "performance_return": "Period return",

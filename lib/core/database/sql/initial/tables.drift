@@ -300,12 +300,13 @@ CREATE TABLE IF NOT EXISTS holdings (
     UNIQUE(accountID, securityID)
 ) AS HoldingInDB;
 
--- A portfolio snapshot: the complete state of an investment account's holdings
--- on a given date (used by accounts in 'holdings' tracking mode). Each snapshot
--- groups zero or more position rows (see `holdingSnapshots`); a snapshot with no
--- positions represents an empty portfolio on that date. When valuing the account
--- at a date, the most recent snapshot on or before that date defines the entire
--- set of holdings (securities absent from it are considered not held).
+-- A portfolio snapshot: the complete state of an investment account on a given
+-- date (used by accounts in 'holdings' tracking mode) -- both its holdings and
+-- its cash. Each snapshot groups zero or more position rows (see
+-- `holdingSnapshots`); a snapshot with no positions represents an empty
+-- portfolio on that date. When valuing the account at a date, the most recent
+-- snapshot on or before that date defines the entire set of holdings
+-- (securities absent from it are considered not held) and the cash balance.
 CREATE TABLE IF NOT EXISTS accountSnapshots (
     id TEXT NOT NULL PRIMARY KEY,
 
@@ -313,6 +314,12 @@ CREATE TABLE IF NOT EXISTS accountSnapshots (
 
     -- Date of this portfolio snapshot (one snapshot per account per date)
     date DATETIME NOT NULL,
+
+    -- Cash the account held at the snapshot date, in the account currency. The
+    -- snapshot is the account's authoritative state on its date, so this value
+    -- sets the cash side of the balance from that date on. Transactions dated
+    -- after it accumulate on top of it.
+    cash REAL NOT NULL DEFAULT 0,
 
     UNIQUE(accountID, date)
 ) AS AccountSnapshotInDB;

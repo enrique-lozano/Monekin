@@ -1,0 +1,38 @@
+{
+  "01-dashboard": {
+    "title": "Dein Geld, <em>endlich klar.</em>",
+    "subtitle": "Alle Konten, Salden und Trends auf einen Blick",
+    "sticker": "100 % privat"
+  },
+  "02-transactions": {
+    "title": "Jede Buchung, <em>sortiert</em>",
+    "subtitle": "Unbegrenzt suchen, filtern und taggen",
+    "search": "Suche",
+    "filters": "Filter",
+    "tags": "Tags"
+  },
+  "03-stats": {
+    "title": "Sieh, <em>wohin</em> dein Geld fließt",
+    "subtitle": "Dein Finanzgesundheits-Score, Vermögen und mehr"
+  },
+  "04-themes": {
+    "title": "Ganz <em>nach deinem Stil</em>",
+    "subtitle": "Wähle Design, Farbe und Schrift und genieße!"
+  },
+  "05-quick-add": {
+    "title": "Buchungen <em>in Sekunden</em>",
+    "subtitle": "Ausgaben, Einnahmen und Überweisungen"
+  },
+  "06-planning": {
+    "title": "Budgets, Ziele und <em>Abos</em>",
+    "subtitle": "Vorausplanen und keine Zahlung verpassen"
+  },
+  "07-privacy": {
+    "title": "Deine Daten, <em>nur deine</em>",
+    "offline": { "title": "Offline zuerst", "text": "Alles bleibt auf deinem Gerät" },
+    "noAds": { "title": "Keine Werbung", "text": "Kein Tracking, keine Werbung, niemals" },
+    "openSource": { "title": "Open Source", "text": "Transparent und überprüfbar" },
+    "investments": { "title": "Investments", "text": "Aktien, Fonds, Krypto und Sachwerte" },
+    "backups": { "title": "Lokale Backups", "text": "Jederzeit exportieren und importieren" }
+  }
+}

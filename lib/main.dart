@@ -70,7 +70,7 @@ void _setupDesktopWindow() {
   doWhenWindowReady(() {
     const initialSize = Size(1280, 720);
 
-    appWindow.minSize = const Size(420, 500);
+    appWindow.minSize = const Size(380, 500);
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
     appWindow.show();
