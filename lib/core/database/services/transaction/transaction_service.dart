@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
@@ -40,6 +41,10 @@ class TransactionService {
   static final TransactionService instance = TransactionService._(
     AppDB.instance,
   );
+
+  /// Creates a service bound to a specific (test) database.
+  @visibleForTesting
+  TransactionService.forTesting(this.db);
 
   Future<int> insertTransaction(TransactionInDB transaction) async {
     final toReturn = await db.into(db.transactions).insert(transaction);
@@ -166,6 +171,50 @@ class TransactionService {
     );
   }
 
+  /// Matches the transactions that the user has not settled yet: the ones dated
+  /// in the future, any recurrency rule (whose date is always its next payment)
+  /// and anything explicitly marked as pending.
+  static Expression<bool> _isPendingToSettle(Transactions t, DateTime now) =>
+      t.date.isBiggerThanValue(now) |
+      t.intervalPeriod.isNotNull() |
+      (t.status.isNotNull() & t.status.equalsValue(TransactionStatus.pending));
+
+  /// Like [getTransactions], but restricted to the transactions that the user
+  /// still has to settle (`settled: false`) or to the ones already settled
+  /// (`settled: true`). Both sides are complementary, so together they return
+  /// the same rows as [getTransactions].
+  ///
+  /// Unsettled transactions are returned oldest-first by default, so that the
+  /// most urgent payment comes first.
+  Stream<List<MoneyTransaction>> getTransactionsBySettlement({
+    required bool settled,
+    TransactionFilterSet? filters,
+    TransactionQueryOrderBy? orderBy,
+    int? limit,
+  }) {
+    final now = DateTime.now();
+
+    return getTransactionsFromPredicate(
+      predicate: (filters ?? const TransactionFilterSet())
+          .toTransactionExpression(
+            extraFilters: (t, a, ac, ra, rac, c, pc) => [
+              settled
+                  ? _isPendingToSettle(t, now).not()
+                  : _isPendingToSettle(t, now),
+            ],
+          ),
+      orderBy:
+          orderBy ??
+          (p0, p1, p2, p3, p4, p5, p6) => OrderBy([
+            OrderingTerm(
+              expression: p0.date,
+              mode: settled ? OrderingMode.desc : OrderingMode.asc,
+            ),
+          ]),
+      limit: limit,
+    );
+  }
+
   Stream<int> countTransactions({
     TransactionFilterSet filters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
@@ -194,6 +243,34 @@ class TransactionService {
     ).map((event) => event.valueSum);
   }
 
+  /// Gross amount spent buying securities (investment-type transactions with
+  /// a negative value), returned as a positive number. Sells are excluded, so
+  /// unlike [getTransactionsValueBalance] this isn't netted against proceeds
+  /// from selling other positions.
+  Stream<double> getInvestmentBuyVolume({
+    required TransactionFilterSet filters,
+    bool convertToPreferredCurrency = true,
+    DateTime? exchDate,
+  }) {
+    final exchangeDate = exchDate ?? DateTime.now();
+
+    final predicate = filters
+        .copyWith(transactionTypes: [TransactionType.investment])
+        .toTransactionExpression(
+          extraFilters: (t, account, accountCurrency, ra, raCurrency, c, pc) =>
+              [t.value.isSmallerThanValue(0)],
+        );
+
+    return db
+        .countTransactions(predicate: predicate, date: exchangeDate)
+        .watchSingle()
+        .map(
+          (res) =>
+              (convertToPreferredCurrency ? res.sumInPrefCurrency : res.sum)
+                  .abs(),
+        );
+  }
+
   Stream<TransactionQueryStatResult> _countTransactions({
     TransactionFilterSet predicate = const TransactionFilterSet(),
     bool convertToPreferredCurrency = true,
@@ -206,8 +283,8 @@ class TransactionService {
             .map((e) => e.index)
             .contains(TransactionType.transfer.index)) {
       // Transfers need origin/destination split; other types use a straight SUM in
-      // `countTransactions`. When types are unspecified, include investment here so
-      // callers get one balance stream (investment was previously easy to omit).
+      // `countTransactions`. When types are unspecified, include investment so
+      // callers get one balance stream covering every non-transfer type.
       return Rx.combineLatest(
         [
           // INCOME, EXPENSE, AND INVESTMENT (non-transfer ledger)

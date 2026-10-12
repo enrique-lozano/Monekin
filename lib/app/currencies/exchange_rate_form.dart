@@ -21,10 +21,8 @@ Future<ExchangeRate?> showExchangeRateFormDialog(
   BuildContext context,
   ExchangeRateFormDialog dialog,
 ) {
-  return showModalBottomSheet<ExchangeRate>(
+  return RouteUtils.showResponsiveSheet<ExchangeRate>(
     context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
     builder: (context) => dialog,
   );
 }

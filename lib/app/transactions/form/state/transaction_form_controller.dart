@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
+import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
@@ -42,11 +43,15 @@ class TransactionFormController extends ChangeNotifier {
     Account? fromAccount,
     Account? toAccount,
     Debt? linkedDebt,
+    SecurityInDB? security,
+    bool isSell = false,
   }) : _mode = mode,
        _transactionToEdit = transactionToEdit,
        _prefillFromAccount = fromAccount,
        _prefillToAccount = toAccount,
-       _linkedDebt = linkedDebt {
+       _linkedDebt = linkedDebt,
+       _security = security,
+       _securityTradeIsSell = isSell {
     _amountTextController.addListener(_onAmountFieldTextChanged);
     valueInDestinyController.addListener(_onValueInDestinyTextChanged);
     quantityController.addListener(_onTradeFieldChanged);
@@ -65,6 +70,7 @@ class TransactionFormController extends ChangeNotifier {
   final FocusNode amountFocusNode = FocusNode(debugLabel: 'transactionAmount');
   final FocusNode titleFocusNode = FocusNode(debugLabel: 'transactionTitle');
   final FocusNode notesFocusNode = FocusNode(debugLabel: 'transactionNotes');
+  final FocusNode quantityFocusNode = FocusNode(debugLabel: 'tradeQuantity');
 
   Future<void>? _formDefaultsFuture;
 
@@ -91,18 +97,36 @@ class TransactionFormController extends ChangeNotifier {
   SecurityInDB? _security;
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  bool _securityTradeIsSell = false;
+  bool _securityTradeIsSell;
 
-  /// True when editing a security trade (type N with a securityID).
+  /// Units held before this trade, used to cap a sell. Null until loaded.
+  double? _heldQuantity;
+  Future<void>? _heldQuantityLoad;
+
+  /// True for a security trade (type N with a securityID): when creating one
+  /// (opened with the investment mode) or editing an existing one.
   bool get isSecurityTradeInvestment {
     final edit = _transactionToEdit;
-    return edit != null &&
-        edit.type == TransactionType.investment &&
-        edit.securityID != null;
+    if (edit == null) return _mode == TransactionType.investment;
+    return edit.type == TransactionType.investment && edit.securityID != null;
   }
 
   SecurityInDB? get security => _security;
   bool get securityTradeIsBuy => !_securityTradeIsSell;
+
+  /// Units available to sell, counting back the units of the trade being
+  /// edited when they are part of the holding. Null until loaded.
+  double? get securityTradeAvailableUnits {
+    final held = _heldQuantity;
+    if (held == null) return null;
+    final edit = _transactionToEdit;
+    final editCountsInHolding =
+        edit != null &&
+        edit.recurrentInfo.isNoRecurrent &&
+        edit.status != TransactionStatus.pending &&
+        edit.status != TransactionStatus.voided;
+    return editCountsInHolding ? held - (edit.quantity ?? 0) : held;
+  }
 
   double get securityTradeQuantity =>
       double.tryParse(quantityController.text.trim().replaceAll(',', '.')) ?? 0;
@@ -115,12 +139,38 @@ class TransactionFormController extends ChangeNotifier {
     if (_securityTradeIsSell == v) return;
     _securityTradeIsSell = v;
     _safeNotify();
+
+    // Only a held security can be sold: ask again if this one isn't
+    if (v && !isEditMode) unawaited(_dropSecurityIfNotHeld());
+  }
+
+  Future<void> _dropSecurityIfNotHeld() async {
+    final security = _security;
+    final account = fromAccount;
+    if (security == null || account == null) return;
+
+    final holding = await HoldingService.instance
+        .getHolding(account.id, security.id)
+        .first;
+    if (_disposed || _security?.id != security.id || !_securityTradeIsSell) {
+      return;
+    }
+    if (holding != null && holding.quantity > 1e-7) return;
+
+    _security = null;
+    _heldQuantity = null;
+    _safeNotify();
   }
 
   void _onTradeFieldChanged() => _safeNotify();
 
   /// When true, money flows from the bottom leg to the top leg (transfer).
   bool _dualLegFlowReversed = false;
+
+  /// Transfer: when false both legs stay linked through the exchange rate.
+  bool _customTransferAmounts = false;
+
+  bool get customTransferAmounts => _customTransferAmounts;
 
   TextEditingController get amountTextController => _amountTextController;
 
@@ -154,12 +204,18 @@ class TransactionFormController extends ChangeNotifier {
   void initialize() {
     if (isSecurityTradeInvestment) {
       transactionType = TransactionType.investment;
-      final edit = _transactionToEdit!;
+      final edit = _transactionToEdit;
+      if (edit == null) {
+        fromAccount = _prefillFromAccount;
+        if (_security != null) _onSecuritySelected(_security!);
+        return;
+      }
       _securityTradeIsSell = !edit.value.isNegative;
       quantityController.text = _plainNumber((edit.quantity ?? 0).abs());
       priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
       _fillForm(edit);
-      unawaited(_loadSecurity());
+      _heldQuantityLoad = _loadSecurity().then((_) => _loadHeldQuantity());
+      unawaited(_heldQuantityLoad);
       return;
     }
 
@@ -224,6 +280,45 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
+  /// Lets the user pick the security of a new trade.
+  Future<void> pickSecurity(BuildContext context) async {
+    final account = fromAccount;
+    final picked = await showSecurityPicker(
+      context,
+      heldInAccountId: securityTradeIsBuy ? null : account?.id,
+    );
+    if (picked == null || _disposed) return;
+    _onSecuritySelected(picked);
+  }
+
+  void _onSecuritySelected(SecurityInDB security) {
+    _security = security;
+    _heldQuantity = null;
+    priceController.text = _plainNumber(security.currentPrice ?? 0);
+    _safeNotify();
+    _heldQuantityLoad = _loadHeldQuantity();
+    unawaited(_heldQuantityLoad);
+    requestQuantityFocusAfterFrame();
+  }
+
+  void requestQuantityFocusAfterFrame() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_disposed) quantityFocusNode.requestFocus();
+    });
+  }
+
+  Future<void> _loadHeldQuantity() async {
+    final account = fromAccount;
+    final security = _security;
+    if (account == null || security == null) return;
+    final holding = await HoldingService.instance
+        .getHolding(account.id, security.id)
+        .first;
+    if (_disposed) return;
+    _heldQuantity = holding?.quantity ?? 0;
+    _safeNotify();
+  }
+
   static String _plainNumber(double v) {
     if (v == 0) return '';
     final isInt = v == v.roundToDouble();
@@ -246,6 +341,7 @@ class TransactionFormController extends ChangeNotifier {
     amountFocusNode.dispose();
     titleFocusNode.dispose();
     notesFocusNode.dispose();
+    quantityFocusNode.dispose();
     super.dispose();
   }
 
@@ -340,27 +436,42 @@ class TransactionFormController extends ChangeNotifier {
       if (acc != null) fromAccount = acc;
     }
 
-    if (fromAccount == null) {
+    if (_prefillToAccount != null) {
+      transferAccount = _prefillToAccount;
+    }
+
+    // On a transfer the source can't be the same account as the destination.
+    // Drop a source that collides with a prefilled destination so it gets
+    // re-picked below with a different account.
+    if (transactionType.isTransfer &&
+        fromAccount != null &&
+        fromAccount!.id == transferAccount?.id) {
+      fromAccount = null;
+    }
+
+    if (fromAccount == null ||
+        (transactionType.isTransfer && transferAccount == null)) {
       final accounts = await AccountService.instance
           .getAccounts(
             predicate: (acc, curr) => buildDriftExpr([
               acc.isSaving.equals(false),
               acc.closingDate.isNull(),
             ]),
-            limit: transactionType.isTransfer ? 2 : 1,
+            limit: transactionType.isTransfer ? 3 : 1,
           )
           .first;
 
-      if (accounts.isNotEmpty) {
-        fromAccount = accounts[0];
-        if (transactionType.isTransfer && accounts.length > 1) {
-          transferAccount = accounts[1];
-        }
+      if (fromAccount == null) {
+        fromAccount =
+            accounts.firstWhereOrNull((a) => a.id != transferAccount?.id) ??
+            accounts.firstOrNull;
       }
-    }
 
-    if (_prefillToAccount != null) {
-      transferAccount = _prefillToAccount;
+      if (transactionType.isTransfer && transferAccount == null) {
+        transferAccount = accounts.firstWhereOrNull(
+          (a) => a.id != fromAccount?.id,
+        );
+      }
     }
 
     String? categoryIdToLoad;
@@ -407,23 +518,30 @@ class TransactionFormController extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  /// Net ledger effect of the draft on [fromAccount] (matches how balances aggregate rows).
+  /// Account whose balance the draft can reduce (the transfer source, honoring the flow direction).
+  Account? get balanceWarningAccount =>
+      transactionType.isTransfer ? effectiveTransferFromAccount : fromAccount;
+
+  /// Net ledger effect of the draft on [balanceWarningAccount] (matches how balances aggregate rows).
   double draftEffectOnFromAccountLedger() {
     if (transactionType == TransactionType.expense) {
       return transactionValue * -1;
     }
     if (transactionType == TransactionType.transfer) {
-      if (_dualLegFlowReversed) return transactionValue.abs();
       return -transactionValue.abs();
     }
     return transactionValue;
   }
 
-  /// Ledger effect of the row being edited on [fromAccount], if it matches the edited row's account.
+  /// Ledger effect of the row being edited on [balanceWarningAccount], if it matches the edited row's account.
   double? get oldEffectOnFromAccountLedgerForEdit {
     final edit = _transactionToEdit;
-    final from = fromAccount;
+    final from = balanceWarningAccount;
     if (edit == null || from == null) return null;
+    if (edit.type == TransactionType.transfer &&
+        edit.receivingAccount?.id == from.id) {
+      return edit.valueInDestiny ?? edit.value;
+    }
     if (edit.account.id != from.id) return null;
     if (edit.type == TransactionType.transfer) {
       return -edit.value;
@@ -495,7 +613,7 @@ class TransactionFormController extends ChangeNotifier {
       accountID: postingFrom!.id,
       value: signedValue,
       isHidden: false,
-      status: date.compareTo(DateTime.now()) > 0
+      status: recurrentRule.isNoRecurrent && date.compareTo(DateTime.now()) > 0
           ? TransactionStatus.pending
           : status,
       notes: notesController.text.isEmpty ? null : notesController.text,
@@ -503,7 +621,8 @@ class TransactionFormController extends ChangeNotifier {
       intervalEach: recurrentRule.intervalEach,
       intervalPeriod: recurrentRule.intervalPeriod,
       endDate: recurrentRule.ruleRecurrentLimit?.endDate,
-      remainingTransactions: recurrentRule.ruleRecurrentLimit?.remainingIterations,
+      remainingTransactions:
+          recurrentRule.ruleRecurrentLimit?.remainingIterations,
       valueInDestiny: transactionType.isTransfer
           ? valueInDestinyToNumber
           : null,
@@ -589,7 +708,12 @@ class TransactionFormController extends ChangeNotifier {
     final account = fromAccount;
     final security = _security;
 
-    if (account == null || security == null) {
+    if (security == null) {
+      shakeKey.currentState?.shake();
+      return;
+    }
+
+    if (account == null) {
       MonekinSnackbar.error(
         SnackbarParams.fromError(t.general.validations.form_error),
       );
@@ -615,7 +739,18 @@ class TransactionFormController extends ChangeNotifier {
       return;
     }
 
-    final id = _transactionToEdit!.id;
+    if (!securityTradeIsBuy) await _heldQuantityLoad;
+    if (_disposed) return;
+
+    final available = securityTradeAvailableUnits;
+    if (!securityTradeIsBuy && available != null && qty > available + 1e-7) {
+      MonekinSnackbar.warning(
+        SnackbarParams(t.assets.holdings.not_enough_units),
+      );
+      return;
+    }
+
+    final id = _transactionToEdit?.id ?? generateUUID();
     final signedQty = securityTradeIsBuy ? qty : -qty;
     final cash = qty * price;
     final signedCash = securityTradeIsBuy ? -cash : cash;
@@ -632,18 +767,27 @@ class TransactionFormController extends ChangeNotifier {
       accountID: account.id,
       value: signedCash,
       isHidden: false,
-      status: date.compareTo(DateTime.now()) > 0
+      status: recurrentRule.isNoRecurrent && date.compareTo(DateTime.now()) > 0
           ? TransactionStatus.pending
           : status,
       notes: notesController.text.isEmpty ? null : notesController.text,
       title: resolvedTitle,
+      intervalEach: recurrentRule.intervalEach,
+      intervalPeriod: recurrentRule.intervalPeriod,
+      endDate: recurrentRule.ruleRecurrentLimit?.endDate,
+      remainingTransactions:
+          recurrentRule.ruleRecurrentLimit?.remainingIterations,
       securityID: security.id,
       quantity: signedQty,
       pricePerUnit: price,
     );
 
     try {
-      await TransactionService.instance.updateTransaction(tx);
+      if (isEditMode) {
+        await TransactionService.instance.updateTransaction(tx);
+      } else {
+        await TransactionService.instance.insertTransaction(tx);
+      }
       await HoldingService.instance.recomputeHolding(
         accountId: account.id,
         securityId: security.id,
@@ -656,7 +800,11 @@ class TransactionFormController extends ChangeNotifier {
       );
 
       RouteUtils.popRoute();
-      MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      MonekinSnackbar.success(
+        SnackbarParams(
+          isEditMode ? t.transaction.edit_success : t.transaction.new_success,
+        ),
+      );
     } catch (error) {
       MonekinSnackbar.error(SnackbarParams.fromError(error));
     }
@@ -751,6 +899,7 @@ class TransactionFormController extends ChangeNotifier {
 
     valueInDestinyController.text =
         transaction.valueInDestiny?.abs().toString() ?? '';
+    _customTransferAmounts = transaction.valueInDestiny != null;
 
     syncAmountFieldFromTransactionValue();
   }
@@ -761,6 +910,17 @@ class TransactionFormController extends ChangeNotifier {
   String resolveFrameworkTitle(Translations t) {
     if (isEditMode) {
       return t.transaction.edit;
+    }
+    if (isSecurityTradeInvestment) {
+      final name = _security?.name;
+      if (name == null) {
+        return securityTradeIsBuy
+            ? t.assets.holdings.buy
+            : t.assets.holdings.sell;
+      }
+      return securityTradeIsBuy
+          ? t.assets.holdings.buy_title(security: name)
+          : t.assets.holdings.sell_title(security: name);
     }
     return t.transaction.create;
   }
@@ -873,6 +1033,24 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
+  /// Turning it off re-links the destination to the source amount.
+  void setCustomTransferAmounts(bool v) {
+    if (_customTransferAmounts == v) return;
+    _customTransferAmounts = v;
+    if (!v) valueInDestinyController.clear();
+    _safeNotify();
+  }
+
+  /// Linked mode: sets the destination amount by deriving the source from [rate].
+  void applyTransferDestinationLinked(double amount, {required double rate}) {
+    final decimals = effectiveTransferFromAccount?.currency.decimalPlaces ?? 2;
+    final source = rate > 0 ? amount.abs() / rate : amount.abs();
+    transactionValue = double.parse(source.toStringAsFixed(decimals));
+    syncAmountFieldFromTransactionValue();
+    valueInDestinyController.clear();
+    _safeNotify();
+  }
+
   /// Sets the source debit to [inverseConvertedSource] (already in the origin
   /// account currency) and clears an explicit destiny amount so the pair is
   /// consistent again.
@@ -885,10 +1063,8 @@ class TransactionFormController extends ChangeNotifier {
 
   void openTransferSourceAmountSelector(BuildContext context) {
     final tr = Translations.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    RouteUtils.showResponsiveModal<void>(
+      context,
       builder: (ctx) => AmountSelector(
         title: tr.transaction.form.value,
         initialAmount: transactionValue.abs(),
@@ -902,26 +1078,31 @@ class TransactionFormController extends ChangeNotifier {
     );
   }
 
+  /// When [linkedRate] is set the entered amount drives the source leg
+  /// instead of overriding the destination.
   void openTransferDestinationAmountSelector(
     BuildContext context, {
     required double defaultDestinationAmount,
+    double? linkedRate,
   }) {
     final tr = Translations.of(context);
     final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    RouteUtils.showResponsiveModal<void>(
+      context,
       builder: (ctx) => AmountSelector(
         title: tr.transfer.form.value_in_destiny.title,
         initialAmount: initial,
         enableSignToggleButton: false,
         currency: effectiveTransferToAccount?.currency,
         onSubmit: (amount) {
-          applyTransferDestinationAmount(
-            amount,
-            defaultDestinationAmount: defaultDestinationAmount,
-          );
+          if (linkedRate != null) {
+            applyTransferDestinationLinked(amount, rate: linkedRate);
+          } else {
+            applyTransferDestinationAmount(
+              amount,
+              defaultDestinationAmount: defaultDestinationAmount,
+            );
+          }
           RouteUtils.popRoute();
         },
       ),
@@ -955,10 +1136,8 @@ class TransactionFormController extends ChangeNotifier {
 
   void openAmountSelectorSheet(BuildContext context) {
     final tr = Translations.of(context);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
+    RouteUtils.showResponsiveModal<void>(
+      context,
       builder: (ctx) => AmountSelector(
         title: tr.transaction.form.value,
         initialAmount: transactionValue,

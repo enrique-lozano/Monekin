@@ -9,6 +9,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -126,139 +127,135 @@ class _AllAccountBalancePageState extends State<AllAccountBalancePage> {
 
         final totalMoney = accounts.map((e) => e.money).sum;
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
-          children: [
-            CardWithHeader(
-              title: t.stats.balance_by_account,
-              subtitle: t.stats.balance_by_account_subtitle,
-              bodyPadding: const EdgeInsets.only(bottom: 0, top: 8),
-              body: accounts.isEmpty
-                  ? emptyAccountsIndicator()
-                  : Builder(
-                      builder: (context) {
-                        final rows = _groupBalances(accounts);
+        return AdaptiveTwoColumn(
+          breakpoint: 640,
+          first: CardWithHeader(
+            title: t.stats.balance_by_account,
+            subtitle: t.stats.balance_by_account_subtitle,
+            bodyPadding: const EdgeInsets.only(bottom: 0, top: 8),
+            body: accounts.isEmpty
+                ? emptyAccountsIndicator()
+                : Builder(
+                    builder: (context) {
+                      final rows = _groupBalances(accounts);
 
-                        return ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final row = rows[index];
+                      return ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final row = rows[index];
 
-                            if (row.groupName == null ||
-                                row.items.length == 1) {
-                              return _AccountBalanceTile(
-                                accountWithMoney: row.items.first,
-                                totalMoney: totalMoney,
-                              );
-                            }
-
-                            return _GroupBalanceTile(
-                              groupName: row.groupName!,
-                              items: row.items,
+                          if (row.groupName == null || row.items.length == 1) {
+                            return _AccountBalanceTile(
+                              accountWithMoney: row.items.first,
                               totalMoney: totalMoney,
                             );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const SizedBox(height: 2);
-                          },
-                          itemCount: rows.length,
-                          shrinkWrap: true,
-                        );
-                      },
-                    ),
-            ),
-            CardWithHeader(
-              title: t.stats.balance_by_currency,
-              subtitle: t.stats.balance_by_currency_subtitle,
-              bodyPadding: const EdgeInsets.symmetric(vertical: 4),
-              body: Builder(
-                builder: (context) {
-                  final currenciesWithMoney = getCurrenciesWithMoney(accounts);
+                          }
 
-                  if (currenciesWithMoney.isEmpty) {
-                    return emptyAccountsIndicator();
-                  }
-
-                  return ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final currencyWithMoney = currenciesWithMoney[index];
-
-                      return ListTile(
-                        titleAlignment: ListTileTitleAlignment.bottom,
-                        minTileHeight: 56,
-                        leading: StreamBuilder(
-                          stream: CurrencyService.instance.getCurrencyByCode(
-                            currencyWithMoney.currency.code,
-                          ),
-                          builder: (context, snapshot) {
-                            final currency = snapshot.data;
-
-                            return Skeletonizer(
-                              enabled: currency == null,
-                              child: ClipRRect(
-                                clipBehavior: Clip.hardEdge,
-                                borderRadius: BorderRadius.circular(100),
-                                child: currency == null
-                                    ? Bone.square(size: 32)
-                                    : currency.displayFlagIcon(size: 32),
-                              ),
-                            );
-                          },
-                        ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                StreamBuilder(
-                                  stream: CurrencyService.instance
-                                      .getCurrencyByCode(
-                                        currencyWithMoney.currency.code,
-                                      ),
-                                  builder: (context, snapshot) {
-                                    final currency = snapshot.data;
-
-                                    return Flexible(
-                                      child: Skeletonizer(
-                                        enabled: currency == null,
-                                        child: Text(
-                                          currency?.name ?? BoneMock.name,
-                                          softWrap: false,
-                                          overflow: TextOverflow.fade,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                const SizedBox(width: 6),
-                                CurrencyDisplayer(
-                                  amountToConvert: currencyWithMoney.money,
-                                ),
-                              ],
-                            ),
-                            AnimatedProgressBar(
-                              value: min(
-                                max(currencyWithMoney.money / totalMoney, 0),
-                                1,
-                              ),
-                            ),
-                          ],
-                        ),
+                          return _GroupBalanceTile(
+                            groupName: row.groupName!,
+                            items: row.items,
+                            totalMoney: totalMoney,
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 2);
+                        },
+                        itemCount: rows.length,
+                        shrinkWrap: true,
                       );
                     },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox.shrink();
-                    },
-                    itemCount: currenciesWithMoney.length,
-                    shrinkWrap: true,
-                  );
-                },
-              ),
+                  ),
+          ),
+          second: CardWithHeader(
+            title: t.stats.balance_by_currency,
+            subtitle: t.stats.balance_by_currency_subtitle,
+            bodyPadding: const EdgeInsets.symmetric(vertical: 4),
+            body: Builder(
+              builder: (context) {
+                final currenciesWithMoney = getCurrenciesWithMoney(accounts);
+
+                if (currenciesWithMoney.isEmpty) {
+                  return emptyAccountsIndicator();
+                }
+
+                return ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final currencyWithMoney = currenciesWithMoney[index];
+
+                    return ListTile(
+                      titleAlignment: ListTileTitleAlignment.bottom,
+                      minTileHeight: 56,
+                      leading: StreamBuilder(
+                        stream: CurrencyService.instance.getCurrencyByCode(
+                          currencyWithMoney.currency.code,
+                        ),
+                        builder: (context, snapshot) {
+                          final currency = snapshot.data;
+
+                          return Skeletonizer(
+                            enabled: currency == null,
+                            child: ClipRRect(
+                              clipBehavior: Clip.hardEdge,
+                              borderRadius: BorderRadius.circular(100),
+                              child: currency == null
+                                  ? Bone.square(size: 32)
+                                  : currency.displayFlagIcon(size: 32),
+                            ),
+                          );
+                        },
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              StreamBuilder(
+                                stream: CurrencyService.instance
+                                    .getCurrencyByCode(
+                                      currencyWithMoney.currency.code,
+                                    ),
+                                builder: (context, snapshot) {
+                                  final currency = snapshot.data;
+
+                                  return Flexible(
+                                    child: Skeletonizer(
+                                      enabled: currency == null,
+                                      child: Text(
+                                        currency?.name ?? BoneMock.name,
+                                        softWrap: false,
+                                        overflow: TextOverflow.fade,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(width: 6),
+                              CurrencyDisplayer(
+                                amountToConvert: currencyWithMoney.money,
+                              ),
+                            ],
+                          ),
+                          AnimatedProgressBar(
+                            value: min(
+                              max(currencyWithMoney.money / totalMoney, 0),
+                              1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return const SizedBox.shrink();
+                  },
+                  itemCount: currenciesWithMoney.length,
+                  shrinkWrap: true,
+                );
+              },
             ),
-          ],
+          ),
         );
       },
     );
@@ -325,7 +322,7 @@ class _AccountBalanceTile extends StatelessWidget {
       titleAlignment: ListTileTitleAlignment.bottom,
       minTileHeight: 56,
       leading: accountWithMoney.account.displayIcon(context),
-      onTap: () => RouteUtils.pushRoute(
+      onTap: () => RouteUtils.showResponsiveForm(
         AccountFormPage(account: accountWithMoney.account),
       ),
       title: Column(

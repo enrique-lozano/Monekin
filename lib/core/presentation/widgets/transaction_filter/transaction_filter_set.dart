@@ -125,6 +125,32 @@ class TransactionFilterSet {
     assetIds,
   ].any((element) => element != null);
 
+  /// Number of user-facing filter facets currently active. Ranges (amount and
+  /// date) count as a single facet each, matching how they read to the user.
+  int get activeFilterCount => [
+    accountsIDs != null,
+    categoriesIds != null,
+    tagsIDs != null,
+    transactionTypes != null,
+    status != null,
+    isRecurrent != null,
+    minValue != null || maxValue != null,
+    minDate != null || maxDate != null,
+    (searchValue?.trim().isNotEmpty ?? false),
+  ].where((isActive) => isActive).length;
+
+  /// Number of active transaction-specific refinement facets (category, tags,
+  /// type, status and amount). These don't affect stats that aren't derived
+  /// from transactions (e.g. net worth / portfolio), where only the account
+  /// scope applies.
+  int get transactionRefinementFilterCount => [
+    categoriesIds != null,
+    tagsIDs != null,
+    transactionTypes != null,
+    status != null,
+    minValue != null || maxValue != null,
+  ].where((isActive) => isActive).length;
+
   Stream<List<Account>> accounts() => accountsIDs != null
       ? AccountService.instance.getAccounts(
           predicate: (acc, curr) => acc.id.isIn(accountsIDs!),

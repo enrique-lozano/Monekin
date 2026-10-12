@@ -7,12 +7,13 @@ class DisplayAppIcon extends StatelessWidget {
   const DisplayAppIcon({
     super.key,
     required this.height,
-
+    this.withBorder = true,
     this.padding = const EdgeInsets.all(8),
   });
 
   final double height;
   final EdgeInsetsGeometry? padding;
+  final bool withBorder;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,9 @@ class DisplayAppIcon extends StatelessWidget {
       padding: padding,
       height: height,
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.white.withOpacity(0.5)),
+        border: withBorder
+            ? Border.all(width: 1, color: Colors.white.withOpacity(0.5))
+            : null,
         borderRadius: borderRadius,
         color: ColorHex.get('0F3375'),
       ),

@@ -45,6 +45,11 @@ class UserAvatar extends StatelessWidget {
               'assets/icons/avatars/$avatar.svg',
               height: size,
               width: size,
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.person_rounded,
+                size: size,
+                color: colors.onPrimaryContainer,
+              ),
             );
           },
         ),

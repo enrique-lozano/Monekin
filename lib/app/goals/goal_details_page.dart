@@ -13,9 +13,10 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:monekin/core/presentation/widgets/targets/target_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -44,7 +45,6 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    // Reuse page framework style
     return StreamBuilder(
       stream: GoalService.instance.getGoalById(widget.goal.id),
       initialData: widget.goal,
@@ -53,9 +53,6 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
 
         final goal = snapshot.data!;
 
-        // Construct PeriodState for charts using goal dates
-        // If end date is null, we might default to "now" or some logic,
-        // but charts usually need a finite range.
         final periodState = DatePeriodState(
           datePeriod: DatePeriod.customRange(
             goal.startDate,
@@ -63,21 +60,50 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
           ),
         );
 
+        final isMobile = BreakPoint.of(context).isSmallerThan(BreakpointID.md);
+
+        final segmentedTabs = isMobile
+            ? null
+            : SegmentedTabBar<int>(
+                selected: _tabController.index,
+                onSelected: (value) =>
+                    setState(() => _tabController.index = value),
+                items: [
+                  SegmentedTabItem(
+                    value: 0,
+                    icon: Icons.bar_chart_rounded,
+                    label: t.goals.details.statistics,
+                  ),
+                  SegmentedTabItem(
+                    value: 1,
+                    icon: Icons.swap_vert_rounded,
+                    label: t.transaction.display(n: 10),
+                  ),
+                ],
+              );
+
         return PageFramework(
-          title: t.goals.details.title,
-          tabBar: TabBar(
-            controller: _tabController,
-            tabAlignment: BreakPoint.of(context).isSmallerThan(BreakpointID.md)
-                ? TabAlignment.fill
-                : TabAlignment.start,
-            isScrollable: !BreakPoint.of(
-              context,
-            ).isSmallerThan(BreakpointID.md),
-            tabs: [
-              Tab(text: t.goals.details.statistics),
-              Tab(text: t.transaction.display(n: 10)),
-            ],
+          title: goal.name,
+          subtitle: Text(goal.type.title(context)),
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: goal.type.color(context).withValues(alpha: 0.2),
+            ),
+            child: Icon(Goal.icon, color: goal.type.color(context), size: 22),
           ),
+          tabBar: isMobile
+              ? TabBar(
+                  controller: _tabController,
+                  tabAlignment: TabAlignment.fill,
+                  isScrollable: false,
+                  tabs: [
+                    Tab(text: t.goals.details.statistics),
+                    Tab(text: t.transaction.display(n: 10)),
+                  ],
+                )
+              : null,
           appBarActions: [
             MonekinPopupMenuButton(
               actionItems: [
@@ -85,7 +111,9 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                   label: t.goals.form.edit_title,
                   icon: Icons.edit,
                   onClick: () {
-                    RouteUtils.pushRoute(GoalFormPage(goalToEdit: goal));
+                    RouteUtils.showResponsiveForm(
+                      GoalFormPage(goalToEdit: goal),
+                    );
                   },
                 ),
                 ListTileActionItem(
@@ -123,15 +151,13 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
           ],
           body: Column(
             children: [
-              // Use a header similar to budget card header
-              Container(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: TargetHeader(target: goal),
-              ),
+              ?segmentedTabs,
               Expanded(
                 child: TabBarView(
                   controller: _tabController,
+                  physics: isMobile
+                      ? null
+                      : const NeverScrollableScrollPhysics(),
                   children: [
                     SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
@@ -150,6 +176,8 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                               mainAxisSize: MainAxisSize.min,
                               spacing: 16,
                               children: [
+                                if (!goal.isActive)
+                                  FinancialTargetTimelineCard(target: goal),
                                 StreamBuilder<double>(
                                   stream: goal.currentValue,
                                   builder: (context, currentValueSnapshot) {
@@ -158,6 +186,16 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                                       currentValue: currentValueSnapshot.data,
                                     );
                                   },
+                                ),
+                                CardWithHeader(
+                                  title: t.goals.details.evolution,
+                                  bodyPadding: const EdgeInsets.fromLTRB(
+                                    12,
+                                    4,
+                                    16,
+                                    12,
+                                  ),
+                                  body: TargetEvolutionChart(target: goal),
                                 ),
                               ],
                             ),

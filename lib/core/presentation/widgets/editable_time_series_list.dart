@@ -23,6 +23,7 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
     required this.valueExtractor,
     required this.currency,
     this.physics,
+    this.canDelete = true,
   });
 
   /// The items to display in the list.
@@ -49,6 +50,9 @@ class EditableTimeSeriesList<T> extends StatefulWidget {
   /// Optional scroll physics for the inner [ListView]. Pass
   /// [NeverScrollableScrollPhysics] to let the list flow inside an outer scroll.
   final ScrollPhysics? physics;
+
+  /// When false, the delete action is disabled for every row.
+  final bool canDelete;
 
   @override
   State<EditableTimeSeriesList<T>> createState() =>
@@ -141,16 +145,23 @@ class _EditableTimeSeriesListState<T> extends State<EditableTimeSeriesList<T>> {
                   ),
                 ),
                 Expanded(
-                  child: FilledButton.tonalIcon(
-                    label: Text(t.ui_actions.delete),
-                    icon: const Icon(Icons.delete),
-                    style: FilledButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.error,
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.errorContainer,
+                  child: Tooltip(
+                    message: widget.canDelete
+                        ? ''
+                        : t.general.min_one_entry_required,
+                    child: FilledButton.tonalIcon(
+                      label: Text(t.ui_actions.delete),
+                      icon: const Icon(Icons.delete),
+                      style: FilledButton.styleFrom(
+                        foregroundColor: Theme.of(context).colorScheme.error,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.errorContainer,
+                      ),
+                      onPressed: widget.canDelete
+                          ? () => widget.onDelete(item)
+                          : null,
                     ),
-                    onPressed: () => widget.onDelete(item),
                   ),
                 ),
               ],
@@ -198,6 +209,7 @@ class EditableTimeSeriesCard<T> extends StatefulWidget {
     required this.onDelete,
     this.initialCount = 10,
     this.pageSize = 10,
+    this.preventDeletingLast = false,
   });
 
   final String title;
@@ -220,6 +232,9 @@ class EditableTimeSeriesCard<T> extends StatefulWidget {
 
   /// How many extra rows each "See more" tap reveals.
   final int pageSize;
+
+  /// When true, the delete action is disabled while a single entry remains.
+  final bool preventDeletingLast;
 
   @override
   State<EditableTimeSeriesCard<T>> createState() =>
@@ -271,6 +286,7 @@ class _EditableTimeSeriesCardState<T> extends State<EditableTimeSeriesCard<T>> {
         currency: widget.currency,
         onEdit: widget.onEdit,
         onDelete: widget.onDelete,
+        canDelete: !widget.preventDeletingLast || total > 1,
         physics: const NeverScrollableScrollPhysics(),
       ),
       footer: remaining > 0

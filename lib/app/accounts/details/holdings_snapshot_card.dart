@@ -9,8 +9,8 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -74,7 +74,7 @@ class HoldingsSnapshotCard extends StatelessWidget {
               body: Column(
                 children: [
                   if (current != null)
-                    _CurrentSnapshotBanner(snapshot: current)
+                    _CurrentSnapshotBanner(snapshot: current, account: account)
                   else
                     Padding(
                       padding: const EdgeInsets.all(24),
@@ -98,14 +98,20 @@ class HoldingsSnapshotCard extends StatelessWidget {
 }
 
 class _CurrentSnapshotBanner extends StatelessWidget {
-  const _CurrentSnapshotBanner({required this.snapshot});
+  const _CurrentSnapshotBanner({required this.snapshot, required this.account});
 
   final AccountSnapshotWithPositions snapshot;
+  final Account account;
 
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
+
+    final cash = UINumberFormatter.currency(
+      amountToConvert: snapshot.cash,
+      currency: account.currency,
+    ).getFormattedAmount();
 
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 8, 12, 4),
@@ -136,11 +142,8 @@ class _CurrentSnapshotBanner extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  snapshot.isEmpty
-                      ? t.assets.holdings.snapshots.empty_portfolio
-                      : t.assets.holdings.snapshots.positions_count(
-                          n: snapshot.positionsCount,
-                        ),
+                  '${snapshot.isEmpty ? t.assets.holdings.snapshots.empty_portfolio : t.assets.holdings.snapshots.positions_count(n: snapshot.positionsCount)}'
+                  ' · ${t.assets.holdings.snapshots.cash_label}: $cash',
                   style: theme.textTheme.bodySmall,
                 ),
               ],
@@ -160,7 +163,6 @@ class _PositionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = Translations.of(context);
     final security = position.security;
 
     final marketValue = position.quantity * (security.currentPrice ?? 0);
@@ -183,25 +185,23 @@ class _PositionTile extends StatelessWidget {
 
         return ListTile(
           leading: SecurityAvatar(security: security),
-          title: Text(security.name),
+          title: Text(
+            security.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           subtitle: Text(
             '${UINumberFormatter.decimal(amountToConvert: position.quantity).getFormattedAmount()}'
-            ' · ${t.assets.holdings.avg_cost}: $avgCostText',
+            ' × $avgCostText',
           ),
-          trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              CurrencyDisplayer(
-                amountToConvert: marketValue,
-                currency: currency,
-              ),
-              TrendingValue(
-                percentage: pnlPct,
-                dataTypes: const [TrendingValueDataType.percentage],
-                fontSize: 12,
-              ),
-            ],
+          trailing: TrailingValue(
+            amount: marketValue,
+            currency: currency,
+            secondary: TrendingValue(
+              percentage: pnlPct,
+              dataTypes: const [TrendingValueDataType.percentage],
+              fontSize: 12,
+            ),
           ),
           onTap: () =>
               RouteUtils.pushRoute(SecurityDetailsPage(security: security)),

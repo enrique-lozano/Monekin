@@ -45,6 +45,7 @@
     "or": "oder",
     "understood": "Verstanden",
     "unspecified": "Nicht spezifiziert",
+    "min_one_entry_required": "Mindestens ein Wert muss erhalten bleiben",
     "quick_actions": "Schnelle Aktionen",
     "details": "Details",
     "balance": "Kontostand",
@@ -55,6 +56,7 @@
     "today": "Heute",
     "yesterday": "Gestern",
     "filters": "Filter",
+    "all": "Alle",
     "empty-warn": "Ops! Das ist sehr leer",
     "search-no-results": "Keine Artikel entsprechen Ihren Suchkriterien",
     "insufficient-data": "Unzureichende Daten",
@@ -176,7 +178,7 @@
     "next": "Nächste",
     "select-your-currency": "Wähle Deine Währung aus",
     "welcome.subtitle": "Dein persönlicher Finanzmanager",
-    "welcome.subtitle2": "100 % geöffnet, 100 % kostenlos",
+    "welcome.subtitle2": "100 % geöffnet, 100 % privat",
     "welcome.footer": "Mit der Anmeldung stimmst Du der <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Datenschutzrichtlinie</a> und den <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Nutzungsbedingungen</a> der App zu",
     "offline.descr.title": "OFFLINE-KONTO:",
     "offline.descr": "Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ",
@@ -264,7 +266,10 @@
       "text.other": "Du könntest ungefähr <b>{{ n }} Monate</b> ohne Einkommen bei dieser Ausgabenrate überleben.",
       "text.infinite": "Du könntest ungefähr <b>Dein ganzes Leben lang</b> ohne Einkommen bei dieser Ausgabenrate überleben.",
       "suggestion": "Denke daran, dass es ratsam ist, dieses Verhältnis immer mindestens über 5 Monate zu halten. Wenn Du feststellst, dass Du nicht über ein ausreichendes Sparpolster verfügst, solltest Du unnötige Ausgaben reduzieren.",
-      "insufficient_data": "Offenbar haben wir nicht genügend Ausgaben, um zu berechnen, wie viele Monate Du ohne Einkommen überleben könntest. Gib ein paar Transaktionen ein und komme hierher zurück, um Deine Finanzen zu überprüfen."
+      "insufficient_data": "Offenbar haben wir nicht genügend Ausgaben, um zu berechnen, wie viele Monate Du ohne Einkommen überleben könntest. Gib ein paar Transaktionen ein und komme hierher zurück, um Deine Finanzen zu überprüfen.",
+      "valueShort": "{{n}} Monate",
+      "formula": "Verfügbares Geld auf Deinen Konten ÷ Deine durchschnittlichen monatlichen Ausgaben in diesem Zeitraum.",
+      "unlock": "Erfasse in diesem Zeitraum mindestens 4 Transaktionen, davon einige Ausgaben."
     },
     "savingsPercentage": {
       "title": "Sparprozentsatz",
@@ -275,13 +280,85 @@
         "bad": "Du hast es geschafft <b>{{value}}%</b> Deines Einkommens in diesem Zeitraum zu sparen . ",
         "very_bad": "Wow, du hast es in dieser Zeit nicht geschafft, etwas zu sparen."
       },
-      "suggestion": "Denk daran, dass es ratsam ist, mindestens 15-20 % Deines Einkommens zu sparen."
-    }
+      "suggestion": "Denk daran, dass es ratsam ist, mindestens 15-20 % Deines Einkommens zu sparen.",
+      "formula": "(Einnahmen − Ausgaben) ÷ Einnahmen, jeweils innerhalb des ausgewählten Zeitraums.",
+      "insufficient_data": "In diesem Zeitraum gibt es nicht genügend Bewegungen, um zu beurteilen, wie viel von Deinem Geld Du behältst.",
+      "unlock": "Erfasse in diesem Zeitraum eine Einnahme oder mindestens 10 Transaktionen beliebiger Art."
+    },
+    "debtToAssetRatio": {
+      "title": "Schulden-Vermögens-Verhältnis",
+      "subtitle": "Welcher Teil Deines Besitzes durch offene Schulden aufgewogen wird",
+      "text": {
+        "value": "Deine offenen Schulden entsprechen <b>{{value}}%</b> Deines Bruttovermögens.",
+        "no_assets": "Du hast offene Schulden, aber kein erfasstes Vermögen, das sie deckt."
+      },
+      "suggestion": "Ein niedrigeres Verhältnis bedeutet in der Regel, dass Du Deine Schulden besser mit Deinem Besitz decken kannst.",
+      "insufficient_data": "Du erfasst noch keine Schulden oder Vermögenswerte, daher gibt es keine Bilanz zu bewerten.",
+      "formula": "Offene Schulden ÷ Bruttovermögen, jeweils zum Ende des ausgewählten Zeitraums.",
+      "unlock": "Füge eine Deiner Schulden oder einen Deiner Vermögenswerte hinzu (ein Haus, ein Auto...)."
+    },
+    "cashFlowConsistency": {
+      "title": "Beständigkeit des Cashflows",
+      "subtitle": "In welchem Teil dieses Zeitraums Deine Ausgaben innerhalb Deiner Einnahmen blieben",
+      "text": {
+        "good": "In <b>{{value}}%</b> dieses Zeitraums hast Du innerhalb Deiner Möglichkeiten ausgegeben. Dein Cashflow ist stabil.",
+        "normal": "In <b>{{value}}%</b> dieses Zeitraums hast Du innerhalb Deiner Möglichkeiten ausgegeben.",
+        "bad": "Nur in <b>{{value}}%</b> dieses Zeitraums hast Du innerhalb Deiner Möglichkeiten ausgegeben, Dein Cashflow schwankt also stark."
+      },
+      "suggestion": "Große Zahlungen zu verteilen und ein gleichmäßiges Tempo zu halten macht Deine Finanzen deutlich planbarer.",
+      "insufficient_data": "In diesem Zeitraum ist zu wenig Aktivität verteilt, um die Stabilität Deines Cashflows zu beurteilen.",
+      "formula": "Wir teilen den Zeitraum in mehrere Abschnitte und verteilen Deine Einnahmen darauf. Gibst Du in einem Abschnitt höchstens Deinen Anteil aus, zählt er ganz; beim Doppelten zählt er gar nicht, dazwischen anteilig.",
+      "unlock": "Wähle einen Zeitraum mit Aktivität in mindestens 3 seiner Abschnitte."
+    },
+    "investmentRatio": {
+      "title": "Investitionsquote",
+      "subtitle": "Welchen Teil Deines Einkommens Du in diesem Zeitraum in Wertpapiere gesteckt hast",
+      "text": {
+        "value": "Du hast in diesem Zeitraum <b>{{value}}%</b> Deines Einkommens in Wertpapiere gesteckt.",
+        "none": "Du hast in diesem Zeitraum kein Geld in Wertpapiere gesteckt."
+      },
+      "suggestion": "Einen Teil Deines Einkommens regelmäßig zu investieren hilft Deinem Geld, schneller als die Inflation zu wachsen.",
+      "formula": "In Wertpapiere investierter Betrag ÷ Einkommen, jeweils innerhalb des ausgewählten Zeitraums.",
+      "insufficient_data": "In diesem Zeitraum war kein Anlagekonto offen, daher können wir diesen Teil Deiner Finanzen nicht messen.",
+      "unlock": "Eröffne ein Anlagekonto oder wähle einen Zeitraum, in dem eines davon schon offen war."
+    },
+    "howCalculated": {
+      "action": "Wie Deine Note berechnet wird",
+      "intro": "Deine Note kombiniert diese 5 Indikatoren, jeder mit seinem eigenen Gewicht. Wenn für einen davon noch nicht genügend Daten vorliegen, wird sein Gewicht anteilig auf die übrigen verteilt, damit Deine Note weiterhin 100 erreichen kann.",
+      "notAvailable": "Noch nicht gezählt"
+    },
+    "composition": {
+      "earned": "Erreicht",
+      "earnedDescr": "Punkte, die Du mit den Daten dieses Zeitraums schon erreicht hast.",
+      "pending": "Erreichbar",
+      "pendingDescr": "Was Dir bei den Indikatoren fehlt, die wir heute messen können.",
+      "paused": "Nicht messbar",
+      "pausedDescr": "{{indicators}}: Du nutzt sie noch nicht, daher können wir ihre Punkte nicht messen.",
+      "scoreExplanation": "Deine Note ({{score}}) berücksichtigt nur die {{measurable}} Punkte, die wir heute messen können, daher ziehen die nicht messbaren sie nicht nach unten.",
+      "total": "Gesamt"
+    },
+    "lowReliability": "Diese Note stützt sich nur auf <b>{{measurable}} von {{total}} Indikatoren</b>, betrachte sie also als ersten Entwurf: je mehr Du davon nutzt, desto näher kommt sie Deiner Realität.",
+    "shortRange": "Ein Zeitraum von <b>weniger als einem Monat</b> lässt Gehälter und Rechnungen außen vor, was Indikatoren wie Deinen Sparprozentsatz verzerrt. Erweitere ihn für eine stabilere Note.",
+    "unreliableShort": "Wenig verlässlich",
+    "pointsContribution": "Trägt {{earned}} von {{total}} Pkt. bei",
+    "pointsOfTotal": "{{earned}} von {{total}} Pkt.",
+    "pointsShort": "{{value}} Pkt.",
+    "pausedPoints": "{{total}} Pkt. nicht messbar",
+    "pausedShort": "Nicht messbar",
+    "aboutIndicator": "Über diesen Indikator",
+    "formulaLabel": "Wie er berechnet wird",
+    "howToUnlock": "Wie Du ihn freischaltest",
+    "indicatorsLabel": "Indikatoren",
+    "yourOwnPast": "Deine eigene Vergangenheit",
+    "noComparisonNote": "Diese App ist ganz allein Deine: wir vergleichen Dich nie mit anderen Nutzern, wir vergleichen Dich mit Dir selbst.",
+    "previousPeriodLabel": "Vorheriger Zeitraum",
+    "nowLabel": "Jetzt"
   },
   "STATS": {
     "title": "Statistiken",
     "balance": "Kontostand",
     "final-balance": "Schlussstand",
+    "final-net-worth": "Endvermögen",
     "balance-by-account": "Saldo nach Konten",
     "balance-by-account-subtitle": "Wo habe ich das meiste Geld?",
     "balance-by-currency": "Saldo nach Währung",
@@ -290,6 +367,8 @@
     "balance-evolution-subtitle": "Habe ich mehr Geld als vorher?",
     "net-worth": "Net worth",
     "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-gross": "Bruttovermögen",
+    "net-worth-net": "Nettovermögen",
     "net-worth-composition": "Net worth composition",
     "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "portfolio": "Portfolio",
@@ -298,7 +377,7 @@
     "portfolio-heat-map": "Heatmap",
     "portfolio-heat-map-subtitle": "Je größer der Block, desto größer die Position. Je grüner, desto besser läuft es.",
     "daily-performance": "Täglich",
-    "compared-to-previous-period": "Im Vergleich zur Vorperiode",
+    "compared-to-previous-period": "vs. Vorperiode",
     "cash-flow": "Cashflow",
     "cash-flow-subtitle": "Gebe ich weniger aus, als ich verdiene?",
     "by-periods": "Nach Perioden",
@@ -367,6 +446,7 @@
       "accept-dialog.title": "Akzeptierst Du die Transaktion",
       "accept-dialog.msg-single": "Der neue Status der Transaktion ist null. ",
       "accept-dialog.msg": "Diese Aktion erstellt eine neue Transaktion mit Datum {{date}}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen",
+      "accept-dialog.trade": "{{quantity}} Einheiten von {{security}} zu {{price}} {{currency}}, dem aktuellen Kurs. Du kannst sie danach bearbeiten.",
       "recurrent-rule-finished": "Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!"
     },
     "LIST": {
@@ -375,6 +455,10 @@
       "searcher.placeholder": "Suche nach Kategorie, Beschreibung...",
       "searcher.no-results": "Es wurden keine Transaktionen gefunden, die den Suchkriterien entsprechen",
       "loading": "Weitere Transaktionen werden geladen...",
+      "upcoming": {
+        "one": "{{n}} anstehende Transaktion",
+        "other": "{{n}} anstehende Transaktionen"
+      },
       "selected.short": {
         "one": "{{n}} ausgewählt",
         "other": "{{n}} ausgewählt"
@@ -491,6 +575,10 @@
     "FORM": {
       "from": "Origin-Konto",
       "to": "Zielkonto",
+      "label-from": "Von",
+      "label-to": "Nach",
+      "custom-amounts": "Individuelle Beträge",
+      "difference": "Differenz",
       "VALUE-IN-DESTINY": {
         "title": "Am Zielkonto überwiesener Betrag",
         "amount-short": "{{amount}} zum Zielkonto"
@@ -501,11 +589,15 @@
     "title": "Wiederkehrende Transaktionen",
     "title.short": "Wiederk. Transakt.",
     "empty": "Anscheinend hast Du keine wiederkehrenden Transaktionen. Erstelle eine monatliche, jährliche oder wöchentliche wiederkehrende Transaktion, die hier angezeigt wird.",
+    "empty-for-type": "Sie haben keine wiederkehrende Transaktion dieser Art. Ändern Sie den Filter oben, um den Rest Ihrer Wiederholungen zu sehen",
     "total-expense.title": "Gesamtausgaben pro Periode",
+    "total-income.title": "Gesamteinnahmen pro Periode",
+    "total-all.title": "Gesamt pro Periode",
     "total-expense.descr": "* Ohne Berücksichtigung des Start- und Enddatums jeder Wiederholung",
     "DETAILS": {
       "title": "Wiederkehrende Transaktion",
       "descr": "Die nächsten Schritte für diese Transaktion werden unten angezeigt. Du kannst den ersten Schritt akzeptieren oder diesen Schritt auslassen",
+      "generated-transaction-status": "Status bei Annahme: {{status}}",
       "last-payment-info": "Diese Bewegung ist die letzte der wiederkehrenden Regel, daher wird diese Regel beim Bestätigen dieser Aktion automatisch gelöscht",
       "delete-header": "Wiederkehrende Transaktion löschen",
       "delete-message": "Diese Aktion ist unumkehrbar und hat keinen Einfluss auf Transaktionen, die Du bereits bestätigt/bezahlt habst"
@@ -560,14 +652,15 @@
       "investment": "Investmentkonto",
       "investment.descr": "Ein Broker-, Krypto-Börsen- oder Portfoliokonto, das Vermögenswerte enthalten kann. Erfasse Dein investiertes Kapital und aktualisiere die Werte einzelner Vermögenswerte manuell über Bewertungen",
       "normal": "Normales Konto",
-      "normal.descr": "Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen"
+      "normal.descr": "Nützlich, um Deine täglichen Finanzen aufzuzeichnen. Es ist das gebräuchlichste Konto, das es Dir ermöglicht, Ausgaben, Einnahmen hinzuzufügen",
+      "locked_warn": "Dieses Konto kann seinen Typ nicht mehr ändern, da es bereits Bestände, Trades oder Snapshots enthält."
     },
     "TRACKING_MODES": {
       "title": "Tracking-Modus",
       "transactions": "Transaktionen",
-      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet.",
+      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet. Am besten, wenn Sie eine vollständige Handelshistorie haben (oder führen möchten) und eine genaue Kostenbasis wünschen.",
       "holdings": "Bestände",
-      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten).",
+      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten). Am besten, wenn Sie nur Ihre aktuelle Position kennen und nicht jeden Trade protokollieren möchten. Ihre Einnahmen, Ausgaben und Überweisungen auf diesem Konto werden in beiden Modi weiterhin ganz normal erfasst.",
       "switch_warn": "Jeder Modus berechnet Ihre Positionen aus einer anderen Quelle. Beim Speichern werden Ihre aktuellen Positionen in den neuen Modus übertragen. Frühere Zeitpunkte werden mit dem Verlauf bewertet, den dieser Modus bereits hat."
     },
     "FORM": {
@@ -783,15 +876,7 @@
         "active-overspending": "Mehrausgaben",
         "active-indeterminate": "Aktiv",
         "success": "Erreicht",
-        "fail": "Budget überschritten"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Sie können {{ dailyAmount }} pro Tag für die verbleibenden {{ remainingDays }} Tage ausgeben",
-        "active-overspending": "Um wieder auf Kurs zu kommen, sollten Sie Ihre Ausgaben auf {{ dailyAmount }} pro Tag für die verbleibenden {{ remainingDays }} Tage begrenzen",
-        "active-indeterminate": "Sie haben noch {{ amount }} zum Ausgeben übrig.",
-        "active-exceeded": "Sie haben Ihr Budgetlimit bereits um {{ amount }} überschritten. Wenn Sie keine Einnahmen für dieses Budget finden, sollten Sie für den Rest des Zeitraums keine Ausgaben mehr tätigen",
-        "success": "Gute Arbeit! Dieses Budget wurde erfolgreich abgeschlossen. Erstellen Sie weiterhin Budgets, um Ihre Ausgaben zu verwalten",
-        "fail": "Sie haben das Budget um {{ amount }} überschritten. Versuchen Sie beim nächsten Mal vorsichtiger zu sein!"
+        "fail": "Überschritten"
       }
     }
   },
@@ -841,16 +926,34 @@
         "active-on-track": "Auf dem richtigen Weg",
         "active-behind-schedule": "Hinter dem Zeitplan",
         "active-indeterminate": "Aktiv",
-        "success": "Ziel erreicht",
-        "fail": "Ziel gescheitert"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Sie sind auf dem richtigen Weg, Ihr Ziel zu erreichen! Sie müssen für die verbleibenden {{ remainingDays }} Tage pro Tag {{ dailyAmount }} sparen",
-        "active-behind-schedule": "Sie sind im Rückstand. Sie müssen {{ dailyAmount }} pro Tag sparen, um Ihr Ziel in {{ remainingDays }} Tagen zu erreichen",
-        "active-indeterminate": "Sie benötigen {{ amount }} mehr, um Ihr Ziel zu erreichen.",
-        "success": "Glückwunsch! Du hast dein Ziel erreicht.",
-        "fail": "Sie haben Ihr Ziel um {{ amount }} verfehlt."
+        "success": "Erreicht",
+        "fail": "Gescheitert"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "übrig",
+    "over": "darüber",
+    "spent": "ausgegeben",
+    "saved": "gespart",
+    "CHART": {
+      "spent": "Ausgegeben",
+      "saved": "Gespart",
+      "projected": "Prognose",
+      "pace": "Tempo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "pro Tag, noch {{n}} Tag",
+        "other": "pro Tag, noch {{n}} Tage"
+      },
+      "per-day-short": "pro Tag",
+      "per-day-help": "Wie viel du bis zum Ende des Zeitraums täglich noch hinzufügen kannst, um den Zielbetrag zu erreichen",
+      "above-pace": "über dem Tempo",
+      "below-pace": "unter dem Tempo",
+      "pace-help": "Differenz zwischen dem aktuellen Betrag und dem Betrag, der bei gleichmäßiger Verteilung über den gesamten Zeitraum bis heute zu erwarten wäre",
+      "projected": "Prognose",
+      "projected-help": "Geschätzter Betrag am Ende des Zeitraums, wenn das aktuelle Tempo beibehalten wird"
     }
   },
   "DEBTS": {
@@ -950,6 +1053,7 @@
     "profit_percent": "Zurückkehren %",
     "total_value": "Gesamtwert der Vermögenswerte",
     "group_by_type": "Gruppieren Sie nach Asset-Typ",
+    "price": "Preis",
     "show_value_variation": "Prozentuale Veränderung anzeigen",
     "amount_invested": "Sie haben die {{ X }} dieses Kontos investiert",
     "TYPES": {
@@ -986,6 +1090,7 @@
       "choose_security": "Wertpapier auswählen",
       "create_security": "Neues Wertpapier erstellen",
       "security_name": "Name des Wertpapiers",
+      "security": "Wertpapier",
       "ticker": "Ticker/Symbol (optional)",
       "security_type": "Wertpapierart",
       "current_price": "Aktueller Preis",
@@ -1000,7 +1105,7 @@
       "edit_snapshot": "Schnappschuss bearbeiten",
       "SNAPSHOTS": {
         "history_title": "Snapshot-Verlauf",
-        "history_intro": "Jeder Snapshot speichert das gesamte Portfolio für ein Datum. Wenn Sie sich einen Tag ansehen, wird der letzte an oder davor angewendet.",
+        "history_intro": "Jeder Snapshot speichert den vollständigen Zustand des Kontos zu einem bestimmten Datum. Wählen Sie einen aus, um ihn zu bearbeiten.",
         "count": "{{n}} Schnappschüsse",
         "new_snapshot": "Neu",
         "no_snapshots": "Noch keine Schnappschüsse",
@@ -1012,14 +1117,19 @@
         "update": "Aktualisieren",
         "update_positions": "Positionen aktualisieren",
         "full_portfolio": "komplettes Portfolio",
-        "editor_intro": "Sag uns, wie dein Portfolio am {{date}} aussieht. Die eingegebenen Werte werden verwendet, um Salden und Statistiken von diesem Datum bis zu deinem nächsten Snapshot zu berechnen.",
+        "how_it_works": "So funktionieren Snapshots",
+        "snapshot_contents_description": "Ein Snapshot ist eine vollständige Aufzeichnung dieses Kontos am {{date}}. Geben Sie das nicht investierte Bargeld und alle Positionen ein, die Ihr Broker an diesem Datum anzeigt. Jede ausgelassene Position gilt als nicht mehr gehalten.",
         "date_label": "Snapshot-Datum",
+        "cash_label": "Bargeld",
+        "balance_effect_description": "Dieser Snapshot wird bis zum nächsten zur Berechnung von Salden und Statistiken verwendet. Positionswerte folgen weiterhin den Marktpreisen, während Transaktionen und Überweisungen nach diesem Datum das Bargeld verändern. Wird kein späterer Snapshot hinzugefügt, gelten diese Regeln unbegrenzt weiter.",
         "overwrite_warning": "Für dieses Datum ist bereits ein Snapshot vorhanden. Beim Speichern wird er überschrieben.",
-        "add_position": "Fügen Sie eine weitere Position hinzu",
+        "add_position": "Weitere Position hinzufügen",
+        "add_first_position": "Erste Position hinzufügen",
         "col_symbol": "Symbol",
         "total_cost": "Gesamtkosten des Portfolios",
+        "snapshot_total": "Gesamtsumme zu Einstandskosten",
         "save": "Schnappschuss speichern",
-        "remove_hint": "Um eine Position zu entfernen, löschen Sie einfach deren Zeile: Der Schnappschuss ist das vollständige Foto, keine Bewegung.",
+        "zero_qty_hint": "Eine Menge von 0 behält diese Position im Snapshot. Um sie vollständig zu entfernen, löschen Sie stattdessen die Zeile.",
         "delete_title": "Snapshot löschen?",
         "delete_descr": "Dieser Snapshot wird entfernt. Wenn es der aktuellste war, werden Ihre aktuellen Positionen auf den vorherigen Schnappschuss zurückgesetzt."
       }
@@ -1104,7 +1214,6 @@
       "acquisition_transaction_badge": "Erwerb",
       "select_account": "Wählen Sie ein Konto aus",
       "update_value": "Wert aktualisieren",
-      "trade_form_asset_column": "Anlage",
       "notes_optional": "Notizen (optional)",
       "performance_title": "Performance",
       "performance_return": "Periodenrendite",
@@ -1122,14 +1231,28 @@
       "no_liabilities": "Sie haben noch keine Verbindlichkeiten.",
       "name": "Asset-Name",
       "name_required": "Bitte geben Sie einen Asset-Namen ein",
+      "NAME_HINTS": {
+        "real_estate": "Strandhaus, Wohnung in der Innenstadt...",
+        "vehicle": "Tesla Model 3, Familienvan...",
+        "precious_metal": "Goldbarren, Silbermünzen...",
+        "jewelry_art": "Rolex Daytona, Picasso-Druck...",
+        "other": "Vintage-Gitarre, Webdomain..."
+      },
       "description": "Beschreibung",
       "initial_value": "Anfangswert",
       "initial_value_required": "Bitte geben Sie einen Anfangswert ein",
       "initial_value_invalid": "Bitte geben Sie eine gültige Nummer ein",
+      "acquisition_info": "Erwerbsdetails",
+      "purchase_value": "Kaufwert",
+      "purchase_value_option": "Kaufwert angeben",
+      "purchase_value_help": "Wenn leer, wird die erste Bewertung als Kaufpreis verwendet.",
+      "current_value": "Aktueller Wert",
+      "current_value_help": "Optional. Erstellt eine Bewertung mit dem heutigen Datum.",
       "link_acquisition_transaction": "Verknüpfen Sie eine Kauftransaktion",
       "link_acquisition_transaction_descr": "Wählen Sie die Kosten aus, die den Kauf dieses Vermögenswerts darstellen. Der Betrag (umgerechnet in die Währung des Vermögenswerts) und das Datum werden als Anfangswert und Erwerbsdatum verwendet",
       "acquisition_transaction": "Erwerbstransaktion",
       "creation_date_before_acquisition_transaction": "Das Erwerbsdatum darf nicht vor dem Datum der verknüpften Transaktion liegen",
+      "acquisition_date_from_transaction": "Das Erwerbsdatum wird aus der verknüpften Transaktion übernommen und kann nicht bearbeitet werden. Trennen Sie die Transaktion, um es zu ändern.",
       "currency": "Währung",
       "select_currency": "Bitte wählen Sie eine Währung aus",
       "creation_date": "Erstellungsdatum",

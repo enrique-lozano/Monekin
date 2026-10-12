@@ -1,12 +1,15 @@
 import 'package:collection/collection.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
+import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/count_indicator.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -18,10 +21,8 @@ Future<List<Category>?> showMultiCategoryListModal(
   BuildContext context,
   CategoryMultiSelectorModal modal,
 ) {
-  return showModalBottomSheet<List<Category>>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<List<Category>>(
+    context,
     builder: (context) => modal,
   );
 }
@@ -59,7 +60,7 @@ class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return buildDraggableSheet(
+    final sheet = buildDraggableSheet(
       defaultSize: 0.65,
       minChildSize: 0.64,
       builder: (context, sc) {
@@ -85,6 +86,8 @@ class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
               return Column(
                 children: [
                   TextField(
+                    focusNode: searchFocusNode,
+                    autofocus: ModalPresentation.isPopover(context),
                     decoration: InputDecoration(
                       filled: false,
                       isDense: false,
@@ -106,13 +109,21 @@ class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
               );
             },
           ),
-          footer: BottomSheetFooter(
-            onSaved: selectedCategories.isNotEmpty
-                ? () => RouteUtils.popRoute(selectedCategories)
-                : null,
-          ),
+          footer: ModalPresentation.isPopover(context)
+              ? null
+              : BottomSheetFooter(
+                  onSaved: selectedCategories.isNotEmpty
+                      ? () => RouteUtils.popRoute(selectedCategories)
+                      : null,
+                ),
         );
       },
+    );
+
+    // Popovers have no save button: apply the current selection on dismiss.
+    return PopoverCommitOnDismiss(
+      onCommit: () => RouteUtils.popRoute(selectedCategories),
+      child: sheet,
     );
   }
 
@@ -171,6 +182,7 @@ class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
                 leading: IconDisplayer.fromCategory(
                   context,
                   category: category,
+                  borderRadius: 10,
                 ),
                 trailing: Checkbox.adaptive(
                   value:
@@ -241,27 +253,82 @@ class _CategoryMultiSelectorModalState extends State<CategoryMultiSelectorModal>
     BuildContext context, {
     required Category category,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 18),
-      child: CheckboxListTile.adaptive(
-        title: Text(
-          category.isMainCategory
-              ? '${t.categories.select.without_subcategory} - ${category.name}'
-              : category.name,
-          softWrap: false,
-          overflow: TextOverflow.ellipsis,
-        ),
-        secondary: IconDisplayer.fromCategory(context, category: category),
-        value: selectedCategories.map((e) => e.id).contains(category.id),
-        onChanged: (value) {
-          if (value == true) {
-            selectedCategories.add(category);
-          } else {
-            selectedCategories.removeWhere((e) => e.id == category.id);
-          }
+    // The main category tile acts as the "without subcategory" pseudo-item.
+    final isWithoutSubcategoryTile = category.isMainCategory;
 
-          rebuild();
-        },
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Nesting guide: a continuous vertical line that visually keeps the
+          // subcategories tucked under their parent category.
+          Container(
+            margin: const EdgeInsets.only(left: 28, right: 4),
+            width: 1,
+            color: Theme.of(
+              context,
+            ).colorScheme.outlineVariant.withValues(alpha: 0.4),
+          ),
+          Expanded(
+            child: CheckboxListTile.adaptive(
+              contentPadding: const EdgeInsets.only(left: 4, right: 12),
+              title: Text(
+                isWithoutSubcategoryTile
+                    ? t.categories.select.without_subcategory
+                    : category.name,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                style: isWithoutSubcategoryTile
+                    ? TextStyle(
+                        fontStyle: FontStyle.italic,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      )
+                    : null,
+              ),
+              secondary: isWithoutSubcategoryTile
+                  ? buildWithoutSubcategoryIcon(
+                      context,
+                      ColorHex.get(category.color).lighten(
+                        isAppInDarkBrightness(context)
+                            ? IconDisplayer.darkLightenFactor
+                            : 0,
+                      ),
+                    )
+                  : IconDisplayer.fromCategory(
+                      context,
+                      category: category,
+                      size: 20,
+                      borderRadius: 9,
+                    ).copyWith(secondaryColor: Colors.transparent),
+              value: selectedCategories.map((e) => e.id).contains(category.id),
+              onChanged: (value) {
+                if (value == true) {
+                  selectedCategories.add(category);
+                } else {
+                  selectedCategories.removeWhere((e) => e.id == category.id);
+                }
+
+                rebuild();
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildWithoutSubcategoryIcon(BuildContext context, Color color) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: DottedBorder(
+        options: CircularDottedBorderOptions(
+          color: color,
+          strokeWidth: 1.5,
+          strokeCap: StrokeCap.round,
+          dashPattern: const [2, 3],
+          padding: EdgeInsets.zero,
+        ),
+        child: const SizedBox(width: 20, height: 20),
       ),
     );
   }

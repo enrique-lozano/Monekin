@@ -3,7 +3,9 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
+import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -12,6 +14,24 @@ import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+
+/// A colored, rounded-square icon box for a tag — matching the category icon
+/// style so both selectors read consistently.
+Widget _tagIcon(
+  BuildContext context, {
+  required Color color,
+  IconData icon = Icons.label_rounded,
+}) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
+
+  return IconDisplayer(
+    icon: icon,
+    mainColor: color.lighten(isDark ? IconDisplayer.darkLightenFactor : 0),
+    secondaryColor: color.lighten(isDark ? 0 : IconDisplayer.darkLightenFactor),
+    size: 20,
+    borderRadius: 9,
+  );
+}
 
 class TagSelectorResult {
   final List<Tag?> selectedTags;
@@ -27,10 +47,8 @@ Future<TagSelectorResult?> showTagListModal(
   BuildContext context, {
   required TagSelector modal,
 }) {
-  return showModalBottomSheet<TagSelectorResult>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<TagSelectorResult>(
+    context,
     builder: (context) {
       return modal;
     },
@@ -75,7 +93,7 @@ class _TagSelectorState extends State<TagSelector>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return buildDraggableSheet(
+    final sheet = buildDraggableSheet(
       minChildSize: 0.64,
       defaultSize: 0.65,
       builder: (context, scrollController) {
@@ -100,6 +118,8 @@ class _TagSelectorState extends State<TagSelector>
               return Column(
                 children: [
                   TextField(
+                    focusNode: searchFocusNode,
+                    autofocus: ModalPresentation.isPopover(context),
                     decoration: InputDecoration(
                       filled: false,
                       isDense: false,
@@ -120,18 +140,31 @@ class _TagSelectorState extends State<TagSelector>
               );
             },
           ),
-          footer: BottomSheetFooter(
-            onSaved: selectedTags.isNotEmpty || widget.allowEmptySubmit
-                ? () => RouteUtils.popRoute(
-                    TagSelectorResult(
-                      selectedTags: selectedTags,
-                      explicitlyRemovedTags: explicitlyRemovedTags,
-                    ),
-                  )
-                : null,
-          ),
+          footer: ModalPresentation.isPopover(context)
+              ? null
+              : BottomSheetFooter(
+                  onSaved: selectedTags.isNotEmpty || widget.allowEmptySubmit
+                      ? () => RouteUtils.popRoute(
+                          TagSelectorResult(
+                            selectedTags: selectedTags,
+                            explicitlyRemovedTags: explicitlyRemovedTags,
+                          ),
+                        )
+                      : null,
+                ),
         );
       },
+    );
+
+    // Popovers have no save button: apply the current selection on dismiss.
+    return PopoverCommitOnDismiss(
+      onCommit: () => RouteUtils.popRoute(
+        TagSelectorResult(
+          selectedTags: selectedTags,
+          explicitlyRemovedTags: explicitlyRemovedTags,
+        ),
+      ),
+      child: sheet,
     );
   }
 
@@ -166,9 +199,10 @@ class _TagSelectorState extends State<TagSelector>
               if (tag == null) {
                 return CheckboxListTile.adaptive(
                   value: selectedTags.any((element) => element == null),
-                  secondary: Icon(
-                    Icons.label_off_rounded,
+                  secondary: _tagIcon(
+                    context,
                     color: Theme.of(context).colorScheme.primary,
+                    icon: Icons.label_off_rounded,
                   ),
                   title: Text(t.tags.without_tags),
                   onChanged: (newValue) {
@@ -202,7 +236,7 @@ class _TagSelectorState extends State<TagSelector>
               return CheckboxListTile.adaptive(
                 value: isIndeterminate ? null : isSelected,
                 tristate: true,
-                secondary: tag.displayIcon(),
+                secondary: _tagIcon(context, color: tag.colorData),
                 title: Text(tag.name),
                 subtitle: !tag.description.isNullOrEmpty
                     ? Text(tag.description!)

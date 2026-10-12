@@ -1,15 +1,24 @@
+import 'dart:ui' show lerpDouble;
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/presentation/animations/animate_fab.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/empty_app_bar.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/app_utils.dart';
+
+part 'page_framework_mobile.dart';
 
 class PageFramework extends StatelessWidget {
   const PageFramework({
     super.key,
     this.title,
+    this.subtitle,
+    this.icon,
+    this.leading,
+    this.onClose,
     this.tabBar,
     this.appBarActions,
-    this.appBarBuilder,
     this.appBarBackgroundColor,
     this.appBarForegroundColor,
     this.enableAppBar = true,
@@ -21,14 +30,20 @@ class PageFramework extends StatelessWidget {
   });
 
   final String? title;
+  final Widget? subtitle;
+  final Widget? icon;
+  final Widget? leading;
+
+  /// Action of the close (X) affordance shown when the page is presented as a
+  /// modal or a side drawer. Defaults to popping the route.
+  ///
+  /// Pages that intercept the back gesture to navigate inside themselves (e.g.
+  /// wizard steps) should set it, so that closing the page keeps dismissing it
+  /// as a whole instead of behaving like a back action.
+  final VoidCallback? onClose;
+
   final TabBar? tabBar;
   final List<Widget>? appBarActions;
-  final PreferredSizeWidget Function(
-    String title,
-    TabBar? tabBar,
-    List<Widget>? appBarActions,
-  )?
-  appBarBuilder;
   final Color? appBarBackgroundColor;
   final Color? appBarForegroundColor;
   final bool enableAppBar;
@@ -38,49 +53,144 @@ class PageFramework extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
 
-  PreferredSizeWidget? _buildAppBar() {
-    if (enableAppBar) {
-      if (appBarBuilder != null) {
-        return appBarBuilder!(title ?? '', tabBar, appBarActions);
-      }
+  /// Trailing inset so compact desktop action icons are not flush with the
+  /// window edge. Android keeps the default Material padding.
+  static EdgeInsetsGeometry? get _actionsPadding =>
+      AppUtils.isDesktop ? const EdgeInsetsDirectional.only(end: 12) : null;
 
-      return AppBar(
-        key: ValueKey('AppBar_${title ?? ''}'),
-        title: Text(title ?? ''),
-        bottom: tabBar,
-        backgroundColor: appBarBackgroundColor,
-        foregroundColor: appBarForegroundColor,
-        actions: appBarActions,
-      );
-    }
+  bool get _hasTitle => title != null && title!.isNotEmpty;
 
-    if (appBarBackgroundColor != null) {
-      return EmptyAppBar(
-        key: ValueKey('empty_app_bar_$appBarBackgroundColor'),
-        color: appBarBackgroundColor!,
-      );
-    }
+  bool get _hasIdentityExtras => subtitle != null || icon != null;
 
-    return null;
+  bool _usesSingleRowHeader(BuildContext context) =>
+      SideDrawerScope.of(context) || ModalPageScope.of(context);
+
+  Color _foregroundColor(BuildContext context) =>
+      appBarForegroundColor ?? Theme.of(context).colorScheme.onSurface;
+
+  Color _subtitleColor(BuildContext context) {
+    return appBarForegroundColor?.withValues(alpha: 0.85) ??
+        Theme.of(context).extension<AppColors>()?.textHint ??
+        Theme.of(context).colorScheme.onSurfaceVariant;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final scaffold = MediaQuery.removePadding(
+  Widget _buildHeaderContent(BuildContext context, {bool singleRow = false}) {
+    final theme = Theme.of(context);
+    final foreground = _foregroundColor(context);
+    final compactTitle = singleRow || (subtitle != null && icon != null);
+    final baseStyle = compactTitle
+        ? theme.textTheme.titleLarge
+        : AppUtils.isMobileLayout(context)
+        ? theme.textTheme.headlineLarge
+        : theme.textTheme.headlineSmall;
+
+    return Row(
+      spacing: 12,
+      children: [
+        if (icon != null)
+          IconTheme.merge(
+            data: IconThemeData(size: singleRow ? 24 : 32, color: foreground),
+            child: icon!,
+          ),
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: baseStyle?.copyWith(
+                  color: foreground,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              if (subtitle != null)
+                DefaultTextStyle(
+                  style: theme.textTheme.labelMedium!.copyWith(
+                    color: _subtitleColor(context),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  child: subtitle!,
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  PreferredSizeWidget _buildStaticAppBar(
+    BuildContext context, {
+    required bool singleRow,
+  }) {
+    return AppBar(
+      key: ValueKey('AppBar_${title ?? ''}'),
+      toolbarHeight: _hasIdentityExtras ? 76 : 56,
+      titleSpacing: icon != null ? 0 : null,
+      leading: leading ?? (singleRow ? CloseButton(onPressed: onClose) : null),
+      title: _hasTitle
+          ? _buildHeaderContent(context, singleRow: singleRow)
+          : null,
+      bottom: tabBar,
+      backgroundColor: appBarBackgroundColor,
+      foregroundColor: appBarForegroundColor,
+      actions: appBarActions,
+      actionsPadding: _actionsPadding,
+    );
+  }
+
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
+    if (!enableAppBar) {
+      return appBarBackgroundColor == null
+          ? null
+          : EmptyAppBar(
+              key: ValueKey('empty_app_bar_$appBarBackgroundColor'),
+              color: appBarBackgroundColor!,
+            );
+    }
+
+    return _buildStaticAppBar(
+      context,
+      singleRow: _usesSingleRowHeader(context),
+    );
+  }
+
+  Widget _buildScaffold(
+    BuildContext context, {
+    PreferredSizeWidget? appBar,
+    Widget? scaffoldBody,
+  }) {
+    return MediaQuery.removePadding(
       context: context,
       removeLeft: !AppUtils.isMobileLayout(context),
       removeRight: !AppUtils.isMobileLayout(context),
       child: Scaffold(
-        appBar: _buildAppBar(),
+        appBar: appBar ?? _buildAppBar(context),
         persistentFooterButtons: persistentFooterButtons,
         floatingActionButton: AnimateFABDelayed(fab: floatingActionButton),
         floatingActionButtonLocation: floatingActionButtonLocation,
         bottomNavigationBar: bottomNavigationBar,
-        body: body,
+        body: scaffoldBody ?? body,
       ),
     );
+  }
 
-    return PageNavigationFrameworkSafeArea(child: scaffold);
+  @override
+  Widget build(BuildContext context) {
+    final collapsible =
+        enableAppBar &&
+        _hasTitle &&
+        AppUtils.isMobileLayout(context) &&
+        !_usesSingleRowHeader(context);
+
+    return PageNavigationFrameworkSafeArea(
+      child: collapsible
+          ? _CollapsibleMobilePageScaffold(page: this)
+          : _buildScaffold(context),
+    );
   }
 }
 

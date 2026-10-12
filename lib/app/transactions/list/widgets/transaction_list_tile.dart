@@ -9,6 +9,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/extensions/string.extension.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
+import 'package:monekin/core/models/transaction/next_pay_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -36,6 +37,9 @@ class TransactionListTile extends StatelessWidget {
     this.isSelected = false,
     this.applySwipeActions = false,
     this.preventDefaultOnTap = false,
+    this.tableLayout = false,
+    this.onSelectedChanged,
+    this.selectionActive = false,
   });
 
   final MoneyTransaction transaction;
@@ -73,8 +77,49 @@ class TransactionListTile extends StatelessWidget {
 
   final bool isSelected;
 
+  /// Renders a desktop-oriented table row (checkbox + account column) instead
+  /// of the mobile list tile. Swipe actions and the long-press menu are not
+  /// applied in this mode.
+  final bool tableLayout;
+
+  /// Called when the row's selection checkbox is toggled (only in
+  /// [tableLayout]).
+  final ValueChanged<bool?>? onSelectedChanged;
+
+  /// Whether any transaction is currently selected on the page. When `true`,
+  /// the [tableLayout] checkbox stays visible on every row; otherwise it only
+  /// appears while hovering the row.
+  final bool selectionActive;
+
   bool get showPeriodicityInfo =>
       periodicityInfo != null && transaction.recurrentInfo.isRecurrent;
+
+  /// Whether to warn that the date of a payment still to be made has passed
+  bool get showDelayedPayStatus =>
+      !showPeriodicityInfo &&
+      transaction.nextPayStatus == NextPayStatus.delayed;
+
+  /// Small icon displayed next to the title. Recurrency rules always show the
+  /// repeat icon: their status describes the transaction that will be created
+  /// when the payment is accepted, not the rule itself, so displaying it here
+  /// would make an unpaid recurrency look like it was already settled
+  Widget? buildTitleIcon(BuildContext context) {
+    if (transaction.recurrentInfo.isRecurrent) {
+      return Icon(
+        Icons.repeat,
+        color: Theme.of(context).colorScheme.primary,
+        size: 12,
+      );
+    }
+
+    if (transaction.status == null) return null;
+
+    return Icon(
+      transaction.status.icon,
+      color: transaction.status.color.darken(0.1),
+      size: 12,
+    );
+  }
 
   void showTransactionActions(
     BuildContext context,
@@ -152,14 +197,200 @@ class TransactionListTile extends StatelessWidget {
     );
   }
 
+  void _openDetails() {
+    RouteUtils.pushRoute(
+      TransactionDetailsPage(transaction: transaction, heroTag: heroTag),
+    );
+  }
+
+  /// Desktop table-like row: leading selection checkbox, name, a dedicated
+  /// account column, a date column and the amount.
+  ///
+  /// The checkbox slot is always reserved (to avoid layout shifts) but the
+  /// checkbox itself is only shown when [showCheckbox] is `true`.
+  Widget _buildTableRow(BuildContext context, {required bool showCheckbox}) {
+    return Material(
+      color: isSelected
+          ? Theme.of(context).colorScheme.primary.withOpacity(0.12)
+          : Colors.transparent,
+      child: InkWell(
+        onTap: onTap ?? (preventDefaultOnTap ? null : _openDetails),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: Row(
+            children: [
+              if (onSelectedChanged != null) ...[
+                SizedBox(
+                  width: 36,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 120),
+                    opacity: showCheckbox ? 1 : 0,
+                    child: IgnorePointer(
+                      ignoring: !showCheckbox,
+                      child: Checkbox(
+                        value: isSelected,
+                        onChanged: onSelectedChanged,
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 4),
+              ],
+              transaction.getDisplayIcon(context, size: 20, padding: 5),
+              const SizedBox(width: 14),
+              // Title + tags
+              Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            transaction.displayName(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (buildTitleIcon(context) case final titleIcon?) ...[
+                          const SizedBox(width: 4),
+                          titleIcon,
+                        ],
+                        if (transaction.isReversed) ...[
+                          const SizedBox(width: 6),
+                          Icon(
+                            MoneyTransaction.reversedIcon,
+                            size: 12,
+                            color: AppColors.of(context).brand,
+                          ),
+                        ],
+                        if (showDelayedPayStatus) ...[
+                          const SizedBox(width: 6),
+                          buildNextPayStatusChip(context),
+                        ],
+                      ],
+                    ),
+                    if (transaction.tags.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Wrap(
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: transaction.tags
+                            .map(
+                              (tag) => TransactionTagChip(
+                                tag: tag,
+                                visualDensity: VisualDensity.compact,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Account
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: [
+                    IconDisplayer(
+                      supportedIcon: transaction.account.icon,
+                      size: 14,
+                      mainColor: transaction.account
+                          .getComputedColor(context)
+                          .lightenPastel(
+                            amount: isAppInDarkBrightness(context) ? 0.12 : 0,
+                          ),
+                      secondaryColor: Colors.transparent,
+                      padding: 0,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        transaction.account.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              // Description (notes)
+              Expanded(
+                flex: 3,
+                child: transaction.notes.isNotNullNorEmpty
+                    ? Text(
+                        transaction.notes!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelMedium!
+                            .copyWith(fontStyle: FontStyle.italic),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              const SizedBox(width: 12),
+              // Amount + time
+              SizedBox(
+                width: 120,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CurrencyDisplayer(
+                      amountToConvert: transaction.value,
+                      currency: transaction.account.currency,
+                      integerStyle: TextStyle(
+                        color: transaction.status == TransactionStatus.voided
+                            ? Colors.grey.shade400
+                            : transaction.isIncomeOrExpense
+                            ? transaction.type.color(context)
+                            : null,
+                        decoration:
+                            transaction.status == TransactionStatus.voided
+                            ? TextDecoration.lineThrough
+                            : null,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      DateFormat.Hm().format(transaction.date),
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (tableLayout) {
+      return _TransactionTableRow(tile: this);
+    }
+
     final showTime =
         appStateSettings[SettingKey.transactionTileShowTime] == '1';
 
     final showTags =
         transaction.tags.isNotEmpty &&
         appStateSettings[SettingKey.transactionTileShowTags] == '1';
+
+    // On the recurrent transactions page the periodicity block already conveys
+    // the recurrency, so the title stays clean
+    final titleIcon = periodicityInfo != null ? null : buildTitleIcon(context);
 
     final tileContent = ListTile(
       title: Row(
@@ -176,18 +407,7 @@ class TransactionListTile extends StatelessWidget {
                     overflow: TextOverflow.fade,
                   ),
                 ),
-                if ((transaction.status != null ||
-                        transaction.recurrentInfo.isRecurrent) &&
-                    periodicityInfo == null) ...[
-                  const SizedBox(width: 4),
-                  Icon(
-                    transaction.status?.icon ?? Icons.repeat,
-                    color:
-                        transaction.status?.color.darken(0.1) ??
-                        Theme.of(context).colorScheme.primary,
-                    size: 12,
-                  ),
-                ],
+                if (titleIcon != null) ...[const SizedBox(width: 4), titleIcon],
                 if (transaction.isReversed) ...[
                   const SizedBox(width: 6),
                   Icon(
@@ -303,8 +523,14 @@ class TransactionListTile extends StatelessWidget {
             ),
 
             // ----------------- RIGHT SIDE -----------------
-            if (!showDateTime && !showPeriodicityInfo && showTime)
+            // The delay warning takes the place of the time: both together
+            // leave the row too cramped
+            if (!showDateTime &&
+                !showPeriodicityInfo &&
+                !showDelayedPayStatus &&
+                showTime)
               Text(DateFormat.Hm().format(transaction.date)),
+            if (showDelayedPayStatus) buildNextPayStatusChip(context),
             if (showPeriodicityInfo)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -464,6 +690,33 @@ class TransactionListTile extends StatelessWidget {
   }
 }
 
+/// Wraps the desktop table row so the selection checkbox only shows while the
+/// pointer hovers the row (or when a selection is already active).
+class _TransactionTableRow extends StatefulWidget {
+  const _TransactionTableRow({required this.tile});
+
+  final TransactionListTile tile;
+
+  @override
+  State<_TransactionTableRow> createState() => _TransactionTableRowState();
+}
+
+class _TransactionTableRowState extends State<_TransactionTableRow> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final tile = widget.tile;
+    final showCheckbox = _hovering || tile.selectionActive || tile.isSelected;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: tile._buildTableRow(context, showCheckbox: showCheckbox),
+    );
+  }
+}
+
 Future<bool> executeTransactionSwipeAction(
   BuildContext context,
   MoneyTransaction transaction,
@@ -481,7 +734,7 @@ Future<bool> executeTransactionSwipeAction(
       );
       break;
     case TransactionSwipeAction.edit:
-      await RouteUtils.pushRoute(
+      await RouteUtils.showResponsiveForm(
         TransactionFormPage(transactionToEdit: transaction),
       );
 

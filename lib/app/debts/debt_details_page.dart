@@ -29,7 +29,7 @@ import 'package:rxdart/rxdart.dart';
 Color _labelColorInHeader(BuildContext context) => Theme.of(context)
     .colorScheme
     .onSurface
-    .withOpacity(isAppInDarkBrightness(context) ? 0.6 : 0.85);
+    .withValues(alpha: isAppInDarkBrightness(context) ? 0.6 : 0.85);
 
 class DebtDetailsPage extends StatelessWidget {
   const DebtDetailsPage({super.key, required this.debtInitialData});
@@ -48,7 +48,15 @@ class DebtDetailsPage extends StatelessWidget {
 
         return PageFramework(
           title: debt.name,
-
+          subtitle: Text(debt.type.title(context)),
+          icon: IconDisplayer(
+            supportedIcon: SupportedIconService.instance.getIconByID(
+              debt.iconId,
+            ),
+            mainColor: debt.type.color(context),
+            size: 22,
+            padding: 8,
+          ),
           appBarBackgroundColor: Theme.of(context).cardColor,
           appBarActions: [
             IconButton(
@@ -81,7 +89,7 @@ class DebtDetailsPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                RouteUtils.pushRoute(DebtFormPage(debt: debt));
+                RouteUtils.showResponsiveForm(DebtFormPage(debt: debt));
               },
             ),
           ],
@@ -173,80 +181,62 @@ class DebtDetailsPage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                child: Row(
-                  spacing: 16,
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconDisplayer(
-                      supportedIcon: SupportedIconService.instance.getIconByID(
-                        debt.iconId,
+                    Text(
+                      t.debts.details.collected_amount,
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: _labelColorInHeader(context),
                       ),
-                      mainColor: color,
-                      size: 46,
                     ),
-                    Flexible(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            t.debts.details.collected_amount,
-                            style: Theme.of(context).textTheme.labelSmall!
-                                .copyWith(color: _labelColorInHeader(context)),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 4,
-                            children: [
-                              Row(
-                                spacing: 4,
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  CurrencyDisplayer(
-                                    amountToConvert: collectedAmount,
-                                    currency: debt.currency,
-                                    integerStyle: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall!
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: color,
-                                        ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 4,
+                      children: [
+                        Row(
+                          spacing: 4,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            CurrencyDisplayer(
+                              amountToConvert: collectedAmount,
+                              currency: debt.currency,
+                              integerStyle: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: color,
                                   ),
-                                  Text(
-                                    '/',
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium,
-                                  ),
-                                  CurrencyDisplayer(
-                                    amountToConvert: totalAmount,
-                                    currency: debt.currency,
-                                    integerStyle: Theme.of(
-                                      context,
-                                    ).textTheme.titleMedium!,
-                                  ),
-                                ],
-                              ),
-
-                              if (BreakPoint.of(
+                            ),
+                            Text(
+                              '/',
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            CurrencyDisplayer(
+                              amountToConvert: totalAmount,
+                              currency: debt.currency,
+                              integerStyle: Theme.of(
                                 context,
-                              ).isLargerThan(BreakpointID.sm))
-                                Flexible(
-                                  child: _DebtDirectionBadge(debt: debt),
-                                ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          AnimatedProgressBar(
-                            value: progress.clamp(0.0, 1.0),
-                            showPercentageText: true,
-                            width: 16,
-                          ),
-                        ],
-                      ),
+                              ).textTheme.titleMedium!,
+                            ),
+                          ],
+                        ),
+
+                        if (BreakPoint.of(
+                          context,
+                        ).isLargerThan(BreakpointID.sm))
+                          Flexible(child: _DebtDirectionBadge(debt: debt)),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    AnimatedProgressBar(
+                      value: progress.clamp(0.0, 1.0),
+                      showPercentageText: true,
+                      width: 16,
                     ),
                   ],
                 ),
@@ -313,9 +303,10 @@ class DebtDetailsPage extends StatelessWidget {
                               : Text(
                                   t.debts.details.no_deadline,
                                   style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface.withOpacity(0.45),
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.45),
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),
@@ -428,8 +419,8 @@ class _DebtDirectionBadge extends StatelessWidget {
     return Chip(
       avatar: Icon(debt.type.icon(), size: 14, color: color),
       label: Text(label),
-      backgroundColor: color.withOpacity(0.1),
-      side: BorderSide(color: color.withOpacity(0.35)),
+      backgroundColor: color.withValues(alpha: 0.1),
+      side: BorderSide(color: color.withValues(alpha: 0.35)),
       labelStyle: Theme.of(context).textTheme.labelMedium!.copyWith(
         color: color,
         fontWeight: FontWeight.w600,

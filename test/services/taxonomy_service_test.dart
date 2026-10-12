@@ -39,10 +39,7 @@ void main() {
           ),
         );
 
-    for (final c in const [
-      ('ac_equity', 'Equity'),
-      ('ac_cash', 'Cash'),
-    ]) {
+    for (final c in const [('ac_equity', 'Equity'), ('ac_cash', 'Cash')]) {
       await db
           .into(db.taxonomyCategories)
           .insert(

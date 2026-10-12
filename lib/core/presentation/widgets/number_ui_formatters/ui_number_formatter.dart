@@ -74,6 +74,12 @@ class UINumberFormatter {
 
   final UINumberFormatterMode mode;
 
+  /// How many digits [amount] is shown with in [currency]. If [currency] is null,
+  static int digitCount(double amount, {CurrencyInDB? currency}) {
+    final integerDigits = amount.abs().truncate().toString().length;
+    return integerDigits + (currency?.decimalPlaces ?? 0);
+  }
+
   int get _compactLimit => 1000;
   int get _fractionsDigits => amountToConvert >= 10000000
       ? 3

@@ -43,8 +43,11 @@
   },
   "GENERAL": {
     "or": "or",
+    "of": "of",
+    "showing": "Showing",
     "understood": "Understood",
     "unspecified": "Unspecified",
+    "min_one_entry_required": "At least one value must remain",
     "quick_actions": "Quick actions",
     "details": "Details",
     "balance": "Balance",
@@ -55,6 +58,7 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "filters": "Filters",
+    "all": "All",
     "empty-warn": "Oops! This is very empty",
     "search-no-results": "No items match your search criteria",
     "insufficient-data": "Insufficient data",
@@ -176,7 +180,7 @@
     "next": "Next",
     "select-your-currency": "Select your currency",
     "welcome.subtitle": "Your personal finance manager",
-    "welcome.subtitle2": "100% open, 100% free",
+    "welcome.subtitle2": "100% open, 100% private",
     "welcome.footer": "By logging in you agree to the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Privacy Policy</a> and the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Terms of Use</a> of the application",
     "offline.descr.title": "OFFLINE ACCOUNT:",
     "offline.descr": "Your data will only be stored on your device, and will be safe as long as you don't uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.",
@@ -264,7 +268,10 @@
       "text.other": "You could survive approximately <b>{{ n }} months</b> without income at this rate of spending.",
       "text.infinite": "You could survive approximately <b>all your life</b> without income at this rate of spending.",
       "suggestion": "Remember that it is advisable to always keep this ratio above 5 months at least. If you see that you do not have a sufficient savings cushion, reduce unnecessary expenses.",
-      "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health"
+      "insufficient_data": "It looks like we don't have enough expenses to calculate how many months you could survive without income. Enter a few transactions and come back here to check your financial health",
+      "valueShort": "{{n}} months",
+      "formula": "Money available in your accounts ÷ your average monthly expenses in this period.",
+      "unlock": "Record at least 4 transactions, some of them expenses, within this period."
     },
     "savingsPercentage": {
       "title": "Savings percentage",
@@ -275,13 +282,88 @@
         "bad": "You have managed to save <b>{{value}}%</b> of your income during this period. However, we think you can still do much more!",
         "very_bad": "Wow, you haven't managed to save anything during this period."
       },
-      "suggestion": "Remember that it is advisable to save at least 15-20% of what you earn."
-    }
+      "suggestion": "Remember that it is advisable to save at least 15-20% of what you earn.",
+      "formula": "(Income − expenses) ÷ income, all within the selected range.",
+      "insufficient_data": "There is not enough activity in this period to judge how much of your money you keep.",
+      "unlock": "Record one income within this period, or at least 10 transactions of any kind."
+    },
+    "debtToAssetRatio": {
+      "title": "Debt-to-asset ratio",
+      "subtitle": "How much of what you own is offset by outstanding debt",
+      "text": {
+        "value": "Your outstanding debt is <b>{{value}}%</b> of your gross assets.",
+        "no_assets": "You have outstanding debt but no recorded assets to back it."
+      },
+      "suggestion": "A lower ratio generally means you are better able to cover your debts with what you own.",
+      "insufficient_data": "You are not tracking any debt or asset yet, so there is no balance sheet to judge.",
+      "formula": "Outstanding debt ÷ gross assets, both as of the end of the selected range.",
+      "unlock": "Add one of your debts or one of your assets (a house, a car...)."
+    },
+    "cashFlowConsistency": {
+      "title": "Cash-flow consistency",
+      "subtitle": "How much of this period you kept your spending within your income",
+      "text": {
+        "good": "You spent within your means during <b>{{value}}%</b> of this period. Your cash flow is steady.",
+        "normal": "You spent within your means during <b>{{value}}%</b> of this period.",
+        "bad": "You only spent within your means during <b>{{value}}%</b> of this period, so your cash flow swings a lot."
+      },
+      "suggestion": "Spreading the big payments and keeping a similar pace all along makes your finances far more predictable.",
+      "insufficient_data": "There is not enough activity spread along this range to tell how steady your cash flow is.",
+      "formula": "We split the range into several parts and share out your income between them. In each part, spending at most what falls to you counts in full, spending twice as much counts as nothing, and in between counts proportionally.",
+      "unlock": "Pick a range with activity in at least 3 of its parts."
+    },
+    "investmentRatio": {
+      "title": "Investment ratio",
+      "subtitle": "What part of your income you put into securities in this period",
+      "text": {
+        "value": "You put <b>{{value}}%</b> of your income into securities during this period.",
+        "none": "You haven't put any money into securities during this period."
+      },
+      "suggestion": "Investing part of your income regularly helps your money grow faster than inflation.",
+      "build_emergency_fund": "Prioritize your emergency fund first. Each month of runway, up to five, progressively unlocks the points earned by your investment ratio.",
+      "runway_insufficient_data": "We can't score this ratio until your emergency runway can be measured.",
+      "formula": "Gross security purchases and positive cost-basis increases recorded in portfolio snapshots ÷ income, all within the selected range.",
+      "insufficient_data": "You had no investment account open during this period, so we can't measure this part of your finances.",
+      "unlock": "Open an investment account, or pick a range in which one of them was already open.",
+      "runway_unlock": "Pick a range with at least 4 transactions and some recorded expenses so your emergency runway can be measured."
+    },
+    "howCalculated": {
+      "action": "How your score is calculated",
+      "intro": "Your score blends these 5 indicators, each with its own weight. When there isn't enough data for one of them yet, its weight is shared proportionally among the rest, so your score can still reach 100.",
+      "notAvailable": "Not counted yet"
+    },
+    "composition": {
+      "earned": "Earned",
+      "earnedDescr": "Points you have already won with the data of this range.",
+      "pending": "Within reach",
+      "pendingDescr": "What you are still missing in the indicators we can measure today.",
+      "paused": "Not measured",
+      "pausedDescr": "{{indicators}}: you don't use them yet, so we cannot measure their points.",
+      "scoreExplanation": "Your score ({{score}}) only takes into account the {{measurable}} points we can measure today, so the ones we cannot measure are not dragging it down.",
+      "total": "Total"
+    },
+    "lowReliability": "This score leans on <b>{{measurable}} of the {{total}} indicators</b> only, so take it as a first sketch: the more of them you use, the closer it will get to your reality.",
+    "shortRange": "A range <b>shorter than a month</b> leaves out paydays and bills, which distorts indicators such as your savings rate. Widen it for a steadier score.",
+    "unreliableShort": "Low reliability",
+    "pointsContribution": "Contributes {{earned}} of {{total}} pts",
+    "pointsOfTotal": "{{earned}} of {{total}} pts",
+    "pointsShort": "{{value}} pts",
+    "pausedPoints": "{{total}} pts not measured",
+    "pausedShort": "Not measured",
+    "aboutIndicator": "About this indicator",
+    "formulaLabel": "How it's calculated",
+    "howToUnlock": "How to unlock it",
+    "indicatorsLabel": "Indicators",
+    "yourOwnPast": "Your own past",
+    "noComparisonNote": "This app is yours and yours only: we never compare you with other users, we compare you with yourself.",
+    "previousPeriodLabel": "Previous period",
+    "nowLabel": "Now"
   },
   "STATS": {
     "title": "Statistics",
     "balance": "Balance",
     "final-balance": "Final balance",
+    "final-net-worth": "Final net worth",
     "balance-by-account": "Balance by accounts",
     "balance-by-account-subtitle": "Where do I have most of my money?",
     "balance-by-currency": "Balance by currency",
@@ -290,6 +372,8 @@
     "balance-evolution-subtitle": "Do I have more money than before?",
     "net-worth": "Net worth",
     "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-gross": "Gross net worth",
+    "net-worth-net": "Net worth",
     "net-worth-composition": "Net worth composition",
     "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "portfolio": "Portfolio",
@@ -298,7 +382,7 @@
     "portfolio-heat-map": "Heat map",
     "portfolio-heat-map-subtitle": "The bigger the block, the larger the position. The greener, the better it is doing.",
     "daily-performance": "Daily",
-    "compared-to-previous-period": "Compared to the previous period",
+    "compared-to-previous-period": "vs previous period",
     "cash-flow": "Cash flow",
     "cash-flow-subtitle": "Am I spending less than I earn?",
     "by-periods": "By periods",
@@ -367,6 +451,7 @@
       "accept-dialog.title": "Accept transaction",
       "accept-dialog.msg-single": "The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want",
       "accept-dialog.msg": "This action will create a new transaction with date {{date}}. You will be able to check the details of this transaction on the transaction page",
+      "accept-dialog.trade": "{{quantity}} units of {{security}} at {{price}} {{currency}}, the latest price. You can edit it afterwards.",
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {
@@ -375,6 +460,22 @@
       "searcher.placeholder": "Search by category, description...",
       "searcher.no-results": "No transactions found matching the search criteria",
       "loading": "Loading more transactions...",
+      "upcoming": {
+        "one": "{{n}} upcoming transaction",
+        "other": "{{n}} upcoming transactions"
+      },
+      "FILTERED_EMPTY": {
+        "title": "No transactions with these filters",
+        "description": {
+          "one": "Your {{n}} transaction is still there — it just doesn't match the current filters. Try widening the range or removing a filter.",
+          "other": "All {{n}} transactions are still there — they just don't match the current filters. Try widening the range or removing a filter."
+        },
+        "clear": {
+          "one": "Remove filter",
+          "other": "Remove the {{n}} filters"
+        },
+        "expand-dates": "Show all dates"
+      },
       "selected.short": {
         "one": "{{n}} selected",
         "other": "{{n}} selected"
@@ -383,6 +484,11 @@
         "one": "{{n}} transaction selected",
         "other": "{{n}} transactions selected"
       },
+      "selected_of": {
+        "one": "{{n}} of {{total}} selected",
+        "other": "{{n}} of {{total}} selected"
+      },
+      "shown": "shown",
       "BULK_EDIT": {
         "dates": "Edit dates",
         "categories": "Edit categories",
@@ -399,6 +505,10 @@
       "from_date_def": "From the {{ date }}",
       "to_date_def": "Up to the {{ date }}",
       "reset": "Reset filters",
+      "inapplicable_here": {
+        "one": "<b>1</b> active filter doesn't apply to this view.",
+        "other": "<b>{{n}}</b> active filters don't apply to this view."
+      },
       "saved": {
         "title": "Saved filters",
         "new_title": "New Filter",
@@ -491,6 +601,10 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
+      "label-from": "From",
+      "label-to": "To",
+      "custom-amounts": "Custom amounts",
+      "difference": "difference",
       "VALUE-IN-DESTINY": {
         "title": "Amount transferred at destination",
         "amount-short": "{{amount}} to target account"
@@ -501,11 +615,15 @@
     "title": "Recurrent transactions",
     "title.short": "Rec. transactions",
     "empty": "It looks like you don't have any recurring transactions. Create a monthly, yearly, or weekly recurring transaction and it will appear here",
+    "empty-for-type": "You don't have any recurring transaction of this type. Change the filter above to see the rest of your recurrences",
     "total-expense.title": "Total expense per period",
+    "total-income.title": "Total income per period",
+    "total-all.title": "Total per period",
     "total-expense.descr": "* Without considering the start and end date of each recurrence",
     "DETAILS": {
       "title": "Recurrent transaction",
       "descr": "The next moves for this transaction are shown below. You can accept the first move or skip this move",
+      "generated-transaction-status": "Status when accepted: {{status}}",
       "last-payment-info": "This movement is the last of the recurring rule, so this rule will be automatically deleted when confirming this action",
       "delete-header": "Delete recurring transaction",
       "delete-message": "This action is irreversible and will not affect transactions you have already confirmed/paid for"
@@ -558,14 +676,15 @@
       "saving": "Savings account",
       "saving.descr": "Money only comes in or out via transfers from other accounts. Perfect to start saving.",
       "investment": "Investment account",
-      "investment.descr": "A broker, crypto exchange, or portfolio account that holds cash plus financial holdings (stocks, funds, crypto...)."
+      "investment.descr": "A broker, crypto exchange, or portfolio account that holds cash plus financial holdings (stocks, funds, crypto...).",
+      "locked_warn": "This account can no longer change its type, since it already has holdings, trades or snapshots."
     },
     "TRACKING_MODES": {
       "title": "Tracking mode",
       "transactions": "Transactions",
-      "transactions_descr": "Positions are calculated automatically from your buy and sell trades.",
+      "transactions_descr": "Positions are calculated automatically from your buy and sell trades. Best if you have (or want to keep) a full trade history and want accurate cost basis.",
       "holdings": "Holdings",
-      "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost).",
+      "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost). Best if you only know your current position and don't want to log every trade. Your income, expenses and transfers on this account are still tracked as normal either way.",
       "switch_warn": "Each mode calculates your positions from a different source. When you save, your current positions are converted to the new mode. Earlier dates will be valued using the history that mode already has."
     },
     "FORM": {
@@ -781,15 +900,7 @@
         "active-overspending": "Overspending",
         "active-indeterminate": "Active",
         "success": "Achieved",
-        "fail": "Budget exceeded"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "You can spend {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-overspending": "To get back on track, you should limit your spending to {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-indeterminate": "You have {{ amount }} left to spend.",
-        "active-exceeded": "You have already exceeded your budget limit by {{ amount }}. If you don't find any incomes for this budget, you should stop spending for the rest of its period",
-        "success": "Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses",
-        "fail": "You exceeded the budget by {{ amount }}. Try to be more careful next time!"
+        "fail": "Exceeded"
       }
     }
   },
@@ -839,16 +950,34 @@
         "active-on-track": "On track",
         "active-behind-schedule": "Behind schedule",
         "active-indeterminate": "Active",
-        "success": "Goal reached",
-        "fail": "Goal failed"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "You are on track to seek your goal! You have to save {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-behind-schedule": "You are behind schedule. You have to save {{ dailyAmount }} per day to reach your goal in {{ remainingDays }} days",
-        "active-indeterminate": "You need {{ amount }} more to reach your goal.",
-        "success": "Congratulations! You reached your goal.",
-        "fail": "You missed your goal by {{ amount }}."
+        "success": "Reached",
+        "fail": "Failed"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "left",
+    "over": "over",
+    "spent": "spent",
+    "saved": "saved",
+    "CHART": {
+      "spent": "Spent",
+      "saved": "Saved",
+      "projected": "Projected",
+      "pace": "Pace"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "per day, {{n}} day left",
+        "other": "per day, {{n}} days left"
+      },
+      "per-day-short": "per day",
+      "per-day-help": "How much you can still add each day until the end of the period to reach the target amount",
+      "above-pace": "above pace",
+      "below-pace": "below pace",
+      "pace-help": "Difference between the current amount and the amount expected by today if it were spread evenly over the whole period",
+      "projected": "projected",
+      "projected-help": "Estimated amount at the end of the period if the current pace continues"
     }
   },
   "DEBTS": {
@@ -933,6 +1062,7 @@
   },
   "ASSETS": {
     "title": "Assets",
+    "linked_asset": "Linked asset",
     "empty_description": "You haven't created any assets yet. Assets like real estate, vehicles, or collectibles can be tracked with their valuations",
     "create": "Add asset",
     "ADD": {
@@ -984,6 +1114,7 @@
       "choose_security": "Choose a security",
       "create_security": "Create new security",
       "security_name": "Security name",
+      "security": "Security",
       "ticker": "Ticker / symbol (optional)",
       "security_type": "Security type",
       "current_price": "Current price",
@@ -998,7 +1129,7 @@
       "edit_snapshot": "Edit snapshot",
       "SNAPSHOTS": {
         "history_title": "Snapshot history",
-        "history_intro": "Each snapshot stores the full portfolio for a date. When looking at a day, the most recent one on or before it is applied.",
+        "history_intro": "Each snapshot stores the full account state for a given date. Select one to edit it.",
         "count": "{{n}} snapshots",
         "new_snapshot": "New",
         "no_snapshots": "No snapshots yet",
@@ -1010,14 +1141,19 @@
         "update": "Update",
         "update_positions": "Update positions",
         "full_portfolio": "full portfolio",
-        "editor_intro": "Tell us how your portfolio looks on {{date}}. The values you enter will be used to calculate balances and stats from this date until your next snapshot.",
+        "how_it_works": "How snapshots work",
+        "snapshot_contents_description": "A snapshot is a complete record of this account on {{date}}. Enter the uninvested cash and every position shown by your broker on that date. Any position you leave out is treated as no longer held.",
         "date_label": "Snapshot date",
+        "cash_label": "Cash",
+        "balance_effect_description": "This snapshot is used to calculate balances and stats until the next one. Position values continue to follow market prices, while transactions and transfers after this date change its cash. If no later snapshot is added, these rules continue indefinitely.",
         "overwrite_warning": "A snapshot already exists on this date. Saving will overwrite it.",
         "add_position": "Add another position",
+        "add_first_position": "Add your first position",
         "col_symbol": "Symbol",
         "total_cost": "Total portfolio cost",
+        "snapshot_total": "Total at cost",
         "save": "Save snapshot",
-        "remove_hint": "To get rid of a position just delete its row: the snapshot is the full photo, not a movement.",
+        "zero_qty_hint": "A quantity of 0 keeps this position in the snapshot. To remove it entirely, delete the row instead.",
         "delete_title": "Delete snapshot?",
         "delete_descr": "This snapshot will be removed. If it was the most recent one, your current positions will fall back to the previous snapshot."
       }
@@ -1030,7 +1166,7 @@
       "empty_description": "You haven't added any securities yet. Add a stock, fund or crypto to start tracking your portfolio.",
       "total_value": "Portfolio value",
       "group_by_type": "Group by security type",
-      "current_price": "Current price",
+      "price": "Price",
       "market_value": "Market value",
       "units_held": "Units held",
       "unrealized_pnl": "Unrealized P&L",
@@ -1092,6 +1228,9 @@
       },
       "link_transaction": {
         "success": "Transaction linked successfully"
+      },
+      "unlink_transaction": {
+        "title": "Unlink from asset"
       }
     },
     "DETAILS": {
@@ -1102,7 +1241,6 @@
       "acquisition_transaction_badge": "Acquisition",
       "select_account": "Select an account",
       "update_value": "Update value",
-      "trade_form_asset_column": "Asset",
       "notes_optional": "Notes (optional)",
       "performance_title": "Performance",
       "performance_return": "Period return",
@@ -1120,14 +1258,28 @@
       "no_liabilities": "You don't have any liabilities yet.",
       "name": "Asset name",
       "name_required": "Please enter an asset name",
+      "NAME_HINTS": {
+        "real_estate": "Beach house, Downtown flat...",
+        "vehicle": "Tesla Model 3, Family van...",
+        "precious_metal": "Gold bars, Silver coins...",
+        "jewelry_art": "Rolex Daytona, Picasso print...",
+        "other": "Vintage guitar, Web domain..."
+      },
       "description": "Description",
       "initial_value": "Initial value",
       "initial_value_required": "Please enter an initial value",
       "initial_value_invalid": "Please enter a valid number",
+      "acquisition_info": "Acquisition details",
+      "purchase_value": "Purchase value",
+      "purchase_value_option": "Enter the purchase value",
+      "purchase_value_help": "If left empty, the first valuation is used as the purchase price.",
+      "current_value": "Current value",
+      "current_value_help": "Optional. Records a valuation dated today.",
       "link_acquisition_transaction": "Link a purchase transaction",
       "link_acquisition_transaction_descr": "Choose the expense that represents buying this asset. Its amount (converted to the asset's currency) and date will be used as the initial value and acquisition date",
       "acquisition_transaction": "Acquisition transaction",
       "creation_date_before_acquisition_transaction": "The acquisition date cannot be before the linked transaction's date",
+      "acquisition_date_from_transaction": "The acquisition date is set from the linked transaction and can't be edited. Unlink the transaction to change it.",
       "currency": "Currency",
       "select_currency": "Please select a currency",
       "creation_date": "Creation date",
@@ -1144,7 +1296,7 @@
       "edit_valuation": "Edit valuation",
       "value": "Value",
       "net_contribution": "Net contribution",
-      "net_contribution_help": "Cash you've put into this asset: its starting value plus any linked buy/sell transactions. It's separate from market-value changes, which you record manually via valuations.",
+      "net_contribution_help": "Cash you've put into this asset: its starting value plus any linked transactions. It's separate from market-value changes, which you record manually via valuations.",
       "value_required": "Please enter a value",
       "value_invalid": "Please enter a valid number",
       "update_value_success": "Valuation added successfully",

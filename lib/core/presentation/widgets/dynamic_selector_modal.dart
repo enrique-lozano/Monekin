@@ -140,10 +140,8 @@ Future<ModalResult<V>?> showDynamicSelectorBottomSheet<T, V>(
   BuildContext context, {
   required DynamicSelectorModal<T, V> selectorWidget,
 }) {
-  return showModalBottomSheet<ModalResult<V>>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
+  return RouteUtils.showResponsiveModal<ModalResult<V>>(
+    context,
     builder: (context) {
       return selectorWidget;
     },
@@ -230,18 +228,20 @@ class _DynamicMultiSelectorModalState<T, V>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ModalContainer(
+    final content = ModalContainer(
       title: widget.title,
       subtitle: widget.subtitle,
       responseToKeyboard: false,
       showTitleDivider: true,
-      footer: BottomSheetFooter(
-        submitText: t.ui_actions.continue_text,
-        submitIcon: Icons.check_rounded,
-        onSaved: () {
-          RouteUtils.popRoute(ModalResult(_currentSelectedValues));
-        },
-      ),
+      footer: ModalPresentation.isPopover(context)
+          ? null
+          : BottomSheetFooter(
+              submitText: t.ui_actions.continue_text,
+              submitIcon: Icons.check_rounded,
+              onSaved: () {
+                RouteUtils.popRoute(ModalResult(_currentSelectedValues));
+              },
+            ),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -254,6 +254,12 @@ class _DynamicMultiSelectorModalState<T, V>
         ),
       ),
     );
+
+    // Popovers have no save button: apply the current selection on dismiss.
+    return PopoverCommitOnDismiss(
+      onCommit: () => RouteUtils.popRoute(ModalResult(_currentSelectedValues)),
+      child: content,
+    );
   }
 }
 
@@ -261,10 +267,8 @@ Future<ModalResult<List<V>>?> showDynamicMultiSelectorBottomSheet<T, V>(
   BuildContext context, {
   required DynamicMultiSelectorModal<T, V> selectorWidget,
 }) {
-  return showModalBottomSheet<ModalResult<List<V>>>(
-    context: context,
-    showDragHandle: true,
-    isScrollControlled: true,
+  return RouteUtils.showResponsiveModal<ModalResult<List<V>>>(
+    context,
     builder: (context) {
       return selectorWidget;
     },

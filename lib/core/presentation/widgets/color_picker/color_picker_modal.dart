@@ -4,6 +4,7 @@ import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/custom_color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/gradient-box.borders.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
+import 'package:monekin/core/presentation/widgets/sheet_or_fixed.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -12,10 +13,8 @@ Future<void> showColorPickerModal(
   BuildContext context,
   ColorPickerModal component,
 ) {
-  return showModalBottomSheet<Color>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<Color>(
+    context,
     builder: (context) {
       return component;
     },
@@ -47,8 +46,7 @@ class ColorPickerModal extends StatelessWidget {
     final t = Translations.of(context);
     double circleSize = 54;
 
-    return DraggableScrollableSheet(
-      expand: false,
+    return SheetOrFixed(
       maxChildSize: 0.65,
       minChildSize: 0.45,
       initialChildSize: 0.65,
@@ -150,7 +148,11 @@ class ColorPickerModal extends StatelessWidget {
         children: [
           Tappable(
             bgColor: ColorHex.get(colorItem),
-            onTap: () => onColorSelected(ColorHex.get('#$colorItem')),
+            onTap: () {
+              onColorSelected(ColorHex.get('#$colorItem'));
+              // In a popover the selection is final on tap, so close it.
+              if (ModalPresentation.isPopover(context)) RouteUtils.popRoute();
+            },
             child: SizedBox(height: size, width: size),
           ),
           if (selectedColor != null &&

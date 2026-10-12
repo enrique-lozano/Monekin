@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/stats/widgets/portfolio/portfolio_treemap_layout.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
@@ -8,15 +9,23 @@ import 'package:monekin/core/database/services/exchange-rate/exchange_rate_servi
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 enum _PerformanceMode { daily, pnl, returnRate }
 
 class PortfolioTreemapCard extends StatefulWidget {
-  const PortfolioTreemapCard({super.key, required this.date});
+  const PortfolioTreemapCard({
+    super.key,
+    required this.date,
+    this.filters = const TransactionFilterSet(),
+  });
 
   final DateTime date;
+
+  /// Only the account scope of the filter applies to holdings.
+  final TransactionFilterSet filters;
 
   @override
   State<PortfolioTreemapCard> createState() => _PortfolioTreemapCardState();
@@ -36,7 +45,11 @@ class _PortfolioTreemapCardState extends State<PortfolioTreemapCard> {
   @override
   void didUpdateWidget(covariant PortfolioTreemapCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.date != widget.date) {
+    if (oldWidget.date != widget.date ||
+        !listEquals(
+          oldWidget.filters.accountsIDs?.toList(),
+          widget.filters.accountsIDs?.toList(),
+        )) {
       _selectedSlice = null;
       _slicesFuture = _loadSlices();
     }
@@ -44,7 +57,7 @@ class _PortfolioTreemapCardState extends State<PortfolioTreemapCard> {
 
   Future<List<_PortfolioTreemapSlice>> _loadSlices() async {
     final holdings = await HoldingService.instance
-        .getHoldingValuationsAtDate(widget.date)
+        .getHoldingValuationsAtDate(widget.date, widget.filters.accountsIDs)
         .first;
     final slicesBySecurity = <String, _PortfolioTreemapSlice>{};
 
@@ -130,34 +143,27 @@ class _PortfolioTreemapCardState extends State<PortfolioTreemapCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 360),
-                child: ExpandingSegmentedTabs<_PerformanceMode>(
-                  fullWidth: false,
-                  height: 36,
-                  items: [
-                    SegmentedTabItem(
-                      value: _PerformanceMode.daily,
-                      icon: Icons.today_outlined,
-                      label: t.stats.daily_performance,
-                    ),
-                    SegmentedTabItem(
-                      value: _PerformanceMode.pnl,
-                      icon: Icons.account_balance_outlined,
-                      label: t.assets.securities.unrealized_pnl,
-                    ),
-                    SegmentedTabItem(
-                      value: _PerformanceMode.returnRate,
-                      icon: Icons.percent_rounded,
-                      label: t.assets.details.performance_return,
-                    ),
-                  ],
-                  selected: _mode,
-                  onSelected: (mode) => setState(() => _mode = mode),
+            ExpandingSegmentedTabs<_PerformanceMode>(
+              fullWidth: true,
+              items: [
+                SegmentedTabItem(
+                  value: _PerformanceMode.daily,
+                  icon: Icons.today_outlined,
+                  label: t.stats.daily_performance,
                 ),
-              ),
+                SegmentedTabItem(
+                  value: _PerformanceMode.pnl,
+                  icon: Icons.account_balance_outlined,
+                  label: t.assets.securities.unrealized_pnl,
+                ),
+                SegmentedTabItem(
+                  value: _PerformanceMode.returnRate,
+                  icon: Icons.percent_rounded,
+                  label: t.assets.details.performance_return,
+                ),
+              ],
+              selected: _mode,
+              onSelected: (mode) => setState(() => _mode = mode),
             ),
             const SizedBox(height: 16),
             LayoutBuilder(

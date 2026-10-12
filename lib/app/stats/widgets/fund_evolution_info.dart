@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/stats/widgets/period_value_header.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -7,13 +8,10 @@ import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/monetary_evolution_chart_shared.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/time_series_evolution_chart.dart';
-import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
-import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class FundEvolutionInfo extends StatelessWidget {
   const FundEvolutionInfo({
@@ -45,86 +43,37 @@ class FundEvolutionInfo extends StatelessWidget {
                 builder: (context) {
                   final accounts = accountsSnapshot.data;
 
-                  return Skeletonizer(
-                    enabled: accounts == null,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              t.stats.final_balance,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            if (accounts == null)
-                              Text(
-                                '--',
-                                style: Theme.of(
-                                  context,
-                                ).textTheme.headlineSmall,
-                              ),
-                            if (accounts != null)
-                              StreamBuilder(
-                                stream: accountService.getAccountsMoney(
-                                  accountIds: accounts.map((e) => e.id),
-                                  trFilters: filters,
-                                  date: dateRange.endDate,
-                                ),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Bone(width: 70, height: 40);
-                                  }
+                  if (accounts == null) {
+                    return PeriodValueHeader(
+                      label: t.stats.final_balance,
+                      value: null,
+                      relativeChange: null,
+                    );
+                  }
 
-                                  return CurrencyDisplayer(
-                                    amountToConvert: snapshot.data!,
-                                    integerStyle: Theme.of(
-                                      context,
-                                    ).textTheme.headlineSmall!,
-                                  );
-                                },
-                              ),
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              t.stats.compared_to_previous_period,
-                              style: const TextStyle(fontSize: 12),
-                            ),
-                            if (accounts != null)
-                              StreamBuilder(
-                                stream: accountService
-                                    .getAccountsBalanceRelativeChange(
-                                      accounts: accounts,
-                                      startDate: dateRange.startDate,
-                                      endDate: dateRange.endDate,
-                                      trFilters: filters,
-                                      convertToPreferredCurrency: true,
-                                    ),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Bone(width: 52, height: 22);
-                                  }
-
-                                  return TrendingValue(
-                                    percentage: snapshot.data!,
-                                    fontWeight: Theme.of(
-                                      context,
-                                    ).textTheme.headlineSmall!.fontWeight!,
-                                    fontSize: Theme.of(
-                                      context,
-                                    ).textTheme.headlineSmall!.fontSize!,
-                                  );
-                                },
-                              ),
-                          ],
-                        ),
-                      ],
+                  return StreamBuilder(
+                    stream: Rx.combineLatest2(
+                      accountService.getAccountsMoney(
+                        accountIds: accounts.map((e) => e.id),
+                        trFilters: filters,
+                        date: dateRange.endDate,
+                      ),
+                      accountService.getAccountsBalanceRelativeChange(
+                        accounts: accounts,
+                        startDate: dateRange.startDate,
+                        endDate: dateRange.endDate,
+                        trFilters: filters,
+                        convertToPreferredCurrency: true,
+                      ),
+                      (double balance, double change) => (balance, change),
                     ),
+                    builder: (context, snapshot) {
+                      return PeriodValueHeader(
+                        label: t.stats.final_balance,
+                        value: snapshot.data?.$1,
+                        relativeChange: snapshot.data?.$2,
+                      );
+                    },
                   );
                 },
               ),
@@ -184,6 +133,8 @@ class FundEvolutionLineChart extends StatefulWidget {
     required this.loadingWidget,
     this.accountsIds,
     this.showYAxisTitles = true,
+    this.expand = false,
+    this.onHover,
   });
 
   final DateTimeRange? timeRange;
@@ -192,8 +143,13 @@ class FundEvolutionLineChart extends StatefulWidget {
   final Widget loadingWidget;
 
   /// Whether the chart shows its Y-axis labels/grid. Set to `false` for a
-  /// minimal, dashboard-style hero chart.
+  /// minimal, dashboard-style chart.
   final bool showYAxisTitles;
+
+  /// Fill the parent instead of using a computed height. Used when the
+  /// chart sits inside an [EvolutionCard].
+  final bool expand;
+  final ValueChanged<TimeSeriesLabeledPoint?>? onHover;
 
   @override
   State<FundEvolutionLineChart> createState() => _FundEvolutionLineChartState();
@@ -293,33 +249,15 @@ class _FundEvolutionLineChartState extends State<FundEvolutionLineChart> {
     List<TimeSeriesLabeledPoint> points,
     CurrencyInDB? currency,
   ) {
-    // Handle edge case: when all values are the same or very close,
-    // add padding to the min/max values to ensure proper axis rendering
-    double? minY;
-    double? maxY;
-
-    if (points.isNotEmpty) {
-      final values = points.map((p) => p.value).toList();
-      final min = values.reduce((a, b) => a < b ? a : b);
-      final max = values.reduce((a, b) => a > b ? a : b);
-
-      // If all values are effectively the same, add 10% padding
-      if ((max - min).abs() < 0.0001) {
-        final padding = (min.abs() * 0.1).abs() + 1;
-        minY = min - padding;
-        maxY = max + padding;
-      }
-    }
-
     return TimeSeriesEvolutionChart<TimeSeriesLabeledPoint>(
       data: points,
       dateExtractor: (p) => p.date,
       valueExtractor: (p) => p.value,
       currency: currency,
       tooltipTitleBuilder: (p) => p.label,
-      minY: minY,
-      maxY: maxY,
       showYAxisTitles: widget.showYAxisTitles,
+      expand: widget.expand,
+      onHover: widget.onHover,
     );
   }
 }

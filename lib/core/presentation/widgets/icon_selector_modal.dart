@@ -5,6 +5,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/scrollable_with_bottom_gradient.dart';
+import 'package:monekin/core/presentation/widgets/sheet_or_fixed.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/supported_icon/supported_icon_service.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -13,10 +14,8 @@ Future<void> showIconSelectorModal(
   BuildContext context,
   IconSelectorModal component,
 ) {
-  return showModalBottomSheet<void>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<void>(
+    context,
     builder: (context) {
       return component;
     },
@@ -58,8 +57,7 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return DraggableScrollableSheet(
-      expand: false,
+    return SheetOrFixed(
       maxChildSize: 0.85,
       minChildSize: 0.625,
       initialChildSize: 0.85,
@@ -113,14 +111,16 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
               ),
             ],
           ),
-          footer: BottomSheetFooter(
-            submitIcon: Icons.check,
-            submitText: t.ui_actions.select,
-            onSaved: () {
-              widget.onIconSelected!(_selectedIcon!);
-              RouteUtils.popRoute();
-            },
-          ),
+          footer: ModalPresentation.isPopover(context)
+              ? null
+              : BottomSheetFooter(
+                  submitIcon: Icons.check,
+                  submitText: t.ui_actions.select,
+                  onSaved: () {
+                    widget.onIconSelected!(_selectedIcon!);
+                    RouteUtils.popRoute();
+                  },
+                ),
         );
       },
     );
@@ -161,6 +161,14 @@ class _IconSelectorModalState extends State<IconSelectorModal> {
                     child: IconDisplayer(
                       supportedIcon: e,
                       onTap: () {
+                        // In a popover selection applies + closes on tap (no
+                        // save button).
+                        if (ModalPresentation.isPopover(context)) {
+                          widget.onIconSelected?.call(e);
+                          RouteUtils.popRoute();
+                          return;
+                        }
+
                         setState(() {
                           _selectedIcon = e;
                         });

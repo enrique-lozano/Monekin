@@ -52,7 +52,7 @@ class _DebtFabButtonState extends State<DebtFabButton> {
           if (state != null && state.isOpen) {
             state.toggle();
           }
-          RouteUtils.pushRoute(DebtFormPage(type: direction));
+          RouteUtils.showResponsiveForm(DebtFormPage(type: direction));
         },
       ),
     );

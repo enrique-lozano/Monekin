@@ -33,7 +33,7 @@ If the list of tasks is too small for you, or you can't find one that matches yo
 - Propose a new task by creating an issue.
 - Make code improvements and pull requests without having an opened issue.
 - Ask questions or suggest ideas in the forum.
-- Some recurring tasks such as [contributing in translations](https://github.com/enrique-lozano/Monekin/blob/main/lib/i18n/README.md), improving marketplace screenshots, or improving documentation do not usually have a related issue. These tasks are easy to perform, maybe you can start there.
+- Some recurring tasks such as [contributing in translations](https://github.com/enrique-lozano/Monekin/blob/main/lib/i18n/README.md), [improving our store presence](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/README.md) (texts and screenshots), or improving documentation do not usually have a related issue. These tasks are easy to perform, maybe you can start there.
 
 ## 3. Create a new working branch in your fork
 
@@ -90,6 +90,9 @@ So far you should have pushed your work to your working branch and have tested t
 
 > [!IMPORTANT]
 > This project doesn't have QA, so you are the QA! Please test your implementation carefully.
+
+> [!NOTE]
+> Keep the PR title a clean, prefix-free sentence (not `feat: ...` / `fix: ...`). Labels, not the title, are what categorizes it for the release notes.
 
 ## Questions?
 

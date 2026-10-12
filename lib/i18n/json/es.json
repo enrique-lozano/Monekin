@@ -43,8 +43,11 @@
   },
   "GENERAL": {
     "or": "o",
+    "of": "de",
+    "showing": "Mostrando",
     "understood": "Entendido",
     "unspecified": "Sin especificar",
+    "min_one_entry_required": "Debe quedar al menos un valor",
     "quick_actions": "Acciones rápidas",
     "details": "Detalles",
     "balance": "Balance",
@@ -55,6 +58,7 @@
     "today": "Hoy",
     "yesterday": "Ayer",
     "filters": "Filtros",
+    "all": "Todas",
     "empty-warn": "Ops! Esto esta muy vacio",
     "search-no-results": "No hay elementos que coincidan con tus criterios de búsqueda",
     "insufficient-data": "Datos insuficientes",
@@ -177,7 +181,7 @@
     "next": "Siguiente",
     "select-your-currency": "Selecciona tu divisa",
     "welcome.subtitle": "Tu gestor de finanzas personales",
-    "welcome.subtitle2": "100% libre, 100% gratis",
+    "welcome.subtitle2": "100% libre, 100% privado",
     "welcome.footer": "Al iniciar sesión aceptas la <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Política de Privacidad</a> y los <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Términos de uso</a> de la aplicación",
     "offline.descr.title": "CUENTA SIN CONEXIÓN:",
     "offline.descr": "Tus datos serán guardados unicamente en tu dispositivo, y estarán seguros mientras no desinstales la app o cambies de telefono. Para prevenir la perdida de datos se recomienda realizar una copia de seguridad regularmente desde los ajustes de la app.",
@@ -267,7 +271,10 @@
       "text.other": "Podrías sobrevivir aproximadamente <b>{{ n }} meses</b> sin ingresos a este ritmo de gasto.",
       "text.infinite": "Podrías sobrevivir aproximadamente <b>casi toda tu vida</b> sin ingresos a este ritmo de gasto.",
       "suggestion": "Recuerda que es recomendable mantener este ratio siempre por encima de 5 meses como mínimo. Si ves que no tienes un colchon de ahorro suficiente, reduce los gastos no necesarios.",
-      "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera"
+      "insufficient_data": "Parece que no tenemos gastos suficientes para calcular cuantos meses podrías sobrevivir sin ingresos. Introduce unas pocas transacciones y regresa aquí para consultar tu salud financiera",
+      "valueShort": "{{n}} meses",
+      "formula": "Dinero disponible en tus cuentas ÷ tu gasto medio mensual en este periodo.",
+      "unlock": "Registra al menos 4 transacciones en este periodo, algunas de ellas gastos."
     },
     "savingsPercentage": {
       "title": "Porcentaje de ahorro",
@@ -278,13 +285,88 @@
         "bad": "Has conseguido ahorrar un <b>{{value}}%</b> de tus ingresos durante este periodo. Sin embargo, creemos que aun puedes hacer mucho mas!",
         "very_bad": "Vaya, no has conseguido ahorrar nada durante este periodo."
       },
-      "suggestion": "Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas."
-    }
+      "suggestion": "Recuerda que es recomendable ahorrar al menos un 15-20% de lo que ingresas.",
+      "formula": "(Ingresos − gastos) ÷ ingresos, todo dentro del rango seleccionado.",
+      "insufficient_data": "No hay suficiente actividad en este periodo para valorar qué parte de tu dinero conservas.",
+      "unlock": "Registra un ingreso dentro de este periodo, o al menos 10 transacciones de cualquier tipo."
+    },
+    "debtToAssetRatio": {
+      "title": "Ratio deuda-activos",
+      "subtitle": "Cuánta parte de lo que tienes está compensada por deuda pendiente",
+      "text": {
+        "value": "Tu deuda pendiente es el <b>{{value}}%</b> de tus activos brutos.",
+        "no_assets": "Tienes deuda pendiente pero no hay activos registrados que la respalden."
+      },
+      "suggestion": "Un ratio más bajo generalmente significa que puedes cubrir mejor tus deudas con lo que posees.",
+      "insufficient_data": "Todavía no llevas el seguimiento de ninguna deuda ni activo, así que no hay balance que valorar.",
+      "formula": "Deuda pendiente ÷ activos brutos, ambos a fecha de fin del rango seleccionado.",
+      "unlock": "Añade una de tus deudas o uno de tus activos (una casa, un coche...)."
+    },
+    "cashFlowConsistency": {
+      "title": "Consistencia del flujo",
+      "subtitle": "Qué parte de este periodo mantuviste el gasto dentro de tus ingresos",
+      "text": {
+        "good": "Gastaste dentro de tus posibilidades durante el <b>{{value}}%</b> de este periodo. Tu flujo de caja es estable.",
+        "normal": "Gastaste dentro de tus posibilidades durante el <b>{{value}}%</b> de este periodo.",
+        "bad": "Solo gastaste dentro de tus posibilidades durante el <b>{{value}}%</b> de este periodo, así que tu flujo de caja da muchos bandazos."
+      },
+      "suggestion": "Repartir los pagos grandes y mantener un ritmo parecido a lo largo del tiempo hace que tus finanzas sean mucho más predecibles.",
+      "insufficient_data": "No hay suficiente actividad repartida a lo largo de este rango como para saber si tu flujo de caja es estable.",
+      "formula": "Dividimos el rango en varios tramos y repartimos tus ingresos entre ellos. En cada tramo, gastar como mucho lo que te toca lo suma entero; gastar el doble no suma nada, y entre medias suma de forma proporcional.",
+      "unlock": "Elige un rango con actividad en al menos 3 de sus tramos."
+    },
+    "investmentRatio": {
+      "title": "Ratio de inversión",
+      "subtitle": "Qué parte de tus ingresos destinaste a inversiones en este periodo",
+      "text": {
+        "value": "Destinaste el <b>{{value}}%</b> de tus ingresos a inversiones durante este periodo.",
+        "none": "No has destinado dinero a inversiones durante este periodo."
+      },
+      "suggestion": "Invertir una parte de tus ingresos de forma regular ayuda a que tu dinero crezca más rápido que la inflación.",
+      "build_emergency_fund": "Prioriza primero tu fondo de emergencia. Cada mes de colchón, hasta cinco, desbloquea progresivamente los puntos obtenidos por tu ratio de inversión.",
+      "runway_insufficient_data": "No podemos puntuar este ratio hasta que podamos calcular tu colchón de emergencia.",
+      "formula": "Compras brutas de valores y aumentos positivos del coste base registrados mediante snapshots ÷ ingresos, todo dentro del rango seleccionado.",
+      "insufficient_data": "No tenías ninguna cuenta de inversión abierta durante este periodo, así que no podemos medir esta parte de tus finanzas.",
+      "unlock": "Abre una cuenta de inversión, o elige un rango en el que ya tuvieras alguna abierta.",
+      "runway_unlock": "Elige un rango con al menos 4 transacciones y algún gasto registrado para poder calcular tu colchón de emergencia."
+    },
+    "howCalculated": {
+      "action": "Cómo se calcula tu nota",
+      "intro": "Tu nota combina estos 5 indicadores, cada uno con su propio peso. Cuando no hay datos suficientes para alguno todavía, su peso se reparte proporcionalmente entre el resto, para que tu nota pueda seguir llegando a 100.",
+      "notAvailable": "Aún no se cuenta"
+    },
+    "composition": {
+      "earned": "Conseguidos",
+      "earnedDescr": "Puntos que ya has ganado con los datos de este rango.",
+      "pending": "Por conseguir",
+      "pendingDescr": "Lo que te falta en los indicadores que sí se pueden medir hoy.",
+      "paused": "Sin medir",
+      "pausedDescr": "{{indicators}}: no los usas todavía, así que no podemos medir sus puntos.",
+      "scoreExplanation": "Tu nota ({{score}}) solo tiene en cuenta los {{measurable}} puntos que hoy podemos medir, así que los que no podemos medir no te penalizan.",
+      "total": "Total"
+    },
+    "lowReliability": "Esta nota se apoya solo en <b>{{measurable}} de los {{total}} indicadores</b>, así que tómatela como un primer boceto: cuantos más uses, más se ajustará a tu realidad.",
+    "shortRange": "Un rango <b>menor de un mes</b> deja fuera nóminas y recibos, lo que distorsiona indicadores como tu tasa de ahorro. Amplíalo para ver una nota más estable.",
+    "unreliableShort": "Poco fiable",
+    "pointsContribution": "Aporta {{earned}} de {{total}} pts",
+    "pointsOfTotal": "{{earned}} de {{total}} pts",
+    "pointsShort": "{{value}} pts",
+    "pausedPoints": "{{total}} pts sin medir",
+    "pausedShort": "Sin medir",
+    "aboutIndicator": "Sobre este indicador",
+    "formulaLabel": "Cómo se calcula",
+    "howToUnlock": "Cómo desbloquearlo",
+    "indicatorsLabel": "Indicadores",
+    "yourOwnPast": "Tu propio pasado",
+    "noComparisonNote": "La app es tuya y solo tuya: no te comparamos con otros usuarios, te comparamos contigo.",
+    "previousPeriodLabel": "Periodo anterior",
+    "nowLabel": "Ahora"
   },
   "STATS": {
     "title": "Estadísticas",
     "balance": "Saldo",
     "final-balance": "Saldo final",
+    "final-net-worth": "Patrimonio final",
     "balance-by-account": "Saldo por cuentas",
     "balance-by-account-subtitle": "¿Donde tengo la mayor parte de mi dinero?",
     "balance-by-currency": "Saldo por divisas",
@@ -293,6 +375,8 @@
     "balance-evolution-subtitle": "¿Tengo más dinero que antes?",
     "net-worth": "Patrimonio",
     "net-worth-subtitle": "La diferencia entre lo que tienes y lo que debes.",
+    "net-worth-gross": "Patrimonio bruto",
+    "net-worth-net": "Patrimonio neto",
     "net-worth-composition": "Composición del patrimonio",
     "net-worth-composition-subtitle": "Reparto entre cuentas, inversiones y deudas.",
     "portfolio": "Cartera",
@@ -301,7 +385,7 @@
     "portfolio-heat-map": "Mapa de calor",
     "portfolio-heat-map-subtitle": "Cuanto más grande el bloque, mayor es la posición. Cuanto más verde, mejor le va.",
     "daily-performance": "Diario",
-    "compared-to-previous-period": "Frente al periodo anterior",
+    "compared-to-previous-period": "vs periodo anterior",
     "cash-flow": "Flujo de caja",
     "cash-flow-subtitle": "¿Estoy gastando menos de lo que gano?",
     "by-periods": "Por periodos",
@@ -370,6 +454,7 @@
       "accept-dialog.title": "Aceptar transacción",
       "accept-dialog.msg-single": "El estado de la transacción pasará a ser nulo. Puedes volver a editar el estado de esta transacción cuando lo desees",
       "accept-dialog.msg": "Esta acción creará una transacción nueva con fecha {{date}}. Podrás consultar los detalles de esta transacción en la página de transacciones",
+      "accept-dialog.trade": "{{quantity}} unidades de {{security}} a {{price}} {{currency}}, el último precio. Podrás editarla después.",
       "recurrent-rule-finished": "La regla recurrente se ha completado, ya no hay mas pagos a realizar!"
     },
     "LIST": {
@@ -378,6 +463,10 @@
       "searcher.placeholder": "Busca por categoría, descripción...",
       "searcher.no-results": "No se han encontrado transacciones que coincidan con los criterios de busqueda",
       "loading": "Cargando más transacciones...",
+      "upcoming": {
+        "one": "{{n}} transacción próxima",
+        "other": "{{n}} transacciones próximas"
+      },
       "selected.short": {
         "one": "{{n}} seleccionada",
         "other": "{{n}} seleccionadas"
@@ -386,6 +475,11 @@
         "one": "{{n}} transacción seleccionada",
         "other": "{{n}} transacciones seleccionadas"
       },
+      "selected_of": {
+        "one": "{{n}} de {{total}} seleccionada",
+        "other": "{{n}} de {{total}} seleccionadas"
+      },
+      "shown": "mostrado",
       "BULK_EDIT": {
         "dates": "Editar fechas",
         "categories": "Editar categorías",
@@ -494,6 +588,10 @@
     "FORM": {
       "from": "Cuenta origen",
       "to": "Cuenta destino",
+      "label-from": "Desde",
+      "label-to": "Hacia",
+      "custom-amounts": "Importes personalizados",
+      "difference": "de diferencia",
       "VALUE-IN-DESTINY": {
         "title": "Cantidad transferida en destino",
         "amount-short": "{{amount}} a cuenta de destino"
@@ -504,11 +602,15 @@
     "title": "Movimientos recurrentes",
     "title.short": "Mov. recurrentes",
     "empty": "Parece que no posees ninguna transacción recurrente. Crea una transacción que se repita mensual, anual o semanalmente y aparecerá aquí",
+    "empty-for-type": "No tienes ninguna transacción recurrente de este tipo. Cambia el filtro de arriba para ver el resto de tus recurrencias",
     "total-expense.title": "Gasto total por periodo",
+    "total-income.title": "Ingreso total por periodo",
+    "total-all.title": "Total por periodo",
     "total-expense.descr": "* Sin considerar la fecha de inicio y fin de cada recurrencia",
     "DETAILS": {
       "title": "Transaccion recurrente",
       "descr": "A continuación se muestran próximos movimientos de esta transacción. Podrás aceptar el primero de ellos o saltar este movimiento",
+      "generated-transaction-status": "Estado al aceptar: {{status}}",
       "last-payment-info": "Este movimiento es el último de la regla recurrente, por lo que se eliminará esta regla de forma automática al confirmar esta acción",
       "delete-header": "Eliminar transacción recurrente",
       "delete-message": "Esta acción es irreversible y no afectará a transacciones que ya hayas confirmado/pagado"
@@ -561,14 +663,15 @@
       "saving": "Cuenta de ahorros",
       "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
       "investment": "Cuenta de inversión",
-      "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones"
+      "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones",
+      "locked_warn": "Esta cuenta ya no puede cambiar de tipo, porque ya tiene posiciones, operaciones o instantáneas."
     },
     "TRACKING_MODES": {
       "title": "Modo de seguimiento",
       "transactions": "Transacciones",
-      "transactions_descr": "Las posiciones se calculan automáticamente a partir de tus operaciones de compra y venta.",
+      "transactions_descr": "Las posiciones se calculan automáticamente a partir de tus operaciones de compra y venta. Ideal si tienes (o quieres mantener) un historial completo de operaciones y buscas un coste base preciso.",
       "holdings": "Posiciones",
-      "holdings_descr": "Introduce tus posiciones manualmente como snapshots con fecha (cantidad y coste medio).",
+      "holdings_descr": "Introduce tus posiciones manualmente como snapshots con fecha (cantidad y coste medio). Ideal si solo conoces tu posición actual y no quieres registrar cada operación. Tus ingresos, gastos y transferencias en esta cuenta se siguen registrando con normalidad en ambos modos.",
       "switch_warn": "Cada modo calcula tus posiciones a partir de una fuente distinta. Al guardar, tus posiciones actuales se convertirán al nuevo modo. Las fechas anteriores se valorarán con el historial que ya tenga ese modo."
     },
     "FORM": {
@@ -783,16 +886,8 @@
         "active-on-track": "Vas bien",
         "active-overspending": "Gastando de más",
         "active-indeterminate": "Activo",
-        "success": "Objetivo cumplido",
-        "fail": "Presupuesto excedido"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Puedes gastar {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes para cumplir con el presupuesto",
-        "active-overspending": "Para volver al camino correcto, deberías limitar tu gasto a {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes de este presuesto",
-        "active-indeterminate": "Te queda {{ amount }} para gastar.",
-        "active-exceeded": "Ya has excedido el límite de tu presupuesto por {{ amount }}. Si no encuentras ningún ingreso para este presupuesto, deberías dejar de gastar durante el resto de su periodo",
-        "success": "¡Buen trabajo! Este presupuesto ha finalizado con éxito. Sigue creando presupuestos para gestionar tus gastos",
-        "fail": "Has excedido el presupuesto por {{ amount }}. ¡Intenta tener más cuidado la próxima vez!"
+        "success": "Cumplido",
+        "fail": "Excedido"
       }
     }
   },
@@ -842,16 +937,34 @@
         "active-on-track": "En camino",
         "active-behind-schedule": "Por detrás",
         "active-indeterminate": "Activo",
-        "success": "Objetivo alcanzado",
-        "fail": "Objetivo fallido"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "¡Vas por buen camino! Tienes que ahorrar {{ dailyAmount }} al día durante los {{ remainingDays }} días restantes",
-        "active-behind-schedule": "Vas con retraso. Tienes que ahorrar {{ dailyAmount }} al día para alcanzar tu objetivo en {{ remainingDays }} días",
-        "active-indeterminate": "Necesitas {{ amount }} más para alcanzar tu objetivo.",
-        "success": "¡Felicidades! Has alcanzado tu objetivo.",
-        "fail": "No has alcanzado tu objetivo por {{ amount }}."
+        "success": "Alcanzado",
+        "fail": "Fallido"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "restantes",
+    "over": "de exceso",
+    "spent": "gastado",
+    "saved": "ahorrado",
+    "CHART": {
+      "spent": "Gastado",
+      "saved": "Ahorrado",
+      "projected": "Proyección",
+      "pace": "Ritmo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "al día, queda {{n}} día",
+        "other": "al día, quedan {{n}} días"
+      },
+      "per-day-short": "al día",
+      "per-day-help": "Cuánto puedes añadir cada día hasta el final del periodo para alcanzar la cantidad objetivo",
+      "above-pace": "sobre el ritmo",
+      "below-pace": "bajo el ritmo",
+      "pace-help": "Diferencia entre la cantidad actual y la esperada a día de hoy si se repartiera de forma uniforme durante todo el periodo",
+      "projected": "proyectado",
+      "projected-help": "Cantidad estimada al final del periodo si se mantiene el ritmo actual"
     }
   },
   "DEBTS": {
@@ -936,6 +1049,7 @@
   },
   "ASSETS": {
     "title": "Activos",
+    "linked_asset": "Activo vinculado",
     "empty_description": "Aún no has creado ningún activo. Se puede realizar un seguimiento de activos como bienes raíces, vehículos o objetos de colección con sus valoraciones.",
     "create": "Agregar activo",
     "ADD": {
@@ -987,6 +1101,7 @@
       "choose_security": "Elige un valor",
       "create_security": "Crear nuevo valor",
       "security_name": "Nombre del valor",
+      "security": "Valor",
       "ticker": "Ticker / símbolo (opcional)",
       "security_type": "Tipo de valor",
       "current_price": "Precio actual",
@@ -1001,7 +1116,7 @@
       "edit_snapshot": "Editar instantánea",
       "SNAPSHOTS": {
         "history_title": "Historial de instantáneas",
-        "history_intro": "Cada instantánea guarda la cartera completa para una fecha. Al consultar un día, se aplica la más reciente en esa fecha o anterior.",
+        "history_intro": "Cada instantánea guarda el estado completo de la cuenta para una fecha determinada. Selecciona una para editarla.",
         "count": "{{n}} instantáneas",
         "new_snapshot": "Nueva",
         "no_snapshots": "Aún no hay instantáneas",
@@ -1013,14 +1128,19 @@
         "update": "Actualizar",
         "update_positions": "Actualizar posiciones",
         "full_portfolio": "cartera completa",
-        "editor_intro": "Indícanos cómo se compone tu cartera para el día {{date}}. Los valores que introduzcas en esta instantánea se usarán para calcular balances y estadísticas desde esta fecha hasta la de tu próxima instantánea.",
+        "how_it_works": "Cómo funcionan las instantáneas",
+        "snapshot_contents_description": "Una instantánea es un registro completo de esta cuenta el {{date}}. Introduce el efectivo no invertido y todas las posiciones que muestre tu bróker en esa fecha. Cualquier posición que omitas se considerará que ya no se mantiene.",
         "date_label": "Fecha de la instantánea",
+        "cash_label": "Efectivo",
+        "balance_effect_description": "Esta instantánea se utiliza para calcular saldos y estadísticas hasta la siguiente. El valor de las posiciones sigue los precios de mercado, mientras que las transacciones y transferencias posteriores a esta fecha modifican el efectivo. Si no se añade otra instantánea, estas reglas se aplican indefinidamente.",
         "overwrite_warning": "Ya existe una instantánea en esta fecha. Al guardar, se sustituirá.",
         "add_position": "Añadir otra posición",
+        "add_first_position": "Añade tu primera posición",
         "col_symbol": "Símbolo",
         "total_cost": "Coste total de la cartera",
+        "snapshot_total": "Total a coste",
         "save": "Guardar instantánea",
-        "remove_hint": "Para eliminar una posición basta con borrar su fila: la instantánea es la foto completa, no un movimiento.",
+        "zero_qty_hint": "Una cantidad de 0 mantiene esta posición en la instantánea. Para quitarla por completo, borra la fila.",
         "delete_title": "¿Eliminar instantánea?",
         "delete_descr": "Esta instantánea se eliminará. Si era la más reciente, tus posiciones actuales volverán a la instantánea anterior."
       }
@@ -1033,7 +1153,7 @@
       "empty_description": "Aún no has añadido ningún valor. Añade una acción, fondo o cripto para empezar a seguir tu cartera.",
       "total_value": "Valor de la cartera",
       "group_by_type": "Agrupar por tipo de valor",
-      "current_price": "Precio actual",
+      "price": "Precio",
       "market_value": "Valor de mercado",
       "units_held": "Unidades",
       "unrealized_pnl": "P&L no realizado",
@@ -1095,6 +1215,9 @@
       },
       "link_transaction": {
         "success": "Transacción vinculada correctamente"
+      },
+      "unlink_transaction": {
+        "title": "Desvincular del activo"
       }
     },
     "DETAILS": {
@@ -1105,7 +1228,6 @@
       "acquisition_transaction_badge": "Adquisición",
       "select_account": "Seleccione una cuenta",
       "update_value": "Actualizar valor",
-      "trade_form_asset_column": "Activo",
       "notes_optional": "Notas (opcional)",
       "performance_title": "Rendimiento",
       "performance_return": "Rentabilidad del periodo",
@@ -1123,14 +1245,28 @@
       "no_liabilities": "Todavía no tienes ninguna deuda.",
       "name": "Nombre del activo",
       "name_required": "Por favor ingrese un nombre de activo",
+      "NAME_HINTS": {
+        "real_estate": "Casa de la playa, Piso en el centro...",
+        "vehicle": "Tesla Model 3, Furgoneta familiar...",
+        "precious_metal": "Lingotes de oro, Monedas de plata...",
+        "jewelry_art": "Rolex Daytona, Grabado de Picasso...",
+        "other": "Guitarra de coleccionista, Dominio web..."
+      },
       "description": "Descripción",
       "initial_value": "Valor inicial",
       "initial_value_required": "Por favor ingrese un valor inicial",
       "initial_value_invalid": "Por favor ingresa un número válido",
+      "acquisition_info": "Información de la adquisición",
+      "purchase_value": "Valor de compra",
+      "purchase_value_option": "Indicar el valor de compra",
+      "purchase_value_help": "Si se deja vacío, se usará la primera valoración como precio de compra.",
+      "current_value": "Valor actual",
+      "current_value_help": "Opcional. Crea una valoración con la fecha de hoy.",
       "link_acquisition_transaction": "Vincular una transacción de compra",
       "link_acquisition_transaction_descr": "Elige el gasto que representa la compra de este activo. Su importe (convertido a la divisa del activo) y su fecha se usarán como valor inicial y fecha de adquisición",
       "acquisition_transaction": "Transacción de adquisición",
       "creation_date_before_acquisition_transaction": "La fecha de adquisición no puede ser anterior a la fecha de la transacción vinculada",
+      "acquisition_date_from_transaction": "La fecha de adquisición se toma de la transacción vinculada y no se puede editar. Desvincula la transacción para cambiarla.",
       "currency": "Divisa",
       "select_currency": "Por favor seleccione una moneda",
       "creation_date": "Fecha de creación",
@@ -1147,7 +1283,7 @@
       "edit_valuation": "Editar valoración",
       "value": "Valor",
       "net_contribution": "Aportación neta",
-      "net_contribution_help": "El dinero que has aportado a este activo: su valor inicial más cualquier transacción de compra/venta vinculada. Es independiente de los cambios del valor de mercado, que registras manualmente mediante las valoraciones.",
+      "net_contribution_help": "El dinero que has aportado a este activo: su valor inicial más cualquier transacción vinculada. Es independiente de los cambios del valor de mercado, que registras manualmente mediante las valoraciones.",
       "value_required": "Por favor introduce un valor",
       "value_invalid": "Por favor ingresa un número válido",
       "update_value_success": "Valoración agregada exitosamente",

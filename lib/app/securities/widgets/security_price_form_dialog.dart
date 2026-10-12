@@ -18,10 +18,8 @@ Future<SecurityPriceInDB?> showSecurityPriceFormDialog(
   BuildContext context,
   SecurityPriceFormDialog dialog,
 ) {
-  return showModalBottomSheet<SecurityPriceInDB>(
+  return RouteUtils.showResponsiveSheet<SecurityPriceInDB>(
     context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
     builder: (context) => dialog,
   );
 }

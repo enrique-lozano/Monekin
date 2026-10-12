@@ -22,10 +22,8 @@ Future<Category?> showCategoryPickerModal(
   BuildContext context, {
   required CategoryPicker modal,
 }) {
-  return showModalBottomSheet<Category>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<Category>(
+    context,
     builder: (context) {
       return modal;
     },
@@ -59,6 +57,11 @@ class _CategoryPickerState extends State<CategoryPicker>
 
   final searchContoller = TextEditingController();
 
+  /// In a popover, set right after the user taps a top-level category so the
+  /// subcategory stream can decide whether to auto-close (leaf) or stay open to
+  /// let the user refine.
+  bool _awaitingSubcatCheck = false;
+
   @override
   void initState() {
     super.initState();
@@ -70,7 +73,7 @@ class _CategoryPickerState extends State<CategoryPicker>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return buildDraggableSheet(
+    final sheet = buildDraggableSheet(
       minChildSize: 0.64,
       defaultSize: 0.65,
       builder: (context, scrollController) {
@@ -112,6 +115,8 @@ class _CategoryPickerState extends State<CategoryPicker>
                 children: [
                   TextFormField(
                     controller: searchContoller,
+                    focusNode: searchFocusNode,
+                    autofocus: ModalPresentation.isPopover(context),
                     decoration: InputDecoration(
                       filled: false,
                       isDense: false,
@@ -153,6 +158,20 @@ class _CategoryPickerState extends State<CategoryPicker>
                   builder: (context, snapshot) {
                     final subcategories = snapshot.data;
 
+                    // Popover leaf-close: once we know the tapped category has
+                    // no subcategories, commit it and close (there is no save
+                    // button). Categories with subcategories stay open to refine.
+                    if (_awaitingSubcatCheck &&
+                        ModalPresentation.isPopover(context) &&
+                        snapshot.hasData) {
+                      _awaitingSubcatCheck = false;
+                      if (subcategories!.isEmpty) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          RouteUtils.popRoute(selectedCategory);
+                        });
+                      }
+                    }
+
                     return AnimatedExpanded(
                       axis: Axis.vertical,
                       expand: snapshot.hasData && snapshot.data!.isNotEmpty,
@@ -188,17 +207,25 @@ class _CategoryPickerState extends State<CategoryPicker>
                 ),
 
               //  -- End subcategory selector --
-              BottomSheetFooter(
-                onSaved: selectedCategory == null
-                    ? null
-                    : () {
-                        RouteUtils.popRoute(selectedCategory);
-                      },
-              ),
+              if (!ModalPresentation.isPopover(context))
+                BottomSheetFooter(
+                  onSaved: selectedCategory == null
+                      ? null
+                      : () {
+                          RouteUtils.popRoute(selectedCategory);
+                        },
+                ),
             ],
           ),
         );
       },
+    );
+
+    // A parent-only selection (or one refined via subcategory chips) has no
+    // save button in a popover: commit whatever is selected on dismiss.
+    return PopoverCommitOnDismiss(
+      onCommit: () => RouteUtils.popRoute(selectedCategory),
+      child: sheet,
     );
   }
 
@@ -249,6 +276,14 @@ class _CategoryPickerState extends State<CategoryPicker>
                 padding: 0,
               ),
               onSelected: (selected) {
+                // In a popover, picking a subcategory is a final choice.
+                if (ModalPresentation.isPopover(context)) {
+                  RouteUtils.popRoute(
+                    selected ? subcat : subcat.parentCategory,
+                  );
+                  return;
+                }
+
                 if (selected) {
                   selectedCategory = subcat;
                 } else {
@@ -293,12 +328,24 @@ class _CategoryPickerState extends State<CategoryPicker>
                   selectedCategory?.id == category.id ||
                   selectedCategory?.parentCategoryID == category.id,
               onTap: () {
-                selectedCategory = category;
                 HapticFeedback.lightImpact();
+
+                // In a popover with no subcategory step, a top-level tap is the
+                // final choice.
+                if (ModalPresentation.isPopover(context) &&
+                    !widget.showSubcategories) {
+                  RouteUtils.popRoute(category);
+                  return;
+                }
+
+                selectedCategory = category;
 
                 if (searchContoller.text.isNotNullNorEmpty) {
                   searchContoller.text = '';
                 }
+
+                // Let the subcategory stream decide whether to auto-close.
+                _awaitingSubcatCheck = ModalPresentation.isPopover(context);
 
                 rebuild();
               },

@@ -1,6 +1,7 @@
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/shared/key_value_pair.dart';
 import 'package:monekin/core/database/services/shared/key_value_service.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// The keys of the avalaible settings of the app
 enum SettingKey {
@@ -76,5 +77,16 @@ class UserSettingService
           ..where((tbl) => tbl.settingKey.equalsValue(settingKey)))
         .map((e) => e.settingValue)
         .watchSingleOrNull();
+  }
+
+  /// Reactive stream of the user profile (name + avatar). Emits a new value
+  /// whenever either setting changes in the DB, so widgets displaying the
+  /// profile can rebuild on their own without refreshing the whole app state.
+  Stream<({String? userName, String? avatar})> getUserProfile() {
+    return Rx.combineLatest2(
+      getSettingFromDB(SettingKey.userName),
+      getSettingFromDB(SettingKey.avatar),
+      (userName, avatar) => (userName: userName, avatar: avatar),
+    );
   }
 }

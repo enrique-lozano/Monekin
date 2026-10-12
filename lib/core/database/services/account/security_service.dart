@@ -58,7 +58,10 @@ class SecurityService {
   /// tracked manually and we keep no dedicated price-history table.
   Stream<List<TransactionInDB>> getSecurityTrades(String securityId) {
     return (db.select(db.transactions)
-          ..where((tbl) => tbl.securityID.equals(securityId))
+          ..where(
+            (tbl) =>
+                tbl.securityID.equals(securityId) & tbl.intervalPeriod.isNull(),
+          )
           ..orderBy([(tbl) => OrderingTerm.asc(tbl.date)]))
         .watch();
   }
@@ -127,10 +130,7 @@ class SecurityService {
             point,
             onConflict: DoUpdate(
               (_) => SecurityPricesCompanion(price: Value(point.price)),
-              target: [
-                db.securityPrices.securityID,
-                db.securityPrices.date,
-              ],
+              target: [db.securityPrices.securityID, db.securityPrices.date],
             ),
           );
     });
@@ -200,9 +200,7 @@ class SecurityService {
         await (db.selectOnly(db.securityPrices)
               ..addColumns([db.securityPrices.date])
               ..where(db.securityPrices.securityID.equals(securityId)))
-            .map(
-              (row) => row.readWithConverter(db.securityPrices.date)!,
-            )
+            .map((row) => row.readWithConverter(db.securityPrices.date)!)
             .get();
 
     return existingDates.map(_dayOnly).where(days.contains).toSet();

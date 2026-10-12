@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:monekin/core/database/services/user-setting/utils/get_theme_from
 import 'package:monekin/core/presentation/helpers/global_snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/theme.dart';
+import 'package:monekin/core/routes/content_modal_observer.dart';
 import 'package:monekin/core/routes/handle_will_pop_scope.dart';
 import 'package:monekin/core/routes/root_navigator_observer.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -56,6 +58,23 @@ void main() async {
 
   debugPaintSizeEnabled = false;
   runApp(InitializeApp(key: appStateKey));
+
+  _setupDesktopWindow();
+}
+
+/// Configures the desktop window (min size + initial size) once bitsdojo's
+/// custom-frame window is ready.
+void _setupDesktopWindow() {
+  if (kIsWeb || !AppUtils.isDesktop) return;
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1280, 720);
+
+    appWindow.minSize = const Size(380, 500);
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
 
 // ignore: library_private_types_in_public_api
@@ -199,8 +218,8 @@ class MaterialAppContainer extends StatelessWidget {
           title: 'Monekin',
           debugShowCheckedModeBanner: false,
           color: Theme.of(context).colorScheme.primary,
-          shortcuts: appShortcuts,
-          actions: keyboardIntents,
+          shortcuts: {...WidgetsApp.defaultShortcuts, ...appShortcuts},
+          actions: {...WidgetsApp.defaultActions, ...keyboardIntents},
           locale: TranslationProvider.of(context).flutterLocale,
           scrollBehavior: ScrollBehaviorOverride(),
           supportedLocales: AppLocaleUtils.supportedLocales,
@@ -230,7 +249,21 @@ class MaterialAppContainer extends StatelessWidget {
               getSystemUiOverlayStyle(Theme.of(context).brightness),
             );
 
-            return BreakpointProvider(child: child ?? const SizedBox.shrink());
+            Widget content = child ?? const SizedBox.shrink();
+
+            // The window title bar lives *above* the root navigator, so nothing
+            // routed on top of it (side drawers, popovers, dialogs and their
+            // scrims) can ever cover the window controls or the drag area.
+            if (AppUtils.isDesktop) {
+              content = Column(
+                children: [
+                  WindowBar(key: windowBarKey),
+                  Expanded(child: content),
+                ],
+              );
+            }
+
+            return BreakpointProvider(child: content);
           },
           home: HandleWillPopScope(
             child: Builder(
@@ -242,7 +275,7 @@ class MaterialAppContainer extends StatelessWidget {
                   ],
                 );
 
-                final mainContent = ColoredBox(
+                return ColoredBox(
                   color: getWindowBackgroundColor(context),
                   child: Row(
                     children: [
@@ -253,9 +286,19 @@ class MaterialAppContainer extends StatelessWidget {
                           builder: (context) {
                             if (AppUtils.isDesktop &&
                                 !AppUtils.isMobileLayout(context)) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(12),
+                              // Square content area, separated from the sidebar
+                              // by a thin border instead of a rounded corner.
+                              return DecoratedBox(
+                                position: DecorationPosition.foreground,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    left: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant
+                                          .withValues(alpha: 0.5),
+                                    ),
+                                  ),
                                 ),
                                 child: mainSide,
                               );
@@ -267,17 +310,6 @@ class MaterialAppContainer extends StatelessWidget {
                       ),
                     ],
                   ),
-                );
-
-                if (!AppUtils.isDesktop) {
-                  return mainContent;
-                }
-
-                return Column(
-                  children: [
-                    WindowBar(key: windowBarKey),
-                    Expanded(child: mainContent),
-                  ],
                 );
               },
             ),
@@ -300,6 +332,7 @@ class InitialPageRouteNavigator extends StatelessWidget {
       controller: MaterialApp.createMaterialHeroController(),
       child: Navigator(
         key: navigatorKey,
+        observers: [contentModalObserver],
         onGenerateRoute: (settings) => RouteUtils.getPageRouteBuilder(
           introSeen ? PageSwitcher(key: tabsPageKey) : const IntroPage(),
         ),

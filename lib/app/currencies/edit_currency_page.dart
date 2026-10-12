@@ -64,7 +64,12 @@ class _EditCurrencyPageState extends State<EditCurrencyPage> {
         }
       },
       child: PageFramework(
-        title: t.currencies.currency_form.edit,
+        title: widget.currency.name,
+        subtitle: Text('${widget.currency.code} · ${widget.currency.symbol}'),
+        icon: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: widget.currency.displayFlagIcon(size: 38),
+        ),
         persistentFooterButtons: [
           PersistentFooterButton(
             child: FilledButton.icon(

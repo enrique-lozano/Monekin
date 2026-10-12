@@ -94,7 +94,12 @@ class _AnimatedExpandedState extends State<AnimatedExpanded>
         axis: widget.axis,
         axisAlignment: 1.0,
         sizeFactor: sizeAnimation,
-        child: widget.child,
+        // On the horizontal axis [SizeTransition] fills the available height
+        // and pins the child to the top edge, which would misalign a child
+        // that is shorter than its siblings in a row.
+        child: widget.axis == Axis.horizontal
+            ? Center(widthFactor: 1, child: widget.child)
+            : widget.child,
       ),
     );
   }

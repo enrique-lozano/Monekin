@@ -12,6 +12,7 @@ class NoResults extends StatelessWidget {
     this.padding,
     this.noSearchResultsVariation = false,
     this.showIllustration = true,
+    this.icon,
     this.title,
     this.bottom,
   });
@@ -23,6 +24,11 @@ class NoResults extends StatelessWidget {
 
   final bool noSearchResultsVariation;
   final bool showIllustration;
+
+  /// Optional icon shown above the text in the compact variant (i.e. when
+  /// [showIllustration] is `false`), as a lightweight stand-in for the
+  /// illustration when embedded in cards/lists.
+  final IconData? icon;
 
   final Widget? bottom;
 
@@ -81,6 +87,16 @@ class NoResults extends StatelessWidget {
                   ),
 
                 if (showIllustration) const SizedBox(height: 30),
+
+                if (!showIllustration && icon != null) ...[
+                  Icon(
+                    icon,
+                    size: 42,
+                    color: (tintColor ?? Theme.of(context).colorScheme.primary)
+                        .withOpacity(0.6),
+                  ),
+                  const SizedBox(height: 14),
+                ],
 
                 if (title != null) ...[
                   Text(

@@ -38,7 +38,7 @@ class TransactionDateSelector extends StatelessWidget {
             }
           },
         ),
-        if (date.compareTo(DateTime.now()) > 0)
+        if (c.recurrentRule.isNoRecurrent && date.compareTo(DateTime.now()) > 0)
           InlineInfoCard(
             margin: const EdgeInsets.fromLTRB(12, 8, 12, 16),
             text: t.transaction.form.validators.date_max,

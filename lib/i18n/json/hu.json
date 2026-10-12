@@ -45,6 +45,7 @@
     "or": "vagy",
     "understood": "Megértve",
     "unspecified": "Meghatározatlan",
+    "min_one_entry_required": "Legalább egy értéknek meg kell maradnia",
     "quick_actions": "Gyorsműveletek",
     "details": "Részletek",
     "balance": "Egyenleg",
@@ -55,6 +56,7 @@
     "today": "Ma",
     "yesterday": "Tegnap",
     "filters": "Szűrők",
+    "all": "Összes",
     "empty-warn": "Hoppá! Ez nagyon üres.",
     "search-no-results": "Egyetlen elem sem felel meg a keresési feltételeknek",
     "insufficient-data": "Hiányos adatok",
@@ -176,7 +178,7 @@
     "next": "Tovább",
     "select-your-currency": "Válassza ki a pénznemet",
     "welcome.subtitle": "Az Ön személyes pénzügyi menedzsere",
-    "welcome.subtitle2": "100% -ban nyitott, és 100% -ban ingyenes",
+    "welcome.subtitle2": "100% -ban nyitott, és 100% -ban privát",
     "welcome.footer": "A bejelentkezéssel elfogadja az <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Felhasználási feltételeit</a>",
     "offline.descr.title": "OFFLINE SZÁMLA:",
     "offline.descr": "Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.",
@@ -264,7 +266,10 @@
       "text.other": "Ezzel a költési aránnyal körülbelül <b>{{ n }} hónapot</b> tudna túlélni jövedelem nélkül.",
       "text.infinite": "Ezzel a költési aránnyal nagyjából <b>az egész életében</b> meg tudna élni jövedelem nélkül.",
       "suggestion": "Ne feledje, hogy célszerű ezt az arányt mindig legalább 5 hónap felett tartani. Ha úgy látja, hogy nem rendelkezik elegendő megtakarítási tartalékkal, csökkentse a felesleges kiadásokat.",
-      "insufficient_data": "Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét."
+      "insufficient_data": "Úgy tűnik, nincs elég rögzített kiadásunk ahhoz, hogy kiszámolhassuk, hány hónapig tudna bevétel nélkül megélni. Adjon meg néhány tranzakciót, és térjen vissza ide, hogy ellenőrizze a pénzügyi helyzetét.",
+      "valueShort": "{{n}} hónap",
+      "formula": "A számláin elérhető pénz ÷ az átlagos havi kiadása ebben az időszakban.",
+      "unlock": "Rögzítsen legalább 4 tranzakciót ebben az időszakban, néhányat kiadásként."
     },
     "savingsPercentage": {
       "title": "Megtakarítási százalék",
@@ -275,13 +280,85 @@
         "bad": "Ebben az időszakban sikerült megtakarítania a jövedelmének <b>{{value}}%-át</b>. Úgy gondoljuk azonban, hogy ennél még sokkal többet is tehet!",
         "very_bad": "Hűha, sajnos ebben az időszakban semmit sem sikerült megtakarítania."
       },
-      "suggestion": "Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani."
-    }
+      "suggestion": "Ne feledje, hogy a jövedelmének legalább 15-20%-át célszerű megtakarítani.",
+      "formula": "(Bevételek − kiadások) ÷ bevételek, mind a kiválasztott időszakon belül.",
+      "insufficient_data": "Ebben az időszakban nincs elég mozgás ahhoz, hogy megítélhessük, a pénzének mekkora részét tartja meg.",
+      "unlock": "Rögzítsen egy bevételt ebben az időszakban, vagy legalább 10 tranzakciót bármilyen típusból."
+    },
+    "debtToAssetRatio": {
+      "title": "Adósság-vagyon arány",
+      "subtitle": "A vagyonának mekkora részét ellensúlyozza a fennálló adóssága",
+      "text": {
+        "value": "A fennálló adóssága a bruttó vagyonának <b>{{value}}%</b>-a.",
+        "no_assets": "Van fennálló adóssága, de nincs rögzített vagyona, ami fedezné."
+      },
+      "suggestion": "Az alacsonyabb arány általában azt jelenti, hogy jobban fedezni tudja az adósságait a vagyonából.",
+      "insufficient_data": "Még nem követ nyomon adósságot vagy vagyontárgyat, így nincs mit értékelni.",
+      "formula": "Fennálló adósság ÷ bruttó vagyon, mindkettő a kiválasztott időszak végén.",
+      "unlock": "Adja meg valamelyik adósságát vagy vagyontárgyát (egy házat, egy autót...)."
+    },
+    "cashFlowConsistency": {
+      "title": "Pénzáramlás egyenletessége",
+      "subtitle": "Az időszak mekkora részében maradt a költése a bevételein belül",
+      "text": {
+        "good": "Az időszak <b>{{value}}%</b>-ában a lehetőségein belül költött. A pénzáramlása kiegyensúlyozott.",
+        "normal": "Az időszak <b>{{value}}%</b>-ában a lehetőségein belül költött.",
+        "bad": "Az időszaknak csak a <b>{{value}}%</b>-ában költött a lehetőségein belül, így a pénzáramlása erősen ingadozik."
+      },
+      "suggestion": "A nagy kifizetések elosztása és az egyenletes tempó sokkal kiszámíthatóbbá teszi a pénzügyeit.",
+      "insufficient_data": "Ebben az időszakban nincs elég elosztott aktivitás ahhoz, hogy megítéljük a pénzáramlás egyenletességét.",
+      "formula": "Az időszakot több szakaszra osztjuk, és elosztjuk köztük a bevételeit. Ha egy szakaszban legfeljebb a rá jutó részt költi el, az teljesen számít; ha a kétszeresét, egyáltalán nem, a kettő között pedig arányosan.",
+      "unlock": "Válasszon olyan időszakot, amelynek legalább 3 szakaszában van aktivitás."
+    },
+    "investmentRatio": {
+      "title": "Befektetési arány",
+      "subtitle": "A bevételének mekkora részét fektette értékpapírba ebben az időszakban",
+      "text": {
+        "value": "A bevételének <b>{{value}}%</b>-át fektette értékpapírba ebben az időszakban.",
+        "none": "Ebben az időszakban nem fektetett pénzt értékpapírba."
+      },
+      "suggestion": "Ha rendszeresen befekteti a bevétele egy részét, a pénze gyorsabban nő, mint az infláció.",
+      "formula": "Értékpapírba fektetett összeg ÷ bevétel, mindkettő a kiválasztott időszakon belül.",
+      "insufficient_data": "Ebben az időszakban nem volt nyitott befektetési számlája, így nem tudjuk mérni a pénzügyeinek ezt a részét.",
+      "unlock": "Nyisson befektetési számlát, vagy válasszon olyan időszakot, amelyben már nyitva volt egy."
+    },
+    "howCalculated": {
+      "action": "Hogyan számoljuk ki az értékelését",
+      "intro": "Az értékelése ezt az 5 mutatót vonja össze, mindegyiket a saját súlyával. Ha valamelyikhez még nincs elég adat, a súlya arányosan szétoszlik a többi között, így az értékelése továbbra is elérheti a 100-at.",
+      "notAvailable": "Még nem számít bele"
+    },
+    "composition": {
+      "earned": "Megszerezve",
+      "earnedDescr": "Pontok, amelyeket már megszerzett ennek az időszaknak az adataiból.",
+      "pending": "Elérhető",
+      "pendingDescr": "Ami még hiányzik azoknál a mutatóknál, amelyeket ma mérni tudunk.",
+      "paused": "Nem mérhető",
+      "pausedDescr": "{{indicators}}: ezeket még nem használja, így a pontjaikat nem tudjuk mérni.",
+      "scoreExplanation": "Az értékelése ({{score}}) csak azt a {{measurable}} pontot veszi figyelembe, amit ma mérni tudunk, így a nem mérhetők nem rontják le.",
+      "total": "Összesen"
+    },
+    "lowReliability": "Ez az értékelés csak <b>{{measurable}} mutatón alapul az {{total}} közül</b>, tekintse hát első vázlatnak: minél többet használ, annál közelebb kerül a valóságához.",
+    "shortRange": "Az <b>egy hónapnál rövidebb</b> időszak kihagyja a fizetéseket és a számlákat, ami elrontja az olyan mutatókat, mint a megtakarítási százalék. Bővítse ki egy stabilabb értékeléshez.",
+    "unreliableShort": "Kevéssé megbízható",
+    "pointsContribution": "{{earned}} pontot ad a(z) {{total}}-ból",
+    "pointsOfTotal": "{{earned}} / {{total}} pont",
+    "pointsShort": "{{value}} pont",
+    "pausedPoints": "{{total}} pont nem mérhető",
+    "pausedShort": "Nem mérhető",
+    "aboutIndicator": "Erről a mutatóról",
+    "formulaLabel": "Hogyan számoljuk",
+    "howToUnlock": "Hogyan oldható fel",
+    "indicatorsLabel": "Mutatók",
+    "yourOwnPast": "A saját múltja",
+    "noComparisonNote": "Ez az alkalmazás csak az Öné: soha nem hasonlítjuk össze más felhasználókkal, hanem önmagával.",
+    "previousPeriodLabel": "Előző időszak",
+    "nowLabel": "Most"
   },
   "STATS": {
     "title": "Statisztika",
     "balance": "Egyenleg",
     "final-balance": "Végső egyenleg",
+    "final-net-worth": "Záró vagyon",
     "balance-by-account": "Számlák szerinti egyenleg",
     "balance-by-account-subtitle": "Hol van a legtöbb pénzem?",
     "balance-by-currency": "Egyenleg pénznemenként",
@@ -290,6 +367,8 @@
     "balance-evolution-subtitle": "Több pénzem van, mint korábban?",
     "net-worth": "Net worth",
     "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-gross": "Bruttó vagyon",
+    "net-worth-net": "Nettó vagyon",
     "net-worth-composition": "Net worth composition",
     "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "portfolio": "Portfólió",
@@ -298,7 +377,7 @@
     "portfolio-heat-map": "Hőtérkép",
     "portfolio-heat-map-subtitle": "Minél nagyobb a blokk, annál nagyobb a pozíció. Minél zöldebb, annál jobban teljesít.",
     "daily-performance": "Napi",
-    "compared-to-previous-period": "Az előző időszakhoz képest",
+    "compared-to-previous-period": "vs előző időszak",
     "cash-flow": "Pénzforgalom",
     "cash-flow-subtitle": "Kevesebbet költök, mint amennyit megkeresek?",
     "by-periods": "Időszakonként",
@@ -367,6 +446,7 @@
       "accept-dialog.title": "Tranzakció elfogadása",
       "accept-dialog.msg-single": "A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.",
       "accept-dialog.msg": "Ez a művelet egy új tranzakciót hoz létre {{date}} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.",
+      "accept-dialog.trade": "{{quantity}} egység {{security}}, {{price}} {{currency}} áron, a legutóbbi árfolyamon. Utólag szerkesztheti.",
       "recurrent-rule-finished": "Az ismétlődő szabály teljesült, nincs több kifizetés!"
     },
     "LIST": {
@@ -375,6 +455,10 @@
       "searcher.placeholder": "Keresés kategória, leírás alapján...",
       "searcher.no-results": "Nincs a keresési feltételeknek megfelelő tranzakció",
       "loading": "További tranzakciók betöltése...",
+      "upcoming": {
+        "one": "{{n}} közelgő tranzakció",
+        "other": "{{n}} közelgő tranzakció"
+      },
       "selected.short": {
         "one": "{{n}} kiválasztva",
         "other": "{{n}} kiválasztva"
@@ -491,6 +575,10 @@
     "FORM": {
       "from": "Eredeti számla",
       "to": "Célszámla",
+      "label-from": "Honnan",
+      "label-to": "Hová",
+      "custom-amounts": "Egyéni összegek",
+      "difference": "különbség",
       "VALUE-IN-DESTINY": {
         "title": "A rendeltetési helyre átutalt összeg",
         "amount-short": "{{amount}} a célszámlához"
@@ -501,11 +589,15 @@
     "title": "Ismétlődő tranzakciók",
     "title.short": "Ism. tranzakciók",
     "empty": "Úgy tűnik, hogy nincsenek ismétlődő tranzakciói. Hozzon létre havi, éves vagy heti ismétlődő tranzakciót, és az itt fog megjelenni.",
+    "empty-for-type": "Nincs ilyen típusú ismétlődő tranzakciója. Módosítsa a fenti szűrőt a többi ismétlődés megtekintéséhez",
     "total-expense.title": "Összes kiadás periódusonként",
+    "total-income.title": "Összes bevétel periódusonként",
+    "total-all.title": "Összesen periódusonként",
     "total-expense.descr": "* Az egyes ismétlődések kezdő és befejező időpontjának figyelembevétele nélkül",
     "DETAILS": {
       "title": "Ismétlődő tranzakció",
       "descr": "A tranzakció következő lépései az alábbiakban láthatók. Elfogadhatja az első lépést, vagy kihagyhatja ezt a lépést.",
+      "generated-transaction-status": "Állapot elfogadáskor: {{status}}",
       "last-payment-info": "Ez a mozgatás az utolsó az ismétlődő szabályban, így ez a szabály automatikusan törlődik a művelet megerősítésekor.",
       "delete-header": "Ismétlődő tranzakció törlése",
       "delete-message": "Ez a művelet visszafordíthatatlan, és nem érinti a már visszaigazolt/befizetett tranzakciókat."
@@ -560,14 +652,15 @@
       "investment": "Befektetési számla",
       "investment.descr": "Bróker-, kriptotőzsde- vagy portfóliószámla, amely eszközöket tartalmazhat. Kövesse nyomon befektetett tőkéjét, és frissítse minden eszköz értékét manuálisan értékelésekkel",
       "normal": "Normál számla",
-      "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását..."
+      "normal.descr": "Hasznos a napi pénzügyek rögzítéséhez. Ez a leggyakoribb számla, amely lehetővé teszi kiadások, bevételek hozzáadását...",
+      "locked_warn": "Ez a számla már nem tudja megváltoztatni a típusát, mert már vannak befektetései, ügyletei vagy pillanatfelvételei."
     },
     "TRACKING_MODES": {
       "title": "Követési mód",
       "transactions": "Tranzakciók",
-      "transactions_descr": "A pozíciókat a rendszer automatikusan számítja ki az Ön vételi és eladási kereskedéseiből.",
+      "transactions_descr": "A pozíciókat a rendszer automatikusan számítja ki az Ön vételi és eladási kereskedéseiből. Ez a legjobb választás, ha teljes kereskedési előzménnyel rendelkezik (vagy szeretne vezetni), és pontos bekerülési értéket szeretne.",
       "holdings": "Holdingok",
-      "holdings_descr": "Adja meg pozícióit manuálisan keltezett pillanatképként (mennyiség és átlagos költség).",
+      "holdings_descr": "Adja meg pozícióit manuálisan keltezett pillanatképként (mennyiség és átlagos költség). Ez a legjobb választás, ha csak az aktuális pozícióját ismeri, és nem szeretné rögzíteni minden egyes kereskedését. A számlán zajló bevételeket, kiadásokat és átutalásokat mindkét módban továbbra is a szokásos módon követi a rendszer.",
       "switch_warn": "Minden mód más forrásból számítja ki a pozícióidat. Mentéskor a jelenlegi pozícióid átkerülnek az új módba. A korábbi dátumokat az adott mód már meglévő előzményei alapján értékeljük."
     },
     "FORM": {
@@ -783,15 +876,7 @@
         "active-overspending": "Túlköltekezés",
         "active-indeterminate": "Aktív",
         "success": "Teljesítve",
-        "fail": "Költségvetés túllépve"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Naponta {{ dailyAmount }} összeget költhet a hátralévő {{ remainingDays }} napban",
-        "active-overspending": "Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi {{ dailyAmount }} összegre a hátralévő {{ remainingDays }} napban",
-        "active-indeterminate": "Még {{ amount }} elkölthető.",
-        "active-exceeded": "Már túllépte a költségvetési keretet {{ amount }} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében",
-        "success": "Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez",
-        "fail": "Túllépte a költségvetést {{ amount }} összeggel. Próbáljon meg óvatosabb lenni legközelebb!"
+        "fail": "Túllépve"
       }
     }
   },
@@ -841,16 +926,34 @@
         "active-on-track": "Pályán",
         "active-behind-schedule": "A menetrend lemaradásával",
         "active-indeterminate": "Aktív",
-        "success": "A cél elérve",
-        "fail": "A gól nem sikerült"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Jó úton haladsz a cél felé! Naponta {{ dailyAmount }} összeget kell megtakarítania a fennmaradó {{ remainingDays }} napig",
-        "active-behind-schedule": "Lemaradsz a menetrendről. Naponta {{ dailyAmount }} összeget kell megtakarítania, hogy {{ remainingDays }} napon belül elérje célját",
-        "active-indeterminate": "További {{ amount }} kell a cél eléréséhez.",
-        "success": "Gratulálok! Elérted a célodat.",
-        "fail": "{{ amount }} értékkel eltévesztette a célt."
+        "success": "Elérve",
+        "fail": "Sikertelen"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "maradt",
+    "over": "túllépés",
+    "spent": "elköltve",
+    "saved": "megtakarítva",
+    "CHART": {
+      "spent": "Elköltve",
+      "saved": "Megtakarítva",
+      "projected": "Előrejelzés",
+      "pace": "Ütem"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "naponta, {{n}} nap van hátra",
+        "other": "naponta, {{n}} nap van hátra"
+      },
+      "per-day-short": "naponta",
+      "per-day-help": "Mennyit adhatsz még hozzá naponta az időszak végéig a célösszeg eléréséhez",
+      "above-pace": "ütem felett",
+      "below-pace": "ütem alatt",
+      "pace-help": "A jelenlegi összeg és a mai napig várt összeg különbsége, ha egyenletesen oszlana el a teljes időszakra",
+      "projected": "előrejelzés",
+      "projected-help": "Becsült összeg az időszak végén, ha a jelenlegi ütem folytatódik"
     }
   },
   "DEBTS": {
@@ -950,6 +1053,7 @@
     "profit_percent": "hozam %",
     "total_value": "Az eszközök összértéke",
     "group_by_type": "Csoportosítás eszköztípus szerint",
+    "price": "Ár",
     "show_value_variation": "Százalékos változás megjelenítése",
     "amount_invested": "A számla {{ X }} összegét befektette",
     "TYPES": {
@@ -986,6 +1090,7 @@
       "choose_security": "Válasszon egy értékpapírt",
       "create_security": "Hozzon létre új biztonságot",
       "security_name": "Biztonsági név",
+      "security": "Értékpapír",
       "ticker": "Ticker / szimbólum (opcionális)",
       "security_type": "Biztonsági típus",
       "current_price": "Jelenlegi ár",
@@ -1000,7 +1105,7 @@
       "edit_snapshot": "Pillanatkép szerkesztése",
       "SNAPSHOTS": {
         "history_title": "Pillanatfelvételek előzményei",
-        "history_intro": "Minden pillanatkép a teljes portfóliót tárolja egy dátumhoz. Ha egy napot néz, akkor a legfrissebb, amelyik az alkalmazáskor vagy az előtt van.",
+        "history_intro": "Minden pillanatkép a számla teljes állapotát tárolja egy adott dátumhoz. Válasszon ki egyet a szerkesztéshez.",
         "count": "{{n}} pillanatfelvétel",
         "new_snapshot": "Új",
         "no_snapshots": "Még nincsenek pillanatképek",
@@ -1012,14 +1117,19 @@
         "update": "Frissítés",
         "update_positions": "Frissítse a pozíciókat",
         "full_portfolio": "teljes portfólió",
-        "editor_intro": "Mondd el, hogyan néz ki a portfóliód ekkor: {{date}}. A megadott értékeket a rendszer az egyenlegek és statisztikák kiszámításához használja ettől a dátumtól a következő pillanatfelvételig.",
+        "how_it_works": "A pillanatképek működése",
+        "snapshot_contents_description": "A pillanatkép a számla teljes állapotát rögzíti {{date}} napján. Adja meg a be nem fektetett készpénzt és a brókere által ezen a napon megjelenített összes pozíciót. A kihagyott pozíciókat a rendszer már nem tartottnak tekinti.",
         "date_label": "Pillanatfelvétel dátuma",
+        "cash_label": "Készpénz",
+        "balance_effect_description": "Ezt a pillanatképet használjuk az egyenlegek és statisztikák kiszámításához a következőig. A pozíciók értékei továbbra is követik a piaci árakat, míg az e dátum utáni tranzakciók és átutalások módosítják a készpénzt. Ha nem ad hozzá későbbi pillanatképet, ezek a szabályok határozatlan ideig érvényben maradnak.",
         "overwrite_warning": "Ehhez a dátumhoz már tartozik pillanatfelvétel. Mentéskor felülíródik.",
-        "add_position": "Adjon hozzá egy másik pozíciót",
+        "add_position": "Újabb pozíció hozzáadása",
+        "add_first_position": "Első pozíció hozzáadása",
         "col_symbol": "Szimbólum",
         "total_cost": "Teljes portfólió költség",
+        "snapshot_total": "Összesen bekerülési értéken",
         "save": "Pillanatkép mentése",
-        "remove_hint": "Egy pozíció eltávolításához egyszerűen törölje a sorát: a pillanatfelvétel a teljes fénykép, nem pedig egy mozgás.",
+        "zero_qty_hint": "A 0 mennyiség megtartja ezt a pozíciót a pillanatképben. A teljes eltávolításhoz inkább törölje a sort.",
         "delete_title": "Törli a pillanatképet?",
         "delete_descr": "Ez a pillanatkép el lesz távolítva. Ha ez volt a legutóbbi, akkor a jelenlegi pozíciói visszaállnak az előző pillanatképre."
       }
@@ -1104,7 +1214,6 @@
       "acquisition_transaction_badge": "Beszerzés",
       "select_account": "Válasszon egy fiókot",
       "update_value": "Frissítse az értéket",
-      "trade_form_asset_column": "Eszköz",
       "notes_optional": "Megjegyzések (nem kötelező)",
       "performance_title": "Performance",
       "performance_return": "Period return",
@@ -1126,10 +1235,17 @@
       "initial_value": "Kezdeti érték",
       "initial_value_required": "Adjon meg egy kezdeti értéket",
       "initial_value_invalid": "Kérjük, adjon meg egy érvényes számot",
+      "acquisition_info": "Beszerzési adatok",
+      "purchase_value": "Vételi érték",
+      "purchase_value_option": "Adja meg a vételi értéket",
+      "purchase_value_help": "Ha üresen hagyja, az első értékelést használjuk vételárként.",
+      "current_value": "Aktuális érték",
+      "current_value_help": "Nem kötelező. A mai dátummal rögzít egy értékelést.",
       "link_acquisition_transaction": "Kapcsolja össze a vásárlási tranzakciót",
       "link_acquisition_transaction_descr": "Válassza ki azt a költséget, amely ennek az eszköznek a megvásárlását jelenti. Ennek összege (az eszköz pénznemére átszámítva) és dátuma lesz a kezdeti érték és a beszerzés dátuma",
       "acquisition_transaction": "Felvásárlási tranzakció",
       "creation_date_before_acquisition_transaction": "Az akvizíció dátuma nem lehet korábbi a kapcsolt tranzakció dátuma előtt",
+      "acquisition_date_from_transaction": "A beszerzés dátuma a kapcsolt tranzakcióból származik, és nem szerkeszthető. A módosításhoz szüntesse meg a tranzakció kapcsolatát.",
       "currency": "Valuta",
       "select_currency": "Kérjük, válasszon egy pénznemet",
       "creation_date": "Létrehozás dátuma",

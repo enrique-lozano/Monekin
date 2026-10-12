@@ -14,10 +14,8 @@ Future<AssetValuationInDB?> showValuationFormDialog(
   BuildContext context,
   ValuationFormDialog dialog,
 ) {
-  return showModalBottomSheet<AssetValuationInDB>(
+  return RouteUtils.showResponsiveSheet<AssetValuationInDB>(
     context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
     builder: (context) => dialog,
   );
 }

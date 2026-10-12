@@ -34,7 +34,7 @@ class TransactionViewActionService {
         label: t.ui_actions.edit,
         icon: Icons.edit,
         onClick: () {
-          RouteUtils.pushRoute(
+          RouteUtils.showResponsiveForm(
             TransactionFormPage(
               transactionToEdit: transaction,
               mode: transaction.type,

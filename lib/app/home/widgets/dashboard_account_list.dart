@@ -7,22 +7,28 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-/// Maximum number of rows (accounts and/or account groups) shown inline on the
-/// dashboard.
-const _maxRowsToShow = 3;
-
-/// A vertical list of the user's active accounts (up to [_maxRowsToShow] rows),
-/// where the accounts sharing a group are collapsed into an expandable row.
+/// A vertical list of the user's active accounts, where the accounts sharing a
+/// group are collapsed into an expandable row.
 class DashboardAccountList extends StatelessWidget {
-  const DashboardAccountList({super.key, required this.dateRangeService});
+  const DashboardAccountList({
+    super.key,
+    required this.dateRangeService,
+    this.maxRowsToShow = 3,
+  });
 
   final DatePeriodState dateRangeService;
+  final int maxRowsToShow;
+
+  void _openCreateAccountForm() {
+    RouteUtils.showResponsiveForm(const AccountFormPage());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,18 +41,19 @@ class DashboardAccountList extends StatelessWidget {
       builder: (context, snapshot) {
         final accounts = snapshot.data;
         final rows = accounts == null ? null : groupAccounts(accounts);
-        final hasHiddenRows = (rows?.length ?? 0) > _maxRowsToShow;
+        final isEmpty = rows != null && rows.isEmpty;
+        final hasHiddenRows = (rows?.length ?? 0) > maxRowsToShow;
 
         return CardWithHeader(
           title: t.home.my_accounts,
-          bodyPadding: const EdgeInsets.only(top: 4, bottom: 8),
-          headerAction: hasHiddenRows
-              ? CardHeaderAction(
-                  icon: const Icon(Icons.add_rounded),
-                  text: t.account.form.create,
-                  onTap: () => RouteUtils.pushRoute(const AccountFormPage()),
-                )
-              : null,
+          bodyPadding: isEmpty
+              ? EdgeInsets.zero
+              : const EdgeInsets.only(top: 4, bottom: 8),
+          headerAction: CardHeaderAction(
+            icon: const Icon(Icons.add_rounded),
+            text: t.account.form.create,
+            onTap: _openCreateAccountForm,
+          ),
           footer: hasHiddenRows
               ? CardFooterWithSingleButton(
                   text: t.ui_actions.see_all_count(n: accounts!.length),
@@ -54,27 +61,52 @@ class DashboardAccountList extends StatelessWidget {
                       RouteUtils.pushRoute(const AllAccountsPage()),
                 )
               : null,
-          body: Column(
-            children: [
-              if (rows == null)
-                for (var i = 0; i < 3; i++) const _AccountRowSkeleton()
-              else
-                for (final row in rows.take(_maxRowsToShow))
-                  if (row.groupName == null || row.accounts.length == 1)
-                    _AccountRow(
-                      account: row.accounts.first,
-                      dateRangeService: dateRangeService,
-                    )
-                  else
-                    _AccountGroupRow(
-                      groupName: row.groupName!,
-                      accounts: row.accounts,
-                      dateRangeService: dateRangeService,
-                    ),
-            ],
-          ),
+          body: _buildBody(context, rows),
         );
       },
+    );
+  }
+
+  Widget _buildBody(BuildContext context, List<AccountRowData>? rows) {
+    final t = Translations.of(context);
+
+    if (rows == null) {
+      return Column(
+        children: [
+          for (var i = 0; i < maxRowsToShow; i++) const _AccountRowSkeleton(),
+        ],
+      );
+    }
+
+    if (rows.isEmpty) {
+      return NoResults(
+        showIllustration: false,
+        icon: Icons.account_balance_wallet_outlined,
+        title: t.home.no_accounts,
+        description: t.home.no_accounts_descr,
+        bottom: TextButton.icon(
+          onPressed: _openCreateAccountForm,
+          icon: const Icon(Icons.add_rounded),
+          label: Text(t.account.form.create),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        for (final row in rows.take(maxRowsToShow))
+          if (row.groupName == null || row.accounts.length == 1)
+            _AccountRow(
+              account: row.accounts.first,
+              dateRangeService: dateRangeService,
+            )
+          else
+            _AccountGroupRow(
+              groupName: row.groupName!,
+              accounts: row.accounts,
+              dateRangeService: dateRangeService,
+            ),
+      ],
     );
   }
 }

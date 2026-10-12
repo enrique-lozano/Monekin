@@ -31,6 +31,8 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
     this.timeRange,
     this.fillMissingDatesWithPreviousValue = true,
     this.showYAxisTitles = true,
+    this.expand = false,
+    this.yAnchorZero = false,
   });
 
   /// The raw data items to plot.
@@ -71,6 +73,13 @@ class TimeSeriesEvolutionChart<T> extends StatefulWidget {
   /// When false, the left (Y) axis labels and the background grid are hidden,
   /// for a cleaner, dashboard-like chart.
   final bool showYAxisTitles;
+
+  /// Used by desktop layouts where the chart stretches to match a neighbour column.
+  final bool expand;
+
+  /// Whether the automatically computed Y viewport and area fill should
+  /// include zero. Useful for budgets and net-worth charts.
+  final bool yAnchorZero;
 
   @override
   State<TimeSeriesEvolutionChart<T>> createState() =>
@@ -162,11 +171,23 @@ class _TimeSeriesEvolutionChartState<T>
     final spots = chartSeries.spots;
 
     final isNotEnoughData = sortedData.length < 2;
+    final domain = computeMonetaryChartYDomain(
+      spots.map((spot) => spot.y),
+      extraValues:
+          widget.extraLinesData?.horizontalLines.map((line) => line.y) ??
+          const [],
+      anchorZero: widget.yAnchorZero,
+    );
+    // Placeholder spots (1–5) must define the Y viewport; real data may be empty
+    // or a single large value (e.g. price) and would clip/overflow the stub line.
+    final minY = isNotEnoughData ? null : (widget.minY ?? domain.minY);
+    final maxY = isNotEnoughData ? null : (widget.maxY ?? domain.maxY);
+    final areaFillCutoffY = widget.minY ?? domain.areaFillCutoffY;
 
     final chart = LineChart(
       LineChartData(
-        minY: widget.minY,
-        maxY: widget.maxY,
+        minY: minY,
+        maxY: maxY,
         gridData: FlGridData(
           show: widget.showYAxisTitles,
           drawVerticalLine: false,
@@ -287,6 +308,7 @@ class _TimeSeriesEvolutionChartState<T>
                 : spots,
             isCurved: true,
             curveSmoothness: 0.05,
+            preventCurveOverShooting: true,
             color: isNotEnoughData
                 ? Theme.of(context).colorScheme.outlineVariant
                 : lineColor,
@@ -296,7 +318,7 @@ class _TimeSeriesEvolutionChartState<T>
             belowBarData: BarAreaData(
               show: true,
               applyCutOffY: !isNotEnoughData,
-              cutOffY: widget.minY ?? 0,
+              cutOffY: areaFillCutoffY,
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -322,14 +344,16 @@ class _TimeSeriesEvolutionChartState<T>
       ),
     );
 
-    final chartContainer = SizedBox(
-      height:
-          (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
-              ? 160
-              : 120) *
-          clampDouble(MediaQuery.of(context).size.height / 800, 0.25, 1),
-      child: chart,
-    );
+    final Widget chartContainer = widget.expand
+        ? chart
+        : SizedBox(
+            height:
+                (BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg)
+                    ? 160
+                    : 120) *
+                clampDouble(MediaQuery.of(context).size.height / 800, 0.25, 1),
+            child: chart,
+          );
 
     final interactiveChartContainer = widget.onHover == null
         ? chartContainer

@@ -13,9 +13,12 @@ import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
+import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/pie_chart_center_shade.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -231,9 +234,9 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: ExpandingSegmentedTabs<TransactionType>(
-                fullWidth: false,
+                fullWidth: true,
                 items: [
                   SegmentedTabItem(
                     value: TransactionType.expense,
@@ -252,125 +255,129 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
                 onSelected: (type) => setState(() => transactionsType = type),
               ),
             ),
-            SizedBox(
-              height: 260,
-              child: Stack(
-                children: [
-                  PieChart(
-                    curve: Curves.easeOut,
-                    duration: const Duration(milliseconds: 250),
-                    PieChartData(
-                      startDegreeOffset: -45,
-                      pieTouchData: PieTouchData(
-                        touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                          setState(() {
-                            if (!event.isInterestedForInteractions ||
-                                pieTouchResponse == null ||
-                                pieTouchResponse.touchedSection == null) {
-                              touchedIndex = -1;
-                              return;
-                            }
-                            touchedIndex = pieTouchResponse
-                                .touchedSection!
-                                .touchedSectionIndex;
-                          });
-                        },
-                      ),
-                      borderData: FlBorderData(show: false),
-                      sectionsSpace: 0,
-                      centerSpaceRadius: centerRadius.toDouble(),
-                      sections: showingSections(dataItems),
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: centerRadius * 2.25,
-                        height: centerRadius * 2.25,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surface.withOpacity(0.1),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (snapshot.data!.isEmpty)
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          t.general.insufficient_data,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-
-            /* ----------------------------- */
-            /* ------ Info in a list ------- */
-            /* ----------------------------- */
-            if (widget.showList)
-              ListView.builder(
-                itemCount: snapshot.data!.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final dataCategory = snapshot.data![index];
-
-                  return ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(dataCategory.category.name),
-                        CurrencyDisplayer(amountToConvert: dataCategory.value),
-                      ],
-                    ),
-                    subtitle: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
-                              .toLowerCase(),
-                        ),
-                        Text(
-                          NumberFormat.decimalPercentPattern(
-                            decimalDigits: 2,
-                          ).format(
-                            getElementPercentageInTotal(
-                              dataCategory.value,
-                              snapshot.data!,
-                            ),
+            if (dataItems.isEmpty)
+              SizedBox(
+                height: 240,
+                child: NoResults(
+                  showIllustration: false,
+                  icon: Icons.donut_large_rounded,
+                  description: t.general.insufficient_data,
+                ),
+              )
+            else
+              AdaptiveTwoColumn(
+                breakpoint: widget.showList ? 520 : double.infinity,
+                rowCrossAxisAlignment: CrossAxisAlignment.center,
+                first: SizedBox(
+                  height: 260,
+                  child: Stack(
+                    children: [
+                      PieChart(
+                        curve: Curves.easeOut,
+                        duration: const Duration(milliseconds: 250),
+                        PieChartData(
+                          startDegreeOffset: -45,
+                          pieTouchData: PieTouchData(
+                            touchCallback:
+                                (FlTouchEvent event, pieTouchResponse) {
+                                  setState(() {
+                                    if (!event.isInterestedForInteractions ||
+                                        pieTouchResponse == null ||
+                                        pieTouchResponse.touchedSection ==
+                                            null) {
+                                      touchedIndex = -1;
+                                      return;
+                                    }
+                                    touchedIndex = pieTouchResponse
+                                        .touchedSection!
+                                        .touchedSectionIndex;
+                                  });
+                                },
                           ),
+                          borderData: FlBorderData(show: false),
+                          sectionsSpace: 0,
+                          centerSpaceRadius: centerRadius.toDouble(),
+                          sections: showingSections(dataItems),
                         ),
-                      ],
-                    ),
-                    leading: IconDisplayer.fromCategory(
-                      context,
-                      category: dataCategory.category,
-                      size: 25,
-                    ),
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        builder: (context) {
-                          return CategoryStatsModal(
-                            categoryData: dataCategory,
-                            dateRangeText: widget.datePeriodState.getText(
-                              context,
+                      ),
+                      PieChartCenterShade(
+                        centerSpaceRadius: centerRadius.toDouble(),
+                      ),
+                    ],
+                  ),
+                ),
+                second: widget.showList
+                    ? ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final dataCategory = snapshot.data![index];
+
+                          return ListTile(
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    dataCategory.category.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                CurrencyDisplayer(
+                                  amountToConvert: dataCategory.value,
+                                ),
+                              ],
                             ),
-                            filters: _getTransactionFilters(),
+                            subtitle: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${dataCategory.transactions.length} ${t.transaction.display(n: dataCategory.transactions.length)}'
+                                        .toLowerCase(),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  NumberFormat.decimalPercentPattern(
+                                    decimalDigits: 2,
+                                  ).format(
+                                    getElementPercentageInTotal(
+                                      dataCategory.value,
+                                      snapshot.data!,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            leading: IconDisplayer.fromCategory(
+                              context,
+                              category: dataCategory.category,
+                              size: 25,
+                            ),
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: (context) {
+                                  return CategoryStatsModal(
+                                    categoryData: dataCategory,
+                                    dateRangeText: widget.datePeriodState
+                                        .getText(context),
+                                    filters: _getTransactionFilters(),
+                                  );
+                                },
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                  );
-                },
+                      )
+                    : const SizedBox.shrink(),
               ),
           ],
         );

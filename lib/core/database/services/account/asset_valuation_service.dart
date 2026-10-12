@@ -1,11 +1,14 @@
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart' show DateUtils;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/asset_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/asset/asset.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
+import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -62,8 +65,8 @@ class AssetValuationService {
 
   /// Returns the current value for an asset.
   ///
-  /// Uses the latest valuation if one exists; otherwise returns the asset's
-  /// [initialValue].
+  /// Uses the latest valuation if one exists; otherwise falls back to the
+  /// asset's [getEffectivePurchaseValue].
   Stream<double> getCurrentAssetValue(
     AssetInDB asset, {
     bool convertToPreferredCurrency = false,
@@ -71,6 +74,47 @@ class AssetValuationService {
     return getAssetValueAtDate(
       asset,
       convertToPreferredCurrency: convertToPreferredCurrency,
+    );
+  }
+
+  /// The effective **purchase value** of the asset, used as the baseline for
+  /// performance and as the value shown for the window between the acquisition
+  /// date and the first recorded valuation.
+  ///
+  /// Resolved, in priority order, from:
+  /// 1. the linked **acquisition transaction** amount (its magnitude),
+  /// 2. the legacy stored [AssetInDB.initialValue] when non-zero,
+  /// 3. the earliest recorded valuation (i.e. "as if the purchase price
+  ///    equalled the first existing valuation"),
+  /// 4. `0` when there is no information at all.
+  ///
+  /// A manually entered purchase value is persisted as a valuation on the
+  /// acquisition date, so it is picked up through the normal valuation lookups
+  /// (and short-circuits this resolver via case 3 / the latest-valuation path).
+  Stream<double> getEffectivePurchaseValue(AssetInDB asset) {
+    final acquisitionStream = TransactionService.instance
+        .getTransactions(filters: TransactionFilterSet(assetIds: [asset.id]))
+        .map(
+          (txs) => txs.firstWhereOrNull(
+            (tx) =>
+                statusAffectsValuation(tx) &&
+                isAcquisitionTransaction(tx, asset),
+          ),
+        );
+
+    return Rx.combineLatest2(
+      acquisitionStream,
+      getValuationsForAsset(asset.id),
+      (acquisition, valuations) {
+        if (acquisition != null) return -acquisition.value;
+        if (asset.initialValue != 0) return asset.initialValue;
+        if (valuations.isNotEmpty) {
+          return valuations
+              .reduce((a, b) => a.date.isBefore(b.date) ? a : b)
+              .value;
+        }
+        return 0.0;
+      },
     );
   }
 
@@ -86,16 +130,20 @@ class AssetValuationService {
     return getLatestValuationForAsset(asset.id, date: date).switchMap((
       valuation,
     ) {
-      final value = valuation?.value ?? asset.initialValue;
+      final Stream<double> valueStream = valuation != null
+          ? Stream.value(valuation.value)
+          : getEffectivePurchaseValue(asset);
 
-      if (!convertToPreferredCurrency) return Stream.value(value);
+      return valueStream.switchMap((value) {
+        if (!convertToPreferredCurrency) return Stream.value(value);
 
-      return ExchangeRateService.instance
-          .calculateExchangeRateToPreferredCurrency(
-            amount: value,
-            fromCurrency: asset.currencyId,
-            date: date,
-          );
+        return ExchangeRateService.instance
+            .calculateExchangeRateToPreferredCurrency(
+              amount: value,
+              fromCurrency: asset.currencyId,
+              date: date,
+            );
+      });
     });
   }
 
@@ -139,9 +187,15 @@ class AssetValuationService {
   }
 
   /// A transaction is the asset's **acquisition** record when it's linked to
-  /// that asset and dated on or before the asset's creation date. There is no
-  /// dedicated DB column for this: it's purely derived from the dates so that
-  /// old data (and the "link existing transaction" flow) keep working.
+  /// that asset and dated on the same calendar day as (or before) the asset's
+  /// creation date. There is no dedicated DB column for this: it's purely
+  /// derived from the dates so that old data (and the "link existing
+  /// transaction" flow) keep working.
+  ///
+  /// The comparison is day-level on purpose: the asset's [AssetInDB.creationDate]
+  /// carries a time-of-day (the "acquisition date"), while the purchase
+  /// transaction can be logged later that same day. A full-timestamp comparison
+  /// would then miss the purchase and double-count it as an extra contribution.
   ///
   /// Its amount already makes up [AssetInDB.initialValue], so it must be
   /// excluded from valuation-delta sums (e.g. net-contribution calculations)
@@ -151,7 +205,9 @@ class AssetValuationService {
     AssetInDB asset,
   ) {
     return transaction.assetID == asset.id &&
-        !transaction.date.isAfter(asset.creationDate);
+        !DateUtils.dateOnly(
+          transaction.date,
+        ).isAfter(DateUtils.dateOnly(asset.creationDate));
   }
 
   static bool statusAffectsValuation(TransactionInDB t) {
@@ -274,16 +330,21 @@ class AssetValuationService {
     );
   }
 
-  /// Gain vs the asset’s creation-time initial value.
+  /// Gain vs the asset's effective purchase value (see
+  /// [getEffectivePurchaseValue]).
   Stream<({double value, double percent})> getAssetProfit(Asset asset) {
-    return getCurrentAssetValue(asset).map((currentValue) {
-      final profit = currentValue - asset.initialValue;
-      final percent = asset.initialValue != 0
-          ? profit / asset.initialValue
-          : currentValue.isNegative
-          ? double.negativeInfinity
-          : double.infinity;
-      return (value: profit, percent: percent);
-    });
+    return Rx.combineLatest2(
+      getCurrentAssetValue(asset),
+      getEffectivePurchaseValue(asset),
+      (currentValue, purchaseValue) {
+        final profit = currentValue - purchaseValue;
+        final percent = purchaseValue != 0
+            ? profit / purchaseValue
+            : currentValue.isNegative
+            ? double.negativeInfinity
+            : double.infinity;
+        return (value: profit, percent: percent);
+      },
+    );
   }
 }

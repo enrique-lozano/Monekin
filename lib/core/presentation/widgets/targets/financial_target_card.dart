@@ -4,7 +4,6 @@ import 'package:monekin/app/goals/goal_details_page.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/goal/goal.dart';
-import 'package:monekin/core/models/mixins/financial_target_direction.enum.dart';
 import 'package:monekin/core/models/mixins/financial_target_mixin.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
@@ -266,43 +265,6 @@ class TargetHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: [
-                if (target.targetDirection ==
-                    FinancialTargetDirection.toExpense) ...[
-                  // For Budgets/Expense: Show remaining or spent?
-                  // BudgetCard showed "Remaining from Total"
-                  // GoalCard showed "Current / Total"
-
-                  // Let's unify or check type.
-                  // The prompt asked to create a reusable widget, assuming unification.
-                  // Goals usually show progress (Current / Target).
-                  // Budgets usually show Remaining.
-
-                  // Let's stick to "Current / Target" as generic financial target visualization
-                  // OR keep Budget specific display "Remaining" if `toExpense`?
-                  // BudgetCard code: `amountToConvert: budget.limitAmount - (snapshot.data ?? 0)` -> Remaining
-
-                  // But for Expense GOALs, do we want Remaining or Spent?
-                  // Usually spending limit goals --> "Spent X of Y".
-                  // Budget --> "Left X of Y".
-
-                  // Let's use "Spent X / Y" for all for consistency in this generic card?
-                  // Or keep "Remaining" for Expenses?
-
-                  // Let's implement "Current / Total" for now as it's cleaner for a generic card.
-                  // Money Spent / Limit
-                ] else ...[
-                  // Income Goal: "Saved X / Y"
-                ],
-
-                // If we want to mimic BudgetCard exactly:
-                /*
-                  CurrencyDisplayer(
-                    amountToConvert: budget.limitAmount - (snapshot.data ?? 0),
-                    ...
-                  )
-                 */
-
-                // Let's standardize on: "Current / Total"
                 CurrencyDisplayer(
                   amountToConvert: snapshot.data ?? 0,
                   showDecimals: false,

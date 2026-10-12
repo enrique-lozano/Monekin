@@ -45,6 +45,7 @@
     "or": "veya",
     "understood": "Anlaşıldı",
     "unspecified": "Belirtilmemiş",
+    "min_one_entry_required": "En az bir değer kalmalıdır",
     "quick_actions": "Hızlı İşlemler",
     "details": "Detaylar",
     "balance": "Bakiye",
@@ -55,6 +56,7 @@
     "today": "Bugün",
     "yesterday": "Dün",
     "filters": "Filtreler",
+    "all": "Tümü",
     "empty-warn": "Ups! Burası çok boş",
     "search-no-results": "Arama kriterlerinizle eşleşen öğe yok",
     "insufficient-data": "Yetersiz veri",
@@ -176,7 +178,7 @@
     "next": "İleri",
     "select-your-currency": "Para birimini seçin",
     "welcome.subtitle": "Kişisel finans yöneticiniz",
-    "welcome.subtitle2": "%100 açık, %100 ücretsiz",
+    "welcome.subtitle2": "%100 açık, %100 özel",
     "welcome.footer": "Giriş yaparak, uygulamanın <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Gizlilik Politikası</a> ve <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Kullanım Şartları</a>'nı kabul etmiş olursunuz",
     "offline.descr.title": "ÇEVRİMDIŞI HESAP:",
     "offline.descr": "Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.",
@@ -264,7 +266,10 @@
       "text.other": "Bu harcama oranında yaklaşık <b>{{ n }} ay</b> gelir olmadan yaşayabilirsiniz.",
       "text.infinite": "Bu harcama oranında yaklaşık <b>tüm hayatınız boyunca</b> gelir olmadan yaşayabilirsiniz.",
       "suggestion": "Bu oranın her zaman en az 5 ayın üzerinde tutulması gerektiğini unutmayın. Yeterli birikiminiz olmadığını görürseniz, gereksiz harcamaları azaltın.",
-      "insufficient_data": "Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin"
+      "insufficient_data": "Gelirsiz kaç ay hayatta kalabileceğinizi hesaplamak için yeterli giderimiz yok gibi görünüyor. Birkaç işlem girin ve finansal sağlığınızı kontrol etmek için buraya geri gelin",
+      "valueShort": "{{n}} ay",
+      "formula": "Hesaplarınızdaki kullanılabilir para ÷ bu dönemdeki ortalama aylık giderleriniz.",
+      "unlock": "Bu dönemde en az 4 işlem kaydedin, bunların bir kısmı gider olsun."
     },
     "savingsPercentage": {
       "title": "Tasarruf yüzdesi",
@@ -275,13 +280,85 @@
         "bad": "Bu dönemde gelirinizin <b>{{value}}%</b>'sini tasarruf etmeyi başardınız. Ancak, hala çok daha fazlasını yapabileceğinizi düşünüyoruz!",
         "very_bad": "Vay canına, bu dönemde hiçbir şey biriktirmeyi başaramadınız."
       },
-      "suggestion": "Kazandığınızın en az %15-20'sini biriktirmenin tavsiye edildiğini unutmayın."
-    }
+      "suggestion": "Kazandığınızın en az %15-20'sini biriktirmenin tavsiye edildiğini unutmayın.",
+      "formula": "(Gelir − gider) ÷ gelir, hepsi seçili aralık içinde.",
+      "insufficient_data": "Bu dönemde, paranızın ne kadarını elinizde tuttuğunuzu değerlendirmek için yeterli hareket yok.",
+      "unlock": "Bu dönemde bir gelir kaydedin ya da herhangi bir türden en az 10 işlem girin."
+    },
+    "debtToAssetRatio": {
+      "title": "Borç-varlık oranı",
+      "subtitle": "Sahip olduklarınızın ne kadarı ödenmemiş borçla dengeleniyor",
+      "text": {
+        "value": "Ödenmemiş borcunuz brüt varlıklarınızın <b>%{{value}}</b>'i kadar.",
+        "no_assets": "Ödenmemiş borcunuz var ama bunu karşılayacak kayıtlı bir varlığınız yok."
+      },
+      "suggestion": "Daha düşük bir oran genellikle borçlarınızı sahip olduklarınızla daha rahat karşılayabildiğiniz anlamına gelir.",
+      "insufficient_data": "Henüz hiçbir borç veya varlık takip etmiyorsunuz, bu yüzden değerlendirilecek bir bilanço yok.",
+      "formula": "Ödenmemiş borç ÷ brüt varlıklar, ikisi de seçili aralığın sonu itibarıyla.",
+      "unlock": "Borçlarınızdan birini veya varlıklarınızdan birini ekleyin (bir ev, bir araba...)."
+    },
+    "cashFlowConsistency": {
+      "title": "Nakit akışı istikrarı",
+      "subtitle": "Bu dönemin ne kadarında harcamalarınız gelirinizin içinde kaldı",
+      "text": {
+        "good": "Bu dönemin <b>%{{value}}</b> kadarında imkanlarınız dahilinde harcadınız. Nakit akışınız istikrarlı.",
+        "normal": "Bu dönemin <b>%{{value}}</b> kadarında imkanlarınız dahilinde harcadınız.",
+        "bad": "Bu dönemin yalnızca <b>%{{value}}</b> kadarında imkanlarınız dahilinde harcadınız, yani nakit akışınız çok dalgalanıyor."
+      },
+      "suggestion": "Büyük ödemeleri yaymak ve benzer bir tempoyu korumak finansmanınızı çok daha öngörülebilir kılar.",
+      "insufficient_data": "Bu aralığa nakit akışınızın ne kadar istikrarlı olduğunu anlamaya yetecek kadar hareket yayılmamış.",
+      "formula": "Aralığı birkaç bölüme ayırıp gelirinizi bunlara dağıtıyoruz. Bir bölümde size düşen kadar veya daha az harcamak o bölümü tam kazandırır, iki katını harcamak hiç kazandırmaz, arası ise orantılı sayılır.",
+      "unlock": "En az 3 bölümünde hareket olan bir aralık seçin."
+    },
+    "investmentRatio": {
+      "title": "Yatırım oranı",
+      "subtitle": "Bu dönemde gelirinizin ne kadarını menkul kıymetlere ayırdınız",
+      "text": {
+        "value": "Bu dönemde gelirinizin <b>%{{value}}</b>'ini menkul kıymetlere ayırdınız.",
+        "none": "Bu dönemde menkul kıymetlere hiç para ayırmadınız."
+      },
+      "suggestion": "Gelirinizin bir kısmını düzenli olarak yatırmak, paranızın enflasyondan hızlı büyümesine yardımcı olur.",
+      "formula": "Menkul kıymetlere yatırılan tutar ÷ gelir, ikisi de seçili aralık içinde.",
+      "insufficient_data": "Bu dönemde açık bir yatırım hesabınız yoktu, bu yüzden finansal durumunuzun bu kısmını ölçemiyoruz.",
+      "unlock": "Bir yatırım hesabı açın ya da bunlardan birinin zaten açık olduğu bir aralık seçin."
+    },
+    "howCalculated": {
+      "action": "Notunuz nasıl hesaplanıyor",
+      "intro": "Notunuz, her biri kendi ağırlığıyla bu 5 göstergeyi birleştirir. Bunlardan biri için henüz yeterli veri yoksa, ağırlığı diğerleri arasında oransal olarak paylaşılır, böylece notunuz yine 100'e ulaşabilir.",
+      "notAvailable": "Henüz sayılmıyor"
+    },
+    "composition": {
+      "earned": "Kazanılan",
+      "earnedDescr": "Bu aralığın verileriyle çoktan kazandığınız puanlar.",
+      "pending": "Ulaşılabilir",
+      "pendingDescr": "Bugün ölçebildiğimiz göstergelerde size eksik kalan puanlar.",
+      "paused": "Ölçülemeyen",
+      "pausedDescr": "{{indicators}}: bunları henüz kullanmıyorsunuz, bu yüzden puanlarını ölçemiyoruz.",
+      "scoreExplanation": "Notunuz ({{score}}) yalnızca bugün ölçebildiğimiz {{measurable}} puanı dikkate alıyor, dolayısıyla ölçemediklerimiz notunuzu düşürmüyor.",
+      "total": "Toplam"
+    },
+    "lowReliability": "Bu not yalnızca <b>{{total}} göstergeden {{measurable}} tanesine</b> dayanıyor, o yüzden onu bir ilk taslak olarak görün: ne kadar çoğunu kullanırsanız gerçeğinize o kadar yaklaşır.",
+    "shortRange": "<b>Bir aydan kısa</b> bir aralık maaşları ve faturaları dışarıda bırakır, bu da tasarruf yüzdeniz gibi göstergeleri bozar. Daha istikrarlı bir not için aralığı genişletin.",
+    "unreliableShort": "Az güvenilir",
+    "pointsContribution": "{{total}} puanın {{earned}} tanesini katıyor",
+    "pointsOfTotal": "{{earned}}/{{total}} puan",
+    "pointsShort": "{{value}} puan",
+    "pausedPoints": "{{total}} puan ölçülemiyor",
+    "pausedShort": "Ölçülemiyor",
+    "aboutIndicator": "Bu gösterge hakkında",
+    "formulaLabel": "Nasıl hesaplanıyor",
+    "howToUnlock": "Nasıl açılır",
+    "indicatorsLabel": "Göstergeler",
+    "yourOwnPast": "Kendi geçmişiniz",
+    "noComparisonNote": "Bu uygulama yalnızca size ait: sizi asla başka kullanıcılarla değil, kendinizle karşılaştırırız.",
+    "previousPeriodLabel": "Önceki dönem",
+    "nowLabel": "Şimdi"
   },
   "STATS": {
     "title": "İstatistikler",
     "balance": "Bakiye",
     "final-balance": "Son bakiye",
+    "final-net-worth": "Dönem sonu net varlık",
     "balance-by-account": "Hesaplara göre bakiye",
     "balance-by-account-subtitle": "Paramın çoğunu nerede tutuyorum?",
     "balance-by-currency": "Para birimine göre bakiye",
@@ -290,6 +367,8 @@
     "balance-evolution-subtitle": "Eskisinden daha çok param var mı?",
     "net-worth": "Net worth",
     "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-gross": "Brüt varlık",
+    "net-worth-net": "Net varlık",
     "net-worth-composition": "Net worth composition",
     "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "portfolio": "Portföy",
@@ -298,7 +377,7 @@
     "portfolio-heat-map": "Isı haritası",
     "portfolio-heat-map-subtitle": "Blok ne kadar büyükse pozisyon o kadar büyüktür. Ne kadar yeşilse o kadar iyi gidiyordur.",
     "daily-performance": "Günlük",
-    "compared-to-previous-period": "Önceki döneme göre",
+    "compared-to-previous-period": "vs önceki dönem",
     "cash-flow": "Nakit akışı",
     "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
     "by-periods": "Dönemlere göre",
@@ -367,6 +446,7 @@
       "accept-dialog.title": "İşlemi kabul et",
       "accept-dialog.msg-single": "İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz",
       "accept-dialog.msg": "Bu eylem {{date}} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz",
+      "accept-dialog.trade": "{{security}} için {{quantity}} birim, {{price}} {{currency}} fiyatından (son fiyat). Daha sonra düzenleyebilirsiniz.",
       "recurrent-rule-finished": "Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!"
     },
     "LIST": {
@@ -375,6 +455,10 @@
       "searcher.placeholder": "Kategoriye, açıklamaya göre ara...",
       "searcher.no-results": "Arama kriterlerine uyan işlem bulunamadı",
       "loading": "Daha fazla işlem yükleniyor...",
+      "upcoming": {
+        "one": "{{n}} yaklaşan işlem",
+        "other": "{{n}} yaklaşan işlem"
+      },
       "selected.short": {
         "one": "{{n}} seçildi",
         "other": "{{n}} seçildi"
@@ -491,6 +575,10 @@
     "FORM": {
       "from": "Kaynak hesap",
       "to": "Hedef hesap",
+      "label-from": "Nereden",
+      "label-to": "Nereye",
+      "custom-amounts": "Özel tutarlar",
+      "difference": "fark",
       "VALUE-IN-DESTINY": {
         "title": "Hedefte aktarılan miktar",
         "amount-short": "Hedef hesaba {{amount}}"
@@ -501,11 +589,15 @@
     "title": "Tekrarlayan işlemler",
     "title.short": "Tekr. işl.",
     "empty": "Görünüşe göre tekrarlayan herhangi bir işleminiz yok. Aylık, yıllık veya haftalık tekrarlayan bir işlem oluşturun, burada görünecektir",
+    "empty-for-type": "Bu türde tekrarlayan bir işleminiz yok. Diğer tekrarlarınızı görmek için yukarıdaki filtreyi değiştirin",
     "total-expense.title": "Dönem başına toplam gider",
+    "total-income.title": "Dönem başına toplam gelir",
+    "total-all.title": "Dönem başına toplam",
     "total-expense.descr": "* Her tekrarın başlangıç ​​ve bitiş tarihi dikkate alınmadan",
     "DETAILS": {
       "title": "Tekrarlayan işlem",
       "descr": "Bu işlem için sonraki hareketler aşağıda gösterilmektedir. İlk hareketi kabul edebilir veya bu hareketi atlayabilirsiniz",
+      "generated-transaction-status": "Kabul edildiğindeki durum: {{status}}",
       "last-payment-info": "Bu hareket, tekrar kuralının sonuncusudur, bu nedenle bu eylemi onaylarken bu kural otomatik olarak silinecektir",
       "delete-header": "Tekrarlayan işlemi sil",
       "delete-message": "Bu eylem geri alınamaz ve zaten onayladığınız/ödediğiniz işlemleri etkilemez"
@@ -560,14 +652,15 @@
       "investment": "Yatırım hesabı",
       "investment.descr": "Birden fazla varlık içerebilen bir aracı kurum, kripto borsa veya portföy hesabı. Yatırdığınız sermayeyi takip edin ve her varlığın değerini değerlemeler aracılığıyla manuel olarak güncelleyin",
       "normal": "Normal hesap",
-      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır..."
+      "normal.descr": "Günlük mali durumunuzu kaydetmek için kullanışlıdır. En yaygın hesaptır, giderler, gelirler eklemenize olanak tanır...",
+      "locked_warn": "Bu hesabın türü artık değiştirilemez, çünkü zaten varlıkları, işlemleri veya anlık görüntüleri var."
     },
     "TRACKING_MODES": {
       "title": "İzleme modu",
       "transactions": "İşlemler",
-      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır.",
+      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır. Eksiksiz bir işlem geçmişiniz varsa (veya tutmak istiyorsanız) ve doğru bir maliyet esası istiyorsanız en iyi seçenektir.",
       "holdings": "Holdingler",
-      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin.",
+      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin. Yalnızca mevcut pozisyonunuzu biliyorsanız ve her işlemi kaydetmek istemiyorsanız en iyi seçenektir. Bu hesaptaki gelir, gider ve transferleriniz her iki modda da normal şekilde takip edilmeye devam eder.",
       "switch_warn": "Her mod pozisyonlarınızı farklı bir kaynaktan hesaplar. Kaydettiğinizde mevcut pozisyonlarınız yeni moda dönüştürülür. Daha önceki tarihler, o modun halihazırda sahip olduğu geçmişe göre değerlenir."
     },
     "FORM": {
@@ -783,15 +876,7 @@
         "active-overspending": "Aşırı harcama",
         "active-indeterminate": "Aktif",
         "success": "Başarılı",
-        "fail": "Bütçe aşıldı"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Kalan {{ remainingDays }} gün için günde {{ dailyAmount }} harcayabilirsiniz",
-        "active-overspending": "Tekrar rayına oturmak için, kalan {{ remainingDays }} gün boyunca harcamalarınızı günde {{ dailyAmount }} ile sınırlamalısınız",
-        "active-indeterminate": "Harcayabileceğiniz {{ amount }} kaldı.",
-        "active-exceeded": "Bütçe limitinizi {{ amount }} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız",
-        "success": "Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin",
-        "fail": "Bütçeyi {{ amount }} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!"
+        "fail": "Aşıldı"
       }
     }
   },
@@ -841,16 +926,34 @@
         "active-on-track": "Yolda",
         "active-behind-schedule": "Programın gerisinde",
         "active-indeterminate": "Aktif",
-        "success": "Hedefe ulaşıldı",
-        "fail": "Hedef başarısız oldu"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Hedefinizi arama yolundasınız! Kalan {{ remainingDays }} gün boyunca günde {{ dailyAmount }} tasarruf etmelisiniz",
-        "active-behind-schedule": "Programın gerisindesiniz. Hedefinize {{ remainingDays }} gün içinde ulaşmak için günde {{ dailyAmount }} tasarruf etmeniz gerekiyor",
-        "active-indeterminate": "Hedefinize ulaşmak için {{ amount }} daha fazlasına ihtiyacınız var.",
-        "success": "Tebrikler! Hedefine ulaştın.",
-        "fail": "Hedefinizi {{ amount }} kadar kaçırdınız."
+        "success": "Ulaşıldı",
+        "fail": "Başarısız oldu"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "kaldı",
+    "over": "aşıldı",
+    "spent": "harcandı",
+    "saved": "biriktirildi",
+    "CHART": {
+      "spent": "Harcanan",
+      "saved": "Biriktirilen",
+      "projected": "Tahmin",
+      "pace": "Tempo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "günlük, {{n}} gün kaldı",
+        "other": "günlük, {{n}} gün kaldı"
+      },
+      "per-day-short": "günlük",
+      "per-day-help": "Hedef tutara ulaşmak için dönem sonuna kadar her gün daha ne kadar ekleyebileceğiniz",
+      "above-pace": "tempo üstünde",
+      "below-pace": "tempo altında",
+      "pace-help": "Mevcut tutar ile tüm döneme eşit dağıtılsaydı bugüne kadar beklenen tutar arasındaki fark",
+      "projected": "tahmini",
+      "projected-help": "Mevcut tempo devam ederse dönem sonundaki tahmini tutar"
     }
   },
   "DEBTS": {
@@ -950,6 +1053,7 @@
     "profit_percent": "Geri dönmek %",
     "total_value": "Varlıkların toplam değeri",
     "group_by_type": "Varlık türüne göre gruplandır",
+    "price": "Fiyat",
     "show_value_variation": "Yüzde değişimini göster",
     "amount_invested": "Bu hesaba ait {{ X }} tutarında yatırım yaptınız",
     "TYPES": {
@@ -986,6 +1090,7 @@
       "choose_security": "Bir güvenlik seçin",
       "create_security": "Yeni güvenlik oluşturun",
       "security_name": "Güvenlik adı",
+      "security": "Menkul kıymet",
       "ticker": "Ticker / sembol (isteğe bağlı)",
       "security_type": "Güvenlik türü",
       "current_price": "Güncel fiyat",
@@ -1000,7 +1105,7 @@
       "edit_snapshot": "Anlık görüntüyü düzenle",
       "SNAPSHOTS": {
         "history_title": "Anlık görüntü geçmişi",
-        "history_intro": "Her anlık görüntü, bir tarihe ait portföyün tamamını saklar. Bir güne bakıldığında en güncel olanı veya ondan önceki gün uygulanır.",
+        "history_intro": "Her anlık görüntü, belirli bir tarihteki hesap durumunun tamamını saklar. Düzenlemek için birini seçin.",
         "count": "{{n}} anlık görüntü",
         "new_snapshot": "Yeni",
         "no_snapshots": "Henüz anlık görüntü yok",
@@ -1012,14 +1117,19 @@
         "update": "Güncelleme",
         "update_positions": "Pozisyonları güncelle",
         "full_portfolio": "tam portföy",
-        "editor_intro": "{{date}} tarihinde portföyünüzün nasıl göründüğünü bize bildirin. Girdiğiniz değerler, bu tarihten sonraki anlık görüntünüze kadar bakiyeleri ve istatistikleri hesaplamak için kullanılacaktır.",
+        "how_it_works": "Anlık görüntüler nasıl çalışır?",
+        "snapshot_contents_description": "Anlık görüntü, bu hesabın {{date}} tarihindeki eksiksiz kaydıdır. O tarihte aracı kurumunuzda görünen yatırılmamış nakdi ve tüm pozisyonları girin. Eklenmeyen pozisyonlar artık tutulmuyor kabul edilir.",
         "date_label": "Anlık görüntü tarihi",
+        "cash_label": "Nakit",
+        "balance_effect_description": "Bu anlık görüntü, bir sonrakine kadar bakiyeleri ve istatistikleri hesaplamak için kullanılır. Pozisyon değerleri piyasa fiyatlarını izlemeye devam ederken bu tarihten sonraki işlemler ve transferler nakdi değiştirir. Daha sonraki bir anlık görüntü eklenmezse bu kurallar süresiz olarak geçerli kalır.",
         "overwrite_warning": "Bu tarih için zaten bir anlık görüntü var. Kaydettiğinizde üzerine yazılacak.",
         "add_position": "Başka bir pozisyon ekle",
+        "add_first_position": "İlk pozisyonunuzu ekleyin",
         "col_symbol": "Sembol",
         "total_cost": "Toplam portföy maliyeti",
+        "snapshot_total": "Maliyet üzerinden toplam",
         "save": "Anlık görüntüyü kaydet",
-        "remove_hint": "Bir konumdan kurtulmak için yalnızca satırını silin: anlık görüntü fotoğrafın tamamıdır, bir hareket değil.",
+        "zero_qty_hint": "0 miktarı bu pozisyonu anlık görüntüde tutar. Tamamen kaldırmak için bunun yerine satırı silin.",
         "delete_title": "Anlık görüntü silinsin mi?",
         "delete_descr": "Bu anlık görüntü kaldırılacak. En yenisiyse mevcut konumlarınız önceki anlık görüntüye geri dönecektir."
       }
@@ -1104,7 +1214,6 @@
       "acquisition_transaction_badge": "Kazanma",
       "select_account": "Bir hesap seçin",
       "update_value": "Değeri güncelle",
-      "trade_form_asset_column": "Varlık",
       "notes_optional": "Notlar (isteğe bağlı)",
       "performance_title": "Performance",
       "performance_return": "Period return",
@@ -1126,10 +1235,17 @@
       "initial_value": "Başlangıç ​​değeri",
       "initial_value_required": "Lütfen bir başlangıç ​​değeri girin",
       "initial_value_invalid": "Lütfen geçerli bir numara girin",
+      "acquisition_info": "Edinme bilgileri",
+      "purchase_value": "Satın alma değeri",
+      "purchase_value_option": "Satın alma değerini girin",
+      "purchase_value_help": "Boş bırakılırsa, satın alma fiyatı olarak ilk değerleme kullanılır.",
+      "current_value": "Güncel değer",
+      "current_value_help": "İsteğe bağlı. Bugünün tarihiyle bir değerleme kaydı oluşturur.",
       "link_acquisition_transaction": "Bir satın alma işlemini bağlayın",
       "link_acquisition_transaction_descr": "Bu varlığın satın alınmasını temsil eden gideri seçin. Tutarı (varlığın para birimine dönüştürülmüş) ve tarihi, başlangıç ​​değeri ve edinme tarihi olarak kullanılacaktır.",
       "acquisition_transaction": "Satın alma işlemi",
       "creation_date_before_acquisition_transaction": "Edinme tarihi bağlantılı işlemin tarihinden önce olamaz",
+      "acquisition_date_from_transaction": "Edinme tarihi bağlantılı işlemden alınır ve düzenlenemez. Değiştirmek için işlemin bağlantısını kaldırın.",
       "currency": "Para birimi",
       "select_currency": "Lütfen bir para birimi seçin",
       "creation_date": "Oluşturulma tarihi",

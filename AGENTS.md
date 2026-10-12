@@ -36,6 +36,7 @@ If a skill would be genuinely useful but conflicts on details, adapt its intent 
 - No features beyond what was asked.
 - No abstractions for single-use code.
 - No error handling for impossible scenarios.
+- Don’t comment the obvious. Keep comments short; skip them on simple code.
 - If 200 lines could be 50, rewrite it. _"Don't walk away from complexity, run!"_
 
 ### 3. Surgical Changes

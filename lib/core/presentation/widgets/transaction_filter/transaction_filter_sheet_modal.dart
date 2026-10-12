@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/filters/saved_filters_service.dart';
+import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
@@ -33,11 +34,13 @@ class FilterSheetModal extends StatefulWidget {
     super.key,
     required this.preselectedFilter,
     this.showDateFilter = true,
+    this.showTransactionRefinements = true,
   });
 
   final TransactionFilterSet preselectedFilter;
 
   final bool showDateFilter;
+  final bool showTransactionRefinements;
 
   @override
   State<FilterSheetModal> createState() => _FilterSheetModalState();
@@ -190,32 +193,50 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
               ),
             ],
           ),
-          footer: BottomSheetFooter(
-            submitIcon: Icons.filter_alt_outlined,
-            submitText: t.ui_actions.apply,
-            extraActions: [
-              ListTileActionItem(
-                label: t.transaction.filters.reset,
-                onClick: () {
-                  setState(() {
-                    filtersToReturn = TransactionFilterSet();
-                  });
+          footer: StreamBuilder<int>(
+            stream: TransactionService.instance.countTransactions(
+              filters: filtersToReturn,
+            ),
+            builder: (context, countSnapshot) {
+              final count = countSnapshot.data;
 
-                  HapticFeedback.mediumImpact();
-                },
-                icon: Icons.refresh_rounded,
-              ),
-            ],
-            onSaved:
-                !(_formKey.currentState?.validate() ?? true) ||
-                    filtersToReturn.tagsIDs != null &&
-                        filtersToReturn.tagsIDs!.isEmpty ||
-                    filtersToReturn.accountsIDs != null &&
-                        filtersToReturn.accountsIDs!.isEmpty ||
-                    filtersToReturn.categoriesIds != null &&
-                        filtersToReturn.categoriesIds!.isEmpty
-                ? null
-                : () => RouteUtils.popRoute(filtersToReturn),
+              return BottomSheetFooter(
+                submitIcon: Icons.filter_alt_outlined,
+                // Preview how many transactions the current filters match.
+                submitText: count == null
+                    ? t.ui_actions.apply
+                    : '${t.ui_actions.apply} · $count ${t.transaction.display(n: count).toLowerCase()}',
+                extraActions: [
+                  ListTileActionItem(
+                    label: t.transaction.filters.reset,
+                    onClick: () {
+                      setState(() {
+                        filtersToReturn = TransactionFilterSet();
+                      });
+
+                      HapticFeedback.mediumImpact();
+                    },
+                    icon: Icons.refresh_rounded,
+                  ),
+                ],
+                // Only the (side-effect free) "empty selection" checks gate the
+                // button here. Form validation runs on press — calling
+                // `validate()` during build marks the Form dirty mid-build.
+                onSaved:
+                    (filtersToReturn.tagsIDs != null &&
+                            filtersToReturn.tagsIDs!.isEmpty) ||
+                        (filtersToReturn.accountsIDs != null &&
+                            filtersToReturn.accountsIDs!.isEmpty) ||
+                        (filtersToReturn.categoriesIds != null &&
+                            filtersToReturn.categoriesIds!.isEmpty)
+                    ? null
+                    : () {
+                        if (_formKey.currentState?.validate() ?? true) {
+                          RouteUtils.popRoute(filtersToReturn);
+                        }
+                      },
+              );
+            },
           ),
           showTitleDivider: true,
           body: ScrollableWithBottomGradient(
@@ -232,6 +253,7 @@ class _FilterSheetModalState extends State<FilterSheetModal> {
                   });
                 },
                 showDateFilter: widget.showDateFilter,
+                showTransactionRefinements: widget.showTransactionRefinements,
               ),
             ),
           ),

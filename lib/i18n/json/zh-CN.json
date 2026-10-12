@@ -45,6 +45,7 @@
     "or": "或",
     "understood": "明白",
     "unspecified": "未指定",
+    "min_one_entry_required": "至少需保留一个值",
     "quick_actions": "快捷行动",
     "details": "细节",
     "balance": "余额",
@@ -55,6 +56,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "filters": "筛选",
+    "all": "全部",
     "empty-warn": "喔！这里什么都没有",
     "search-no-results": "没有符合您搜索条件的商品",
     "insufficient-data": "数据不足",
@@ -176,7 +178,7 @@
     "next": "继续",
     "select-your-currency": "选择您的货币",
     "welcome.subtitle": "您的个人财务管家",
-    "welcome.subtitle2": "100% 开放，100% 免费",
+    "welcome.subtitle2": "100% 开放，100% 私密",
     "welcome.footer": "登录即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隐私策略</a>和此应用的<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>使用条款</a>",
     "offline.descr.title": "本地账户：",
     "offline.descr": "您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从应用设置中备份数据。",
@@ -264,7 +266,10 @@
       "text.other": "按这样的开支速度，如果没有收入，您可以大概支撑 <b>{{n}}个月</b>。",
       "text.infinite": "按这样的开支速度，即使没有收入，您也可以维持 <b>一辈子</b>。",
       "suggestion": "请记住，建议至少保持这一数字在 5 个月以上。如果您发现您没有足够的储蓄，请减少不必要的开支。",
-      "insufficient_data": "看起来我们没有足够的数据来计算您没有收入后，能够支撑几个月。请添加一些支出/收入，再来这里查看您的财务健康情况"
+      "insufficient_data": "看起来我们没有足够的数据来计算您没有收入后，能够支撑几个月。请添加一些支出/收入，再来这里查看您的财务健康情况",
+      "valueShort": "{{n}} 个月",
+      "formula": "您账户中的可用资金 ÷ 这段时间内的平均月支出。",
+      "unlock": "在这段时间内记录至少 4 笔交易，其中一部分为支出。"
     },
     "savingsPercentage": {
       "title": "储蓄百分比",
@@ -275,13 +280,85 @@
         "bad": "您在这段时间内省下了 <b>{{value}}%</b> 的收入。但我们认为您可以做得更好！",
         "very_bad": "哇，您在这段时间内并没有任何结余。"
       },
-      "suggestion": "请记住，建议至少将您赚到的 15-20% 存下来。"
-    }
+      "suggestion": "请记住，建议至少将您赚到的 15-20% 存下来。",
+      "formula": "（收入 − 支出）÷ 收入，均在所选时间范围内。",
+      "insufficient_data": "这段时间内的记录不足，无法判断您留下了多少钱。",
+      "unlock": "在这段时间内记录一笔收入，或任意类型的至少 10 笔交易。"
+    },
+    "debtToAssetRatio": {
+      "title": "负债资产比",
+      "subtitle": "您所拥有的资产中有多少被未偿还的债务抵消",
+      "text": {
+        "value": "您未偿还的债务占总资产的 <b>{{value}}%</b>。",
+        "no_assets": "您有未偿还的债务，但没有记录任何资产来支撑它。"
+      },
+      "suggestion": "比率越低，通常意味着您越有能力用自己拥有的资产偿还债务。",
+      "insufficient_data": "您还没有记录任何债务或资产，因此没有资产负债情况可供评估。",
+      "formula": "未偿还债务 ÷ 总资产，均以所选时间范围的结束日为准。",
+      "unlock": "添加一笔您的债务或一项您的资产（房子、汽车……）。"
+    },
+    "cashFlowConsistency": {
+      "title": "现金流稳定度",
+      "subtitle": "这段时间里有多少时候您的支出没有超出收入",
+      "text": {
+        "good": "这段时间里有 <b>{{value}}%</b> 的时候您量入为出，现金流很稳定。",
+        "normal": "这段时间里有 <b>{{value}}%</b> 的时候您量入为出。",
+        "bad": "这段时间里只有 <b>{{value}}%</b> 的时候您量入为出，现金流波动很大。"
+      },
+      "suggestion": "把大额支出分摊开，并保持相近的花钱节奏，会让您的财务可预测得多。",
+      "insufficient_data": "这个时间范围内分布的收支记录太少，无法判断您的现金流是否稳定。",
+      "formula": "我们会把这段时间分成几个部分，并把您的收入分摊到各部分。某个部分花掉的不超过分给它的份额就计满分，花到两倍则不计分，中间按比例计算。",
+      "unlock": "选择一个至少有 3 个部分存在收支记录的时间范围。"
+    },
+    "investmentRatio": {
+      "title": "投资比例",
+      "subtitle": "这段时间内您将收入的多少投入了证券",
+      "text": {
+        "value": "这段时间内您将收入的 <b>{{value}}%</b> 投入了证券。",
+        "none": "这段时间内您没有将任何资金投入证券。"
+      },
+      "suggestion": "定期投资一部分收入，有助于让您的钱增长得快于通胀。",
+      "formula": "投入证券的金额 ÷ 收入，均在所选时间范围内。",
+      "insufficient_data": "这段时间内您没有开设的投资账户，因此我们无法衡量您财务的这一部分。",
+      "unlock": "开设一个投资账户，或选择一个其中已有投资账户处于开设状态的时间范围。"
+    },
+    "howCalculated": {
+      "action": "您的评分是如何计算的",
+      "intro": "您的评分综合了这 5 项指标，每项都有各自的权重。当其中某项还没有足够的数据时，它的权重会按比例分摊给其余指标，因此您的评分仍然可以达到 100。",
+      "notAvailable": "尚未计入"
+    },
+    "composition": {
+      "earned": "已获得",
+      "earnedDescr": "您已经凭这段时间的数据拿到的分数。",
+      "pending": "可争取",
+      "pendingDescr": "在我们目前能够衡量的指标中，您还差的分数。",
+      "paused": "无法衡量",
+      "pausedDescr": "{{indicators}}：您还没有使用它们，因此我们无法衡量它们的分数。",
+      "scoreExplanation": "您的评分（{{score}}）只考虑了我们目前能衡量的 {{measurable}} 分，因此无法衡量的部分不会拉低它。",
+      "total": "总计"
+    },
+    "lowReliability": "该评分仅依据 <b>{{total}} 项指标中的 {{measurable}} 项</b>，请把它当作初步草稿：您使用的指标越多，它就越贴近您的真实情况。",
+    "shortRange": "<b>短于一个月</b>的时间范围会漏掉工资和账单，从而使储蓄百分比等指标失真。请扩大范围以获得更稳定的评分。",
+    "unreliableShort": "可靠性低",
+    "pointsContribution": "贡献 {{total}} 分中的 {{earned}} 分",
+    "pointsOfTotal": "{{earned}}/{{total}} 分",
+    "pointsShort": "{{value}} 分",
+    "pausedPoints": "{{total}} 分无法衡量",
+    "pausedShort": "无法衡量",
+    "aboutIndicator": "关于此指标",
+    "formulaLabel": "如何计算",
+    "howToUnlock": "如何解锁",
+    "indicatorsLabel": "指标",
+    "yourOwnPast": "您自己的过去",
+    "noComparisonNote": "这个应用只属于您：我们从不将您与其他用户比较，只将您与自己比较。",
+    "previousPeriodLabel": "上一时间段",
+    "nowLabel": "现在"
   },
   "STATS": {
     "title": "统计数据",
     "balance": "余额",
     "final-balance": "期末余额",
+    "final-net-worth": "期末净资产",
     "balance-by-account": "账户余额",
     "balance-by-account-subtitle": "我的大部分钱都在哪里？",
     "balance-by-currency": "货币余额",
@@ -290,6 +367,8 @@
     "balance-evolution-subtitle": "我是否比之前更有钱了？",
     "net-worth": "Net worth",
     "net-worth-subtitle": "The difference between what you own and what you owe.",
+    "net-worth-gross": "总资产",
+    "net-worth-net": "净资产",
     "net-worth-composition": "Net worth composition",
     "net-worth-composition-subtitle": "Distribution between accounts, investments and debts.",
     "portfolio": "文件夹",
@@ -298,7 +377,7 @@
     "portfolio-heat-map": "热力图",
     "portfolio-heat-map-subtitle": "方块越大，持仓越大。颜色越绿，表现越好。",
     "daily-performance": "每日",
-    "compared-to-previous-period": "与上一段时间相比",
+    "compared-to-previous-period": "较上一时期",
     "cash-flow": "现金流",
     "cash-flow-subtitle": "我的支出是否少于我的收入？",
     "by-periods": "按时间段",
@@ -367,6 +446,7 @@
       "accept-dialog.title": "接受交易",
       "accept-dialog.msg-single": "此交易的新状态将为null。您可以随时重新编辑此交易的状态",
       "accept-dialog.msg": "此操作将建立日期为 {{date}} 的新交易。您可以在交易页面查看此交易的详情",
+      "accept-dialog.trade": "{{quantity}} 单位 {{security}}，价格为 {{price}} {{currency}}（最新价格）。您之后可以对其进行编辑。",
       "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
     },
     "LIST": {
@@ -375,6 +455,10 @@
       "searcher.placeholder": "按类别、描述等搜索",
       "searcher.no-results": "未找到符合搜索条件的交易",
       "loading": "正在加载更多的交易……",
+      "upcoming": {
+        "one": "{{n}} 笔即将到期的交易",
+        "other": "{{n}} 笔即将到期的交易"
+      },
       "selected.short": {
         "one": "已选择 {{n}}",
         "other": "已选择 {{n}}"
@@ -491,6 +575,10 @@
     "FORM": {
       "from": "转出账户",
       "to": "转入账户",
+      "label-from": "转出",
+      "label-to": "转入",
+      "custom-amounts": "自定义金额",
+      "difference": "差额",
       "VALUE-IN-DESTINY": {
         "title": "转账数额",
         "amount-short": "{{amount}} 至目标账户"
@@ -501,11 +589,15 @@
     "title": "循环交易",
     "title.short": "循环交易",
     "empty": "您似乎没有任何循环交易。创建一个每周、每月或每年的循环交易，它会在此显示",
+    "empty-for-type": "您没有此类型的循环交易。请更改上方的筛选条件以查看其余的循环交易",
     "total-expense.title": "每一周期的总开支",
+    "total-income.title": "每一周期的总收入",
+    "total-all.title": "每一周期的总计",
     "total-expense.descr": "* 不考虑每一循环的起止日期",
     "DETAILS": {
       "title": "循环交易",
       "descr": "此交易的未来的动作显示如下。您可以接受第一个动作或跳过此动作",
+      "generated-transaction-status": "接受后的状态：{{status}}",
       "last-payment-info": "此动作是循环规则的最后一个，因此当确认此动作后，这一循环规则将被自动删除",
       "delete-header": "删除循环交易",
       "delete-message": "此操作无法撤回，不会影响您已确认/付款的交易"
@@ -560,14 +652,15 @@
       "investment": "投资账户",
       "investment.descr": "可包含资产的券商、加密货币交易所或投资组合账户。跟踪投资本金，并通过估值手动更新每个资产的价值",
       "normal": "普通账户",
-      "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……"
+      "normal.descr": "用于记录日常财务。这是最普通的账户，您可以添加支出、收入……",
+      "locked_warn": "该账户已有持仓、交易或快照，因此无法再更改账户类型。"
     },
     "TRACKING_MODES": {
       "title": "追踪模式",
       "transactions": "交易",
-      "transactions_descr": "头寸是根据您的买入和卖出交易自动计算的。",
+      "transactions_descr": "头寸是根据您的买入和卖出交易自动计算的。如果您拥有（或希望保留）完整的交易记录，并且需要精确的成本基础，这是最佳选择。",
       "holdings": "控股",
-      "holdings_descr": "以带日期的快照形式手动输入您的头寸（数量和平均成本）。",
+      "holdings_descr": "以带日期的快照形式手动输入您的头寸（数量和平均成本）。如果您只知道当前持仓，而不想记录每一笔交易，这是最佳选择。无论使用哪种模式，该账户的收入、支出和转账仍会照常记录。",
       "switch_warn": "每种跟踪模式使用不同的数据来源计算持仓。保存时，你当前的持仓会转换到新模式；更早的日期将按该模式已有的历史数据估值。"
     },
     "FORM": {
@@ -783,15 +876,7 @@
         "active-overspending": "超支",
         "active-indeterminate": "积极的",
         "success": "已达成",
-        "fail": "超出预算"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "在剩余的 {{ remainingDays }} 天里，您每天可以花费 {{ dailyAmount }}",
-        "active-overspending": "为了回到正轨，您应该在剩余的 {{ remainingDays }} 天里将每天的支出限制在 {{ dailyAmount }}",
-        "active-indeterminate": "您还剩 {{ amount }} 可以消费。",
-        "active-exceeded": "您已经超出了预算限额 {{ amount }}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出",
-        "success": "干得好！该预算已成功完成。继续创建预算以管理您的支出",
-        "fail": "您超出了预算 {{ amount }}。下次请更加小心！"
+        "fail": "超出"
       }
     }
   },
@@ -841,16 +926,33 @@
         "active-on-track": "步入正轨",
         "active-behind-schedule": "落后于计划",
         "active-indeterminate": "积极的",
-        "success": "目标达成",
-        "fail": "目标失败"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "您正在寻找目标的轨道上！您必须在剩余的 {{ remainingDays }} 天内每天节省 {{ dailyAmount }}",
-        "active-behind-schedule": "你落后于计划了。您必须每天节省 {{ dailyAmount }} 才能在 {{ remainingDays }} 天后达到您的目标",
-        "active-indeterminate": "您还需要 {{ amount }} 才能实现目标。",
-        "success": "恭喜！你达到了你的目标。",
-        "fail": "您与目标相差了 {{ amount }}。"
+        "success": "达成",
+        "fail": "失败"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "剩余",
+    "over": "超出",
+    "spent": "已花费",
+    "saved": "已储蓄",
+    "CHART": {
+      "spent": "已花费",
+      "saved": "已储蓄",
+      "projected": "预测",
+      "pace": "进度"
+    },
+    "STATS": {
+      "per-day": {
+        "other": "每天，剩余 {{n}} 天"
+      },
+      "per-day-short": "每天",
+      "per-day-help": "为达到目标金额，在周期结束前每天还可以增加的金额",
+      "above-pace": "高于进度",
+      "below-pace": "低于进度",
+      "pace-help": "当前金额与按整个周期均匀分配时截至今天的预期金额之间的差额",
+      "projected": "预测",
+      "projected-help": "如果保持当前进度，周期结束时的估计金额"
     }
   },
   "DEBTS": {
@@ -950,6 +1052,7 @@
     "profit_percent": "返回 ％",
     "total_value": "资产总值",
     "group_by_type": "按资产类型分组",
+    "price": "价格",
     "show_value_variation": "显示百分比变化",
     "amount_invested": "您已投资该账户的 {{ X }}",
     "TYPES": {
@@ -986,6 +1089,7 @@
       "choose_security": "选择证券",
       "create_security": "创建新证券",
       "security_name": "证券名称",
+      "security": "证券",
       "ticker": "股票代码/符号（可选）",
       "security_type": "证券类型",
       "current_price": "现价",
@@ -1000,7 +1104,7 @@
       "edit_snapshot": "编辑快照",
       "SNAPSHOTS": {
         "history_title": "快照历史记录",
-        "history_intro": "每个快照都存储某个日期的完整投资组合。当查看一天时，是应用该天或之前的最近一天。",
+        "history_intro": "每个快照都会保存账户在指定日期的完整状态。选择一个快照即可编辑。",
         "count": "{{n}} 个快照",
         "new_snapshot": "新的",
         "no_snapshots": "还没有快照",
@@ -1012,14 +1116,19 @@
         "update": "更新",
         "update_positions": "更新职位",
         "full_portfolio": "完整的投资组合",
-        "editor_intro": "告诉我们您的投资组合在 {{date}} 的情况。您输入的数值将用于计算从该日期到下一个快照期间的余额和统计数据。",
+        "how_it_works": "快照的工作方式",
+        "snapshot_contents_description": "快照是此账户在 {{date}} 的完整记录。请输入当日券商显示的未投资现金和所有持仓。未填写的持仓将视为不再持有。",
         "date_label": "快照日期",
+        "cash_label": "现金",
+        "balance_effect_description": "此快照将用于计算余额和统计数据，直至下一个快照生效。持仓价值会继续随市场价格变化，而此日期之后的交易和转账会改变现金余额。如果不再添加新快照，这些规则将一直生效。",
         "overwrite_warning": "该日期已存在快照。保存后将被覆盖。",
-        "add_position": "添加另一个位置",
+        "add_position": "添加另一个持仓",
+        "add_first_position": "添加您的第一个持仓",
         "col_symbol": "代码",
         "total_cost": "投资组合总成本",
+        "snapshot_total": "按成本计算的总额",
         "save": "保存快照",
-        "remove_hint": "要删除某个位置，只需删除其行即可：快照是完整照片，而不是运动。",
+        "zero_qty_hint": "数量为 0 时，该持仓仍会保留在快照中。要彻底移除，请删除对应行。",
         "delete_title": "删除快照？",
         "delete_descr": "该快照将被删除。如果是最新的，您当前的仓位将回落到上一个快照。"
       }
@@ -1104,7 +1213,6 @@
       "acquisition_transaction_badge": "获得",
       "select_account": "选择一个帐户",
       "update_value": "更新值",
-      "trade_form_asset_column": "资产",
       "notes_optional": "注释（可选）",
       "performance_title": "表现",
       "performance_return": "区间回报",
@@ -1126,10 +1234,17 @@
       "initial_value": "初始值",
       "initial_value_required": "请输入初始值",
       "initial_value_invalid": "请输入有效号码",
+      "acquisition_info": "购买信息",
+      "purchase_value": "购买价值",
+      "purchase_value_option": "输入购买价值",
+      "purchase_value_help": "如果留空，将使用第一次估值作为购买价格。",
+      "current_value": "当前价值",
+      "current_value_help": "可选。将以今天的日期记录一次估值。",
       "link_acquisition_transaction": "链接购买交易",
       "link_acquisition_transaction_descr": "选择代表购买该资产的费用。其金额（转换为资产的货币）和日期将用作初始值和购买日期",
       "acquisition_transaction": "收购交易",
       "creation_date_before_acquisition_transaction": "收购日期不能早于关联交易日期",
+      "acquisition_date_from_transaction": "购买日期取自关联交易，无法编辑。取消关联该交易即可修改。",
       "currency": "货币",
       "select_currency": "请选择货币",
       "creation_date": "创建日期",

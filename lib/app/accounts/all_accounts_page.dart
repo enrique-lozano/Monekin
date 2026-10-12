@@ -37,7 +37,7 @@ class _AllAccountsPageState extends State<AllAccountsPage> {
   }
 
   void _onAddPressed() {
-    RouteUtils.pushRoute(const AccountFormPage());
+    RouteUtils.showResponsiveForm(const AccountFormPage());
   }
 
   @override

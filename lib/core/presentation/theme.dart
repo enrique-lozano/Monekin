@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/user-setting/enum/app-fonts.enum.dart';
@@ -7,6 +5,7 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 
 import 'app_colors.dart';
 
@@ -18,7 +17,7 @@ bool isAppInLightBrightness(BuildContext context) =>
     !isAppInDarkBrightness(context);
 
 double getCardBorderRadius() {
-  return Platform.isIOS || Platform.isMacOS ? 16.0 : 12.0;
+  return AppUtils.isApple ? 16.0 : 12.0;
 }
 
 extension TextThemeExtension on TextTheme {
@@ -175,5 +174,46 @@ ThemeData getThemeData(
       clipBehavior: Clip.hardEdge,
     ),
     listTileTheme: ListTileThemeData(minVerticalPadding: 12),
+    scrollbarTheme: AppUtils.isDesktop
+        ? ScrollbarThemeData(
+            thumbVisibility: const WidgetStatePropertyAll(true),
+            thickness: const WidgetStatePropertyAll(7),
+            radius: const Radius.circular(4),
+            thumbColor: WidgetStateProperty.resolveWith(
+              (states) => theme.colorScheme.onSurfaceVariant.withValues(
+                alpha: states.contains(WidgetState.hovered) ? 0.7 : 0.45,
+              ),
+            ),
+          )
+        : null,
+    // On desktop, icon buttons feel more native as compact, slightly-rounded
+    // squares instead of the large fully-circular touch targets.
+    iconButtonTheme: AppUtils.isDesktop
+        ? IconButtonThemeData(
+            style: IconButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.all(6),
+              minimumSize: const Size(34, 34),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+          )
+        : null,
+    // On desktop, app bars read as flat toolbars separated from the content by
+    // a subtle bottom hairline (instead of the mobile elevation/tint).
+    appBarTheme: AppUtils.isDesktop
+        ? AppBarTheme(
+            scrolledUnderElevation: 0,
+            surfaceTintColor: Colors.transparent,
+            // Desktop icon buttons are compact; keep them off the window edge.
+            actionsPadding: const EdgeInsetsDirectional.only(end: 12),
+            shape: Border(
+              bottom: BorderSide(
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+              ),
+            ),
+          )
+        : null,
   );
 }

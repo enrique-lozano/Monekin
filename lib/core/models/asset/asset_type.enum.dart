@@ -41,6 +41,18 @@ enum AssetType implements DatabaseEnum<String> {
     };
   }
 
+  /// Example names to show as a hint in the asset name field.
+  String nameHint(BuildContext context) {
+    final t = Translations.of(context).assets.form.name_hints;
+    return switch (this) {
+      AssetType.realEstate => t.real_estate,
+      AssetType.vehicle => t.vehicle,
+      AssetType.preciousMetal => t.precious_metal,
+      AssetType.jewelryArt => t.jewelry_art,
+      AssetType.other => t.other,
+    };
+  }
+
   IconData icon() {
     return switch (this) {
       AssetType.realEstate => Icons.home,

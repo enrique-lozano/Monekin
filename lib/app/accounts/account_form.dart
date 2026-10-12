@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/app/accounts/tracking_mode_selector.dart';
 import 'package:monekin/app/accounts/widgets/account_group.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
@@ -20,13 +21,13 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -35,8 +36,6 @@ import 'package:monekin/core/services/supported_icon/supported_icon_service.dart
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
-
-import '../../core/models/transaction/transaction_type.enum.dart';
 
 class AccountFormPage extends StatefulWidget {
   const AccountFormPage({super.key, this.account});
@@ -161,14 +160,17 @@ class _AccountFormPageState extends State<AccountFormPage> {
     }
 
     if (_accountToEdit != null) {
-      // Each tracking mode values the account from a different source (trades
-      // vs. portfolio snapshots), so the positions have to be moved across or
-      // the account would suddenly be worth nothing.
+      // Each tracking mode reads positions from a different source (trades vs.
+      // portfolio snapshots). Holdings mode also takes cash from the snapshot,
+      // so the current cash is written into it as well.
       if (accountToSubmit.trackingMode != _accountToEdit.trackingMode) {
         await HoldingService.instance.convertTrackingMode(
           accountId: accountToSubmit.id,
           to: accountToSubmit.trackingMode,
           anchorTradeTitle: t.assets.holdings.opening_position,
+          snapshotCash: await accountService
+              .getAccountCash(account: _accountToEdit)
+              .first,
         );
       }
 
@@ -291,6 +293,50 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _swiftController.dispose();
 
     super.dispose();
+  }
+
+  /// The account type tile. A [locked] one is greyed out and, instead of
+  /// opening the selector, tells why it can't be changed.
+  Widget _buildAccountTypeField({bool locked = false}) {
+    final t = Translations.of(context);
+
+    // The tile gets its own context so that the selector popover anchors to it
+    // and not to the whole form (on wide layouts it is positioned and sized
+    // after the render box of the widget that opened it).
+    final field = Builder(
+      builder: (context) => ListTileField(
+        leading: Icon(
+          _type.icon,
+          color: locked
+              ? Theme.of(context).disabledColor
+              : Theme.of(context).colorScheme.primary,
+        ),
+        title: t.account.types.title,
+        subtitle: _type.title(context),
+        trailing: locked
+            ? Tooltip(
+                message: t.account.types.locked_warn,
+                child: const Icon(Icons.lock_outline),
+              )
+            : const Icon(Icons.chevron_right),
+        onTap: locked
+            ? () => MonekinSnackbar.info(
+                SnackbarParams(t.account.types.locked_warn),
+              )
+            : () async {
+                final selected = await showAccountTypeSelector(
+                  context,
+                  selectedType: _type,
+                );
+
+                if (selected != null) {
+                  setState(() => _type = selected);
+                }
+              },
+      ),
+    );
+
+    return locked ? Opacity(opacity: 0.6, child: field) : field;
   }
 
   @override
@@ -534,58 +580,25 @@ class _AccountFormPageState extends State<AccountFormPage> {
                     );
                   }
 
-                  // Account type selector stream: include spacing only when visible
-                  formChildren.add(
-                    StreamBuilder(
-                      stream: _accountToEdit == null
-                          ? Stream.value(true)
-                          : TransactionService.instance
-                                .countTransactions(
-                                  filters: TransactionFilterSet(
-                                    transactionTypes: [
-                                      TransactionType.expense,
-                                      TransactionType.income,
-                                    ],
-                                    accountsIDs: [_accountToEdit.id],
-                                  ),
-                                )
-                                .map((count) => count == 0),
-                      builder: (context, snapshot) {
-                        final hasTransactions =
-                            !snapshot.hasData || snapshot.data! == false;
-                        final isInvestmentEdit =
-                            _accountToEdit?.type == AccountType.investment;
+                  // Account type. Any account can become an investment one,
+                  // but the way back is only offered while there is nothing
+                  // investment-specific that would be left unreachable.
+                  final investmentAccountId =
+                      _accountToEdit?.type == AccountType.investment
+                      ? _accountToEdit!.id
+                      : null;
 
-                        if (hasTransactions || isInvestmentEdit) {
-                          return const SizedBox.shrink();
-                        }
-
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTileField(
-                              leading: Icon(
-                                _type.icon,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              title: t.account.types.title,
-                              subtitle: _type.title(context),
-                              trailing: const Icon(Icons.chevron_right),
-                              onTap: () async {
-                                final selected = await showAccountTypeSelector(
-                                  context,
-                                  selectedType: _type,
-                                );
-                                if (selected != null) {
-                                  setState(() => _type = selected);
-                                }
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                          ],
-                        );
-                      },
-                    ),
+                  add(
+                    investmentAccountId == null
+                        ? _buildAccountTypeField()
+                        : StreamBuilder(
+                            stream: HoldingService.instance
+                                .hasInvestmentRecords(investmentAccountId),
+                            builder: (context, snapshot) =>
+                                _buildAccountTypeField(
+                                  locked: snapshot.data ?? true,
+                                ),
+                          ),
                   );
 
                   // Savings flag (only relevant for money accounts)
@@ -609,31 +622,25 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Text(
-                              t.account.tracking_modes.title,
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ),
-                          RadioGroup<AccountTrackingMode>(
-                            groupValue: _trackingMode,
-                            onChanged: (v) {
-                              if (v == null) return;
-                              setState(() => _trackingMode = v);
-                            },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                for (final mode in AccountTrackingMode.values)
-                                  RadioListTile<AccountTrackingMode>.adaptive(
-                                    contentPadding: EdgeInsets.zero,
-                                    value: mode,
-                                    secondary: Icon(mode.icon),
-                                    title: Text(mode.title(context)),
-                                    subtitle: Text(mode.description(context)),
-                                  ),
-                              ],
+                          Builder(
+                            builder: (context) => ListTileField(
+                              leading: Icon(
+                                _trackingMode.icon,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              title: t.account.tracking_modes.title,
+                              subtitle: _trackingMode.title(context),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () async {
+                                final selectedMode =
+                                    await showTrackingModeSelector(
+                                      context,
+                                      selectedMode: _trackingMode,
+                                    );
+                                if (selectedMode != null) {
+                                  setState(() => _trackingMode = selectedMode);
+                                }
+                              },
                             ),
                           ),
                           if (_accountToEdit?.type == AccountType.investment &&

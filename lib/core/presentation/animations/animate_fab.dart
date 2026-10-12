@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class AnimateFAB extends StatelessWidget {
@@ -103,15 +105,24 @@ class AnimateFABDelayed extends StatefulWidget {
 
 class _AnimateFABDelayedState extends State<AnimateFABDelayed> {
   bool scaleIn = false;
+  Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(widget.delay, () {
+    if (widget.fab == null) return;
+
+    _timer = Timer(widget.delay, () {
       setState(() {
         scaleIn = true;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override

@@ -18,7 +18,7 @@ class GoalsPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.add_rounded),
         label: Text(t.goals.form.new_title),
-        onPressed: () => RouteUtils.pushRoute(const GoalFormPage()),
+        onPressed: () => RouteUtils.showResponsiveForm(const GoalFormPage()),
       ),
       body: StreamBuilder(
         stream: GoalService.instance.getGoals(),

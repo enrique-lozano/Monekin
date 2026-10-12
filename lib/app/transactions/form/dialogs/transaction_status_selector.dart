@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
+import 'package:monekin/core/presentation/widgets/sheet_or_fixed.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -9,10 +10,8 @@ Future<ModalResult<TransactionStatus>?> showTransactionStatusModal(
   BuildContext context, {
   required TransactionStatus? initialStatus,
 }) {
-  return showModalBottomSheet<ModalResult<TransactionStatus>>(
-    context: context,
-    isScrollControlled: true,
-    showDragHandle: true,
+  return RouteUtils.showResponsiveModal<ModalResult<TransactionStatus>>(
+    context,
     builder: (context) {
       return TransactionStatusSelector(initialTransactionStatus: initialStatus);
     },
@@ -44,8 +43,7 @@ class TransactionStatusSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return DraggableScrollableSheet(
-      expand: false,
+    return SheetOrFixed(
       maxChildSize: 0.85,
       minChildSize: 0.65,
       initialChildSize: 0.85,
@@ -72,7 +70,6 @@ class TransactionStatusSelector extends StatelessWidget {
 
 class _TransactionStatusButtonSelector extends StatelessWidget {
   const _TransactionStatusButtonSelector({
-    super.key,
     required this.status,
     required this.onClick,
     required this.isSelected,

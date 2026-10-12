@@ -251,10 +251,8 @@ class CategoryFormFunctions {
     required String color,
     Category? subcategory,
   }) {
-    showModalBottomSheet(
+    RouteUtils.showResponsiveSheet(
       context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
       builder: (context) {
         return SubcategoryFormDialog(
           name: subcategory?.name ?? '',

@@ -73,43 +73,48 @@ class CurrencyManagerPage extends StatelessWidget {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Skeletonizer(
-                      enabled: userCurrency == null,
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: userCurrency != null
-                              ? userCurrency.displayFlagIcon(size: 42)
-                              : Container(
-                                  height: 42,
-                                  width: 42,
-                                  color: Colors.red,
-                                ),
-                        ),
-                        title: Text(
-                          userCurrency == null
-                              ? 'PLA - Placeholder'
-                              : ('${userCurrency.name} - ${userCurrency.code}'),
-                        ),
-                        subtitle: Text(
-                          t.currencies.tap_to_change_preferred_currency,
-                        ),
-                        onTap: () {
-                          if (userCurrency == null) return;
+                    // Wrapped in a [Builder] so the popover anchors to *this*
+                    // tile's render box instead of the whole StreamBuilder
+                    // column (which also contains the "currency settings" tile).
+                    Builder(
+                      builder: (tileContext) => Skeletonizer(
+                        enabled: userCurrency == null,
+                        child: ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: userCurrency != null
+                                ? userCurrency.displayFlagIcon(size: 42)
+                                : Container(
+                                    height: 42,
+                                    width: 42,
+                                    color: Colors.red,
+                                  ),
+                          ),
+                          title: Text(
+                            userCurrency == null
+                                ? 'PLA - Placeholder'
+                                : ('${userCurrency.name} - ${userCurrency.code}'),
+                          ),
+                          subtitle: Text(
+                            t.currencies.tap_to_change_preferred_currency,
+                          ),
+                          onTap: () {
+                            if (userCurrency == null) return;
 
-                          showCurrencySelectorModal(
-                            context,
-                            CurrencySelectorModal(
-                              preselectedCurrency: userCurrency,
-                              onCurrencySelected: (newCurrency) async {
-                                await Future.delayed(
-                                  const Duration(milliseconds: 250),
-                                );
-                                changePreferredCurrency(context, newCurrency);
-                              },
-                            ),
-                          );
-                        },
+                            showCurrencySelectorModal(
+                              tileContext,
+                              CurrencySelectorModal(
+                                preselectedCurrency: userCurrency,
+                                onCurrencySelected: (newCurrency) async {
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 250),
+                                  );
+                                  changePreferredCurrency(context, newCurrency);
+                                },
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ),
                     ListTile(
@@ -118,7 +123,7 @@ class CurrencyManagerPage extends StatelessWidget {
                       enabled: userCurrency != null,
                       onTap: () {
                         if (userCurrency != null) {
-                          RouteUtils.pushRoute(
+                          RouteUtils.showResponsiveForm(
                             EditCurrencyPage(currency: userCurrency),
                           );
                         }
