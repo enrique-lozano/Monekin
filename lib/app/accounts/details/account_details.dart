@@ -514,12 +514,8 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     return actions;
   }
 
-  Future<void> _startTrade(Account account, {required bool isBuy}) async {
-    final security = await showSecurityPicker(context);
-    if (security == null || !mounted) return;
-
-    await showTradeForm(account: account, security: security, isBuy: isBuy);
-  }
+  Future<void> _startTrade(Account account, {required bool isBuy}) =>
+      showTradeForm(account: account, isBuy: isBuy);
 
   Future<void> _updateSnapshot(Account account) async {
     final current = await HoldingService.instance

@@ -29,8 +29,8 @@ class TransactionFormPage extends StatefulWidget {
   final Account? toAccount;
   final Debt? linkedDebt;
 
-  /// Creates a buy (or a sell, with [isSell]) of this security in
-  /// [fromAccount].
+  /// With the investment [mode], creates a buy (or a sell, with [isSell]) in
+  /// [fromAccount]. The user picks the security if [security] is null.
   final SecurityInDB? security;
   final bool isSell;
 
@@ -62,7 +62,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   Future<void> _runPostMountBootstrap() async {
     final c = _controller;
-    if (c.isEditMode || c.isSecurityTradeInvestment) return;
+    if (c.isEditMode) return;
+
+    if (c.isSecurityTradeInvestment) {
+      if (c.security == null) await c.pickSecurity(context);
+      return;
+    }
 
     await c.waitForFormDefaults();
     if (!mounted) return;

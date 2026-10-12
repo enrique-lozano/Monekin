@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
+import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/amount_selector.dart';
@@ -100,11 +101,11 @@ class TransactionFormController extends ChangeNotifier {
   /// Units held before this trade, used to cap a sell. Null until loaded.
   double? _heldQuantity;
 
-  /// True for a security trade (type N with a securityID), when creating one
-  /// for a given security or editing an existing one.
+  /// True for a security trade (type N with a securityID): when creating one
+  /// (opened with the investment mode) or editing an existing one.
   bool get isSecurityTradeInvestment {
     final edit = _transactionToEdit;
-    if (edit == null) return _security != null;
+    if (edit == null) return _mode == TransactionType.investment;
     return edit.type == TransactionType.investment && edit.securityID != null;
   }
 
@@ -177,8 +178,7 @@ class TransactionFormController extends ChangeNotifier {
       final edit = _transactionToEdit;
       if (edit == null) {
         fromAccount = _prefillFromAccount;
-        priceController.text = _plainNumber(_security!.currentPrice ?? 0);
-        unawaited(_loadHeldQuantity());
+        if (_security != null) _onSecuritySelected(_security!);
         return;
       }
       _securityTradeIsSell = !edit.value.isNegative;
@@ -248,6 +248,21 @@ class TransactionFormController extends ChangeNotifier {
     if (_disposed) return;
     _security = loaded;
     _safeNotify();
+  }
+
+  /// Lets the user pick the security of a new trade.
+  Future<void> pickSecurity(BuildContext context) async {
+    final picked = await showSecurityPicker(context);
+    if (picked == null || _disposed) return;
+    _onSecuritySelected(picked);
+  }
+
+  void _onSecuritySelected(SecurityInDB security) {
+    _security = security;
+    _heldQuantity = null;
+    priceController.text = _plainNumber(security.currentPrice ?? 0);
+    _safeNotify();
+    unawaited(_loadHeldQuantity());
   }
 
   Future<void> _loadHeldQuantity() async {
@@ -650,7 +665,12 @@ class TransactionFormController extends ChangeNotifier {
     final account = fromAccount;
     final security = _security;
 
-    if (account == null || security == null) {
+    if (security == null) {
+      shakeKey.currentState?.shake();
+      return;
+    }
+
+    if (account == null) {
       MonekinSnackbar.error(
         SnackbarParams.fromError(t.general.validations.form_error),
       );
@@ -845,11 +865,16 @@ class TransactionFormController extends ChangeNotifier {
     if (isEditMode) {
       return t.transaction.edit;
     }
-    final security = _security;
-    if (security != null) {
+    if (isSecurityTradeInvestment) {
+      final name = _security?.name;
+      if (name == null) {
+        return securityTradeIsBuy
+            ? t.assets.holdings.buy
+            : t.assets.holdings.sell;
+      }
       return securityTradeIsBuy
-          ? t.assets.holdings.buy_title(security: security.name)
-          : t.assets.holdings.sell_title(security: security.name);
+          ? t.assets.holdings.buy_title(security: name)
+          : t.assets.holdings.sell_title(security: name);
     }
     return t.transaction.create;
   }

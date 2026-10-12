@@ -11,6 +11,7 @@ import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/currency/currency.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
@@ -45,7 +46,7 @@ class HoldingsCard extends StatelessWidget {
               headerAction: CardHeaderAction(
                 text: t.assets.holdings.buy,
                 icon: const Icon(Icons.add_rounded, size: 15),
-                onTap: () => _startBuyFlow(context),
+                onTap: _startBuyFlow,
               ),
               bodyPadding: const EdgeInsets.symmetric(vertical: 4),
               body: holdings.isEmpty
@@ -68,12 +69,7 @@ class HoldingsCard extends StatelessWidget {
     );
   }
 
-  Future<void> _startBuyFlow(BuildContext context) async {
-    final security = await showSecurityPicker(context);
-    if (security == null || !context.mounted) return;
-
-    await showTradeForm(account: account, security: security, isBuy: true);
-  }
+  Future<void> _startBuyFlow() => showTradeForm(account: account, isBuy: true);
 }
 
 class _HoldingTile extends StatelessWidget {
@@ -279,14 +275,16 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
 // Buy / Sell
 // ---------------------------------------------------------------------------
 
-/// Opens the transaction form to buy or sell [security] in [account].
+/// Opens the transaction form to buy or sell in [account]. The form asks for
+/// the security when [security] is null.
 Future<void> showTradeForm({
   required Account account,
-  required SecurityInDB security,
+  SecurityInDB? security,
   required bool isBuy,
 }) {
   return RouteUtils.showResponsiveForm(
     TransactionFormPage(
+      mode: TransactionType.investment,
       fromAccount: account,
       security: security,
       isSell: !isBuy,
