@@ -20,6 +20,8 @@ Before submitting your PR, please ensure the following:
 - [ ] I confirm that I've run the code locally and everything works as expected.
 - [ ] I have read and agree to the [Contributor License Agreement](https://github.com/enrique-lozano/Monekin/blob/main/CLA.md).
 
+_On your first PR, a bot will ask you to sign the CLA by posting a comment. You only need to do this once._
+
 ## 📸 Screenshots or Demo (if applicable)
 
 _If your changes include UI updates, please attach screenshots or a screen recording of the changes._
