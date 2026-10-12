@@ -177,10 +177,9 @@ Future<void> _push(
   }
 
   await edits.validate(_packageName, editId);
-  await edits.commit(_packageName, editId, changesNotSentForReview: true);
+  await edits.commit(_packageName, editId);
   stdout.writeln(
-    '\nUploaded $changes change(s). Review them and send them for review in '
-    'the Play Console: Publishing overview > Changes not yet sent for review.',
+    '\nUploaded $changes change(s). They are sent for review automatically.',
   );
 }
 
