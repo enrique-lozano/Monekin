@@ -15,13 +15,15 @@ import 'package:rxdart/rxdart.dart';
 /// weighted-average cost basis, and records the matching cash trades.
 class HoldingService {
   final AppDB db;
+  final ExchangeRateService _exchangeRates;
 
-  HoldingService._(this.db);
+  HoldingService._(this.db) : _exchangeRates = ExchangeRateService.instance;
   static final HoldingService instance = HoldingService._(AppDB.instance);
 
   /// Creates a service bound to a specific (test) database.
   @visibleForTesting
-  HoldingService.forTesting(this.db);
+  HoldingService.forTesting(this.db, {ExchangeRateService? exchangeRates})
+    : _exchangeRates = exchangeRates ?? ExchangeRateService.instance;
 
   Stream<List<HoldingWithSecurity>> getHoldingsForAccount(String accountId) {
     final query = db.select(db.holdings).join([
@@ -222,7 +224,7 @@ class HoldingService {
 
     return Rx.combineLatestList(
       codes.map(
-        (code) => ExchangeRateService.instance.calculateExchangeRate(
+        (code) => _exchangeRates.calculateExchangeRate(
           fromCurrency: code,
           toCurrency: toCurrency,
           date: date,

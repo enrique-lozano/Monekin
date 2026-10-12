@@ -14,6 +14,10 @@ class ExchangeRateService {
     AppDB.instance,
   );
 
+  /// Creates a service bound to a specific (test) database.
+  @visibleForTesting
+  ExchangeRateService.forTesting(this.db);
+
   Future<int> insertOrUpdateExchangeRate(ExchangeRateInDB toInsert) async {
     final elToCompare = (await (getLastExchangeRateOf(
       currencyCode: toInsert.currencyCode,

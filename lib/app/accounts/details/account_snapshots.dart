@@ -29,6 +29,7 @@ import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart'
 import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// Plain, locale-agnostic string for a number editable in a text field
 /// (e.g. `1`, `204`, `98.5`), stripping a trailing `.0`.
@@ -357,6 +358,10 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   Map<String, double> _rates = {};
   Map<String, CurrencyInDB> _currencies = {};
 
+  /// Until the rates of the current date and rows are loaded, the converted
+  /// totals would use old ones, so they are not shown.
+  bool _loadingRates = false;
+
   bool get _isEditing => widget.snapshotToEdit != null;
 
   @override
@@ -402,6 +407,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         .toSet();
     final date = _date;
 
+    setState(() => _loadingRates = codes.isNotEmpty);
+
     final rates = <String, double>{
       for (final code in codes)
         code: await ExchangeRateService.instance
@@ -413,11 +420,29 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
             .first,
     };
 
-    if (!mounted || date != _date) return;
-    setState(() => _rates = rates);
+    // A newer request (another date or other rows) owns the result now
+    if (!mounted || date != _date || !_sameCurrencies(codes)) return;
+    setState(() {
+      _rates = rates;
+      _loadingRates = false;
+    });
   }
 
-  double _rateOf(_EditorRow row) => _rates[row.security.currencyId] ?? 1;
+  bool _sameCurrencies(Set<String> codes) {
+    final current = _rows
+        .map((r) => r.security.currencyId)
+        .where((code) => code != widget.account.currency.code)
+        .toSet();
+
+    return current.length == codes.length && current.containsAll(codes);
+  }
+
+  /// 1 only for the currency of the account: any other one waits for its rate.
+  double _rateOf(_EditorRow row) {
+    final code = row.security.currencyId;
+    if (code == widget.account.currency.code) return 1;
+    return _rates[code] ?? 1;
+  }
 
   @override
   void dispose() {
@@ -706,12 +731,14 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
               _buildSummaryRow(
                 t.assets.holdings.snapshots.total_cost,
                 _totalCost,
+                converted: true,
               ),
               const Divider(height: 16),
               _buildSummaryRow(
                 t.assets.holdings.snapshots.snapshot_total,
                 _cashValue + _totalCost,
                 emphasized: true,
+                converted: true,
               ),
             ],
           ),
@@ -724,6 +751,7 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     String label,
     double amount, {
     bool emphasized = false,
+    bool converted = false,
   }) {
     final theme = Theme.of(context);
 
@@ -743,9 +771,12 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
                       ? theme.textTheme.titleMedium!
                       : theme.textTheme.bodyMedium!)
                   .copyWith(color: theme.colorScheme.primary),
-          child: CurrencyDisplayer(
-            amountToConvert: amount,
-            currency: widget.account.currency,
+          child: Skeletonizer(
+            enabled: converted && _loadingRates,
+            child: CurrencyDisplayer(
+              amountToConvert: amount,
+              currency: widget.account.currency,
+            ),
           ),
         ),
       ],
