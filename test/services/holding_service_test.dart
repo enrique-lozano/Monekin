@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -577,6 +578,61 @@ void main() {
       await insertHolding('acc-other', securityId, quantity: 5, avgCost: 10);
 
       expect(await service.hasInvestmentRecords(accountId).first, isFalse);
+    });
+  });
+
+  group('summing valuations in the account currency', () {
+    HoldingValuationAtDate valuation(
+      String currency, {
+      required double market,
+      required double cost,
+    }) => HoldingValuationAtDate(
+      accountId: accountId,
+      securityId: 'sec-$currency',
+      securityName: 'Security $currency',
+      securityType: SecurityType.stock,
+      currencyId: currency,
+      market: market,
+      cost: cost,
+    );
+
+    test('converts every security currency with its own rate', () {
+      final sum = HoldingService.sumValuations(
+        [
+          valuation('EUR', market: 100, cost: 80),
+          valuation('USD', market: 200, cost: 150),
+        ],
+        (code) => code == 'USD' ? 0.5 : 1,
+      );
+
+      expect(sum.market, closeTo(100 + 200 * 0.5, 1e-9));
+      expect(sum.cost, closeTo(80 + 150 * 0.5, 1e-9));
+      expect(sum.positions, 2);
+    });
+
+    test('does not count closed positions', () {
+      final sum = HoldingService.sumValuations(
+        [
+          valuation('EUR', market: 100, cost: 80),
+          valuation('EUR', market: 0, cost: 0),
+        ],
+        (_) => 1,
+      );
+
+      expect(sum.positions, 1);
+    });
+
+    test('adds up without any rate when everything is in the account currency',
+        () async {
+      final sum = await service
+          .sumValuationsIn([
+            valuation('USD', market: 100, cost: 80),
+            valuation('USD', market: 50, cost: 60),
+          ], 'USD')
+          .first;
+
+      expect(sum.market, 150);
+      expect(sum.cost, 140);
     });
   });
 

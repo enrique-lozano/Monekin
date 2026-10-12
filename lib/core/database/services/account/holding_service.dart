@@ -207,6 +207,56 @@ class HoldingService {
     });
   }
 
+  /// Adds up the market value and cost basis of [valuations], converting each
+  /// security currency to [toCurrency] at the rate of [date], and counts the
+  /// open positions.
+  Stream<({double market, double cost, int positions})> sumValuationsIn(
+    Iterable<HoldingValuationAtDate> valuations,
+    String toCurrency, {
+    DateTime? date,
+  }) {
+    final codes = (valuations.map((v) => v.currencyId).toSet()
+      ..remove(toCurrency)).toList();
+
+    if (codes.isEmpty) return Stream.value(sumValuations(valuations, (_) => 1));
+
+    return Rx.combineLatestList(
+      codes.map(
+        (code) => ExchangeRateService.instance.calculateExchangeRate(
+          fromCurrency: code,
+          toCurrency: toCurrency,
+          date: date,
+        ),
+      ),
+    ).map((rates) {
+      final byCode = Map.fromIterables(codes, rates);
+      return sumValuations(valuations, (code) => byCode[code] ?? 1);
+    });
+  }
+
+  /// The sum behind [sumValuationsIn], with [rateOf] giving the rate from a
+  /// security currency to the target one.
+  @visibleForTesting
+  static ({double market, double cost, int positions}) sumValuations(
+    Iterable<HoldingValuationAtDate> valuations,
+    double Function(String currencyId) rateOf,
+  ) {
+    var market = 0.0;
+    var cost = 0.0;
+
+    for (final v in valuations) {
+      final rate = rateOf(v.currencyId);
+      market += v.market * rate;
+      cost += v.cost * rate;
+    }
+
+    return (
+      market: market,
+      cost: cost,
+      positions: valuations.where((v) => v.market != 0).length,
+    );
+  }
+
   /// Reconstructs the quantity, price and average cost of **every position that
   /// has ever existed** (per account/security) as of [date], branched by the
   /// account's [AccountTrackingMode]. This is the single source of truth for

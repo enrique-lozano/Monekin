@@ -10,9 +10,12 @@ import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
+import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -349,6 +352,11 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   final TextEditingController _cash = TextEditingController();
   late DateTime _date;
 
+  /// The rows are written in the currency of each security: these convert them
+  /// to the one of the account on the date of the snapshot.
+  Map<String, double> _rates = {};
+  Map<String, CurrencyInDB> _currencies = {};
+
   bool get _isEditing => widget.snapshotToEdit != null;
 
   @override
@@ -373,7 +381,43 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     } else {
       unawaited(_prefillCashFromLedger(_date));
     }
+
+    unawaited(_loadCurrencies());
+    unawaited(_loadRates());
   }
+
+  Future<void> _loadCurrencies() async {
+    final all = await CurrencyService.instance.getAllCurrencies().first;
+    if (!mounted) return;
+    setState(
+      () => _currencies = {for (final c in all ?? <Currency>[]) c.code: c},
+    );
+  }
+
+  Future<void> _loadRates() async {
+    final accountCode = widget.account.currency.code;
+    final codes = _rows
+        .map((r) => r.security.currencyId)
+        .where((code) => code != accountCode)
+        .toSet();
+    final date = _date;
+
+    final rates = <String, double>{
+      for (final code in codes)
+        code: await ExchangeRateService.instance
+            .calculateExchangeRate(
+              fromCurrency: code,
+              toCurrency: accountCode,
+              date: date,
+            )
+            .first,
+    };
+
+    if (!mounted || date != _date) return;
+    setState(() => _rates = rates);
+  }
+
+  double _rateOf(_EditorRow row) => _rates[row.security.currencyId] ?? 1;
 
   @override
   void dispose() {
@@ -402,7 +446,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
 
   double get _cashValue => double.tryParse(_cash.text) ?? 0;
 
-  double get _totalCost => _rows.fold(0, (sum, r) => sum + r.cost);
+  double get _totalCost =>
+      _rows.fold(0, (sum, r) => sum + r.cost * _rateOf(r));
 
   Future<void> _addPosition() async {
     final security = await showSecurityPicker(context);
@@ -423,6 +468,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         ),
       );
     });
+
+    unawaited(_loadRates());
   }
 
   void _removeRow(_EditorRow row) {
@@ -472,6 +519,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
           ),
         );
     });
+
+    unawaited(_loadRates());
   }
 
   /// The editor is a form, not a tutorial: what a snapshot is and what its cash
@@ -830,7 +879,9 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
                   style: theme.textTheme.bodyMedium!,
                   child: CurrencyDisplayer(
                     amountToConvert: row.cost,
-                    currency: widget.account.currency,
+                    currency:
+                        _currencies[row.security.currencyId] ??
+                        widget.account.currency,
                   ),
                 ),
               ),
