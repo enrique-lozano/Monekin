@@ -131,7 +131,7 @@ function fileName(index) {
 
 /** Whether the screenshots test has generated the `capture` folder. */
 async function hasCaptures(capture) {
-  const res = await fetch(`../../screenshots/captures/${capture}/01_dashboard.png`, { method: 'HEAD' });
+  const res = await fetch(`../../captures/${capture}/01_dashboard.png`, { method: 'HEAD' });
   return res.ok;
 }
 

@@ -1,10 +1,10 @@
 // Prints the comma-separated `<app locale>-<currency>` captures needed by the
 // given store image sets (all of them if none), as defined in
-// `app-marketplaces/store-images/config.json`. Used by
+// `app-marketplaces/screenshots/generator/config.json`. Used by
 // `scripts/generate_screenshots.bat`.
 //
 // Run from the repository root:
-//   dart app-marketplaces/store-images/editor/captures_for_sets.dart en-US pt-BR
+//   dart app-marketplaces/screenshots/generator/editor/captures_for_sets.dart en-US pt-BR
 import 'dart:convert';
 import 'dart:io';
 
@@ -12,7 +12,7 @@ void main(List<String> setIds) {
   final config =
       jsonDecode(
             File(
-              'app-marketplaces/store-images/config.json',
+              'app-marketplaces/screenshots/generator/config.json',
             ).readAsStringSync(),
           )
           as Map<String, dynamic>;

@@ -7,7 +7,7 @@
 // support it, and on desktop the captures are taken from a debug-only API.
 //
 // Run from the repository root:
-//   dart app-marketplaces/store-images/editor/pick_device.dart
+//   dart app-marketplaces/screenshots/generator/editor/pick_device.dart
 import 'dart:convert';
 import 'dart:io';
 

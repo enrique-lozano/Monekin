@@ -1,0 +1,3 @@
+# Never commit the Google Play service account key.
+service-account.json
+.dart_tool/

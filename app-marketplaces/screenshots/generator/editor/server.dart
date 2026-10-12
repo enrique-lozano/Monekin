@@ -5,11 +5,11 @@
 // `app-marketplaces/screenshots/store/<set>/` and opens that folder in the file
 // explorer when the editor asks for it.
 //
-// Run from the repository root: dart app-marketplaces/store-images/editor/server.dart
+// Run from the repository root: dart app-marketplaces/screenshots/generator/editor/server.dart
 import 'dart:io';
 
 const _port = 8080;
-const _editorPath = '/app-marketplaces/store-images/editor/';
+const _editorPath = '/app-marketplaces/screenshots/generator/editor/';
 final _exportPath = RegExp(r'^/export/([\w-]+)/([\w-]+\.png)$');
 final _openPath = RegExp(r'^/open/([\w-]+)$');
 

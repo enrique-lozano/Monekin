@@ -108,7 +108,7 @@ async function loadCapture(container, capture, shot) {
     if (
       await loadImage(
         img,
-        `../../screenshots/captures/${candidate}/${shot}.png`,
+        `../../captures/${candidate}/${shot}.png`,
       )
     ) {
       return { img, isFallback: candidate !== capture };

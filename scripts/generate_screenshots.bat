@@ -14,7 +14,7 @@ setlocal enabledelayedexpansion
 ::   scripts\generate_screenshots.bat en-US pt-BR   (only the captures these sets need)
 ::
 :: The sets (caption language, app language and demo currency of each store
-:: listing) live in app-marketplaces\store-images\config.json. Sets sharing app
+:: listing) live in app-marketplaces\screenshots\generator\config.json. Sets sharing app
 :: language and currency share captures, saved to
 :: app-marketplaces\screenshots\captures\<app language>-<currency>\.
 ::
@@ -30,9 +30,9 @@ cd /d "%~dp0.."
 
 :: ─── Captures needed by the chosen sets ───────────────────────────────────────
 set "CAPTURES="
-for /f "delims=" %%C in ('dart app-marketplaces\store-images\editor\captures_for_sets.dart %*') do set "CAPTURES=%%C"
+for /f "delims=" %%C in ('dart app-marketplaces\screenshots\generator\editor\captures_for_sets.dart %*') do set "CAPTURES=%%C"
 if not defined CAPTURES (
-    echo Failed reading the sets from app-marketplaces\store-images\config.json
+    echo Failed reading the sets from app-marketplaces\screenshots\generator\config.json
     exit /b 1
 )
 
@@ -42,7 +42,7 @@ if defined DEVICE (
     set "DEVICE_ARG=-d %DEVICE%"
     if "%PROFILE%"=="1" set "DEVICE_ARG=-d %DEVICE% --profile"
 ) else (
-    for /f "delims=" %%D in ('dart app-marketplaces\store-images\editor\pick_device.dart') do set "DEVICE_ARG=%%D"
+    for /f "delims=" %%D in ('dart app-marketplaces\screenshots\generator\editor\pick_device.dart') do set "DEVICE_ARG=%%D"
     if not defined DEVICE_ARG exit /b 1
 )
 
@@ -70,6 +70,6 @@ if errorlevel 1 (
 
 echo.
 echo Done. Open the store images editor to review and export them:
-echo   dart app-marketplaces/store-images/editor/server.dart
+echo   dart app-marketplaces/screenshots/generator/editor/server.dart
 
 endlocal

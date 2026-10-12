@@ -15,13 +15,13 @@
 
 @font-face {
   font-family: 'Nunito';
-  src: url(../../../assets/fonts/Nunito/Nunito-SemiBold.ttf);
+  src: url(../../../../assets/fonts/Nunito/Nunito-SemiBold.ttf);
   font-weight: 600;
 }
 
 @font-face {
   font-family: 'Nunito';
-  src: url(../../../assets/fonts/Nunito/Nunito-Bold.ttf);
+  src: url(../../../../assets/fonts/Nunito/Nunito-Bold.ttf);
   font-weight: 700;
 }
 
