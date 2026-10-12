@@ -180,7 +180,7 @@
     "next": "Next",
     "select-your-currency": "Select your currency",
     "welcome.subtitle": "Your personal finance manager",
-    "welcome.subtitle2": "100% open, 100% free",
+    "welcome.subtitle2": "100% open, 100% private",
     "welcome.footer": "By logging in you agree to the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Privacy Policy</a> and the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Terms of Use</a> of the application",
     "offline.descr.title": "OFFLINE ACCOUNT:",
     "offline.descr": "Your data will only be stored on your device, and will be safe as long as you don't uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.",
@@ -382,7 +382,7 @@
     "portfolio-heat-map": "Heat map",
     "portfolio-heat-map-subtitle": "The bigger the block, the larger the position. The greener, the better it is doing.",
     "daily-performance": "Daily",
-    "compared-to-previous-period": "Compared to the previous period",
+    "compared-to-previous-period": "vs previous period",
     "cash-flow": "Cash flow",
     "cash-flow-subtitle": "Am I spending less than I earn?",
     "by-periods": "By periods",
@@ -451,6 +451,7 @@
       "accept-dialog.title": "Accept transaction",
       "accept-dialog.msg-single": "The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want",
       "accept-dialog.msg": "This action will create a new transaction with date {{date}}. You will be able to check the details of this transaction on the transaction page",
+      "accept-dialog.trade": "{{quantity}} units of {{security}} at {{price}} {{currency}}, the latest price. You can edit it afterwards.",
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {
@@ -600,6 +601,10 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
+      "label-from": "From",
+      "label-to": "To",
+      "custom-amounts": "Custom amounts",
+      "difference": "difference",
       "VALUE-IN-DESTINY": {
         "title": "Amount transferred at destination",
         "amount-short": "{{amount}} to target account"
@@ -677,9 +682,9 @@
     "TRACKING_MODES": {
       "title": "Tracking mode",
       "transactions": "Transactions",
-      "transactions_descr": "Positions are calculated automatically from your buy and sell trades.",
+      "transactions_descr": "Positions are calculated automatically from your buy and sell trades. Best if you have (or want to keep) a full trade history and want accurate cost basis.",
       "holdings": "Holdings",
-      "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost).",
+      "holdings_descr": "Enter your positions manually as dated snapshots (quantity and average cost). Best if you only know your current position and don't want to log every trade. Your income, expenses and transfers on this account are still tracked as normal either way.",
       "switch_warn": "Each mode calculates your positions from a different source. When you save, your current positions are converted to the new mode. Earlier dates will be valued using the history that mode already has."
     },
     "FORM": {
@@ -895,15 +900,7 @@
         "active-overspending": "Overspending",
         "active-indeterminate": "Active",
         "success": "Achieved",
-        "fail": "Budget exceeded"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "You can spend {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-overspending": "To get back on track, you should limit your spending to {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-indeterminate": "You have {{ amount }} left to spend.",
-        "active-exceeded": "You have already exceeded your budget limit by {{ amount }}. If you don't find any incomes for this budget, you should stop spending for the rest of its period",
-        "success": "Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses",
-        "fail": "You exceeded the budget by {{ amount }}. Try to be more careful next time!"
+        "fail": "Exceeded"
       }
     }
   },
@@ -953,16 +950,34 @@
         "active-on-track": "On track",
         "active-behind-schedule": "Behind schedule",
         "active-indeterminate": "Active",
-        "success": "Goal reached",
-        "fail": "Goal failed"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "You are on track to seek your goal! You have to save {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-behind-schedule": "You are behind schedule. You have to save {{ dailyAmount }} per day to reach your goal in {{ remainingDays }} days",
-        "active-indeterminate": "You need {{ amount }} more to reach your goal.",
-        "success": "Congratulations! You reached your goal.",
-        "fail": "You missed your goal by {{ amount }}."
+        "success": "Reached",
+        "fail": "Failed"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "left",
+    "over": "over",
+    "spent": "spent",
+    "saved": "saved",
+    "CHART": {
+      "spent": "Spent",
+      "saved": "Saved",
+      "projected": "Projected",
+      "pace": "Pace"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "per day, {{n}} day left",
+        "other": "per day, {{n}} days left"
+      },
+      "per-day-short": "per day",
+      "per-day-help": "How much you can still add each day until the end of the period to reach the target amount",
+      "above-pace": "above pace",
+      "below-pace": "below pace",
+      "pace-help": "Difference between the current amount and the amount expected by today if it were spread evenly over the whole period",
+      "projected": "projected",
+      "projected-help": "Estimated amount at the end of the period if the current pace continues"
     }
   },
   "DEBTS": {
@@ -1099,6 +1114,7 @@
       "choose_security": "Choose a security",
       "create_security": "Create new security",
       "security_name": "Security name",
+      "security": "Security",
       "ticker": "Ticker / symbol (optional)",
       "security_type": "Security type",
       "current_price": "Current price",
@@ -1225,7 +1241,6 @@
       "acquisition_transaction_badge": "Acquisition",
       "select_account": "Select an account",
       "update_value": "Update value",
-      "trade_form_asset_column": "Asset",
       "notes_optional": "Notes (optional)",
       "performance_title": "Performance",
       "performance_return": "Period return",

@@ -1,0 +1,38 @@
+{
+  "01-dashboard": {
+    "title": "你的錢，<em>一目了然。</em>",
+    "subtitle": "所有帳戶、餘額與趨勢盡收眼底",
+    "sticker": "100% 私密"
+  },
+  "02-transactions": {
+    "title": "每筆收支，<em>井然有序</em>",
+    "subtitle": "無限搜尋、篩選與標籤",
+    "search": "搜尋",
+    "filters": "篩選",
+    "tags": "標籤"
+  },
+  "03-stats": {
+    "title": "看清錢都<em>花到哪</em>",
+    "subtitle": "財務健康分數、淨資產等等"
+  },
+  "04-themes": {
+    "title": "打造<em>專屬</em>風格",
+    "subtitle": "選擇主題、顏色與字體，盡情享受！"
+  },
+  "05-quick-add": {
+    "title": "<em>幾秒內</em>新增交易",
+    "subtitle": "支出、收入與轉帳"
+  },
+  "06-planning": {
+    "title": "預算、目標與<em>訂閱</em>",
+    "subtitle": "提前規劃，不錯過任何付款"
+  },
+  "07-privacy": {
+    "title": "你的資料，<em>只屬於你</em>",
+    "offline": { "title": "離線優先", "text": "所有資料都保存在你的裝置上" },
+    "noAds": { "title": "沒有廣告", "text": "不追蹤、不打廣告，永遠如此" },
+    "openSource": { "title": "開放原始碼", "text": "透明且可供審查" },
+    "investments": { "title": "投資", "text": "股票、基金、加密貨幣與資產" },
+    "backups": { "title": "本機備份", "text": "隨時匯出與匯入" }
+  }
+}

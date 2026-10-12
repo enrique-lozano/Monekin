@@ -311,41 +311,46 @@ class ExpandingSegmentedTabs<T> extends StatelessWidget {
         onTap: () => onSelected(item.value),
         bgColor: bgColor,
         borderRadius: innerShape,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(item.icon, size: _iconSize, color: fgColor),
-            if (showLabel)
-              Flexible(
-                child: Padding(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: showLabel ? _horizontalPadding : 0,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(item.icon, size: _iconSize, color: fgColor),
+              if (showLabel)
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: _labelGap),
+                    child: Text(
+                      item.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: _labelStyle.copyWith(color: fgColor),
+                    ),
+                  ),
+                ),
+              if (showLabel && item.badgeCount != null)
+                Padding(
                   padding: const EdgeInsets.only(left: _labelGap),
-                  child: Text(
-                    item.label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: _labelStyle.copyWith(color: fgColor),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: fgColor.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(9999),
+                    ),
+                    child: Text(
+                      '${item.badgeCount}',
+                      style: _badgeTextStyle.copyWith(color: fgColor),
+                    ),
                   ),
                 ),
-              ),
-            if (showLabel && item.badgeCount != null)
-              Padding(
-                padding: const EdgeInsets.only(left: _labelGap),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 1,
-                  ),
-                  decoration: BoxDecoration(
-                    color: fgColor.withValues(alpha: 0.16),
-                    borderRadius: BorderRadius.circular(9999),
-                  ),
-                  child: Text(
-                    '${item.badgeCount}',
-                    style: _badgeTextStyle.copyWith(color: fgColor),
-                  ),
-                ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );

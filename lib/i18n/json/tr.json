@@ -178,7 +178,7 @@
     "next": "İleri",
     "select-your-currency": "Para birimini seçin",
     "welcome.subtitle": "Kişisel finans yöneticiniz",
-    "welcome.subtitle2": "%100 açık, %100 ücretsiz",
+    "welcome.subtitle2": "%100 açık, %100 özel",
     "welcome.footer": "Giriş yaparak, uygulamanın <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Gizlilik Politikası</a> ve <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Kullanım Şartları</a>'nı kabul etmiş olursunuz",
     "offline.descr.title": "ÇEVRİMDIŞI HESAP:",
     "offline.descr": "Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.",
@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Isı haritası",
     "portfolio-heat-map-subtitle": "Blok ne kadar büyükse pozisyon o kadar büyüktür. Ne kadar yeşilse o kadar iyi gidiyordur.",
     "daily-performance": "Günlük",
-    "compared-to-previous-period": "Önceki döneme göre",
+    "compared-to-previous-period": "vs önceki dönem",
     "cash-flow": "Nakit akışı",
     "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
     "by-periods": "Dönemlere göre",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "İşlemi kabul et",
       "accept-dialog.msg-single": "İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz",
       "accept-dialog.msg": "Bu eylem {{date}} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz",
+      "accept-dialog.trade": "{{security}} için {{quantity}} birim, {{price}} {{currency}} fiyatından (son fiyat). Daha sonra düzenleyebilirsiniz.",
       "recurrent-rule-finished": "Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "Kaynak hesap",
       "to": "Hedef hesap",
+      "label-from": "Nereden",
+      "label-to": "Nereye",
+      "custom-amounts": "Özel tutarlar",
+      "difference": "fark",
       "VALUE-IN-DESTINY": {
         "title": "Hedefte aktarılan miktar",
         "amount-short": "Hedef hesaba {{amount}}"
@@ -653,9 +658,9 @@
     "TRACKING_MODES": {
       "title": "İzleme modu",
       "transactions": "İşlemler",
-      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır.",
+      "transactions_descr": "Pozisyonlar alış ve satış işlemlerinizden otomatik olarak hesaplanır. Eksiksiz bir işlem geçmişiniz varsa (veya tutmak istiyorsanız) ve doğru bir maliyet esası istiyorsanız en iyi seçenektir.",
       "holdings": "Holdingler",
-      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin.",
+      "holdings_descr": "Pozisyonlarınızı tarihli anlık görüntüler (miktar ve ortalama maliyet) olarak manuel olarak girin. Yalnızca mevcut pozisyonunuzu biliyorsanız ve her işlemi kaydetmek istemiyorsanız en iyi seçenektir. Bu hesaptaki gelir, gider ve transferleriniz her iki modda da normal şekilde takip edilmeye devam eder.",
       "switch_warn": "Her mod pozisyonlarınızı farklı bir kaynaktan hesaplar. Kaydettiğinizde mevcut pozisyonlarınız yeni moda dönüştürülür. Daha önceki tarihler, o modun halihazırda sahip olduğu geçmişe göre değerlenir."
     },
     "FORM": {
@@ -871,15 +876,7 @@
         "active-overspending": "Aşırı harcama",
         "active-indeterminate": "Aktif",
         "success": "Başarılı",
-        "fail": "Bütçe aşıldı"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Kalan {{ remainingDays }} gün için günde {{ dailyAmount }} harcayabilirsiniz",
-        "active-overspending": "Tekrar rayına oturmak için, kalan {{ remainingDays }} gün boyunca harcamalarınızı günde {{ dailyAmount }} ile sınırlamalısınız",
-        "active-indeterminate": "Harcayabileceğiniz {{ amount }} kaldı.",
-        "active-exceeded": "Bütçe limitinizi {{ amount }} aştınız. Bu bütçe için herhangi bir gelir bulamazsanız, dönemin geri kalanında harcama yapmayı bırakmalısınız",
-        "success": "Harika iş! Bu bütçe başarıyla tamamlandı. Harcamalarınızı yönetmek için bütçe oluşturmaya devam edin",
-        "fail": "Bütçeyi {{ amount }} aştınız. Bir dahaki sefere daha dikkatli olmaya çalışın!"
+        "fail": "Aşıldı"
       }
     }
   },
@@ -929,16 +926,34 @@
         "active-on-track": "Yolda",
         "active-behind-schedule": "Programın gerisinde",
         "active-indeterminate": "Aktif",
-        "success": "Hedefe ulaşıldı",
-        "fail": "Hedef başarısız oldu"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Hedefinizi arama yolundasınız! Kalan {{ remainingDays }} gün boyunca günde {{ dailyAmount }} tasarruf etmelisiniz",
-        "active-behind-schedule": "Programın gerisindesiniz. Hedefinize {{ remainingDays }} gün içinde ulaşmak için günde {{ dailyAmount }} tasarruf etmeniz gerekiyor",
-        "active-indeterminate": "Hedefinize ulaşmak için {{ amount }} daha fazlasına ihtiyacınız var.",
-        "success": "Tebrikler! Hedefine ulaştın.",
-        "fail": "Hedefinizi {{ amount }} kadar kaçırdınız."
+        "success": "Ulaşıldı",
+        "fail": "Başarısız oldu"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "kaldı",
+    "over": "aşıldı",
+    "spent": "harcandı",
+    "saved": "biriktirildi",
+    "CHART": {
+      "spent": "Harcanan",
+      "saved": "Biriktirilen",
+      "projected": "Tahmin",
+      "pace": "Tempo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "günlük, {{n}} gün kaldı",
+        "other": "günlük, {{n}} gün kaldı"
+      },
+      "per-day-short": "günlük",
+      "per-day-help": "Hedef tutara ulaşmak için dönem sonuna kadar her gün daha ne kadar ekleyebileceğiniz",
+      "above-pace": "tempo üstünde",
+      "below-pace": "tempo altında",
+      "pace-help": "Mevcut tutar ile tüm döneme eşit dağıtılsaydı bugüne kadar beklenen tutar arasındaki fark",
+      "projected": "tahmini",
+      "projected-help": "Mevcut tempo devam ederse dönem sonundaki tahmini tutar"
     }
   },
   "DEBTS": {
@@ -1075,6 +1090,7 @@
       "choose_security": "Bir güvenlik seçin",
       "create_security": "Yeni güvenlik oluşturun",
       "security_name": "Güvenlik adı",
+      "security": "Menkul kıymet",
       "ticker": "Ticker / sembol (isteğe bağlı)",
       "security_type": "Güvenlik türü",
       "current_price": "Güncel fiyat",
@@ -1198,7 +1214,6 @@
       "acquisition_transaction_badge": "Kazanma",
       "select_account": "Bir hesap seçin",
       "update_value": "Değeri güncelle",
-      "trade_form_asset_column": "Varlık",
       "notes_optional": "Notlar (isteğe bağlı)",
       "performance_title": "Performance",
       "performance_return": "Period return",

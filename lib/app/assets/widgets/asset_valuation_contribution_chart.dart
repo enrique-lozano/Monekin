@@ -160,6 +160,7 @@ class _AssetValuationContributionChartState
                   : contributionSpots,
               isCurved: true,
               curveSmoothness: 0.05,
+              preventCurveOverShooting: true,
               color: isNotEnoughData
                   ? colorScheme.outlineVariant
                   : netContributionColor,
@@ -181,6 +182,7 @@ class _AssetValuationContributionChartState
                 : valuationSpots,
             isCurved: true,
             curveSmoothness: 0.05,
+            preventCurveOverShooting: true,
             color: isNotEnoughData ? colorScheme.outline : valuationColor,
             barWidth: 3,
             isStrokeCapRound: true,

@@ -1,0 +1,10 @@
+name: play_store
+description: Uploads the store listing texts and images to Google Play.
+publish_to: none
+
+environment:
+  sdk: '>=3.10.1 <4.0.0'
+dependencies:
+  crypto: ^3.0.7
+  googleapis: ^17.0.0
+  googleapis_auth: ^2.3.4

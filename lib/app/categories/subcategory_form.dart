@@ -37,7 +37,6 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
   final TextEditingController _nameController = TextEditingController();
 
   late SupportedIcon _icon;
-  late Color _color;
 
   @override
   void initState() {
@@ -47,7 +46,6 @@ class _SubcategoryFormDialogState extends State<SubcategoryFormDialog> {
 
     setState(() {
       _icon = widget.icon;
-      _color = widget.color;
     });
   }
 

@@ -178,7 +178,7 @@
     "next": "Nächste",
     "select-your-currency": "Wähle Deine Währung aus",
     "welcome.subtitle": "Dein persönlicher Finanzmanager",
-    "welcome.subtitle2": "100 % geöffnet, 100 % kostenlos",
+    "welcome.subtitle2": "100 % geöffnet, 100 % privat",
     "welcome.footer": "Mit der Anmeldung stimmst Du der <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Datenschutzrichtlinie</a> und den <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Nutzungsbedingungen</a> der App zu",
     "offline.descr.title": "OFFLINE-KONTO:",
     "offline.descr": "Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ",
@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Heatmap",
     "portfolio-heat-map-subtitle": "Je größer der Block, desto größer die Position. Je grüner, desto besser läuft es.",
     "daily-performance": "Täglich",
-    "compared-to-previous-period": "Im Vergleich zur Vorperiode",
+    "compared-to-previous-period": "vs. Vorperiode",
     "cash-flow": "Cashflow",
     "cash-flow-subtitle": "Gebe ich weniger aus, als ich verdiene?",
     "by-periods": "Nach Perioden",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "Akzeptierst Du die Transaktion",
       "accept-dialog.msg-single": "Der neue Status der Transaktion ist null. ",
       "accept-dialog.msg": "Diese Aktion erstellt eine neue Transaktion mit Datum {{date}}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen",
+      "accept-dialog.trade": "{{quantity}} Einheiten von {{security}} zu {{price}} {{currency}}, dem aktuellen Kurs. Du kannst sie danach bearbeiten.",
       "recurrent-rule-finished": "Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "Origin-Konto",
       "to": "Zielkonto",
+      "label-from": "Von",
+      "label-to": "Nach",
+      "custom-amounts": "Individuelle Beträge",
+      "difference": "Differenz",
       "VALUE-IN-DESTINY": {
         "title": "Am Zielkonto überwiesener Betrag",
         "amount-short": "{{amount}} zum Zielkonto"
@@ -653,9 +658,9 @@
     "TRACKING_MODES": {
       "title": "Tracking-Modus",
       "transactions": "Transaktionen",
-      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet.",
+      "transactions_descr": "Positionen werden automatisch aus Ihren Kauf- und Verkaufsgeschäften berechnet. Am besten, wenn Sie eine vollständige Handelshistorie haben (oder führen möchten) und eine genaue Kostenbasis wünschen.",
       "holdings": "Bestände",
-      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten).",
+      "holdings_descr": "Geben Sie Ihre Positionen manuell als datierte Schnappschüsse ein (Menge und Durchschnittskosten). Am besten, wenn Sie nur Ihre aktuelle Position kennen und nicht jeden Trade protokollieren möchten. Ihre Einnahmen, Ausgaben und Überweisungen auf diesem Konto werden in beiden Modi weiterhin ganz normal erfasst.",
       "switch_warn": "Jeder Modus berechnet Ihre Positionen aus einer anderen Quelle. Beim Speichern werden Ihre aktuellen Positionen in den neuen Modus übertragen. Frühere Zeitpunkte werden mit dem Verlauf bewertet, den dieser Modus bereits hat."
     },
     "FORM": {
@@ -871,15 +876,7 @@
         "active-overspending": "Mehrausgaben",
         "active-indeterminate": "Aktiv",
         "success": "Erreicht",
-        "fail": "Budget überschritten"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Sie können {{ dailyAmount }} pro Tag für die verbleibenden {{ remainingDays }} Tage ausgeben",
-        "active-overspending": "Um wieder auf Kurs zu kommen, sollten Sie Ihre Ausgaben auf {{ dailyAmount }} pro Tag für die verbleibenden {{ remainingDays }} Tage begrenzen",
-        "active-indeterminate": "Sie haben noch {{ amount }} zum Ausgeben übrig.",
-        "active-exceeded": "Sie haben Ihr Budgetlimit bereits um {{ amount }} überschritten. Wenn Sie keine Einnahmen für dieses Budget finden, sollten Sie für den Rest des Zeitraums keine Ausgaben mehr tätigen",
-        "success": "Gute Arbeit! Dieses Budget wurde erfolgreich abgeschlossen. Erstellen Sie weiterhin Budgets, um Ihre Ausgaben zu verwalten",
-        "fail": "Sie haben das Budget um {{ amount }} überschritten. Versuchen Sie beim nächsten Mal vorsichtiger zu sein!"
+        "fail": "Überschritten"
       }
     }
   },
@@ -929,16 +926,34 @@
         "active-on-track": "Auf dem richtigen Weg",
         "active-behind-schedule": "Hinter dem Zeitplan",
         "active-indeterminate": "Aktiv",
-        "success": "Ziel erreicht",
-        "fail": "Ziel gescheitert"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Sie sind auf dem richtigen Weg, Ihr Ziel zu erreichen! Sie müssen für die verbleibenden {{ remainingDays }} Tage pro Tag {{ dailyAmount }} sparen",
-        "active-behind-schedule": "Sie sind im Rückstand. Sie müssen {{ dailyAmount }} pro Tag sparen, um Ihr Ziel in {{ remainingDays }} Tagen zu erreichen",
-        "active-indeterminate": "Sie benötigen {{ amount }} mehr, um Ihr Ziel zu erreichen.",
-        "success": "Glückwunsch! Du hast dein Ziel erreicht.",
-        "fail": "Sie haben Ihr Ziel um {{ amount }} verfehlt."
+        "success": "Erreicht",
+        "fail": "Gescheitert"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "übrig",
+    "over": "darüber",
+    "spent": "ausgegeben",
+    "saved": "gespart",
+    "CHART": {
+      "spent": "Ausgegeben",
+      "saved": "Gespart",
+      "projected": "Prognose",
+      "pace": "Tempo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "pro Tag, noch {{n}} Tag",
+        "other": "pro Tag, noch {{n}} Tage"
+      },
+      "per-day-short": "pro Tag",
+      "per-day-help": "Wie viel du bis zum Ende des Zeitraums täglich noch hinzufügen kannst, um den Zielbetrag zu erreichen",
+      "above-pace": "über dem Tempo",
+      "below-pace": "unter dem Tempo",
+      "pace-help": "Differenz zwischen dem aktuellen Betrag und dem Betrag, der bei gleichmäßiger Verteilung über den gesamten Zeitraum bis heute zu erwarten wäre",
+      "projected": "Prognose",
+      "projected-help": "Geschätzter Betrag am Ende des Zeitraums, wenn das aktuelle Tempo beibehalten wird"
     }
   },
   "DEBTS": {
@@ -1075,6 +1090,7 @@
       "choose_security": "Wertpapier auswählen",
       "create_security": "Neues Wertpapier erstellen",
       "security_name": "Name des Wertpapiers",
+      "security": "Wertpapier",
       "ticker": "Ticker/Symbol (optional)",
       "security_type": "Wertpapierart",
       "current_price": "Aktueller Preis",
@@ -1198,7 +1214,6 @@
       "acquisition_transaction_badge": "Erwerb",
       "select_account": "Wählen Sie ein Konto aus",
       "update_value": "Wert aktualisieren",
-      "trade_form_asset_column": "Anlage",
       "notes_optional": "Notizen (optional)",
       "performance_title": "Performance",
       "performance_return": "Periodenrendite",

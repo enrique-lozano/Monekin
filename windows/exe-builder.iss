@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Non-commercial use only
 #define MyAppName "Monekin"
-#define MyAppVersion "10.1.0"
+#define MyAppVersion "10.1.1"
 #define MyAppPublisher "Lozin Tech."
 #define MyAppURL "https://github.com/enrique-lozano/Monekin"
 #define MyAppExeName "monekin.exe"

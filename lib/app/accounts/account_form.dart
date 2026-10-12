@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
+import 'package:monekin/app/accounts/tracking_mode_selector.dart';
 import 'package:monekin/app/accounts/widgets/account_group.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
@@ -20,13 +21,13 @@ import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/list_tile_field.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
-import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/show_more_content_button.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -621,31 +622,25 @@ class _AccountFormPageState extends State<AccountFormPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, bottom: 4),
-                            child: Text(
-                              t.account.tracking_modes.title,
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ),
-                          RadioGroup<AccountTrackingMode>(
-                            groupValue: _trackingMode,
-                            onChanged: (v) {
-                              if (v == null) return;
-                              setState(() => _trackingMode = v);
-                            },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                for (final mode in AccountTrackingMode.values)
-                                  RadioListTile<AccountTrackingMode>.adaptive(
-                                    contentPadding: EdgeInsets.zero,
-                                    value: mode,
-                                    secondary: Icon(mode.icon),
-                                    title: Text(mode.title(context)),
-                                    subtitle: Text(mode.description(context)),
-                                  ),
-                              ],
+                          Builder(
+                            builder: (context) => ListTileField(
+                              leading: Icon(
+                                _trackingMode.icon,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              title: t.account.tracking_modes.title,
+                              subtitle: _trackingMode.title(context),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () async {
+                                final selectedMode =
+                                    await showTrackingModeSelector(
+                                      context,
+                                      selectedMode: _trackingMode,
+                                    );
+                                if (selectedMode != null) {
+                                  setState(() => _trackingMode = selectedMode);
+                                }
+                              },
                             ),
                           ),
                           if (_accountToEdit?.type == AccountType.investment &&

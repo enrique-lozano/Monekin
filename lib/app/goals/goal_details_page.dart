@@ -16,7 +16,7 @@ import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/monekin_popup_menu_button.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
-import 'package:monekin/core/presentation/widgets/targets/financial_target_card.dart';
+import 'package:monekin/core/presentation/widgets/targets/target_evolution_chart.dart';
 import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
@@ -151,11 +151,6 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
           ],
           body: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                decoration: BoxDecoration(color: Theme.of(context).cardColor),
-                child: TargetHeader(target: goal, showIdentity: false),
-              ),
               ?segmentedTabs,
               Expanded(
                 child: TabBarView(
@@ -181,6 +176,8 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                               mainAxisSize: MainAxisSize.min,
                               spacing: 16,
                               children: [
+                                if (!goal.isActive)
+                                  FinancialTargetTimelineCard(target: goal),
                                 StreamBuilder<double>(
                                   stream: goal.currentValue,
                                   builder: (context, currentValueSnapshot) {
@@ -189,6 +186,16 @@ class _GoalDetailsPageState extends State<GoalDetailsPage>
                                       currentValue: currentValueSnapshot.data,
                                     );
                                   },
+                                ),
+                                CardWithHeader(
+                                  title: t.goals.details.evolution,
+                                  bodyPadding: const EdgeInsets.fromLTRB(
+                                    12,
+                                    4,
+                                    16,
+                                    12,
+                                  ),
+                                  body: TargetEvolutionChart(target: goal),
                                 ),
                               ],
                             ),

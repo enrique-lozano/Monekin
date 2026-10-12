@@ -490,13 +490,17 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           icon: Icons.add_rounded,
           label: t.assets.holdings.buy,
           color: Colors.green,
-          onTap: disabled ? null : () => _startTrade(account, isBuy: true),
+          onTap: disabled
+              ? null
+              : () => showTradeForm(account: account, isBuy: true),
         ),
         _QuickAction(
           icon: Icons.remove_rounded,
           label: t.assets.holdings.sell,
           color: Colors.red,
-          onTap: disabled ? null : () => _startTrade(account, isBuy: false),
+          onTap: disabled
+              ? null
+              : () => showTradeForm(account: account, isBuy: false),
         ),
         _QuickAction(
           icon: Icons.account_balance_wallet_rounded,
@@ -512,18 +516,6 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     }
 
     return actions;
-  }
-
-  Future<void> _startTrade(Account account, {required bool isBuy}) async {
-    final security = await showSecurityPicker(context);
-    if (security == null || !mounted) return;
-
-    await showTradeSheet(
-      context,
-      account: account,
-      security: security,
-      isBuy: isBuy,
-    );
   }
 
   Future<void> _updateSnapshot(Account account) async {
