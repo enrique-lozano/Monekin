@@ -100,6 +100,7 @@ class TransactionFormController extends ChangeNotifier {
 
   /// Units held before this trade, used to cap a sell. Null until loaded.
   double? _heldQuantity;
+  Future<void>? _heldQuantityLoad;
 
   /// True for a security trade (type N with a securityID): when creating one
   /// (opened with the investment mode) or editing an existing one.
@@ -113,11 +114,17 @@ class TransactionFormController extends ChangeNotifier {
   bool get securityTradeIsBuy => !_securityTradeIsSell;
 
   /// Units available to sell, counting back the units of the trade being
-  /// edited. Null until loaded.
+  /// edited when they are part of the holding. Null until loaded.
   double? get securityTradeAvailableUnits {
     final held = _heldQuantity;
     if (held == null) return null;
-    return held - (_transactionToEdit?.quantity ?? 0);
+    final edit = _transactionToEdit;
+    final editCountsInHolding =
+        edit != null &&
+        edit.recurrentInfo.isNoRecurrent &&
+        edit.status != TransactionStatus.pending &&
+        edit.status != TransactionStatus.voided;
+    return editCountsInHolding ? held - (edit.quantity ?? 0) : held;
   }
 
   double get securityTradeQuantity =>
@@ -185,7 +192,8 @@ class TransactionFormController extends ChangeNotifier {
       quantityController.text = _plainNumber((edit.quantity ?? 0).abs());
       priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
       _fillForm(edit);
-      unawaited(_loadSecurity().then((_) => _loadHeldQuantity()));
+      _heldQuantityLoad = _loadSecurity().then((_) => _loadHeldQuantity());
+      unawaited(_heldQuantityLoad);
       return;
     }
 
@@ -262,7 +270,8 @@ class TransactionFormController extends ChangeNotifier {
     _heldQuantity = null;
     priceController.text = _plainNumber(security.currentPrice ?? 0);
     _safeNotify();
-    unawaited(_loadHeldQuantity());
+    _heldQuantityLoad = _loadHeldQuantity();
+    unawaited(_heldQuantityLoad);
   }
 
   Future<void> _loadHeldQuantity() async {
@@ -695,6 +704,9 @@ class TransactionFormController extends ChangeNotifier {
       );
       return;
     }
+
+    if (!securityTradeIsBuy) await _heldQuantityLoad;
+    if (_disposed) return;
 
     final available = securityTradeAvailableUnits;
     if (!securityTradeIsBuy && available != null && qty > available + 1e-7) {
