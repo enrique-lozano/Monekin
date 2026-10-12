@@ -446,6 +446,7 @@
       "accept-dialog.title": "Tranzakció elfogadása",
       "accept-dialog.msg-single": "A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.",
       "accept-dialog.msg": "Ez a művelet egy új tranzakciót hoz létre {{date}} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.",
+      "accept-dialog.trade": "{{quantity}} egység {{security}}, {{price}} {{currency}} áron, a legutóbbi árfolyamon. Utólag szerkesztheti.",
       "recurrent-rule-finished": "Az ismétlődő szabály teljesült, nincs több kifizetés!"
     },
     "LIST": {
@@ -1089,6 +1090,7 @@
       "choose_security": "Válasszon egy értékpapírt",
       "create_security": "Hozzon létre új biztonságot",
       "security_name": "Biztonsági név",
+      "security": "Értékpapír",
       "ticker": "Ticker / szimbólum (opcionális)",
       "security_type": "Biztonsági típus",
       "current_price": "Jelenlegi ár",
@@ -1212,7 +1214,6 @@
       "acquisition_transaction_badge": "Beszerzés",
       "select_account": "Válasszon egy fiókot",
       "update_value": "Frissítse az értéket",
-      "trade_form_asset_column": "Eszköz",
       "notes_optional": "Megjegyzések (nem kötelező)",
       "performance_title": "Performance",
       "performance_return": "Period return",

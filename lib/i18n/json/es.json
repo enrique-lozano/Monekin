@@ -454,6 +454,7 @@
       "accept-dialog.title": "Aceptar transacción",
       "accept-dialog.msg-single": "El estado de la transacción pasará a ser nulo. Puedes volver a editar el estado de esta transacción cuando lo desees",
       "accept-dialog.msg": "Esta acción creará una transacción nueva con fecha {{date}}. Podrás consultar los detalles de esta transacción en la página de transacciones",
+      "accept-dialog.trade": "{{quantity}} unidades de {{security}} a {{price}} {{currency}}, el último precio. Podrás editarla después.",
       "recurrent-rule-finished": "La regla recurrente se ha completado, ya no hay mas pagos a realizar!"
     },
     "LIST": {
@@ -1100,6 +1101,7 @@
       "choose_security": "Elige un valor",
       "create_security": "Crear nuevo valor",
       "security_name": "Nombre del valor",
+      "security": "Valor",
       "ticker": "Ticker / símbolo (opcional)",
       "security_type": "Tipo de valor",
       "current_price": "Precio actual",
@@ -1226,7 +1228,6 @@
       "acquisition_transaction_badge": "Adquisición",
       "select_account": "Seleccione una cuenta",
       "update_value": "Actualizar valor",
-      "trade_form_asset_column": "Activo",
       "notes_optional": "Notas (opcional)",
       "performance_title": "Rendimiento",
       "performance_return": "Rentabilidad del periodo",
