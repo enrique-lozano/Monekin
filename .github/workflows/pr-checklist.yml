@@ -12,7 +12,7 @@ permissions: {}
 jobs:
   checklist:
     runs-on: ubuntu-latest
-    if: ${{ !endsWith(github.actor, '[bot]') }}
+    if: ${{ github.event.pull_request.user.type != 'Bot' }}
     steps:
       - name: Check all checklist items are ticked
         env:
