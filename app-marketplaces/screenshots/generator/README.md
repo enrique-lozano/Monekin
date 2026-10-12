@@ -1,11 +1,9 @@
-# Google Play presentation
-
-This is one of the parts where we most appreciate your help. The presentation in the Google Play is important to achieve a greater number of downloads.
+# Store images generator
 
 The store images are made in two steps:
 
 1. **Captures**: `scripts\generate_screenshots.bat` runs the app with demo data and saves raw captures to `app-marketplaces/screenshots/captures/<app language>-<currency>/` (see `integration_test/README.md`).
-2. **Store images**: the editor in this folder lays those captures out and exports the final 1080x1920 images to `app-marketplaces/screenshots/store/<set>/01.png`, `02.png`..., ready to upload with `app-marketplaces/play-store/` (see its README).
+2. **Store images**: the editor in this folder lays those captures out and exports the final 1080x1920 images to `app-marketplaces/screenshots/store/<set>/01.png`, `02.png`..., ready to upload.
 
 ## Sets
 
@@ -21,7 +19,7 @@ Each store listing gets a **set** of images, defined in `config.json` with:
 Sets with the same `app` and `currency` share captures. Listings without their own set reuse another one when uploading (e.g. `en-US` for `en-AU`, `de-DE` for `de-AT`).
 
 > [!NOTE]
-> Only the `en-US` store images (`screenshots/store/en-US/`) are committed, because the project README shows them. The captures and the store images of other sets are ignored by git: generate it locally with the two steps above. Commit the `en-US` images only when publishing new ones to the stores, as every export changes them slightly (demo data dates) and each commit adds them to the history again. Discard them otherwise with `git restore app-marketplaces/screenshots/store/en-US/`.
+> Only the `en-US` store images are committed, because the project README shows them. Every export changes them slightly (demo data dates), so don't include them in your PR unless the slides changed: discard them with `git restore app-marketplaces/screenshots/store/en-US/`.
 
 ## Using the editor
 
@@ -32,19 +30,6 @@ dart app-marketplaces/screenshots/generator/editor/server.dart
 ```
 
 Open the printed URL. You'll see every image of the selected set. Use **Export** on an image, or export a whole set at once, then **Open folder** to see the results in your file explorer. Reload the page after editing any file.
-
-```
-app-marketplaces/
-├── screenshots/
-│   ├── generator/               Source of the store images (edit here)
-│   │   ├── config.json          Sets and slides, in store order
-│   │   ├── slides/*.html        One file per image (layout)
-│   │   ├── texts/<lang>.json    Texts of every image, one file per caption language
-│   │   └── editor/              Editor, local server and shared styles (rarely needs changes)
-│   ├── captures/<app>-<currency>/  Raw captures from the integration test (not committed)
-│   └── store/<set>/                Final images exported by the editor (only en-US is committed)
-└── play-store/                  Uploads the listing texts and store images to Google Play (see its README)
-```
 
 ### Editing a slide
 
