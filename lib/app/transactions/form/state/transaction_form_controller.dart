@@ -412,6 +412,7 @@ class TransactionFormController extends ChangeNotifier {
     final security = _security;
     final account = fromAccount;
     if (security == null || account == null) return;
+    final requestedDate = date;
 
     final currency = await CurrencyService.instance
         .getCurrencyByCode(security.currencyId)
@@ -422,10 +423,18 @@ class TransactionFormController extends ChangeNotifier {
               .calculateExchangeRate(
                 fromCurrency: security.currencyId,
                 toCurrency: account.currencyId,
-                date: date,
+                date: requestedDate,
               )
               .first;
-    if (_disposed || _security?.id != security.id) return;
+
+    // Requests can finish out of order: only the one for what is selected now
+    // may set the rate
+    if (_disposed ||
+        _security?.id != security.id ||
+        fromAccount?.currencyId != account.currencyId ||
+        date != requestedDate) {
+      return;
+    }
 
     _securityCurrency = currency;
     _securityToAccountRate = rate;
