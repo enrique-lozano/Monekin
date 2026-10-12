@@ -25,10 +25,6 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
     final t = Translations.of(context);
     final accountCurrency = c.fromAccount?.currency;
     final securityCurrency = c.securityCurrency;
-    final showConvertedTotal =
-        c.isTradeCurrencyMismatch &&
-        accountCurrency != null &&
-        securityCurrency != null;
     final available = c.securityTradeIsBuy
         ? null
         : c.securityTradeAvailableUnits;
@@ -124,7 +120,7 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
               ),
             ],
           ),
-          if (showConvertedTotal)
+          if (accountCurrency != null && securityCurrency != null)
             TransactionFormTradeConversionCard(
               controller: c,
               accountCurrency: accountCurrency,
