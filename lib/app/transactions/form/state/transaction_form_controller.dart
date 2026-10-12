@@ -112,6 +112,8 @@ class TransactionFormController extends ChangeNotifier {
   // The price is in the security currency but the cash moves in the account
   // one. When they differ, the cash amount is its own field: filled in with
   // the stored exchange rate unless the user types what they really paid.
+  // With the same currency the cash is always quantity × price, so the average
+  // cost (which ignores the fees) stays consistent with it.
   final TextEditingController tradeTotalController = TextEditingController();
   String _tradeTotalText = '';
   bool _customTradeTotal = false;
@@ -190,10 +192,15 @@ class TransactionFormController extends ChangeNotifier {
     return securityTradeIsBuy ? difference : -difference;
   }
 
-  /// The cash of the trade, in the account currency.
-  double get securityTradeCashAmount =>
-      double.tryParse(tradeTotalController.text.trim().replaceAll(',', '.')) ??
-      0;
+  /// The cash of the trade, in the account currency: quantity × price, or the
+  /// total of [tradeTotalController] when the currencies differ.
+  double get securityTradeCashAmount {
+    if (!isTradeCurrencyMismatch) return securityTradeTotal;
+    return double.tryParse(
+          tradeTotalController.text.trim().replaceAll(',', '.'),
+        ) ??
+        0;
+  }
 
   void _setTradeTotalText(String text) {
     _tradeTotalText = text;
@@ -209,7 +216,7 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void _syncTradeTotal() {
-    if (_customTradeTotal) return;
+    if (_customTradeTotal || !isTradeCurrencyMismatch) return;
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
     _setTradeTotalText(
       _plainNumber(

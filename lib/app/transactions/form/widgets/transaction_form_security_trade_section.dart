@@ -4,6 +4,7 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/app/transactions/form/widgets/transaction_form_trade_conversion_card.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
@@ -123,11 +124,30 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
               ),
             ],
           ),
-          if (accountCurrency != null)
+          if (showConvertedTotal)
             TransactionFormTradeConversionCard(
               controller: c,
               accountCurrency: accountCurrency,
-              securityCurrency: showConvertedTotal ? securityCurrency : null,
+              securityCurrency: securityCurrency,
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  t.assets.holdings.total,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                DefaultTextStyle.merge(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  child: CurrencyDisplayer(
+                    amountToConvert: c.securityTradeTotal,
+                    currency: accountCurrency,
+                  ),
+                ),
+              ],
             ),
         ],
       ),
