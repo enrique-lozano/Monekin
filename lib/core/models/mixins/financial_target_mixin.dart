@@ -46,25 +46,30 @@ mixin FinancialTargetMixin implements FinancialTarget {
   @override
   double get initialValue => 0;
 
+  double _toTargetValue(double balance) {
+    if (targetDirection.isInverted) {
+      balance = balance * -1;
+    }
+
+    balance += initialValue;
+
+    return balance <= 0 ? 0.0 : balance;
+  }
+
   /// Get the amount of money relative to this target for a given date
   Stream<double> getValueOnDate(DateTime? date) {
     date ??= DateTime.now();
 
     return TransactionService.instance
         .getTransactionsValueBalance(filters: trFilters.copyWith(maxDate: date))
-        .map((res) {
-          if (targetDirection.isInverted) {
-            res = res * -1;
-          }
+        .map(_toTargetValue);
+  }
 
-          res += initialValue;
-
-          if (res <= 0) {
-            return 0.0;
-          }
-
-          return res;
-        });
+  /// Like [getValueOnDate] for several dates at once, with a single query
+  Stream<List<double>> getValuesOnDates(List<DateTime> dates) {
+    return TransactionService.instance
+        .getTransactionsValueBalanceOnDates(dates: dates, filters: trFilters)
+        .map((values) => values.map(_toTargetValue).toList());
   }
 
   /// Get the amount of money relative to this target for the current date-time

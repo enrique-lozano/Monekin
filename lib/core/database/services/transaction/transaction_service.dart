@@ -243,6 +243,59 @@ class TransactionService {
     ).map((event) => event.valueSum);
   }
 
+  /// Same value as [getTransactionsValueBalance] for each date of [dates]
+  /// (counting only the transactions dated before it), but loading the
+  /// transactions once instead of running one query per date.
+  Stream<List<double>> getTransactionsValueBalanceOnDates({
+    required List<DateTime> dates,
+    TransactionFilterSet filters = const TransactionFilterSet(),
+  }) {
+    if (dates.isEmpty) return Stream.value(const []);
+
+    final accountsIDs = filters.accountsIDs;
+    final countsTransfers =
+        filters.transactionTypes?.contains(TransactionType.transfer) ?? true;
+
+    return getTransactions(
+      filters: filters.copyWith(
+        maxDate: dates.reduce((a, b) => a.isAfter(b) ? a : b),
+        status: TransactionStatus.getStatusThatCountsForStats(filters.status),
+      ),
+      orderBy: (t, _, _, _, _, _, _) => OrderBy([OrderingTerm.asc(t.date)]),
+    ).map((transactions) {
+      final sortedDates = dates.indexed.toList()
+        ..sort((a, b) => a.$2.compareTo(b.$2));
+      final result = List<double>.filled(dates.length, 0);
+
+      var i = 0;
+      var sum = 0.0;
+
+      for (final (index, date) in sortedDates) {
+        while (i < transactions.length && transactions[i].date.isBefore(date)) {
+          final tr = transactions[i++];
+
+          if (!tr.isTransfer) {
+            sum += tr.currentValueInPreferredCurrency;
+          } else if (countsTransfers) {
+            if (accountsIDs == null || accountsIDs.contains(tr.account.id)) {
+              sum -= tr.currentValueInPreferredCurrency;
+            }
+            if (accountsIDs == null ||
+                accountsIDs.contains(tr.receivingAccount?.id)) {
+              sum +=
+                  tr.currentValueInDestinyInPreferredCurrency ??
+                  tr.currentValueInPreferredCurrency;
+            }
+          }
+        }
+
+        result[index] = sum;
+      }
+
+      return result;
+    });
+  }
+
   /// Gross amount spent buying securities (investment-type transactions with
   /// a negative value), returned as a positive number. Sells are excluded, so
   /// unlike [getTransactionsValueBalance] this isn't netted against proceeds

@@ -76,15 +76,10 @@ class _TargetEvolutionChartState extends State<TargetEvolutionChart> {
 
     // Value before each sampled day, plus the value right now at the end
     final xs = [for (var x = 0; x < lastX; x += step) x, lastX];
-    final values = await Future.wait(
-      xs.map(
-        (x) => target
-            .getValueOnDate(
-              x == lastX && isActive ? now : start.justDay(dayOffset: x),
-            )
-            .first,
-      ),
-    );
+    final values = await target.getValuesOnDates([
+      for (final x in xs)
+        x == lastX && isActive ? now : start.justDay(dayOffset: x),
+    ]).first;
 
     return _ChartData(
       start: start,
