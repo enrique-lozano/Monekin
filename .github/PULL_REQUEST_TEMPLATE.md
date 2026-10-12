@@ -18,7 +18,7 @@ Before submitting your PR, please ensure the following:
 
 - [ ] I've read and understand the [Code Contributions Guide](https://github.com/enrique-lozano/Monekin/blob/main/docs/CODE_CONTRIBUTING.md).
 - [ ] I confirm that I've run the code locally and everything works as expected.
-- [ ] I have read and agree to the [Contributor License Agreement](https://github.com/enrique-lozano/Monekin/blob/main/CLA.md).
+- [ ] I have read and agree to the [Contributor License Agreement](https://github.com/enrique-lozano/Monekin/blob/main/CLA.md), and I license my contribution under its terms.
 
 ## 📸 Screenshots or Demo (if applicable)
 
