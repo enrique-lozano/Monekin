@@ -446,6 +446,7 @@
       "accept-dialog.title": "Akzeptierst Du die Transaktion",
       "accept-dialog.msg-single": "Der neue Status der Transaktion ist null. ",
       "accept-dialog.msg": "Diese Aktion erstellt eine neue Transaktion mit Datum {{date}}. Du kannst die Details dieser Transaktion auf der Transaktionsseite überprüfen",
+      "accept-dialog.trade": "{{quantity}} Einheiten von {{security}} zu {{price}} {{currency}}, dem aktuellen Kurs. Du kannst sie danach bearbeiten.",
       "recurrent-rule-finished": "Die wiederkehrende Regel ist abgeschlossen, es sind keine weiteren Zahlungen mehr zu leisten!"
     },
     "LIST": {

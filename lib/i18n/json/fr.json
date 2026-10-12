@@ -446,6 +446,7 @@
       "accept-dialog.title": "Accepter la transaction",
       "accept-dialog.msg-single": "Le nouveau statut de la transaction sera nul. Vous pourrez rééditer le statut de cette transaction quand vous le souhaitez",
       "accept-dialog.msg": "Cette action créera une nouvelle transaction avec la date {{date}}. Vous pourrez consulter les détails de cette transaction sur la page des transactions",
+      "accept-dialog.trade": "{{quantity}} unités de {{security}} à {{price}} {{currency}}, le dernier prix. Vous pourrez la modifier ensuite.",
       "recurrent-rule-finished": "La règle récurrente est terminée, il n'y a plus de paiements à effectuer !"
     },
     "LIST": {

@@ -446,6 +446,7 @@
       "accept-dialog.title": "İşlemi kabul et",
       "accept-dialog.msg-single": "İşlemin yeni durumu boş olacaktır. İstediğiniz zaman bu işlemin durumunu yeniden düzenleyebilirsiniz",
       "accept-dialog.msg": "Bu eylem {{date}} tarihli yeni bir işlem oluşturacaktır. İşlem sayfasında bu işlemin detaylarını kontrol edebileceksiniz",
+      "accept-dialog.trade": "{{security}} için {{quantity}} birim, {{price}} {{currency}} fiyatından (son fiyat). Daha sonra düzenleyebilirsiniz.",
       "recurrent-rule-finished": "Tekrarlama kuralı tamamlandı, yapılacak başka ödeme yok!"
     },
     "LIST": {

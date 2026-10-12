@@ -446,6 +446,7 @@
       "accept-dialog.title": "Tranzakció elfogadása",
       "accept-dialog.msg-single": "A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.",
       "accept-dialog.msg": "Ez a művelet egy új tranzakciót hoz létre {{date}} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.",
+      "accept-dialog.trade": "{{quantity}} egység {{security}}, {{price}} {{currency}} áron, a legutóbbi árfolyamon. Utólag szerkesztheti.",
       "recurrent-rule-finished": "Az ismétlődő szabály teljesült, nincs több kifizetés!"
     },
     "LIST": {

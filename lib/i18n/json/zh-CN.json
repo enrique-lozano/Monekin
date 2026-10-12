@@ -446,6 +446,7 @@
       "accept-dialog.title": "接受交易",
       "accept-dialog.msg-single": "此交易的新状态将为null。您可以随时重新编辑此交易的状态",
       "accept-dialog.msg": "此操作将建立日期为 {{date}} 的新交易。您可以在交易页面查看此交易的详情",
+      "accept-dialog.trade": "{{quantity}} 单位 {{security}}，价格为 {{price}} {{currency}}（最新价格）。您之后可以对其进行编辑。",
       "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
     },
     "LIST": {

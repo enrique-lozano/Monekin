@@ -446,6 +446,7 @@
       "accept-dialog.title": "Accetta transazione",
       "accept-dialog.msg-single": "Il nuovo stato della transazione sarà nullo. Potrai ri-modificare lo stato di questa transazione quando vuoi",
       "accept-dialog.msg": "Questa azione creerà una nuova transazione con data {{date}}. Potrai controllare i dettagli di questa transazione sulla pagina delle transazioni",
+      "accept-dialog.trade": "{{quantity}} unità di {{security}} a {{price}} {{currency}}, l'ultimo prezzo. Potrai modificarla in seguito.",
       "recurrent-rule-finished": "La regola ricorrente è stata completata, non ci sono più pagamenti da effettuare!"
     },
     "LIST": {
