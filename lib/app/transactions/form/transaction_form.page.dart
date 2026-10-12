@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/app/transactions/form/transaction_form_scaffold.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
@@ -18,6 +19,8 @@ class TransactionFormPage extends StatefulWidget {
     this.toAccount,
     this.transactionToEdit,
     this.linkedDebt,
+    this.security,
+    this.isSell = false,
   });
 
   final TransactionType? mode;
@@ -25,6 +28,11 @@ class TransactionFormPage extends StatefulWidget {
   final Account? fromAccount;
   final Account? toAccount;
   final Debt? linkedDebt;
+
+  /// Creates a buy (or a sell, with [isSell]) of this security in
+  /// [fromAccount].
+  final SecurityInDB? security;
+  final bool isSell;
 
   @override
   State<TransactionFormPage> createState() => _TransactionFormPageState();
@@ -42,6 +50,8 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
       fromAccount: widget.fromAccount,
       toAccount: widget.toAccount,
       linkedDebt: widget.linkedDebt,
+      security: widget.security,
+      isSell: widget.isSell,
     )..initialize();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -52,7 +62,7 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
 
   Future<void> _runPostMountBootstrap() async {
     final c = _controller;
-    if (c.isEditMode) return;
+    if (c.isEditMode || c.isSecurityTradeInvestment) return;
 
     await c.waitForFormDefaults();
     if (!mounted) return;

@@ -42,11 +42,15 @@ class TransactionFormController extends ChangeNotifier {
     Account? fromAccount,
     Account? toAccount,
     Debt? linkedDebt,
+    SecurityInDB? security,
+    bool isSell = false,
   }) : _mode = mode,
        _transactionToEdit = transactionToEdit,
        _prefillFromAccount = fromAccount,
        _prefillToAccount = toAccount,
-       _linkedDebt = linkedDebt {
+       _linkedDebt = linkedDebt,
+       _security = security,
+       _securityTradeIsSell = isSell {
     _amountTextController.addListener(_onAmountFieldTextChanged);
     valueInDestinyController.addListener(_onValueInDestinyTextChanged);
     quantityController.addListener(_onTradeFieldChanged);
@@ -91,18 +95,29 @@ class TransactionFormController extends ChangeNotifier {
   SecurityInDB? _security;
   final TextEditingController quantityController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
-  bool _securityTradeIsSell = false;
+  bool _securityTradeIsSell;
 
-  /// True when editing a security trade (type N with a securityID).
+  /// Units held before this trade, used to cap a sell. Null until loaded.
+  double? _heldQuantity;
+
+  /// True for a security trade (type N with a securityID), when creating one
+  /// for a given security or editing an existing one.
   bool get isSecurityTradeInvestment {
     final edit = _transactionToEdit;
-    return edit != null &&
-        edit.type == TransactionType.investment &&
-        edit.securityID != null;
+    if (edit == null) return _security != null;
+    return edit.type == TransactionType.investment && edit.securityID != null;
   }
 
   SecurityInDB? get security => _security;
   bool get securityTradeIsBuy => !_securityTradeIsSell;
+
+  /// Units available to sell, counting back the units of the trade being
+  /// edited. Null until loaded.
+  double? get securityTradeAvailableUnits {
+    final held = _heldQuantity;
+    if (held == null) return null;
+    return held - (_transactionToEdit?.quantity ?? 0);
+  }
 
   double get securityTradeQuantity =>
       double.tryParse(quantityController.text.trim().replaceAll(',', '.')) ?? 0;
@@ -159,12 +174,18 @@ class TransactionFormController extends ChangeNotifier {
   void initialize() {
     if (isSecurityTradeInvestment) {
       transactionType = TransactionType.investment;
-      final edit = _transactionToEdit!;
+      final edit = _transactionToEdit;
+      if (edit == null) {
+        fromAccount = _prefillFromAccount;
+        priceController.text = _plainNumber(_security!.currentPrice ?? 0);
+        unawaited(_loadHeldQuantity());
+        return;
+      }
       _securityTradeIsSell = !edit.value.isNegative;
       quantityController.text = _plainNumber((edit.quantity ?? 0).abs());
       priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
       _fillForm(edit);
-      unawaited(_loadSecurity());
+      unawaited(_loadSecurity().then((_) => _loadHeldQuantity()));
       return;
     }
 
@@ -226,6 +247,18 @@ class TransactionFormController extends ChangeNotifier {
     final loaded = await SecurityService.instance.getSecurityById(id).first;
     if (_disposed) return;
     _security = loaded;
+    _safeNotify();
+  }
+
+  Future<void> _loadHeldQuantity() async {
+    final account = fromAccount;
+    final security = _security;
+    if (account == null || security == null) return;
+    final holding = await HoldingService.instance
+        .getHolding(account.id, security.id)
+        .first;
+    if (_disposed) return;
+    _heldQuantity = holding?.quantity ?? 0;
     _safeNotify();
   }
 
@@ -643,7 +676,15 @@ class TransactionFormController extends ChangeNotifier {
       return;
     }
 
-    final id = _transactionToEdit!.id;
+    final available = securityTradeAvailableUnits;
+    if (!securityTradeIsBuy && available != null && qty > available + 1e-7) {
+      MonekinSnackbar.warning(
+        SnackbarParams(t.assets.holdings.not_enough_units),
+      );
+      return;
+    }
+
+    final id = _transactionToEdit?.id ?? generateUUID();
     final signedQty = securityTradeIsBuy ? qty : -qty;
     final cash = qty * price;
     final signedCash = securityTradeIsBuy ? -cash : cash;
@@ -676,7 +717,11 @@ class TransactionFormController extends ChangeNotifier {
     );
 
     try {
-      await TransactionService.instance.updateTransaction(tx);
+      if (isEditMode) {
+        await TransactionService.instance.updateTransaction(tx);
+      } else {
+        await TransactionService.instance.insertTransaction(tx);
+      }
       await HoldingService.instance.recomputeHolding(
         accountId: account.id,
         securityId: security.id,
@@ -689,7 +734,11 @@ class TransactionFormController extends ChangeNotifier {
       );
 
       RouteUtils.popRoute();
-      MonekinSnackbar.success(SnackbarParams(t.transaction.edit_success));
+      MonekinSnackbar.success(
+        SnackbarParams(
+          isEditMode ? t.transaction.edit_success : t.transaction.new_success,
+        ),
+      );
     } catch (error) {
       MonekinSnackbar.error(SnackbarParams.fromError(error));
     }
@@ -795,6 +844,12 @@ class TransactionFormController extends ChangeNotifier {
   String resolveFrameworkTitle(Translations t) {
     if (isEditMode) {
       return t.transaction.edit;
+    }
+    final security = _security;
+    if (security != null) {
+      return securityTradeIsBuy
+          ? t.assets.holdings.buy_title(security: security.name)
+          : t.assets.holdings.sell_title(security: security.name);
     }
     return t.transaction.create;
   }

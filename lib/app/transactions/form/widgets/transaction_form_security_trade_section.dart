@@ -4,6 +4,7 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,9 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
     final c = context.watch<TransactionFormController>();
     final t = Translations.of(context);
     final currency = c.fromAccount?.currency;
+    final available = c.securityTradeIsBuy
+        ? null
+        : c.securityTradeAvailableUnits;
 
     return Padding(
       padding: padding,
@@ -56,6 +60,13 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
                   controller: c.quantityController,
                   decoration: InputDecoration(
                     labelText: t.assets.holdings.quantity,
+                    helperText: available == null
+                        ? null
+                        : t.assets.holdings.units_available(
+                            quantity: UINumberFormatter.decimal(
+                              amountToConvert: available,
+                            ).getFormattedAmount(),
+                          ),
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,

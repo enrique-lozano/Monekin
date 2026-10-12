@@ -518,12 +518,7 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     final security = await showSecurityPicker(context);
     if (security == null || !mounted) return;
 
-    await showTradeSheet(
-      context,
-      account: account,
-      security: security,
-      isBuy: isBuy,
-    );
+    await showTradeForm(account: account, security: security, isBuy: isBuy);
   }
 
   Future<void> _updateSnapshot(Account account) async {

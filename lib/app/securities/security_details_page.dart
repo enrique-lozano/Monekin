@@ -167,12 +167,7 @@ class _SecurityDetailsPageState extends State<SecurityDetailsPage> {
     required SecurityInDB security,
     required bool isBuy,
   }) async {
-    await showTradeSheet(
-      context,
-      account: account,
-      security: security,
-      isBuy: isBuy,
-    );
+    await showTradeForm(account: account, security: security, isBuy: isBuy);
   }
 
   Future<void> _editTrade(TransactionInDB trade) async {
