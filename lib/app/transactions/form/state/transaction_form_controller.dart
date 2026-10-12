@@ -115,6 +115,10 @@ class TransactionFormController extends ChangeNotifier {
   final TextEditingController tradeTotalController = TextEditingController();
   String _tradeTotalText = '';
   bool _customTradeTotal = false;
+
+  /// An edited trade starts with its saved total. It only counts as typed by
+  /// the user if it is not the one the form would have computed.
+  bool _checkSavedTradeTotal = false;
   CurrencyInDB? _securityCurrency;
   double _securityToAccountRate = 1;
 
@@ -187,13 +191,9 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   /// The cash of the trade, in the account currency.
-  double get securityTradeCashAmount {
-    if (!isTradeCurrencyMismatch) return securityTradeTotal;
-    return double.tryParse(
-          tradeTotalController.text.trim().replaceAll(',', '.'),
-        ) ??
-        0;
-  }
+  double get securityTradeCashAmount =>
+      double.tryParse(tradeTotalController.text.trim().replaceAll(',', '.')) ??
+      0;
 
   void _setTradeTotalText(String text) {
     _tradeTotalText = text;
@@ -209,7 +209,7 @@ class TransactionFormController extends ChangeNotifier {
   }
 
   void _syncTradeTotal() {
-    if (_customTradeTotal || !isTradeCurrencyMismatch) return;
+    if (_customTradeTotal) return;
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
     _setTradeTotalText(
       _plainNumber(
@@ -311,6 +311,7 @@ class TransactionFormController extends ChangeNotifier {
       quantityController.text = _plainNumber((edit.quantity ?? 0).abs());
       priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
       _customTradeTotal = true;
+      _checkSavedTradeTotal = true;
       _setTradeTotalText(_plainNumber(edit.value.abs()));
       _fillForm(edit);
       _heldQuantityLoad = _loadSecurity().then((_) => _loadHeldQuantity());
@@ -435,6 +436,15 @@ class TransactionFormController extends ChangeNotifier {
 
     _securityCurrency = currency;
     _securityToAccountRate = rate;
+    if (_checkSavedTradeTotal) {
+      _checkSavedTradeTotal = false;
+      if (nearlyEqualMoney(
+        securityTradeConvertedValue,
+        securityTradeCashAmount,
+      )) {
+        _customTradeTotal = false;
+      }
+    }
     _syncTradeTotal();
     _safeNotify();
   }

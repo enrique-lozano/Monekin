@@ -8,20 +8,24 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-/// The cash of a security trade whose security is quoted in another currency
-/// than the account: what it is worth, at which rate, what was really paid and
-/// the difference (fees and exchange spread together).
+/// The cash of a security trade: what it is worth, the total really paid or
+/// received (editable) and the difference between the two, which are the fees.
+///
+/// When the security is quoted in another currency than the account, it also
+/// shows the exchange rate and the difference includes the exchange spread.
 class TransactionFormTradeConversionCard extends StatefulWidget {
   const TransactionFormTradeConversionCard({
     super.key,
     required this.controller,
     required this.accountCurrency,
-    required this.securityCurrency,
+    this.securityCurrency,
   });
 
   final TransactionFormController controller;
   final CurrencyInDB accountCurrency;
-  final CurrencyInDB securityCurrency;
+
+  /// Only when it differs from the one of the account.
+  final CurrencyInDB? securityCurrency;
 
   @override
   State<TransactionFormTradeConversionCard> createState() =>
@@ -34,6 +38,8 @@ class _TransactionFormTradeConversionCardState
 
   TransactionFormController get c => widget.controller;
 
+  bool get _hasConversion => widget.securityCurrency != null;
+
   String _rate(double? rate) => rate == null
       ? '—'
       : UINumberFormatter.decimal(
@@ -41,16 +47,8 @@ class _TransactionFormTradeConversionCardState
           decimalDigits: 4,
         ).getFormattedAmount();
 
-  Widget _row(
-    BuildContext context,
-    String label,
-    Widget value, {
-    bool emphasized = false,
-  }) {
+  Widget _row(BuildContext context, String label, Widget value) {
     final theme = Theme.of(context);
-    final style = emphasized
-        ? theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700)
-        : theme.textTheme.bodyMedium!;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,17 +57,21 @@ class _TransactionFormTradeConversionCardState
         Flexible(
           child: Text(
             label,
-            style: style.copyWith(
-              color: emphasized ? null : theme.colorScheme.onSurfaceVariant,
+            style: theme.textTheme.bodyMedium!.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
         ),
-        DefaultTextStyle.merge(style: style, child: value),
+        DefaultTextStyle.merge(
+          style: theme.textTheme.bodyMedium!,
+          child: value,
+        ),
       ],
     );
   }
 
-  /// Fees and spread, as an amount and as a share of what the trade is worth.
+  /// Fees (and the exchange spread, with a conversion) as an amount and as a
+  /// share of what the trade is worth.
   Widget _extraCost(BuildContext context, double extra) {
     final theme = Theme.of(context);
     final t = Translations.of(context);
@@ -86,7 +88,9 @@ class _TransactionFormTradeConversionCardState
 
     return _row(
       context,
-      t.assets.holdings.fees_and_exchange,
+      _hasConversion
+          ? t.assets.holdings.fees_and_exchange
+          : t.assets.holdings.fees,
       DefaultTextStyle.merge(
         style: TextStyle(color: color, fontWeight: FontWeight.w600),
         child: Row(
@@ -134,64 +138,76 @@ class _TransactionFormTradeConversionCardState
         crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: 12,
         children: [
-          // The summary line always shows; the breakdown opens under it
+          // The summary line always shows; with a conversion, the breakdown
+          // opens under it
           InkWell(
             borderRadius: BorderRadius.all(inputBorderRadius),
-            onTap: () => setState(() => _expanded = !_expanded),
+            onTap: _hasConversion
+                ? () => setState(() => _expanded = !_expanded)
+                : null,
             child: Row(
               spacing: 8,
               children: [
                 Expanded(
-                  child: _row(
-                    context,
-                    t.assets.holdings.total,
-                    CurrencyDisplayer(
-                      amountToConvert: c.securityTradeTotal,
-                      currency: security,
+                  child: DefaultTextStyle.merge(
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(t.assets.holdings.total),
+                        CurrencyDisplayer(
+                          amountToConvert: c.securityTradeTotal,
+                          currency: security ?? account,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Icon(
-                  _expanded
-                      ? Icons.expand_less_rounded
-                      : Icons.expand_more_rounded,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                if (_hasConversion)
+                  Icon(
+                    _expanded
+                        ? Icons.expand_less_rounded
+                        : Icons.expand_more_rounded,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
               ],
             ),
           ),
-          AnimatedExpanded(
-            expand: _expanded,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 8,
-              children: [
-                _row(
-                  context,
-                  t.assets.holdings.rate_stored(
-                    from: security.code,
-                    to: account.code,
-                  ),
-                  Text('× ${_rate(c.securityToAccountRate)}'),
-                ),
-                _row(
-                  context,
-                  t.assets.holdings.equivalent_in(currency: account.code),
-                  CurrencyDisplayer(
-                    amountToConvert: c.securityTradeConvertedValue,
-                    currency: account,
-                  ),
-                ),
-                if (effectiveRate != null)
+          if (_hasConversion)
+            AnimatedExpanded(
+              expand: _expanded,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 8,
+                children: [
                   _row(
                     context,
-                    t.assets.holdings.rate_applied,
-                    Text('× ${_rate(effectiveRate)}'),
+                    t.assets.holdings.rate_stored(
+                      from: security!.code,
+                      to: account.code,
+                    ),
+                    Text('× ${_rate(c.securityToAccountRate)}'),
                   ),
-                const Divider(height: 8),
-              ],
+                  _row(
+                    context,
+                    t.assets.holdings.equivalent_in(currency: account.code),
+                    CurrencyDisplayer(
+                      amountToConvert: c.securityTradeConvertedValue,
+                      currency: account,
+                    ),
+                  ),
+                  if (effectiveRate != null)
+                    _row(
+                      context,
+                      t.assets.holdings.rate_applied,
+                      Text('× ${_rate(effectiveRate)}'),
+                    ),
+                  const Divider(height: 8),
+                ],
+              ),
             ),
-          ),
           TextFormField(
             controller: c.tradeTotalController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -204,25 +220,96 @@ class _TransactionFormTradeConversionCardState
                   : null;
             },
             decoration: InputDecoration(
-              labelText:
-                  '${t.assets.holdings.total_in_account_currency(currency: account.code)} *',
+              labelText: '${_totalLabel(t, account)} *',
               suffixText: account.symbol,
-              suffixIcon: c.isTradeTotalCustom
-                  ? IconButton(
-                      icon: const Icon(Icons.restart_alt_rounded),
-                      tooltip: t.ui_actions.reset,
-                      onPressed: c.resetTradeTotal,
-                    )
-                  : null,
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
             ],
           ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              _TotalModeChip(
+                custom: c.isTradeTotalCustom,
+                onPressed: c.isTradeTotalCustom ? c.resetTradeTotal : null,
+              ),
+            ],
+          ),
           if (c.securityTradeCashAmount > 0)
             _extraCost(context, c.securityTradeExtraCost),
         ],
+      ),
+    );
+  }
+
+  String _totalLabel(Translations t, CurrencyInDB account) {
+    return _hasConversion
+        ? t.assets.holdings.total_in_account_currency(currency: account.code)
+        : c.securityTradeIsBuy
+        ? t.assets.holdings.total_paid
+        : t.assets.holdings.total_received;
+  }
+}
+
+/// Shows whether the total follows quantity × price or was typed by the user,
+/// and goes back to the computed one when tapped. Same style as the chips of
+/// the transfer form.
+class _TotalModeChip extends StatelessWidget {
+  const _TotalModeChip({required this.custom, required this.onPressed});
+
+  final bool custom;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final color = custom ? scheme.primary : scheme.onSurfaceVariant;
+
+    return Semantics(
+      button: true,
+      toggled: custom,
+      child: Material(
+        color: custom
+            ? scheme.primary.withValues(alpha: 0.12)
+            : Colors.transparent,
+        shape: StadiumBorder(
+          side: BorderSide(
+            color: custom ? scheme.primary : scheme.outlineVariant,
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 6,
+              children: [
+                Icon(
+                  custom ? Icons.link_off_rounded : Icons.link_rounded,
+                  size: 16,
+                  color: color,
+                ),
+                Text(
+                  custom
+                      ? Translations.of(context).assets.holdings.total_custom
+                      : Translations.of(context).assets.holdings.total_linked,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
