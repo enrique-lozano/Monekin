@@ -111,7 +111,7 @@ class TransactionFormScaffold extends StatelessWidget {
                 saveButtonColor.getContrastColor(),
               ),
             ),
-            onPressed: () => c.onSavePressed(context),
+            onPressed: c.isSubmitting ? null : () => c.onSavePressed(context),
             icon: const Icon(Icons.save),
             label: Text(saveLabel),
           ),
