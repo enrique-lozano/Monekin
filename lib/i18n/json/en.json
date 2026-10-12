@@ -451,6 +451,7 @@
       "accept-dialog.title": "Accept transaction",
       "accept-dialog.msg-single": "The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want",
       "accept-dialog.msg": "This action will create a new transaction with date {{date}}. You will be able to check the details of this transaction on the transaction page",
+      "accept-dialog.trade": "{{quantity}} units of {{security}} at {{price}} {{currency}}, the latest price. You can edit it afterwards.",
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {

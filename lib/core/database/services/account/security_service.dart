@@ -58,7 +58,10 @@ class SecurityService {
   /// tracked manually and we keep no dedicated price-history table.
   Stream<List<TransactionInDB>> getSecurityTrades(String securityId) {
     return (db.select(db.transactions)
-          ..where((tbl) => tbl.securityID.equals(securityId))
+          ..where(
+            (tbl) =>
+                tbl.securityID.equals(securityId) & tbl.intervalPeriod.isNull(),
+          )
           ..orderBy([(tbl) => OrderingTerm.asc(tbl.date)]))
         .watch();
   }
