@@ -32,8 +32,8 @@ jobs:
           flutter pub get
           dart pub get --directory app-marketplaces/play-store
 
-      - name: Generate translations
-        run: dart run slang
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
 
       # --no-fatal-infos: the codebase currently has ~180 pre-existing
       # info-level issues (mostly deprecated Flutter APIs like
