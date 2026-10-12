@@ -64,6 +64,9 @@ class TransactionFormController extends ChangeNotifier {
   final Account? _prefillToAccount;
   final Debt? _linkedDebt;
 
+  /// Whether a save is in progress (used to ignore repeated taps on save).
+  bool isSubmitting = false;
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ShakeWidgetState> shakeKey = GlobalKey<ShakeWidgetState>();
 
@@ -549,9 +552,9 @@ class TransactionFormController extends ChangeNotifier {
     return edit.value;
   }
 
-  void submitForm(BuildContext context) {
+  Future<void> submitForm(BuildContext context) async {
     if (isSecurityTradeInvestment) {
-      _submitSecurityTrade(context);
+      await _submitSecurityTrade(context);
       return;
     }
 
@@ -646,7 +649,7 @@ class TransactionFormController extends ChangeNotifier {
       );
     }
 
-    postCall
+    await postCall
         .then((value) async {
           final db = AppDB.instance;
           final existingTags = _transactionToEdit?.tags ?? [];
@@ -1123,10 +1126,19 @@ class TransactionFormController extends ChangeNotifier {
     }
   }
 
-  void onSavePressed(BuildContext context) {
+  Future<void> onSavePressed(BuildContext context) async {
+    if (isSubmitting) return;
+
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-      submitForm(context);
+      isSubmitting = true;
+      notifyListeners();
+      try {
+        await submitForm(context);
+      } finally {
+        isSubmitting = false;
+        if (!_disposed) notifyListeners();
+      }
     } else {
       MonekinSnackbar.error(
         SnackbarParams(Translations.of(context).general.validations.form_error),
