@@ -4,10 +4,10 @@ Our Google Play listing is the first thing most people see of Monekin, and one o
 
 | I want to... | Edit | Guide |
 | --- | --- | --- |
-| Improve or translate the **store texts** (title, descriptions) | `play-store/listings/<language>/*.txt` | [play-store](play-store/README.md) |
+| Improve or translate the **store texts** (title, descriptions) | `play-store/listings/<language>/*.txt` | [Below](#store-texts) |
 | Improve or translate the **captions** of the images | `screenshots/generator/texts/<language>.json` | [generator](screenshots/generator/README.md) |
 | Improve the **design** of the images | `screenshots/generator/slides/*.html` | [generator](screenshots/generator/README.md) |
-| Add a **new language** to the store | All of the above, plus a set in `screenshots/generator/config.json` | Both |
+| Add a **new language** to the store | All of the above, plus a set in `screenshots/generator/config.json` | [Below](#store-texts) and [generator](screenshots/generator/README.md) |
 
 You don't need any account or key: the maintainers upload the changes to the store once your PR is merged.
 
@@ -21,3 +21,7 @@ app-marketplaces/
     ├── listings/       Store texts of every listing
     └── play_store.dart Uploads texts and images to Google Play (maintainers)
 ```
+
+## Store texts
+
+Each folder in `play-store/listings/` is a store listing with its `title.txt`, `short_description.txt` and `full_description.txt`, of up to 30, 80 and 4000 characters. Descriptions can use `<b>` for bold text. For a new language, copy `en-US/` to a folder named with its Play Store language code (e.g. `pl-PL`).
