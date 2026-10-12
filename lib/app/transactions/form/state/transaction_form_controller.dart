@@ -163,6 +163,29 @@ class TransactionFormController extends ChangeNotifier {
 
   bool get isTradeTotalCustom => _customTradeTotal;
 
+  /// The stored rate from the security currency to the account one.
+  double get securityToAccountRate => _securityToAccountRate;
+
+  /// What the trade is worth at the stored rate, in the account currency.
+  double get securityTradeConvertedValue =>
+      securityTradeTotal * _securityToAccountRate;
+
+  /// The rate the user really got: what moved in the account currency over
+  /// what the trade is worth in the security one. Null until both are known.
+  double? get securityTradeEffectiveRate {
+    final total = securityTradeTotal;
+    final cash = securityTradeCashAmount;
+    return total > 0 && cash > 0 ? cash / total : null;
+  }
+
+  /// How much more the trade cost (or less it brought) than at the stored rate,
+  /// in the account currency: fees and the exchange spread together. Positive
+  /// is a loss, whether buying or selling.
+  double get securityTradeExtraCost {
+    final difference = securityTradeCashAmount - securityTradeConvertedValue;
+    return securityTradeIsBuy ? difference : -difference;
+  }
+
   /// The cash of the trade, in the account currency.
   double get securityTradeCashAmount {
     if (!isTradeCurrencyMismatch) return securityTradeTotal;

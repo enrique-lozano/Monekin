@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_trade_conversion_card.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -123,55 +124,29 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                t.assets.holdings.total,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              DefaultTextStyle.merge(
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
-                child: CurrencyDisplayer(
-                  amountToConvert: c.securityTradeTotal,
-                  currency: showConvertedTotal
-                      ? securityCurrency
-                      : accountCurrency,
-                ),
-              ),
-            ],
-          ),
           if (showConvertedTotal)
-            TextFormField(
-              controller: c.tradeTotalController,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (v) {
-                final parsed = double.tryParse(
-                  (v ?? '').trim().replaceAll(',', '.'),
-                );
-                return parsed == null || parsed <= 0
-                    ? t.general.validations.required
-                    : null;
-              },
-              decoration: InputDecoration(
-                labelText:
-                    '${t.assets.holdings.total_in_account_currency(currency: accountCurrency.code)} *',
-                suffixText: accountCurrency.symbol,
-                suffixIcon: c.isTradeTotalCustom
-                    ? IconButton(
-                        icon: const Icon(Icons.restart_alt_rounded),
-                        tooltip: t.ui_actions.reset,
-                        onPressed: c.resetTradeTotal,
-                      )
-                    : null,
-              ),
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
-              ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+            TransactionFormTradeConversionCard(
+              controller: c,
+              accountCurrency: accountCurrency,
+              securityCurrency: securityCurrency,
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  t.assets.holdings.total,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                DefaultTextStyle.merge(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  child: CurrencyDisplayer(
+                    amountToConvert: c.securityTradeTotal,
+                    currency: accountCurrency,
+                  ),
+                ),
               ],
             ),
         ],
