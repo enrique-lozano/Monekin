@@ -377,7 +377,7 @@
     "portfolio-heat-map": "热力图",
     "portfolio-heat-map-subtitle": "方块越大，持仓越大。颜色越绿，表现越好。",
     "daily-performance": "每日",
-    "compared-to-previous-period": "与上一段时间相比",
+    "compared-to-previous-period": "较上一时期",
     "cash-flow": "现金流",
     "cash-flow-subtitle": "我的支出是否少于我的收入？",
     "by-periods": "按时间段",
@@ -875,7 +875,7 @@
         "active-overspending": "超支",
         "active-indeterminate": "积极的",
         "success": "已达成",
-        "fail": "超出预算"
+        "fail": "超出"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "步入正轨",
         "active-behind-schedule": "落后于计划",
         "active-indeterminate": "积极的",
-        "success": "目标达成",
-        "fail": "目标失败"
+        "success": "达成",
+        "fail": "失败"
       }
     }
   },

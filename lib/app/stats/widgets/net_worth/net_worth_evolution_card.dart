@@ -230,11 +230,7 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
         LineChartData(
           minY: widget.yMin,
           maxY: widget.yMax,
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: false,
-            horizontalInterval: (widget.yMax - widget.yMin) / 5,
-          ),
+          gridData: const FlGridData(show: true, drawVerticalLine: false),
           titlesData: FlTitlesData(
             leftTitles: AxisTitles(
               sideTitles: SideTitles(
@@ -248,6 +244,8 @@ class _NetWorthLineChartState extends State<_NetWorthLineChart> {
                     meta: meta,
                     child: Text(
                       meta.formattedValue,
+                      softWrap: false,
+                      maxLines: 1,
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
                   );

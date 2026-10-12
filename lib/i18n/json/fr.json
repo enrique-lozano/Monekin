@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Carte thermique",
     "portfolio-heat-map-subtitle": "Plus le bloc est grand, plus la position est importante. Plus il est vert, mieux elle se porte.",
     "daily-performance": "Quotidien",
-    "compared-to-previous-period": "Par rapport à la période précédente",
+    "compared-to-previous-period": "vs période précédente",
     "cash-flow": "Flux de trésorerie",
     "cash-flow-subtitle": "Est-ce que je dépense moins que ce que je gagne ?",
     "by-periods": "Par périodes",
@@ -875,7 +875,7 @@
         "active-overspending": "Dépenses excessives",
         "active-indeterminate": "Actif",
         "success": "Atteint",
-        "fail": "Budget dépassé"
+        "fail": "Dépassé"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "En bonne voie",
         "active-behind-schedule": "En retard",
         "active-indeterminate": "Actif",
-        "success": "Objectif atteint",
-        "fail": "Objectif raté"
+        "success": "Atteint",
+        "fail": "Raté"
       }
     }
   },

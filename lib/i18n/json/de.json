@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Heatmap",
     "portfolio-heat-map-subtitle": "Je größer der Block, desto größer die Position. Je grüner, desto besser läuft es.",
     "daily-performance": "Täglich",
-    "compared-to-previous-period": "Im Vergleich zur Vorperiode",
+    "compared-to-previous-period": "vs. Vorperiode",
     "cash-flow": "Cashflow",
     "cash-flow-subtitle": "Gebe ich weniger aus, als ich verdiene?",
     "by-periods": "Nach Perioden",
@@ -875,7 +875,7 @@
         "active-overspending": "Mehrausgaben",
         "active-indeterminate": "Aktiv",
         "success": "Erreicht",
-        "fail": "Budget überschritten"
+        "fail": "Überschritten"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "Auf dem richtigen Weg",
         "active-behind-schedule": "Hinter dem Zeitplan",
         "active-indeterminate": "Aktiv",
-        "success": "Ziel erreicht",
-        "fail": "Ziel gescheitert"
+        "success": "Erreicht",
+        "fail": "Gescheitert"
       }
     }
   },

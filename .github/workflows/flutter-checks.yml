@@ -28,7 +28,9 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          dart pub get --directory app-marketplaces/play-store
 
       - name: Generate translations
         run: dart run slang

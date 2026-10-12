@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Isı haritası",
     "portfolio-heat-map-subtitle": "Blok ne kadar büyükse pozisyon o kadar büyüktür. Ne kadar yeşilse o kadar iyi gidiyordur.",
     "daily-performance": "Günlük",
-    "compared-to-previous-period": "Önceki döneme göre",
+    "compared-to-previous-period": "vs önceki dönem",
     "cash-flow": "Nakit akışı",
     "cash-flow-subtitle": "Kazandığımdan daha az mı harcıyorum?",
     "by-periods": "Dönemlere göre",
@@ -875,7 +875,7 @@
         "active-overspending": "Aşırı harcama",
         "active-indeterminate": "Aktif",
         "success": "Başarılı",
-        "fail": "Bütçe aşıldı"
+        "fail": "Aşıldı"
       }
     }
   },
@@ -925,8 +925,8 @@
         "active-on-track": "Yolda",
         "active-behind-schedule": "Programın gerisinde",
         "active-indeterminate": "Aktif",
-        "success": "Hedefe ulaşıldı",
-        "fail": "Hedef başarısız oldu"
+        "success": "Ulaşıldı",
+        "fail": "Başarısız oldu"
       }
     }
   },
