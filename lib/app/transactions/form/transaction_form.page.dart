@@ -65,7 +65,12 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
     if (c.isEditMode) return;
 
     if (c.isSecurityTradeInvestment) {
-      if (c.security == null) await c.pickSecurity(context);
+      // As with the category, the picker would open over the side drawer
+      if (c.security == null) {
+        if (!SideDrawerScope.of(context)) await c.pickSecurity(context);
+      } else {
+        c.requestQuantityFocusAfterFrame();
+      }
       return;
     }
 

@@ -172,17 +172,26 @@ class _HoldingTile extends StatelessWidget {
 
 /// Lets the user pick an existing security or create a new one. Returns the
 /// chosen (or created) security, or null if dismissed.
-Future<SecurityInDB?> showSecurityPicker(BuildContext context) {
+///
+/// With [heldInAccountId], only the securities held in that account are listed
+/// and none can be created, as there would be nothing to sell.
+Future<SecurityInDB?> showSecurityPicker(
+  BuildContext context, {
+  String? heldInAccountId,
+}) {
   return showModalBottomSheet<SecurityInDB>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (context) => const _SecurityPickerSheet(),
+    builder: (context) =>
+        _SecurityPickerSheet(heldInAccountId: heldInAccountId),
   );
 }
 
 class _SecurityPickerSheet extends StatefulWidget {
-  const _SecurityPickerSheet();
+  const _SecurityPickerSheet({this.heldInAccountId});
+
+  final String? heldInAccountId;
 
   @override
   State<_SecurityPickerSheet> createState() => _SecurityPickerSheetState();
@@ -212,24 +221,30 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
     return ModalContainer(
       title: t.assets.holdings.choose_security,
       body: StreamBuilder<List<SecurityInDB>>(
-        stream: SecurityService.instance.getSecurities(),
+        stream: widget.heldInAccountId == null
+            ? SecurityService.instance.getSecurities()
+            : HoldingService.instance
+                  .getHoldingsForAccount(widget.heldInAccountId!)
+                  .map((holdings) => holdings.map((h) => h.security).toList()),
         builder: (context, snapshot) {
           final securities = _filter(snapshot.data ?? []);
 
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Icon(Icons.add_circle_outline_rounded),
-                title: Text(t.assets.holdings.create_security),
-                onTap: () async {
-                  final created = await showSecurityFormSheet(context);
-                  if (created != null && context.mounted) {
-                    RouteUtils.popRoute(created);
-                  }
-                },
-              ),
-              const Divider(height: 1),
+              if (widget.heldInAccountId == null) ...[
+                ListTile(
+                  leading: const Icon(Icons.add_circle_outline_rounded),
+                  title: Text(t.assets.holdings.create_security),
+                  onTap: () async {
+                    final created = await showSecurityFormSheet(context);
+                    if (created != null && context.mounted) {
+                      RouteUtils.popRoute(created);
+                    }
+                  },
+                ),
+                const Divider(height: 1),
+              ],
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                 child: SearchBar(
@@ -248,6 +263,16 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
                   ],
                 ),
               ),
+              if (securities.isEmpty &&
+                  widget.heldInAccountId != null &&
+                  _searchQuery.isEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    t.assets.holdings.empty,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               Flexible(
                 child: ListView(
                   shrinkWrap: true,

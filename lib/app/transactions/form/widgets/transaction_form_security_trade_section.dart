@@ -58,8 +58,24 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: c.quantityController,
+                  focusNode: c.quantityFocusNode,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (v) {
+                    final parsed = double.tryParse(
+                      (v ?? '').trim().replaceAll(',', '.'),
+                    );
+                    if (parsed == null || parsed <= 0) {
+                      return t.general.validations.required;
+                    }
+                    if (!c.securityTradeIsBuy &&
+                        available != null &&
+                        parsed > available + 1e-7) {
+                      return t.assets.holdings.not_enough_units;
+                    }
+                    return null;
+                  },
                   decoration: InputDecoration(
-                    labelText: t.assets.holdings.quantity,
+                    labelText: '${t.assets.holdings.quantity} *',
                     helperText: available == null
                         ? null
                         : t.assets.holdings.units_available(
@@ -79,8 +95,17 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
               Expanded(
                 child: TextFormField(
                   controller: c.priceController,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (v) {
+                    final parsed = double.tryParse(
+                      (v ?? '').trim().replaceAll(',', '.'),
+                    );
+                    return parsed == null || parsed <= 0
+                        ? t.general.validations.required
+                        : null;
+                  },
                   decoration: InputDecoration(
-                    labelText: t.assets.holdings.price_per_unit,
+                    labelText: '${t.assets.holdings.price_per_unit} *',
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,

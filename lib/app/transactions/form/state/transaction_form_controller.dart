@@ -70,6 +70,7 @@ class TransactionFormController extends ChangeNotifier {
   final FocusNode amountFocusNode = FocusNode(debugLabel: 'transactionAmount');
   final FocusNode titleFocusNode = FocusNode(debugLabel: 'transactionTitle');
   final FocusNode notesFocusNode = FocusNode(debugLabel: 'transactionNotes');
+  final FocusNode quantityFocusNode = FocusNode(debugLabel: 'tradeQuantity');
 
   Future<void>? _formDefaultsFuture;
 
@@ -137,6 +138,27 @@ class TransactionFormController extends ChangeNotifier {
   void setSecurityTradeIsSell(bool v) {
     if (_securityTradeIsSell == v) return;
     _securityTradeIsSell = v;
+    _safeNotify();
+
+    // Only a held security can be sold: ask again if this one isn't
+    if (v && !isEditMode) unawaited(_dropSecurityIfNotHeld());
+  }
+
+  Future<void> _dropSecurityIfNotHeld() async {
+    final security = _security;
+    final account = fromAccount;
+    if (security == null || account == null) return;
+
+    final holding = await HoldingService.instance
+        .getHolding(account.id, security.id)
+        .first;
+    if (_disposed || _security?.id != security.id || !_securityTradeIsSell) {
+      return;
+    }
+    if (holding != null && holding.quantity > 1e-7) return;
+
+    _security = null;
+    _heldQuantity = null;
     _safeNotify();
   }
 
@@ -260,7 +282,11 @@ class TransactionFormController extends ChangeNotifier {
 
   /// Lets the user pick the security of a new trade.
   Future<void> pickSecurity(BuildContext context) async {
-    final picked = await showSecurityPicker(context);
+    final account = fromAccount;
+    final picked = await showSecurityPicker(
+      context,
+      heldInAccountId: securityTradeIsBuy ? null : account?.id,
+    );
     if (picked == null || _disposed) return;
     _onSecuritySelected(picked);
   }
@@ -272,6 +298,13 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
     _heldQuantityLoad = _loadHeldQuantity();
     unawaited(_heldQuantityLoad);
+    requestQuantityFocusAfterFrame();
+  }
+
+  void requestQuantityFocusAfterFrame() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_disposed) quantityFocusNode.requestFocus();
+    });
   }
 
   Future<void> _loadHeldQuantity() async {
@@ -308,6 +341,7 @@ class TransactionFormController extends ChangeNotifier {
     amountFocusNode.dispose();
     titleFocusNode.dispose();
     notesFocusNode.dispose();
+    quantityFocusNode.dispose();
     super.dispose();
   }
 
