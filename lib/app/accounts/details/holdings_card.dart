@@ -176,8 +176,7 @@ class _HoldingTile extends StatelessWidget {
 /// With [heldInAccountId], only the securities held in that account are listed
 /// and none can be created, as there would be nothing to sell.
 ///
-/// With [accountCurrencyId], the securities quoted in that currency come first
-/// and the others show their currency.
+/// With [accountCurrencyId], the securities quoted in that currency come first.
 Future<SecurityInDB?> showSecurityPicker(
   BuildContext context, {
   String? heldInAccountId,
@@ -230,16 +229,11 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
     ];
   }
 
-  Widget? _subtitle(SecurityInDB security) {
-    final parts = [
-      if (security.ticker != null) security.ticker!,
-      if (widget.accountCurrencyId != null &&
-          security.currencyId != widget.accountCurrencyId)
-        security.currencyId,
-    ];
-
-    return parts.isEmpty ? null : Text(parts.join(' · '));
-  }
+  Widget _subtitle(SecurityInDB security) => Text(
+    [if (security.ticker != null) security.ticker!, security.currencyId].join(
+      ' · ',
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {

@@ -1102,7 +1102,6 @@
       "equivalent_in": "Gegenwert in {{currency}}",
       "rate_applied": "Dein Kurs",
       "fees_and_exchange": "Gebühren und Wechselkurs",
-      "total_linked": "Menge × Preis",
       "total_custom": "Individueller Betrag",
       "units_available": "{{quantity}} verfügbar",
       "not_enough_units": "Sie besitzen nicht so viele Einheiten",

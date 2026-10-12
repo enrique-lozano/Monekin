@@ -1125,7 +1125,6 @@
       "equivalent_in": "折合 {{currency}}",
       "rate_applied": "實際匯率",
       "fees_and_exchange": "手續費和匯兌",
-      "total_linked": "數量 × 價格",
       "total_custom": "自訂總額",
       "units_available": "可用 {{quantity}}",
       "not_enough_units": "你持有的份額不足",

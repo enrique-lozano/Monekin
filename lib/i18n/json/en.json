@@ -1126,7 +1126,6 @@
       "equivalent_in": "Equivalent in {{currency}}",
       "rate_applied": "Rate you got",
       "fees_and_exchange": "Fees and exchange",
-      "total_linked": "Quantity × price",
       "total_custom": "Custom total",
       "units_available": "{{quantity}} available",
       "not_enough_units": "You do not hold that many units",

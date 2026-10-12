@@ -196,71 +196,81 @@ class _TransactionFormTradeConversionCardState
               ],
             ),
           ),
-          TextFormField(
-            controller: c.tradeTotalController,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (v) {
-              final parsed = double.tryParse(
-                (v ?? '').trim().replaceAll(',', '.'),
-              );
-              return parsed == null || parsed <= 0
-                  ? t.general.validations.required
-                  : null;
-            },
-            decoration: InputDecoration(
-              labelText:
-                  '${t.assets.holdings.total_in_account_currency(currency: account.code)} *',
-              suffixText: account.symbol,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: _CustomTotalChip(
+              active: c.isTradeTotalCustom,
+              onPressed: () => c.setTradeTotalCustom(!c.isTradeTotalCustom),
             ),
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
-            ],
           ),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              _TotalModeChip(
-                custom: c.isTradeTotalCustom,
-                onPressed: c.isTradeTotalCustom ? c.resetTradeTotal : null,
-              ),
-            ],
+          // The field only exists while the total is custom: a hidden field
+          // must not block the save with its own validation. Closing it skips
+          // the collapse animation because of that.
+          AnimatedExpanded(
+            expand: c.isTradeTotalCustom,
+            child: c.isTradeTotalCustom
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: 12,
+                    children: [
+                      TextFormField(
+                        controller: c.tradeTotalController,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (v) {
+                          final parsed = double.tryParse(
+                            (v ?? '').trim().replaceAll(',', '.'),
+                          );
+                          return parsed == null || parsed <= 0
+                              ? t.general.validations.required
+                              : null;
+                        },
+                        decoration: InputDecoration(
+                          labelText:
+                              '${t.assets.holdings.total_in_account_currency(currency: account.code)} *',
+                          suffixText: account.symbol,
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+                        ],
+                      ),
+                      if (c.securityTradeCashAmount > 0)
+                        _extraCost(context, c.securityTradeExtraCost),
+                    ],
+                  )
+                : const SizedBox.shrink(),
           ),
-          if (c.securityTradeCashAmount > 0)
-            _extraCost(context, c.securityTradeExtraCost),
         ],
       ),
     );
   }
-
 }
 
-/// Shows whether the total follows quantity × price or was typed by the user,
-/// and goes back to the computed one when tapped. Same style as the chips of
-/// the transfer form.
-class _TotalModeChip extends StatelessWidget {
-  const _TotalModeChip({required this.custom, required this.onPressed});
+/// Turns on typing the total instead of using the converted one. Same style as
+/// the "Custom amounts" chip of the transfer form.
+class _CustomTotalChip extends StatelessWidget {
+  const _CustomTotalChip({required this.active, required this.onPressed});
 
-  final bool custom;
-  final VoidCallback? onPressed;
+  final bool active;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final color = custom ? scheme.primary : scheme.onSurfaceVariant;
+    final color = active ? scheme.primary : scheme.onSurfaceVariant;
 
     return Semantics(
       button: true,
-      toggled: custom,
+      toggled: active,
       child: Material(
-        color: custom
+        color: active
             ? scheme.primary.withValues(alpha: 0.12)
             : Colors.transparent,
         shape: StadiumBorder(
           side: BorderSide(
-            color: custom ? scheme.primary : scheme.outlineVariant,
+            color: active ? scheme.primary : scheme.outlineVariant,
           ),
         ),
         clipBehavior: Clip.antiAlias,
@@ -273,14 +283,12 @@ class _TotalModeChip extends StatelessWidget {
               spacing: 6,
               children: [
                 Icon(
-                  custom ? Icons.link_off_rounded : Icons.link_rounded,
+                  active ? Icons.link_off_rounded : Icons.link_rounded,
                   size: 16,
                   color: color,
                 ),
                 Text(
-                  custom
-                      ? Translations.of(context).assets.holdings.total_custom
-                      : Translations.of(context).assets.holdings.total_linked,
+                  Translations.of(context).assets.holdings.total_custom,
                   maxLines: 1,
                   softWrap: false,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(

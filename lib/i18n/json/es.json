@@ -1113,7 +1113,6 @@
       "equivalent_in": "Equivalente en {{currency}}",
       "rate_applied": "Tipo que te aplicaron",
       "fees_and_exchange": "Comisiones y cambio",
-      "total_linked": "Cantidad × precio",
       "total_custom": "Total personalizado",
       "units_available": "{{quantity}} disponibles",
       "not_enough_units": "No tienes tantas unidades",

@@ -1104,7 +1104,6 @@
       "equivalent_in": "Еквівалент у {{currency}}",
       "rate_applied": "Ваш курс",
       "fees_and_exchange": "Комісії та обмін",
-      "total_linked": "Кількість × ціна",
       "total_custom": "Власна сума",
       "units_available": "Доступно: {{quantity}}",
       "not_enough_units": "У вас немає стільки одиниць",

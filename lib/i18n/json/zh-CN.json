@@ -1101,7 +1101,6 @@
       "equivalent_in": "折合 {{currency}}",
       "rate_applied": "实际汇率",
       "fees_and_exchange": "手续费和汇兑",
-      "total_linked": "数量 × 价格",
       "total_custom": "自定义总额",
       "units_available": "可用 {{quantity}}",
       "not_enough_units": "你持有的份额不足",

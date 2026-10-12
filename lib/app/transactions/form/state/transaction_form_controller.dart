@@ -58,7 +58,7 @@ class TransactionFormController extends ChangeNotifier {
     valueInDestinyController.addListener(_onValueInDestinyTextChanged);
     quantityController.addListener(_onTradeFieldChanged);
     priceController.addListener(_onTradeFieldChanged);
-    tradeTotalController.addListener(_onTradeTotalTextChanged);
+    tradeTotalController.addListener(_safeNotify);
   }
 
   final TransactionType? _mode;
@@ -115,7 +115,6 @@ class TransactionFormController extends ChangeNotifier {
   // With the same currency the cash is always quantity × price, so the average
   // cost (which ignores the fees) stays consistent with it.
   final TextEditingController tradeTotalController = TextEditingController();
-  String _tradeTotalText = '';
   bool _customTradeTotal = false;
 
   /// An edited trade starts with its saved total. It only counts as typed by
@@ -202,37 +201,24 @@ class TransactionFormController extends ChangeNotifier {
         0;
   }
 
-  void _setTradeTotalText(String text) {
-    _tradeTotalText = text;
-    tradeTotalController.text = text;
-  }
-
-  void _onTradeTotalTextChanged() {
-    // Also called when only the selection changes
-    if (tradeTotalController.text == _tradeTotalText) return;
-    _tradeTotalText = tradeTotalController.text;
-    _customTradeTotal = true;
-    _safeNotify();
-  }
-
   void _syncTradeTotal() {
     if (_customTradeTotal || !isTradeCurrencyMismatch) return;
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
-    _setTradeTotalText(
-      _plainNumber(
-        double.parse(
-          (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
-            decimals,
-          ),
+    tradeTotalController.text = _plainNumber(
+      double.parse(
+        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
+          decimals,
         ),
       ),
     );
   }
 
-  /// Goes back to the amount converted with the stored exchange rate.
-  void resetTradeTotal() {
-    _customTradeTotal = false;
-    _syncTradeTotal();
+  /// With [v], the total can be typed. Without it, it goes back to the amount
+  /// converted with the stored exchange rate.
+  void setTradeTotalCustom(bool v) {
+    if (_customTradeTotal == v) return;
+    _customTradeTotal = v;
+    if (!v) _syncTradeTotal();
     _safeNotify();
   }
 
@@ -319,7 +305,7 @@ class TransactionFormController extends ChangeNotifier {
       priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
       _customTradeTotal = true;
       _checkSavedTradeTotal = true;
-      _setTradeTotalText(_plainNumber(edit.value.abs()));
+      tradeTotalController.text = _plainNumber(edit.value.abs());
       _fillForm(edit);
       _heldQuantityLoad = _loadSecurity().then((_) => _loadHeldQuantity());
       unawaited(_heldQuantityLoad);
@@ -485,7 +471,7 @@ class TransactionFormController extends ChangeNotifier {
     quantityController.dispose();
     priceController.removeListener(_onTradeFieldChanged);
     priceController.dispose();
-    tradeTotalController.removeListener(_onTradeTotalTextChanged);
+    tradeTotalController.removeListener(_safeNotify);
     tradeTotalController.dispose();
     notesController.dispose();
     titleController.dispose();
