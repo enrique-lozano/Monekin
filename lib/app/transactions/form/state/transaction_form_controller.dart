@@ -15,6 +15,8 @@ import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/account/security_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
@@ -56,6 +58,7 @@ class TransactionFormController extends ChangeNotifier {
     valueInDestinyController.addListener(_onValueInDestinyTextChanged);
     quantityController.addListener(_onTradeFieldChanged);
     priceController.addListener(_onTradeFieldChanged);
+    tradeTotalController.addListener(_onTradeTotalTextChanged);
   }
 
   final TransactionType? _mode;
@@ -106,6 +109,15 @@ class TransactionFormController extends ChangeNotifier {
   double? _heldQuantity;
   Future<void>? _heldQuantityLoad;
 
+  // The price is in the security currency but the cash moves in the account
+  // one. When they differ, the cash amount is its own field: filled in with
+  // the stored exchange rate unless the user types what they really paid.
+  final TextEditingController tradeTotalController = TextEditingController();
+  String _tradeTotalText = '';
+  bool _customTradeTotal = false;
+  CurrencyInDB? _securityCurrency;
+  double _securityToAccountRate = 1;
+
   /// True for a security trade (type N with a securityID): when creating one
   /// (opened with the investment mode) or editing an existing one.
   bool get isSecurityTradeInvestment {
@@ -138,6 +150,62 @@ class TransactionFormController extends ChangeNotifier {
   double get securityTradeTotal =>
       securityTradeQuantity * securityTradePricePerUnit;
 
+  CurrencyInDB? get securityCurrency => _securityCurrency;
+
+  /// True when the security is quoted in another currency than the account.
+  bool get isTradeCurrencyMismatch {
+    final account = fromAccount;
+    final security = _security;
+    return account != null &&
+        security != null &&
+        security.currencyId != account.currencyId;
+  }
+
+  bool get isTradeTotalCustom => _customTradeTotal;
+
+  /// The cash of the trade, in the account currency.
+  double get securityTradeCashAmount {
+    if (!isTradeCurrencyMismatch) return securityTradeTotal;
+    return double.tryParse(
+          tradeTotalController.text.trim().replaceAll(',', '.'),
+        ) ??
+        0;
+  }
+
+  void _setTradeTotalText(String text) {
+    _tradeTotalText = text;
+    tradeTotalController.text = text;
+  }
+
+  void _onTradeTotalTextChanged() {
+    // Also called when only the selection changes
+    if (tradeTotalController.text == _tradeTotalText) return;
+    _tradeTotalText = tradeTotalController.text;
+    _customTradeTotal = true;
+    _safeNotify();
+  }
+
+  void _syncTradeTotal() {
+    if (_customTradeTotal || !isTradeCurrencyMismatch) return;
+    final decimals = fromAccount?.currency.decimalPlaces ?? 2;
+    _setTradeTotalText(
+      _plainNumber(
+        double.parse(
+          (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
+            decimals,
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Goes back to the amount converted with the stored exchange rate.
+  void resetTradeTotal() {
+    _customTradeTotal = false;
+    _syncTradeTotal();
+    _safeNotify();
+  }
+
   void setSecurityTradeIsSell(bool v) {
     if (_securityTradeIsSell == v) return;
     _securityTradeIsSell = v;
@@ -165,7 +233,10 @@ class TransactionFormController extends ChangeNotifier {
     _safeNotify();
   }
 
-  void _onTradeFieldChanged() => _safeNotify();
+  void _onTradeFieldChanged() {
+    _syncTradeTotal();
+    _safeNotify();
+  }
 
   /// When true, money flows from the bottom leg to the top leg (transfer).
   bool _dualLegFlowReversed = false;
@@ -216,6 +287,8 @@ class TransactionFormController extends ChangeNotifier {
       _securityTradeIsSell = !edit.value.isNegative;
       quantityController.text = _plainNumber((edit.quantity ?? 0).abs());
       priceController.text = _plainNumber(edit.pricePerUnit ?? 0);
+      _customTradeTotal = true;
+      _setTradeTotalText(_plainNumber(edit.value.abs()));
       _fillForm(edit);
       _heldQuantityLoad = _loadSecurity().then((_) => _loadHeldQuantity());
       unawaited(_heldQuantityLoad);
@@ -281,6 +354,7 @@ class TransactionFormController extends ChangeNotifier {
     if (_disposed) return;
     _security = loaded;
     _safeNotify();
+    unawaited(_loadTradeCurrencyAndRate());
   }
 
   /// Lets the user pick the security of a new trade.
@@ -289,6 +363,7 @@ class TransactionFormController extends ChangeNotifier {
     final picked = await showSecurityPicker(
       context,
       heldInAccountId: securityTradeIsBuy ? null : account?.id,
+      accountCurrencyId: account?.currencyId,
     );
     if (picked == null || _disposed) return;
     _onSecuritySelected(picked);
@@ -297,10 +372,14 @@ class TransactionFormController extends ChangeNotifier {
   void _onSecuritySelected(SecurityInDB security) {
     _security = security;
     _heldQuantity = null;
+    _securityCurrency = null;
+    _securityToAccountRate = 1;
+    _customTradeTotal = false;
     priceController.text = _plainNumber(security.currentPrice ?? 0);
     _safeNotify();
     _heldQuantityLoad = _loadHeldQuantity();
     unawaited(_heldQuantityLoad);
+    unawaited(_loadTradeCurrencyAndRate());
     requestQuantityFocusAfterFrame();
   }
 
@@ -308,6 +387,33 @@ class TransactionFormController extends ChangeNotifier {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_disposed) quantityFocusNode.requestFocus();
     });
+  }
+
+  /// Loads the currency of the security and the rate to the account currency
+  /// on the date of the trade.
+  Future<void> _loadTradeCurrencyAndRate() async {
+    final security = _security;
+    final account = fromAccount;
+    if (security == null || account == null) return;
+
+    final currency = await CurrencyService.instance
+        .getCurrencyByCode(security.currencyId)
+        .first;
+    final rate = security.currencyId == account.currencyId
+        ? 1.0
+        : await ExchangeRateService.instance
+              .calculateExchangeRate(
+                fromCurrency: security.currencyId,
+                toCurrency: account.currencyId,
+                date: date,
+              )
+              .first;
+    if (_disposed || _security?.id != security.id) return;
+
+    _securityCurrency = currency;
+    _securityToAccountRate = rate;
+    _syncTradeTotal();
+    _safeNotify();
   }
 
   Future<void> _loadHeldQuantity() async {
@@ -339,6 +445,8 @@ class TransactionFormController extends ChangeNotifier {
     quantityController.dispose();
     priceController.removeListener(_onTradeFieldChanged);
     priceController.dispose();
+    tradeTotalController.removeListener(_onTradeTotalTextChanged);
+    tradeTotalController.dispose();
     notesController.dispose();
     titleController.dispose();
     amountFocusNode.dispose();
@@ -725,8 +833,9 @@ class TransactionFormController extends ChangeNotifier {
 
     final qty = securityTradeQuantity;
     final price = securityTradePricePerUnit;
+    final cash = securityTradeCashAmount;
 
-    if (qty <= 0 || price <= 0) {
+    if (qty <= 0 || price <= 0 || cash <= 0) {
       MonekinSnackbar.warning(
         SnackbarParams(t.transaction.form.validators.zero),
       );
@@ -755,7 +864,6 @@ class TransactionFormController extends ChangeNotifier {
 
     final id = _transactionToEdit?.id ?? generateUUID();
     final signedQty = securityTradeIsBuy ? qty : -qty;
-    final cash = qty * price;
     final signedCash = securityTradeIsBuy ? -cash : cash;
 
     final titleTrim = titleController.text.trim();
@@ -950,6 +1058,7 @@ class TransactionFormController extends ChangeNotifier {
   void setDate(DateTime v) {
     date = v;
     _safeNotify();
+    if (_security != null) unawaited(_loadTradeCurrencyAndRate());
   }
 
   void setStatus(TransactionStatus? v) {

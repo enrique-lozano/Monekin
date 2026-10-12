@@ -175,23 +175,30 @@ class _HoldingTile extends StatelessWidget {
 ///
 /// With [heldInAccountId], only the securities held in that account are listed
 /// and none can be created, as there would be nothing to sell.
+///
+/// With [accountCurrencyId], the securities quoted in that currency come first
+/// and the others show their currency.
 Future<SecurityInDB?> showSecurityPicker(
   BuildContext context, {
   String? heldInAccountId,
+  String? accountCurrencyId,
 }) {
   return showModalBottomSheet<SecurityInDB>(
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (context) =>
-        _SecurityPickerSheet(heldInAccountId: heldInAccountId),
+    builder: (context) => _SecurityPickerSheet(
+      heldInAccountId: heldInAccountId,
+      accountCurrencyId: accountCurrencyId,
+    ),
   );
 }
 
 class _SecurityPickerSheet extends StatefulWidget {
-  const _SecurityPickerSheet({this.heldInAccountId});
+  const _SecurityPickerSheet({this.heldInAccountId, this.accountCurrencyId});
 
   final String? heldInAccountId;
+  final String? accountCurrencyId;
 
   @override
   State<_SecurityPickerSheet> createState() => _SecurityPickerSheetState();
@@ -201,17 +208,37 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
   String _searchQuery = '';
 
   List<SecurityInDB> _filter(List<SecurityInDB> securities) {
-    if (_searchQuery.isEmpty) return securities;
-
     final query = _searchQuery.toLowerCase();
 
-    return securities
-        .where(
-          (s) =>
-              s.name.toLowerCase().contains(query) ||
-              (s.ticker?.toLowerCase().contains(query) ?? false),
-        )
-        .toList();
+    final filtered = _searchQuery.isEmpty
+        ? securities
+        : securities
+              .where(
+                (s) =>
+                    s.name.toLowerCase().contains(query) ||
+                    (s.ticker?.toLowerCase().contains(query) ?? false),
+              )
+              .toList();
+
+    final accountCurrency = widget.accountCurrencyId;
+    if (accountCurrency == null) return filtered;
+
+    // Stable: keeps the order inside each group
+    return [
+      ...filtered.where((s) => s.currencyId == accountCurrency),
+      ...filtered.where((s) => s.currencyId != accountCurrency),
+    ];
+  }
+
+  Widget? _subtitle(SecurityInDB security) {
+    final parts = [
+      if (security.ticker != null) security.ticker!,
+      if (widget.accountCurrencyId != null &&
+          security.currencyId != widget.accountCurrencyId)
+        security.currencyId,
+    ];
+
+    return parts.isEmpty ? null : Text(parts.join(' · '));
   }
 
   @override
@@ -281,7 +308,7 @@ class _SecurityPickerSheetState extends State<_SecurityPickerSheet> {
                         (s) => ListTile(
                           leading: SecurityAvatar(security: s),
                           title: Text(s.name),
-                          subtitle: s.ticker != null ? Text(s.ticker!) : null,
+                          subtitle: _subtitle(s),
                           onTap: () => RouteUtils.popRoute(s),
                         ),
                       )

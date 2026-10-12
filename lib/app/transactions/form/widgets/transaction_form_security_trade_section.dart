@@ -22,7 +22,12 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.watch<TransactionFormController>();
     final t = Translations.of(context);
-    final currency = c.fromAccount?.currency;
+    final accountCurrency = c.fromAccount?.currency;
+    final securityCurrency = c.securityCurrency;
+    final showConvertedTotal =
+        c.isTradeCurrencyMismatch &&
+        accountCurrency != null &&
+        securityCurrency != null;
     final available = c.securityTradeIsBuy
         ? null
         : c.securityTradeAvailableUnits;
@@ -106,6 +111,7 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
                   },
                   decoration: InputDecoration(
                     labelText: '${t.assets.holdings.price_per_unit} *',
+                    suffixText: securityCurrency?.code,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
@@ -130,11 +136,44 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
                 ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                 child: CurrencyDisplayer(
                   amountToConvert: c.securityTradeTotal,
-                  currency: currency,
+                  currency: showConvertedTotal
+                      ? securityCurrency
+                      : accountCurrency,
                 ),
               ),
             ],
           ),
+          if (showConvertedTotal)
+            TextFormField(
+              controller: c.tradeTotalController,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: (v) {
+                final parsed = double.tryParse(
+                  (v ?? '').trim().replaceAll(',', '.'),
+                );
+                return parsed == null || parsed <= 0
+                    ? t.general.validations.required
+                    : null;
+              },
+              decoration: InputDecoration(
+                labelText:
+                    '${t.assets.holdings.total_in_account_currency(currency: accountCurrency.code)} *',
+                suffixText: accountCurrency.symbol,
+                suffixIcon: c.isTradeTotalCustom
+                    ? IconButton(
+                        icon: const Icon(Icons.restart_alt_rounded),
+                        tooltip: t.ui_actions.reset,
+                        onPressed: c.resetTradeTotal,
+                      )
+                    : null,
+              ),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+              ],
+            ),
         ],
       ),
     );

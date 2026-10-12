@@ -1121,6 +1121,7 @@
       "quantity": "Quantity",
       "price_per_unit": "Price per unit",
       "total": "Total",
+      "total_in_account_currency": "Total in {{currency}}",
       "units_available": "{{quantity}} available",
       "not_enough_units": "You do not hold that many units",
       "opening_position": "Opening position",
