@@ -32,6 +32,14 @@ jobs:
           flutter pub get
           dart pub get --directory app-marketplaces/play-store
 
+      # build_runner's incremental asset graph, so unchanged files are skipped
+      - name: Cache build_runner
+        uses: actions/cache@v4
+        with:
+          path: .dart_tool/build
+          key: build-runner-${{ hashFiles('pubspec.lock') }}-${{ github.sha }}
+          restore-keys: build-runner-${{ hashFiles('pubspec.lock') }}-
+
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
 
