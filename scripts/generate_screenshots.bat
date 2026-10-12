@@ -24,7 +24,7 @@ setlocal enabledelayedexpansion
 :: env var to a device id (see `flutter devices`) to skip the question; it then
 :: runs in debug mode, unless PROFILE=1 is set too.
 :: Set the STYLES env var to only capture some styles (comma-separated ids from
-:: that file, e.g. `set STYLES=dark,dark_purple`). Default: all.
+:: that file, e.g. `set STYLES=light,dark_purple`). Default: all.
 
 cd /d "%~dp0.."
 

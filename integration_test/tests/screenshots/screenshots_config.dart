@@ -51,6 +51,10 @@ class ScreenshotStyle {
 
 /// Settings of the screenshot generation. Edit the values here.
 abstract final class ScreenshotConfig {
+  /// The only database the test may wipe and seed. Must match the
+  /// `MONEKIN_DB_NAME` passed by `generate_screenshots.bat`.
+  static const dbName = 'screenshots.db';
+
   /// Comma-separated `<app locale>-<currency>` pairs to capture (e.g.
   /// `en-USD,es-EUR,en-INR`). Each pair is saved to
   /// `app-marketplaces/screenshots/captures/<pair>/`. Set via

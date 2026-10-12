@@ -74,8 +74,13 @@ Future<void> takeScreenshot(
     // The root layer already carries the device pixel ratio transform.
     final size = tester.view.physicalSize;
     final image = await layer.toImage(Offset.zero & size);
-    final data = await image.toByteData(format: ui.ImageByteFormat.png);
-    return data!.buffer.asUint8List();
+    try {
+      final data = await image.toByteData(format: ui.ImageByteFormat.png);
+      return data!.buffer.asUint8List();
+    } finally {
+      // Native memory, not tracked by the GC: release it right away.
+      image.dispose();
+    }
   });
 
   binding.reportData ??= <String, dynamic>{};

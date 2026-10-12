@@ -44,12 +44,12 @@ void main() {
 
   final captures = _parseCaptures();
 
-  // The test wipes and seeds its DB, so it only runs on a disposable one
-  // passed via `--dart-define=MONEKIN_DB_NAME=...`, never the real `database.db`.
-  final usesRealDb = AppDB.instance.dbName == 'database.db';
+  // The test wipes and seeds its DB, so it only runs on the dedicated one
+  // (`--dart-define=MONEKIN_DB_NAME=screenshots.db`), never on any other.
+  final usesOtherDb = AppDB.instance.dbName != ScreenshotConfig.dbName;
 
   setUpAll(() async {
-    if (usesRealDb) return;
+    if (usesOtherDb) return;
 
     // Start from a fresh install.
     final dbPath = await AppDB.instance.databasePath;
@@ -136,7 +136,7 @@ void main() {
     } finally {
       debugDefaultTargetPlatformOverride = null;
     }
-  }, skip: usesRealDb);
+  }, skip: usesOtherDb);
 }
 
 /// Runs [task] and prints how long it took, to spot slow steps.
