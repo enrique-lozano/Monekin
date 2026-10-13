@@ -68,6 +68,7 @@ class _CustomColorPickerModalState extends State<CustomColorPickerModal> {
               submitText: t.ui_actions.select,
               onSaved: () {
                 widget.onColorSelected(color);
+                RouteUtils.popRoute();
               },
             ),
     );

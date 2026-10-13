@@ -150,8 +150,7 @@ class ColorPickerModal extends StatelessWidget {
             bgColor: ColorHex.get(colorItem),
             onTap: () {
               onColorSelected(ColorHex.get('#$colorItem'));
-              // In a popover the selection is final on tap, so close it.
-              if (ModalPresentation.isPopover(context)) RouteUtils.popRoute();
+              RouteUtils.popRoute();
             },
             child: SizedBox(height: size, width: size),
           ),
