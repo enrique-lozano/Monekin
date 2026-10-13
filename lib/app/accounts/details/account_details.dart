@@ -19,7 +19,6 @@ import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
-import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -574,24 +573,37 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     final theme = Theme.of(context);
     final endDate = _dateRange.endDate;
 
-    return StreamBuilder<(double total, List<HoldingValuationAtDate> vals)>(
+    return StreamBuilder<
+      ({double total, double market, double cost, int positions})
+    >(
       stream: Rx.combineLatest2(
         AccountService.instance.getAccountMoney(
           account: account,
           date: endDate,
         ),
-        HoldingService.instance.getHoldingValuationsAtDate(endDate),
-        (total, vals) => (total, vals),
+        // The securities may be quoted in another currency than the account
+        HoldingService.instance
+            .getHoldingValuationsAtDate(endDate, [account.id])
+            .switchMap(
+              (vals) => HoldingService.instance.sumValuationsIn(
+                vals,
+                account.currency.code,
+                date: endDate,
+              ),
+            ),
+        (total, holdings) => (
+          total: total,
+          market: holdings.market,
+          cost: holdings.cost,
+          positions: holdings.positions,
+        ),
       ),
       builder: (context, snapshot) {
-        final total = snapshot.data?.$1 ?? 0;
-        final vals = (snapshot.data?.$2 ?? [])
-            .where((v) => v.accountId == account.id)
-            .toList();
+        final total = snapshot.data?.total ?? 0;
+        final market = snapshot.data?.market ?? 0;
+        final cost = snapshot.data?.cost ?? 0;
+        final positionsCount = snapshot.data?.positions ?? 0;
 
-        final market = vals.fold<double>(0, (s, v) => s + v.market);
-        final cost = vals.fold<double>(0, (s, v) => s + v.cost);
-        final positionsCount = vals.where((v) => v.market != 0).length;
         final cash = total - market;
         final pnl = market - cost;
         final pnlPct = cost == 0 ? 0.0 : pnl / cost;

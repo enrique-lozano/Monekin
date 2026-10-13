@@ -2,7 +2,9 @@ import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -17,7 +19,10 @@ void main() {
 
   setUp(() {
     db = AppDB.forTesting(NativeDatabase.memory());
-    service = HoldingService.forTesting(db);
+    service = HoldingService.forTesting(
+      db,
+      exchangeRates: ExchangeRateService.forTesting(db),
+    );
   });
 
   tearDown(() async {
@@ -577,6 +582,115 @@ void main() {
       await insertHolding('acc-other', securityId, quantity: 5, avgCost: 10);
 
       expect(await service.hasInvestmentRecords(accountId).first, isFalse);
+    });
+  });
+
+  group('summing valuations in the account currency', () {
+    HoldingValuationAtDate valuation(
+      String currency, {
+      required double market,
+      required double cost,
+    }) => HoldingValuationAtDate(
+      accountId: accountId,
+      securityId: 'sec-$currency',
+      securityName: 'Security $currency',
+      securityType: SecurityType.stock,
+      currencyId: currency,
+      market: market,
+      cost: cost,
+    );
+
+    test('converts every security currency with its own rate', () {
+      final sum = HoldingService.sumValuations(
+        [
+          valuation('EUR', market: 100, cost: 80),
+          valuation('USD', market: 200, cost: 150),
+        ],
+        (code) => code == 'USD' ? 0.5 : 1,
+      );
+
+      expect(sum.market, closeTo(100 + 200 * 0.5, 1e-9));
+      expect(sum.cost, closeTo(80 + 150 * 0.5, 1e-9));
+      expect(sum.positions, 2);
+    });
+
+    test('does not count closed positions', () {
+      final sum = HoldingService.sumValuations(
+        [
+          valuation('EUR', market: 100, cost: 80),
+          valuation('EUR', market: 0, cost: 0),
+        ],
+        (_) => 1,
+      );
+
+      expect(sum.positions, 1);
+    });
+
+    test('converts each currency with the rate of the requested date', () async {
+      Future<void> insertCurrency(String code) => db
+          .into(db.currencies)
+          .insert(
+            CurrencyInDB(
+              code: code,
+              symbol: code,
+              name: code,
+              decimalPlaces: 2,
+              isDefault: false,
+              type: 0,
+            ),
+          );
+
+      Future<void> insertRate(String code, DateTime date, double rate) => db
+          .into(db.exchangeRates)
+          .insert(
+            ExchangeRateInDB(
+              id: 'rate-$code-${date.millisecondsSinceEpoch}',
+              date: date,
+              currencyCode: code,
+              exchangeRate: rate,
+            ),
+          );
+
+      // EUR is the base currency: the rates are the value of 1 unit in EUR
+      await insertCurrency('EUR');
+      await insertCurrency('USD');
+      await insertCurrency('GBP');
+      await insertRate('USD', DateTime(2026, 1, 1), 0.5);
+      await insertRate('USD', DateTime(2026, 3, 1), 0.8);
+      await insertRate('GBP', DateTime(2026, 1, 1), 1.2);
+
+      final valuations = [
+        valuation('USD', market: 100, cost: 80),
+        valuation('GBP', market: 50, cost: 40),
+        valuation('EUR', market: 10, cost: 10),
+      ];
+
+      final february = await service
+          .sumValuationsIn(valuations, 'EUR', date: DateTime(2026, 2, 15))
+          .first;
+      expect(february.market, closeTo(100 * 0.5 + 50 * 1.2 + 10, 1e-9));
+      expect(february.cost, closeTo(80 * 0.5 + 40 * 1.2 + 10, 1e-9));
+      expect(february.positions, 3);
+
+      // The USD rate changed on March 1st, the GBP one did not
+      final march = await service
+          .sumValuationsIn(valuations, 'EUR', date: DateTime(2026, 3, 15))
+          .first;
+      expect(march.market, closeTo(100 * 0.8 + 50 * 1.2 + 10, 1e-9));
+      expect(march.cost, closeTo(80 * 0.8 + 40 * 1.2 + 10, 1e-9));
+    });
+
+    test('adds up without any rate when everything is in the account currency',
+        () async {
+      final sum = await service
+          .sumValuationsIn([
+            valuation('USD', market: 100, cost: 80),
+            valuation('USD', market: 50, cost: 60),
+          ], 'USD')
+          .first;
+
+      expect(sum.market, 150);
+      expect(sum.cost, 140);
     });
   });
 

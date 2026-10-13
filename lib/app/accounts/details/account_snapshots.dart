@@ -10,9 +10,12 @@ import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
+import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
+import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -26,6 +29,7 @@ import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart'
 import 'package:monekin/core/presentation/widgets/trailing_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 /// Plain, locale-agnostic string for a number editable in a text field
 /// (e.g. `1`, `204`, `98.5`), stripping a trailing `.0`.
@@ -349,6 +353,15 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
   final TextEditingController _cash = TextEditingController();
   late DateTime _date;
 
+  /// The rows are written in the currency of each security: these convert them
+  /// to the one of the account on the date of the snapshot.
+  Map<String, double> _rates = {};
+  Map<String, CurrencyInDB> _currencies = {};
+
+  /// Until the rates of the current date and rows are loaded, the converted
+  /// totals would use old ones, so they are not shown.
+  bool _loadingRates = false;
+
   bool get _isEditing => widget.snapshotToEdit != null;
 
   @override
@@ -373,6 +386,62 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     } else {
       unawaited(_prefillCashFromLedger(_date));
     }
+
+    unawaited(_loadCurrencies());
+    unawaited(_loadRates());
+  }
+
+  Future<void> _loadCurrencies() async {
+    final all = await CurrencyService.instance.getAllCurrencies().first;
+    if (!mounted) return;
+    setState(
+      () => _currencies = {for (final c in all ?? <Currency>[]) c.code: c},
+    );
+  }
+
+  Future<void> _loadRates() async {
+    final accountCode = widget.account.currency.code;
+    final codes = _rows
+        .map((r) => r.security.currencyId)
+        .where((code) => code != accountCode)
+        .toSet();
+    final date = _date;
+
+    setState(() => _loadingRates = codes.isNotEmpty);
+
+    final rates = <String, double>{
+      for (final code in codes)
+        code: await ExchangeRateService.instance
+            .calculateExchangeRate(
+              fromCurrency: code,
+              toCurrency: accountCode,
+              date: date,
+            )
+            .first,
+    };
+
+    // A newer request (another date or other rows) owns the result now
+    if (!mounted || date != _date || !_sameCurrencies(codes)) return;
+    setState(() {
+      _rates = rates;
+      _loadingRates = false;
+    });
+  }
+
+  bool _sameCurrencies(Set<String> codes) {
+    final current = _rows
+        .map((r) => r.security.currencyId)
+        .where((code) => code != widget.account.currency.code)
+        .toSet();
+
+    return current.length == codes.length && current.containsAll(codes);
+  }
+
+  /// 1 only for the currency of the account: any other one waits for its rate.
+  double _rateOf(_EditorRow row) {
+    final code = row.security.currencyId;
+    if (code == widget.account.currency.code) return 1;
+    return _rates[code] ?? 1;
   }
 
   @override
@@ -402,7 +471,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
 
   double get _cashValue => double.tryParse(_cash.text) ?? 0;
 
-  double get _totalCost => _rows.fold(0, (sum, r) => sum + r.cost);
+  double get _totalCost =>
+      _rows.fold(0, (sum, r) => sum + r.cost * _rateOf(r));
 
   Future<void> _addPosition() async {
     final security = await showSecurityPicker(context);
@@ -423,6 +493,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
         ),
       );
     });
+
+    unawaited(_loadRates());
   }
 
   void _removeRow(_EditorRow row) {
@@ -472,6 +544,8 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
           ),
         );
     });
+
+    unawaited(_loadRates());
   }
 
   /// The editor is a form, not a tutorial: what a snapshot is and what its cash
@@ -657,12 +731,14 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
               _buildSummaryRow(
                 t.assets.holdings.snapshots.total_cost,
                 _totalCost,
+                converted: true,
               ),
               const Divider(height: 16),
               _buildSummaryRow(
                 t.assets.holdings.snapshots.snapshot_total,
                 _cashValue + _totalCost,
                 emphasized: true,
+                converted: true,
               ),
             ],
           ),
@@ -675,6 +751,7 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
     String label,
     double amount, {
     bool emphasized = false,
+    bool converted = false,
   }) {
     final theme = Theme.of(context);
 
@@ -694,9 +771,12 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
                       ? theme.textTheme.titleMedium!
                       : theme.textTheme.bodyMedium!)
                   .copyWith(color: theme.colorScheme.primary),
-          child: CurrencyDisplayer(
-            amountToConvert: amount,
-            currency: widget.account.currency,
+          child: Skeletonizer(
+            enabled: converted && _loadingRates,
+            child: CurrencyDisplayer(
+              amountToConvert: amount,
+              currency: widget.account.currency,
+            ),
           ),
         ),
       ],
@@ -830,7 +910,9 @@ class _SnapshotEditorSheetState extends State<_SnapshotEditorSheet> {
                   style: theme.textTheme.bodyMedium!,
                   child: CurrencyDisplayer(
                     amountToConvert: row.cost,
-                    currency: widget.account.currency,
+                    currency:
+                        _currencies[row.security.currencyId] ??
+                        widget.account.currency,
                   ),
                 ),
               ),

@@ -15,13 +15,15 @@ import 'package:rxdart/rxdart.dart';
 /// weighted-average cost basis, and records the matching cash trades.
 class HoldingService {
   final AppDB db;
+  final ExchangeRateService _exchangeRates;
 
-  HoldingService._(this.db);
+  HoldingService._(this.db) : _exchangeRates = ExchangeRateService.instance;
   static final HoldingService instance = HoldingService._(AppDB.instance);
 
   /// Creates a service bound to a specific (test) database.
   @visibleForTesting
-  HoldingService.forTesting(this.db);
+  HoldingService.forTesting(this.db, {ExchangeRateService? exchangeRates})
+    : _exchangeRates = exchangeRates ?? ExchangeRateService.instance;
 
   Stream<List<HoldingWithSecurity>> getHoldingsForAccount(String accountId) {
     final query = db.select(db.holdings).join([
@@ -205,6 +207,56 @@ class HoldingService {
         streams,
       ).map((values) => values.fold<double>(0, (a, b) => a + b));
     });
+  }
+
+  /// Adds up the market value and cost basis of [valuations], converting each
+  /// security currency to [toCurrency] at the rate of [date], and counts the
+  /// open positions.
+  Stream<({double market, double cost, int positions})> sumValuationsIn(
+    Iterable<HoldingValuationAtDate> valuations,
+    String toCurrency, {
+    DateTime? date,
+  }) {
+    final codes = (valuations.map((v) => v.currencyId).toSet()
+      ..remove(toCurrency)).toList();
+
+    if (codes.isEmpty) return Stream.value(sumValuations(valuations, (_) => 1));
+
+    return Rx.combineLatestList(
+      codes.map(
+        (code) => _exchangeRates.calculateExchangeRate(
+          fromCurrency: code,
+          toCurrency: toCurrency,
+          date: date,
+        ),
+      ),
+    ).map((rates) {
+      final byCode = Map.fromIterables(codes, rates);
+      return sumValuations(valuations, (code) => byCode[code] ?? 1);
+    });
+  }
+
+  /// The sum behind [sumValuationsIn], with [rateOf] giving the rate from a
+  /// security currency to the target one.
+  @visibleForTesting
+  static ({double market, double cost, int positions}) sumValuations(
+    Iterable<HoldingValuationAtDate> valuations,
+    double Function(String currencyId) rateOf,
+  ) {
+    var market = 0.0;
+    var cost = 0.0;
+
+    for (final v in valuations) {
+      final rate = rateOf(v.currencyId);
+      market += v.market * rate;
+      cost += v.cost * rate;
+    }
+
+    return (
+      market: market,
+      cost: cost,
+      positions: valuations.where((v) => v.market != 0).length,
+    );
   }
 
   /// Reconstructs the quantity, price and average cost of **every position that
