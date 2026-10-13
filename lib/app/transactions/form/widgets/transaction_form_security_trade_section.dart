@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_form_trade_conversion_card.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
@@ -22,7 +23,8 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.watch<TransactionFormController>();
     final t = Translations.of(context);
-    final currency = c.fromAccount?.currency;
+    final accountCurrency = c.fromAccount?.currency;
+    final securityCurrency = c.securityCurrency;
     final available = c.securityTradeIsBuy
         ? null
         : c.securityTradeAvailableUnits;
@@ -106,6 +108,7 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
                   },
                   decoration: InputDecoration(
                     labelText: '${t.assets.holdings.price_per_unit} *',
+                    suffixText: securityCurrency?.code,
                   ),
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
@@ -117,24 +120,31 @@ class TransactionFormSecurityTradeSection extends StatelessWidget {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                t.assets.holdings.total,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              DefaultTextStyle.merge(
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
-                child: CurrencyDisplayer(
-                  amountToConvert: c.securityTradeTotal,
-                  currency: currency,
+          if (accountCurrency != null && securityCurrency != null)
+            TransactionFormTradeConversionCard(
+              controller: c,
+              accountCurrency: accountCurrency,
+              securityCurrency: securityCurrency,
+            )
+          else
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  t.assets.holdings.total,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-              ),
-            ],
-          ),
+                DefaultTextStyle.merge(
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  child: CurrencyDisplayer(
+                    amountToConvert: c.securityTradeTotal,
+                    currency: accountCurrency,
+                  ),
+                ),
+              ],
+            ),
         ],
       ),
     );
