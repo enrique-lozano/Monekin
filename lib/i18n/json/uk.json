@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Теплова карта",
     "portfolio-heat-map-subtitle": "Що більший блок, то більша позиція. Що зеленіший, то краще вона почувається.",
     "daily-performance": "Щоденно",
-    "compared-to-previous-period": "Порівняно з попереднім періодом",
+    "compared-to-previous-period": "vs попередній період",
     "cash-flow": "Грошовий потік",
     "cash-flow-subtitle": "Я витрачаю менше, ніж заробляю?",
     "by-periods": "За періодами",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "Прийняти транзакцію",
       "accept-dialog.msg-single": "Новий статус транзакції буде нульовим. Ви можете знову редагувати статус цієї транзакції в будь-який момент",
       "accept-dialog.msg": "Ця дія створить нову транзакцію з датою {{date}}. Ви зможете переглянути деталі цієї транзакції на сторінці транзакцій",
+      "accept-dialog.trade": "{{quantity}} од. {{security}} за ціною {{price}} {{currency}}, остання ціна. Згодом ви зможете її змінити.",
       "recurrent-rule-finished": "Правило періодичності було завершено, більше немає платежів!"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "Початковий рахунок",
       "to": "Цільовий рахунок",
+      "label-from": "Звідки",
+      "label-to": "Куди",
+      "custom-amounts": "Власні суми",
+      "difference": "різниця",
       "VALUE-IN-DESTINY": {
         "title": "Сума переказу в пункті призначення",
         "amount-short": "{{amount}} на цільовий рахунок"
@@ -871,15 +876,7 @@
         "active-overspending": "Перевитрата",
         "active-indeterminate": "Активний",
         "success": "Досягнуто",
-        "fail": "Бюджет перевищено"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Ви можете витрачати {{ dailyAmount }} на день протягом {{ remainingDays }} днів, що залишилися",
-        "active-overspending": "Щоб повернутися до плану, вам слід обмежити витрати до {{ dailyAmount }} на день протягом {{ remainingDays }} днів, що залишилися",
-        "active-indeterminate": "У вас залишилося витратити {{ amount }}.",
-        "active-exceeded": "Ви вже перевищили ліміт бюджету на {{ amount }}. Якщо ви не знайдете жодних доходів для цього бюджету, вам слід припинити витрати до кінця його періоду",
-        "success": "Чудова робота! Цей бюджет успішно завершено. Продовжуйте створювати бюджети для управління витратами",
-        "fail": "Ви перевищили бюджет на {{ amount }}. Спробуйте бути уважнішими наступного разу!"
+        "fail": "Перевищено"
       }
     }
   },
@@ -929,16 +926,36 @@
         "active-on-track": "На шляху",
         "active-behind-schedule": "Відставання від графіка",
         "active-indeterminate": "Активний",
-        "success": "Мета досягнута",
-        "fail": "Мета не вдалася"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Ви на шляху до своєї мети! Ви повинні відкладати {{ dailyAmount }} на день протягом {{ remainingDays }} днів, що залишилися",
-        "active-behind-schedule": "Ви відстаєте від графіка. Ви повинні заощаджувати {{ dailyAmount }} на день, щоб досягти своєї мети за {{ remainingDays }} днів",
-        "active-indeterminate": "Вам потрібно ще {{ amount }}, щоб досягти своєї мети.",
-        "success": "Щиро вітаю! Ви досягли своєї мети.",
-        "fail": "Ви не досягли цілі на {{ amount }}."
+        "success": "Досягнуто",
+        "fail": "Не вдалося"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "залишилось",
+    "over": "перевищено",
+    "spent": "витрачено",
+    "saved": "заощаджено",
+    "CHART": {
+      "spent": "Витрачено",
+      "saved": "Заощаджено",
+      "projected": "Прогноз",
+      "pace": "Темп"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "на день, залишився {{n}} день",
+        "few": "на день, залишилось {{n}} дні",
+        "many": "на день, залишилось {{n}} днів",
+        "other": "на день, залишилось {{n}} днів"
+      },
+      "per-day-short": "на день",
+      "per-day-help": "Скільки ви ще можете додавати щодня до кінця періоду, щоб досягти цільової суми",
+      "above-pace": "вище темпу",
+      "below-pace": "нижче темпу",
+      "pace-help": "Різниця між поточною сумою та сумою, очікуваною на сьогодні, якби її рівномірно розподілили на весь період",
+      "projected": "прогноз",
+      "projected-help": "Орієнтовна сума наприкінці періоду, якщо поточний темп збережеться"
     }
   },
   "DEBTS": {
@@ -1075,12 +1092,25 @@
       "choose_security": "Вибрати цінний папір",
       "create_security": "Створити новий цінний папір",
       "security_name": "Назва цінного папера",
+      "security": "Цінний папір",
       "ticker": "Тикер / символ (необов'язково)",
       "security_type": "Тип цінного папера",
       "current_price": "Актуальна ціна",
       "quantity": "Кількість",
       "price_per_unit": "Ціна за одиницю",
       "total": "Всього",
+      "total_in_account_currency": "Всього в {{currency}}",
+      "rate_stored": "Обмінний курс {{from}} → {{to}}",
+      "equivalent_in": "Еквівалент у {{currency}}",
+      "fees_and_exchange": "Комісії та обмін",
+      "custom_total_configure": "Вказати власну суму",
+      "custom_total_reset": "Скинути суму",
+      "fees_and_exchange_info": "Комісії та курсова різниця разом. Ця сума не враховується в середній вартості за одиницю та в іншій статистиці.",
+      "rate_stored_caption": "Збережений курс {{rate}}",
+      "total_mode_auto": "Авто",
+      "total_mode_custom": "Власна",
+      "calculated": "Розраховано",
+      "rate_effective": "фактичний",
       "units_available": "Доступно: {{quantity}}",
       "not_enough_units": "У вас немає стільки одиниць",
       "opening_position": "Початкова позиція",
@@ -1198,7 +1228,6 @@
       "acquisition_transaction_badge": "Придбання",
       "select_account": "Виберіть обліковий запис",
       "update_value": "Оновити значення",
-      "trade_form_asset_column": "Актив",
       "notes_optional": "Примітки (необов'язково)",
       "performance_title": "Performance",
       "performance_return": "Period return",

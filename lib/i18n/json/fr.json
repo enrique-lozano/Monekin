@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Carte thermique",
     "portfolio-heat-map-subtitle": "Plus le bloc est grand, plus la position est importante. Plus il est vert, mieux elle se porte.",
     "daily-performance": "Quotidien",
-    "compared-to-previous-period": "Par rapport à la période précédente",
+    "compared-to-previous-period": "vs période précédente",
     "cash-flow": "Flux de trésorerie",
     "cash-flow-subtitle": "Est-ce que je dépense moins que ce que je gagne ?",
     "by-periods": "Par périodes",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "Accepter la transaction",
       "accept-dialog.msg-single": "Le nouveau statut de la transaction sera nul. Vous pourrez rééditer le statut de cette transaction quand vous le souhaitez",
       "accept-dialog.msg": "Cette action créera une nouvelle transaction avec la date {{date}}. Vous pourrez consulter les détails de cette transaction sur la page des transactions",
+      "accept-dialog.trade": "{{quantity}} unités de {{security}} à {{price}} {{currency}}, le dernier prix. Vous pourrez la modifier ensuite.",
       "recurrent-rule-finished": "La règle récurrente est terminée, il n'y a plus de paiements à effectuer !"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "Compte d'origine",
       "to": "Compte de destination",
+      "label-from": "De",
+      "label-to": "Vers",
+      "custom-amounts": "Montants personnalisés",
+      "difference": "de différence",
       "VALUE-IN-DESTINY": {
         "title": "Montant transféré au compte de destination",
         "amount-short": "{{amount}} vers le compte cible"
@@ -871,15 +876,7 @@
         "active-overspending": "Dépenses excessives",
         "active-indeterminate": "Actif",
         "success": "Atteint",
-        "fail": "Budget dépassé"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Vous pouvez dépenser {{ dailyAmount }} par jour pour les {{ remainingDays }} jours restants",
-        "active-overspending": "Pour revenir sur la bonne voie, vous devriez limiter vos dépenses à {{ dailyAmount }} par jour pour les {{ remainingDays }} jours restants",
-        "active-indeterminate": "Il vous reste {{ amount }} à dépenser.",
-        "active-exceeded": "Vous avez déjà dépassé votre limite budgétaire de {{ amount }}. Si vous ne trouvez aucun revenu pour ce budget, vous devriez arrêter de dépenser pour le reste de sa période",
-        "success": "Bon travail ! Ce budget est terminé avec succès. Continuez à créer des budgets pour gérer vos dépenses",
-        "fail": "Vous avez dépassé le budget de {{ amount }}. Essayez d'être plus prudent la prochaine fois !"
+        "fail": "Dépassé"
       }
     }
   },
@@ -929,16 +926,34 @@
         "active-on-track": "En bonne voie",
         "active-behind-schedule": "En retard",
         "active-indeterminate": "Actif",
-        "success": "Objectif atteint",
-        "fail": "Objectif raté"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Vous êtes en bonne voie pour atteindre votre objectif ! Vous devez économiser {{ dailyAmount }} par jour pendant les {{ remainingDays }} jours.",
-        "active-behind-schedule": "Vous êtes en retard. Vous devez économiser {{ dailyAmount }} par jour pour atteindre votre objectif dans {{ remainingDays }} jours.",
-        "active-indeterminate": "Il vous en faut {{ amount }} supplémentaires pour atteindre votre objectif.",
-        "success": "Félicitations! Vous avez atteint votre objectif.",
-        "fail": "Vous avez raté votre objectif de {{ amount }}."
+        "success": "Atteint",
+        "fail": "Raté"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "restants",
+    "over": "de dépassement",
+    "spent": "dépensé",
+    "saved": "épargné",
+    "CHART": {
+      "spent": "Dépensé",
+      "saved": "Épargné",
+      "projected": "Projection",
+      "pace": "Rythme"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "par jour, {{n}} jour restant",
+        "other": "par jour, {{n}} jours restants"
+      },
+      "per-day-short": "par jour",
+      "per-day-help": "Combien vous pouvez encore ajouter chaque jour jusqu'à la fin de la période pour atteindre le montant cible",
+      "above-pace": "au-dessus du rythme",
+      "below-pace": "en dessous du rythme",
+      "pace-help": "Différence entre le montant actuel et le montant attendu à ce jour s'il était réparti uniformément sur toute la période",
+      "projected": "projeté",
+      "projected-help": "Montant estimé à la fin de la période si le rythme actuel se maintient"
     }
   },
   "DEBTS": {
@@ -1075,12 +1090,25 @@
       "choose_security": "Choisissez un titre",
       "create_security": "Créer une nouvelle sécurité",
       "security_name": "Nom de sécurité",
+      "security": "Titre",
       "ticker": "Ticker/symbole (facultatif)",
       "security_type": "Type de sécurité",
       "current_price": "Prix ​​actuel",
       "quantity": "Quantité",
       "price_per_unit": "Prix ​​par unité",
       "total": "Total",
+      "total_in_account_currency": "Total en {{currency}}",
+      "rate_stored": "Taux de change {{from}} → {{to}}",
+      "equivalent_in": "Équivalent en {{currency}}",
+      "fees_and_exchange": "Frais et change",
+      "custom_total_configure": "Définir un total personnalisé",
+      "custom_total_reset": "Réinitialiser le total",
+      "fees_and_exchange_info": "Frais et écart de change ensemble. Ce montant n'est pas pris en compte dans le coût moyen par unité ni dans d'autres statistiques.",
+      "rate_stored_caption": "Taux enregistré {{rate}}",
+      "total_mode_auto": "Auto",
+      "total_mode_custom": "Personnalisé",
+      "calculated": "Calculé",
+      "rate_effective": "effectif",
       "units_available": "{{quantity}} disponibles",
       "not_enough_units": "Vous ne détenez pas autant d'unités",
       "opening_position": "Position d'ouverture",
@@ -1198,7 +1226,6 @@
       "acquisition_transaction_badge": "Acquisition",
       "select_account": "Sélectionnez un compte",
       "update_value": "Mettre à jour la valeur",
-      "trade_form_asset_column": "Actif",
       "notes_optional": "Remarques (facultatif)",
       "performance_title": "Performance",
       "performance_return": "Rendement sur la période",

@@ -33,36 +33,52 @@ class PeriodValueHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 8,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: const TextStyle(fontSize: 12)),
-              if (value == null)
-                const Bone(width: 70, height: 40)
-              else
-                CurrencyDisplayer(
-                  amountToConvert: value!,
-                  integerStyle: headlineStyle,
-                ),
-            ],
+          Flexible(
+            flex: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: const TextStyle(fontSize: 12)),
+                if (value == null)
+                  const Bone(width: 70, height: 40)
+                else
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: CurrencyDisplayer(
+                      amountToConvert: value!,
+                      integerStyle: headlineStyle,
+                    ),
+                  ),
+              ],
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                t.stats.compared_to_previous_period,
-                style: const TextStyle(fontSize: 12),
-              ),
-              if (relativeChange == null)
-                const Bone(width: 52, height: 22)
-              else
-                TrendingValue(
-                  percentage: relativeChange!,
-                  fontWeight: headlineStyle.fontWeight!,
-                  fontSize: headlineStyle.fontSize!,
+          Flexible(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  t.stats.compared_to_previous_period,
+                  textAlign: TextAlign.end,
+                  style: const TextStyle(fontSize: 12),
                 ),
-            ],
+                if (relativeChange == null)
+                  const Bone(width: 52, height: 22)
+                else
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: TrendingValue(
+                      percentage: relativeChange!,
+                      fontWeight: headlineStyle.fontWeight!,
+                      fontSize: headlineStyle.fontSize!,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ],
       ),

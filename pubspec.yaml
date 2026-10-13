@@ -13,7 +13,7 @@ publish_to: 'none'
 # The X represents the major releases, and can be up to infinity. Never start by a zero
 # The Y represents the minor releases, and can be up to 99. Always start by a zero
 # The Z represents the patch releases, and can be up to 999. Always start by a zero
-version: 10.1.1+1001001
+version: 10.2.0+1002000
 
 environment:
   flutter: 3.44.1
@@ -86,7 +86,7 @@ dev_dependencies:
   json_serializable: ^6.14.1
   flutter_launcher_icons: ^0.14.2 # Package to regenerate icons (config later in this file). To run, type `dart run flutter_launcher_icons`
   drift_dev: ^2.34.0
-  slang_build_runner: ^4.4.0 # To regenerate the translations run 'dart run slang'
+  slang_build_runner: ^4.19.0 # To regenerate the translations run 'dart run slang'
   copy_with_extension_gen: ^15.0.1
   freezed: ^3.2.5
 

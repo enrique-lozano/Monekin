@@ -1,0 +1,30 @@
+name: PR checklist
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches:
+      - develop
+      - main
+
+permissions: {}
+
+jobs:
+  checklist:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.user.type != 'Bot' }}
+    steps:
+      - name: Check all checklist items are ticked
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          section=$(printf '%s\n' "$BODY" | awk '/^## /{in_list = /Checklist/; next} in_list')
+          if ! printf '%s\n' "$section" | grep -qE -- '- \[[xX]\]'; then
+            echo "::error::The checklist from the PR template is missing. Please restore it and tick every item."
+            exit 1
+          fi
+          if printf '%s\n' "$section" | grep -qE -- '- \[ \]'; then
+            echo "::error::Please tick every item in the PR checklist."
+            printf '%s\n' "$section" | grep -E -- '- \[ \]'
+            exit 1
+          fi

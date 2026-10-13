@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Mappa di calore",
     "portfolio-heat-map-subtitle": "Più grande è il blocco, maggiore è la posizione. Più è verde, meglio sta andando.",
     "daily-performance": "Giornaliero",
-    "compared-to-previous-period": "Rispetto al periodo precedente",
+    "compared-to-previous-period": "vs periodo precedente",
     "cash-flow": "Flusso di cassa",
     "cash-flow-subtitle": "Sto spendendo meno di quanto guadagno?",
     "by-periods": "Per periodi",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "Accetta transazione",
       "accept-dialog.msg-single": "Il nuovo stato della transazione sarà nullo. Potrai ri-modificare lo stato di questa transazione quando vuoi",
       "accept-dialog.msg": "Questa azione creerà una nuova transazione con data {{date}}. Potrai controllare i dettagli di questa transazione sulla pagina delle transazioni",
+      "accept-dialog.trade": "{{quantity}} unità di {{security}} a {{price}} {{currency}}, l'ultimo prezzo. Potrai modificarla in seguito.",
       "recurrent-rule-finished": "La regola ricorrente è stata completata, non ci sono più pagamenti da effettuare!"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "Conto di origine",
       "to": "Conto di destinazione",
+      "label-from": "Da",
+      "label-to": "A",
+      "custom-amounts": "Importi personalizzati",
+      "difference": "di differenza",
       "VALUE-IN-DESTINY": {
         "title": "Importo trasferito a destinazione",
         "amount-short": "{{amount}} al conto di destinazione"
@@ -871,15 +876,7 @@
         "active-overspending": "Spesa eccessiva",
         "active-indeterminate": "Attivo",
         "success": "Raggiunto",
-        "fail": "Budget superato"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Puoi spendere {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
-        "active-overspending": "Per tornare in linea, dovresti limitare la tua spesa a {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
-        "active-indeterminate": "Ti restano {{ amount }} da spendere.",
-        "active-exceeded": "Hai già superato il limite del budget di {{ amount }}. Se non trovi entrate per questo budget, dovresti smettere di spendere per il resto del periodo",
-        "success": "Ottimo lavoro! Questo budget è terminato con successo. Continua a creare budget per gestire le tue spese",
-        "fail": "Hai superato il budget di {{ amount }}. Cerca di fare più attenzione la prossima volta!"
+        "fail": "Superato"
       }
     }
   },
@@ -929,16 +926,34 @@
         "active-on-track": "In pista",
         "active-behind-schedule": "In ritardo rispetto al programma",
         "active-indeterminate": "Attivo",
-        "success": "Obiettivo raggiunto",
-        "fail": "Obiettivo fallito"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Sei sulla buona strada per raggiungere il tuo obiettivo! Devi risparmiare {{ dailyAmount }} al giorno per i restanti {{ remainingDays }} giorni",
-        "active-behind-schedule": "Sei in ritardo sulla tabella di marcia. Devi risparmiare {{ dailyAmount }} al giorno per raggiungere il tuo obiettivo in {{ remainingDays }} giorni",
-        "active-indeterminate": "Ti servono {{ amount }} in più per raggiungere il tuo obiettivo.",
-        "success": "Congratulazioni! Hai raggiunto il tuo obiettivo.",
-        "fail": "Hai mancato il tuo obiettivo di {{ amount }}."
+        "success": "Raggiunto",
+        "fail": "Fallito"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "rimanenti",
+    "over": "in eccesso",
+    "spent": "speso",
+    "saved": "risparmiato",
+    "CHART": {
+      "spent": "Speso",
+      "saved": "Risparmiato",
+      "projected": "Proiezione",
+      "pace": "Ritmo"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "al giorno, {{n}} giorno rimasto",
+        "other": "al giorno, {{n}} giorni rimasti"
+      },
+      "per-day-short": "al giorno",
+      "per-day-help": "Quanto puoi ancora aggiungere ogni giorno fino alla fine del periodo per raggiungere l'importo obiettivo",
+      "above-pace": "sopra il ritmo",
+      "below-pace": "sotto il ritmo",
+      "pace-help": "Differenza tra l'importo attuale e quello previsto a oggi se fosse distribuito uniformemente su tutto il periodo",
+      "projected": "previsto",
+      "projected-help": "Importo stimato alla fine del periodo se il ritmo attuale continua"
     }
   },
   "DEBTS": {
@@ -1075,12 +1090,25 @@
       "choose_security": "Scegli un titolo",
       "create_security": "Crea nuovo titolo",
       "security_name": "Nome del titolo",
+      "security": "Titolo",
       "ticker": "Ticker/simbolo (facoltativo)",
       "security_type": "Tipo di titolo",
       "current_price": "Prezzo attuale",
       "quantity": "Quantità",
       "price_per_unit": "Prezzo per unità",
       "total": "Totale",
+      "total_in_account_currency": "Totale in {{currency}}",
+      "rate_stored": "Tasso di cambio {{from}} → {{to}}",
+      "equivalent_in": "Equivalente in {{currency}}",
+      "fees_and_exchange": "Commissioni e cambio",
+      "custom_total_configure": "Imposta un totale personalizzato",
+      "custom_total_reset": "Reimposta totale",
+      "fees_and_exchange_info": "Commissioni e differenza di cambio insieme. Questo importo non viene considerato nel costo medio per unità né in altre statistiche.",
+      "rate_stored_caption": "Tasso salvato {{rate}}",
+      "total_mode_auto": "Auto",
+      "total_mode_custom": "Personalizzato",
+      "calculated": "Calcolato",
+      "rate_effective": "effettivo",
       "units_available": "{{quantity}} disponibili",
       "not_enough_units": "Non possiedi così tante unità",
       "opening_position": "Posizione iniziale",
@@ -1198,7 +1226,6 @@
       "acquisition_transaction_badge": "Acquisizione",
       "select_account": "Seleziona un conto",
       "update_value": "Aggiorna valore",
-      "trade_form_asset_column": "Asset",
       "notes_optional": "Note (facoltativo)",
       "performance_title": "Performance",
       "performance_return": "Rendimento di periodo",

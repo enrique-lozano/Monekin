@@ -377,7 +377,7 @@
     "portfolio-heat-map": "热力图",
     "portfolio-heat-map-subtitle": "方块越大，持仓越大。颜色越绿，表现越好。",
     "daily-performance": "每日",
-    "compared-to-previous-period": "与上一段时间相比",
+    "compared-to-previous-period": "较上一时期",
     "cash-flow": "现金流",
     "cash-flow-subtitle": "我的支出是否少于我的收入？",
     "by-periods": "按时间段",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "接受交易",
       "accept-dialog.msg-single": "此交易的新状态将为null。您可以随时重新编辑此交易的状态",
       "accept-dialog.msg": "此操作将建立日期为 {{date}} 的新交易。您可以在交易页面查看此交易的详情",
+      "accept-dialog.trade": "{{quantity}} 单位 {{security}}，价格为 {{price}} {{currency}}（最新价格）。您之后可以对其进行编辑。",
       "recurrent-rule-finished": "循环规则已完成，没有更多的支付！"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "转出账户",
       "to": "转入账户",
+      "label-from": "转出",
+      "label-to": "转入",
+      "custom-amounts": "自定义金额",
+      "difference": "差额",
       "VALUE-IN-DESTINY": {
         "title": "转账数额",
         "amount-short": "{{amount}} 至目标账户"
@@ -871,15 +876,7 @@
         "active-overspending": "超支",
         "active-indeterminate": "积极的",
         "success": "已达成",
-        "fail": "超出预算"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "在剩余的 {{ remainingDays }} 天里，您每天可以花费 {{ dailyAmount }}",
-        "active-overspending": "为了回到正轨，您应该在剩余的 {{ remainingDays }} 天里将每天的支出限制在 {{ dailyAmount }}",
-        "active-indeterminate": "您还剩 {{ amount }} 可以消费。",
-        "active-exceeded": "您已经超出了预算限额 {{ amount }}。如果您找不到此预算的任何收入，您应该在其剩余期间停止支出",
-        "success": "干得好！该预算已成功完成。继续创建预算以管理您的支出",
-        "fail": "您超出了预算 {{ amount }}。下次请更加小心！"
+        "fail": "超出"
       }
     }
   },
@@ -929,16 +926,33 @@
         "active-on-track": "步入正轨",
         "active-behind-schedule": "落后于计划",
         "active-indeterminate": "积极的",
-        "success": "目标达成",
-        "fail": "目标失败"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "您正在寻找目标的轨道上！您必须在剩余的 {{ remainingDays }} 天内每天节省 {{ dailyAmount }}",
-        "active-behind-schedule": "你落后于计划了。您必须每天节省 {{ dailyAmount }} 才能在 {{ remainingDays }} 天后达到您的目标",
-        "active-indeterminate": "您还需要 {{ amount }} 才能实现目标。",
-        "success": "恭喜！你达到了你的目标。",
-        "fail": "您与目标相差了 {{ amount }}。"
+        "success": "达成",
+        "fail": "失败"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "剩余",
+    "over": "超出",
+    "spent": "已花费",
+    "saved": "已储蓄",
+    "CHART": {
+      "spent": "已花费",
+      "saved": "已储蓄",
+      "projected": "预测",
+      "pace": "进度"
+    },
+    "STATS": {
+      "per-day": {
+        "other": "每天，剩余 {{n}} 天"
+      },
+      "per-day-short": "每天",
+      "per-day-help": "为达到目标金额，在周期结束前每天还可以增加的金额",
+      "above-pace": "高于进度",
+      "below-pace": "低于进度",
+      "pace-help": "当前金额与按整个周期均匀分配时截至今天的预期金额之间的差额",
+      "projected": "预测",
+      "projected-help": "如果保持当前进度，周期结束时的估计金额"
     }
   },
   "DEBTS": {
@@ -1075,12 +1089,25 @@
       "choose_security": "选择证券",
       "create_security": "创建新证券",
       "security_name": "证券名称",
+      "security": "证券",
       "ticker": "股票代码/符号（可选）",
       "security_type": "证券类型",
       "current_price": "现价",
       "quantity": "数量",
       "price_per_unit": "每单位价格",
       "total": "全部的",
+      "total_in_account_currency": "{{currency}} 合计",
+      "rate_stored": "汇率 {{from}} → {{to}}",
+      "equivalent_in": "折合 {{currency}}",
+      "fees_and_exchange": "手续费和汇兑",
+      "custom_total_configure": "设置自定义总额",
+      "custom_total_reset": "重置总额",
+      "fees_and_exchange_info": "手续费和汇差合计。此金额不计入每单位平均成本或其他统计。",
+      "rate_stored_caption": "已保存汇率 {{rate}}",
+      "total_mode_auto": "自动",
+      "total_mode_custom": "自定义",
+      "calculated": "计算值",
+      "rate_effective": "实际",
       "units_available": "可用 {{quantity}}",
       "not_enough_units": "你持有的份额不足",
       "opening_position": "初始持仓",
@@ -1198,7 +1225,6 @@
       "acquisition_transaction_badge": "获得",
       "select_account": "选择一个帐户",
       "update_value": "更新值",
-      "trade_form_asset_column": "资产",
       "notes_optional": "注释（可选）",
       "performance_title": "表现",
       "performance_return": "区间回报",

@@ -28,10 +28,12 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          flutter pub get
+          dart pub get --directory app-marketplaces/play-store
 
-      - name: Generate translations
-        run: dart run slang
+      - name: Generate code
+        run: dart run build_runner build
 
       # --no-fatal-infos: the codebase currently has ~180 pre-existing
       # info-level issues (mostly deprecated Flutter APIs like

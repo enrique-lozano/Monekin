@@ -382,7 +382,7 @@
     "portfolio-heat-map": "Heat map",
     "portfolio-heat-map-subtitle": "The bigger the block, the larger the position. The greener, the better it is doing.",
     "daily-performance": "Daily",
-    "compared-to-previous-period": "Compared to the previous period",
+    "compared-to-previous-period": "vs previous period",
     "cash-flow": "Cash flow",
     "cash-flow-subtitle": "Am I spending less than I earn?",
     "by-periods": "By periods",
@@ -451,6 +451,7 @@
       "accept-dialog.title": "Accept transaction",
       "accept-dialog.msg-single": "The new status of the transaction will be null. You can re-edit the status of this transaction whenever you want",
       "accept-dialog.msg": "This action will create a new transaction with date {{date}}. You will be able to check the details of this transaction on the transaction page",
+      "accept-dialog.trade": "{{quantity}} units of {{security}} at {{price}} {{currency}}, the latest price. You can edit it afterwards.",
       "recurrent-rule-finished": "The recurring rule has been completed, there are no more payments to make!"
     },
     "LIST": {
@@ -600,6 +601,10 @@
     "FORM": {
       "from": "Origin account",
       "to": "Destination account",
+      "label-from": "From",
+      "label-to": "To",
+      "custom-amounts": "Custom amounts",
+      "difference": "difference",
       "VALUE-IN-DESTINY": {
         "title": "Amount transferred at destination",
         "amount-short": "{{amount}} to target account"
@@ -895,15 +900,7 @@
         "active-overspending": "Overspending",
         "active-indeterminate": "Active",
         "success": "Achieved",
-        "fail": "Budget exceeded"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "You can spend {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-overspending": "To get back on track, you should limit your spending to {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-indeterminate": "You have {{ amount }} left to spend.",
-        "active-exceeded": "You have already exceeded your budget limit by {{ amount }}. If you don't find any incomes for this budget, you should stop spending for the rest of its period",
-        "success": "Great job! This budget has already finish successfully. Keep creating budgets to manage your expenses",
-        "fail": "You exceeded the budget by {{ amount }}. Try to be more careful next time!"
+        "fail": "Exceeded"
       }
     }
   },
@@ -953,16 +950,34 @@
         "active-on-track": "On track",
         "active-behind-schedule": "Behind schedule",
         "active-indeterminate": "Active",
-        "success": "Goal reached",
-        "fail": "Goal failed"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "You are on track to seek your goal! You have to save {{ dailyAmount }} per day for the remaining {{ remainingDays }} days",
-        "active-behind-schedule": "You are behind schedule. You have to save {{ dailyAmount }} per day to reach your goal in {{ remainingDays }} days",
-        "active-indeterminate": "You need {{ amount }} more to reach your goal.",
-        "success": "Congratulations! You reached your goal.",
-        "fail": "You missed your goal by {{ amount }}."
+        "success": "Reached",
+        "fail": "Failed"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "left",
+    "over": "over",
+    "spent": "spent",
+    "saved": "saved",
+    "CHART": {
+      "spent": "Spent",
+      "saved": "Saved",
+      "projected": "Projected",
+      "pace": "Pace"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "per day, {{n}} day left",
+        "other": "per day, {{n}} days left"
+      },
+      "per-day-short": "per day",
+      "per-day-help": "How much you can still add each day until the end of the period to reach the target amount",
+      "above-pace": "above pace",
+      "below-pace": "below pace",
+      "pace-help": "Difference between the current amount and the amount expected by today if it were spread evenly over the whole period",
+      "projected": "projected",
+      "projected-help": "Estimated amount at the end of the period if the current pace continues"
     }
   },
   "DEBTS": {
@@ -1099,12 +1114,25 @@
       "choose_security": "Choose a security",
       "create_security": "Create new security",
       "security_name": "Security name",
+      "security": "Security",
       "ticker": "Ticker / symbol (optional)",
       "security_type": "Security type",
       "current_price": "Current price",
       "quantity": "Quantity",
       "price_per_unit": "Price per unit",
       "total": "Total",
+      "total_in_account_currency": "Total in {{currency}}",
+      "rate_stored": "Exchange rate {{from}} → {{to}}",
+      "equivalent_in": "Equivalent in {{currency}}",
+      "fees_and_exchange": "Fees and exchange",
+      "custom_total_configure": "Set a custom total",
+      "custom_total_reset": "Reset total",
+      "fees_and_exchange_info": "Fees and exchange spread together. This amount is not taken into account in the average cost per unit or in other stats.",
+      "rate_stored_caption": "Stored rate {{rate}}",
+      "total_mode_auto": "Auto",
+      "total_mode_custom": "Custom",
+      "calculated": "Calculated",
+      "rate_effective": "effective",
       "units_available": "{{quantity}} available",
       "not_enough_units": "You do not hold that many units",
       "opening_position": "Opening position",
@@ -1225,7 +1253,6 @@
       "acquisition_transaction_badge": "Acquisition",
       "select_account": "Select an account",
       "update_value": "Update value",
-      "trade_form_asset_column": "Asset",
       "notes_optional": "Notes (optional)",
       "performance_title": "Performance",
       "performance_return": "Period return",

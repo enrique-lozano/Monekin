@@ -6,6 +6,7 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/asset/holding.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:rxdart/rxdart.dart';
@@ -14,13 +15,15 @@ import 'package:rxdart/rxdart.dart';
 /// weighted-average cost basis, and records the matching cash trades.
 class HoldingService {
   final AppDB db;
+  final ExchangeRateService _exchangeRates;
 
-  HoldingService._(this.db);
+  HoldingService._(this.db) : _exchangeRates = ExchangeRateService.instance;
   static final HoldingService instance = HoldingService._(AppDB.instance);
 
   /// Creates a service bound to a specific (test) database.
   @visibleForTesting
-  HoldingService.forTesting(this.db);
+  HoldingService.forTesting(this.db, {ExchangeRateService? exchangeRates})
+    : _exchangeRates = exchangeRates ?? ExchangeRateService.instance;
 
   Stream<List<HoldingWithSecurity>> getHoldingsForAccount(String accountId) {
     final query = db.select(db.holdings).join([
@@ -206,6 +209,56 @@ class HoldingService {
     });
   }
 
+  /// Adds up the market value and cost basis of [valuations], converting each
+  /// security currency to [toCurrency] at the rate of [date], and counts the
+  /// open positions.
+  Stream<({double market, double cost, int positions})> sumValuationsIn(
+    Iterable<HoldingValuationAtDate> valuations,
+    String toCurrency, {
+    DateTime? date,
+  }) {
+    final codes = (valuations.map((v) => v.currencyId).toSet()
+      ..remove(toCurrency)).toList();
+
+    if (codes.isEmpty) return Stream.value(sumValuations(valuations, (_) => 1));
+
+    return Rx.combineLatestList(
+      codes.map(
+        (code) => _exchangeRates.calculateExchangeRate(
+          fromCurrency: code,
+          toCurrency: toCurrency,
+          date: date,
+        ),
+      ),
+    ).map((rates) {
+      final byCode = Map.fromIterables(codes, rates);
+      return sumValuations(valuations, (code) => byCode[code] ?? 1);
+    });
+  }
+
+  /// The sum behind [sumValuationsIn], with [rateOf] giving the rate from a
+  /// security currency to the target one.
+  @visibleForTesting
+  static ({double market, double cost, int positions}) sumValuations(
+    Iterable<HoldingValuationAtDate> valuations,
+    double Function(String currencyId) rateOf,
+  ) {
+    var market = 0.0;
+    var cost = 0.0;
+
+    for (final v in valuations) {
+      final rate = rateOf(v.currencyId);
+      market += v.market * rate;
+      cost += v.cost * rate;
+    }
+
+    return (
+      market: market,
+      cost: cost,
+      positions: valuations.where((v) => v.market != 0).length,
+    );
+  }
+
   /// Reconstructs the quantity, price and average cost of **every position that
   /// has ever existed** (per account/security) as of [date], branched by the
   /// account's [AccountTrackingMode]. This is the single source of truth for
@@ -271,6 +324,8 @@ class HoldingService {
         WHERE t.type = 'N' AND t.securityID IS NOT NULL
           AND a.trackingMode = 'transactions'
           AND t.date <= ?1
+          AND t.intervalPeriod IS NULL
+          AND (t.status IS NULL OR t.status NOT IN ('V', 'P'))
           $tradesAccountFilter
       ),
       -- Running weighted-average cost, mirroring `recomputeHolding`: buys move
@@ -558,6 +613,16 @@ class HoldingService {
     );
   }
 
+  /// Trades that move a position. Recurrent rules (not paid yet) and pending or
+  /// voided trades are left out, as they don't move cash either.
+  static Expression<bool> _countsAsTrade(Transactions t) =>
+      t.intervalPeriod.isNull() &
+      (t.status.isNull() |
+          t.status.isNotInValues([
+            TransactionStatus.voided,
+            TransactionStatus.pending,
+          ]));
+
   /// Replays every security trade of the (account, security) pair in date order
   /// and returns the resulting position: buys move the weighted-average cost,
   /// sells only shrink the quantity, and a position that closes leaves a
@@ -571,7 +636,8 @@ class HoldingService {
               ..where(
                 (t) =>
                     t.accountID.equals(accountId) &
-                    t.securityID.equals(securityId),
+                    t.securityID.equals(securityId) &
+                    _countsAsTrade(t),
               )
               ..orderBy([(t) => OrderingTerm.asc(t.date)]))
             .get();

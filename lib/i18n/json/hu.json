@@ -377,7 +377,7 @@
     "portfolio-heat-map": "Hőtérkép",
     "portfolio-heat-map-subtitle": "Minél nagyobb a blokk, annál nagyobb a pozíció. Minél zöldebb, annál jobban teljesít.",
     "daily-performance": "Napi",
-    "compared-to-previous-period": "Az előző időszakhoz képest",
+    "compared-to-previous-period": "vs előző időszak",
     "cash-flow": "Pénzforgalom",
     "cash-flow-subtitle": "Kevesebbet költök, mint amennyit megkeresek?",
     "by-periods": "Időszakonként",
@@ -446,6 +446,7 @@
       "accept-dialog.title": "Tranzakció elfogadása",
       "accept-dialog.msg-single": "A tranzakció új állapota nulla lesz. A tranzakció státuszát bármikor újra módosíthatja, amikor csak akarja.",
       "accept-dialog.msg": "Ez a művelet egy új tranzakciót hoz létre {{date}} dátummal. A tranzakció részleteit a tranzakciós oldalon ellenőrizheti.",
+      "accept-dialog.trade": "{{quantity}} egység {{security}}, {{price}} {{currency}} áron, a legutóbbi árfolyamon. Utólag szerkesztheti.",
       "recurrent-rule-finished": "Az ismétlődő szabály teljesült, nincs több kifizetés!"
     },
     "LIST": {
@@ -574,6 +575,10 @@
     "FORM": {
       "from": "Eredeti számla",
       "to": "Célszámla",
+      "label-from": "Honnan",
+      "label-to": "Hová",
+      "custom-amounts": "Egyéni összegek",
+      "difference": "különbség",
       "VALUE-IN-DESTINY": {
         "title": "A rendeltetési helyre átutalt összeg",
         "amount-short": "{{amount}} a célszámlához"
@@ -871,15 +876,7 @@
         "active-overspending": "Túlköltekezés",
         "active-indeterminate": "Aktív",
         "success": "Teljesítve",
-        "fail": "Költségvetés túllépve"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Naponta {{ dailyAmount }} összeget költhet a hátralévő {{ remainingDays }} napban",
-        "active-overspending": "Hogy visszatérjen a tervhez, korlátoznia kell kiadásait napi {{ dailyAmount }} összegre a hátralévő {{ remainingDays }} napban",
-        "active-indeterminate": "Még {{ amount }} elkölthető.",
-        "active-exceeded": "Már túllépte a költségvetési keretet {{ amount }} összeggel. Ha nem talál bevételt ehhez a költségvetéshez, abba kell hagynia a költekezést az időszak hátralévő részében",
-        "success": "Szép munka! Ez a költségvetés sikeresen lezárult. Hozzon létre további költségvetéseket kiadásai kezeléséhez",
-        "fail": "Túllépte a költségvetést {{ amount }} összeggel. Próbáljon meg óvatosabb lenni legközelebb!"
+        "fail": "Túllépve"
       }
     }
   },
@@ -929,16 +926,34 @@
         "active-on-track": "Pályán",
         "active-behind-schedule": "A menetrend lemaradásával",
         "active-indeterminate": "Aktív",
-        "success": "A cél elérve",
-        "fail": "A gól nem sikerült"
-      },
-      "DESCRIPTION": {
-        "active-on-track": "Jó úton haladsz a cél felé! Naponta {{ dailyAmount }} összeget kell megtakarítania a fennmaradó {{ remainingDays }} napig",
-        "active-behind-schedule": "Lemaradsz a menetrendről. Naponta {{ dailyAmount }} összeget kell megtakarítania, hogy {{ remainingDays }} napon belül elérje célját",
-        "active-indeterminate": "További {{ amount }} kell a cél eléréséhez.",
-        "success": "Gratulálok! Elérted a célodat.",
-        "fail": "{{ amount }} értékkel eltévesztette a célt."
+        "success": "Elérve",
+        "fail": "Sikertelen"
       }
+    }
+  },
+  "TARGETS": {
+    "left": "maradt",
+    "over": "túllépés",
+    "spent": "elköltve",
+    "saved": "megtakarítva",
+    "CHART": {
+      "spent": "Elköltve",
+      "saved": "Megtakarítva",
+      "projected": "Előrejelzés",
+      "pace": "Ütem"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "naponta, {{n}} nap van hátra",
+        "other": "naponta, {{n}} nap van hátra"
+      },
+      "per-day-short": "naponta",
+      "per-day-help": "Mennyit adhatsz még hozzá naponta az időszak végéig a célösszeg eléréséhez",
+      "above-pace": "ütem felett",
+      "below-pace": "ütem alatt",
+      "pace-help": "A jelenlegi összeg és a mai napig várt összeg különbsége, ha egyenletesen oszlana el a teljes időszakra",
+      "projected": "előrejelzés",
+      "projected-help": "Becsült összeg az időszak végén, ha a jelenlegi ütem folytatódik"
     }
   },
   "DEBTS": {
@@ -1075,12 +1090,25 @@
       "choose_security": "Válasszon egy értékpapírt",
       "create_security": "Hozzon létre új biztonságot",
       "security_name": "Biztonsági név",
+      "security": "Értékpapír",
       "ticker": "Ticker / szimbólum (opcionális)",
       "security_type": "Biztonsági típus",
       "current_price": "Jelenlegi ár",
       "quantity": "Mennyiség",
       "price_per_unit": "Ár egységenként",
       "total": "Teljes",
+      "total_in_account_currency": "Összesen {{currency}}-ban",
+      "rate_stored": "Árfolyam {{from}} → {{to}}",
+      "equivalent_in": "Egyenérték {{currency}}-ban",
+      "fees_and_exchange": "Díjak és árfolyam",
+      "custom_total_configure": "Egyéni összeg megadása",
+      "custom_total_reset": "Összeg visszaállítása",
+      "fees_and_exchange_info": "A díjak és az árfolyamkülönbözet együtt. Ez az összeg nem számít bele az egységenkénti átlagköltségbe és más statisztikákba.",
+      "rate_stored_caption": "Mentett árfolyam {{rate}}",
+      "total_mode_auto": "Automatikus",
+      "total_mode_custom": "Egyéni",
+      "calculated": "Kiszámított",
+      "rate_effective": "tényleges",
       "units_available": "{{quantity}} elérhető",
       "not_enough_units": "Nincs ennyi egységed",
       "opening_position": "Nyitó pozíció",
@@ -1198,7 +1226,6 @@
       "acquisition_transaction_badge": "Beszerzés",
       "select_account": "Válasszon egy fiókot",
       "update_value": "Frissítse az értéket",
-      "trade_form_asset_column": "Eszköz",
       "notes_optional": "Megjegyzések (nem kötelező)",
       "performance_title": "Performance",
       "performance_return": "Period return",

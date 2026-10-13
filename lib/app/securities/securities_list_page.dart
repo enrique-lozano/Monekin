@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/securities/security_details_page.dart';
@@ -6,7 +7,9 @@ import 'package:monekin/app/securities/widgets/security_form_sheet.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/account/security_service.dart';
+import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/models/asset/holding.dart';
+import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/asset/security_type.enum.dart';
 import 'package:monekin/core/presentation/animations/animated_floating_button.dart';
 import 'package:monekin/core/presentation/responsive/page_content.dart';
@@ -26,10 +29,17 @@ String _securityAvatarHeroTag(String securityId) =>
 
 /// A security together with its aggregated position across all accounts.
 class _SecurityRow {
-  _SecurityRow({required this.security, required this.marketValue});
+  _SecurityRow({
+    required this.security,
+    required this.marketValue,
+    this.currency,
+  });
 
   final SecurityInDB security;
+
+  /// In the currency of the security.
   final double marketValue;
+  final CurrencyInDB? currency;
 }
 
 class SecuritiesListPage extends StatefulWidget {
@@ -64,10 +74,15 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
   }
 
   Stream<List<_SecurityRow>> _getRows() {
-    return Rx.combineLatest2(
+    return Rx.combineLatest3(
       SecurityService.instance.getSecurities(),
       HoldingService.instance.getAllHoldings(),
-      (List<SecurityInDB> securities, List<HoldingWithSecurity> holdings) {
+      CurrencyService.instance.getAllCurrencies(),
+      (
+        List<SecurityInDB> securities,
+        List<HoldingWithSecurity> holdings,
+        List<Currency>? currencies,
+      ) {
         return securities.map((security) {
           final positions = holdings.where((h) => h.security.id == security.id);
 
@@ -76,6 +91,9 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
             marketValue: positions.fold<double>(
               0,
               (sum, h) => sum + h.marketValue,
+            ),
+            currency: currencies?.firstWhereOrNull(
+              (c) => c.code == security.currencyId,
             ),
           );
         }).toList();
@@ -328,6 +346,7 @@ class _SecuritiesListPageState extends State<SecuritiesListPage> {
       ),
       trailing: CurrencyDisplayer(
         amountToConvert: row.marketValue,
+        currency: row.currency,
         integerStyle: Theme.of(
           context,
         ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),

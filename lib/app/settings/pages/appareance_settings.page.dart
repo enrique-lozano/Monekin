@@ -14,7 +14,6 @@ import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker_modal.dart';
 import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/monekin_dropdown_select.dart';
-import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 final GlobalKey<MonekinDropdownSelectState> _themeDropdownKey = GlobalKey();
@@ -120,8 +119,6 @@ class AppareanceSettingsPage extends StatelessWidget {
                               ],
                               selectedColor: color.toHex(),
                               onColorSelected: (value) {
-                                RouteUtils.popRoute();
-
                                 UserSettingService.instance.setItem(
                                   SettingKey.accentColor,
                                   value.toHex(),

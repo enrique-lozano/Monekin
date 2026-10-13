@@ -267,6 +267,7 @@ Before completing any task:
 - Branch off **`develop`**, never `main`. Naming: `fix/XXXX` (issue number) or `feature/some-new-feature`.
 - `main` and `develop` are protected; open PRs against **`develop`**.
 - Follow the commit message convention in `docs/COMMIT_MSG.md` and branch workflow in `docs/GIT_BRANCHES_WORKFLOW.md`.
+- PR titles are a clean, prefix-free sentence (no `feat:`/`fix:`); labels categorize the PR. See `docs/CODE_CONTRIBUTING.md` for the full PR guidelines.
 - There is no separate QA — **you are the QA**. Test carefully on supported platforms.
 - Do not create commits unless explicitly asked. When asked to commit AI-generated work, add the trailer `Includes-AI-Code: true` to the commit message.
 
