@@ -204,8 +204,6 @@ class _TagFormPageState extends State<TagFormPage> {
                         colorOptions: defaultColorPickerOptions,
                         selectedColor: _color,
                         onColorSelected: (value) {
-                          RouteUtils.popRoute();
-
                           setState(() {
                             _color = value.toHex();
                           });
