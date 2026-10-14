@@ -380,7 +380,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   Future<void> _fetchTodayEcbRate() async {
     final t = Translations.of(context);
     final preferredCode =
-        _preferredCurrency?.code ?? appStateSettings[SettingKey.preferredCurrency];
+        _preferredCurrency?.code ??
+        appStateSettings[SettingKey.preferredCurrency];
     if (preferredCode == null || preferredCode == _currency.code) {
       MonekinSnackbar.warning(
         SnackbarParams(t.currencies.exchange_rate_form.equal_to_preferred_warn),

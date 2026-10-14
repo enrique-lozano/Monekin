@@ -7,8 +7,7 @@ import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
 class _StubClient extends http.BaseClient {
   _StubClient(this.onSend);
 
-  final Future<http.StreamedResponse> Function(http.BaseRequest request)
-  onSend;
+  final Future<http.StreamedResponse> Function(http.BaseRequest request) onSend;
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {
@@ -61,10 +60,7 @@ void main() {
     expect(quote.rate, 0.89381);
     expect(requested.path, '/v2/rate/usd/eur');
     expect(requested.queryParameters['providers'], 'ecb');
-    expect(
-      requested.host,
-      'api.frankfurter.dev',
-    );
+    expect(requested.host, 'api.frankfurter.dev');
   });
 
   test('surfaces an unsupported pair', () async {
