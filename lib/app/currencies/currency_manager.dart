@@ -6,15 +6,20 @@ import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/today_rate_plan.dart';
+import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
@@ -50,6 +55,81 @@ class CurrencyManagerPage extends StatelessWidget {
     if (newRate != null) {
       await ExchangeRateService.instance.insertOrUpdateExchangeRate(newRate);
     }
+  }
+
+  Future<void> fetchTodayEcbRate(BuildContext context) async {
+    final t = Translations.of(context);
+    final preferred = await CurrencyService.instance
+        .ensureAndGetPreferredCurrency()
+        .first;
+    if (!context.mounted) return;
+
+    showCurrencySelectorModal(
+      context,
+      CurrencySelectorModal(
+        onCurrencySelected: (currency) async {
+          if (currency.code == preferred.code) {
+            MonekinSnackbar.warning(
+              SnackbarParams(
+                t.currencies.exchange_rate_form.equal_to_preferred_warn,
+              ),
+            );
+            return;
+          }
+
+          try {
+            final quote = await FrankfurterEcbClient().latest(
+              from: currency.code,
+              to: preferred.code,
+            );
+            final existing = await ExchangeRateService.instance
+                .getExchangeRatesOf(currency.code)
+                .first;
+            final decision = planTodayRate(
+              quoteDate: quote.date,
+              quoteRate: quote.rate,
+              existingDates: existing.map((rate) => rate.date),
+            );
+            if (!context.mounted) return;
+
+            if (decision.plan == TodayRatePlan.keepExisting) {
+              MonekinSnackbar.info(
+                SnackbarParams(
+                  t.currencies.exchange_rate_form.fetch_today_kept,
+                  message: t.currencies.exchange_rate_form.fetch_today_source,
+                ),
+              );
+              return;
+            }
+
+            await ExchangeRateService.instance.insertOrUpdateExchangeRate(
+              ExchangeRateInDB(
+                id: generateUUID(),
+                date: decision.date,
+                currencyCode: currency.code,
+                exchangeRate: decision.rate,
+              ),
+            );
+            if (!context.mounted) return;
+
+            MonekinSnackbar.success(
+              SnackbarParams(
+                t.currencies.exchange_rate_form.fetch_today_added,
+                message: t.currencies.exchange_rate_form.fetch_today_source,
+              ),
+            );
+          } catch (error) {
+            if (!context.mounted) return;
+            MonekinSnackbar.error(
+              SnackbarParams(
+                t.currencies.exchange_rate_form.fetch_today_error,
+                message: '$error',
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -149,10 +229,23 @@ class CurrencyManagerPage extends StatelessWidget {
                   return NoResults(
                     title: t.general.empty_warn,
                     description: t.currencies.empty,
-                    bottom: FilledButton.tonalIcon(
-                      onPressed: () => addExchangeRate(context),
-                      icon: const Icon(Icons.add_rounded),
-                      label: Text(t.currencies.exchange_rate_form.add),
+                    bottom: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FilledButton.tonalIcon(
+                          onPressed: () => addExchangeRate(context),
+                          icon: const Icon(Icons.add_rounded),
+                          label: Text(t.currencies.exchange_rate_form.add),
+                        ),
+                        const SizedBox(height: 8),
+                        FilledButton.tonalIcon(
+                          onPressed: () => fetchTodayEcbRate(context),
+                          icon: const Icon(Icons.cloud_download_rounded),
+                          label: Text(
+                            t.currencies.exchange_rate_form.fetch_today,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 }
@@ -250,6 +343,31 @@ class CurrencyManagerPage extends StatelessWidget {
                           ),
                         ),
                         onTap: () => addExchangeRate(context),
+                      ),
+                      ListTile(
+                        title: Text(
+                          t.currencies.exchange_rate_form.fetch_today,
+                        ),
+                        subtitle: Text(
+                          t.currencies.exchange_rate_form.fetch_today_source,
+                        ),
+                        minVerticalPadding: 16,
+                        leading: Container(
+                          width: 42,
+                          height: 42,
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.125),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.cloud_download_rounded,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        onTap: () => fetchTodayEcbRate(context),
                       ),
                     ],
                   ),

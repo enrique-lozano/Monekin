@@ -765,7 +765,13 @@
       "edit": "Edit exchange rate",
       "edit-success": "Exchange rate edited successfully",
       "remove-all": "Delete all exchange rates",
-      "remove-all-warning": "This action is irreversible and will delete all exchange rates for this currency"
+      "remove-all-warning": "This action is irreversible and will delete all exchange rates for this currency",
+      "fetch-today": "Fetch today's ECB rate",
+      "fetch-today-added": "Today's ECB rate is ready",
+      "fetch-today-kept": "Kept your rate for that day",
+      "fetch-today-error": "Could not fetch today's ECB rate",
+      "fetch-today-save-hint": "Save to keep it. European Central Bank via Frankfurter.",
+      "fetch-today-source": "European Central Bank via Frankfurter"
     },
     "TYPES": {
       "display": "Currency type",
