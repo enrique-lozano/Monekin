@@ -172,7 +172,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              supported ? form.fetch_today_source : form.fetch_today_unsupported,
+              supported
+                  ? form.fetch_today_source
+                  : form.fetch_today_unsupported,
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ),

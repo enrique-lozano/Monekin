@@ -6,7 +6,12 @@ const ecbCurrencyCodes = {
   'ZAR',
 };
 
-enum EcbFetchAvailability { available, missingCurrency, samePreferred, unsupported }
+enum EcbFetchAvailability {
+  available,
+  missingCurrency,
+  samePreferred,
+  unsupported,
+}
 
 /// Whether the ECB fetch action can apply to a [currency]/[preferred] pair.
 EcbFetchAvailability ecbFetchAvailability({
