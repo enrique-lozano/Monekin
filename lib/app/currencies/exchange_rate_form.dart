@@ -306,6 +306,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
               children: [
                 Expanded(
                   child: DateTimeFormField(
+                    // Rebuild when the ECB fetch moves the date to the
+                    // quote's business day; initialDate is read only once.
+                    key: ValueKey(date),
                     enabled: !isEditMode,
                     decoration: InputDecoration(
                       labelText: '${t.general.time.date} *',
