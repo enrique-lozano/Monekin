@@ -38,11 +38,8 @@ import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
-import 'package:monekin/core/services/exchange-rate/today_rate_plan.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/list_tile_action_item.dart';
-import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -100,8 +97,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
 
   /// The user's preferred/base currency, used to display exchange-rate values.
   Currency? _preferredCurrency;
-
-  bool _fetchingEcbRate = false;
 
   /// The currency passed to the page, but with the updated info if edited.
   late Currency _currency;
@@ -377,71 +372,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     getExchangeRates();
   }
 
-  Future<void> _fetchTodayEcbRate() async {
-    final t = Translations.of(context);
-    final preferredCode =
-        _preferredCurrency?.code ??
-        appStateSettings[SettingKey.preferredCurrency];
-    if (preferredCode == null || preferredCode == _currency.code) {
-      MonekinSnackbar.warning(
-        SnackbarParams(t.currencies.exchange_rate_form.equal_to_preferred_warn),
-      );
-      return;
-    }
-    if (_fetchingEcbRate || _currentRates == null) return;
-
-    setState(() => _fetchingEcbRate = true);
-    try {
-      final quote = await FrankfurterEcbClient().latest(
-        from: _currency.code,
-        to: preferredCode,
-      );
-      if (!mounted) return;
-
-      final decision = planTodayRate(
-        quoteDate: quote.date,
-        quoteRate: quote.rate,
-        existingDates: _currentRates!.map((rate) => rate.date),
-      );
-      if (decision.plan == TodayRatePlan.keepExisting) {
-        MonekinSnackbar.info(
-          SnackbarParams(
-            t.currencies.exchange_rate_form.fetch_today_kept,
-            message: t.currencies.exchange_rate_form.fetch_today_source,
-          ),
-        );
-        return;
-      }
-
-      setState(() {
-        _currentRates!.add(
-          ExchangeRate(
-            id: generateUUID(),
-            date: decision.date,
-            currency: _currency,
-            exchangeRate: decision.rate,
-          ),
-        );
-      });
-      MonekinSnackbar.success(
-        SnackbarParams(
-          t.currencies.exchange_rate_form.fetch_today_added,
-          message: t.currencies.exchange_rate_form.fetch_today_save_hint,
-        ),
-      );
-    } catch (error) {
-      if (!mounted) return;
-      MonekinSnackbar.error(
-        SnackbarParams(
-          t.currencies.exchange_rate_form.fetch_today_error,
-          message: '$error',
-        ),
-      );
-    } finally {
-      if (mounted) setState(() => _fetchingEcbRate = false);
-    }
-  }
-
   Future<void> _addRate() async {
     final newRate = await showExchangeRateFormDialog(
       context,
@@ -533,14 +463,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: FilledButton.icon(
-                onPressed: _fetchingEcbRate ? null : _fetchTodayEcbRate,
-                icon: const Icon(Icons.cloud_download_rounded, size: 18),
-                label: Text(t.currencies.exchange_rate_form.fetch_today),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: FilledButton.icon(
                 onPressed: _addRate,
                 icon: const Icon(Icons.add_rounded, size: 18),
                 label: Text(t.currencies.exchange_rate_form.add),
@@ -550,13 +472,6 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
           ],
           MonekinPopupMenuButton(
             actionItems: [
-              ListTileActionItem(
-                label: t.currencies.exchange_rate_form.fetch_today,
-                icon: Icons.cloud_download_rounded,
-                onClick: _currentRates == null || _fetchingEcbRate
-                    ? null
-                    : _fetchTodayEcbRate,
-              ),
               ListTileActionItem(
                 label: t.currencies.exchange_rate_form.remove_all,
                 icon: Icons.settings_backup_restore_rounded,

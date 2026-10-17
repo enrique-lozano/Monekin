@@ -1,39 +1,53 @@
-enum TodayRatePlan { insert, keepExisting }
+/// Currencies published in the ECB euro foreign exchange reference rates.
+const ecbCurrencyCodes = {
+  'AUD', 'BGN', 'BRL', 'CAD', 'CHF', 'CNY', 'CZK', 'DKK', 'EUR', 'GBP', //
+  'HKD', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'MXN', 'MYR', //
+  'NOK', 'NZD', 'PHP', 'PLN', 'RON', 'SEK', 'SGD', 'THB', 'TRY', 'USD', //
+  'ZAR',
+};
 
-class TodayRateDecision {
-  const TodayRateDecision({
-    required this.plan,
-    required this.date,
-    required this.rate,
-  });
+enum EcbFetchAvailability { available, missingCurrency, samePreferred, unsupported }
 
-  final TodayRatePlan plan;
-
-  /// Calendar day the quote belongs to, with no time component.
-  final DateTime date;
-  final double rate;
+/// Whether the ECB fetch action can apply to a [currency]/[preferred] pair.
+EcbFetchAvailability ecbFetchAvailability({
+  required String? currency,
+  required String? preferred,
+}) {
+  if (currency == null || preferred == null) {
+    return EcbFetchAvailability.missingCurrency;
+  }
+  final from = currency.toUpperCase();
+  final to = preferred.toUpperCase();
+  if (from == to) return EcbFetchAvailability.samePreferred;
+  if (!ecbCurrencyCodes.contains(from) || !ecbCurrencyCodes.contains(to)) {
+    return EcbFetchAvailability.unsupported;
+  }
+  return EcbFetchAvailability.available;
 }
+
+enum RateFillPlan { fill, confirmReplace, dateMismatch }
 
 bool isSameCalendarDay(DateTime a, DateTime b) {
   return a.year == b.year && a.month == b.month && a.day == b.day;
 }
 
-/// Decide whether a fetched ECB quote may be stored.
+/// Decide how a fetched ECB quote may go into the exchange-rate form.
 ///
-/// A rate the user already has for that calendar day is kept. The quote date
-/// is the ECB business day Frankfurter returned, which can be earlier than
-/// the local clock on weekends and before the daily fix.
-TodayRateDecision planTodayRate({
-  required DateTime quoteDate,
+/// A rate the user already typed is never replaced without confirmation.
+/// When the form date cannot change (editing a saved rate), the quote is only
+/// used if it belongs to that same day: the ECB business day can be earlier
+/// than the local clock on weekends and before the daily fix.
+RateFillPlan planRateFill({
+  required String currentText,
   required double quoteRate,
-  required Iterable<DateTime> existingDates,
+  required DateTime quoteDate,
+  required DateTime formDate,
+  required bool dateLocked,
 }) {
-  final day = DateTime(quoteDate.year, quoteDate.month, quoteDate.day);
-  final exists = existingDates.any((date) => isSameCalendarDay(date, day));
-
-  return TodayRateDecision(
-    plan: exists ? TodayRatePlan.keepExisting : TodayRatePlan.insert,
-    date: day,
-    rate: quoteRate,
-  );
+  if (dateLocked && !isSameCalendarDay(quoteDate, formDate)) {
+    return RateFillPlan.dateMismatch;
+  }
+  final typed = double.tryParse(currentText.trim());
+  if (typed != null && typed != quoteRate) return RateFillPlan.confirmReplace;
+  return RateFillPlan.fill;
 }
