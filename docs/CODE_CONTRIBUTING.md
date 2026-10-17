@@ -81,18 +81,14 @@ By following these steps and tips, you’ll maintain code quality and contribute
 
 ## 5. Submit a PR to `develop` branch
 
-So far you should have pushed your work to your working branch and have tested that it works on all the compatible devices. Then final step is to open a pull request to the `develop` branch of the official [Monekin repo](https://github.com/enrique-lozano/Monekin).
+Once your work is pushed and tested, open a pull request to the official [Monekin repo](https://github.com/enrique-lozano/Monekin) ([how to open a PR from a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)). When doing so:
 
-**[How To Submit a PR Guide - by GitHub.com](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)**
+- **Target `develop`.** Choose `develop` as the base branch. PRs to `main` will be retargeted or, in the worst case, rejected.
+- **Use a clean title.** Write a prefix-free sentence (not `feat: ...` / `fix: ...`). Labels, not the title, categorize the PR for the release notes.
+- **Fill in the PR template and tick every checklist item.** This includes agreeing to the [Contributor License Agreement](https://github.com/enrique-lozano/Monekin/blob/main/CLA.md), so read it first. Maintainers will never tick it on your behalf.
 
 > [!IMPORTANT]
-> Make sure that the `develop` branch is chosen as "base" in the PR. Pull requests to `main` will be changed to the `develop` branch, or in the worst case, rejected.
-
-> [!IMPORTANT]
-> This project doesn't have QA, so you are the QA! Please test your implementation carefully.
-
-> [!NOTE]
-> Keep the PR title a clean, prefix-free sentence (not `feat: ...` / `fix: ...`). Labels, not the title, are what categorizes it for the release notes.
+> This project doesn't have QA, so you are the QA! Please test your implementation carefully on all the compatible devices.
 
 ## Questions?
 
