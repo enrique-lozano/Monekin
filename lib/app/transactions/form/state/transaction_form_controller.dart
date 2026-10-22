@@ -207,7 +207,9 @@ class TransactionFormController extends ChangeNotifier {
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
     tradeTotalController.text = _plainNumber(
       double.parse(
-        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(decimals),
+        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
+          decimals,
+        ),
       ),
     );
   }
@@ -280,6 +282,23 @@ class TransactionFormController extends ChangeNotifier {
 
   Account? get effectiveTransferToAccount =>
       _dualLegFlowReversed ? fromAccount : transferAccount;
+
+  /// Rate to convert the transfer amount from the origin to the destination
+  /// currency at [date] (1 when they match or an account is missing).
+  Stream<double> get transferRate {
+    final from = effectiveTransferFromAccount;
+    final to = effectiveTransferToAccount;
+
+    if (from == null || to == null || from.currency.code == to.currency.code) {
+      return Stream.value(1);
+    }
+
+    return ExchangeRateService.instance.calculateExchangeRate(
+      fromCurrency: from.currency.code,
+      toCurrency: to.currency.code,
+      date: date,
+    );
+  }
 
   MoneyTransaction? get transactionToEdit => _transactionToEdit;
   Debt? get linkedDebt => _linkedDebt;
@@ -694,23 +713,6 @@ class TransactionFormController extends ChangeNotifier {
     return edit.value;
   }
 
-  /// Amount to store as `valueInDestiny` for a transfer from [from] to [to].
-  ///
-  /// It stays null when both accounts share a currency. Otherwise it is
-  /// [custom] if the user set one, or else the amount converted with
-  /// [convert] (rounded to the destination currency), so balances never
-  /// credit the receiving account with an unconverted amount.
-  static Future<double?> resolveValueInDestiny({
-    required Account from,
-    required Account to,
-    required double? custom,
-    required Future<double> Function() convert,
-  }) async {
-    if (custom != null || from.currency.code == to.currency.code) return custom;
-
-    return (await convert()).roundWithDecimals(to.currency.decimalPlaces);
-  }
-
   Future<void> submitForm(BuildContext context) async {
     if (isSecurityTradeInvestment) {
       await _submitSecurityTrade(context);
@@ -768,25 +770,17 @@ class TransactionFormController extends ChangeNotifier {
         ? effectiveTransferFromAccount
         : fromAccount;
 
-    final transferFrom = effectiveTransferFromAccount;
+    // Without it the balance would credit the origin amount unconverted
+    double? valueInDestiny = valueInDestinyToNumber;
     final transferTo = effectiveTransferToAccount;
 
-    final double? valueInDestiny =
-        transactionType.isTransfer && transferFrom != null && transferTo != null
-        ? await resolveValueInDestiny(
-            from: transferFrom,
-            to: transferTo,
-            custom: valueInDestinyToNumber,
-            convert: () => ExchangeRateService.instance
-                .calculateExchangeRate(
-                  fromCurrency: transferFrom.currency.code,
-                  toCurrency: transferTo.currency.code,
-                  amount: transactionValue.abs(),
-                  date: date,
-                )
-                .first,
-          )
-        : null;
+    if (transactionType.isTransfer &&
+        valueInDestiny == null &&
+        transferTo != null &&
+        transferTo.currency.code != postingFrom!.currency.code) {
+      valueInDestiny = (transactionValue.abs() * await transferRate.first)
+          .roundWithDecimals(transferTo.currency.decimalPlaces);
+    }
 
     final transactionToPost = TransactionInDB(
       id: newTrID,

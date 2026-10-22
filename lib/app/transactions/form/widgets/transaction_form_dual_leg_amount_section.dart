@@ -3,7 +3,6 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -158,11 +157,7 @@ class _DualLegBody extends StatelessWidget {
 
     if (differentCurrency) {
       return StreamBuilder<double>(
-        stream: ExchangeRateService.instance.calculateExchangeRate(
-          fromCurrency: effectiveFrom.currency.code,
-          toCurrency: effectiveTo.currency.code,
-          date: c.date,
-        ),
+        stream: c.transferRate,
         builder: (context, snap) => buildLegs(snap.data ?? 1),
       );
     }
