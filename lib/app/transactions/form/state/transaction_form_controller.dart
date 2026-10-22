@@ -23,6 +23,7 @@ import 'package:monekin/core/database/services/user-setting/default_transaction_
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/utils/drift_utils.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/debt/debt.dart';
@@ -281,6 +282,23 @@ class TransactionFormController extends ChangeNotifier {
 
   Account? get effectiveTransferToAccount =>
       _dualLegFlowReversed ? fromAccount : transferAccount;
+
+  /// Rate to convert the transfer amount from the origin to the destination
+  /// currency at [date] (1 when they match or an account is missing).
+  Stream<double> get transferRate {
+    final from = effectiveTransferFromAccount;
+    final to = effectiveTransferToAccount;
+
+    if (from == null || to == null || from.currency.code == to.currency.code) {
+      return Stream.value(1);
+    }
+
+    return ExchangeRateService.instance.calculateExchangeRate(
+      fromCurrency: from.currency.code,
+      toCurrency: to.currency.code,
+      date: date,
+    );
+  }
 
   MoneyTransaction? get transactionToEdit => _transactionToEdit;
   Debt? get linkedDebt => _linkedDebt;
@@ -752,6 +770,18 @@ class TransactionFormController extends ChangeNotifier {
         ? effectiveTransferFromAccount
         : fromAccount;
 
+    // Without it the balance would credit the origin amount unconverted
+    double? valueInDestiny = valueInDestinyToNumber;
+    final transferTo = effectiveTransferToAccount;
+
+    if (transactionType.isTransfer &&
+        valueInDestiny == null &&
+        transferTo != null &&
+        transferTo.currency.code != postingFrom!.currency.code) {
+      valueInDestiny = (transactionValue.abs() * await transferRate.first)
+          .roundWithDecimals(transferTo.currency.decimalPlaces);
+    }
+
     final transactionToPost = TransactionInDB(
       id: newTrID,
       date: date,
@@ -769,9 +799,7 @@ class TransactionFormController extends ChangeNotifier {
       endDate: recurrentRule.ruleRecurrentLimit?.endDate,
       remainingTransactions:
           recurrentRule.ruleRecurrentLimit?.remainingIterations,
-      valueInDestiny: transactionType.isTransfer
-          ? valueInDestinyToNumber
-          : null,
+      valueInDestiny: valueInDestiny,
       categoryID: transactionType.isIncomeOrExpense
           ? selectedCategory?.id
           : null,
