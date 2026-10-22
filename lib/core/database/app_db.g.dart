@@ -504,7 +504,7 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         type: DriftSqlType.string,
         requiredDuringInsert: true,
         $customConstraints:
-            'NOT NULL CHECK (type IN (\'money\', \'investment\'))',
+            'NOT NULL CHECK (type IN (\'money\', \'investment\', \'credit\'))',
       ).withConverter<AccountType>(Accounts.$convertertype);
   static const VerificationMeta _isSavingMeta = const VerificationMeta(
     'isSaving',
@@ -599,6 +599,49 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     requiredDuringInsert: false,
     $customConstraints: '',
   );
+  static const VerificationMeta _cutoffDayMeta = const VerificationMeta(
+    'cutoffDay',
+  );
+  late final GeneratedColumn<int> cutoffDay = GeneratedColumn<int>(
+    'cutoffDay',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints:
+        'CHECK (cutoffDay IS NULL OR cutoffDay BETWEEN 1 AND 31)',
+  );
+  static const VerificationMeta _dueDayMeta = const VerificationMeta('dueDay');
+  late final GeneratedColumn<int> dueDay = GeneratedColumn<int>(
+    'dueDay',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'CHECK (dueDay IS NULL OR dueDay BETWEEN 1 AND 31)',
+  );
+  static const VerificationMeta _creditLimitMeta = const VerificationMeta(
+    'creditLimit',
+  );
+  late final GeneratedColumn<double> creditLimit = GeneratedColumn<double>(
+    'creditLimit',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
+  static const VerificationMeta _minPaymentPctMeta = const VerificationMeta(
+    'minPaymentPct',
+  );
+  late final GeneratedColumn<double> minPaymentPct = GeneratedColumn<double>(
+    'minPaymentPct',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+    $customConstraints: '',
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -617,6 +660,10 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
     currencyId,
     iban,
     swift,
+    cutoffDay,
+    dueDay,
+    creditLimit,
+    minPaymentPct,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -734,6 +781,36 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         swift.isAcceptableOrUnknown(data['swift']!, _swiftMeta),
       );
     }
+    if (data.containsKey('cutoffDay')) {
+      context.handle(
+        _cutoffDayMeta,
+        cutoffDay.isAcceptableOrUnknown(data['cutoffDay']!, _cutoffDayMeta),
+      );
+    }
+    if (data.containsKey('dueDay')) {
+      context.handle(
+        _dueDayMeta,
+        dueDay.isAcceptableOrUnknown(data['dueDay']!, _dueDayMeta),
+      );
+    }
+    if (data.containsKey('creditLimit')) {
+      context.handle(
+        _creditLimitMeta,
+        creditLimit.isAcceptableOrUnknown(
+          data['creditLimit']!,
+          _creditLimitMeta,
+        ),
+      );
+    }
+    if (data.containsKey('minPaymentPct')) {
+      context.handle(
+        _minPaymentPctMeta,
+        minPaymentPct.isAcceptableOrUnknown(
+          data['minPaymentPct']!,
+          _minPaymentPctMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -811,6 +888,22 @@ class Accounts extends Table with TableInfo<Accounts, AccountInDB> {
         DriftSqlType.string,
         data['${effectivePrefix}swift'],
       ),
+      cutoffDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}cutoffDay'],
+      ),
+      dueDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dueDay'],
+      ),
+      creditLimit: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}creditLimit'],
+      ),
+      minPaymentPct: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}minPaymentPct'],
+      ),
     );
   }
 
@@ -844,7 +937,8 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final DateTime date;
   final String? description;
 
-  /// The type of the account. 'money' (cash only) or 'investment' (cash + holdings)
+  /// The type of the account. 'money' (cash only), 'investment' (cash + holdings)
+  /// or 'credit' (a credit card, its balance is the debt with the bank)
   final AccountType type;
 
   /// Whether this money account behaves as a savings account (money only in/out via transfers)
@@ -869,6 +963,21 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
   final String currencyId;
   final String? iban;
   final String? swift;
+
+  /// Credit card fields, only meaningful for 'credit' accounts. A credit account
+  /// always has a cutoffDay and a dueDay (validated in the form, not here).
+  /// Days that a month does not have fall back to the last day of that month.
+  /// Day of the month (1-31) the statement closes
+  final int? cutoffDay;
+
+  /// Day of the month (1-31) the statement has to be paid
+  final int? dueDay;
+
+  /// Credit limit, in the account currency
+  final double? creditLimit;
+
+  /// Share of the statement used to estimate the minimum payment (e.g. 0.05 for 5%)
+  final double? minPaymentPct;
   const AccountInDB({
     required this.id,
     required this.name,
@@ -886,6 +995,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     required this.currencyId,
     this.iban,
     this.swift,
+    this.cutoffDay,
+    this.dueDay,
+    this.creditLimit,
+    this.minPaymentPct,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -924,6 +1037,18 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     if (!nullToAbsent || swift != null) {
       map['swift'] = Variable<String>(swift);
     }
+    if (!nullToAbsent || cutoffDay != null) {
+      map['cutoffDay'] = Variable<int>(cutoffDay);
+    }
+    if (!nullToAbsent || dueDay != null) {
+      map['dueDay'] = Variable<int>(dueDay);
+    }
+    if (!nullToAbsent || creditLimit != null) {
+      map['creditLimit'] = Variable<double>(creditLimit);
+    }
+    if (!nullToAbsent || minPaymentPct != null) {
+      map['minPaymentPct'] = Variable<double>(minPaymentPct);
+    }
     return map;
   }
 
@@ -955,6 +1080,18 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       swift: swift == null && nullToAbsent
           ? const Value.absent()
           : Value(swift),
+      cutoffDay: cutoffDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cutoffDay),
+      dueDay: dueDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dueDay),
+      creditLimit: creditLimit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(creditLimit),
+      minPaymentPct: minPaymentPct == null && nullToAbsent
+          ? const Value.absent()
+          : Value(minPaymentPct),
     );
   }
 
@@ -984,6 +1121,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       currencyId: serializer.fromJson<String>(json['currencyId']),
       iban: serializer.fromJson<String?>(json['iban']),
       swift: serializer.fromJson<String?>(json['swift']),
+      cutoffDay: serializer.fromJson<int?>(json['cutoffDay']),
+      dueDay: serializer.fromJson<int?>(json['dueDay']),
+      creditLimit: serializer.fromJson<double?>(json['creditLimit']),
+      minPaymentPct: serializer.fromJson<double?>(json['minPaymentPct']),
     );
   }
   @override
@@ -1008,6 +1149,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
       'currencyId': serializer.toJson<String>(currencyId),
       'iban': serializer.toJson<String?>(iban),
       'swift': serializer.toJson<String?>(swift),
+      'cutoffDay': serializer.toJson<int?>(cutoffDay),
+      'dueDay': serializer.toJson<int?>(dueDay),
+      'creditLimit': serializer.toJson<double?>(creditLimit),
+      'minPaymentPct': serializer.toJson<double?>(minPaymentPct),
     };
   }
 
@@ -1028,6 +1173,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     String? currencyId,
     Value<String?> iban = const Value.absent(),
     Value<String?> swift = const Value.absent(),
+    Value<int?> cutoffDay = const Value.absent(),
+    Value<int?> dueDay = const Value.absent(),
+    Value<double?> creditLimit = const Value.absent(),
+    Value<double?> minPaymentPct = const Value.absent(),
   }) => AccountInDB(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -1045,6 +1194,12 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     currencyId: currencyId ?? this.currencyId,
     iban: iban.present ? iban.value : this.iban,
     swift: swift.present ? swift.value : this.swift,
+    cutoffDay: cutoffDay.present ? cutoffDay.value : this.cutoffDay,
+    dueDay: dueDay.present ? dueDay.value : this.dueDay,
+    creditLimit: creditLimit.present ? creditLimit.value : this.creditLimit,
+    minPaymentPct: minPaymentPct.present
+        ? minPaymentPct.value
+        : this.minPaymentPct,
   );
   AccountInDB copyWithCompanion(AccountsCompanion data) {
     return AccountInDB(
@@ -1074,6 +1229,14 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           : this.currencyId,
       iban: data.iban.present ? data.iban.value : this.iban,
       swift: data.swift.present ? data.swift.value : this.swift,
+      cutoffDay: data.cutoffDay.present ? data.cutoffDay.value : this.cutoffDay,
+      dueDay: data.dueDay.present ? data.dueDay.value : this.dueDay,
+      creditLimit: data.creditLimit.present
+          ? data.creditLimit.value
+          : this.creditLimit,
+      minPaymentPct: data.minPaymentPct.present
+          ? data.minPaymentPct.value
+          : this.minPaymentPct,
     );
   }
 
@@ -1095,7 +1258,11 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           ..write('closingDate: $closingDate, ')
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
-          ..write('swift: $swift')
+          ..write('swift: $swift, ')
+          ..write('cutoffDay: $cutoffDay, ')
+          ..write('dueDay: $dueDay, ')
+          ..write('creditLimit: $creditLimit, ')
+          ..write('minPaymentPct: $minPaymentPct')
           ..write(')'))
         .toString();
   }
@@ -1118,6 +1285,10 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
     currencyId,
     iban,
     swift,
+    cutoffDay,
+    dueDay,
+    creditLimit,
+    minPaymentPct,
   );
   @override
   bool operator ==(Object other) =>
@@ -1138,7 +1309,11 @@ class AccountInDB extends DataClass implements Insertable<AccountInDB> {
           other.closingDate == this.closingDate &&
           other.currencyId == this.currencyId &&
           other.iban == this.iban &&
-          other.swift == this.swift);
+          other.swift == this.swift &&
+          other.cutoffDay == this.cutoffDay &&
+          other.dueDay == this.dueDay &&
+          other.creditLimit == this.creditLimit &&
+          other.minPaymentPct == this.minPaymentPct);
 }
 
 class AccountsCompanion extends UpdateCompanion<AccountInDB> {
@@ -1158,6 +1333,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
   final Value<String> currencyId;
   final Value<String?> iban;
   final Value<String?> swift;
+  final Value<int?> cutoffDay;
+  final Value<int?> dueDay;
+  final Value<double?> creditLimit;
+  final Value<double?> minPaymentPct;
   final Value<int> rowid;
   const AccountsCompanion({
     this.id = const Value.absent(),
@@ -1176,6 +1355,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     this.currencyId = const Value.absent(),
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
+    this.cutoffDay = const Value.absent(),
+    this.dueDay = const Value.absent(),
+    this.creditLimit = const Value.absent(),
+    this.minPaymentPct = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   AccountsCompanion.insert({
@@ -1195,6 +1378,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     required String currencyId,
     this.iban = const Value.absent(),
     this.swift = const Value.absent(),
+    this.cutoffDay = const Value.absent(),
+    this.dueDay = const Value.absent(),
+    this.creditLimit = const Value.absent(),
+    this.minPaymentPct = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        name = Value(name),
@@ -1221,6 +1408,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Expression<String>? currencyId,
     Expression<String>? iban,
     Expression<String>? swift,
+    Expression<int>? cutoffDay,
+    Expression<int>? dueDay,
+    Expression<double>? creditLimit,
+    Expression<double>? minPaymentPct,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1240,6 +1431,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       if (currencyId != null) 'currencyId': currencyId,
       if (iban != null) 'iban': iban,
       if (swift != null) 'swift': swift,
+      if (cutoffDay != null) 'cutoffDay': cutoffDay,
+      if (dueDay != null) 'dueDay': dueDay,
+      if (creditLimit != null) 'creditLimit': creditLimit,
+      if (minPaymentPct != null) 'minPaymentPct': minPaymentPct,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1261,6 +1456,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     Value<String>? currencyId,
     Value<String?>? iban,
     Value<String?>? swift,
+    Value<int?>? cutoffDay,
+    Value<int?>? dueDay,
+    Value<double?>? creditLimit,
+    Value<double?>? minPaymentPct,
     Value<int>? rowid,
   }) {
     return AccountsCompanion(
@@ -1280,6 +1479,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
       currencyId: currencyId ?? this.currencyId,
       iban: iban ?? this.iban,
       swift: swift ?? this.swift,
+      cutoffDay: cutoffDay ?? this.cutoffDay,
+      dueDay: dueDay ?? this.dueDay,
+      creditLimit: creditLimit ?? this.creditLimit,
+      minPaymentPct: minPaymentPct ?? this.minPaymentPct,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1337,6 +1540,18 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
     if (swift.present) {
       map['swift'] = Variable<String>(swift.value);
     }
+    if (cutoffDay.present) {
+      map['cutoffDay'] = Variable<int>(cutoffDay.value);
+    }
+    if (dueDay.present) {
+      map['dueDay'] = Variable<int>(dueDay.value);
+    }
+    if (creditLimit.present) {
+      map['creditLimit'] = Variable<double>(creditLimit.value);
+    }
+    if (minPaymentPct.present) {
+      map['minPaymentPct'] = Variable<double>(minPaymentPct.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1362,6 +1577,10 @@ class AccountsCompanion extends UpdateCompanion<AccountInDB> {
           ..write('currencyId: $currencyId, ')
           ..write('iban: $iban, ')
           ..write('swift: $swift, ')
+          ..write('cutoffDay: $cutoffDay, ')
+          ..write('dueDay: $dueDay, ')
+          ..write('creditLimit: $creditLimit, ')
+          ..write('minPaymentPct: $minPaymentPct, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -10489,8 +10708,8 @@ class AccountSnapshotInDB extends DataClass
 
   /// Cash the account held at the snapshot date, in the account currency. The
   /// snapshot is the account's authoritative state on its date, so this value
-  /// (and not the transaction ledger) sets the cash side of the balance from
-  /// that date on. Transactions dated after it accumulate on top of it.
+  /// sets the cash side of the balance from that date on. Transactions dated
+  /// after it accumulate on top of it.
   final double cash;
   const AccountSnapshotInDB({
     required this.id,
@@ -11648,6 +11867,10 @@ abstract class _$AppDB extends GeneratedDatabase {
         iban: row.readNullable<String>('iban'),
         swift: row.readNullable<String>('swift'),
         color: row.readNullable<String>('color'),
+        cutoffDay: row.readNullable<int>('cutoffDay'),
+        dueDay: row.readNullable<int>('dueDay'),
+        creditLimit: row.readNullable<double>('creditLimit'),
+        minPaymentPct: row.readNullable<double>('minPaymentPct'),
       ),
     );
   }
@@ -11856,7 +12079,7 @@ abstract class _$AppDB extends GeneratedDatabase {
     );
     $arrayStartIndex += generatedlimit.amountOfVariables;
     return customSelect(
-      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."groupName" AS "nested_0.groupName", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."isSaving" AS "nested_0.isSaving", "a"."trackingMode" AS "nested_0.trackingMode", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."groupName" AS "nested_3.groupName", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."isSaving" AS "nested_3.isSaving", "ra"."trackingMode" AS "nested_3.trackingMode", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
+      'SELECT t.*,"a"."id" AS "nested_0.id", "a"."name" AS "nested_0.name", "a"."groupName" AS "nested_0.groupName", "a"."iniValue" AS "nested_0.iniValue", "a"."date" AS "nested_0.date", "a"."description" AS "nested_0.description", "a"."type" AS "nested_0.type", "a"."isSaving" AS "nested_0.isSaving", "a"."trackingMode" AS "nested_0.trackingMode", "a"."iconId" AS "nested_0.iconId", "a"."displayOrder" AS "nested_0.displayOrder", "a"."color" AS "nested_0.color", "a"."closingDate" AS "nested_0.closingDate", "a"."currencyId" AS "nested_0.currencyId", "a"."iban" AS "nested_0.iban", "a"."swift" AS "nested_0.swift", "a"."cutoffDay" AS "nested_0.cutoffDay", "a"."dueDay" AS "nested_0.dueDay", "a"."creditLimit" AS "nested_0.creditLimit", "a"."minPaymentPct" AS "nested_0.minPaymentPct","accountCurrency"."code" AS "nested_1.code", "accountCurrency"."symbol" AS "nested_1.symbol", "accountCurrency"."name" AS "nested_1.name", "accountCurrency"."decimalPlaces" AS "nested_1.decimalPlaces", "accountCurrency"."isDefault" AS "nested_1.isDefault", "accountCurrency"."type" AS "nested_1.type","receivingAccountCurrency"."code" AS "nested_2.code", "receivingAccountCurrency"."symbol" AS "nested_2.symbol", "receivingAccountCurrency"."name" AS "nested_2.name", "receivingAccountCurrency"."decimalPlaces" AS "nested_2.decimalPlaces", "receivingAccountCurrency"."isDefault" AS "nested_2.isDefault", "receivingAccountCurrency"."type" AS "nested_2.type","ra"."id" AS "nested_3.id", "ra"."name" AS "nested_3.name", "ra"."groupName" AS "nested_3.groupName", "ra"."iniValue" AS "nested_3.iniValue", "ra"."date" AS "nested_3.date", "ra"."description" AS "nested_3.description", "ra"."type" AS "nested_3.type", "ra"."isSaving" AS "nested_3.isSaving", "ra"."trackingMode" AS "nested_3.trackingMode", "ra"."iconId" AS "nested_3.iconId", "ra"."displayOrder" AS "nested_3.displayOrder", "ra"."color" AS "nested_3.color", "ra"."closingDate" AS "nested_3.closingDate", "ra"."currencyId" AS "nested_3.currencyId", "ra"."iban" AS "nested_3.iban", "ra"."swift" AS "nested_3.swift", "ra"."cutoffDay" AS "nested_3.cutoffDay", "ra"."dueDay" AS "nested_3.dueDay", "ra"."creditLimit" AS "nested_3.creditLimit", "ra"."minPaymentPct" AS "nested_3.minPaymentPct","c"."id" AS "nested_4.id", "c"."name" AS "nested_4.name", "c"."iconId" AS "nested_4.iconId", "c"."color" AS "nested_4.color", "c"."displayOrder" AS "nested_4.displayOrder", "c"."type" AS "nested_4.type", "c"."parentCategoryID" AS "nested_4.parentCategoryID","pc"."id" AS "nested_5.id", "pc"."name" AS "nested_5.name", "pc"."iconId" AS "nested_5.iconId", "pc"."color" AS "nested_5.color", "pc"."displayOrder" AS "nested_5.displayOrder", "pc"."type" AS "nested_5.type", "pc"."parentCategoryID" AS "nested_5.parentCategoryID", t.value * COALESCE(excRate.exchangeRate, 1) AS currentValueInPreferredCurrency, t.valueInDestiny * COALESCE(excRateOfDestiny.exchangeRate, 1) AS currentValueInDestinyInPreferredCurrency, t.id AS "\$n_0" FROM transactions AS t INNER JOIN accounts AS a ON t.accountID = a.id INNER JOIN currencies AS accountCurrency ON a.currencyId = accountCurrency.code LEFT JOIN accounts AS ra ON t.receivingAccountID = ra.id LEFT JOIN currencies AS receivingAccountCurrency ON ra.currencyId = receivingAccountCurrency.code LEFT JOIN categories AS c ON t.categoryID = c.id LEFT JOIN categories AS pc ON c.parentCategoryID = pc.id LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRate ON a.currencyId = excRate.currencyCode LEFT JOIN (SELECT currencyCode, exchangeRate FROM exchangeRates AS er WHERE date = (SELECT MAX(date) FROM exchangeRates WHERE currencyCode = er.currencyCode AND DATE <= DATE(\'now\')) ORDER BY currencyCode) AS excRateOfDestiny ON ra.currencyId = excRateOfDestiny.currencyCode WHERE ${generatedpredicate.sql} ${generatedorderBy.sql} ${generatedlimit.sql}',
       variables: [
         ...generatedpredicate.introducedVariables,
         ...generatedorderBy.introducedVariables,
@@ -13444,6 +13667,10 @@ typedef $AccountsCreateCompanionBuilder =
       required String currencyId,
       Value<String?> iban,
       Value<String?> swift,
+      Value<int?> cutoffDay,
+      Value<int?> dueDay,
+      Value<double?> creditLimit,
+      Value<double?> minPaymentPct,
       Value<int> rowid,
     });
 typedef $AccountsUpdateCompanionBuilder =
@@ -13464,6 +13691,10 @@ typedef $AccountsUpdateCompanionBuilder =
       Value<String> currencyId,
       Value<String?> iban,
       Value<String?> swift,
+      Value<int?> cutoffDay,
+      Value<int?> dueDay,
+      Value<double?> creditLimit,
+      Value<double?> minPaymentPct,
       Value<int> rowid,
     });
 
@@ -13614,6 +13845,26 @@ class $AccountsFilterComposer extends Composer<_$AppDB, Accounts> {
 
   ColumnFilters<String> get swift => $composableBuilder(
     column: $table.swift,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get cutoffDay => $composableBuilder(
+    column: $table.cutoffDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get dueDay => $composableBuilder(
+    column: $table.dueDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get creditLimit => $composableBuilder(
+    column: $table.creditLimit,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get minPaymentPct => $composableBuilder(
+    column: $table.minPaymentPct,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -13774,6 +14025,26 @@ class $AccountsOrderingComposer extends Composer<_$AppDB, Accounts> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get cutoffDay => $composableBuilder(
+    column: $table.cutoffDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get dueDay => $composableBuilder(
+    column: $table.dueDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get creditLimit => $composableBuilder(
+    column: $table.creditLimit,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get minPaymentPct => $composableBuilder(
+    column: $table.minPaymentPct,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $CurrenciesOrderingComposer get currencyId {
     final $CurrenciesOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -13859,6 +14130,22 @@ class $AccountsAnnotationComposer extends Composer<_$AppDB, Accounts> {
 
   GeneratedColumn<String> get swift =>
       $composableBuilder(column: $table.swift, builder: (column) => column);
+
+  GeneratedColumn<int> get cutoffDay =>
+      $composableBuilder(column: $table.cutoffDay, builder: (column) => column);
+
+  GeneratedColumn<int> get dueDay =>
+      $composableBuilder(column: $table.dueDay, builder: (column) => column);
+
+  GeneratedColumn<double> get creditLimit => $composableBuilder(
+    column: $table.creditLimit,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get minPaymentPct => $composableBuilder(
+    column: $table.minPaymentPct,
+    builder: (column) => column,
+  );
 
   $CurrenciesAnnotationComposer get currencyId {
     final $CurrenciesAnnotationComposer composer = $composerBuilder(
@@ -13982,6 +14269,10 @@ class $AccountsTableManager
                 Value<String> currencyId = const Value.absent(),
                 Value<String?> iban = const Value.absent(),
                 Value<String?> swift = const Value.absent(),
+                Value<int?> cutoffDay = const Value.absent(),
+                Value<int?> dueDay = const Value.absent(),
+                Value<double?> creditLimit = const Value.absent(),
+                Value<double?> minPaymentPct = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountsCompanion(
                 id: id,
@@ -14000,6 +14291,10 @@ class $AccountsTableManager
                 currencyId: currencyId,
                 iban: iban,
                 swift: swift,
+                cutoffDay: cutoffDay,
+                dueDay: dueDay,
+                creditLimit: creditLimit,
+                minPaymentPct: minPaymentPct,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -14020,6 +14315,10 @@ class $AccountsTableManager
                 required String currencyId,
                 Value<String?> iban = const Value.absent(),
                 Value<String?> swift = const Value.absent(),
+                Value<int?> cutoffDay = const Value.absent(),
+                Value<int?> dueDay = const Value.absent(),
+                Value<double?> creditLimit = const Value.absent(),
+                Value<double?> minPaymentPct = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AccountsCompanion.insert(
                 id: id,
@@ -14038,6 +14337,10 @@ class $AccountsTableManager
                 currencyId: currencyId,
                 iban: iban,
                 swift: swift,
+                cutoffDay: cutoffDay,
+                dueDay: dueDay,
+                creditLimit: creditLimit,
+                minPaymentPct: minPaymentPct,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

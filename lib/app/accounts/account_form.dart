@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
 import 'package:monekin/app/accounts/tracking_mode_selector.dart';
@@ -72,6 +73,11 @@ class _AccountFormPageState extends State<AccountFormPage> {
   final TextEditingController _balanceController = TextEditingController(
     text: '0',
   );
+  final TextEditingController _cutoffDayController = TextEditingController();
+  final TextEditingController _dueDayController = TextEditingController();
+  final TextEditingController _creditLimitController = TextEditingController();
+  final TextEditingController _minPaymentPctController =
+      TextEditingController();
 
   AccountType _type = AccountType.money;
   bool _isSaving = false;
@@ -113,11 +119,16 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iniValue = _accountToEdit.iniValue;
     } else {
       iniValue = double.parse(_balanceController.text);
+
+      // Credit cards ask for the current debt, stored as a negative balance.
+      if (_type == AccountType.credit) iniValue = -iniValue;
     }
 
     // Accounts are grouped by an exact match of this text, so a stray space
     // would silently create a group of its own.
     final groupName = _groupController.text.trim();
+    final isCredit = _type == AccountType.credit;
+    final minPaymentPct = double.tryParse(_minPaymentPctController.text);
 
     Account accountToSubmit = Account(
       id: _accountToEdit?.id ?? generateUUID(),
@@ -138,6 +149,14 @@ class _AccountFormPageState extends State<AccountFormPage> {
       iban: _ibanController.text.isEmpty ? null : _ibanController.text,
       description: _textController.text.isEmpty ? null : _textController.text,
       swift: _swiftController.text.isEmpty ? null : _swiftController.text,
+      cutoffDay: isCredit ? int.parse(_cutoffDayController.text) : null,
+      dueDay: isCredit ? int.parse(_dueDayController.text) : null,
+      creditLimit: isCredit
+          ? double.tryParse(_creditLimitController.text)
+          : null,
+      minPaymentPct: isCredit && minPaymentPct != null
+          ? minPaymentPct / 100
+          : null,
     );
 
     // Check for accounts with same names before continue:
@@ -261,6 +280,13 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _isSaving = _accountToEdit.isSaving;
     _trackingMode = _accountToEdit.trackingMode;
 
+    _cutoffDayController.text = _accountToEdit.cutoffDay?.toString() ?? '';
+    _dueDayController.text = _accountToEdit.dueDay?.toString() ?? '';
+    _creditLimitController.text = _accountToEdit.creditLimit?.toString() ?? '';
+    _minPaymentPctController.text = _accountToEdit.minPaymentPct == null
+        ? ''
+        : (_accountToEdit.minPaymentPct! * 100).toString();
+
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
       setState(() {
         _color = _accountToEdit.getComputedColor(context);
@@ -291,6 +317,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
     _textController.dispose();
     _ibanController.dispose();
     _swiftController.dispose();
+    _cutoffDayController.dispose();
+    _dueDayController.dispose();
+    _creditLimitController.dispose();
+    _minPaymentPctController.dispose();
 
     super.dispose();
   }
@@ -337,6 +367,107 @@ class _AccountFormPageState extends State<AccountFormPage> {
     );
 
     return locked ? Opacity(opacity: 0.6, child: field) : field;
+  }
+
+  /// Billing cycle, limit and minimum payment of a credit card account.
+  Widget _buildCreditCardFields() {
+    final t = Translations.of(context);
+
+    String? dayValidator(String? value) {
+      final error = fieldValidator(value, isRequired: true);
+      if (error != null) return error;
+
+      final day = int.tryParse(value!);
+      return day == null || day < 1 || day > 31
+          ? t.account.credit.form.day_validation
+          : null;
+    }
+
+    return Column(
+      spacing: 12,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          spacing: 12,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: TextFormField(
+                controller: _cutoffDayController,
+                decoration: InputDecoration(
+                  labelText: '${t.account.credit.cutoff_day} *',
+                  helperText: t.account.credit.form.day_descr,
+                  helperMaxLines: 2,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: dayValidator,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction: TextInputAction.next,
+              ),
+            ),
+            Expanded(
+              child: TextFormField(
+                controller: _dueDayController,
+                decoration: InputDecoration(
+                  labelText: '${t.account.credit.due_day} *',
+                  helperText: t.account.credit.form.day_descr,
+                  helperMaxLines: 2,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: dayValidator,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction: TextInputAction.next,
+              ),
+            ),
+          ],
+        ),
+        TextFormField(
+          controller: _creditLimitController,
+          decoration: InputDecoration(
+            labelText: t.account.credit.limit,
+            suffixText: _currency?.symbol,
+          ),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: twoDecimalDigitFormatter,
+          validator: (value) => fieldValidator(
+            value,
+            isRequired: false,
+            validator: ValidatorType.double,
+          ),
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textInputAction: TextInputAction.next,
+        ),
+        TextFormField(
+          controller: _minPaymentPctController,
+          decoration: InputDecoration(
+            labelText: t.account.credit.form.min_payment_pct,
+            helperText: t.account.credit.form.min_payment_pct_descr,
+            helperMaxLines: 2,
+            suffixText: '%',
+          ),
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          inputFormatters: twoDecimalDigitFormatter,
+          validator: (value) {
+            final error = fieldValidator(
+              value,
+              isRequired: false,
+              validator: ValidatorType.double,
+            );
+            if (error != null) return error;
+
+            final pct = double.tryParse(value ?? '');
+            return pct != null && pct > 100
+                ? t.account.credit.form.pct_validation
+                : null;
+          },
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          textInputAction: TextInputAction.next,
+        ),
+      ],
+    );
   }
 
   @override
@@ -529,7 +660,9 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       AmountAndCurrencyFormField(
                         amountController: _balanceController,
                         currency: _currency,
-                        amountLabel: t.account.form.initial_balance,
+                        amountLabel: _type == AccountType.credit
+                            ? t.account.credit.form.initial_debt
+                            : t.account.form.initial_balance,
                         enabled: true,
                         onCurrencySelected: (newCurrency) {
                           setState(() {
@@ -656,6 +789,10 @@ class _AccountFormPageState extends State<AccountFormPage> {
                       ),
                     );
                     formChildren.add(const SizedBox(height: 12));
+                  }
+
+                  if (_type == AccountType.credit) {
+                    add(_buildCreditCardFields());
                   }
 
                   // Show more fields
