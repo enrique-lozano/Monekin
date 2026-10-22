@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:monekin/app/home/widgets/dashboard_balance_scope.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -19,11 +20,15 @@ class DashboardBalanceChart extends StatefulWidget {
     super.key,
     required this.dateRange,
     required this.lineColor,
+    this.scope = DashboardBalanceScope.netWorth,
     this.height,
   });
 
   final DatePeriodState dateRange;
   final Color lineColor;
+
+  /// Which accounts the plotted balance adds up.
+  final DashboardBalanceScope scope;
 
   /// When null, the chart fills its parent (e.g. [EvolutionCard]).
   final double? height;
@@ -46,7 +51,8 @@ class _DashboardBalanceChartState extends State<DashboardBalanceChart> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.dateRange.startDate != widget.dateRange.startDate ||
-        oldWidget.dateRange.endDate != widget.dateRange.endDate) {
+        oldWidget.dateRange.endDate != widget.dateRange.endDate ||
+        oldWidget.scope != widget.scope) {
       _dataStream = _buildStream();
     }
   }
@@ -82,7 +88,7 @@ class _DashboardBalanceChartState extends State<DashboardBalanceChart> {
           dates.add(end);
 
           final balances = dates
-              .map((d) => AccountService.instance.getAccountsMoney(date: d))
+              .map((d) => widget.scope.watchBalance(date: d))
               .toList();
 
           return Rx.combineLatest<double, List<_BalancePoint>>(

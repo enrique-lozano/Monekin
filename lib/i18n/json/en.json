@@ -210,6 +210,10 @@
     "welcome-back-evening": "Evening, boss!",
     "welcome-back-night": "Up past bedtime?",
     "total-balance": "Total balance",
+    "balance-scope": {
+      "net-worth": "Net worth",
+      "available": "Available"
+    },
     "no-income-this-period": "No income in this period",
     "no-expenses-this-period": "No expenses in this period",
     "vs-previous-period": "vs prev.",

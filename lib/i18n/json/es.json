@@ -211,6 +211,10 @@
     "welcome-back-evening": "¡Buenas, jefe!",
     "welcome-back-night": "¿Trasnochando?",
     "total-balance": "Saldo total",
+    "balance-scope": {
+      "net-worth": "Patrimonio",
+      "available": "Disponible"
+    },
     "no-income-this-period": "Sin ingresos en este periodo",
     "no-expenses-this-period": "Sin gastos en este periodo",
     "vs-previous-period": "vs ant.",
