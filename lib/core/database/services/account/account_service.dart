@@ -59,6 +59,14 @@ class AccountService {
 
   // --- Crud end --- //
 
+  /// Default date for "current" balances. Using the end of today instead of
+  /// `DateTime.now()` keeps long-lived streams (e.g. the dashboard's) counting
+  /// accounts and transactions created after they were opened.
+  static DateTime _endOfToday() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day + 1);
+  }
+
   // ---------------------------------------------------------------------------
   // Accounts metrics & balances
   // ---------------------------------------------------------------------------
@@ -85,7 +93,7 @@ class AccountService {
       AS $columnName ON $accountTableName.currencyId = $columnName.currencyCode
     ''';
 
-  /// The **cash** side of an account at [date] (defaults to now): its opening
+  /// The **cash** side of an account at [date] (defaults to the end of today): its opening
   /// balance plus its ledger, with portfolio snapshots taking over from the
   /// ledger where they exist (see [_getSnapshotCashAdjustment]).
   ///
@@ -100,7 +108,7 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
-    date ??= DateTime.now();
+    date ??= _endOfToday();
 
     final statusFiltered = trFilters.copyWith(
       status: TransactionStatus.getStatusThatCountsForStats(trFilters.status),
@@ -144,7 +152,7 @@ class AccountService {
 
   /// Get the amount of money that an account has in a certain period of time,
   /// specified in the [date] param. If the [date] param is null, it will return
-  /// the money of the account right now.
+  /// the money of the account right now (up to the end of today).
   ///
   /// The balance is the account's cash ([getAccountCash]) plus the market value
   /// of the securities it holds.
@@ -175,7 +183,7 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
-    date ??= DateTime.now();
+    date ??= _endOfToday();
 
     final cash = getAccountCash(
       account: account,
@@ -322,7 +330,7 @@ class AccountService {
 
   /// Get the amount of money that some accounts have in a certain period of time,
   /// specified in the [date] param. If the [date] param is null, it will return
-  /// the money of the account right now.
+  /// the money of the account right now (up to the end of today).
   ///
   /// If the [accountIds] param is not specified, the function will return the money of
   /// all the user accounts (closed or not).
@@ -346,7 +354,7 @@ class AccountService {
       return Stream.value(0.0);
     }
 
-    date ??= DateTime.now();
+    date ??= _endOfToday();
 
     final hasAccountFilter = accountIds != null;
 
@@ -425,8 +433,9 @@ class AccountService {
   }
 
   /// Relative change in combined account balance between two dates: fraction
-  /// `(end - start) / start` in the same sense as [getAccountsMoney] (e.g. `0.05`
-  /// means +5% when formatted as a percent).
+  /// `(end - start) / |start|` in the same sense as [getAccountsMoney] (e.g.
+  /// `0.05` means +5% when formatted as a percent). Dividing by the absolute
+  /// value keeps the sign of the change when the balance is negative (debts).
   ///
   /// If the starting balance is zero (or numerically near zero), returns `0.0`
   /// when the ending balance is also near zero, otherwise `double.nan`.
@@ -479,7 +488,7 @@ class AccountService {
           return finalBalance.abs() < eps ? 0.0 : double.nan;
         }
 
-        return (finalBalance - startBalance) / startBalance;
+        return (finalBalance - startBalance) / startBalance.abs();
       },
     );
   }

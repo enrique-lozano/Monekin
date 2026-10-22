@@ -112,7 +112,7 @@ class _DashboardPageState extends State<DashboardPage> {
         const eps = 1e-10;
         final percentage = startBalance.abs() < eps
             ? (endBalance.abs() < eps ? 0.0 : double.nan)
-            : delta / startBalance;
+            : delta / startBalance.abs();
 
         return (delta: delta, percentage: percentage);
       },
