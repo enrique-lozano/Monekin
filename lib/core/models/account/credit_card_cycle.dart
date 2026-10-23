@@ -10,6 +10,8 @@ import 'dart:math';
 /// All dates are local dates at midnight.
 class CreditCardCycle {
   const CreditCardCycle._({
+    required this.cutoffDay,
+    required this.dueDay,
     required this.previousCutoff,
     required this.previousPaymentDueDate,
     required this.lastCutoff,
@@ -24,12 +26,7 @@ class CreditCardCycle {
     required int dueDay,
     DateTime? date,
   }) {
-    final today = _dateOnly(date ?? DateTime.now());
-
-    var nextCutoff = dayInMonth(today.year, today.month, cutoffDay);
-    if (nextCutoff.isBefore(today)) {
-      nextCutoff = dayInMonth(today.year, today.month + 1, cutoffDay);
-    }
+    final nextCutoff = cutoffOnOrAfter(cutoffDay, date ?? DateTime.now());
 
     final lastCutoff = dayInMonth(
       nextCutoff.year,
@@ -44,6 +41,8 @@ class CreditCardCycle {
     );
 
     return CreditCardCycle._(
+      cutoffDay: cutoffDay,
+      dueDay: dueDay,
       previousCutoff: previousCutoff,
       previousPaymentDueDate: _dueDateAfter(previousCutoff, dueDay),
       lastCutoff: lastCutoff,
@@ -52,6 +51,9 @@ class CreditCardCycle {
       nextPaymentDueDate: _dueDateAfter(nextCutoff, dueDay),
     );
   }
+
+  final int cutoffDay;
+  final int dueDay;
 
   /// The statement closed right before [lastCutoff].
   final DateTime previousCutoff;
@@ -91,6 +93,24 @@ class CreditCardCycle {
   /// the due date has passed.
   int daysToPaymentDue([DateTime? date]) =>
       _daysBetween(_dateOnly(date ?? DateTime.now()), paymentDueDate);
+
+  /// The cut-off of the statement [date] belongs to: the first cut-off on or
+  /// after its day.
+  static DateTime cutoffOnOrAfter(int cutoffDay, DateTime date) {
+    final day = _dateOnly(date);
+    final sameMonth = dayInMonth(day.year, day.month, cutoffDay);
+
+    return sameMonth.isBefore(day)
+        ? dayInMonth(day.year, day.month + 1, cutoffDay)
+        : sameMonth;
+  }
+
+  /// The cut-off [months] months after [cutoff] (negative goes back).
+  DateTime cutoffAfter(DateTime cutoff, int months) =>
+      dayInMonth(cutoff.year, cutoff.month + months, cutoffDay);
+
+  /// When the statement closed on [cutoff] has to be paid.
+  DateTime dueDateOf(DateTime cutoff) => _dueDateAfter(cutoff, dueDay);
 
   /// The [day] of the given month, clamped to the last day of that month.
   /// [month] may overflow (13 is January of the next year, 0 is December of

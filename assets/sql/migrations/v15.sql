@@ -12,12 +12,17 @@
 --     Days that a month does not have (29, 30, 31) fall back to the
 --     last day of that month.
 --
+--   * Transactions gain an optional `installments` column: the number
+--     of monthly installments an expense of a credit card is paid in.
+--     The whole amount is debt from the purchase date, but each
+--     statement only bills one installment.
+--
 -- INVARIANT: a `credit` account always has a non-null cutoffDay and
 -- dueDay. It is validated by the account form and assumed by the
 -- queries instead of being expressed as a CHECK constraint.
 --
--- Existing accounts keep their type and get NULL in the new columns.
--- Nothing else is rewritten.
+-- Existing accounts keep their type, and existing accounts and
+-- transactions get NULL in the new columns. Nothing else is rewritten.
 -- ============================================================
 
 -- The type lives in a CHECK constraint, so the table has to be rebuilt.
@@ -54,3 +59,5 @@ FROM accounts;
 DROP TABLE accounts;
 
 ALTER TABLE accounts_new RENAME TO accounts;
+
+ALTER TABLE transactions ADD COLUMN installments INTEGER CHECK(installments IS NULL OR installments >= 2);

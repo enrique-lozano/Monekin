@@ -94,6 +94,31 @@ void main() {
     expect(fks.where((r) => r['table'] == 'accounts'), isNotEmpty);
   });
 
+  test('transactions gain a nullable, range-checked installments column', () {
+    final db = migrateSample();
+
+    final column = db
+        .select('PRAGMA table_info(transactions)')
+        .firstWhere((r) => r['name'] == 'installments');
+    expect(column['type'], 'INTEGER');
+    expect(column['notnull'], 0);
+
+    final withInstallments = db.select(
+      'SELECT COUNT(*) c FROM transactions WHERE installments IS NOT NULL',
+    );
+    expect(withInstallments.first['c'], 0);
+
+    final id = db.select('SELECT id FROM transactions LIMIT 1').first['id'];
+    db.execute('UPDATE transactions SET installments = 12 WHERE id = ?', [id]);
+    expect(
+      () => db.execute(
+        'UPDATE transactions SET installments = 1 WHERE id = ?',
+        [id],
+      ),
+      throwsA(isA<SqliteException>()),
+    );
+  });
+
   test('credit accounts can be stored and days are range-checked', () {
     final db = migrateSample();
 

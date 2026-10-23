@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/services/account/credit_card_service.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/label_value_info_list.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Billing cycle and available credit of a credit card account: what is left
@@ -93,11 +98,18 @@ class _CreditCardDetailsCardState extends State<CreditCardDetailsCard> {
                   ),
                   _amountItem(
                     t.account.credit.period_charges,
-                    status.periodCharges,
+                    status.nextStatementCharges,
                     hint: t.account.credit.period_charges_hint(
                       date: DateFormat.MMMd().format(cycle.nextPaymentDueDate),
                     ),
                   ),
+                  if (status.installmentsPending > 0)
+                    _amountItem(
+                      t.account.credit.installments_pending,
+                      status.installmentsPending,
+                      hint: t.account.credit.installments_pending_hint,
+                      onTap: () => _showUpcomingInstallments(context, status),
+                    ),
                   _amountItem(t.account.credit.total_debt, status.totalDebt),
                 ],
               ),
@@ -277,12 +289,57 @@ class _CreditCardDetailsCardState extends State<CreditCardDetailsCard> {
     );
   }
 
+  /// Installments each upcoming statement bills, until all are paid.
+  void _showUpcomingInstallments(
+    BuildContext context,
+    CreditCardStatus status,
+  ) {
+    final t = Translations.of(context);
+
+    unawaited(
+      RouteUtils.showResponsiveModal<void>(
+        context,
+        builder: (context) => ModalContainer(
+          title: t.account.credit.upcoming_installments,
+          responseToKeyboard: false,
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final e in status.upcomingInstallments)
+                  ListTile(
+                    title: Text(
+                      t.account.credit.statement_of(
+                        date: DateFormat.yMMMd().format(e.cutoff),
+                      ),
+                    ),
+                    subtitle: Text(
+                      t.account.credit.period_charges_hint(
+                        date: DateFormat.MMMd().format(e.dueDate),
+                      ),
+                    ),
+                    trailing: CurrencyDisplayer(
+                      amountToConvert: e.amount,
+                      currency: widget.account.currency,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   LabelValueInfoListItem _amountItem(
     String label,
     double amount, {
     String? hint,
+    VoidCallback? onTap,
   }) {
     return LabelValueInfoListItem(
+      onTap: onTap,
       label: label,
       value: hint == null ? const SizedBox.shrink() : Text(hint),
       trailing: CurrencyDisplayer(

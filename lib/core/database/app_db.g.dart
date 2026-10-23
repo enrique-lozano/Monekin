@@ -4362,6 +4362,17 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     requiredDuringInsert: false,
     $customConstraints: '',
   );
+  static const VerificationMeta _installmentsMeta = const VerificationMeta(
+    'installments',
+  );
+  late final GeneratedColumn<int> installments = GeneratedColumn<int>(
+    'installments',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    $customConstraints: 'CHECK (installments IS NULL OR installments >= 2)',
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -4388,6 +4399,7 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
     intervalEach,
     endDate,
     remainingTransactions,
+    installments,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -4553,6 +4565,15 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         ),
       );
     }
+    if (data.containsKey('installments')) {
+      context.handle(
+        _installmentsMeta,
+        installments.isAcceptableOrUnknown(
+          data['installments']!,
+          _installmentsMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -4664,6 +4685,10 @@ class Transactions extends Table with TableInfo<Transactions, TransactionInDB> {
         DriftSqlType.int,
         data['${effectivePrefix}remainingTransactions'],
       ),
+      installments: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}installments'],
+      ),
     );
   }
 
@@ -4765,6 +4790,11 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
 
   /// Number of payments remaining. This value must dicrease by one in the case a new payment is done within this rule. If this field or the `endDate` field is not specified, the recurring transaction will never end.
   final int? remainingTransactions;
+
+  /// Only for expenses of credit card accounts: number of monthly installments the
+  /// purchase is paid in. The whole amount is debt from the purchase date, but each
+  /// statement only bills one installment, starting with the one of the purchase.
+  final int? installments;
   const TransactionInDB({
     required this.id,
     required this.date,
@@ -4790,6 +4820,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     this.intervalEach,
     this.endDate,
     this.remainingTransactions,
+    this.installments,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -4860,6 +4891,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     if (!nullToAbsent || remainingTransactions != null) {
       map['remainingTransactions'] = Variable<int>(remainingTransactions);
     }
+    if (!nullToAbsent || installments != null) {
+      map['installments'] = Variable<int>(installments);
+    }
     return map;
   }
 
@@ -4925,6 +4959,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       remainingTransactions: remainingTransactions == null && nullToAbsent
           ? const Value.absent()
           : Value(remainingTransactions),
+      installments: installments == null && nullToAbsent
+          ? const Value.absent()
+          : Value(installments),
     );
   }
 
@@ -4964,6 +5001,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       remainingTransactions: serializer.fromJson<int?>(
         json['remainingTransactions'],
       ),
+      installments: serializer.fromJson<int?>(json['installments']),
     );
   }
   @override
@@ -4996,6 +5034,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       'intervalEach': serializer.toJson<int?>(intervalEach),
       'endDate': serializer.toJson<DateTime?>(endDate),
       'remainingTransactions': serializer.toJson<int?>(remainingTransactions),
+      'installments': serializer.toJson<int?>(installments),
     };
   }
 
@@ -5024,6 +5063,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     Value<int?> intervalEach = const Value.absent(),
     Value<DateTime?> endDate = const Value.absent(),
     Value<int?> remainingTransactions = const Value.absent(),
+    Value<int?> installments = const Value.absent(),
   }) => TransactionInDB(
     id: id ?? this.id,
     date: date ?? this.date,
@@ -5057,6 +5097,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     remainingTransactions: remainingTransactions.present
         ? remainingTransactions.value
         : this.remainingTransactions,
+    installments: installments.present ? installments.value : this.installments,
   );
   TransactionInDB copyWithCompanion(TransactionsCompanion data) {
     return TransactionInDB(
@@ -5106,6 +5147,9 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
       remainingTransactions: data.remainingTransactions.present
           ? data.remainingTransactions.value
           : this.remainingTransactions,
+      installments: data.installments.present
+          ? data.installments.value
+          : this.installments,
     );
   }
 
@@ -5135,7 +5179,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           ..write('intervalPeriod: $intervalPeriod, ')
           ..write('intervalEach: $intervalEach, ')
           ..write('endDate: $endDate, ')
-          ..write('remainingTransactions: $remainingTransactions')
+          ..write('remainingTransactions: $remainingTransactions, ')
+          ..write('installments: $installments')
           ..write(')'))
         .toString();
   }
@@ -5166,6 +5211,7 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
     intervalEach,
     endDate,
     remainingTransactions,
+    installments,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -5194,7 +5240,8 @@ class TransactionInDB extends DataClass implements Insertable<TransactionInDB> {
           other.intervalPeriod == this.intervalPeriod &&
           other.intervalEach == this.intervalEach &&
           other.endDate == this.endDate &&
-          other.remainingTransactions == this.remainingTransactions);
+          other.remainingTransactions == this.remainingTransactions &&
+          other.installments == this.installments);
 }
 
 class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
@@ -5222,6 +5269,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
   final Value<int?> intervalEach;
   final Value<DateTime?> endDate;
   final Value<int?> remainingTransactions;
+  final Value<int?> installments;
   final Value<int> rowid;
   const TransactionsCompanion({
     this.id = const Value.absent(),
@@ -5248,6 +5296,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.intervalEach = const Value.absent(),
     this.endDate = const Value.absent(),
     this.remainingTransactions = const Value.absent(),
+    this.installments = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   TransactionsCompanion.insert({
@@ -5275,6 +5324,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     this.intervalEach = const Value.absent(),
     this.endDate = const Value.absent(),
     this.remainingTransactions = const Value.absent(),
+    this.installments = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        date = Value(date),
@@ -5306,6 +5356,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Expression<int>? intervalEach,
     Expression<DateTime>? endDate,
     Expression<int>? remainingTransactions,
+    Expression<int>? installments,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -5334,6 +5385,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       if (endDate != null) 'endDate': endDate,
       if (remainingTransactions != null)
         'remainingTransactions': remainingTransactions,
+      if (installments != null) 'installments': installments,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -5363,6 +5415,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     Value<int?>? intervalEach,
     Value<DateTime?>? endDate,
     Value<int?>? remainingTransactions,
+    Value<int?>? installments,
     Value<int>? rowid,
   }) {
     return TransactionsCompanion(
@@ -5391,6 +5444,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
       endDate: endDate ?? this.endDate,
       remainingTransactions:
           remainingTransactions ?? this.remainingTransactions,
+      installments: installments ?? this.installments,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -5476,6 +5530,9 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
     if (remainingTransactions.present) {
       map['remainingTransactions'] = Variable<int>(remainingTransactions.value);
     }
+    if (installments.present) {
+      map['installments'] = Variable<int>(installments.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -5509,6 +5566,7 @@ class TransactionsCompanion extends UpdateCompanion<TransactionInDB> {
           ..write('intervalEach: $intervalEach, ')
           ..write('endDate: $endDate, ')
           ..write('remainingTransactions: $remainingTransactions, ')
+          ..write('installments: $installments, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -12153,6 +12211,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           row.readNullable<String>('intervalPeriod'),
         ),
         remainingTransactions: row.readNullable<int>('remainingTransactions'),
+        installments: row.readNullable<int>('installments'),
         debtId: row.readNullable<String>('debtId'),
         assetID: row.readNullable<String>('assetID'),
         securityID: row.readNullable<String>('securityID'),
@@ -17213,6 +17272,7 @@ typedef $TransactionsCreateCompanionBuilder =
       Value<int?> intervalEach,
       Value<DateTime?> endDate,
       Value<int?> remainingTransactions,
+      Value<int?> installments,
       Value<int> rowid,
     });
 typedef $TransactionsUpdateCompanionBuilder =
@@ -17241,6 +17301,7 @@ typedef $TransactionsUpdateCompanionBuilder =
       Value<int?> intervalEach,
       Value<DateTime?> endDate,
       Value<int?> remainingTransactions,
+      Value<int?> installments,
       Value<int> rowid,
     });
 
@@ -17469,6 +17530,11 @@ class $TransactionsFilterComposer extends Composer<_$AppDB, Transactions> {
 
   ColumnFilters<int> get remainingTransactions => $composableBuilder(
     column: $table.remainingTransactions,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get installments => $composableBuilder(
+    column: $table.installments,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -17734,6 +17800,11 @@ class $TransactionsOrderingComposer extends Composer<_$AppDB, Transactions> {
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get installments => $composableBuilder(
+    column: $table.installments,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $AccountsOrderingComposer get accountID {
     final $AccountsOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -17949,6 +18020,11 @@ class $TransactionsAnnotationComposer extends Composer<_$AppDB, Transactions> {
 
   GeneratedColumn<int> get remainingTransactions => $composableBuilder(
     column: $table.remainingTransactions,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get installments => $composableBuilder(
+    column: $table.installments,
     builder: (column) => column,
   );
 
@@ -18176,6 +18252,7 @@ class $TransactionsTableManager
                 Value<int?> intervalEach = const Value.absent(),
                 Value<DateTime?> endDate = const Value.absent(),
                 Value<int?> remainingTransactions = const Value.absent(),
+                Value<int?> installments = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TransactionsCompanion(
                 id: id,
@@ -18202,6 +18279,7 @@ class $TransactionsTableManager
                 intervalEach: intervalEach,
                 endDate: endDate,
                 remainingTransactions: remainingTransactions,
+                installments: installments,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -18230,6 +18308,7 @@ class $TransactionsTableManager
                 Value<int?> intervalEach = const Value.absent(),
                 Value<DateTime?> endDate = const Value.absent(),
                 Value<int?> remainingTransactions = const Value.absent(),
+                Value<int?> installments = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => TransactionsCompanion.insert(
                 id: id,
@@ -18256,6 +18335,7 @@ class $TransactionsTableManager
                 intervalEach: intervalEach,
                 endDate: endDate,
                 remainingTransactions: remainingTransactions,
+                installments: installments,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

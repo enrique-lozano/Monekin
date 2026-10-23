@@ -51,6 +51,7 @@ class MoneyTransaction extends TransactionInDB {
     super.intervalEach,
     super.intervalPeriod,
     super.remainingTransactions,
+    super.installments,
     super.debtId,
     super.assetID,
     super.securityID,

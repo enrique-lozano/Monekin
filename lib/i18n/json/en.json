@@ -546,7 +546,12 @@
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date",
       "extra-info-section": "Extra info",
-      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics."
+      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics.",
+      "INSTALLMENTS": {
+        "title": "Interest-free installments (months)",
+        "months": "months",
+        "per_month": "per month"
+      }
     },
     "REVERSED": {
       "title": "Inverse transaction",
@@ -708,9 +713,13 @@
       "min_payment_hint": "Estimate. Your bank may compute it differently",
       "statement_balance": "Statement balance ({{date}})",
       "payments_since_cutoff": "Paid since the cut-off",
-      "period_charges": "Purchases in the current period",
+      "period_charges": "Charges for the next statement",
       "period_charges_hint": "Payable by {{date}}",
       "total_debt": "Total debt",
+      "installments_pending": "Pending in installments",
+      "installments_pending_hint": "Billed in later statements. Tap to see them",
+      "upcoming_installments": "Upcoming installments",
+      "statement_of": "Statement of {{date}}",
       "cutoff_day": "Cut-off day",
       "due_day": "Payment due day",
       "FORM": {

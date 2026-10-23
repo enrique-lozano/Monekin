@@ -533,7 +533,12 @@
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción",
       "extra-info-section": "Información adicional",
-      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas."
+      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas.",
+      "INSTALLMENTS": {
+        "title": "Meses sin intereses",
+        "months": "meses",
+        "per_month": "al mes"
+      }
     },
     "REVERSED": {
       "title": "Transacción invertida",
@@ -695,9 +700,13 @@
       "min_payment_hint": "Estimado. Tu banco puede calcularlo distinto",
       "statement_balance": "Saldo al corte ({{date}})",
       "payments_since_cutoff": "Pagado desde el corte",
-      "period_charges": "Compras del periodo actual",
+      "period_charges": "Cargos del próximo corte",
       "period_charges_hint": "Se pagan a más tardar el {{date}}",
       "total_debt": "Deuda total",
+      "installments_pending": "Pendiente a meses",
+      "installments_pending_hint": "Se cobra en los siguientes cortes. Toca para verlos",
+      "upcoming_installments": "Próximas mensualidades",
+      "statement_of": "Corte del {{date}}",
       "cutoff_day": "Día de corte",
       "due_day": "Día límite de pago",
       "FORM": {
