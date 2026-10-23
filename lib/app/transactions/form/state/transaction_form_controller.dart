@@ -59,6 +59,7 @@ class TransactionFormController extends ChangeNotifier {
     quantityController.addListener(_onTradeFieldChanged);
     priceController.addListener(_onTradeFieldChanged);
     tradeTotalController.addListener(_safeNotify);
+    installmentsController.addListener(_onInstallmentsTextChanged);
   }
 
   final TransactionType? _mode;
@@ -98,6 +99,16 @@ class TransactionFormController extends ChangeNotifier {
   final TextEditingController titleController = TextEditingController();
   RecurrencyData recurrentRule = const RecurrencyData.noRepeat();
   List<Tag> tags = [];
+
+  /// Monthly installments of a credit card purchase. Null when paid at once.
+  int? installments;
+  final TextEditingController installmentsController = TextEditingController();
+
+  /// Only one-off expenses of a credit card can be paid in installments.
+  bool get canPayInInstallments =>
+      transactionType == TransactionType.expense &&
+      fromAccount?.isCredit == true &&
+      recurrentRule.isNoRecurrent;
 
   // --- Security trades (stock/fund/crypto buy & sell) ---------------------
   SecurityInDB? _security;
@@ -206,9 +217,7 @@ class TransactionFormController extends ChangeNotifier {
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
     tradeTotalController.text = _plainNumber(
       double.parse(
-        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
-          decimals,
-        ),
+        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(decimals),
       ),
     );
   }
@@ -482,6 +491,8 @@ class TransactionFormController extends ChangeNotifier {
     priceController.dispose();
     tradeTotalController.removeListener(_safeNotify);
     tradeTotalController.dispose();
+    installmentsController.removeListener(_onInstallmentsTextChanged);
+    installmentsController.dispose();
     notesController.dispose();
     titleController.dispose();
     amountFocusNode.dispose();
@@ -769,6 +780,7 @@ class TransactionFormController extends ChangeNotifier {
       endDate: recurrentRule.ruleRecurrentLimit?.endDate,
       remainingTransactions:
           recurrentRule.ruleRecurrentLimit?.remainingIterations,
+      installments: canPayInInstallments ? installments : null,
       valueInDestiny: transactionType.isTransfer
           ? valueInDestinyToNumber
           : null,
@@ -1030,6 +1042,8 @@ class TransactionFormController extends ChangeNotifier {
     status = transaction.status;
     selectedCategory = transaction.category;
     recurrentRule = transaction.recurrentInfo;
+    installments = transaction.installments;
+    installmentsController.text = installments?.toString() ?? '';
     tags = [...transaction.tags];
 
     notesController.text = transaction.notes ?? '';
@@ -1103,6 +1117,16 @@ class TransactionFormController extends ChangeNotifier {
 
   void setRecurrency(RecurrencyData v) {
     recurrentRule = v;
+    _safeNotify();
+  }
+
+  /// Fewer than 2 installments (or an empty field) means paying at once.
+  void _onInstallmentsTextChanged() {
+    final n = int.tryParse(installmentsController.text);
+    final value = n != null && n >= 2 ? n : null;
+    if (value == installments) return;
+
+    installments = value;
     _safeNotify();
   }
 

@@ -210,6 +210,10 @@
     "welcome-back-evening": "Evening, boss!",
     "welcome-back-night": "Up past bedtime?",
     "total-balance": "Total balance",
+    "balance-scope": {
+      "net-worth": "Net worth",
+      "available": "Available"
+    },
     "no-income-this-period": "No income in this period",
     "no-expenses-this-period": "No expenses in this period",
     "vs-previous-period": "vs prev.",
@@ -542,7 +546,12 @@
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date",
       "extra-info-section": "Extra info",
-      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics."
+      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics.",
+      "INSTALLMENTS": {
+        "title": "Interest-free installments (months)",
+        "months": "months",
+        "per_month": "per month"
+      }
     },
     "REVERSED": {
       "title": "Inverse transaction",
@@ -677,7 +686,50 @@
       "saving.descr": "Money only comes in or out via transfers from other accounts. Perfect to start saving.",
       "investment": "Investment account",
       "investment.descr": "A broker, crypto exchange, or portfolio account that holds cash plus financial holdings (stocks, funds, crypto...).",
+      "credit": "Credit card",
+      "credit.descr": "A credit card with a monthly billing cycle. Its balance is what you owe, and it shows the statement to pay, the payment due date and your available credit.",
       "locked_warn": "This account can no longer change its type, since it already has holdings, trades or snapshots."
+    },
+    "CREDIT": {
+      "title": "Credit card",
+      "to_pay": "Left to pay on the statement",
+      "statement_paid": "Statement paid",
+      "nothing_to_pay": "Nothing to pay on this statement",
+      "due_in": {
+        "one": "Due tomorrow, {{date}}",
+        "other": "Due in {{n}} days, {{date}}"
+      },
+      "due_today": "Due today",
+      "due_overdue": "Overdue since {{date}}",
+      "cutoff_in": {
+        "one": "Statement closes tomorrow, {{date}}",
+        "other": "Statement closes in {{n}} days, {{date}}"
+      },
+      "cutoff_today": "Statement closes today",
+      "available": "Available credit",
+      "limit": "Credit limit",
+      "utilization": "{{x}} of the limit in use",
+      "min_payment": "Minimum payment",
+      "min_payment_hint": "Estimate. Your bank may compute it differently",
+      "statement_balance": "Statement balance ({{date}})",
+      "payments_since_cutoff": "Paid since the cut-off",
+      "period_charges": "Charges for the next statement",
+      "period_charges_hint": "Payable by {{date}}",
+      "total_debt": "Total debt",
+      "installments_pending": "Pending in installments",
+      "installments_pending_hint": "Billed in later statements. Tap to see them",
+      "upcoming_installments": "Upcoming installments",
+      "statement_of": "Statement of {{date}}",
+      "cutoff_day": "Cut-off day",
+      "due_day": "Payment due day",
+      "FORM": {
+        "day_descr": "Day of the month (1-31)",
+        "day_validation": "Enter a day between 1 and 31",
+        "min_payment_pct": "Minimum payment",
+        "min_payment_pct_descr": "Share of the statement your bank asks as minimum payment. Optional",
+        "pct_validation": "Enter a percentage between 0 and 100",
+        "initial_debt": "Current debt"
+      }
     },
     "TRACKING_MODES": {
       "title": "Tracking mode",

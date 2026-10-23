@@ -211,6 +211,10 @@
     "welcome-back-evening": "¡Buenas, jefe!",
     "welcome-back-night": "¿Trasnochando?",
     "total-balance": "Saldo total",
+    "balance-scope": {
+      "net-worth": "Patrimonio",
+      "available": "Disponible"
+    },
     "no-income-this-period": "Sin ingresos en este periodo",
     "no-expenses-this-period": "Sin gastos en este periodo",
     "vs-previous-period": "vs ant.",
@@ -529,7 +533,12 @@
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción",
       "extra-info-section": "Información adicional",
-      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas."
+      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas.",
+      "INSTALLMENTS": {
+        "title": "Meses sin intereses",
+        "months": "meses",
+        "per_month": "al mes"
+      }
     },
     "REVERSED": {
       "title": "Transacción invertida",
@@ -664,7 +673,50 @@
       "saving.descr": "Solo podrás añadir y retirar dinero de ella desde otras cuentas. Perfecta para empezar a ahorrar",
       "investment": "Cuenta de inversión",
       "investment.descr": "Una cuenta de broker, exchange de criptomonedas o cartera de inversión que puede incluir activos. Registra tu capital invertido y actualiza el valor de cada activo manualmente mediante valoraciones",
+      "credit": "Tarjeta de crédito",
+      "credit.descr": "Una tarjeta de crédito con ciclo mensual. Su saldo es lo que debes, y muestra lo que hay que pagar del corte, la fecha límite de pago y tu crédito disponible.",
       "locked_warn": "Esta cuenta ya no puede cambiar de tipo, porque ya tiene posiciones, operaciones o instantáneas."
+    },
+    "CREDIT": {
+      "title": "Tarjeta de crédito",
+      "to_pay": "Por pagar del corte",
+      "statement_paid": "Corte pagado",
+      "nothing_to_pay": "Nada que pagar en este corte",
+      "due_in": {
+        "one": "Vence mañana, {{date}}",
+        "other": "Vence en {{n}} días, {{date}}"
+      },
+      "due_today": "Vence hoy",
+      "due_overdue": "Vencido desde el {{date}}",
+      "cutoff_in": {
+        "one": "Corta mañana, {{date}}",
+        "other": "Corta en {{n}} días, {{date}}"
+      },
+      "cutoff_today": "Corta hoy",
+      "available": "Crédito disponible",
+      "limit": "Límite de crédito",
+      "utilization": "{{x}} del límite en uso",
+      "min_payment": "Pago mínimo",
+      "min_payment_hint": "Estimado. Tu banco puede calcularlo distinto",
+      "statement_balance": "Saldo al corte ({{date}})",
+      "payments_since_cutoff": "Pagado desde el corte",
+      "period_charges": "Cargos del próximo corte",
+      "period_charges_hint": "Se pagan a más tardar el {{date}}",
+      "total_debt": "Deuda total",
+      "installments_pending": "Pendiente a meses",
+      "installments_pending_hint": "Se cobra en los siguientes cortes. Toca para verlos",
+      "upcoming_installments": "Próximas mensualidades",
+      "statement_of": "Corte del {{date}}",
+      "cutoff_day": "Día de corte",
+      "due_day": "Día límite de pago",
+      "FORM": {
+        "day_descr": "Día del mes (1-31)",
+        "day_validation": "Escribe un día entre 1 y 31",
+        "min_payment_pct": "Pago mínimo",
+        "min_payment_pct_descr": "Porcentaje del corte que tu banco pide como pago mínimo. Opcional",
+        "pct_validation": "Escribe un porcentaje entre 0 y 100",
+        "initial_debt": "Deuda actual"
+      }
     },
     "TRACKING_MODES": {
       "title": "Modo de seguimiento",
