@@ -799,7 +799,7 @@ class TransactionFormController extends ChangeNotifier {
       endDate: recurrentRule.ruleRecurrentLimit?.endDate,
       remainingTransactions:
           recurrentRule.ruleRecurrentLimit?.remainingIterations,
-      valueInDestiny: valueInDestiny,
+      valueInDestiny: transactionType.isTransfer ? valueInDestiny : null,
       categoryID: transactionType.isIncomeOrExpense
           ? selectedCategory?.id
           : null,
