@@ -72,6 +72,10 @@ class _DualLegBody extends StatelessWidget {
       final sourceAmount = c.transactionValue.abs();
       final defaultDest = sourceAmount * rate;
       final destAmount = c.valueInDestinyToNumber ?? defaultDest;
+      final appliedRate =
+          custom && c.valueInDestinyToNumber != null && sourceAmount > 0
+          ? destAmount / sourceAmount
+          : null;
 
       void openAmount({required bool isSource}) {
         if (isSource) {
@@ -124,7 +128,8 @@ class _DualLegBody extends StatelessWidget {
                   active: custom,
                   onPressed: () => c.setCustomTransferAmounts(!custom),
                 ),
-                if (differentCurrency) _FxChip(rate: rate),
+                if (differentCurrency)
+                  _FxChip(rate: rate, appliedRate: appliedRate),
                 if (showDifference)
                   _InfoChip(
                     label:
@@ -501,18 +506,27 @@ class _InfoChip extends StatelessWidget {
 }
 
 class _FxChip extends StatelessWidget {
-  const _FxChip({required this.rate});
+  const _FxChip({required this.rate, this.appliedRate});
 
   final double rate;
+  final double? appliedRate;
+
+  String _formatRate(double rate) => UINumberFormatter.decimal(
+    amountToConvert: rate,
+    decimalDigits: 4,
+  ).getFormattedAmount();
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final appliedRate = this.appliedRate;
+    final label = appliedRate == null
+        ? _formatRate(rate)
+        : '${_formatRate(rate)} · ${_formatRate(appliedRate)} ${t.assets.holdings.rate_effective}';
+
     return Tooltip(
-      message: Translations.of(context).currencies.exchange_rate,
-      child: _InfoChip(
-        icon: Icons.swap_horiz_rounded,
-        label: rate.toStringAsFixed(rate == rate.roundToDouble() ? 0 : 4),
-      ),
+      message: t.currencies.exchange_rate,
+      child: _InfoChip(icon: Icons.swap_horiz_rounded, label: label),
     );
   }
 }
