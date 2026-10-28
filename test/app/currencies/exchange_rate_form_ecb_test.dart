@@ -52,12 +52,17 @@ void main() {
 
       final output = Platform.environment['MONEKIN_REVIEW_IMAGES'];
       if (output != null) {
-        final render = boundary.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-        final image = await render.toImage();
-        final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
-        await Directory(output).create(recursive: true);
-        await File('$output/ecb-form-${width.toInt()}.png').writeAsBytes(bytes!.buffer.asUint8List());
-        image.dispose();
+        await tester.runAsync(() async {
+          final render = boundary.currentContext!.findRenderObject()! as RenderRepaintBoundary;
+          final image = await render.toImage();
+          try {
+            final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+            await Directory(output).create(recursive: true);
+            await File('$output/ecb-form-${width.toInt()}.png').writeAsBytes(bytes!.buffer.asUint8List());
+          } finally {
+            image.dispose();
+          }
+        });
       }
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pumpAndSettle();
