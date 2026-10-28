@@ -8,7 +8,6 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -19,6 +18,7 @@ import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
@@ -36,11 +36,8 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   List<String> _failedCurrencies = [];
 
   Future<void> _updateRates() async {
+    if (_updatingRates) return;
     final t = Translations.of(context);
-    final preferred = await CurrencyService.instance
-        .ensureAndGetPreferredCurrency()
-        .first;
-
     setState(() {
       _updatingRates = true;
       _failedCurrencies = [];
@@ -50,18 +47,26 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
     );
 
     try {
+      final preferred = await CurrencyService.instance
+          .ensureAndGetPreferredCurrency()
+          .first;
       final result = await syncEcbRates(preferredCurrency: preferred.code);
       if (!mounted) return;
 
       setState(() => _failedCurrencies = result.failedCurrencies);
 
-      MonekinSnackbar.success(
+      if (result.showSuccess) MonekinSnackbar.success(
         SnackbarParams(
           result.addedRates == 0
               ? t.currencies.update_rates_up_to_date
               : t.currencies.update_rates_success(added: result.addedRates),
           showAtTop: false,
+          message: frankfurterEcbCredit,
         ),
+      );
+    } catch (_) {
+      if (mounted) MonekinSnackbar.error(
+        SnackbarParams(t.currencies.update_rates_error, showAtTop: false),
       );
     } finally {
       if (mounted) setState(() => _updatingRates = false);
@@ -111,14 +116,11 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       context,
       dialogTitle: t.currencies.change_preferred_currency_title,
       contentParagraphs: [Text(t.currencies.change_preferred_currency_msg)],
-    ).then((isConfirmed) {
+    ).then((isConfirmed) async {
       if (isConfirmed != true) return;
 
-      UserSettingService.instance
-          .setItem(SettingKey.preferredCurrency, newCurrency.code)
-          .then((value) {
-            ExchangeRateService.instance.deleteExchangeRates();
-          });
+      await ExchangeRateService.instance.changePreferredCurrency(newCurrency.code);
+      if (mounted) setState(() => _failedCurrencies = []);
     });
   }
 

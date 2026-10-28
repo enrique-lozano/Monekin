@@ -29,6 +29,8 @@ class FrankfurterEcbClient {
 
   static const _timeout = Duration(seconds: 8);
 
+  void close() => _client.close();
+
   Future<String> _get(Uri uri, String label) async {
     final response = await _client
         .get(

@@ -15,6 +15,7 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/ecb_autofill.dart';
 import 'package:monekin/core/services/exchange-rate/today_rate_plan.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -36,6 +37,9 @@ class ExchangeRateFormDialog extends StatefulWidget {
     super.key,
     this.currency,
     this.exchangeRateToEdit,
+    this.preferredCurrency,
+    this.exchangeRates,
+    this.ecbClient,
   }) : assert(
          currency == null || exchangeRateToEdit == null,
          'You cannot provide both a currency and an exchange rate to edit',
@@ -43,6 +47,9 @@ class ExchangeRateFormDialog extends StatefulWidget {
 
   final Currency? currency;
   final ExchangeRate? exchangeRateToEdit;
+  final Currency? preferredCurrency;
+  final ExchangeRateService? exchangeRates;
+  final FrankfurterEcbClient? ecbClient;
 
   @override
   State<ExchangeRateFormDialog> createState() => _ExchangeRateFormDialogState();
@@ -62,7 +69,10 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
   bool get isEditMode => widget.exchangeRateToEdit != null;
 
   /// ECB rate for the chosen currency and date, if the ECB has one.
-  double? _ecbRate;
+  final _ecbAutofill = EcbAutofill();
+  late final _ecbClient = widget.ecbClient ?? FrankfurterEcbClient();
+  ExchangeRateService get _exchangeRates => widget.exchangeRates ?? ExchangeRateService.instance;
+  double? get _ecbRate => _ecbAutofill.rate;
   bool _loadingEcbRate = false;
   int _ecbRequestId = 0;
 
@@ -75,6 +85,12 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     final currency = _currency;
     final preferred = userPreferredCurrency;
     final requestId = ++_ecbRequestId;
+    rateController.text = _ecbAutofill.select(
+      currency: currency?.code,
+      preferred: preferred?.code,
+      date: date,
+      text: rateController.text,
+    );
 
     final availability = ecbFetchAvailability(
       currency: currency?.code,
@@ -83,21 +99,20 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
     if (isEditMode || availability != EcbFetchAvailability.available) {
       setState(() {
-        _ecbRate = null;
+        _ecbAutofill.rate = null;
         _loadingEcbRate = false;
       });
       return;
     }
 
-    final previousEcbRate = _ecbRate;
     setState(() {
-      _ecbRate = null;
+      _ecbAutofill.rate = null;
       _loadingEcbRate = true;
     });
 
     double? rate;
     try {
-      rate = (await FrankfurterEcbClient().latest(
+      rate = (await _ecbClient.latest(
         from: currency!.code,
         to: preferred!.code,
         date: date,
@@ -108,14 +123,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
     if (!mounted || requestId != _ecbRequestId) return;
 
-    final typed = rateController.text.trim();
-    final untouched =
-        typed.isEmpty || double.tryParse(typed) == previousEcbRate;
-
     setState(() {
-      _ecbRate = rate;
       _loadingEcbRate = false;
-      if (rate != null && untouched) rateController.text = rate.toString();
+      rateController.text = _ecbAutofill.receive(rate, rateController.text);
     });
   }
 
@@ -127,8 +137,9 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     Widget child = const SizedBox.shrink();
 
     if (_loadingEcbRate) {
-      child = Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      child = Wrap(
+        alignment: WrapAlignment.end,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           const SizedBox(
             width: 12,
@@ -152,13 +163,14 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
         ),
       );
     } else if (_ecbRate != null) {
-      child = Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+      child = Wrap(
+        alignment: WrapAlignment.end,
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Text(form.ecb_value(rate: _ecbRate.toString()), style: style),
           TextButton.icon(
             onPressed: () => setState(() {
-              rateController.text = _ecbRate.toString();
+              rateController.text = _ecbAutofill.restore();
             }),
             icon: const Icon(Icons.sync_rounded, size: 14),
             label: Text(form.ecb_use_value),
@@ -169,7 +181,16 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
     return AnimatedExpanded(
       expand: _loadingEcbRate || _ecbRate != null,
-      child: Padding(padding: const EdgeInsets.only(top: 4), child: child),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            child,
+            Text(frankfurterEcbCredit, style: style),
+          ],
+        ),
+      ),
     );
   }
 
@@ -187,14 +208,29 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
       _currency = widget.currency;
     }
 
+    if (widget.preferredCurrency != null) {
+      userPreferredCurrency = widget.preferredCurrency;
+      unawaited(_loadEcbRate());
+      return;
+    }
+
     CurrencyService.instance.ensureAndGetPreferredCurrency().first.then((
       value,
     ) {
+      if (!mounted) return;
       setState(() {
         userPreferredCurrency = value;
       });
       unawaited(_loadEcbRate());
     });
+  }
+
+  @override
+  void dispose() {
+    _ecbRequestId++;
+    if (widget.ecbClient == null) _ecbClient.close();
+    rateController.dispose();
+    super.dispose();
   }
 
   void onSubmitted() {
@@ -254,11 +290,11 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                   context,
                   CurrencySelectorModal(
                     preselectedCurrency: _currency,
-                    onCurrencySelected: (newCurrency) => {
+                    onCurrencySelected: (newCurrency) {
                       setState(() {
                         _currency = newCurrency;
-                      }),
-                      _loadEcbRate(),
+                      });
+                      unawaited(_loadEcbRate());
                     },
                   ),
                 );
@@ -325,6 +361,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       isRequired: true,
                     ),
                     onChanged: (value) {
+                      _ecbAutofill.userEdited();
                       setState(() {});
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -348,7 +385,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
             if (_currency != null)
               StreamBuilder(
-                stream: ExchangeRateService.instance
+                stream: _exchangeRates
                     .getExchangeRateItem(_currency!.code, date)
                     .map((rate) => rate != null),
                 initialData: false,

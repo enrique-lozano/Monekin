@@ -9,12 +9,16 @@ class EcbSyncResult {
   const EcbSyncResult({
     required this.addedRates,
     required this.failedCurrencies,
+    this.cancelled = false,
   });
 
   final int addedRates;
 
   /// Codes of the currencies that could not be updated.
   final List<String> failedCurrencies;
+  final bool cancelled;
+
+  bool get showSuccess => !cancelled && (addedRates > 0 || failedCurrencies.isEmpty);
 }
 
 /// Saves today's ECB rate for every currency that already has a rate. Days
@@ -22,10 +26,15 @@ class EcbSyncResult {
 Future<EcbSyncResult> syncEcbRates({
   required String preferredCurrency,
   FrankfurterEcbClient? client,
+  ExchangeRateService? exchangeRates,
+  DateTime? now,
 }) async {
+  final ownsClient = client == null;
   client ??= FrankfurterEcbClient();
-  final lastRates = await ExchangeRateService.instance.getExchangeRates().first;
-  final today = DateUtils.dateOnly(DateTime.now());
+  exchangeRates ??= ExchangeRateService.instance;
+  try {
+  final lastRates = await exchangeRates.getExchangeRates().first;
+  final today = DateUtils.dateOnly(now ?? DateTime.now());
 
   var addedRates = 0;
   final failed = <String>[];
@@ -33,7 +42,9 @@ Future<EcbSyncResult> syncEcbRates({
   for (final last in lastRates) {
     final code = last.currencyCode;
 
-    if (DateUtils.isSameDay(last.date, today)) continue;
+    if (await exchangeRates.getExchangeRateItem(code, today).first != null) {
+      continue;
+    }
 
     final availability = ecbFetchAvailability(
       currency: code,
@@ -47,19 +58,29 @@ Future<EcbSyncResult> syncEcbRates({
     try {
       final quote = await client.latest(from: code, to: preferredCurrency);
 
-      await ExchangeRateService.instance.insertOrUpdateExchangeRate(
+      final inserted = await exchangeRates.insertExchangeRateIfMissing(
         ExchangeRate(
           id: generateUUID(),
           currency: last.currency,
           date: today,
           exchangeRate: quote.rate,
         ),
+        preferredCurrency: preferredCurrency,
       );
-      addedRates++;
+      if (inserted) addedRates++;
+    } on ExchangeRateBaseChanged {
+      return const EcbSyncResult(
+        addedRates: 0,
+        failedCurrencies: [],
+        cancelled: true,
+      );
     } catch (_) {
       failed.add(code);
     }
   }
 
   return EcbSyncResult(addedRates: addedRates, failedCurrencies: failed);
+  } finally {
+    if (ownsClient) client.close();
+  }
 }

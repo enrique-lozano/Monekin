@@ -1,10 +1,15 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../app_db.dart';
+
+class ExchangeRateBaseChanged implements Exception {
+  const ExchangeRateBaseChanged();
+}
 
 class ExchangeRateService {
   final AppDB db;
@@ -17,6 +22,39 @@ class ExchangeRateService {
   /// Creates a service bound to a specific (test) database.
   @visibleForTesting
   ExchangeRateService.forTesting(this.db);
+
+  /// Checks the quote's base and inserts a missing date in the same transaction.
+  Future<bool> insertExchangeRateIfMissing(
+    ExchangeRateInDB rate, {
+    required String preferredCurrency,
+  }) {
+    return db.transaction(() async {
+      final setting = await (db.select(db.userSettings)..where(
+        (row) => row.settingKey.equalsValue(SettingKey.preferredCurrency),
+      )).getSingleOrNull();
+      if (setting?.settingValue != preferredCurrency) {
+        throw const ExchangeRateBaseChanged();
+      }
+      final inserted = await db.into(db.exchangeRates).insertReturningOrNull(
+        rate,
+        mode: InsertMode.insertOrIgnore,
+      );
+      return inserted != null;
+    });
+  }
+
+  Future<void> changePreferredCurrency(String currencyCode) async {
+    await db.transaction(() async {
+      await db.into(db.userSettings).insertOnConflictUpdate(
+        UserSetting(
+          settingKey: SettingKey.preferredCurrency,
+          settingValue: currencyCode,
+        ),
+      );
+      await deleteExchangeRates();
+    });
+    appStateSettings[SettingKey.preferredCurrency] = currencyCode;
+  }
 
   Future<int> insertOrUpdateExchangeRate(ExchangeRateInDB toInsert) async {
     final elToCompare = (await (getLastExchangeRateOf(
