@@ -12,16 +12,100 @@ import 'package:monekin/core/database/services/user-setting/user_setting_service
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
+import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
 
-class CurrencyManagerPage extends StatelessWidget {
+class CurrencyManagerPage extends StatefulWidget {
   const CurrencyManagerPage({super.key});
+
+  @override
+  State<CurrencyManagerPage> createState() => _CurrencyManagerPageState();
+}
+
+class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
+  bool _updatingRates = false;
+  List<String> _failedCurrencies = [];
+
+  Future<void> _updateRates() async {
+    final t = Translations.of(context);
+    final preferred = await CurrencyService.instance
+        .ensureAndGetPreferredCurrency()
+        .first;
+
+    setState(() {
+      _updatingRates = true;
+      _failedCurrencies = [];
+    });
+    MonekinSnackbar.info(
+      SnackbarParams(t.currencies.update_rates_loading, showAtTop: false),
+    );
+
+    try {
+      final result = await syncEcbRates(preferredCurrency: preferred.code);
+      if (!mounted) return;
+
+      setState(() => _failedCurrencies = result.failedCurrencies);
+
+      MonekinSnackbar.success(
+        SnackbarParams(
+          result.addedRates == 0
+              ? t.currencies.update_rates_up_to_date
+              : t.currencies.update_rates_success(
+                  added: result.addedRates,
+                  currencies: result.updatedCurrencies,
+                ),
+          showAtTop: false,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _updatingRates = false);
+    }
+  }
+
+  Widget _buildUpdateAction(BuildContext context) {
+    final t = Translations.of(context);
+    final isWide = BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg);
+
+    return StreamBuilder(
+      stream: ExchangeRateService.instance.getExchangeRates(),
+      builder: (context, snapshot) {
+        if (snapshot.data?.isNotEmpty != true) return const SizedBox.shrink();
+
+        final onPressed = _updatingRates ? null : _updateRates;
+        final icon = _updatingRates
+            ? const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Icon(Icons.sync_rounded);
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: isWide
+              ? FilledButton.tonalIcon(
+                  onPressed: onPressed,
+                  icon: icon,
+                  label: Text(t.currencies.update_rates),
+                )
+              : IconButton.filledTonal(
+                  tooltip: t.currencies.update_rates,
+                  onPressed: onPressed,
+                  icon: icon,
+                ),
+        );
+      },
+    );
+  }
 
   void changePreferredCurrency(BuildContext context, Currency newCurrency) {
     final t = Translations.of(context);
@@ -58,6 +142,7 @@ class CurrencyManagerPage extends StatelessWidget {
 
     return PageFramework(
       title: Translations.of(context).currencies.currency_manager,
+      appBarActions: [_buildUpdateAction(context)],
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 12).withSafeBottom(context),
         child: Column(
@@ -134,6 +219,15 @@ class CurrencyManagerPage extends StatelessWidget {
               },
             ),
             createListSeparator(context, t.currencies.exchange_rates),
+
+            for (final code in _failedCurrencies)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                child: InlineInfoCard(
+                  text: t.currencies.update_rates_failure(currency: code),
+                  mode: InlineInfoCardMode.warn,
+                ),
+              ),
 
             StreamBuilder(
               stream: ExchangeRateService.instance.getExchangeRates(),

@@ -29,30 +29,3 @@ EcbFetchAvailability ecbFetchAvailability({
   }
   return EcbFetchAvailability.available;
 }
-
-enum RateFillPlan { fill, confirmReplace, dateMismatch }
-
-bool isSameCalendarDay(DateTime a, DateTime b) {
-  return a.year == b.year && a.month == b.month && a.day == b.day;
-}
-
-/// Decide how a fetched ECB quote may go into the exchange-rate form.
-///
-/// A rate the user already typed is never replaced without confirmation.
-/// When the form date cannot change (editing a saved rate), the quote is only
-/// used if it belongs to that same day: the ECB business day can be earlier
-/// than the local clock on weekends and before the daily fix.
-RateFillPlan planRateFill({
-  required String currentText,
-  required double quoteRate,
-  required DateTime quoteDate,
-  required DateTime formDate,
-  required bool dateLocked,
-}) {
-  if (dateLocked && !isSameCalendarDay(quoteDate, formDate)) {
-    return RateFillPlan.dateMismatch;
-  }
-  final typed = double.tryParse(currentText.trim());
-  if (typed != null && typed != quoteRate) return RateFillPlan.confirmReplace;
-  return RateFillPlan.fill;
-}

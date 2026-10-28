@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
@@ -5,9 +7,7 @@ import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
-import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
-import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.dart';
@@ -61,125 +61,115 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
   bool get isEditMode => widget.exchangeRateToEdit != null;
 
-  bool _fetchingEcbRate = false;
+  /// ECB rate for the chosen currency and date, if the ECB has one.
+  double? _ecbRate;
+  bool _loadingEcbRate = false;
+  int _ecbRequestId = 0;
 
-  /// Fill the rate field with the latest ECB reference rate. Nothing is
-  /// stored until the user saves the form.
-  Future<void> _fetchEcbRate() async {
-    final t = Translations.of(context);
-    final form = t.currencies.exchange_rate_form;
+  bool get _rateMatchesEcb =>
+      _ecbRate != null && double.tryParse(rateController.text) == _ecbRate;
+
+  /// Looks up the ECB rate for the current currency/date and autofills the
+  /// field unless the user already typed their own value.
+  Future<void> _loadEcbRate() async {
     final currency = _currency;
     final preferred = userPreferredCurrency;
-    if (currency == null || preferred == null || _fetchingEcbRate) return;
+    final requestId = ++_ecbRequestId;
 
-    setState(() => _fetchingEcbRate = true);
-    try {
-      final quote = await FrankfurterEcbClient().latest(
-        from: currency.code,
-        to: preferred.code,
-      );
-      if (!mounted) return;
+    final availability = ecbFetchAvailability(
+      currency: currency?.code,
+      preferred: preferred?.code,
+    );
 
-      final quoteDay = getMMMdDateFormatBasedOnYear(
-        quote.date,
-      ).dateFormat.format(quote.date);
-      final plan = planRateFill(
-        currentText: rateController.text,
-        quoteRate: quote.rate,
-        quoteDate: quote.date,
-        formDate: date,
-        dateLocked: isEditMode,
-      );
-
-      if (plan == RateFillPlan.dateMismatch) {
-        MonekinSnackbar.info(
-          SnackbarParams(
-            form.fetch_today_date_mismatch(date: quoteDay),
-            message: form.fetch_today_source,
-          ),
-        );
-        return;
-      }
-
-      if (plan == RateFillPlan.confirmReplace) {
-        final confirmed = await confirmDialog(
-          context,
-          dialogTitle: form.fetch_today_replace_title,
-          contentParagraphs: [
-            Text(
-              form.fetch_today_replace_body(
-                date: quoteDay,
-                rate: quote.rate.toString(),
-              ),
-            ),
-          ],
-          showCancelButton: true,
-          confirmationText: form.fetch_today_replace,
-        );
-        if (confirmed != true || !mounted) return;
-      }
-
+    if (isEditMode || availability != EcbFetchAvailability.available) {
       setState(() {
-        rateController.text = quote.rate.toString();
-        if (!isEditMode) date = quote.date;
+        _ecbRate = null;
+        _loadingEcbRate = false;
       });
-      MonekinSnackbar.success(
-        SnackbarParams(
-          form.fetch_today_filled(date: quoteDay),
-          message: form.fetch_today_source,
-        ),
-      );
-    } catch (error) {
-      if (!mounted) return;
-      MonekinSnackbar.error(
-        SnackbarParams(form.fetch_today_error, message: '$error'),
-      );
-    } finally {
-      if (mounted) setState(() => _fetchingEcbRate = false);
+      return;
     }
+
+    final previousEcbRate = _ecbRate;
+    setState(() {
+      _ecbRate = null;
+      _loadingEcbRate = true;
+    });
+
+    double? rate;
+    try {
+      rate = (await FrankfurterEcbClient().latest(
+        from: currency!.code,
+        to: preferred!.code,
+        date: date,
+      )).rate;
+    } catch (_) {
+      rate = null;
+    }
+
+    if (!mounted || requestId != _ecbRequestId) return;
+
+    final typed = rateController.text.trim();
+    final untouched =
+        typed.isEmpty || double.tryParse(typed) == previousEcbRate;
+
+    setState(() {
+      _ecbRate = rate;
+      _loadingEcbRate = false;
+      if (rate != null && untouched) rateController.text = rate.toString();
+    });
   }
 
-  Widget _buildEcbFetchAction(Translations t) {
-    final availability = ecbFetchAvailability(
-      currency: _currency?.code,
-      preferred: userPreferredCurrency?.code,
-    );
-    // The currency field already explains why the preferred currency has no
-    // rate, and nothing can be fetched before a currency is chosen.
-    if (availability == EcbFetchAvailability.missingCurrency ||
-        availability == EcbFetchAvailability.samePreferred) {
-      return const SizedBox.shrink();
-    }
-
+  Widget _buildEcbIndicator(Translations t) {
     final form = t.currencies.exchange_rate_form;
-    final supported = availability == EcbFetchAvailability.available;
+    final theme = Theme.of(context);
+    final style = theme.textTheme.labelSmall;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 12),
-      child: Row(
+    Widget child = const SizedBox.shrink();
+
+    if (_loadingEcbRate) {
+      child = Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          TextButton.icon(
-            onPressed: supported && !_fetchingEcbRate ? _fetchEcbRate : null,
-            icon: _fetchingEcbRate
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.cloud_download_rounded, size: 18),
-            label: Text(form.fetch_today),
+          const SizedBox(
+            width: 12,
+            height: 12,
+            child: CircularProgressIndicator(strokeWidth: 2),
           ),
           const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              supported
-                  ? form.fetch_today_source
-                  : form.fetch_today_unsupported,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+          Text(form.ecb_loading, style: style),
+        ],
+      );
+    } else if (_ecbRate != null && _rateMatchesEcb) {
+      child = Align(
+        alignment: Alignment.centerRight,
+        child: Chip(
+          visualDensity: VisualDensity.compact,
+          avatar: const Icon(Icons.sync_rounded, size: 14),
+          label: Text(form.ecb_filled),
+          labelStyle: style,
+          side: BorderSide.none,
+          backgroundColor: theme.colorScheme.primaryContainer,
+        ),
+      );
+    } else if (_ecbRate != null) {
+      child = Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(form.ecb_value(rate: _ecbRate.toString()), style: style),
+          TextButton.icon(
+            onPressed: () => setState(() {
+              rateController.text = _ecbRate.toString();
+            }),
+            icon: const Icon(Icons.sync_rounded, size: 14),
+            label: Text(form.ecb_use_value),
           ),
         ],
-      ),
+      );
+    }
+
+    return AnimatedExpanded(
+      expand: _loadingEcbRate || _ecbRate != null,
+      child: Padding(padding: const EdgeInsets.only(top: 4), child: child),
     );
   }
 
@@ -203,6 +193,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
       setState(() {
         userPreferredCurrency = value;
       });
+      unawaited(_loadEcbRate());
     });
   }
 
@@ -267,6 +258,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       setState(() {
                         _currency = newCurrency;
                       }),
+                      _loadEcbRate(),
                     },
                   ),
                 );
@@ -306,9 +298,6 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
               children: [
                 Expanded(
                   child: DateTimeFormField(
-                    // Rebuild when the ECB fetch moves the date to the
-                    // quote's business day; initialDate is read only once.
-                    key: ValueKey(date),
                     enabled: !isEditMode,
                     decoration: InputDecoration(
                       labelText: '${t.general.time.date} *',
@@ -322,6 +311,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       setState(() {
                         date = value;
                       });
+                      unawaited(_loadEcbRate());
                     },
                   ),
                 ),
@@ -354,7 +344,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                 ),
               ],
             ),
-            _buildEcbFetchAction(t),
+            _buildEcbIndicator(t),
 
             if (_currency != null)
               StreamBuilder(

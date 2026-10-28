@@ -29,20 +29,7 @@ class FrankfurterEcbClient {
 
   static const _timeout = Duration(seconds: 8);
 
-  /// Latest ECB rate: how many [to] units one [from] unit buys.
-  ///
-  /// Uses Frankfurter v2 pinned to the ECB provider. Unpinned v2 blends
-  /// other sources, and v1 is frozen.
-  Future<FrankfurterRate> latest({
-    required String from,
-    required String to,
-  }) async {
-    final base = from.trim().toLowerCase();
-    final quote = to.trim().toLowerCase();
-    final uri = Uri.parse(
-      'https://api.frankfurter.dev/v2/rate/$base/$quote',
-    ).replace(queryParameters: const {'providers': 'ecb'});
-
+  Future<String> _get(Uri uri, String label) async {
     final response = await _client
         .get(
           uri,
@@ -55,12 +42,73 @@ class FrankfurterEcbClient {
 
     if (response.statusCode != 200) {
       throw FrankfurterEcbException(
-        'Frankfurter returned HTTP ${response.statusCode} for $base/$quote',
+        'Frankfurter returned HTTP ${response.statusCode} for $label',
       );
     }
 
-    return parseFrankfurterRate(response.body);
+    return response.body;
   }
+
+  /// ECB rate: how many [to] units one [from] unit buys. Without a [date] it
+  /// is the latest one; otherwise the one of the closest ECB business day
+  /// on or before it.
+  ///
+  /// Uses Frankfurter v2 pinned to the ECB provider. Unpinned v2 blends
+  /// other sources, and v1 is frozen.
+  Future<FrankfurterRate> latest({
+    required String from,
+    required String to,
+    DateTime? date,
+  }) async {
+    final base = from.trim().toLowerCase();
+    final quote = to.trim().toLowerCase();
+    final uri = Uri.parse('https://api.frankfurter.dev/v2/rate/$base/$quote')
+        .replace(
+          queryParameters: {
+            'providers': 'ecb',
+            if (date != null) 'date': _formatIsoDate(date),
+          },
+        );
+
+    return parseFrankfurterRate(await _get(uri, '$base/$quote'));
+  }
+
+  /// ECB rates of every business day between [start] and [end], both included.
+  Future<List<FrankfurterRate>> series({
+    required String from,
+    required String to,
+    required DateTime start,
+    required DateTime end,
+  }) async {
+    final base = from.trim().toLowerCase();
+    final quote = to.trim().toLowerCase();
+    final uri = Uri.parse('https://api.frankfurter.dev/v2/rates').replace(
+      queryParameters: {
+        'base': base,
+        'quotes': quote,
+        'from': _formatIsoDate(start),
+        'to': _formatIsoDate(end),
+        'providers': 'ecb',
+      },
+    );
+
+    return parseFrankfurterSeries(await _get(uri, '$base/$quote'));
+  }
+}
+
+String _formatIsoDate(DateTime date) =>
+    '${date.year.toString().padLeft(4, '0')}-'
+    '${date.month.toString().padLeft(2, '0')}-'
+    '${date.day.toString().padLeft(2, '0')}';
+
+List<FrankfurterRate> parseFrankfurterSeries(String body) {
+  final decoded = jsonDecode(body);
+  if (decoded is! List) {
+    throw FrankfurterEcbException('Unexpected Frankfurter response');
+  }
+
+  return [for (final item in decoded) parseFrankfurterRate(jsonEncode(item))]
+    ..sort((a, b) => a.date.compareTo(b.date));
 }
 
 FrankfurterRate parseFrankfurterRate(String body) {

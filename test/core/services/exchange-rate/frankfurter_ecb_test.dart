@@ -73,4 +73,32 @@ void main() {
       throwsA(isA<FrankfurterEcbException>()),
     );
   });
+
+  test('series asks for the date range and sorts the quotes', () async {
+    late Uri requested;
+    final client = FrankfurterEcbClient(
+      client: _StubClient((request) async {
+        requested = request.url;
+        return _json(
+          200,
+          '[{"date":"2026-10-21","base":"USD","quote":"EUR","rate":0.9},'
+          '{"date":"2026-10-20","base":"USD","quote":"EUR","rate":0.8}]',
+          request,
+        );
+      }),
+    );
+
+    final quotes = await client.series(
+      from: 'USD',
+      to: 'EUR',
+      start: DateTime(2026, 10, 20),
+      end: DateTime(2026, 10, 21),
+    );
+
+    expect(quotes.map((q) => q.rate), [0.8, 0.9]);
+    expect(requested.path, '/v2/rates');
+    expect(requested.queryParameters['from'], '2026-10-20');
+    expect(requested.queryParameters['to'], '2026-10-21');
+    expect(requested.queryParameters['providers'], 'ecb');
+  });
 }
