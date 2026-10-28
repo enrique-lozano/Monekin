@@ -73,6 +73,8 @@ class TransactionFormController extends ChangeNotifier {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ShakeWidgetState> shakeKey = GlobalKey<ShakeWidgetState>();
+  final GlobalKey dualLegTopCardKey = GlobalKey();
+  final GlobalKey dualLegBottomCardKey = GlobalKey();
 
   final FocusNode amountFocusNode = FocusNode(debugLabel: 'transactionAmount');
   final FocusNode titleFocusNode = FocusNode(debugLabel: 'transactionTitle');
@@ -207,9 +209,7 @@ class TransactionFormController extends ChangeNotifier {
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
     tradeTotalController.text = _plainNumber(
       double.parse(
-        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
-          decimals,
-        ),
+        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(decimals),
       ),
     );
   }
@@ -1239,7 +1239,9 @@ class TransactionFormController extends ChangeNotifier {
   void openTransferSourceAmountSelector(BuildContext context) {
     final tr = Translations.of(context);
     RouteUtils.showResponsiveModal<void>(
-      context,
+      (dualLegTopIsOutflow ? dualLegTopCardKey : dualLegBottomCardKey)
+              .currentContext ??
+          context,
       builder: (ctx) => AmountSelector(
         title: tr.transaction.form.value,
         initialAmount: transactionValue.abs(),
@@ -1263,7 +1265,9 @@ class TransactionFormController extends ChangeNotifier {
     final tr = Translations.of(context);
     final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
     RouteUtils.showResponsiveModal<void>(
-      context,
+      (dualLegTopIsOutflow ? dualLegBottomCardKey : dualLegTopCardKey)
+              .currentContext ??
+          context,
       builder: (ctx) => AmountSelector(
         title: tr.transfer.form.value_in_destiny.title,
         initialAmount: initial,

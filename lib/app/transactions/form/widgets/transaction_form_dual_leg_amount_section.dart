@@ -9,6 +9,7 @@ import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -103,6 +104,7 @@ class _DualLegBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _DualLegCard(
+            key: c.dualLegTopCardKey,
             label: topOut
                 ? t.transfer.form.label_from
                 : t.transfer.form.label_to,
@@ -146,6 +148,7 @@ class _DualLegBody extends StatelessWidget {
             shakeOffset: 10,
             key: c.shakeKey,
             child: _DualLegCard(
+              key: c.dualLegBottomCardKey,
               label: topOut
                   ? t.transfer.form.label_to
                   : t.transfer.form.label_from,
@@ -173,6 +176,7 @@ class _DualLegBody extends StatelessWidget {
 
 class _DualLegCard extends StatelessWidget {
   const _DualLegCard({
+    super.key,
     required this.label,
     required this.account,
     required this.isOutflow,
@@ -314,10 +318,11 @@ class _BalancePreview extends StatelessWidget {
         return FittedBox(
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerStart,
-          child: Text(
-            _formatMoney(balance, account.currency),
-            maxLines: 1,
-            style: style,
+          child: CurrencyDisplayer(
+            amountToConvert: balance,
+            currency: account.currency,
+            integerStyle: style ?? const TextStyle(),
+            followPrivateMode: false,
           ),
         );
       },
@@ -344,7 +349,11 @@ class _AmountPill extends StatelessWidget {
     final accent = isOutflow
         ? AppColors.of(context).danger
         : AppColors.of(context).success;
-    final label = '${isOutflow ? '−' : '+'}${_formatMoney(amount, currency)}';
+    final style = Theme.of(context).textTheme.titleMedium!.copyWith(
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
+      color: accent,
+    );
 
     return Material(
       color: scheme.surface,
@@ -360,14 +369,21 @@ class _AmountPill extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 8,
               children: [
-                Text(
-                  label,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: accent,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(isOutflow ? '−' : '+', style: style),
+                    CurrencyDisplayer(
+                      amountToConvert: amount,
+                      currency: currency,
+                      integerStyle: style,
+                      decimalsStyle: style.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      followPrivateMode: false,
+                    ),
+                  ],
                 ),
                 Icon(
                   Icons.calculate_outlined,
