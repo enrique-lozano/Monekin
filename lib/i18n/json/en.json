@@ -755,7 +755,7 @@
     "preferred-currency": "Preferred/base currency",
     "update-rates": "Update rates",
     "update-rates-loading": "Fetching exchange rates from the ECB (Frankfurter)…",
-    "update-rates-success": "{{added}} new exchange rates added for {{currencies}} currencies. The ones you entered are never overwritten.",
+    "update-rates-success": "Today's exchange rates updated for {{added}} currencies. The ones you entered are never overwritten.",
     "update-rates-up-to-date": "Your exchange rates are already up to date",
     "update-rates-failure": "{{currency}} could not be updated: the ECB has no data for it. Enter the rate manually if you need it.",
     "tap-to-change-preferred-currency": "Tap to change",

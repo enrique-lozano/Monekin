@@ -72,44 +72,12 @@ class FrankfurterEcbClient {
 
     return parseFrankfurterRate(await _get(uri, '$base/$quote'));
   }
-
-  /// ECB rates of every business day between [start] and [end], both included.
-  Future<List<FrankfurterRate>> series({
-    required String from,
-    required String to,
-    required DateTime start,
-    required DateTime end,
-  }) async {
-    final base = from.trim().toLowerCase();
-    final quote = to.trim().toLowerCase();
-    final uri = Uri.parse('https://api.frankfurter.dev/v2/rates').replace(
-      queryParameters: {
-        'base': base,
-        'quotes': quote,
-        'from': _formatIsoDate(start),
-        'to': _formatIsoDate(end),
-        'providers': 'ecb',
-      },
-    );
-
-    return parseFrankfurterSeries(await _get(uri, '$base/$quote'));
-  }
 }
 
 String _formatIsoDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'
     '${date.month.toString().padLeft(2, '0')}-'
     '${date.day.toString().padLeft(2, '0')}';
-
-List<FrankfurterRate> parseFrankfurterSeries(String body) {
-  final decoded = jsonDecode(body);
-  if (decoded is! List) {
-    throw FrankfurterEcbException('Unexpected Frankfurter response');
-  }
-
-  return [for (final item in decoded) parseFrankfurterRate(jsonEncode(item))]
-    ..sort((a, b) => a.date.compareTo(b.date));
-}
 
 FrankfurterRate parseFrankfurterRate(String body) {
   final decoded = jsonDecode(body);

@@ -59,10 +59,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
         SnackbarParams(
           result.addedRates == 0
               ? t.currencies.update_rates_up_to_date
-              : t.currencies.update_rates_success(
-                  added: result.addedRates,
-                  currencies: result.updatedCurrencies,
-                ),
+              : t.currencies.update_rates_success(added: result.addedRates),
           showAtTop: false,
         ),
       );
