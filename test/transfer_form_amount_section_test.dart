@@ -10,6 +10,7 @@ import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -53,24 +54,26 @@ void main() {
     final scheme = ColorScheme.fromSeed(seedColor: Colors.blue);
 
     await tester.pumpWidget(
-      ChangeNotifierProvider.value(
-        value: controller,
-        child: MaterialApp(
-          navigatorKey: rootNavigatorKey,
-          theme: ThemeData(
-            colorScheme: scheme,
-            extensions: [AppColors.fromColorScheme(scheme)],
-          ),
-          home: Scaffold(
-            body: Align(
-              alignment: Alignment.centerRight,
-              child: SizedBox(key: formKey, width: 450, child: body),
+      TranslationProvider(
+        child: ChangeNotifierProvider.value(
+          value: controller,
+          child: MaterialApp(
+            navigatorKey: rootNavigatorKey,
+            theme: ThemeData(
+              colorScheme: scheme,
+              extensions: [AppColors.fromColorScheme(scheme)],
+            ),
+            home: Scaffold(
+              body: Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(key: formKey, width: 450, child: body),
+              ),
             ),
           ),
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    await tester.pump();
   }
 
   testWidgets('the transfer cards expose separate popover anchors', (
@@ -83,6 +86,9 @@ void main() {
     expect(top.width, greaterThan(0));
     expect(bottom.width, top.width);
     expect(top.bottom, lessThan(bottom.top));
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
   });
 
   for (final reversed in [false, true]) {
