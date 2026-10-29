@@ -72,3 +72,4 @@ if errorlevel 1 ( echo Upload failed & pause & exit /b 1 )
 :open
 echo Opening releases folder...
 explorer "%RELEASES%"
+exit /b 0
