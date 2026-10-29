@@ -5,8 +5,18 @@ void main() {
   late EcbAutofill state;
   final today = DateTime(2026, 10, 29);
 
-  String select(String text, {String currency = 'EUR', String preferred = 'USD', DateTime? date}) {
-    return state.select(currency: currency, preferred: preferred, date: date ?? today, text: text);
+  String select(
+    String text, {
+    String currency = 'EUR',
+    String preferred = 'USD',
+    DateTime? date,
+  }) {
+    return state.select(
+      currency: currency,
+      preferred: preferred,
+      date: date ?? today,
+      text: text,
+    );
   }
 
   setUp(() => state = EcbAutofill());

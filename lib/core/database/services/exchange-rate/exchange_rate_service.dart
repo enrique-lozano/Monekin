@@ -29,28 +29,32 @@ class ExchangeRateService {
     required String preferredCurrency,
   }) {
     return db.transaction(() async {
-      final setting = await (db.select(db.userSettings)..where(
-        (row) => row.settingKey.equalsValue(SettingKey.preferredCurrency),
-      )).getSingleOrNull();
+      final setting =
+          await (db.select(db.userSettings)..where(
+                (row) =>
+                    row.settingKey.equalsValue(SettingKey.preferredCurrency),
+              ))
+              .getSingleOrNull();
       if (setting?.settingValue != preferredCurrency) {
         throw const ExchangeRateBaseChanged();
       }
-      final inserted = await db.into(db.exchangeRates).insertReturningOrNull(
-        rate,
-        mode: InsertMode.insertOrIgnore,
-      );
+      final inserted = await db
+          .into(db.exchangeRates)
+          .insertReturningOrNull(rate, mode: InsertMode.insertOrIgnore);
       return inserted != null;
     });
   }
 
   Future<void> changePreferredCurrency(String currencyCode) async {
     await db.transaction(() async {
-      await db.into(db.userSettings).insertOnConflictUpdate(
-        UserSetting(
-          settingKey: SettingKey.preferredCurrency,
-          settingValue: currencyCode,
-        ),
-      );
+      await db
+          .into(db.userSettings)
+          .insertOnConflictUpdate(
+            UserSetting(
+              settingKey: SettingKey.preferredCurrency,
+              settingValue: currencyCode,
+            ),
+          );
       await deleteExchangeRates();
     });
     appStateSettings[SettingKey.preferredCurrency] = currencyCode;

@@ -18,7 +18,8 @@ class EcbSyncResult {
   final List<String> failedCurrencies;
   final bool cancelled;
 
-  bool get showSuccess => !cancelled && (addedRates > 0 || failedCurrencies.isEmpty);
+  bool get showSuccess =>
+      !cancelled && (addedRates > 0 || failedCurrencies.isEmpty);
 }
 
 /// Saves today's ECB rate for every currency that already has a rate. Days
@@ -33,53 +34,53 @@ Future<EcbSyncResult> syncEcbRates({
   client ??= FrankfurterEcbClient();
   exchangeRates ??= ExchangeRateService.instance;
   try {
-  final lastRates = await exchangeRates.getExchangeRates().first;
-  final today = DateUtils.dateOnly(now ?? DateTime.now());
+    final lastRates = await exchangeRates.getExchangeRates().first;
+    final today = DateUtils.dateOnly(now ?? DateTime.now());
 
-  var addedRates = 0;
-  final failed = <String>[];
+    var addedRates = 0;
+    final failed = <String>[];
 
-  for (final last in lastRates) {
-    final code = last.currencyCode;
+    for (final last in lastRates) {
+      final code = last.currencyCode;
 
-    if (await exchangeRates.getExchangeRateItem(code, today).first != null) {
-      continue;
-    }
+      if (await exchangeRates.getExchangeRateItem(code, today).first != null) {
+        continue;
+      }
 
-    final availability = ecbFetchAvailability(
-      currency: code,
-      preferred: preferredCurrency,
-    );
-    if (availability != EcbFetchAvailability.available) {
-      failed.add(code);
-      continue;
-    }
-
-    try {
-      final quote = await client.latest(from: code, to: preferredCurrency);
-
-      final inserted = await exchangeRates.insertExchangeRateIfMissing(
-        ExchangeRate(
-          id: generateUUID(),
-          currency: last.currency,
-          date: today,
-          exchangeRate: quote.rate,
-        ),
-        preferredCurrency: preferredCurrency,
+      final availability = ecbFetchAvailability(
+        currency: code,
+        preferred: preferredCurrency,
       );
-      if (inserted) addedRates++;
-    } on ExchangeRateBaseChanged {
-      return const EcbSyncResult(
-        addedRates: 0,
-        failedCurrencies: [],
-        cancelled: true,
-      );
-    } catch (_) {
-      failed.add(code);
-    }
-  }
+      if (availability != EcbFetchAvailability.available) {
+        failed.add(code);
+        continue;
+      }
 
-  return EcbSyncResult(addedRates: addedRates, failedCurrencies: failed);
+      try {
+        final quote = await client.latest(from: code, to: preferredCurrency);
+
+        final inserted = await exchangeRates.insertExchangeRateIfMissing(
+          ExchangeRate(
+            id: generateUUID(),
+            currency: last.currency,
+            date: today,
+            exchangeRate: quote.rate,
+          ),
+          preferredCurrency: preferredCurrency,
+        );
+        if (inserted) addedRates++;
+      } on ExchangeRateBaseChanged {
+        return const EcbSyncResult(
+          addedRates: 0,
+          failedCurrencies: [],
+          cancelled: true,
+        );
+      } catch (_) {
+        failed.add(code);
+      }
+    }
+
+    return EcbSyncResult(addedRates: addedRates, failedCurrencies: failed);
   } finally {
     if (ownsClient) client.close();
   }

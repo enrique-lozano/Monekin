@@ -71,7 +71,8 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
   /// ECB rate for the chosen currency and date, if the ECB has one.
   final _ecbAutofill = EcbAutofill();
   late final _ecbClient = widget.ecbClient ?? FrankfurterEcbClient();
-  ExchangeRateService get _exchangeRates => widget.exchangeRates ?? ExchangeRateService.instance;
+  ExchangeRateService get _exchangeRates =>
+      widget.exchangeRates ?? ExchangeRateService.instance;
   double? get _ecbRate => _ecbAutofill.rate;
   bool _loadingEcbRate = false;
   int _ecbRequestId = 0;

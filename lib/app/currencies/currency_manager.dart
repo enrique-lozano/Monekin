@@ -55,19 +55,23 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
 
       setState(() => _failedCurrencies = result.failedCurrencies);
 
-      if (result.showSuccess) MonekinSnackbar.success(
-        SnackbarParams(
-          result.addedRates == 0
-              ? t.currencies.update_rates_up_to_date
-              : t.currencies.update_rates_success(added: result.addedRates),
-          showAtTop: false,
-          message: frankfurterEcbCredit,
-        ),
-      );
+      if (result.showSuccess) {
+        MonekinSnackbar.success(
+          SnackbarParams(
+            result.addedRates == 0
+                ? t.currencies.update_rates_up_to_date
+                : t.currencies.update_rates_success(added: result.addedRates),
+            showAtTop: false,
+            message: frankfurterEcbCredit,
+          ),
+        );
+      }
     } catch (_) {
-      if (mounted) MonekinSnackbar.error(
-        SnackbarParams(t.currencies.update_rates_error, showAtTop: false),
-      );
+      if (mounted) {
+        MonekinSnackbar.error(
+          SnackbarParams(t.currencies.update_rates_error, showAtTop: false),
+        );
+      }
     } finally {
       if (mounted) setState(() => _updatingRates = false);
     }
@@ -119,7 +123,9 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
     ).then((isConfirmed) async {
       if (isConfirmed != true) return;
 
-      await ExchangeRateService.instance.changePreferredCurrency(newCurrency.code);
+      await ExchangeRateService.instance.changePreferredCurrency(
+        newCurrency.code,
+      );
       if (mounted) setState(() => _failedCurrencies = []);
     });
   }
