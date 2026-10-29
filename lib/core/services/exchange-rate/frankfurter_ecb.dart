@@ -13,9 +13,12 @@ class FrankfurterRate {
 }
 
 class FrankfurterEcbException implements Exception {
-  FrankfurterEcbException(this.message);
+  FrankfurterEcbException(this.message, {this.notPublished = false});
 
   final String message;
+
+  /// The ECB has no rate for the requested pair or date (HTTP 404).
+  final bool notPublished;
 
   @override
   String toString() => message;
@@ -27,7 +30,7 @@ class FrankfurterEcbClient {
 
   final http.Client _client;
 
-  static const _timeout = Duration(seconds: 8);
+  static const _timeout = Duration(seconds: 5);
 
   void close() => _client.close();
 
@@ -45,6 +48,7 @@ class FrankfurterEcbClient {
     if (response.statusCode != 200) {
       throw FrankfurterEcbException(
         'Frankfurter returned HTTP ${response.statusCode} for $label',
+        notPublished: response.statusCode == 404,
       );
     }
 

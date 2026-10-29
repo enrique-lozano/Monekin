@@ -63,14 +63,20 @@ void main() {
     expect(requested.host, 'api.frankfurter.dev');
   });
 
-  test('surfaces an unsupported pair', () async {
+  test('flags a pair the ECB does not publish', () async {
     final client = FrankfurterEcbClient(
       client: _StubClient((request) async => _json(404, 'not found', request)),
     );
 
     expect(
       () => client.latest(from: 'BTC', to: 'EUR'),
-      throwsA(isA<FrankfurterEcbException>()),
+      throwsA(
+        isA<FrankfurterEcbException>().having(
+          (e) => e.notPublished,
+          'notPublished',
+          isTrue,
+        ),
+      ),
     );
   });
 }

@@ -8,6 +8,7 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -53,28 +54,50 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       final result = await syncEcbRates(preferredCurrency: preferred.code);
       if (!mounted) return;
 
-      setState(() => _failedCurrencies = result.failedCurrencies);
+      setState(() => _failedCurrencies = result.unpublishedCurrencies);
 
-      if (result.showSuccess) {
+      if (result.addedRates > 0) {
         MonekinSnackbar.success(
           SnackbarParams(
-            result.addedRates == 0
-                ? t.currencies.update_rates_up_to_date
-                : t.currencies.update_rates_success(added: result.addedRates),
+            t.currencies.update_rates_success(n: result.addedRates),
             showAtTop: false,
             message: frankfurterEcbCredit,
           ),
         );
-      }
-    } catch (_) {
-      if (mounted) {
+      } else if (result.connectionFailed) {
         MonekinSnackbar.error(
           SnackbarParams(t.currencies.update_rates_error, showAtTop: false),
+        );
+      } else if (result.unpublishedCurrencies.isEmpty) {
+        MonekinSnackbar.success(
+          SnackbarParams(
+            t.currencies.update_rates_up_to_date,
+            showAtTop: false,
+          ),
         );
       }
     } finally {
       if (mounted) setState(() => _updatingRates = false);
     }
+  }
+
+  Widget _buildLastUpdate(DateTime date) {
+    final t = Translations.of(context);
+    final theme = Theme.of(context);
+    final days = DateUtils.dateOnly(
+      DateTime.now(),
+    ).difference(DateUtils.dateOnly(date)).inDays;
+
+    return Text(
+      days <= 0
+          ? t.currencies.updated_today
+          : t.currencies.updated_days_ago(n: days),
+      style: theme.textTheme.labelSmall?.copyWith(
+        color: days <= 0
+            ? theme.colorScheme.primary
+            : theme.colorScheme.onSurfaceVariant,
+      ),
+    );
   }
 
   Widget _buildUpdateAction(BuildContext context) {
@@ -120,13 +143,14 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       context,
       dialogTitle: t.currencies.change_preferred_currency_title,
       contentParagraphs: [Text(t.currencies.change_preferred_currency_msg)],
-    ).then((isConfirmed) async {
+    ).then((isConfirmed) {
       if (isConfirmed != true) return;
 
-      await ExchangeRateService.instance.changePreferredCurrency(
-        newCurrency.code,
-      );
-      if (mounted) setState(() => _failedCurrencies = []);
+      UserSettingService.instance
+          .setItem(SettingKey.preferredCurrency, newCurrency.code)
+          .then((value) {
+            ExchangeRateService.instance.deleteExchangeRates();
+          });
     });
   }
 
@@ -189,7 +213,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                             t.currencies.tap_to_change_preferred_currency,
                           ),
                           onTap: () {
-                            if (userCurrency == null) return;
+                            if (userCurrency == null || _updatingRates) return;
 
                             showCurrencySelectorModal(
                               tileContext,
@@ -292,11 +316,18 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                           );
                         },
                       ),
-                      trailing: Text(
-                        item.exchangeRate.toStringAsFixed(
-                          max(4, item.currency.decimalPlaces),
-                        ),
-                        style: Theme.of(context).textTheme.labelLarge,
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            item.exchangeRate.toStringAsFixed(
+                              max(4, item.currency.decimalPlaces),
+                            ),
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          _buildLastUpdate(item.date),
+                        ],
                       ),
                       onTap: () async {
                         final currency = await CurrencyService.instance

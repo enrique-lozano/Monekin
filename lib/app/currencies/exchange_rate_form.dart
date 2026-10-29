@@ -15,7 +15,6 @@ import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
-import 'package:monekin/core/services/exchange-rate/ecb_autofill.dart';
 import 'package:monekin/core/services/exchange-rate/today_rate_plan.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
@@ -37,9 +36,6 @@ class ExchangeRateFormDialog extends StatefulWidget {
     super.key,
     this.currency,
     this.exchangeRateToEdit,
-    this.preferredCurrency,
-    this.exchangeRates,
-    this.ecbClient,
   }) : assert(
          currency == null || exchangeRateToEdit == null,
          'You cannot provide both a currency and an exchange rate to edit',
@@ -47,9 +43,6 @@ class ExchangeRateFormDialog extends StatefulWidget {
 
   final Currency? currency;
   final ExchangeRate? exchangeRateToEdit;
-  final Currency? preferredCurrency;
-  final ExchangeRateService? exchangeRates;
-  final FrankfurterEcbClient? ecbClient;
 
   @override
   State<ExchangeRateFormDialog> createState() => _ExchangeRateFormDialogState();
@@ -68,65 +61,72 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
   bool get isEditMode => widget.exchangeRateToEdit != null;
 
+  final _ecbClient = FrankfurterEcbClient();
+
   /// ECB rate for the chosen currency and date, if the ECB has one.
-  final _ecbAutofill = EcbAutofill();
-  late final _ecbClient = widget.ecbClient ?? FrankfurterEcbClient();
-  ExchangeRateService get _exchangeRates =>
-      widget.exchangeRates ?? ExchangeRateService.instance;
-  double? get _ecbRate => _ecbAutofill.rate;
+  double? _ecbRate;
   bool _loadingEcbRate = false;
   int _ecbRequestId = 0;
+
+  /// Text that was autofilled and the user has not edited since.
+  String? _autofilledText;
 
   bool get _rateMatchesEcb =>
       _ecbRate != null && double.tryParse(rateController.text) == _ecbRate;
 
   /// Looks up the ECB rate for the current currency/date and autofills the
-  /// field unless the user already typed their own value.
+  /// field if it is empty. Dates that already have a rate are not autofilled.
   Future<void> _loadEcbRate() async {
     final currency = _currency;
     final preferred = userPreferredCurrency;
     final requestId = ++_ecbRequestId;
-    rateController.text = _ecbAutofill.select(
-      currency: currency?.code,
-      preferred: preferred?.code,
-      date: date,
-      text: rateController.text,
-    );
 
-    final availability = ecbFetchAvailability(
-      currency: currency?.code,
-      preferred: preferred?.code,
-    );
+    if (rateController.text == _autofilledText) rateController.clear();
+    _autofilledText = null;
 
-    if (isEditMode || availability != EcbFetchAvailability.available) {
-      setState(() {
-        _ecbAutofill.rate = null;
-        _loadingEcbRate = false;
-      });
-      return;
-    }
+    final canFetch =
+        !isEditMode &&
+        ecbFetchAvailability(
+              currency: currency?.code,
+              preferred: preferred?.code,
+            ) ==
+            EcbFetchAvailability.available;
 
     setState(() {
-      _ecbAutofill.rate = null;
-      _loadingEcbRate = true;
+      _ecbRate = null;
+      _loadingEcbRate = canFetch;
     });
+    if (!canFetch) return;
 
     double? rate;
     try {
-      rate = (await _ecbClient.latest(
-        from: currency!.code,
-        to: preferred!.code,
-        date: date,
-      )).rate;
+      final alreadyExists =
+          await ExchangeRateService.instance
+              .getExchangeRateItem(currency!.code, date)
+              .first !=
+          null;
+
+      if (!alreadyExists) {
+        rate = (await _ecbClient.latest(
+          from: currency.code,
+          to: preferred!.code,
+          date: date,
+        )).rate;
+      }
     } catch (_) {
-      rate = null;
+      // Offline or no ECB rate: the field is simply left to the user
     }
 
     if (!mounted || requestId != _ecbRequestId) return;
 
     setState(() {
       _loadingEcbRate = false;
-      rateController.text = _ecbAutofill.receive(rate, rateController.text);
+      _ecbRate = rate;
+
+      if (rate != null && rateController.text.trim().isEmpty) {
+        _autofilledText = rate.toString();
+        rateController.text = _autofilledText!;
+      }
     });
   }
 
@@ -171,7 +171,8 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
           Text(form.ecb_value(rate: _ecbRate.toString()), style: style),
           TextButton.icon(
             onPressed: () => setState(() {
-              rateController.text = _ecbAutofill.restore();
+              _autofilledText = _ecbRate.toString();
+              rateController.text = _autofilledText!;
             }),
             icon: const Icon(Icons.sync_rounded, size: 14),
             label: Text(form.ecb_use_value),
@@ -209,12 +210,6 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
       _currency = widget.currency;
     }
 
-    if (widget.preferredCurrency != null) {
-      userPreferredCurrency = widget.preferredCurrency;
-      unawaited(_loadEcbRate());
-      return;
-    }
-
     CurrencyService.instance.ensureAndGetPreferredCurrency().first.then((
       value,
     ) {
@@ -229,7 +224,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
   @override
   void dispose() {
     _ecbRequestId++;
-    if (widget.ecbClient == null) _ecbClient.close();
+    _ecbClient.close();
     rateController.dispose();
     super.dispose();
   }
@@ -362,7 +357,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       isRequired: true,
                     ),
                     onChanged: (value) {
-                      _ecbAutofill.userEdited();
+                      _autofilledText = null;
                       setState(() {});
                     },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -386,7 +381,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
             if (_currency != null)
               StreamBuilder(
-                stream: _exchangeRates
+                stream: ExchangeRateService.instance
                     .getExchangeRateItem(_currency!.code, date)
                     .map((rate) => rate != null),
                 initialData: false,

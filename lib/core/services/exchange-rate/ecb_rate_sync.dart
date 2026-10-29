@@ -8,19 +8,20 @@ import 'package:monekin/core/utils/uuid.dart';
 class EcbSyncResult {
   const EcbSyncResult({
     required this.addedRates,
-    required this.failedCurrencies,
-    this.cancelled = false,
+    required this.unpublishedCurrencies,
+    required this.connectionFailed,
   });
 
   final int addedRates;
 
-  /// Codes of the currencies that could not be updated.
-  final List<String> failedCurrencies;
-  final bool cancelled;
+  /// Codes of the currencies for which the ECB has no rate.
+  final List<String> unpublishedCurrencies;
 
-  bool get showSuccess =>
-      !cancelled && (addedRates > 0 || failedCurrencies.isEmpty);
+  /// Whether any request failed for network reasons (offline, timeout...).
+  final bool connectionFailed;
 }
+
+enum _Outcome { added, skipped, unpublished, connectionFailed }
 
 /// Saves today's ECB rate for every currency that already has a rate. Days
 /// that already have a rate are never overwritten.
@@ -31,57 +32,60 @@ Future<EcbSyncResult> syncEcbRates({
   DateTime? now,
 }) async {
   final ownsClient = client == null;
-  client ??= FrankfurterEcbClient();
-  exchangeRates ??= ExchangeRateService.instance;
+  final ecb = client ?? FrankfurterEcbClient();
+  final service = exchangeRates ?? ExchangeRateService.instance;
+
   try {
-    final lastRates = await exchangeRates.getExchangeRates().first;
+    final lastRates = await service.getExchangeRates().first;
     final today = DateUtils.dateOnly(now ?? DateTime.now());
 
-    var addedRates = 0;
-    final failed = <String>[];
-
-    for (final last in lastRates) {
-      final code = last.currencyCode;
-
-      if (await exchangeRates.getExchangeRateItem(code, today).first != null) {
-        continue;
-      }
+    Future<_Outcome> sync(ExchangeRate last) async {
+      if (DateUtils.isSameDay(last.date, today)) return _Outcome.skipped;
 
       final availability = ecbFetchAvailability(
-        currency: code,
+        currency: last.currencyCode,
         preferred: preferredCurrency,
       );
       if (availability != EcbFetchAvailability.available) {
-        failed.add(code);
-        continue;
+        return _Outcome.unpublished;
       }
 
       try {
-        final quote = await client.latest(from: code, to: preferredCurrency);
+        final quote = await ecb.latest(
+          from: last.currencyCode,
+          to: preferredCurrency,
+        );
 
-        final inserted = await exchangeRates.insertExchangeRateIfMissing(
+        final inserted = await service.insertExchangeRateIfMissing(
           ExchangeRate(
             id: generateUUID(),
             currency: last.currency,
             date: today,
             exchangeRate: quote.rate,
           ),
-          preferredCurrency: preferredCurrency,
         );
-        if (inserted) addedRates++;
-      } on ExchangeRateBaseChanged {
-        return const EcbSyncResult(
-          addedRates: 0,
-          failedCurrencies: [],
-          cancelled: true,
-        );
+
+        return inserted ? _Outcome.added : _Outcome.skipped;
+      } on FrankfurterEcbException catch (e) {
+        return e.notPublished
+            ? _Outcome.unpublished
+            : _Outcome.connectionFailed;
       } catch (_) {
-        failed.add(code);
+        return _Outcome.connectionFailed;
       }
     }
 
-    return EcbSyncResult(addedRates: addedRates, failedCurrencies: failed);
+    final outcomes = await Future.wait(lastRates.map(sync));
+
+    return EcbSyncResult(
+      addedRates: outcomes.where((o) => o == _Outcome.added).length,
+      unpublishedCurrencies: [
+        for (var i = 0; i < lastRates.length; i++)
+          if (outcomes[i] == _Outcome.unpublished) lastRates[i].currencyCode,
+      ],
+      connectionFailed: outcomes.contains(_Outcome.connectionFailed),
+    );
   } finally {
-    if (ownsClient) client.close();
+    if (ownsClient) ecb.close();
   }
 }

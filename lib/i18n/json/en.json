@@ -755,10 +755,18 @@
     "preferred-currency": "Preferred/base currency",
     "update-rates": "Update rates",
     "update-rates-loading": "Fetching exchange rates from the ECB (Frankfurter)…",
-    "update-rates-success": "Today's exchange rates updated for {{added}} currencies. The ones you entered are never overwritten.",
+    "update-rates-success": {
+      "one": "Today's exchange rate updated for 1 currency. The ones you entered are never overwritten.",
+      "other": "Today's exchange rates updated for {{n}} currencies. The ones you entered are never overwritten."
+    },
     "update-rates-up-to-date": "Your exchange rates are already up to date",
-    "update-rates-failure": "{{currency}} could not be updated. Check your connection or try again later; you can also enter the rate manually.",
-    "update-rates-error": "Exchange rates could not be updated. Please try again later.",
+    "update-rates-failure": "{{currency}} could not be updated: the ECB has no rate for it. Enter the rate manually if you need it.",
+    "update-rates-error": "Could not reach the exchange rate service. Check your connection and try again.",
+    "updated-today": "Updated today",
+    "updated-days-ago": {
+      "one": "1 day ago",
+      "other": "{{n}} days ago"
+    },
     "tap-to-change-preferred-currency": "Tap to change",
     "change-preferred-currency-title": "Change preferred currency",
     "change-preferred-currency-msg": "All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?",
