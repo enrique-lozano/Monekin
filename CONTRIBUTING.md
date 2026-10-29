@@ -63,6 +63,9 @@ Ready to take an active role in improving Monekin? Whether you’re a developer,
 - 🛍️ **Store Presence**: Improve or translate our Google Play texts and screenshots, the first thing most people see of Monekin. See the [Store Presence Guide](https://github.com/enrique-lozano/Monekin/blob/main/app-marketplaces/README.md).
 - 🎨 **Design Contributions**: Love design? Share your UI mockups or promotional materials in the [forum](https://github.com/enrique-lozano/Monekin/discussions). Your creativity helps make Monekin more user-friendly and appealing.
 
+> [!IMPORTANT]
+> By submitting a contribution (code, translations, designs, docs...) you agree to our [Contributor License Agreement](https://github.com/enrique-lozano/Monekin/blob/main/CLA.md). Please read it before contributing.
+
 <!-- DONATE SECTION -->
 
 ## Support the Project 💖

@@ -3,13 +3,13 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/app/transactions/form/widgets/transaction_form_amount_block.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
-import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/animations/shake_widget.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
+import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/utils/focus.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -73,6 +73,10 @@ class _DualLegBody extends StatelessWidget {
       final sourceAmount = c.transactionValue.abs();
       final defaultDest = sourceAmount * rate;
       final destAmount = c.valueInDestinyToNumber ?? defaultDest;
+      final appliedRate =
+          custom && c.valueInDestinyToNumber != null && sourceAmount > 0
+          ? destAmount / sourceAmount
+          : null;
 
       void openAmount({required bool isSource}) {
         if (isSource) {
@@ -100,6 +104,7 @@ class _DualLegBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _DualLegCard(
+            key: c.dualLegTopCardKey,
             label: topOut
                 ? t.transfer.form.label_from
                 : t.transfer.form.label_to,
@@ -125,7 +130,8 @@ class _DualLegBody extends StatelessWidget {
                   active: custom,
                   onPressed: () => c.setCustomTransferAmounts(!custom),
                 ),
-                if (differentCurrency) _FxChip(rate: rate),
+                if (differentCurrency)
+                  _FxChip(rate: rate, appliedRate: appliedRate),
                 if (showDifference)
                   _InfoChip(
                     label:
@@ -142,6 +148,7 @@ class _DualLegBody extends StatelessWidget {
             shakeOffset: 10,
             key: c.shakeKey,
             child: _DualLegCard(
+              key: c.dualLegBottomCardKey,
               label: topOut
                   ? t.transfer.form.label_to
                   : t.transfer.form.label_from,
@@ -158,11 +165,7 @@ class _DualLegBody extends StatelessWidget {
 
     if (differentCurrency) {
       return StreamBuilder<double>(
-        stream: ExchangeRateService.instance.calculateExchangeRate(
-          fromCurrency: effectiveFrom.currency.code,
-          toCurrency: effectiveTo.currency.code,
-          date: c.date,
-        ),
+        stream: c.transferRate,
         builder: (context, snap) => buildLegs(snap.data ?? 1),
       );
     }
@@ -173,6 +176,7 @@ class _DualLegBody extends StatelessWidget {
 
 class _DualLegCard extends StatelessWidget {
   const _DualLegCard({
+    super.key,
     required this.label,
     required this.account,
     required this.isOutflow,
@@ -314,10 +318,11 @@ class _BalancePreview extends StatelessWidget {
         return FittedBox(
           fit: BoxFit.scaleDown,
           alignment: AlignmentDirectional.centerStart,
-          child: Text(
-            _formatMoney(balance, account.currency),
-            maxLines: 1,
-            style: style,
+          child: CurrencyDisplayer(
+            amountToConvert: balance,
+            currency: account.currency,
+            integerStyle: style ?? const TextStyle(),
+            followPrivateMode: false,
           ),
         );
       },
@@ -344,7 +349,11 @@ class _AmountPill extends StatelessWidget {
     final accent = isOutflow
         ? AppColors.of(context).danger
         : AppColors.of(context).success;
-    final label = '${isOutflow ? '−' : '+'}${_formatMoney(amount, currency)}';
+    final style = Theme.of(context).textTheme.titleMedium!.copyWith(
+      fontSize: 17,
+      fontWeight: FontWeight.bold,
+      color: accent,
+    );
 
     return Material(
       color: scheme.surface,
@@ -360,14 +369,21 @@ class _AmountPill extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: 8,
               children: [
-                Text(
-                  label,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    color: accent,
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(isOutflow ? '−' : '+', style: style),
+                    CurrencyDisplayer(
+                      amountToConvert: amount,
+                      currency: currency,
+                      integerStyle: style,
+                      decimalsStyle: style.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      followPrivateMode: false,
+                    ),
+                  ],
                 ),
                 Icon(
                   Icons.calculate_outlined,
@@ -506,18 +522,27 @@ class _InfoChip extends StatelessWidget {
 }
 
 class _FxChip extends StatelessWidget {
-  const _FxChip({required this.rate});
+  const _FxChip({required this.rate, this.appliedRate});
 
   final double rate;
+  final double? appliedRate;
+
+  String _formatRate(double rate) => UINumberFormatter.decimal(
+    amountToConvert: rate,
+    decimalDigits: 4,
+  ).getFormattedAmount();
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final appliedRate = this.appliedRate;
+    final label = appliedRate == null
+        ? _formatRate(rate)
+        : '${_formatRate(rate)} · ${_formatRate(appliedRate)} ${t.assets.holdings.rate_effective}';
+
     return Tooltip(
-      message: Translations.of(context).currencies.exchange_rate,
-      child: _InfoChip(
-        icon: Icons.swap_horiz_rounded,
-        label: rate.toStringAsFixed(rate == rate.roundToDouble() ? 0 : 4),
-      ),
+      message: t.currencies.exchange_rate,
+      child: _InfoChip(icon: Icons.swap_horiz_rounded, label: label),
     );
   }
 }
