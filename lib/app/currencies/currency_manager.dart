@@ -84,16 +84,21 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   Widget _buildLastUpdate(DateTime date) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
-    final days = DateUtils.dateOnly(
-      DateTime.now(),
-    ).difference(DateUtils.dateOnly(date)).inDays;
+    final now = DateTime.now();
+    final isToday = DateUtils.isSameDay(date, now) || date.isAfter(now);
+    // UTC days have no daylight-saving offsets
+    final days = DateTime.utc(
+      now.year,
+      now.month,
+      now.day,
+    ).difference(DateTime.utc(date.year, date.month, date.day)).inDays;
 
     return Text(
-      days <= 0
+      isToday
           ? t.currencies.updated_today
           : t.currencies.updated_days_ago(n: days),
       style: theme.textTheme.labelSmall?.copyWith(
-        color: days <= 0
+        color: isToday
             ? theme.colorScheme.primary
             : theme.colorScheme.onSurfaceVariant,
       ),
