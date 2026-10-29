@@ -9,6 +9,7 @@ import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
@@ -84,14 +85,8 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   Widget _buildLastUpdate(DateTime date) {
     final t = Translations.of(context);
     final theme = Theme.of(context);
-    final now = DateTime.now();
-    final isToday = DateUtils.isSameDay(date, now) || date.isAfter(now);
-    // UTC days have no daylight-saving offsets
-    final days = DateTime.utc(
-      now.year,
-      now.month,
-      now.day,
-    ).difference(DateTime.utc(date.year, date.month, date.day)).inDays;
+    final days = DateTime.now().dayDifference(date);
+    final isToday = days <= 0;
 
     return Text(
       isToday
