@@ -237,18 +237,18 @@ packages:
     dependency: "direct main"
     description:
       name: copy_with_extension
-      sha256: "4e37b3a0376fc7e981be911efba812845c75447b0d17c931faca9d972d335d1d"
+      sha256: "9a832fe40e5a5fcbe58e094d2c857ac6b185f34ec200241051daebe48b1b0403"
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.1"
+    version: "18.0.0"
   copy_with_extension_gen:
     dependency: "direct dev"
     description:
       name: copy_with_extension_gen
-      sha256: f2845406e5718db6b008716be1caa2500ea6297da8d4151b0b495b30e9586465
+      sha256: "4475dfeaa67d41760e7f8b690cbbbbc0d71efb34797997478ae869c0933a5fe1"
       url: "https://pub.dev"
     source: hosted
-    version: "15.0.1"
+    version: "18.0.0"
   cross_file:
     dependency: transitive
     description:
@@ -309,10 +309,10 @@ packages:
     dependency: "direct main"
     description:
       name: drift
-      sha256: "6cc0b623c0e83f7080524d8396e9301b1d78b9c66a4fdceeb0f798211303254c"
+      sha256: bab55d542d63765f6250ee3e2c62e11bfa1145d4ec2ffa05353c8fb4e10b52c1
       url: "https://pub.dev"
     source: hosted
-    version: "2.34.0"
+    version: "2.34.4"
   drift_dev:
     dependency: "direct dev"
     description:
@@ -1205,10 +1205,10 @@ packages:
     dependency: "direct main"
     description:
       name: sqlite3
-      sha256: "9488c7d2cdb1091c91cacf7e207cff81b28bff8e366f042bad3afe7d34afe189"
+      sha256: "4c7fe79840389aaeaf05fd093f795b631b5a98e2bd28d54e555c100f4a9c7a1c"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.2"
+    version: "3.5.2"
   sqlite3_flutter_libs:
     dependency: "direct main"
     description:
