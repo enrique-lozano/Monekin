@@ -729,6 +729,20 @@
     "currency-manager": "Gestionnaire de devises",
     "currency-manager.descr": "Configurez votre devise et ses taux de change avec les autres",
     "preferred-currency": "Devise de base/préférée",
+    "update-rates": "Mettre à jour les taux",
+    "update-rates-loading": "Récupération des taux de change de la BCE (Frankfurter)…",
+    "update-rates-success": {
+      "one": "Taux de change du jour mis à jour pour 1 devise. Ceux que vous avez saisis ne sont jamais écrasés.",
+      "other": "Taux de change du jour mis à jour pour {{n}} devises. Ceux que vous avez saisis ne sont jamais écrasés."
+    },
+    "update-rates-up-to-date": "Vos taux de change sont déjà à jour",
+    "update-rates-failure": "{{currency}} n'a pas pu être mise à jour : la BCE n'a pas de taux pour cette devise. Saisissez le taux manuellement si besoin.",
+    "update-rates-error": "Impossible de joindre le service de taux de change. Vérifiez votre connexion et réessayez.",
+    "updated-today": "Mis à jour aujourd'hui",
+    "updated-days-ago": {
+      "one": "il y a 1 jour",
+      "other": "il y a {{n}} jours"
+    },
     "tap-to-change-preferred-currency": "Appuyez pour modifier",
     "change-preferred-currency-title": "Changer la devise préférée",
     "change-preferred-currency-msg": "Toutes les statistiques et budgets seront affichés dans cette devise à partir de maintenant. Les comptes et transactions conserveront la devise qu'ils avaient. Tous les taux de change enregistrés seront supprimés si vous effectuez cette action. Voulez-vous continuer ?",
@@ -741,7 +755,11 @@
       "edit": "Modifier le taux de change",
       "edit-success": "Taux de change modifié avec succès",
       "remove-all": "Supprimer tous les taux de change",
-      "remove-all-warning": "Cette action est irréversible et supprimera tous les taux de change de cette devise"
+      "remove-all-warning": "Cette action est irréversible et supprimera tous les taux de change de cette devise",
+      "ecb-loading": "Recherche du taux de la BCE…",
+      "ecb-filled": "Rempli depuis la BCE",
+      "ecb-value": "BCE : {{rate}}",
+      "ecb-use-value": "Utiliser cette valeur"
     },
     "TYPES": {
       "display": "Type de devise",

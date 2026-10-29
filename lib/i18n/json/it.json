@@ -729,6 +729,20 @@
     "currency-manager": "Gestore valute",
     "currency-manager.descr": "Configura la tua valuta e i suoi tassi di cambio con altre",
     "preferred-currency": "Valuta preferita/base",
+    "update-rates": "Aggiorna i tassi",
+    "update-rates-loading": "Recupero dei tassi di cambio dalla BCE (Frankfurter)…",
+    "update-rates-success": {
+      "one": "Tasso di cambio di oggi aggiornato per 1 valuta. Quelli inseriti da te non vengono mai sovrascritti.",
+      "other": "Tassi di cambio di oggi aggiornati per {{n}} valute. Quelli inseriti da te non vengono mai sovrascritti."
+    },
+    "update-rates-up-to-date": "I tuoi tassi di cambio sono già aggiornati",
+    "update-rates-failure": "Impossibile aggiornare {{currency}}: la BCE non ha un tasso per questa valuta. Inseriscilo manualmente se ti serve.",
+    "update-rates-error": "Impossibile raggiungere il servizio dei tassi di cambio. Controlla la connessione e riprova.",
+    "updated-today": "Aggiornato oggi",
+    "updated-days-ago": {
+      "one": "1 giorno fa",
+      "other": "{{n}} giorni fa"
+    },
     "tap-to-change-preferred-currency": "Tocca per modificare",
     "change-preferred-currency-title": "Cambia valuta preferita",
     "change-preferred-currency-msg": "Tutte le statistiche e i budget saranno visualizzati in questa valuta d'ora in poi. Conti e transazioni manterranno la valuta che avevano. Tutti i tassi di cambio salvati verranno eliminati se esegui questa azione. Desideri continuare?",
@@ -741,7 +755,11 @@
       "edit": "Modifica tasso di cambio",
       "edit-success": "Tasso di cambio modificato con successo",
       "remove-all": "Elimina tutti i tassi di cambio",
-      "remove-all-warning": "Questa azione è irreversibile e cancellerà tutti i tassi di cambio per questa valuta"
+      "remove-all-warning": "Questa azione è irreversibile e cancellerà tutti i tassi di cambio per questa valuta",
+      "ecb-loading": "Ricerca del tasso BCE…",
+      "ecb-filled": "Compilato dalla BCE",
+      "ecb-value": "BCE: {{rate}}",
+      "ecb-use-value": "Usa questo valore"
     },
     "TYPES": {
       "display": "Tipo di valuta",

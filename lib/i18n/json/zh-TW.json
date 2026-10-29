@@ -753,6 +753,20 @@
     "currency-manager": "貨幣管理",
     "currency-manager.descr": "配置您的貨幣及其與其他貨幣的匯率",
     "preferred-currency": "首選/基礎貨幣",
+    "update-rates": "更新匯率",
+    "update-rates-loading": "正在從歐洲央行（Frankfurter）取得匯率…",
+    "update-rates-success": {
+      "one": "已更新 1 種貨幣的今日匯率。您手動輸入的匯率不會被覆寫。",
+      "other": "已更新 {{n}} 種貨幣的今日匯率。您手動輸入的匯率不會被覆寫。"
+    },
+    "update-rates-up-to-date": "您的匯率已是最新",
+    "update-rates-failure": "無法更新 {{currency}}：歐洲央行沒有該貨幣的匯率。如有需要，請手動輸入。",
+    "update-rates-error": "無法連線至匯率服務。請檢查網路連線後重試。",
+    "updated-today": "今天已更新",
+    "updated-days-ago": {
+      "one": "1 天前",
+      "other": "{{n}} 天前"
+    },
     "tap-to-change-preferred-currency": "點擊即可更改",
     "change-preferred-currency-title": "更改首選貨幣",
     "change-preferred-currency-msg": "從現在開始，所有統計數據和預算都將以該貨幣顯示。帳戶和交易將保留其所擁有的貨幣。如果您執行此操作，所有保存的匯率都將被刪除。您想繼續嗎？",
@@ -765,7 +779,11 @@
       "edit": "編輯匯率",
       "edit-success": "匯率編輯成功",
       "remove-all": "刪除所有匯率",
-      "remove-all-warning": "此操作不可逆轉，並將刪除該貨幣的所有匯率"
+      "remove-all-warning": "此操作不可逆轉，並將刪除該貨幣的所有匯率",
+      "ecb-loading": "正在查詢歐洲央行匯率…",
+      "ecb-filled": "已從歐洲央行填入",
+      "ecb-value": "歐洲央行：{{rate}}",
+      "ecb-use-value": "使用此值"
     },
     "TYPES": {
       "display": "貨幣類型",

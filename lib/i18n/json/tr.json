@@ -729,6 +729,20 @@
     "currency-manager": "Para birimi yöneticisi",
     "currency-manager.descr": "Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın",
     "preferred-currency": "Tercih edilen/temel para birimi",
+    "update-rates": "Kurları güncelle",
+    "update-rates-loading": "Döviz kurları AMB'den (Frankfurter) alınıyor…",
+    "update-rates-success": {
+      "one": "1 para birimi için bugünün döviz kuru güncellendi. Sizin girdiğiniz kurların üzerine asla yazılmaz.",
+      "other": "{{n}} para birimi için bugünün döviz kurları güncellendi. Sizin girdiğiniz kurların üzerine asla yazılmaz."
+    },
+    "update-rates-up-to-date": "Döviz kurlarınız zaten güncel",
+    "update-rates-failure": "{{currency}} güncellenemedi: AMB'nin bu para birimi için kuru yok. Gerekirse kuru elle girin.",
+    "update-rates-error": "Döviz kuru hizmetine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+    "updated-today": "Bugün güncellendi",
+    "updated-days-ago": {
+      "one": "1 gün önce",
+      "other": "{{n}} gün önce"
+    },
     "tap-to-change-preferred-currency": "Değiştirmek için dokunun",
     "change-preferred-currency-title": "Tercih edilen para birimini değiştir",
     "change-preferred-currency-msg": "Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?",
@@ -741,7 +755,11 @@
       "edit": "Döviz kurunu düzenle",
       "edit-success": "Döviz kuru başarıyla düzenlendi",
       "remove-all": "Tüm döviz kurlarını sil",
-      "remove-all-warning": "Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir"
+      "remove-all-warning": "Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir",
+      "ecb-loading": "AMB kuru aranıyor…",
+      "ecb-filled": "AMB'den dolduruldu",
+      "ecb-value": "AMB: {{rate}}",
+      "ecb-use-value": "Bu değeri kullan"
     },
     "TYPES": {
       "display": "Para birimi türü",

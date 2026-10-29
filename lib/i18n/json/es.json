@@ -740,6 +740,20 @@
     "currency-manager": "Administrador de divisas",
     "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "preferred-currency": "Divisa predeterminada/base",
+    "update-rates": "Actualizar tipos",
+    "update-rates-loading": "Obteniendo tipos de cambio del BCE (Frankfurter)…",
+    "update-rates-success": {
+      "one": "Tipo de cambio de hoy actualizado para 1 divisa. Los que introdujiste nunca se sobrescriben.",
+      "other": "Tipos de cambio de hoy actualizados para {{n}} divisas. Los que introdujiste nunca se sobrescriben."
+    },
+    "update-rates-up-to-date": "Tus tipos de cambio ya están al día",
+    "update-rates-failure": "{{currency}} no se pudo actualizar: el BCE no tiene tipo de cambio para ella. Introdúcelo manualmente si lo necesitas.",
+    "update-rates-error": "No se pudo conectar con el servicio de tipos de cambio. Comprueba tu conexión e inténtalo de nuevo.",
+    "updated-today": "Actualizado hoy",
+    "updated-days-ago": {
+      "one": "hace 1 día",
+      "other": "hace {{n}} días"
+    },
     "tap-to-change-preferred-currency": "Toca para cambiar",
     "change-preferred-currency-title": "Cambiar divisa predeterminada",
     "change-preferred-currency-msg": "Todas las estadisticas y presupuestos serán mostradas en esta divisa a partir de ahora. Las cuentas y transacciones mantendrán la divisa que tenían. Todos los tipos de cambios guardados serán eliminados si ejecutas esta acción, ¿Desea continuar?",
@@ -752,7 +766,11 @@
       "edit": "Editar tipo de cambio",
       "edit-success": "Tipo de cambio editado correctamente",
       "remove-all": "Eliminar todos los tipos de cambio",
-      "remove-all-warning": "Esta acción es irreversible y eliminará todos los tipos de cambio de esta moneda."
+      "remove-all-warning": "Esta acción es irreversible y eliminará todos los tipos de cambio de esta moneda.",
+      "ecb-loading": "Buscando el tipo del BCE…",
+      "ecb-filled": "Rellenado del BCE",
+      "ecb-value": "BCE: {{rate}}",
+      "ecb-use-value": "Usar este valor"
     },
     "TYPES": {
       "display": "Tipo de moneda",

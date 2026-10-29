@@ -729,6 +729,20 @@
     "currency-manager": "Valutakezelő",
     "currency-manager.descr": "Konfigurálja a pénznemet és annak árfolyamait másokkal együtt",
     "preferred-currency": "Kedvelt/alap pénznem",
+    "update-rates": "Árfolyamok frissítése",
+    "update-rates-loading": "Árfolyamok lekérése az EKB-től (Frankfurter)…",
+    "update-rates-success": {
+      "one": "A mai árfolyam frissítve 1 pénznemhez. Az Ön által megadott árfolyamok soha nem íródnak felül.",
+      "other": "A mai árfolyamok frissítve {{n}} pénznemhez. Az Ön által megadott árfolyamok soha nem íródnak felül."
+    },
+    "update-rates-up-to-date": "Az árfolyamai már naprakészek",
+    "update-rates-failure": "A(z) {{currency}} nem frissíthető: az EKB nem rendelkezik hozzá árfolyammal. Szükség esetén adja meg kézzel.",
+    "update-rates-error": "Az árfolyamszolgáltatás nem érhető el. Ellenőrizze a kapcsolatot, és próbálja újra.",
+    "updated-today": "Ma frissítve",
+    "updated-days-ago": {
+      "one": "1 napja",
+      "other": "{{n}} napja"
+    },
     "tap-to-change-preferred-currency": "Érintse meg a módosításhoz",
     "change-preferred-currency-title": "Kedvelt pénznem módosítása",
     "change-preferred-currency-msg": "Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?",
@@ -741,7 +755,11 @@
       "edit": "Árfolyam szerkesztése",
       "edit-success": "Az árfolyam szerkesztése sikerült",
       "remove-all": "Törölje az összes árfolyamot",
-      "remove-all-warning": "Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez"
+      "remove-all-warning": "Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez",
+      "ecb-loading": "EKB-árfolyam keresése…",
+      "ecb-filled": "Kitöltve az EKB-ból",
+      "ecb-value": "EKB: {{rate}}",
+      "ecb-use-value": "Érték használata"
     },
     "TYPES": {
       "display": "Pénznem típusa",
