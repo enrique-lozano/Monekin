@@ -133,6 +133,58 @@ void main() {
     expect(c.nextPaymentDueDate, DateTime(2026, 12, 5));
   });
 
+  test('the previous due date is not always past (month-end days)', () {
+    // Cut-off 29 and due day 31: the Feb 28 statement is due on Mar 31.
+    CreditCardCycle at(DateTime d) =>
+        CreditCardCycle.of(cutoffDay: 29, dueDay: 31, date: d);
+
+    final mar30 = at(DateTime(2026, 3, 30));
+    expect(mar30.previousCutoff, DateTime(2026, 2, 28));
+    expect(mar30.previousPaymentDueDate, DateTime(2026, 3, 31));
+    expect(mar30.isPreviousPaymentDue(DateTime(2026, 3, 30)), isFalse);
+    expect(mar30.isPreviousPaymentDue(DateTime(2026, 4, 1)), isTrue);
+  });
+
+  group('opening debt', () {
+    // Cut-off 15, due 5. A card registered on Oct 22 brings the debt of the
+    // Oct 15 statement, due Nov 5.
+    final opened = DateTime(2026, 10, 22, 14, 30);
+
+    test('belongs to the statement closed before the opening date', () {
+      final c = CreditCardCycle.of(
+        cutoffDay: 15,
+        dueDay: 5,
+        date: DateTime(2026, 10, 25),
+      );
+
+      expect(c.billsOpeningDebt(c.lastCutoff, opened), isTrue);
+      expect(c.billsOpeningDebt(c.previousCutoff, opened), isFalse);
+    });
+
+    test('stays in that statement once it becomes the previous one', () {
+      final c = CreditCardCycle.of(
+        cutoffDay: 15,
+        dueDay: 5,
+        date: DateTime(2026, 11, 20),
+      );
+
+      expect(c.billsOpeningDebt(c.previousCutoff, opened), isTrue);
+      // The balance at the end of Nov 15 already includes it.
+      expect(c.billsOpeningDebt(c.lastCutoff, opened), isFalse);
+    });
+
+    test('is not added twice when opened right at the period start', () {
+      final c = CreditCardCycle.of(
+        cutoffDay: 15,
+        dueDay: 5,
+        date: DateTime(2026, 10, 25),
+      );
+
+      // The balance at the start of Oct 16 already counts this opening.
+      expect(c.billsOpeningDebt(c.lastCutoff, DateTime(2026, 10, 16)), isFalse);
+    });
+  });
+
   group('CreditCardStatus overdue', () {
     final cycle = CreditCardCycle.of(
       cutoffDay: 15,

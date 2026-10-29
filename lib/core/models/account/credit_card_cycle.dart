@@ -58,8 +58,9 @@ class CreditCardCycle {
   /// The statement closed right before [lastCutoff].
   final DateTime previousCutoff;
 
-  /// When the statement closed on [previousCutoff] had to be paid. Always
-  /// before today.
+  /// When the statement closed on [previousCutoff] has to be paid. Usually
+  /// before today, but not always: with month-end days clamped (e.g. cut-off
+  /// 29, due 31) it can still be ahead. See [isPreviousPaymentDue].
   final DateTime previousPaymentDueDate;
 
   /// The last statement that is already closed (strictly before today).
@@ -93,6 +94,21 @@ class CreditCardCycle {
   /// the due date has passed.
   int daysToPaymentDue([DateTime? date]) =>
       _daysBetween(_dateOnly(date ?? DateTime.now()), paymentDueDate);
+
+  /// Whether [previousPaymentDueDate] has already passed on [date] (defaults
+  /// to now), so that an unpaid previous statement is overdue.
+  bool isPreviousPaymentDue([DateTime? date]) =>
+      _daysBetween(_dateOnly(date ?? DateTime.now()), previousPaymentDueDate) <
+      0;
+
+  /// Whether the opening debt of a card opened on [openingDate] belongs to the
+  /// statement closed on [cutoff] while the balance at the end of that
+  /// statement leaves it out: the card was opened during the period that
+  /// follows [cutoff]. A card registered after a cut-off brings a debt that
+  /// statement already billed.
+  bool billsOpeningDebt(DateTime cutoff, DateTime openingDate) =>
+      openingDate.isAfter(_nextDay(cutoff)) &&
+      openingDate.isBefore(_nextDay(cutoffAfter(cutoff, 1)));
 
   /// The cut-off of the statement [date] belongs to: the first cut-off on or
   /// after its day.

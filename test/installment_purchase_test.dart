@@ -41,6 +41,38 @@ void main() {
       expect(purchase.chargeAt(cycle, DateTime(2027, 2, 15)), 0);
     });
 
+    test('installments are rounded down so they never bill too much', () {
+      final cycle = CreditCardCycle.of(cutoffDay: 15, dueDay: 5);
+      final p = InstallmentPurchase(
+        date: DateTime(2026, 10, 20),
+        amount: 200,
+        count: 3,
+      );
+
+      expect(p.installmentAmount, 66.66);
+      expect(p.chargeAt(cycle, DateTime(2027, 1, 15)), 66.68);
+    });
+
+    test('tiny installments in a currency without decimals stay valid', () {
+      final cycle = CreditCardCycle.of(cutoffDay: 15, dueDay: 5);
+      final yen = InstallmentPurchase(
+        date: DateTime(2026, 10, 20),
+        amount: 100,
+        count: 60,
+        decimals: 0,
+      );
+
+      var cutoff = DateTime(2026, 11, 15);
+      for (var i = 0; i < 60; i++) {
+        expect(yen.chargeAt(cycle, cutoff), greaterThanOrEqualTo(0));
+        expect(yen.billedAt(cutoff, 15), lessThanOrEqualTo(100));
+        expect(yen.unbilledAt(cutoff, 15), greaterThanOrEqualTo(0));
+        cutoff = cycle.cutoffAfter(cutoff, 1);
+      }
+
+      expect(yen.billedAt(DateTime(2031, 10, 15), 15), 100);
+    });
+
     test('unbilled debt only counts once the purchase is made', () {
       expect(purchase.unbilledAt(DateTime(2026, 10, 15), 15), 0);
       expect(purchase.unbilledAt(DateTime(2026, 11, 15), 15), 666.67);

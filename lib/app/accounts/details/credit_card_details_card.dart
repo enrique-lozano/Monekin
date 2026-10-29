@@ -25,13 +25,63 @@ class CreditCardDetailsCard extends StatefulWidget {
   State<CreditCardDetailsCard> createState() => _CreditCardDetailsCardState();
 }
 
-class _CreditCardDetailsCardState extends State<CreditCardDetailsCard> {
+class _CreditCardDetailsCardState extends State<CreditCardDetailsCard>
+    with WidgetsBindingObserver {
   late Stream<CreditCardStatus?> _status;
+
+  /// The day [_status] was built for. The billing cycle depends on it, so the
+  /// status is rebuilt when the day changes (at midnight, or when the app
+  /// comes back after it).
+  late DateTime _day;
+  Timer? _midnightTimer;
+
+  static DateTime _today() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month, now.day);
+  }
+
+  void _subscribe() {
+    _day = _today();
+    _status = CreditCardService.instance.getStatus(widget.account);
+    _scheduleMidnightCheck();
+  }
+
+  void _scheduleMidnightCheck() {
+    _midnightTimer?.cancel();
+    final nextDay = DateTime(_day.year, _day.month, _day.day + 1);
+    _midnightTimer = Timer(
+      nextDay.difference(DateTime.now()) + const Duration(seconds: 1),
+      _refreshIfNewDay,
+    );
+  }
+
+  void _refreshIfNewDay() {
+    if (!mounted) return;
+
+    if (_today() != _day) {
+      setState(_subscribe);
+    } else {
+      _scheduleMidnightCheck();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _status = CreditCardService.instance.getStatus(widget.account);
+    WidgetsBinding.instance.addObserver(this);
+    _subscribe();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _refreshIfNewDay();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _midnightTimer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -47,7 +97,7 @@ class _CreditCardDetailsCardState extends State<CreditCardDetailsCard> {
         a.iniValue != b.iniValue ||
         a.date != b.date ||
         a.currencyId != b.currencyId) {
-      _status = CreditCardService.instance.getStatus(a);
+      _subscribe();
     }
   }
 
@@ -174,7 +224,9 @@ class _CreditCardDetailsCardState extends State<CreditCardDetailsCard> {
             ),
           ),
           // Once the last statement is overdue its own text already says so.
-          if (daysToDue >= 0 && status.previousStatementOverdue > 0)
+          if (daysToDue >= 0 &&
+              status.cycle.isPreviousPaymentDue() &&
+              status.previousStatementOverdue > 0)
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: DefaultTextStyle.merge(

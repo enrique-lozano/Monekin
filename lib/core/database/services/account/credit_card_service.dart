@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:drift/drift.dart' show ComparableExpr;
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/account/credit_card_cycle.dart';
 import 'package:monekin/core/models/account/installment_purchase.dart';
+import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
@@ -82,9 +84,10 @@ class CreditCardStatus {
     statementDebt - max(0, paymentsSinceCutoff),
   ).roundWithDecimals(decimals);
 
-  /// What is still unpaid of the statement before the last one, whose due
-  /// date ([CreditCardCycle.previousPaymentDueDate]) has already passed. It is
-  /// part of [statementPaymentLeft] too, since unpaid debt carries over.
+  /// What is still unpaid of the statement before the last one. It is overdue
+  /// once [CreditCardCycle.previousPaymentDueDate] has passed (see
+  /// [CreditCardCycle.isPreviousPaymentDue]). It is part of
+  /// [statementPaymentLeft] too, since unpaid debt carries over.
   double get previousStatementOverdue => max(
     0,
     -(previousStatementBalance + _unbilledAt(cycle.previousCutoff)) -
@@ -184,34 +187,40 @@ class CreditCardService {
       date: date,
     );
 
-    // `maxDate` is exclusive, so the start of the current period is the end
-    // of the cut-off day.
+    // `maxDate` is exclusive, so a statement balance is taken at the start of
+    // the day after its cut-off.
     //
-    // A card registered after its last cut-off brings a debt that was already
-    // billed, so its opening balance counts as part of that statement. It is
-    // never counted in the previous one, so it can't show up as overdue.
-    final openedInCurrentPeriod = !account.date.isBefore(cycle.periodStart);
-    final statementBalance = AccountService.instance
-        .getAccountMoney(account: account, date: cycle.periodStart)
-        .map((b) => openedInCurrentPeriod ? b + account.iniValue : b);
+    // A card registered after a cut-off brings a debt that was already billed,
+    // so its opening balance counts as part of the statement closed right
+    // before its opening date (which the balance itself leaves out), and it
+    // keeps counting there once that statement becomes the previous one.
+    double openingDebtOf(DateTime cutoff) =>
+        cycle.billsOpeningDebt(cutoff, account.date) ? account.iniValue : 0;
 
-    final previousStatementBalance = AccountService.instance.getAccountMoney(
-      account: account,
-      date: cycle.previousPeriodStart,
-    );
-
-    Stream<double> periodFlow(List<TransactionType> types, {DateTime? from}) =>
-        TransactionService.instance.getTransactionsValueBalance(
-          filters: TransactionFilterSet(
-            accountsIDs: [account.id],
-            minDate: from ?? cycle.periodStart,
-            maxDate: date,
-            transactionTypes: types,
-          ),
-          convertToPreferredCurrency: false,
-        );
+    Stream<double> statementBalanceAt(DateTime cutoff) => AccountService
+        .instance
+        .getAccountMoney(account: account, date: _dayAfter(cutoff))
+        .map((b) => b + openingDebtOf(cutoff));
 
     final decimals = account.currency.decimalPlaces;
+
+    // Payments and charges are told apart by their effect on the card, not by
+    // the transaction type: a refund (an inverted expense) pays like a
+    // payment, and money sent out of the card is a charge.
+    final flows = TransactionService.instance
+        .getTransactions(
+          filters: TransactionFilterSet(
+            accountsIDs: [account.id],
+            minDate: cycle.previousPeriodStart,
+            maxDate: date,
+            status: TransactionStatus.getStatusThatCountsForStats(null),
+          ),
+        )
+        .map(
+          (txs) => txs
+              .map((tx) => (date: tx.date, effect: _effectOn(account.id, tx)))
+              .toList(),
+        );
 
     final installmentPurchases = TransactionService.instance
         .getTransactionsFromPredicate(
@@ -224,6 +233,7 @@ class CreditCardService {
               ).toTransactionExpression(
                 extraFilters: (t, a, ac, ra, rac, c, pc) => [
                   t.installments.isNotNull(),
+                  t.value.isSmallerThanValue(0),
                 ],
               ),
         )
@@ -240,37 +250,58 @@ class CreditCardService {
               .toList(),
         );
 
-    const credits = [TransactionType.income, TransactionType.transfer];
-
-    return Rx.combineLatest7(
+    return Rx.combineLatest5(
       balance,
-      statementBalance,
-      periodFlow(credits),
-      periodFlow([TransactionType.expense, TransactionType.investment]),
-      previousStatementBalance,
-      periodFlow(credits, from: cycle.previousPeriodStart),
+      statementBalanceAt(cycle.lastCutoff),
+      statementBalanceAt(cycle.previousCutoff),
+      flows,
       installmentPurchases,
       (
         double bal,
         double stmt,
-        double payments,
-        double charges,
         double prevStmt,
-        double prevPayments,
+        List<({DateTime date, double effect})> flows,
         List<InstallmentPurchase> installments,
-      ) => CreditCardStatus(
-        cycle: cycle,
-        balance: bal,
-        statementBalance: stmt,
-        paymentsSinceCutoff: payments.roundWithDecimals(decimals),
-        periodCharges: (-charges).roundWithDecimals(decimals),
-        previousStatementBalance: prevStmt,
-        paymentsSincePreviousCutoff: prevPayments.roundWithDecimals(decimals),
-        installmentPurchases: installments,
-        decimals: decimals,
-        creditLimit: account.creditLimit,
-        minPaymentPct: account.minPaymentPct,
-      ),
+      ) {
+        double sum(bool Function(({DateTime date, double effect}) f) test) =>
+            flows.where(test).fold<double>(0, (acc, f) => acc + f.effect);
+
+        bool inPeriod(({DateTime date, double effect}) f) =>
+            !f.date.isBefore(cycle.periodStart);
+
+        return CreditCardStatus(
+          cycle: cycle,
+          balance: bal,
+          statementBalance: stmt,
+          paymentsSinceCutoff: sum(
+            (f) => f.effect > 0 && inPeriod(f),
+          ).roundWithDecimals(decimals),
+          periodCharges: -sum(
+            (f) => f.effect < 0 && inPeriod(f),
+          ).roundWithDecimals(decimals),
+          previousStatementBalance: prevStmt,
+          paymentsSincePreviousCutoff: sum(
+            (f) => f.effect > 0,
+          ).roundWithDecimals(decimals),
+          installmentPurchases: installments,
+          decimals: decimals,
+          creditLimit: account.creditLimit,
+          minPaymentPct: account.minPaymentPct,
+        );
+      },
     );
+  }
+
+  static DateTime _dayAfter(DateTime d) => DateTime(d.year, d.month, d.day + 1);
+
+  /// Signed effect of [tx] on the balance of the account [accountId]: the
+  /// value of incomes and expenses, minus the value when the account sends a
+  /// transfer, and the received amount when it gets one.
+  static double _effectOn(String accountId, MoneyTransaction tx) {
+    if (!tx.type.isTransfer) return tx.value;
+
+    return tx.account.id == accountId
+        ? -tx.value
+        : tx.valueInDestiny ?? tx.value;
   }
 }

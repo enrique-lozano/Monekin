@@ -6,8 +6,9 @@ import 'package:monekin/core/models/account/credit_card_cycle.dart';
 ///
 /// The whole [amount] is debt from the purchase [date], but each statement only
 /// bills one installment, starting with the statement the purchase belongs to.
-/// The installment is `amount / count` rounded to [decimals]; the last one
-/// absorbs the rounding difference so they add up to the purchase.
+/// The installment is `amount / count` rounded down to [decimals]; the last one
+/// absorbs the difference so they add up to the purchase without ever billing
+/// more than it.
 class InstallmentPurchase {
   const InstallmentPurchase({
     required this.date,
@@ -26,7 +27,11 @@ class InstallmentPurchase {
 
   final int decimals;
 
-  double get installmentAmount => _round(amount / count);
+  double get installmentAmount {
+    final factor = pow(10, decimals);
+    // The epsilon keeps exact quotients (e.g. 100 / 4) from dropping a cent.
+    return (amount / count * factor + 1e-9).floor() / factor;
+  }
 
   /// How many installments the statement closed on [cutoff] and the earlier
   /// ones have billed.
@@ -42,7 +47,9 @@ class InstallmentPurchase {
   /// Amount billed by the statement closed on [cutoff] and the earlier ones.
   double billedAt(DateTime cutoff, int cutoffDay) {
     final billed = billedCountAt(cutoff, cutoffDay);
-    return billed >= count ? amount : _round(installmentAmount * billed);
+    return billed >= count
+        ? amount
+        : min(amount, _round(installmentAmount * billed));
   }
 
   /// Part of the purchase that, at the end of the [cutoff] day, is already

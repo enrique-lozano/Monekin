@@ -107,9 +107,11 @@ class TransactionFormController extends ChangeNotifier {
   int? installments;
   final TextEditingController installmentsController = TextEditingController();
 
-  /// Only one-off expenses of a credit card can be paid in installments.
+  /// Only one-off purchases of a credit card can be paid in installments, not
+  /// inverted expenses (refunds).
   bool get canPayInInstallments =>
       transactionType == TransactionType.expense &&
+      transactionValue >= 0 &&
       fromAccount?.isCredit == true &&
       recurrentRule.isNoRecurrent;
 
