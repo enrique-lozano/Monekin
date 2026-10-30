@@ -155,12 +155,14 @@ class TransactionService {
   /// By default, the transactions will be returned ordered by date
   Stream<List<MoneyTransaction>> getTransactions({
     TransactionFilterSet? filters,
+    bool onlyPosted = false,
     TransactionQueryOrderBy? orderBy,
     int? limit,
     int? offset,
   }) {
     return getTransactionsFromPredicate(
-      predicate: filters?.toTransactionExpression(),
+      predicate: (filters ?? const TransactionFilterSet())
+          .toTransactionExpression(onlyPosted: onlyPosted),
       orderBy:
           orderBy ??
           (p0, p1, p2, p3, p4, p5, p6) => OrderBy([
@@ -217,11 +219,13 @@ class TransactionService {
 
   Stream<int> countTransactions({
     TransactionFilterSet filters = const TransactionFilterSet(),
+    bool onlyPosted = false,
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {
     return _countTransactions(
       predicate: filters,
+      onlyPosted: onlyPosted,
       convertToPreferredCurrency: convertToPreferredCurrency,
       exchDate: exchDate,
     ).map((event) => event.numberOfRes);
@@ -233,7 +237,8 @@ class TransactionService {
     DateTime? exchDate,
   }) {
     return _countTransactions(
-      predicate: filters.forPostedTransactions(),
+      predicate: filters,
+      onlyPosted: true,
       convertToPreferredCurrency: convertToPreferredCurrency,
       exchDate: exchDate,
     ).map((event) => event.valueSum);
@@ -251,9 +256,9 @@ class TransactionService {
     final exchangeDate = exchDate ?? DateTime.now();
 
     final predicate = filters
-        .forPostedTransactions()
         .copyWith(transactionTypes: [TransactionType.investment])
         .toTransactionExpression(
+          onlyPosted: true,
           extraFilters: (t, account, accountCurrency, ra, raCurrency, c, pc) =>
               [t.value.isSmallerThanValue(0)],
         );
@@ -270,6 +275,7 @@ class TransactionService {
 
   Stream<TransactionQueryStatResult> _countTransactions({
     TransactionFilterSet predicate = const TransactionFilterSet(),
+    bool onlyPosted = false,
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {
@@ -303,7 +309,7 @@ class TransactionService {
                             TransactionType.investment,
                           ],
                     )
-                    .toTransactionExpression(),
+                    .toTransactionExpression(onlyPosted: onlyPosted),
                 date: exchangeDate,
               )
               .watchSingle(),
@@ -316,7 +322,7 @@ class TransactionService {
                       transactionTypes: [TransactionType.transfer],
                       includeReceivingAccountsInAccountFilters: false,
                     )
-                    .toTransactionExpression(),
+                    .toTransactionExpression(onlyPosted: onlyPosted),
                 date: exchangeDate,
               )
               .watchSingle(),
@@ -330,6 +336,7 @@ class TransactionService {
                       accountsIDs: null,
                     )
                     .toTransactionExpression(
+                      onlyPosted: onlyPosted,
                       extraFilters:
                           (
                             transaction,
@@ -366,7 +373,7 @@ class TransactionService {
     // If we should not take into account transfers, we just return the normal sum
     return db
         .countTransactions(
-          predicate: predicate.toTransactionExpression(),
+          predicate: predicate.toTransactionExpression(onlyPosted: onlyPosted),
           date: exchangeDate,
         )
         .watchSingle()

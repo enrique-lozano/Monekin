@@ -200,14 +200,7 @@ void main() {
 
       expect(await service.getTransactionsValueBalance().first, -10);
       expect(await service.countTransactions().first, 5);
-      expect(
-        await service
-            .countTransactions(
-              filters: const TransactionFilterSet().forPostedTransactions(),
-            )
-            .first,
-        1,
-      );
+      expect(await service.countTransactions(onlyPosted: true).first, 1);
       expect(
         (await service
                 .getTransactions(
@@ -219,6 +212,109 @@ void main() {
       );
     },
   );
+
+  test('posted totals intersect a recurring-only scope', () async {
+    await insertTransaction(
+      'rule',
+      date: now.subtract(const Duration(days: 1)),
+      intervalPeriod: Periodicity.month,
+      value: -10,
+    );
+    await insertTransaction(
+      'one-off',
+      date: now.subtract(const Duration(days: 1)),
+      value: -100,
+    );
+
+    expect(
+      await service
+          .getTransactionsValueBalance(
+            filters: const TransactionFilterSet(isRecurrent: true),
+          )
+          .first,
+      0,
+    );
+    expect(
+      await service
+          .getTransactionsValueBalance(
+            filters: const TransactionFilterSet(
+              isRecurrent: true,
+              transactionTypes: [TransactionType.expense],
+            ),
+          )
+          .first,
+      0,
+    );
+    expect(
+      await service
+          .countTransactions(
+            filters: const TransactionFilterSet(isRecurrent: true),
+            onlyPosted: true,
+          )
+          .first,
+      0,
+    );
+    expect(
+      await service
+          .getTransactions(
+            filters: const TransactionFilterSet(isRecurrent: true),
+            onlyPosted: true,
+          )
+          .first,
+      isEmpty,
+    );
+    expect(
+      await service
+          .countTransactions(
+            filters: const TransactionFilterSet(isRecurrent: true),
+          )
+          .first,
+      1,
+    );
+    for (final isRecurrent in [null, false]) {
+      expect(
+        await service
+            .getTransactionsValueBalance(
+              filters: TransactionFilterSet(isRecurrent: isRecurrent),
+            )
+            .first,
+        -100,
+      );
+    }
+  });
+
+  test('posted investment volume intersects a recurring-only scope', () async {
+    await insertTransaction(
+      'investment-rule',
+      date: now.subtract(const Duration(days: 1)),
+      intervalPeriod: Periodicity.month,
+      type: TransactionType.investment,
+      value: -10,
+    );
+    await insertTransaction(
+      'investment-buy',
+      date: now.subtract(const Duration(days: 1)),
+      type: TransactionType.investment,
+      value: -100,
+    );
+
+    expect(
+      await service
+          .getInvestmentBuyVolume(
+            filters: const TransactionFilterSet(isRecurrent: true),
+          )
+          .first,
+      0,
+    );
+    expect(
+      await service
+          .getInvestmentBuyVolume(
+            filters: const TransactionFilterSet(isRecurrent: false),
+          )
+          .first,
+      100,
+    );
+  });
 
   test('financial totals preserve date and status restrictions', () async {
     await insertTransaction(

@@ -109,11 +109,6 @@ class TransactionFilterSet {
     );
   }
 
-  TransactionFilterSet forPostedTransactions() => copyWith(
-    isRecurrent: false,
-    status: TransactionStatus.getStatusThatCountsForStats(status),
-  );
-
   bool get hasFilter => [
     minDate,
     maxDate,
@@ -172,6 +167,7 @@ class TransactionFilterSet {
     Categories,
   )?
   toTransactionExpression({
+    bool onlyPosted = false,
     Iterable<Expression<bool>> Function(
       Transactions transaction,
       Accounts account,
@@ -183,6 +179,10 @@ class TransactionFilterSet {
     )?
     extraFilters,
   }) {
+    final includedStatuses = onlyPosted
+        ? TransactionStatus.getStatusThatCountsForStats(status)
+        : status;
+
     return (
       transaction,
       account,
@@ -212,6 +212,7 @@ class TransactionFilterSet {
         transaction.type.isInValues(transactionTypes!),
 
       // Is recurrent:
+      if (onlyPosted) transaction.intervalPeriod.isNull(),
       if (isRecurrent == false) transaction.intervalPeriod.isNull(),
       if (isRecurrent == true) transaction.intervalPeriod.isNotNull(),
 
@@ -242,7 +243,8 @@ class TransactionFilterSet {
             c.parentCategoryID.isIn(categoriesIds!),
       if (categoriesIds != null && !includeParentCategoriesInSearch)
         transaction.categoryID.isIn(categoriesIds!),
-      if (status != null) transaction.status.isInValues(status!),
+      if (includedStatuses != null)
+        transaction.status.isInValues(includedStatuses),
       if (extraFilters != null)
         buildDriftExpr(
           extraFilters(

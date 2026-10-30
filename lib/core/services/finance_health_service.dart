@@ -353,7 +353,8 @@ class FinanceHealthService {
 
     return Rx.combineLatest3(
       TransactionService.instance.countTransactions(
-        filters: filters.forPostedTransactions(),
+        filters: filters,
+        onlyPosted: true,
       ),
       AccountService.instance.getAccountsMoney(
         accountIds: filters.accountsIDs,
@@ -392,7 +393,8 @@ class FinanceHealthService {
         filters: filters.copyWith(transactionTypes: [TransactionType.expense]),
       ),
       TransactionService.instance.countTransactions(
-        filters: filters.forPostedTransactions(),
+        filters: filters,
+        onlyPosted: true,
       ),
       (income, expense, transactionCount) {
         if (income <= 0) return transactionCount >= 10 ? 0.0 : null;
@@ -470,7 +472,8 @@ class FinanceHealthService {
 
       return TransactionService.instance
           .getTransactions(
-            filters: filters.forPostedTransactions().copyWith(
+            onlyPosted: true,
+            filters: filters.copyWith(
               transactionTypes: [
                 TransactionType.income,
                 TransactionType.expense,

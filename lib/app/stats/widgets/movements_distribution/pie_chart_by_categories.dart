@@ -51,7 +51,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
   final centerRadius = 35;
 
   TransactionFilterSet _getTransactionFilters() {
-    return widget.filters.forPostedTransactions().copyWith(
+    return widget.filters.copyWith(
       transactionTypes: [
         transactionsType,
       ].intersectionWithNullable(widget.filters.transactionTypes).toList(),
@@ -218,7 +218,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
     return StreamBuilder(
       stream: TransactionService.instance
-          .getTransactions(filters: _getTransactionFilters())
+          .getTransactions(filters: _getTransactionFilters(), onlyPosted: true)
           .asyncMap((data) => getEvolutionData(context, data)),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
