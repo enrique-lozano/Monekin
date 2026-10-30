@@ -232,12 +232,8 @@ class TransactionService {
     bool convertToPreferredCurrency = true,
     DateTime? exchDate,
   }) {
-    filters = filters.copyWith(
-      status: TransactionStatus.getStatusThatCountsForStats(filters.status),
-    );
-
     return _countTransactions(
-      predicate: filters,
+      predicate: filters.forPostedTransactions(),
       convertToPreferredCurrency: convertToPreferredCurrency,
       exchDate: exchDate,
     ).map((event) => event.valueSum);
@@ -255,6 +251,7 @@ class TransactionService {
     final exchangeDate = exchDate ?? DateTime.now();
 
     final predicate = filters
+        .forPostedTransactions()
         .copyWith(transactionTypes: [TransactionType.investment])
         .toTransactionExpression(
           extraFilters: (t, account, accountCurrency, ra, raCurrency, c, pc) =>

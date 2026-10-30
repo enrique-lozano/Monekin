@@ -109,6 +109,11 @@ class TransactionFilterSet {
     );
   }
 
+  TransactionFilterSet forPostedTransactions() => copyWith(
+    isRecurrent: false,
+    status: TransactionStatus.getStatusThatCountsForStats(status),
+  );
+
   bool get hasFilter => [
     minDate,
     maxDate,

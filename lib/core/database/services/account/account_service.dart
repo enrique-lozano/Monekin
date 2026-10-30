@@ -297,6 +297,7 @@ class AccountService {
               )
               FROM transactions t
               WHERE (t.status IS NULL OR t.status NOT IN ('V', 'P'))
+                AND t.intervalPeriod IS NULL
                 AND t.date <= acs.date
                 AND (
                   t.accountID = accounts.id

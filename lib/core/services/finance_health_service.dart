@@ -13,7 +13,6 @@ import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/date-utils/date_period_segments.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
@@ -353,7 +352,9 @@ class FinanceHealthService {
     final maxDate = filters.maxDate ?? DateTime.now();
 
     return Rx.combineLatest3(
-      TransactionService.instance.countTransactions(filters: filters),
+      TransactionService.instance.countTransactions(
+        filters: filters.forPostedTransactions(),
+      ),
       AccountService.instance.getAccountsMoney(
         accountIds: filters.accountsIDs,
         trFilters: filters.copyWithNull(minDate: true),
@@ -390,7 +391,9 @@ class FinanceHealthService {
       TransactionService.instance.getTransactionsValueBalance(
         filters: filters.copyWith(transactionTypes: [TransactionType.expense]),
       ),
-      TransactionService.instance.countTransactions(filters: filters),
+      TransactionService.instance.countTransactions(
+        filters: filters.forPostedTransactions(),
+      ),
       (income, expense, transactionCount) {
         if (income <= 0) return transactionCount >= 10 ? 0.0 : null;
 
@@ -467,14 +470,11 @@ class FinanceHealthService {
 
       return TransactionService.instance
           .getTransactions(
-            filters: filters.copyWith(
+            filters: filters.forPostedTransactions().copyWith(
               transactionTypes: [
                 TransactionType.income,
                 TransactionType.expense,
               ],
-              status: TransactionStatus.getStatusThatCountsForStats(
-                filters.status,
-              ),
               minDate: segments.first.start,
               maxDate: segments.last.end,
             ),

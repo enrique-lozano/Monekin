@@ -12,7 +12,6 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/responsive/adaptive_two_column.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
@@ -52,10 +51,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
   final centerRadius = 35;
 
   TransactionFilterSet _getTransactionFilters() {
-    return widget.filters.copyWith(
-      status: TransactionStatus.getStatusThatCountsForStats(
-        widget.filters.status,
-      ),
+    return widget.filters.forPostedTransactions().copyWith(
       transactionTypes: [
         transactionsType,
       ].intersectionWithNullable(widget.filters.transactionTypes).toList(),
