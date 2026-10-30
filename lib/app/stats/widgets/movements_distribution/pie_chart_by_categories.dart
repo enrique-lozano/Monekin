@@ -52,15 +52,22 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
   final centerRadius = 35;
 
   TransactionFilterSet _getTransactionFilters() {
+    final hasConflictingRecurrenceFilter = widget.filters.isRecurrent == true;
+
     return widget.filters.copyWith(
+      transactionTypes: hasConflictingRecurrenceFilter
+          ? []
+          : [
+              transactionsType,
+            ].intersectionWithNullable(
+              widget.filters.transactionTypes,
+            ).toList(),
+      minDate: widget.datePeriodState.startDate,
+      maxDate: widget.datePeriodState.endDate,
       status: TransactionStatus.getStatusThatCountsForStats(
         widget.filters.status,
       ),
-      transactionTypes: [
-        transactionsType,
-      ].intersectionWithNullable(widget.filters.transactionTypes).toList(),
-      minDate: widget.datePeriodState.startDate,
-      maxDate: widget.datePeriodState.endDate,
+      isRecurrent: false,
     );
   }
 
@@ -222,7 +229,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
     return StreamBuilder(
       stream: TransactionService.instance
-          .getTransactions(filters: _getTransactionFilters())
+          .getTransactions(filters: _getTransactionFilters(), onlyPosted: true)
           .asyncMap((data) => getEvolutionData(context, data)),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

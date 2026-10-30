@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/models/account/account.dart';
+import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 
@@ -79,6 +80,7 @@ void main() {
     String? receivingAccountId,
     double? valueInDestiny,
     TransactionStatus? status,
+    Periodicity? intervalPeriod,
   }) {
     return db
         .into(db.transactions)
@@ -91,6 +93,8 @@ void main() {
             type: type,
             isHidden: false,
             status: status,
+            intervalPeriod: intervalPeriod,
+            intervalEach: intervalPeriod != null ? 1 : null,
             receivingAccountID: receivingAccountId,
             valueInDestiny: valueInDestiny,
             // Income and expense rows need a category, transfers a receiving
@@ -331,6 +335,25 @@ void main() {
       expect(await adjustmentAt(DateTime(2026, 5)), closeTo(-30, 0.0001));
     },
   );
+
+  test('recurring rules never affect the snapshot cash anchor', () async {
+    await insertAccount(investmentAccount);
+    await insertLedgerRow(
+      id: 'rule',
+      date: DateTime(2026, 2),
+      value: -400,
+      intervalPeriod: Periodicity.month,
+    );
+    await insertLedgerRow(id: 'posted', date: DateTime(2026, 2), value: 30);
+    await insertSnapshot(
+      'snapshot',
+      accountId: investmentAccount,
+      date: DateTime(2026, 4),
+      cash: 0,
+    );
+
+    expect(await adjustmentAt(DateTime(2026, 5)), closeTo(-30, 0.0001));
+  });
 
   test('accounts tracked by transactions are left alone', () async {
     await insertAccount(

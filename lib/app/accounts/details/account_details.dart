@@ -841,10 +841,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     const transactionsToShow = 8;
 
     final filters = TransactionFilterSet(
-      status: TransactionStatus.notIn({
-        TransactionStatus.pending,
-        TransactionStatus.voided,
-      }),
+      status: TransactionStatus.notIn({TransactionStatus.pending}),
+      isRecurrent: false,
+      maxDate: DateTime.now(),
       accountsIDs: [account.id],
     );
 
