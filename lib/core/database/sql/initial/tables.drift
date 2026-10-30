@@ -73,8 +73,9 @@ CREATE TABLE IF NOT EXISTS accounts (
 
     description TEXT,
 
-    -- The type of the account. 'money' (cash only) or 'investment' (cash + holdings)
-    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('money', 'investment')),
+    -- The type of the account. 'money' (cash only), 'investment' (cash + holdings)
+    -- or 'credit' (a credit card, its balance is the debt with the bank)
+    type ENUMNAME(AccountType) NOT NULL CHECK(type IN ('money', 'investment', 'credit')),
 
     -- Whether this money account behaves as a savings account (money only in/out via transfers)
     isSaving BOOLEAN NOT NULL DEFAULT 0,
@@ -99,7 +100,23 @@ CREATE TABLE IF NOT EXISTS accounts (
     currencyId TEXT NOT NULL REFERENCES currencies(code) ON DELETE CASCADE ON UPDATE CASCADE,
     
     iban TEXT,
-    swift TEXT
+    swift TEXT,
+
+    -- Credit card fields, only meaningful for 'credit' accounts. A credit account
+    -- always has a cutoffDay and a dueDay (validated in the form, not here).
+    -- Days that a month does not have fall back to the last day of that month.
+
+    -- Day of the month (1-31) the statement closes
+    cutoffDay INTEGER CHECK(cutoffDay IS NULL OR cutoffDay BETWEEN 1 AND 31),
+
+    -- Day of the month (1-31) the statement has to be paid
+    dueDay INTEGER CHECK(dueDay IS NULL OR dueDay BETWEEN 1 AND 31),
+
+    -- Credit limit, in the account currency
+    creditLimit REAL,
+
+    -- Share of the statement used to estimate the minimum payment (e.g. 0.05 for 5%)
+    minPaymentPct REAL
 ) AS AccountInDB;
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -411,6 +428,11 @@ CREATE TABLE IF NOT EXISTS transactions (
 
   -- Number of payments remaining. This value must dicrease by one in the case a new payment is done within this rule. If this field or the `endDate` field is not specified, the recurring transaction will never end.
   remainingTransactions INTEGER,
+
+  -- Only for expenses of credit card accounts: number of monthly installments the
+  -- purchase is paid in. The whole amount is debt from the purchase date, but each
+  -- statement only bills one installment, starting with the one of the purchase.
+  installments INTEGER CHECK(installments IS NULL OR installments >= 2),
 
   -- Transfer/I/E: exactly one of category vs receiving. Investment (N): asset or
   -- security set, receiving null, category null.

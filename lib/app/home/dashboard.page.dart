@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/dashboard_account_list.dart';
 import 'package:monekin/app/home/widgets/dashboard_balance_chart.dart';
+import 'package:monekin/app/home/widgets/dashboard_balance_scope.dart';
 import 'package:monekin/app/home/widgets/finance_health_donut.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/page_context.dart';
@@ -12,7 +14,6 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/edit_profile_modal.dart';
 import 'package:monekin/app/stats/stats_page.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
-import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/models/date-utils/date_period.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
@@ -54,17 +55,16 @@ class _DashboardPageState extends State<DashboardPage> {
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _showStickyBalanceHeader = ValueNotifier(false);
   late final String _welcomeGreeting = _pickWelcomeGreeting();
-  late final Stream<double> _currentBalanceStream;
+  late Stream<double> _currentBalanceStream;
+  DashboardBalanceScope _balanceScope = DashboardBalanceScope.fromName(
+    appStateData[AppDataKey.dashboardBalanceScope],
+  );
   late Stream<(double, _BalanceStats)> _balanceSummaryStream;
 
   @override
   void initState() {
     super.initState();
 
-    _currentBalanceStream = AccountService.instance
-        .getAccountsMoney()
-        .distinct()
-        .shareReplay(maxSize: 1);
     _refreshBalanceSummaryStream();
     _scrollController.addListener(_updateStickyBalanceHeader);
     _loadSavedDatePeriod();
@@ -104,15 +104,15 @@ class _DashboardPageState extends State<DashboardPage> {
     }
 
     return Rx.combineLatest2(
-      AccountService.instance.getAccountsMoney(date: start),
-      AccountService.instance.getAccountsMoney(date: end),
+      _balanceScope.watchBalance(date: start),
+      _balanceScope.watchBalance(date: end),
       (double startBalance, double endBalance) {
         final delta = endBalance - startBalance;
 
         const eps = 1e-10;
         final percentage = startBalance.abs() < eps
             ? (endBalance.abs() < eps ? 0.0 : double.nan)
-            : delta / startBalance;
+            : delta / startBalance.abs();
 
         return (delta: delta, percentage: percentage);
       },
@@ -120,11 +120,33 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _refreshBalanceSummaryStream() {
+    _currentBalanceStream = _balanceScope.watchBalance().distinct().shareReplay(
+      maxSize: 1,
+    );
     _balanceSummaryStream = Rx.combineLatest2(
       _currentBalanceStream,
       _getBalanceStatsStream(dateRangeService),
       (double current, _BalanceStats stats) => (current, stats),
     ).distinct().shareReplay(maxSize: 1);
+  }
+
+  void _toggleBalanceScope() {
+    const scopes = DashboardBalanceScope.values;
+    final next = scopes[(scopes.indexOf(_balanceScope) + 1) % scopes.length];
+
+    unawaited(HapticFeedback.selectionClick());
+
+    unawaited(
+      AppDataService.instance.setItem(
+        AppDataKey.dashboardBalanceScope,
+        next.name,
+      ),
+    );
+
+    setState(() {
+      _balanceScope = next;
+      _refreshBalanceSummaryStream();
+    });
   }
 
   void _onPeriodChanged(DatePeriod period) {
@@ -257,7 +279,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    t.home.total_balance,
+                    _balanceScope.title(context),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.labelSmall?.copyWith(
@@ -540,7 +562,8 @@ class _DashboardPageState extends State<DashboardPage> {
         final stats = snapshot.data?.$2;
 
         return EvolutionCard(
-          valueLabel: t.home.total_balance,
+          valueLabel: _balanceScope.title(context),
+          onValueLabelTap: _toggleBalanceScope,
           finalValue: current,
           changeValue: snapshot.hasData ? stats?.delta : null,
           changePercentage: snapshot.hasData ? stats?.percentage : null,
@@ -548,6 +571,7 @@ class _DashboardPageState extends State<DashboardPage> {
           chart: DashboardBalanceChart(
             dateRange: dateRangeService,
             lineColor: accent,
+            scope: _balanceScope,
           ),
           currentPeriod: dateRangeService.datePeriod,
           onPresetSelected: _onPeriodChanged,

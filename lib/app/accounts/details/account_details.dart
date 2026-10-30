@@ -6,6 +6,7 @@ import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/balance_correction_modal.dart';
 import 'package:monekin/app/accounts/details/account_details_actions.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
+import 'package:monekin/app/accounts/details/credit_card_details_card.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/accounts/details/holdings_snapshot_card.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -241,6 +242,13 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
         const SizedBox(height: 20),
         _buildQuickActions(account, isInvestment),
         const SizedBox(height: 16),
+        if (account.isCredit) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: CreditCardDetailsCard(account: account),
+          ),
+          const SizedBox(height: 16),
+        ],
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: isInvestment
@@ -302,6 +310,10 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (account.isCredit) ...[
+                CreditCardDetailsCard(account: account),
+                const SizedBox(height: 16),
+              ],
               _buildInfo(account, topGap: false),
               if (!isInvestment) ...[
                 const SizedBox(height: 16),
