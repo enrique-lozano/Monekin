@@ -38,6 +38,7 @@ class ExchangeRateFormDialog extends StatefulWidget {
     super.key,
     this.currency,
     this.exchangeRateToEdit,
+    this.existingRateDates = const [],
   }) : assert(
          currency == null || exchangeRateToEdit == null,
          'You cannot provide both a currency and an exchange rate to edit',
@@ -45,6 +46,9 @@ class ExchangeRateFormDialog extends StatefulWidget {
 
   final Currency? currency;
   final ExchangeRate? exchangeRateToEdit;
+
+  /// Dates already present in the caller's unsaved rates for [currency].
+  final List<DateTime> existingRateDates;
 
   @override
   State<ExchangeRateFormDialog> createState() => _ExchangeRateFormDialogState();
@@ -64,6 +68,10 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
   bool get isEditMode => widget.exchangeRateToEdit != null;
 
   final _ecbClient = FrankfurterEcbClient();
+
+  bool get _hasStagedRate =>
+      _currency?.code == widget.currency?.code &&
+      widget.existingRateDates.any((day) => DateUtils.isSameDay(day, date));
 
   /// ECB rate for the chosen currency and date, if the ECB has one.
   double? _ecbRate;
@@ -88,6 +96,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
     final canFetch =
         !isEditMode &&
+        !_hasStagedRate &&
         ecbFetchAvailability(
               currency: currency?.code,
               preferred: preferred?.code,
@@ -348,7 +357,8 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                       .map((rate) => rate != null),
                   initialData: false,
                   builder: (context, snapshot) {
-                    final hasAlreadyAnRate = snapshot.hasData && snapshot.data!;
+                    final hasAlreadyAnRate =
+                        _hasStagedRate || (snapshot.hasData && snapshot.data!);
 
                     return AnimatedExpanded(
                       expand: hasAlreadyAnRate && !isEditMode,
