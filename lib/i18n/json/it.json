@@ -736,6 +736,8 @@
       "other": "Tassi di cambio di oggi aggiornati per {{n}} valute. Quelli inseriti da te non vengono mai sovrascritti."
     },
     "update-rates-up-to-date": "I tuoi tassi di cambio sono già aggiornati",
+    "remove-all-rates-warning": "Questa azione è irreversibile ed eliminerà tutti i tassi di cambio salvati per tutte le valute. Le valute, i conti e le transazioni non verranno eliminati. I saldi convertiti e le statistiche potrebbero cambiare.",
+    "delete-rates-error": "Impossibile eliminare i tassi di cambio. Riprova.",
     "update-rates-supported-up-to-date": "I tassi di cambio supportati sono già aggiornati",
     "update-rates-unavailable": "I tassi di cambio automatici non sono disponibili per {{currencies}}. Inserisci questi tassi manualmente.",
     "update-rates-failure": "Impossibile aggiornare {{currency}}: la BCE non ha un tasso per questa valuta. Inseriscilo manualmente se ti serve.",

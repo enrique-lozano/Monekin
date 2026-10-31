@@ -807,6 +807,8 @@
       "already-exists": "A currency with this code already exists. You may want to edit it"
     },
     "delete-all-success": "Deleted exchange rates successfully",
+    "remove-all-rates-warning": "This action cannot be undone and will delete all saved exchange rates for every currency. Currencies, accounts and transactions will not be deleted. Converted balances and statistics may change.",
+    "delete-rates-error": "Could not delete exchange rates. Try again.",
     "historical": "Historical rates",
     "historical-empty": "No historical exchange rates found for this currency",
     "exchange-rate": "Exchange rate",

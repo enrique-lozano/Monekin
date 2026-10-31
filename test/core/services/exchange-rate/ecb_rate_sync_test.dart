@@ -67,6 +67,17 @@ void main() {
 
   tearDown(() => db.close());
 
+  test('clearing all rates removes history but preserves currencies', () async {
+    await save('usd-today', 'USD', today, 1.2);
+    await save('gbp-today', 'GBP', today, 0.9);
+    final currenciesBefore = await db.select(db.currencies).get();
+
+    expect(await service.deleteExchangeRates(), 4);
+    expect(await db.select(db.exchangeRates).get(), isEmpty);
+    expect(await service.getExchangeRates().first, isEmpty);
+    expect(await db.select(db.currencies).get(), currenciesBefore);
+  });
+
   test('adds today\'s rate for every currency', () async {
     final result = await sync((_) async => quote());
 

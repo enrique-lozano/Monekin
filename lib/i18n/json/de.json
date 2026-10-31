@@ -737,6 +737,8 @@
     },
     "update-rates-up-to-date": "Deine Wechselkurse sind bereits aktuell",
     "update-rates-supported-up-to-date": "Die unterstützten Wechselkurse sind bereits aktuell",
+    "remove-all-rates-warning": "Diese Aktion kann nicht rückgängig gemacht werden und löscht alle gespeicherten Wechselkurse für sämtliche Währungen. Währungen, Konten und Transaktionen werden nicht gelöscht. Umgerechnete Salden und Statistiken können sich ändern.",
+    "delete-rates-error": "Die Wechselkurse konnten nicht gelöscht werden. Versuche es erneut.",
     "update-rates-unavailable": "Automatische Wechselkurse für {{currencies}} sind nicht verfügbar. Gib diese Kurse manuell ein.",
     "update-rates-failure": "{{currency}} konnte nicht aktualisiert werden: Die EZB hat dafür keinen Kurs. Gib den Kurs bei Bedarf manuell ein.",
     "update-rates-error": "Der Wechselkursdienst ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",

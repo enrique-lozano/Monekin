@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:monekin/app/currencies/edit_currency_page.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
+import 'package:monekin/app/currencies/widgets/currency_manager_menu.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
@@ -14,7 +16,6 @@ import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/routes/route_utils.dart';
@@ -22,6 +23,7 @@ import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
 import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
+import 'package:sqlite3/sqlite3.dart' show SqliteException;
 
 import '../../core/presentation/widgets/no_results.dart';
 
@@ -79,9 +81,11 @@ class CurrencyManagerPage extends StatefulWidget {
 
 class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   bool _updatingRates = false;
+  bool _deletingRates = false;
+  bool get _busy => _updatingRates || _deletingRates;
 
   Future<void> _updateRates() async {
-    if (_updatingRates) return;
+    if (_busy) return;
     final t = Translations.of(context);
     setState(() {
       _updatingRates = true;
@@ -123,37 +127,36 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
     );
   }
 
-  Widget _buildUpdateAction(BuildContext context) {
+  Future<void> _deleteAllRates() async {
+    if (_busy) return;
     final t = Translations.of(context);
-    final isWide = BreakPoint.of(context).isLargerOrEqualTo(BreakpointID.lg);
+    setState(() => _deletingRates = true);
+    try {
+      await ExchangeRateService.instance.deleteExchangeRates();
+      if (!mounted) return;
+      MonekinSnackbar.success(
+        SnackbarParams(t.currencies.delete_all_success, showAtTop: false),
+      );
+    } on SqliteException {
+      if (!mounted) return;
+      MonekinSnackbar.error(
+        SnackbarParams(t.currencies.delete_rates_error, showAtTop: false),
+      );
+    } finally {
+      if (mounted) setState(() => _deletingRates = false);
+    }
+  }
 
+  Widget _buildActions(BuildContext context) {
     return StreamBuilder(
       stream: ExchangeRateService.instance.getExchangeRates(),
       builder: (context, snapshot) {
         if (snapshot.data?.isNotEmpty != true) return const SizedBox.shrink();
 
-        final onPressed = _updatingRates ? null : _updateRates;
-        final icon = _updatingRates
-            ? const SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              )
-            : const Icon(Icons.sync_rounded);
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: isWide
-              ? FilledButton.tonalIcon(
-                  onPressed: onPressed,
-                  icon: icon,
-                  label: Text(t.currencies.update_rates),
-                )
-              : IconButton.filledTonal(
-                  tooltip: t.currencies.update_rates,
-                  onPressed: onPressed,
-                  icon: icon,
-                ),
+        return CurrencyManagerMenu(
+          busy: _busy,
+          onUpdate: () => unawaited(_updateRates()),
+          onDelete: _deleteAllRates,
         );
       },
     );
@@ -194,7 +197,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
 
     return PageFramework(
       title: Translations.of(context).currencies.currency_manager,
-      appBarActions: [_buildUpdateAction(context)],
+      appBarActions: [_buildActions(context)],
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 12).withSafeBottom(context),
         child: Column(
@@ -236,7 +239,7 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
                             t.currencies.tap_to_change_preferred_currency,
                           ),
                           onTap: () {
-                            if (userCurrency == null || _updatingRates) return;
+                            if (userCurrency == null || _busy) return;
 
                             showCurrencySelectorModal(
                               tileContext,

@@ -760,6 +760,8 @@
       "other": "已更新 {{n}} 種貨幣的今日匯率。您手動輸入的匯率不會被覆寫。"
     },
     "update-rates-up-to-date": "您的匯率已是最新",
+    "remove-all-rates-warning": "此操作無法復原，將刪除所有貨幣的全部已儲存匯率。貨幣、帳戶和交易不會被刪除。換算後的餘額和統計資料可能會改變。",
+    "delete-rates-error": "無法刪除匯率。請重試。",
     "update-rates-supported-up-to-date": "支援的匯率已是最新",
     "update-rates-unavailable": "{{currencies}} 的自動匯率無法使用。請手動輸入這些匯率。",
     "update-rates-failure": "無法更新 {{currency}}：歐洲央行沒有該貨幣的匯率。如有需要，請手動輸入。",

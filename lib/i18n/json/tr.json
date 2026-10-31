@@ -736,6 +736,8 @@
       "other": "{{n}} para birimi için bugünün döviz kurları güncellendi. Sizin girdiğiniz kurların üzerine asla yazılmaz."
     },
     "update-rates-up-to-date": "Döviz kurlarınız zaten güncel",
+    "remove-all-rates-warning": "Bu işlem geri alınamaz ve tüm para birimleri için kaydedilen tüm döviz kurlarını siler. Para birimleri, hesaplar ve işlemler silinmez. Dönüştürülen bakiyeler ve istatistikler değişebilir.",
+    "delete-rates-error": "Döviz kurları silinemedi. Tekrar deneyin.",
     "update-rates-supported-up-to-date": "Desteklenen döviz kurları zaten güncel",
     "update-rates-unavailable": "{{currencies}} için otomatik döviz kurları mevcut değil. Bu kurları elle girin.",
     "update-rates-failure": "{{currency}} güncellenemedi: AMB'nin bu para birimi için kuru yok. Gerekirse kuru elle girin.",
