@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,6 +18,52 @@ class ExchangeRateService {
   /// Creates a service bound to a specific (test) database.
   @visibleForTesting
   ExchangeRateService.forTesting(this.db);
+
+  /// Changes the manager's base currency and clears its rates atomically.
+  Future<void> changePreferredCurrency(String currencyCode) async {
+    await db.transaction(() async {
+      final previous =
+          await (db.select(db.userSettings)..where(
+                (s) => s.settingKey.equalsValue(SettingKey.preferredCurrency),
+              ))
+              .getSingleOrNull();
+      if (previous?.settingValue == currencyCode) return;
+
+      await db
+          .into(db.userSettings)
+          .insert(
+            UserSetting(
+              settingKey: SettingKey.preferredCurrency,
+              settingValue: currencyCode,
+            ),
+            mode: InsertMode.insertOrReplace,
+          );
+      await deleteExchangeRates();
+    });
+
+    appStateSettings[SettingKey.preferredCurrency] = currencyCode;
+  }
+
+  /// Inserts only if the base currency still matches and the date has no rate.
+  Future<bool> insertExchangeRateIfMissing(
+    ExchangeRateInDB rate, {
+    required String expectedBaseCurrency,
+  }) {
+    return db.transaction(() async {
+      final preferred =
+          await (db.select(db.userSettings)..where(
+                (s) => s.settingKey.equalsValue(SettingKey.preferredCurrency),
+              ))
+              .getSingleOrNull();
+      if (preferred?.settingValue != expectedBaseCurrency) return false;
+
+      final inserted = await db
+          .into(db.exchangeRates)
+          .insertReturningOrNull(rate, mode: InsertMode.insertOrIgnore);
+
+      return inserted != null;
+    });
+  }
 
   Future<int> insertOrUpdateExchangeRate(ExchangeRateInDB toInsert) async {
     final elToCompare = (await (getLastExchangeRateOf(

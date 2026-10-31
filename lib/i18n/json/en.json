@@ -753,6 +753,22 @@
     "currency-manager": "Currency manager",
     "currency-manager.descr": "Configure your currency and its exchange rates with others",
     "preferred-currency": "Preferred/base currency",
+    "update-rates": "Update rates",
+    "update-rates-loading": "Fetching exchange rates from the ECB (Frankfurter)…",
+    "update-rates-success": {
+      "one": "Today's exchange rate updated for 1 currency. The ones you entered are never overwritten.",
+      "other": "Today's exchange rates updated for {{n}} currencies. The ones you entered are never overwritten."
+    },
+    "update-rates-up-to-date": "Your exchange rates are already up to date",
+    "update-rates-supported-up-to-date": "Supported exchange rates are already up to date",
+    "update-rates-unavailable": "Automatic rates unavailable for {{currencies}}. Enter these rates manually.",
+    "update-rates-failure": "{{currency}} could not be updated: the ECB has no rate for it. Enter the rate manually if you need it.",
+    "update-rates-error": "Could not reach the exchange rate service. Check your connection and try again.",
+    "updated-today": "Updated today",
+    "updated-days-ago": {
+      "one": "1 day ago",
+      "other": "{{n}} days ago"
+    },
     "tap-to-change-preferred-currency": "Tap to change",
     "change-preferred-currency-title": "Change preferred currency",
     "change-preferred-currency-msg": "All stats and budgets will be displayed in this currency from now on. Accounts and transactions will keep the currency they had. All saved exchange rates will be deleted if you execute this action. Do you wish to continue?",
@@ -765,7 +781,11 @@
       "edit": "Edit exchange rate",
       "edit-success": "Exchange rate edited successfully",
       "remove-all": "Delete all exchange rates",
-      "remove-all-warning": "This action is irreversible and will delete all exchange rates for this currency"
+      "remove-all-warning": "This action is irreversible and will delete all exchange rates for this currency",
+      "ecb-loading": "Looking up the ECB rate…",
+      "ecb-filled": "Filled from the ECB",
+      "ecb-value": "ECB: {{rate}}",
+      "ecb-use-value": "Use this value"
     },
     "TYPES": {
       "display": "Currency type",
@@ -787,6 +807,8 @@
       "already-exists": "A currency with this code already exists. You may want to edit it"
     },
     "delete-all-success": "Deleted exchange rates successfully",
+    "remove-all-rates-warning": "This action cannot be undone and will delete all saved exchange rates for every currency. Currencies, accounts and transactions will not be deleted. Converted balances and statistics may change.",
+    "delete-rates-error": "Could not delete exchange rates. Try again.",
     "historical": "Historical rates",
     "historical-empty": "No historical exchange rates found for this currency",
     "exchange-rate": "Exchange rate",

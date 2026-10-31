@@ -729,6 +729,24 @@
     "currency-manager": "Währungsmanager",
     "currency-manager.descr": "Konfiguriere Deine Währung und deren Wechselkurse mit anderen",
     "preferred-currency": "Bevorzugte/Basis Währung",
+    "update-rates": "Kurse aktualisieren",
+    "update-rates-loading": "Wechselkurse werden von der EZB (Frankfurter) abgerufen…",
+    "update-rates-success": {
+      "one": "Heutiger Wechselkurs für 1 Währung aktualisiert. Von dir eingegebene Kurse werden nie überschrieben.",
+      "other": "Heutige Wechselkurse für {{n}} Währungen aktualisiert. Von dir eingegebene Kurse werden nie überschrieben."
+    },
+    "update-rates-up-to-date": "Deine Wechselkurse sind bereits aktuell",
+    "update-rates-supported-up-to-date": "Die unterstützten Wechselkurse sind bereits aktuell",
+    "remove-all-rates-warning": "Diese Aktion kann nicht rückgängig gemacht werden und löscht alle gespeicherten Wechselkurse für sämtliche Währungen. Währungen, Konten und Transaktionen werden nicht gelöscht. Umgerechnete Salden und Statistiken können sich ändern.",
+    "delete-rates-error": "Die Wechselkurse konnten nicht gelöscht werden. Versuche es erneut.",
+    "update-rates-unavailable": "Automatische Wechselkurse für {{currencies}} sind nicht verfügbar. Gib diese Kurse manuell ein.",
+    "update-rates-failure": "{{currency}} konnte nicht aktualisiert werden: Die EZB hat dafür keinen Kurs. Gib den Kurs bei Bedarf manuell ein.",
+    "update-rates-error": "Der Wechselkursdienst ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+    "updated-today": "Heute aktualisiert",
+    "updated-days-ago": {
+      "one": "vor 1 Tag",
+      "other": "vor {{n}} Tagen"
+    },
     "tap-to-change-preferred-currency": "Zum Ändern tippen",
     "change-preferred-currency-title": "Änder die bevorzugte Währung",
     "change-preferred-currency-msg": "Alle Statistiken und Budgets werden ab sofort in dieser Währung angezeigt. Konten und Transaktionen behalten die Währung, die sie hatten. Alle gespeicherten Wechselkurse werden gelöscht, wenn Du diese Aktion ausführst. Möchtest Du fortfahren?",
@@ -741,7 +759,11 @@
       "edit": "Wechselkurs bearbeiten",
       "edit-success": "Wechselkurs erfolgreich bearbeitet",
       "remove-all": "Alle Wechselkurse löschen",
-      "remove-all-warning": "Diese Aktion ist unwiderruflich und löscht alle Wechselkurse für diese Währung"
+      "remove-all-warning": "Diese Aktion ist unwiderruflich und löscht alle Wechselkurse für diese Währung",
+      "ecb-loading": "EZB-Kurs wird gesucht…",
+      "ecb-filled": "Von der EZB übernommen",
+      "ecb-value": "EZB: {{rate}}",
+      "ecb-use-value": "Diesen Wert verwenden"
     },
     "TYPES": {
       "display": "Währungstyp",
