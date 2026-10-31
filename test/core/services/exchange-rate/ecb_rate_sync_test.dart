@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:drift/native.dart';
@@ -6,12 +7,14 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
 import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
 
 void main() {
   late AppDB db;
   late ExchangeRateService service;
+  late Map<SettingKey, String?> previousSettings;
   final today = DateTime(2026, 10, 29);
 
   Future<void> save(String id, String currency, DateTime date, double rate) {
@@ -44,6 +47,8 @@ void main() {
   setUp(() async {
     db = AppDB.forTesting(NativeDatabase.memory());
     service = ExchangeRateService.forTesting(db);
+    previousSettings = Map.of(appStateSettings);
+    await service.changePreferredCurrency('EUR');
 
     for (final code in ['EUR', 'USD', 'GBP']) {
       await db
@@ -65,7 +70,109 @@ void main() {
     await save('gbp', 'GBP', yesterday, 0.8);
   });
 
-  tearDown(() => db.close());
+  tearDown(() async {
+    await db.close();
+    appStateSettings
+      ..clear()
+      ..addAll(previousSettings);
+  });
+
+  test('pending old-base quotes cannot repopulate cleared rates', () async {
+    final started = Completer<void>();
+    final response = Completer<http.Response>();
+    var requests = 0;
+    final pending = sync((_) {
+      if (++requests == 2) started.complete();
+      return response.future;
+    });
+    await started.future;
+
+    await service.changePreferredCurrency('GBP');
+    expect(await db.select(db.exchangeRates).get(), isEmpty);
+    await save('new-base', 'USD', today, 7.7);
+    response.complete(quote());
+    final result = await pending;
+
+    expect(result.addedRates, 0);
+    expect(result.connectionFailed, isFalse);
+    expect(result.unpublishedCurrencies, isEmpty);
+    final rates = await db.select(db.exchangeRates).get();
+    expect(rates, hasLength(1));
+    expect(rates.single.id, 'new-base');
+    expect(rates.single.exchangeRate, 7.7);
+    expect((await db.select(db.userSettings).getSingle()).settingValue, 'GBP');
+    expect(appStateSettings[SettingKey.preferredCurrency], 'GBP');
+  });
+
+  test('a base change clears quotes inserted before it commits', () async {
+    expect(
+      await service.insertExchangeRateIfMissing(
+        ExchangeRateInDB(
+          id: 'quote',
+          date: today,
+          currencyCode: 'USD',
+          exchangeRate: 1.2,
+        ),
+        expectedBaseCurrency: 'EUR',
+      ),
+      isTrue,
+    );
+
+    await service.changePreferredCurrency('GBP');
+
+    expect(await db.select(db.exchangeRates).get(), isEmpty);
+  });
+
+  test('keeping the same base does not delete rates', () async {
+    appStateSettings[SettingKey.preferredCurrency] = 'USD';
+    final before = await db.select(db.exchangeRates).get();
+
+    await service.changePreferredCurrency('EUR');
+    expect(await db.select(db.exchangeRates).get(), before);
+    expect(appStateSettings[SettingKey.preferredCurrency], 'EUR');
+  });
+
+  test(
+    'a failed rate deletion rolls back the base and leaves cache intact',
+    () async {
+      final before = await db.select(db.exchangeRates).get();
+      await db.customStatement('''
+      CREATE TRIGGER fail_rate_delete BEFORE DELETE ON exchangeRates
+      BEGIN SELECT RAISE(ABORT, 'test deletion failure'); END
+    ''');
+
+      await expectLater(
+        service.changePreferredCurrency('GBP'),
+        throwsA(isA<SqliteException>()),
+      );
+
+      expect(
+        (await db.select(db.userSettings).getSingle()).settingValue,
+        'EUR',
+      );
+      expect(appStateSettings[SettingKey.preferredCurrency], 'EUR');
+      expect(await db.select(db.exchangeRates).get(), before);
+    },
+  );
+
+  test('inserts use the persisted base rather than the cached base', () async {
+    appStateSettings[SettingKey.preferredCurrency] = 'GBP';
+
+    final result = await sync((_) async => quote());
+
+    expect(result.addedRates, 2);
+    expect(result.connectionFailed, isFalse);
+  });
+
+  test('a missing persisted base rejects fetched rates', () async {
+    await db.delete(db.userSettings).go();
+
+    final result = await sync((_) async => quote());
+
+    expect(result.addedRates, 0);
+    expect(await service.getExchangeRateItem('USD', today).first, isNull);
+    expect(await service.getExchangeRateItem('GBP', today).first, isNull);
+  });
 
   test('clearing all rates removes history but preserves currencies', () async {
     await save('usd-today', 'USD', today, 1.2);

@@ -169,14 +169,17 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       context,
       dialogTitle: t.currencies.change_preferred_currency_title,
       contentParagraphs: [Text(t.currencies.change_preferred_currency_msg)],
-    ).then((isConfirmed) {
+    ).then((isConfirmed) async {
       if (isConfirmed != true) return;
 
-      UserSettingService.instance
-          .setItem(SettingKey.preferredCurrency, newCurrency.code)
-          .then((value) {
-            ExchangeRateService.instance.deleteExchangeRates();
-          });
+      try {
+        await ExchangeRateService.instance.changePreferredCurrency(
+          newCurrency.code,
+        );
+      } catch (err) {
+        if (!mounted) return;
+        MonekinSnackbar.error(SnackbarParams.fromError(err));
+      }
     });
   }
 

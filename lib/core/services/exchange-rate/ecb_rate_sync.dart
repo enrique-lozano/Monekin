@@ -63,6 +63,7 @@ Future<EcbSyncResult> syncEcbRates({
             date: today,
             exchangeRate: quote.rate,
           ),
+          expectedBaseCurrency: preferredCurrency,
         );
 
         return inserted ? _Outcome.added : _Outcome.skipped;
