@@ -747,6 +747,8 @@
       "other": "Tipos de cambio de hoy actualizados para {{n}} divisas. Los que introdujiste nunca se sobrescriben."
     },
     "update-rates-up-to-date": "Tus tipos de cambio ya están al día",
+    "update-rates-supported-up-to-date": "Los tipos de cambio disponibles ya están al día",
+    "update-rates-unavailable": "No hay tipos de cambio automáticos para {{currencies}}. Introduce estos tipos manualmente.",
     "update-rates-failure": "{{currency}} no se pudo actualizar: el BCE no tiene tipo de cambio para ella. Introdúcelo manualmente si lo necesitas.",
     "update-rates-error": "No se pudo conectar con el servicio de tipos de cambio. Comprueba tu conexión e inténtalo de nuevo.",
     "updated-today": "Actualizado hoy",

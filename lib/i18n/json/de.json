@@ -736,6 +736,8 @@
       "other": "Heutige Wechselkurse für {{n}} Währungen aktualisiert. Von dir eingegebene Kurse werden nie überschrieben."
     },
     "update-rates-up-to-date": "Deine Wechselkurse sind bereits aktuell",
+    "update-rates-supported-up-to-date": "Die unterstützten Wechselkurse sind bereits aktuell",
+    "update-rates-unavailable": "Automatische Wechselkurse für {{currencies}} sind nicht verfügbar. Gib diese Kurse manuell ein.",
     "update-rates-failure": "{{currency}} konnte nicht aktualisiert werden: Die EZB hat dafür keinen Kurs. Gib den Kurs bei Bedarf manuell ein.",
     "update-rates-error": "Der Wechselkursdienst ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
     "updated-today": "Heute aktualisiert",

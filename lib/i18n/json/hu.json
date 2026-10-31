@@ -736,6 +736,8 @@
       "other": "A mai árfolyamok frissítve {{n}} pénznemhez. Az Ön által megadott árfolyamok soha nem íródnak felül."
     },
     "update-rates-up-to-date": "Az árfolyamai már naprakészek",
+    "update-rates-supported-up-to-date": "A támogatott árfolyamok már naprakészek",
+    "update-rates-unavailable": "Nem érhetők el automatikus árfolyamok ezekhez a pénznemekhez: {{currencies}}. Adja meg ezeket az árfolyamokat kézzel.",
     "update-rates-failure": "A(z) {{currency}} nem frissíthető: az EKB nem rendelkezik hozzá árfolyammal. Szükség esetén adja meg kézzel.",
     "update-rates-error": "Az árfolyamszolgáltatás nem érhető el. Ellenőrizze a kapcsolatot, és próbálja újra.",
     "updated-today": "Ma frissítve",

@@ -736,6 +736,8 @@
       "other": "{{n}} para birimi için bugünün döviz kurları güncellendi. Sizin girdiğiniz kurların üzerine asla yazılmaz."
     },
     "update-rates-up-to-date": "Döviz kurlarınız zaten güncel",
+    "update-rates-supported-up-to-date": "Desteklenen döviz kurları zaten güncel",
+    "update-rates-unavailable": "{{currencies}} için otomatik döviz kurları mevcut değil. Bu kurları elle girin.",
     "update-rates-failure": "{{currency}} güncellenemedi: AMB'nin bu para birimi için kuru yok. Gerekirse kuru elle girin.",
     "update-rates-error": "Döviz kuru hizmetine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
     "updated-today": "Bugün güncellendi",

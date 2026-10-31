@@ -86,6 +86,48 @@ void main() {
     expect(usd!.exchangeRate, 9.9);
   });
 
+  test('repeated sync skips current rates but still reports ANG', () async {
+    await db
+        .into(db.currencies)
+        .insert(
+          const CurrencyInDB(
+            code: 'ANG',
+            name: 'ANG',
+            symbol: 'ANG',
+            decimalPlaces: 2,
+            isDefault: true,
+            type: 0,
+          ),
+        );
+    await save('ang', 'ANG', today.subtract(const Duration(days: 1)), 0.02);
+    var requests = 0;
+
+    final first = await sync((_) async {
+      requests++;
+      return quote();
+    });
+    expect(first.addedRates, 2);
+    expect(first.unpublishedCurrencies, ['ANG']);
+    expect(requests, 2);
+
+    final second = await sync((_) async {
+      fail('A repeated sync must not fetch rates that are already current');
+    });
+    expect(second.addedRates, 0);
+    expect(second.unpublishedCurrencies, ['ANG']);
+    expect(second.connectionFailed, isFalse);
+    expect(
+      (await service
+              .getExchangeRateItem(
+                'ANG',
+                today.subtract(const Duration(days: 1)),
+              )
+              .first)!
+          .exchangeRate,
+      0.02,
+    );
+  });
+
   test('reports currencies the ECB has no rate for apart', () async {
     final result = await sync(
       (request) async => request.url.path.contains('/usd/')

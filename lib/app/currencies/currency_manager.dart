@@ -17,7 +17,6 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
-import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
 import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
@@ -25,6 +24,51 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 
 import '../../core/presentation/widgets/no_results.dart';
+
+void showEcbSyncResultSnackbar(BuildContext context, EcbSyncResult result) {
+  final t = Translations.of(context);
+  final summary = result.addedRates > 0
+      ? t.currencies.update_rates_success(n: result.addedRates)
+      : result.unpublishedCurrencies.isNotEmpty
+      ? t.currencies.update_rates_supported_up_to_date
+      : t.currencies.update_rates_up_to_date;
+  final warnings = [
+    if (result.connectionFailed) t.currencies.update_rates_error,
+    if (result.unpublishedCurrencies.isNotEmpty)
+      t.currencies.update_rates_unavailable(
+        currencies: result.unpublishedCurrencies.join(', '),
+      ),
+  ];
+
+  if (result.connectionFailed && result.addedRates == 0) {
+    MonekinSnackbar.error(
+      SnackbarParams(
+        t.currencies.update_rates_error,
+        message: result.unpublishedCurrencies.isEmpty
+            ? null
+            : warnings.skip(1).join('\n'),
+        showAtTop: false,
+      ),
+    );
+  } else if (warnings.isNotEmpty) {
+    MonekinSnackbar.warning(
+      SnackbarParams(
+        warnings.join('\n'),
+        duration: const Duration(seconds: 6),
+        message: summary,
+        showAtTop: false,
+      ),
+    );
+  } else {
+    MonekinSnackbar.success(
+      SnackbarParams(
+        summary,
+        message: result.addedRates > 0 ? frankfurterEcbCredit : null,
+        showAtTop: false,
+      ),
+    );
+  }
+}
 
 class CurrencyManagerPage extends StatefulWidget {
   const CurrencyManagerPage({super.key});
@@ -35,18 +79,13 @@ class CurrencyManagerPage extends StatefulWidget {
 
 class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
   bool _updatingRates = false;
-  List<String> _failedCurrencies = [];
 
   Future<void> _updateRates() async {
     if (_updatingRates) return;
     final t = Translations.of(context);
     setState(() {
       _updatingRates = true;
-      _failedCurrencies = [];
     });
-    MonekinSnackbar.info(
-      SnackbarParams(t.currencies.update_rates_loading, showAtTop: false),
-    );
 
     try {
       final preferred = await CurrencyService.instance
@@ -55,28 +94,12 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       final result = await syncEcbRates(preferredCurrency: preferred.code);
       if (!mounted) return;
 
-      setState(() => _failedCurrencies = result.unpublishedCurrencies);
-
-      if (result.addedRates > 0) {
-        MonekinSnackbar.success(
-          SnackbarParams(
-            t.currencies.update_rates_success(n: result.addedRates),
-            showAtTop: false,
-            message: frankfurterEcbCredit,
-          ),
-        );
-      } else if (result.connectionFailed) {
-        MonekinSnackbar.error(
-          SnackbarParams(t.currencies.update_rates_error, showAtTop: false),
-        );
-      } else if (result.unpublishedCurrencies.isEmpty) {
-        MonekinSnackbar.success(
-          SnackbarParams(
-            t.currencies.update_rates_up_to_date,
-            showAtTop: false,
-          ),
-        );
-      }
+      showEcbSyncResultSnackbar(context, result);
+    } catch (_) {
+      if (!mounted) return;
+      MonekinSnackbar.error(
+        SnackbarParams(t.currencies.update_rates_error, showAtTop: false),
+      );
     } finally {
       if (mounted) setState(() => _updatingRates = false);
     }
@@ -248,15 +271,6 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
               },
             ),
             createListSeparator(context, t.currencies.exchange_rates),
-
-            for (final code in _failedCurrencies)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-                child: InlineInfoCard(
-                  text: t.currencies.update_rates_failure(currency: code),
-                  mode: InlineInfoCardMode.warn,
-                ),
-              ),
 
             StreamBuilder(
               stream: ExchangeRateService.instance.getExchangeRates(),

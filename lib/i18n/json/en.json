@@ -760,6 +760,8 @@
       "other": "Today's exchange rates updated for {{n}} currencies. The ones you entered are never overwritten."
     },
     "update-rates-up-to-date": "Your exchange rates are already up to date",
+    "update-rates-supported-up-to-date": "Supported exchange rates are already up to date",
+    "update-rates-unavailable": "Automatic rates unavailable for {{currencies}}. Enter these rates manually.",
     "update-rates-failure": "{{currency}} could not be updated: the ECB has no rate for it. Enter the rate manually if you need it.",
     "update-rates-error": "Could not reach the exchange rate service. Check your connection and try again.",
     "updated-today": "Updated today",

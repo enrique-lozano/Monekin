@@ -760,6 +760,8 @@
       "other": "已更新 {{n}} 種貨幣的今日匯率。您手動輸入的匯率不會被覆寫。"
     },
     "update-rates-up-to-date": "您的匯率已是最新",
+    "update-rates-supported-up-to-date": "支援的匯率已是最新",
+    "update-rates-unavailable": "{{currencies}} 的自動匯率無法使用。請手動輸入這些匯率。",
     "update-rates-failure": "無法更新 {{currency}}：歐洲央行沒有該貨幣的匯率。如有需要，請手動輸入。",
     "update-rates-error": "無法連線至匯率服務。請檢查網路連線後重試。",
     "updated-today": "今天已更新",

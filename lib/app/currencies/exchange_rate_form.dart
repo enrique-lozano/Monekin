@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:monekin/app/currencies/widgets/exchange_rate_source_indicator.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/currency/currency.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:monekin/core/presentation/animations/animated_expanded.dart';
+import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/core/presentation/widgets/bottomSheetFooter.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/date_field.dart';
@@ -130,72 +132,6 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     });
   }
 
-  Widget _buildEcbIndicator(Translations t) {
-    final form = t.currencies.exchange_rate_form;
-    final theme = Theme.of(context);
-    final style = theme.textTheme.labelSmall;
-
-    Widget child = const SizedBox.shrink();
-
-    if (_loadingEcbRate) {
-      child = Wrap(
-        alignment: WrapAlignment.end,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          const SizedBox(
-            width: 12,
-            height: 12,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          ),
-          const SizedBox(width: 8),
-          Text(form.ecb_loading, style: style),
-        ],
-      );
-    } else if (_ecbRate != null && _rateMatchesEcb) {
-      child = Align(
-        alignment: Alignment.centerRight,
-        child: Chip(
-          visualDensity: VisualDensity.compact,
-          avatar: const Icon(Icons.sync_rounded, size: 14),
-          label: Text(form.ecb_filled),
-          labelStyle: style,
-          side: BorderSide.none,
-          backgroundColor: theme.colorScheme.primaryContainer,
-        ),
-      );
-    } else if (_ecbRate != null) {
-      child = Wrap(
-        alignment: WrapAlignment.end,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Text(form.ecb_value(rate: _ecbRate.toString()), style: style),
-          TextButton.icon(
-            onPressed: () => setState(() {
-              _autofilledText = _ecbRate.toString();
-              rateController.text = _autofilledText!;
-            }),
-            icon: const Icon(Icons.sync_rounded, size: 14),
-            label: Text(form.ecb_use_value),
-          ),
-        ],
-      );
-    }
-
-    return AnimatedExpanded(
-      expand: _loadingEcbRate || _ecbRate != null,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            child,
-            Text(frankfurterEcbCredit, style: style),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
@@ -247,6 +183,40 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
+    final theme = Theme.of(context);
+    final dateField = DateTimeFormField(
+      enabled: !isEditMode,
+      decoration: InputDecoration(labelText: '${t.general.time.date} *'),
+      mode: DateTimeFieldPickerMode.date,
+      initialDate: date,
+      dateFormat: getMMMdDateFormatBasedOnYear(date).dateFormat,
+      validator: (e) => e == null ? t.general.validations.required : null,
+      onDateSelected: (DateTime value) {
+        setState(() {
+          date = value;
+        });
+        unawaited(_loadEcbRate());
+      },
+    );
+    final rateField = TextFormField(
+      controller: rateController,
+      validator: (value) => fieldValidator(
+        value,
+        validator: ValidatorType.double,
+        isRequired: true,
+      ),
+      onChanged: (value) {
+        _autofilledText = null;
+        setState(() {});
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      keyboardType: TextInputType.number,
+      inputFormatters: decimalDigitFormatter(6),
+      decoration: InputDecoration(
+        labelText: '${t.currencies.exchange_rate} *',
+        hintText: '2.14',
+      ),
+    );
 
     return ModalContainer(
       title: isEditMode
@@ -256,154 +226,147 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
       bodyPadding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       body: Form(
         key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: TextEditingController(
-                text: _currency != null
-                    ? _currency?.name
-                    : t.general.unspecified,
-              ),
-              readOnly: true,
-              mouseCursor: isEditMode
-                  ? SystemMouseCursors.click
-                  : SystemMouseCursors.basic,
-              validator: (value) {
-                if (_currency == null) {
-                  return t.currencies.exchange_rate_form.specify_a_currency;
-                } else if (_currency!.code == userPreferredCurrency?.code) {
-                  return t
-                      .currencies
-                      .exchange_rate_form
-                      .equal_to_preferred_warn;
-                }
-
-                return null;
-              },
-              onTap: () {
-                showCurrencySelectorModal(
-                  context,
-                  CurrencySelectorModal(
-                    preselectedCurrency: _currency,
-                    onCurrencySelected: (newCurrency) {
-                      setState(() {
-                        _currency = newCurrency;
-                      });
-                      unawaited(_loadEcbRate());
-                    },
-                  ),
-                );
-              },
-              decoration: InputDecoration(
-                labelText: t.currencies.currency,
-                enabled: !(isEditMode || widget.currency != null),
-                suffixIcon: const Icon(Icons.arrow_drop_down),
-                prefixIcon: _currency != null
-                    ? Opacity(
-                        opacity: isEditMode || widget.currency != null
-                            ? 0.5
-                            : 1.0,
-                        child: Container(
-                          margin: const EdgeInsets.all(10),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(999),
-                            child: _currency!.displayFlagIcon(size: 25),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        margin: const EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.circle,
-                          size: 25,
-                          color: Theme.of(
-                            context,
-                          ).inputDecorationTheme.fillColor!.darken(0.2),
-                        ),
-                      ),
-              ),
-            ),
-            const SizedBox(height: 22),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: DateTimeFormField(
-                    enabled: !isEditMode,
-                    decoration: InputDecoration(
-                      labelText: '${t.general.time.date} *',
-                    ),
-                    mode: DateTimeFieldPickerMode.date,
-                    initialDate: date,
-                    dateFormat: getMMMdDateFormatBasedOnYear(date).dateFormat,
-                    validator: (e) =>
-                        e == null ? t.general.validations.required : null,
-                    onDateSelected: (DateTime value) {
-                      setState(() {
-                        date = value;
-                      });
-                      unawaited(_loadEcbRate());
-                    },
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: TextEditingController(
+                  text: _currency != null
+                      ? _currency?.name
+                      : t.general.unspecified,
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextFormField(
-                    controller: rateController,
-                    validator: (value) => fieldValidator(
-                      value,
-                      validator: ValidatorType.double,
-                      isRequired: true,
-                    ),
-                    onChanged: (value) {
-                      _autofilledText = null;
-                      setState(() {});
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: decimalDigitFormatter(6),
-                    decoration: InputDecoration(
-                      labelText: '${t.currencies.exchange_rate} *',
-                      hintText: 'Ex.: 2.14',
-                      helperText:
-                          (userPreferredCurrency != null &&
-                              _currency != null &&
-                              double.tryParse(rateController.text) != null)
-                          ? '1 ${_currency?.code} = ${double.parse(rateController.text)} ${userPreferredCurrency?.code ?? ''}'
-                          : null,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            _buildEcbIndicator(t),
+                readOnly: true,
+                mouseCursor: isEditMode
+                    ? SystemMouseCursors.click
+                    : SystemMouseCursors.basic,
+                validator: (value) {
+                  if (_currency == null) {
+                    return t.currencies.exchange_rate_form.specify_a_currency;
+                  } else if (_currency!.code == userPreferredCurrency?.code) {
+                    return t
+                        .currencies
+                        .exchange_rate_form
+                        .equal_to_preferred_warn;
+                  }
 
-            if (_currency != null)
-              StreamBuilder(
-                stream: ExchangeRateService.instance
-                    .getExchangeRateItem(_currency!.code, date)
-                    .map((rate) => rate != null),
-                initialData: false,
-                builder: (context, snapshot) {
-                  final hasAlreadyAnRate = snapshot.hasData && snapshot.data!;
-
-                  return AnimatedExpanded(
-                    expand: hasAlreadyAnRate && !isEditMode,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: InlineInfoCard(
-                        text: t
-                            .currencies
-                            .exchange_rate_form
-                            .override_existing_warn,
-                        mode: InlineInfoCardMode.info,
-                      ),
+                  return null;
+                },
+                onTap: () {
+                  showCurrencySelectorModal(
+                    context,
+                    CurrencySelectorModal(
+                      preselectedCurrency: _currency,
+                      onCurrencySelected: (newCurrency) {
+                        setState(() {
+                          _currency = newCurrency;
+                        });
+                        unawaited(_loadEcbRate());
+                      },
                     ),
                   );
                 },
+                decoration: InputDecoration(
+                  labelText: t.currencies.currency,
+                  enabled: !(isEditMode || widget.currency != null),
+                  suffixIcon: isEditMode || widget.currency != null
+                      ? null
+                      : const Icon(Icons.arrow_drop_down),
+                  prefixIcon: _currency != null
+                      ? Opacity(
+                          opacity: isEditMode || widget.currency != null
+                              ? 0.5
+                              : 1.0,
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(999),
+                              child: _currency!.displayFlagIcon(size: 25),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          margin: const EdgeInsets.all(10),
+                          child: Icon(
+                            Icons.circle,
+                            size: 25,
+                            color: Theme.of(
+                              context,
+                            ).inputDecorationTheme.fillColor!.darken(0.2),
+                          ),
+                        ),
+                ),
               ),
-          ],
+              const SizedBox(height: 16),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final fieldWidth = BreakPoint.getById(BreakpointID.xs).width;
+                  final textScale =
+                      MediaQuery.textScalerOf(context).scale(14) / 14;
+                  if (constraints.maxWidth < fieldWidth * textScale) {
+                    return Column(
+                      spacing: 16,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [dateField, rateField],
+                    );
+                  }
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 12,
+                    children: [
+                      Expanded(child: dateField),
+                      Expanded(child: rateField),
+                    ],
+                  );
+                },
+              ),
+              if (userPreferredCurrency != null &&
+                  _currency != null &&
+                  double.tryParse(rateController.text) != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Text(
+                    '1 ${_currency!.code} = ${double.parse(rateController.text)} ${userPreferredCurrency!.code}',
+                    style: theme.textTheme.bodyMedium,
+                  ),
+                ),
+              ExchangeRateSourceIndicator(
+                loading: _loadingEcbRate,
+                rate: _ecbRate,
+                matchesRate: _rateMatchesEcb,
+                onUseValue: () => setState(() {
+                  _autofilledText = _ecbRate.toString();
+                  rateController.text = _autofilledText!;
+                }),
+              ),
+
+              if (_currency != null)
+                StreamBuilder(
+                  stream: ExchangeRateService.instance
+                      .getExchangeRateItem(_currency!.code, date)
+                      .map((rate) => rate != null),
+                  initialData: false,
+                  builder: (context, snapshot) {
+                    final hasAlreadyAnRate = snapshot.hasData && snapshot.data!;
+
+                    return AnimatedExpanded(
+                      expand: hasAlreadyAnRate && !isEditMode,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: InlineInfoCard(
+                          text: t
+                              .currencies
+                              .exchange_rate_form
+                              .override_existing_warn,
+                          mode: InlineInfoCardMode.info,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
         ),
       ),
     );

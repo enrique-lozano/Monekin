@@ -736,6 +736,8 @@
       "other": "Taux de change du jour mis à jour pour {{n}} devises. Ceux que vous avez saisis ne sont jamais écrasés."
     },
     "update-rates-up-to-date": "Vos taux de change sont déjà à jour",
+    "update-rates-supported-up-to-date": "Les taux de change pris en charge sont déjà à jour",
+    "update-rates-unavailable": "Les taux de change automatiques ne sont pas disponibles pour {{currencies}}. Saisissez ces taux manuellement.",
     "update-rates-failure": "{{currency}} n'a pas pu être mise à jour : la BCE n'a pas de taux pour cette devise. Saisissez le taux manuellement si besoin.",
     "update-rates-error": "Impossible de joindre le service de taux de change. Vérifiez votre connexion et réessayez.",
     "updated-today": "Mis à jour aujourd'hui",

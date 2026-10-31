@@ -736,6 +736,8 @@
       "other": "已更新 {{n}} 种货币的今日汇率。您手动输入的汇率不会被覆盖。"
     },
     "update-rates-up-to-date": "您的汇率已是最新",
+    "update-rates-supported-up-to-date": "支持的汇率已是最新",
+    "update-rates-unavailable": "{{currencies}} 的自动汇率不可用。请手动输入这些汇率。",
     "update-rates-failure": "无法更新 {{currency}}：欧洲央行没有该货币的汇率。如有需要，请手动输入。",
     "update-rates-error": "无法连接汇率服务。请检查网络连接后重试。",
     "updated-today": "今天已更新",
