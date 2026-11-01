@@ -33,6 +33,7 @@ import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/presentation/widgets/user_profile_builder.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -138,6 +139,7 @@ class _DashboardPageState extends State<DashboardPage> {
       _refreshCurrentBalanceStream();
       _refreshVersion++;
     });
+
     await _balanceSummaryStream.first;
   }
 
@@ -218,6 +220,13 @@ class _DashboardPageState extends State<DashboardPage> {
             children: [
               SingleChildScrollView(
                 controller: _scrollController,
+                physics: AppUtils.hasPointerInput
+                    ? null
+                    : AlwaysScrollableScrollPhysics(
+                        parent: ScrollConfiguration.of(
+                          context,
+                        ).getScrollPhysics(context),
+                      ),
                 padding: const EdgeInsets.only(bottom: 32),
                 child: PageContent(
                   child: _buildContent(context, refreshButton),

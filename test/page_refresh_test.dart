@@ -4,10 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/presentation/widgets/page_refresh.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 void main() {
+  ScrollPhysics refreshPhysics(BuildContext context) =>
+      AlwaysScrollableScrollPhysics(
+        parent: ScrollConfiguration.of(context).getScrollPhysics(context),
+      );
+
   Widget buildPage(
     Future<void> Function() onRefresh, {
     double height = 100,
@@ -19,6 +25,7 @@ void main() {
         body: PageRefresh(
           onRefresh: onRefresh,
           builder: (context, button) => SingleChildScrollView(
+            physics: AppUtils.hasPointerInput ? null : refreshPhysics(context),
             child: Column(
               children: [
                 ?button,
@@ -109,10 +116,7 @@ void main() {
           children: [
             SizedBox(
               height: 200,
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: const [SizedBox(height: 600)],
-              ),
+              child: ListView(children: const [SizedBox(height: 600)]),
             ),
             GestureDetector(
               key: const Key('chart'),
@@ -237,6 +241,7 @@ void main() {
                   await Future.wait([parentData.future, nestedData.future]);
                 },
                 builder: (context, _) => SingleChildScrollView(
+                  physics: refreshPhysics(context),
                   child: StreamBuilder(
                     stream: parent,
                     builder: (context, snapshot) {
@@ -326,6 +331,9 @@ void main() {
                   }
                 },
                 builder: (context, button) => SingleChildScrollView(
+                  physics: AppUtils.hasPointerInput
+                      ? null
+                      : refreshPhysics(context),
                   child: Column(
                     children: [
                       ?button,
@@ -375,6 +383,7 @@ void main() {
                 await data.future;
               },
               builder: (context, _) => SingleChildScrollView(
+                physics: refreshPhysics(context),
                 child: StreamBuilder(
                   stream: stream,
                   builder: (context, snapshot) {

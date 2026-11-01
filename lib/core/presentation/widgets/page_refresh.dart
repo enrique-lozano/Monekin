@@ -27,8 +27,12 @@ class _PageRefreshState extends State<PageRefresh> {
   final _busy = ValueNotifier(false);
 
   Future<void> _refresh() async {
-    if (_busy.value) return;
+    if (_busy.value) {
+      return Future<void>.delayed(const Duration(seconds: 0));
+    }
+
     _busy.value = true;
+
     try {
       await widget.onRefresh();
     } catch (error) {
@@ -81,19 +85,14 @@ class _PageRefreshState extends State<PageRefresh> {
       },
       child: Focus(
         autofocus: desktop,
-        child: ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-            physics: desktop ? null : const AlwaysScrollableScrollPhysics(),
-          ),
-          child: RefreshIndicator(
-            key: _indicatorKey,
-            onRefresh: _refresh,
-            notificationPredicate: (notification) =>
-                !desktop && notification.depth == 0,
-            child: SizedBox.expand(
-              child: Builder(
-                builder: (context) => widget.builder(context, button),
-              ),
+        child: RefreshIndicator(
+          key: _indicatorKey,
+          onRefresh: _refresh,
+          notificationPredicate: (notification) =>
+              !desktop && notification.depth == 0,
+          child: SizedBox.expand(
+            child: Builder(
+              builder: (context) => widget.builder(context, button),
             ),
           ),
         ),
