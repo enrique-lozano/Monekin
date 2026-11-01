@@ -5,6 +5,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/account/holding_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
+import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -100,7 +101,7 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
-    date ??= DateTime.now();
+    date ??= DateTime.now().justDay(dayOffset: 1);
 
     final statusFiltered = trFilters.copyWith(
       status: TransactionStatus.getStatusThatCountsForStats(trFilters.status),
@@ -175,7 +176,7 @@ class AccountService {
     TransactionFilterSet trFilters = const TransactionFilterSet(),
     bool convertToPreferredCurrency = false,
   }) {
-    date ??= DateTime.now();
+    date ??= DateTime.now().justDay(dayOffset: 1);
 
     final cash = getAccountCash(
       account: account,
@@ -347,7 +348,7 @@ class AccountService {
       return Stream.value(0.0);
     }
 
-    date ??= DateTime.now();
+    date ??= DateTime.now().justDay(dayOffset: 1);
 
     final hasAccountFilter = accountIds != null;
 
@@ -446,7 +447,7 @@ class AccountService {
   }) {
     if (accounts.isEmpty) return Stream.value(0);
 
-    endDate ??= DateTime.now();
+    endDate ??= DateTime.now().justDay(dayOffset: 1);
     startDate ??= accounts.map((e) => e.date).min;
 
     final Iterable<String> accountIds = accounts.map((e) => e.id);
