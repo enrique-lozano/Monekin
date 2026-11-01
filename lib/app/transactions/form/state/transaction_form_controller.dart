@@ -754,6 +754,15 @@ class TransactionFormController extends ChangeNotifier {
       return;
     }
 
+    if (transactionType.isTransfer && fromAccount?.id == transferAccount?.id) {
+      MonekinSnackbar.warning(
+        SnackbarParams(
+          t.transaction.form.validators.transfer_between_same_accounts,
+        ),
+      );
+      return;
+    }
+
     final newTrID = _transactionToEdit?.id ?? generateUUID();
 
     final double signedValue;

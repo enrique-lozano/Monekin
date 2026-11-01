@@ -59,6 +59,7 @@ void main() {
           value: controller,
           child: MaterialApp(
             navigatorKey: rootNavigatorKey,
+            scaffoldMessengerKey: snackbarKey,
             theme: ThemeData(
               colorScheme: scheme,
               extensions: [AppColors.fromColorScheme(scheme)],
@@ -92,6 +93,33 @@ void main() {
   });
 
   for (final reversed in [false, true]) {
+    testWidgets(
+      'same-account transfers cannot be saved when reversed=$reversed',
+      (tester) async {
+        controller
+          ..fromAccount = account('Same')
+          ..transferAccount = account('Same')
+          ..transactionValue = 10;
+        if (reversed) controller.toggleDualLegFlowDirection();
+
+        await pumpForm(tester, const SizedBox.shrink());
+
+        await controller.submitForm(formKey.currentContext!);
+        await tester.pumpAndSettle();
+
+        expect(find.byType(SnackBar), findsOneWidget);
+        expect(
+          find.text(
+            t.transaction.form.validators.transfer_between_same_accounts,
+          ),
+          findsOneWidget,
+        );
+
+        await tester.pump(const Duration(seconds: 5));
+        await tester.pumpAndSettle();
+      },
+    );
+
     testWidgets('calculator anchors follow accounts when reversed=$reversed', (
       tester,
     ) async {
