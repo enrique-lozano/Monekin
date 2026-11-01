@@ -49,6 +49,15 @@ Assets are **not** part of any account: physical property stands on its own and 
 
 > **Implementation:** `AccountService.getAccountCash()` for the cash side, `AccountService.getAccountMoney()` for the total. Results are rounded in the account's currency when not converting.
 
+The dashboard supports an explicit refresh: pull down when already at the top,
+or use the refresh button / F5 on desktop. It recreates retained queries so
+date-dependent balances and charts can advance to a new local day without
+reopening the page. The selected period, category type and account group
+expansion are preserved. Refresh waits for the new dashboard balance summary;
+other widgets load independently. Summary errors use the existing snackbar.
+Refresh does not poll,
+synchronize over the network or write financial data.
+
 ### 1.1 Cash ledger net
 
 $L(a,t)$ is the net effect of every counted transaction on the account.
