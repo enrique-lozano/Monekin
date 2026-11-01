@@ -142,6 +142,9 @@ void main() {
       await tester.ensureVisible(group);
       await tester.tap(find.text('Group'));
       await tester.pump(const Duration(milliseconds: 300));
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(seconds: 2)),
+      );
 
       await tester.runAsync(() async {
         final categories = await db.select(db.categories).get();
