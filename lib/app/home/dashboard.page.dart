@@ -469,6 +469,7 @@ class _DashboardPageState extends State<DashboardPage> {
       children: [
         Expanded(child: _buildWelcome(context)),
         ?refreshButton,
+        if (refreshButton != null) const SizedBox(width: 8),
         _buildPrivateModeButton(context),
       ],
     );
