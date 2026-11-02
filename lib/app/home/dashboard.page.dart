@@ -28,10 +28,12 @@ import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/evolution_card.dart';
 import 'package:monekin/core/presentation/widgets/income_expense_flow_card.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
+import 'package:monekin/core/presentation/widgets/page_refresh.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/user_avatar.dart';
 import 'package:monekin/core/presentation/widgets/user_profile_builder.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -42,30 +44,28 @@ class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  DashboardPageState createState() => DashboardPageState();
 }
 
 typedef _BalanceStats = ({double delta, double percentage});
 
-class _DashboardPageState extends State<DashboardPage> {
+class DashboardPageState extends State<DashboardPage> {
+  final _refreshKey = GlobalKey<PageRefreshState>();
   DatePeriodState dateRangeService = const DatePeriodState(
     datePeriod: defaultDatePeriod,
   );
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<bool> _showStickyBalanceHeader = ValueNotifier(false);
   late final String _welcomeGreeting = _pickWelcomeGreeting();
-  late final Stream<double> _currentBalanceStream;
+  late Stream<double> _currentBalanceStream;
   late Stream<(double, _BalanceStats)> _balanceSummaryStream;
+  int _refreshVersion = 0;
 
   @override
   void initState() {
     super.initState();
 
-    _currentBalanceStream = AccountService.instance
-        .getAccountsMoney()
-        .distinct()
-        .shareReplay(maxSize: 1);
-    _refreshBalanceSummaryStream();
+    _refreshCurrentBalanceStream();
     _scrollController.addListener(_updateStickyBalanceHeader);
     _loadSavedDatePeriod();
   }
@@ -126,6 +126,25 @@ class _DashboardPageState extends State<DashboardPage> {
       (double current, _BalanceStats stats) => (current, stats),
     ).distinct().shareReplay(maxSize: 1);
   }
+
+  void _refreshCurrentBalanceStream() {
+    _currentBalanceStream = AccountService.instance
+        .getAccountsMoney()
+        .distinct()
+        .shareReplay(maxSize: 1);
+    _refreshBalanceSummaryStream();
+  }
+
+  Future<void> _refreshDashboard() async {
+    setState(() {
+      _refreshCurrentBalanceStream();
+      _refreshVersion++;
+    });
+
+    await _balanceSummaryStream.first;
+  }
+
+  void requestRefreshFocus() => _refreshKey.currentState?.requestFocus();
 
   void _onPeriodChanged(DatePeriod period) {
     AppDataService.instance.setItem(
@@ -198,36 +217,49 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
       body: SafeArea(
         bottom: false,
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: _scrollController,
-              padding: const EdgeInsets.only(bottom: 32),
-              child: PageContent(child: _buildContent(context)),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: ValueListenableBuilder<bool>(
-                valueListenable: _showStickyBalanceHeader,
-                child: _buildStickyBalanceHeader(context),
-                builder: (context, showHeader, child) => IgnorePointer(
-                  ignoring: !showHeader,
-                  child: AnimatedSlide(
-                    duration: const Duration(milliseconds: 180),
-                    curve: Curves.easeOutCubic,
-                    offset: showHeader ? Offset.zero : const Offset(0, -1),
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 120),
-                      opacity: showHeader ? 1 : 0,
-                      child: child,
+        child: PageRefresh(
+          key: _refreshKey,
+          onRefresh: _refreshDashboard,
+          builder: (context, refreshButton) => Stack(
+            children: [
+              SingleChildScrollView(
+                controller: _scrollController,
+                physics: AppUtils.hasPointerInput
+                    ? null
+                    : AlwaysScrollableScrollPhysics(
+                        parent: ScrollConfiguration.of(
+                          context,
+                        ).getScrollPhysics(context),
+                      ),
+                padding: const EdgeInsets.only(bottom: 32),
+                child: PageContent(
+                  child: _buildContent(context, refreshButton),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: _showStickyBalanceHeader,
+                  child: _buildStickyBalanceHeader(context),
+                  builder: (context, showHeader, child) => IgnorePointer(
+                    ignoring: !showHeader,
+                    child: AnimatedSlide(
+                      duration: const Duration(milliseconds: 180),
+                      curve: Curves.easeOutCubic,
+                      offset: showHeader ? Offset.zero : const Offset(0, -1),
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 120),
+                        opacity: showHeader ? 1 : 0,
+                        child: child,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -300,7 +332,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  Widget _buildContent(BuildContext context, Widget? refreshButton) {
     final isWide = _isWide(context);
     final isVeryWide = _isVeryWide(context);
 
@@ -341,7 +373,7 @@ class _DashboardPageState extends State<DashboardPage> {
       children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-          child: _buildHeader(context),
+          child: _buildHeader(context, refreshButton),
         ),
         const SizedBox(height: 20),
         // On mobile the chart runs full-bleed (its label/chips keep their inset
@@ -445,10 +477,12 @@ class _DashboardPageState extends State<DashboardPage> {
     return greetings[Random().nextInt(greetings.length)];
   }
 
-  Widget _buildHeader(BuildContext context) {
+  Widget _buildHeader(BuildContext context, Widget? refreshButton) {
     return Row(
       children: [
         Expanded(child: _buildWelcome(context)),
+        ?refreshButton,
+        if (refreshButton != null) const SizedBox(width: 8),
         _buildPrivateModeButton(context),
       ],
     );
@@ -546,6 +580,7 @@ class _DashboardPageState extends State<DashboardPage> {
           changePercentage: snapshot.hasData ? stats?.percentage : null,
           loading: !snapshot.hasData,
           chart: DashboardBalanceChart(
+            key: ValueKey(_refreshVersion),
             dateRange: dateRangeService,
             lineColor: accent,
           ),

@@ -49,14 +49,6 @@ Assets are **not** part of any account: physical property stands on its own and 
 
 > **Implementation:** `AccountService.getAccountCash()` for the cash side, `AccountService.getAccountMoney()` for the total. Results are rounded in the account's currency when not converting.
 
-When no date is supplied to an account balance stream, its cutoff is the start
-of the next local day. The transaction upper bound is exclusive, so later
-posted transactions today still update the balance without polling or forced
-UI refreshes. Explicit historical dates are unchanged. The cutoff is fixed
-when the stream is created; a screen left open overnight needs its query
-recreated to include the new day. Other balance components retain their
-existing inclusive cutoff comparisons.
-
 ### 1.1 Cash ledger net
 
 $L(a,t)$ is the net effect of every counted transaction on the account.
