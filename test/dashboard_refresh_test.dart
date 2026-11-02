@@ -113,7 +113,7 @@ void main() {
               colorScheme: scheme,
               extensions: [AppColors.fromColorScheme(scheme)],
             ),
-            home: const PageSwitcher(key: tabsPageKey),
+            home: PageSwitcher(key: tabsPageKey),
           ),
         ),
       );
