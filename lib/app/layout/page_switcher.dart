@@ -38,6 +38,13 @@ class PageSwitcherState extends State<PageSwitcher> {
     });
 
     FocusScope.of(context).unfocus();
+    if (destination == AppMenuDestinationsID.dashboard) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && selectedDestination == destination) {
+          dashboardPageKey.currentState?.requestRefreshFocus();
+        }
+      });
+    }
   }
 
   @override

@@ -44,12 +44,13 @@ class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  DashboardPageState createState() => DashboardPageState();
 }
 
 typedef _BalanceStats = ({double delta, double percentage});
 
-class _DashboardPageState extends State<DashboardPage> {
+class DashboardPageState extends State<DashboardPage> {
+  final _refreshKey = GlobalKey<PageRefreshState>();
   DatePeriodState dateRangeService = const DatePeriodState(
     datePeriod: defaultDatePeriod,
   );
@@ -143,6 +144,8 @@ class _DashboardPageState extends State<DashboardPage> {
     await _balanceSummaryStream.first;
   }
 
+  void requestRefreshFocus() => _refreshKey.currentState?.requestFocus();
+
   void _onPeriodChanged(DatePeriod period) {
     AppDataService.instance.setItem(
       AppDataKey.lastDashboardDatePeriod,
@@ -215,6 +218,7 @@ class _DashboardPageState extends State<DashboardPage> {
       body: SafeArea(
         bottom: false,
         child: PageRefresh(
+          key: _refreshKey,
           onRefresh: _refreshDashboard,
           builder: (context, refreshButton) => Stack(
             children: [

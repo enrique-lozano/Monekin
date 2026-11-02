@@ -8,7 +8,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 // GlobalKeys for each destination page
-final GlobalKey<State<StatefulWidget>> dashboardPageKey = GlobalKey();
+final GlobalKey<DashboardPageState> dashboardPageKey = GlobalKey();
 final GlobalKey budgetsPageKey = GlobalKey();
 final GlobalKey<TransactionsPageState> transactionsPageKey = GlobalKey();
 final GlobalKey<State<StatefulWidget>> statsPageKey = GlobalKey();

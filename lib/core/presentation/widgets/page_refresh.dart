@@ -19,12 +19,17 @@ class PageRefresh extends StatefulWidget {
   final Widget Function(BuildContext context, Widget? refreshButton) builder;
 
   @override
-  State<PageRefresh> createState() => _PageRefreshState();
+  PageRefreshState createState() => PageRefreshState();
 }
 
-class _PageRefreshState extends State<PageRefresh> {
+class PageRefreshState extends State<PageRefresh> {
   final _indicatorKey = GlobalKey<RefreshIndicatorState>();
   final _busy = ValueNotifier(false);
+  final _focusNode = FocusNode();
+
+  void requestFocus() {
+    if (mounted && AppUtils.hasPointerInput) _focusNode.requestFocus();
+  }
 
   Future<void> _refresh() async {
     if (_busy.value) {
@@ -52,6 +57,7 @@ class _PageRefreshState extends State<PageRefresh> {
   @override
   void dispose() {
     _busy.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -85,6 +91,7 @@ class _PageRefreshState extends State<PageRefresh> {
       },
       child: Focus(
         autofocus: desktop,
+        focusNode: _focusNode,
         child: RefreshIndicator(
           key: _indicatorKey,
           onRefresh: _refresh,

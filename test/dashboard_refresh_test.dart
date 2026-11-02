@@ -4,8 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/home/widgets/dashboard_balance_chart.dart';
+import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/pie_chart_by_categories.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
@@ -17,6 +17,7 @@ import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/evolution_charts/evolution_card.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/page_refresh.dart';
+import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:path_provider/path_provider.dart';
@@ -112,7 +113,7 @@ void main() {
               colorScheme: scheme,
               extensions: [AppColors.fromColorScheme(scheme)],
             ),
-            home: const DashboardPage(),
+            home: const PageSwitcher(key: tabsPageKey),
           ),
         ),
       );
@@ -128,6 +129,11 @@ void main() {
       );
       expect(before.finalValue, 100);
       expect(before.currentPeriod.customDateRange, historical.customDateRange);
+
+      tabsPageKey.currentState!.changePage(AppMenuDestinationsID.budgets);
+      await tester.pumpAndSettle();
+      tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
+      await tester.pumpAndSettle();
 
       final categories = find.byType(PieChartByCategories);
       final income = find.descendant(
