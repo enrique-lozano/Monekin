@@ -529,6 +529,7 @@
         "zero": "The value of a transaction cannot be equal to zero",
         "date-max": "The selected date is after the current one. The transaction will be added as pending",
         "date-after-account-creation": "You cannot create a transaction whose date is before the creation date of the account it belongs to",
+        "category-type-mismatch": "This category no longer supports this transaction type. Select a different category.",
         "negative-transfer": "The monetary value of a transfer cannot be negative",
         "transfer-between-same-accounts": "The origin and the destination account cannot be the same"
       },
@@ -835,6 +836,7 @@
     "edit.success": "Category edited correctly",
     "name": "Category name",
     "type": "Category type",
+    "type-change-conflict": "Cannot change this category to {{type}} because it and its subcategories contain {{count}} {{transactionType}}. Change or reassign those transactions first.",
     "both-types": "Both types",
     "subcategories": "Subcategories",
     "subcategories.add": "Add subcategory",

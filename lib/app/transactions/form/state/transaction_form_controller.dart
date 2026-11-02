@@ -649,6 +649,12 @@ class TransactionFormController extends ChangeNotifier {
       selectedCategory = await CategoryService.instance
           .getCategoryById(categoryIdToLoad)
           .first;
+
+      if (selectedCategory != null &&
+          transactionType.isIncomeOrExpense &&
+          !selectedCategory!.type.matchWithTransactionType(transactionType)) {
+        selectedCategory = null;
+      }
     }
 
     if (useLast(TransactionFormField.status)) {
@@ -726,6 +732,17 @@ class TransactionFormController extends ChangeNotifier {
     }
 
     final t = Translations.of(context);
+
+    if (transactionType.isIncomeOrExpense &&
+        !await CategoryService.instance.supportsTransactionType(
+          selectedCategory!.id,
+          transactionType,
+        )) {
+      MonekinSnackbar.warning(
+        SnackbarParams(t.transaction.form.validators.category_type_mismatch),
+      );
+      return;
+    }
 
     if (transactionValue == 0) {
       MonekinSnackbar.warning(
@@ -882,7 +899,15 @@ class TransactionFormController extends ChangeNotifier {
           }
         })
         .catchError((error) {
-          MonekinSnackbar.error(SnackbarParams.fromError(error));
+          if (error is TransactionCategoryTypeMismatchException) {
+            MonekinSnackbar.warning(
+              SnackbarParams(
+                t.transaction.form.validators.category_type_mismatch,
+              ),
+            );
+          } else {
+            MonekinSnackbar.error(SnackbarParams.fromError(error));
+          }
         });
   }
 

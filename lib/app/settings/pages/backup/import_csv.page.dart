@@ -327,6 +327,19 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         final trValue = double.parse(
           row[amountColumn!].toString().replaceFirst(',', '.'),
         );
+        final transactionType = trValue < 0
+            ? TransactionType.expense
+            : TransactionType.income;
+
+        if (!await CategoryService.instance.supportsTransactionType(
+          categoryId,
+          transactionType,
+        )) {
+          throw TransactionCategoryTypeMismatchException(
+            categoryId: categoryId,
+            transactionType: transactionType,
+          );
+        }
 
         final transactionId = generateUUID();
 
@@ -339,9 +352,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
                     _dateFormatController.text,
                     'en_US',
                   ).parse(row[dateColumn!].toString()),
-            type: trValue < 0
-                ? TransactionType.expense
-                : TransactionType.income,
+            type: transactionType,
             accountID: accountID,
             value: trValue,
             isHidden: false,
@@ -389,7 +400,13 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       Logger.printDebug(e);
       loadingOverlay.hide();
 
-      MonekinSnackbar.error(SnackbarParams.fromError(e));
+      if (e is TransactionCategoryTypeMismatchException) {
+        MonekinSnackbar.warning(
+          SnackbarParams(t.transaction.form.validators.category_type_mismatch),
+        );
+      } else {
+        MonekinSnackbar.error(SnackbarParams.fromError(e));
+      }
     }
   }
 
