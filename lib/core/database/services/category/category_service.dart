@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/category/category.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/utils/uuid.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -14,12 +16,75 @@ class CategoryService {
   CategoryService._(this.db);
   static final CategoryService instance = CategoryService._(AppDB.instance);
 
+  @visibleForTesting
+  CategoryService.forTesting(this.db);
+
   Future<int> insertCategory(CategoryInDB category) {
     return db.into(db.categories).insert(category);
   }
 
   Future<bool> updateCategory(CategoryInDB category) {
-    return db.update(db.categories).replace(category);
+    return db.transaction(() async {
+      await _verifyCategoryTypeChange(category);
+      return db.update(db.categories).replace(category);
+    });
+  }
+
+  Future<void> _verifyCategoryTypeChange(CategoryInDB category) async {
+    final currentCategory = await (db.select(
+      db.categories,
+    )..where((tbl) => tbl.id.equals(category.id))).getSingleOrNull();
+
+    if (currentCategory == null ||
+        currentCategory.parentCategoryID != null ||
+        category.parentCategoryID != null ||
+        currentCategory.type == category.type ||
+        category.type == null ||
+        category.type == CategoryType.B) {
+      return;
+    }
+
+    final categoryIds =
+        await (db.selectOnly(db.categories)
+              ..addColumns([db.categories.id])
+              ..where(
+                db.categories.id.equals(category.id) |
+                    db.categories.parentCategoryID.equals(category.id),
+              ))
+            .map((row) => row.read(db.categories.id)!)
+            .get();
+
+    final transactionCount = db.transactions.id.count();
+    final transactionCounts =
+        await (db.selectOnly(db.transactions)
+              ..addColumns([db.transactions.type, transactionCount])
+              ..where(
+                db.transactions.categoryID.isIn(categoryIds) &
+                    db.transactions.type.isInValues([
+                      TransactionType.expense,
+                      TransactionType.income,
+                    ]),
+              )
+              ..groupBy([db.transactions.type]))
+            .get();
+
+    final unsupportedType = category.type == CategoryType.I
+        ? TransactionType.expense
+        : TransactionType.income;
+    final unsupportedCount = transactionCounts
+        .where(
+          (row) =>
+              row.read(db.transactions.type) == unsupportedType.databaseValue,
+        )
+        .map((row) => row.read(transactionCount)!)
+        .firstOrNull;
+
+    if (unsupportedCount != null && unsupportedCount > 0) {
+      throw CategoryTypeChangeException(
+        transactionType: unsupportedType,
+        count: unsupportedCount,
+      );
+    }
   }
 
   Future<int> deleteCategory(String categoryId) {
@@ -140,4 +205,14 @@ class CategoryService {
       }
     }
   }
+}
+
+class CategoryTypeChangeException implements Exception {
+  const CategoryTypeChangeException({
+    required this.transactionType,
+    required this.count,
+  });
+
+  final TransactionType transactionType;
+  final int count;
 }

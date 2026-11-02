@@ -835,6 +835,8 @@
     "edit.success": "類別編輯成功",
     "name": "分類名稱",
     "type": "類別類型",
+    "type-change-conflict-title": "無法將類別變更為{{type}}",
+    "type-change-conflict": "此類別及其子類別中有{{count}}筆{{transactionType}}。請先變更或重新指派這些交易。",
     "both-types": "兩種類型",
     "subcategories": "子類別",
     "subcategories.add": "新增子類別",

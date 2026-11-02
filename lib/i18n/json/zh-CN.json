@@ -811,6 +811,8 @@
     "edit.success": "类别编辑成功",
     "name": "类别名称",
     "type": "类别类型",
+    "type-change-conflict-title": "无法将类别更改为{{type}}",
+    "type-change-conflict": "此类别及其子类别中有{{count}}笔{{transactionType}}。请先更改或重新分配这些交易。",
     "both-types": "混合类型",
     "subcategories": "子类别",
     "subcategories.add": "新增子类别",
