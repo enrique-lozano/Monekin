@@ -130,10 +130,11 @@ void main() {
       expect(before.finalValue, 100);
       expect(before.currentPeriod.customDateRange, historical.customDateRange);
 
+      // Other tabs keep loading indicators running, so pumpAndSettle never ends.
       tabsPageKey.currentState!.changePage(AppMenuDestinationsID.budgets);
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 400));
       tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
-      await tester.pumpAndSettle();
+      await tester.pump(const Duration(milliseconds: 400));
 
       final categories = find.byType(PieChartByCategories);
       final income = find.descendant(
