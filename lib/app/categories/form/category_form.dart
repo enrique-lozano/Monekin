@@ -100,8 +100,8 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
             if (error is CategoryTypeChangeException) {
               MonekinSnackbar.error(
                 SnackbarParams(
-                  t.categories.type_change_conflict(
-                    type: typeName,
+                  t.categories.type_change_conflict_title(type: typeName),
+                  message: t.categories.type_change_conflict(
                     count: error.count,
                     transactionType:
                         error.transactionType == TransactionType.expense
