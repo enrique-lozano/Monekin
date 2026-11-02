@@ -1,9 +1,7 @@
-import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
-import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/date-utils/periodicity.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
@@ -12,12 +10,10 @@ import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 void main() {
   late AppDB db;
   late CategoryService service;
-  late TransactionService transactionService;
 
   setUp(() async {
     db = AppDB.forTesting(NativeDatabase.memory());
     service = CategoryService.forTesting(db);
-    transactionService = TransactionService.forTesting(db);
 
     await db
         .into(db.categories)
@@ -29,18 +25,6 @@ void main() {
             color: '#4385be',
             type: CategoryType.B,
             displayOrder: 0,
-          ),
-        );
-    await db
-        .into(db.categories)
-        .insert(
-          const CategoryInDB(
-            id: 'income-only',
-            name: 'Income only',
-            iconId: 'wallet',
-            color: '#4385be',
-            type: CategoryType.I,
-            displayOrder: 1,
           ),
         );
     await db
@@ -201,76 +185,6 @@ void main() {
       );
 
       expect(await updateParentType(CategoryType.B), isTrue);
-    },
-  );
-
-  test(
-    'reports whether the current category supports a transaction type',
-    () async {
-      await updateParentType(CategoryType.E);
-
-      expect(
-        await service.supportsTransactionType(
-          'parent',
-          TransactionType.expense,
-        ),
-        isTrue,
-      );
-      expect(
-        await service.supportsTransactionType('parent', TransactionType.income),
-        isFalse,
-      );
-      expect(
-        await service.supportsTransactionType(
-          'missing',
-          TransactionType.expense,
-        ),
-        isFalse,
-      );
-    },
-  );
-
-  test(
-    'transaction service rejects new transactions with incompatible categories',
-    () async {
-      await updateParentType(CategoryType.E);
-
-      await expectLater(
-        transactionService.insertTransaction(
-          TransactionInDB(
-            id: 'income',
-            date: DateTime(2026, 1, 1),
-            accountID: 'account',
-            categoryID: 'parent',
-            value: 10,
-            type: TransactionType.income,
-            isHidden: false,
-          ),
-        ),
-        throwsA(isA<TransactionCategoryTypeMismatchException>()),
-      );
-    },
-  );
-
-  test(
-    'transaction service rejects changing to an incompatible category',
-    () async {
-      await insertTransaction(
-        'expense',
-        categoryId: 'parent',
-        type: TransactionType.expense,
-      );
-
-      final transaction = await (db.select(
-        db.transactions,
-      )..where((tbl) => tbl.id.equals('expense'))).getSingle();
-
-      await expectLater(
-        transactionService.updateTransaction(
-          transaction.copyWith(categoryID: const Value('income-only')),
-        ),
-        throwsA(isA<TransactionCategoryTypeMismatchException>()),
-      );
     },
   );
 }

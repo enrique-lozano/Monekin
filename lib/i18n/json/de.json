@@ -811,6 +811,7 @@
     "edit.success": "Kategorie korrekt bearbeitet",
     "name": "Kategoriename",
     "type": "Kategorietyp",
+    "type-change-conflict": "Diese Kategorie kann nicht in {{type}} geändert werden, da sie oder ihre Unterkategorien {{count}} {{transactionType}} enthalten. Ändere oder verschiebe diese Transaktionen zuerst.",
     "both-types": "Beide Typen",
     "subcategories": "Unterkategorien",
     "subcategories.add": "Unterkategorie hinzufügen",

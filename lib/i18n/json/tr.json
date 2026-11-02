@@ -811,6 +811,7 @@
     "edit.success": "Kategori başarıyla düzenlendi",
     "name": "Kategori adı",
     "type": "Kategori türü",
+    "type-change-conflict": "Bu kategori veya alt kategorileri {{count}} {{transactionType}} içerdiğinden kategori {{type}} olarak değiştirilemiyor. Önce bu işlemleri değiştirin veya yeniden atayın.",
     "both-types": "Her iki tür",
     "subcategories": "Alt kategoriler",
     "subcategories.add": "Alt kategori ekle",

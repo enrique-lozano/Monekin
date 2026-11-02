@@ -822,6 +822,7 @@
     "edit.success": "Categoría editada correctamente",
     "name": "Nombre de la categoría",
     "type": "Tipo de categoría",
+    "type-change-conflict": "No se puede cambiar esta categoría a {{type}} porque esta categoría o sus subcategorías contienen {{count}} {{transactionType}}. Cambia o reasigna esas transacciones primero.",
     "both-types": "Ambos tipos",
     "subcategories": "Subcategorías",
     "subcategories.add": "Añadir subcategoría",

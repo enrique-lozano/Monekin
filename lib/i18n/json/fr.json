@@ -811,6 +811,7 @@
     "edit.success": "Catégorie modifiée avec succès",
     "name": "Nom de la catégorie",
     "type": "Type de catégorie",
+    "type-change-conflict": "Impossible de changer cette catégorie en {{type}}, car cette catégorie ou ses sous-catégories contiennent {{count}} {{transactionType}}. Modifiez ou réattribuez d'abord ces transactions.",
     "both-types": "Les deux types",
     "subcategories": "Sous-catégories",
     "subcategories.add": "Ajouter une sous-catégorie",

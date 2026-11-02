@@ -23,16 +23,6 @@ class TransactionQueryStatResult {
   });
 }
 
-class TransactionCategoryTypeMismatchException implements Exception {
-  const TransactionCategoryTypeMismatchException({
-    required this.categoryId,
-    required this.transactionType,
-  });
-
-  final String categoryId;
-  final TransactionType transactionType;
-}
-
 typedef TransactionQueryOrderBy =
     OrderBy Function(
       Transactions transaction,
@@ -57,10 +47,7 @@ class TransactionService {
   TransactionService.forTesting(this.db);
 
   Future<int> insertTransaction(TransactionInDB transaction) async {
-    final toReturn = await db.transaction(() async {
-      await _validateCategoryType(transaction);
-      return db.into(db.transactions).insert(transaction);
-    });
+    final toReturn = await db.into(db.transactions).insert(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
@@ -69,51 +56,13 @@ class TransactionService {
   }
 
   Future<int> updateTransaction(TransactionInDB transaction) async {
-    final toReturn = await db.transaction(() async {
-      final current = await (db.select(
-        db.transactions,
-      )..where((tbl) => tbl.id.equals(transaction.id))).getSingleOrNull();
-
-      if (current == null ||
-          current.categoryID != transaction.categoryID ||
-          current.type != transaction.type) {
-        await _validateCategoryType(transaction);
-      }
-
-      return db.update(db.transactions).replace(transaction);
-    });
+    final toReturn = await db.update(db.transactions).replace(transaction);
 
     // To update the getAccountsData() function results
     // TODO: Check why we need this. The function already listen to changes in the transactions table
     db.markTablesUpdated([db.accounts]);
 
     return toReturn ? 1 : 0;
-  }
-
-  Future<void> _validateCategoryType(TransactionInDB transaction) async {
-    if (!transaction.type.isIncomeOrExpense || transaction.categoryID == null) {
-      return;
-    }
-
-    final category =
-        await (db.select(db.categories)
-              ..where((tbl) => tbl.id.equals(transaction.categoryID!)))
-            .getSingleOrNull();
-
-    final categoryType = category?.parentCategoryID == null
-        ? category?.type
-        : await (db.select(db.categories)
-                ..where((tbl) => tbl.id.equals(category!.parentCategoryID!)))
-              .map((parent) => parent.type)
-              .getSingleOrNull();
-
-    if (categoryType == null ||
-        !categoryType.matchWithTransactionType(transaction.type)) {
-      throw TransactionCategoryTypeMismatchException(
-        categoryId: transaction.categoryID!,
-        transactionType: transaction.type,
-      );
-    }
   }
 
   /// Updates a recurrent transaction to its next payment iteration.

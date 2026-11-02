@@ -8,7 +8,6 @@ import 'package:monekin/core/database/services/transaction/transaction_service.d
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/outlined_button_stacked.dart';
@@ -61,23 +60,11 @@ class BulkEditTransactionModal extends StatelessWidget {
               text: t.transaction.list.bulk_edit.categories,
               iconData: Icons.category_rounded,
               onTap: () {
-                final transactionTypes = transactionsToEdit
-                    .map((transaction) => transaction.type)
-                    .where((type) => type.isIncomeOrExpense)
-                    .toSet();
-                if (transactionTypes.isEmpty) return;
-
-                final categoryTypes = transactionTypes.length > 1
-                    ? [CategoryType.B]
-                    : transactionTypes.single == TransactionType.income
-                    ? [CategoryType.I, CategoryType.B]
-                    : [CategoryType.E, CategoryType.B];
-
                 showCategoryPickerModal(
                   context,
                   modal: CategoryPicker(
                     selectedCategory: null,
-                    categoryType: categoryTypes,
+                    categoryType: CategoryType.values,
                   ),
                 ).then((modalRes) {
                   if (modalRes == null) return;
@@ -222,15 +209,7 @@ class BulkEditTransactionModal extends StatelessWidget {
           onSuccess();
         })
         .catchError((err) {
-          if (err is TransactionCategoryTypeMismatchException) {
-            MonekinSnackbar.warning(
-              SnackbarParams(
-                t.transaction.form.validators.category_type_mismatch,
-              ),
-            );
-          } else {
-            MonekinSnackbar.error(SnackbarParams.fromError(err));
-          }
+          MonekinSnackbar.error(SnackbarParams.fromError(err));
         });
   }
 }
