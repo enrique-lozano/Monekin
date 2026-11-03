@@ -1363,39 +1363,85 @@
       "select-other-file": "Select other file",
       "tap-to-select-file": "Tap to select a file",
       "MANUAL-IMPORT": {
-        "title": "Manual import",
-        "descr": "Import transactions from a .csv file manually",
+        "title": "Import from another app",
+        "descr": "Bring your transactions from other apps or spreadsheets (.csv)",
         "defaultAccount": "Default account",
-        "removeDefaultAccount": "Remove default account",
         "defaultCategory": "Default Category",
         "defaultTags": "Default Tags",
-        "select-a-column": "Select a column from the .csv",
         "date-format": "Date format",
         "note-column": "Note column",
         "title-column": "Title column",
         "tag-separator": "Tag separator in the .csv",
-        "steps": [
-          "Select your file",
-          "Column for amount",
-          "Column for account",
-          "Column for category",
-          "Column for tags",
-          "Column for date",
-          "Other columns"
-        ],
-        "steps-descr": [
-          "Select a .csv file from your device. Make sure it has a first row that describes the name of each column.",
-          "Select the column where the value of each transaction is specified. Use negative values for expenses and positive values for income.",
-          "Select the column where the account to which each transaction belongs is specified. You can also select a default account in case we cannot find the account you want. If a default account is not specified, we will create one with the same name.",
-          "Specify the column where the transaction category name is located. You must specify a default category so that we assign this category to transactions, in case the category cannot be found.",
-          "Specify the column where the transaction tags are located. If not specified, transactions will be created with default tags.",
-          "Select the column where the date of each transaction is specified. If not specified, transactions will be created with the current date.",
-          "Specifies the columns for other optional transaction attributes."
-        ],
-        "success": "Successfully imported {{x}} transactions"
+        "success": "Successfully imported {{x}} transactions",
+        "stage-file": "File",
+        "stage-columns": "Columns",
+        "stage-review": "Review",
+        "file-title": "Select your file",
+        "empty-file": "The file is empty or has no rows below the header",
+        "template-mismatch": "This file doesn't look like an export from {{app}}, so we guessed the columns. Please review them carefully.",
+        "file-preview": "File preview",
+        "rows-detected": {
+          "one": "1 row detected",
+          "other": "{{n}} rows detected"
+        },
+        "amount-title": "Amount",
+        "amount-mode-signed": "One column",
+        "amount-mode-separate": "Income / Expense",
+        "amount-mode-type": "With type",
+        "amount-mode-signed-descr": "A single column with the amount. Negative values are expenses and positive values are incomes.",
+        "amount-mode-separate-descr": "One column for the incomes and another one for the expenses.",
+        "amount-mode-type-descr": "A column with the amount and another one telling if each row is an income or an expense.",
+        "amount-column": "Amount column",
+        "income-column": "Income column",
+        "expense-column": "Expense column",
+        "type-column": "Type column",
+        "income-values": "Values of an income (comma-separated)",
+        "expense-values": "Values of an expense (comma-separated)",
+        "account-title": "Account",
+        "account-column": "Account column",
+        "category-title": "Category",
+        "category-column": "Category column",
+        "transfers-title": "Transfers",
+        "transfers-descr": "Optional. A transfer is imported as a single transaction between two accounts.",
+        "transfer-column": "Column that marks a transfer",
+        "transfer-values": "Values of a transfer (comma-separated)",
+        "destination-column": "Destination account column",
+        "date-title": "Date",
+        "date-column": "Date column",
+        "time-column": "Time column",
+        "date-format-help": "Leave it empty if the dates are in ISO 8601 format (2025-01-31 or 2025-01-31T10:30:00)",
+        "details-title": "Details",
+        "tags-column": "Tags column",
+        "review-title": {
+          "one": "Ready to import 1 transaction",
+          "other": "Ready to import {{n}} transactions"
+        },
+        "no-transactions-found": "No transactions could be read with these columns. Go back and review them.",
+        "skipped-rows": {
+          "one": "1 row will be skipped because its amount, date or type is not valid",
+          "other": "{{n}} rows will be skipped because their amount, date or type are not valid"
+        },
+        "unpaired-transfers": {
+          "one": "1 transfer row has no matching counterpart and will be imported as a regular transaction",
+          "other": "{{n}} transfer rows have no matching counterpart and will be imported as regular transactions"
+        },
+        "accounts-to-create": "These accounts don't exist yet and will be created: {{accounts}}",
+        "preview": "Preview"
       },
       "success": "Import performed successfully",
-      "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
+      "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com",
+      "SOURCE": {
+        "title": "Where is your data from?",
+        "descr": "Pick the app so we can match its columns for you. You will be able to review everything before importing.",
+        "apps": "Apps",
+        "other": "Other"
+      },
+      "TEMPLATES": {
+        "my-expenses-hint": "Export your transactions as CSV from MyExpenses. Dates are expected as day/month/year, you can change it in the next step.",
+        "cashew-hint": "Export your transactions as CSV from Cashew's settings, then select the file here.",
+        "wallet-hint": "Export your records as CSV from Wallet by BudgetBakers, then select the file here. Transfers are imported as a single transaction.",
+        "spreadsheet-hint": "Any .csv file whose first row names each column. In Excel or Google Sheets, save the file as CSV first."
+      }
     },
     "ABOUT": {
       "title": "Information about your database",
