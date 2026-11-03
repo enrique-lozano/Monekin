@@ -164,7 +164,7 @@ CREATE TABLE IF NOT EXISTS assetValuations (
     date TEXT NOT NULL MAPPED BY `const DateTypeConverter()`,
 
     -- Value at the time of this snapshot, in the currency of the account or asset
-    value REAL NOT NULL,
+    value REAL NOT NULL
 ) AS AssetValuationInDB;
 
 -- A financial instrument (stock, fund, crypto) that can be held inside
