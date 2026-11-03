@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/services/csv_import/csv_import_mapping.dart';
 
+/// Max time between the outgoing and incoming rows of the same transfer
+const _legsTimeTolerance = Duration(minutes: 1);
+
 /// A transaction read from a CSV row, before being matched with the accounts,
 /// categories and tags of the database.
 class ParsedCsvTransaction {
@@ -186,9 +189,12 @@ class CsvTransactionParser {
     if (date == null) return (row: null, issue: CsvRowIssue.invalidDate);
 
     final destination = _cell(row, m.destinationAccountColumn);
+    final flagText = _cell(row, m.transferColumn);
     final isFlagged =
         m.transferColumn != null &&
-        _matches(_cell(row, m.transferColumn), m.transferValues);
+        (_matches(flagText, m.transferValues) ||
+            (m.transferPattern.isNotEmpty &&
+                RegExp(m.transferPattern, multiLine: true).hasMatch(flagText)));
 
     final isTransfer = m.destinationAccountColumn != null
         ? destination.isNotEmpty && (m.transferColumn == null || isFlagged)
@@ -272,30 +278,29 @@ class CsvTransactionParser {
     int unpaired = 0;
 
     if (mapping.dateColumn != null) {
-      final incoming = <int, List<_ParsedRow>>{};
-
-      for (final leg in legs.where((l) => l.signedAmount > 0)) {
-        incoming
-            .putIfAbsent(leg.date.millisecondsSinceEpoch, () => [])
-            .add(leg);
-      }
+      final incoming = legs.where((l) => l.signedAmount > 0).toList();
 
       for (final out in legs.where((l) => l.signedAmount < 0)) {
-        final candidates = incoming[out.date.millisecondsSinceEpoch] ?? [];
-
-        final candidatesInOtherAccounts = candidates.where(
-          (c) => c.accountName != out.accountName,
-        );
+        // Exports often write both legs a few seconds apart
+        final candidates = incoming
+            .where(
+              (c) =>
+                  c.accountName != out.accountName &&
+                  c.date.difference(out.date).abs() <= _legsTimeTolerance,
+            )
+            .sortedBy<num>(
+              (c) => c.date.difference(out.date).abs().inMilliseconds,
+            );
 
         final match =
-            candidatesInOtherAccounts.firstWhereOrNull(
+            candidates.firstWhereOrNull(
               (c) => (c.signedAmount + out.signedAmount).abs() < 1e-9,
             ) ??
-            candidatesInOtherAccounts.firstOrNull;
+            candidates.firstOrNull;
 
         if (match == null) continue;
 
-        candidates.remove(match);
+        incoming.remove(match);
 
         final amount = out.signedAmount.abs();
 

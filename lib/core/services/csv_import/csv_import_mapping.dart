@@ -32,6 +32,7 @@ class CsvImportMapping {
     this.expenseTypeValues = const [],
     this.transferColumn,
     this.transferValues = const [],
+    this.transferPattern = '',
     this.accountColumn,
     this.destinationAccountColumn,
     this.categoryColumn,
@@ -64,6 +65,11 @@ class CsvImportMapping {
   /// as the category or the type one.
   final int? transferColumn;
   final List<String> transferValues;
+
+  /// Regular expression that also flags a row as a transfer when it matches
+  /// the [transferColumn] text. Useful when the only language-independent
+  /// hint is inside a free text, like a note.
+  final String transferPattern;
 
   final int? accountColumn;
 

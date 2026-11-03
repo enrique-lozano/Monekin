@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/database/backup/csv_import_service.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
@@ -40,9 +40,8 @@ class CsvImportReview extends StatelessWidget {
       children: [
         Text(
           t.review_title(n: result.transactions.length),
-          style: Theme.of(
-            context,
-          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 14),
         Row(
@@ -129,10 +128,8 @@ class _TypeStat extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '$count',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
+            style: Theme.of(context).textTheme.titleLarge
+                ?.copyWith(fontWeight: FontWeight.bold, color: color),
           ),
           Text(
             type.displayName(context, plural: true),
@@ -181,10 +178,8 @@ class _PreviewTile extends StatelessWidget {
       subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
       trailing: Text(
         '$sign${NumberFormat.decimalPatternDigits(decimalDigits: 2).format(tr.amount)}',
-        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.titleSmall
+            ?.copyWith(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }

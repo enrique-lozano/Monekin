@@ -25,6 +25,8 @@ abstract class _$CsvImportMappingCWProxy {
 
   CsvImportMapping transferValues(List<String> transferValues);
 
+  CsvImportMapping transferPattern(String transferPattern);
+
   CsvImportMapping accountColumn(int? accountColumn);
 
   CsvImportMapping destinationAccountColumn(int? destinationAccountColumn);
@@ -63,6 +65,7 @@ abstract class _$CsvImportMappingCWProxy {
     List<String> expenseTypeValues,
     int? transferColumn,
     List<String> transferValues,
+    String transferPattern,
     int? accountColumn,
     int? destinationAccountColumn,
     int? categoryColumn,
@@ -117,6 +120,10 @@ class _$CsvImportMappingCWProxyImpl implements _$CsvImportMappingCWProxy {
   @override
   CsvImportMapping transferValues(List<String> transferValues) =>
       call(transferValues: transferValues);
+
+  @override
+  CsvImportMapping transferPattern(String transferPattern) =>
+      call(transferPattern: transferPattern);
 
   @override
   CsvImportMapping accountColumn(int? accountColumn) =>
@@ -174,6 +181,7 @@ class _$CsvImportMappingCWProxyImpl implements _$CsvImportMappingCWProxy {
     Object? expenseTypeValues = const $CopyWithPlaceholder(),
     Object? transferColumn = const $CopyWithPlaceholder(),
     Object? transferValues = const $CopyWithPlaceholder(),
+    Object? transferPattern = const $CopyWithPlaceholder(),
     Object? accountColumn = const $CopyWithPlaceholder(),
     Object? destinationAccountColumn = const $CopyWithPlaceholder(),
     Object? categoryColumn = const $CopyWithPlaceholder(),
@@ -229,6 +237,12 @@ class _$CsvImportMappingCWProxyImpl implements _$CsvImportMappingCWProxy {
           ? _value.transferValues
           // ignore: cast_nullable_to_non_nullable
           : transferValues as List<String>,
+      transferPattern:
+          transferPattern == const $CopyWithPlaceholder() ||
+              transferPattern == null
+          ? _value.transferPattern
+          // ignore: cast_nullable_to_non_nullable
+          : transferPattern as String,
       accountColumn: accountColumn == const $CopyWithPlaceholder()
           ? _value.accountColumn
           // ignore: cast_nullable_to_non_nullable
@@ -314,6 +328,7 @@ extension $CsvImportMappingCopyWith on CsvImportMapping {
       expenseTypeValues: expenseTypeValues,
       transferColumn: transferColumn == true ? null : this.transferColumn,
       transferValues: transferValues,
+      transferPattern: transferPattern,
       accountColumn: accountColumn == true ? null : this.accountColumn,
       destinationAccountColumn: destinationAccountColumn == true
           ? null

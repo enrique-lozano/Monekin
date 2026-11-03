@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/services/csv_import/csv_import_mapping.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -106,6 +106,9 @@ class CsvImportTemplates {
       titleColumn: h.find(['title']),
       notesColumn: h.find(['note']),
       categoryColumn: h.find(['category name']),
+      // Both legs of a transfer have a note like "Bank → Cash"
+      transferColumn: h.find(['note']),
+      transferPattern: r'\S\s→\s\S',
     ),
   );
 

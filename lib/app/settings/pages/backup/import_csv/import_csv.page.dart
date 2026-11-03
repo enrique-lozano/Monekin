@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart' show FileType;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -252,9 +252,8 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             Expanded(
               child: Text(
                 t.backup.import.manual_import.file_title,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
           ],

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
@@ -26,9 +26,8 @@ class ImportSourcePage extends StatelessWidget {
         children: [
           Text(
             t.backup.import.source.title,
-            style: Theme.of(
-              context,
-            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(context).textTheme.headlineSmall
+                ?.copyWith(fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 4),
           Text(
@@ -86,9 +85,8 @@ class _SourceTile extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
-            color: Theme.of(
-              context,
-            ).colorScheme.outlineVariant.withOpacity(0.4),
+            color: Theme.of(context).colorScheme.outlineVariant
+                .withOpacity(0.4),
           ),
         ),
         clipBehavior: Clip.antiAlias,

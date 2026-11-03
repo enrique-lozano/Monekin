@@ -1,3 +1,4 @@
+import 'package:csv/csv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/services/csv_import/csv_import_mapping.dart';
@@ -159,6 +160,52 @@ void main() {
         TransactionType.expense,
       ]);
       expect(result.skippedRows, {3: CsvRowIssue.unknownType});
+    });
+  });
+
+  group('Cashew template', () {
+    const file = '''
+account,amount,amount unpaid,currency,title,note,date,income,type,category name,subcategory name,color,icon,emoji,budget,objective,extra
+Banco,500,,USD,Salary,,2026-11-03 18:58:42.000,true,default,Ingreso,,0XFF9575CD,coin,,,,repeat every 1 month
+Banco,-85,,USD,jyhr,,2026-11-03 18:58:27.000,false,default,Compras,,0XFFE91E63,shopping,,,,repeat every 1 month
+fdlkl,24,,USD,fdlkl Transferir a,"Saldo transferido
+Banco → fdlkl",2026-09-10 19:00:31.000,true,default,Corrección de Balance,,0XFF607D8B,charts,,,,
+Banco,-25,,USD,Banco Transferir de,"Saldo transferido
+Banco → fdlkl",2026-09-10 19:00:30.000,false,default,Corrección de Balance,,0XFF607D8B,charts,,,,
+fdlkl,33,,USD,,"Saldo total actualizado
+fdlkl: 33 \$",2026-05-15 17:51:31.000,true,default,Corrección de Balance,,0XFF607D8B,charts,,,,
+''';
+
+    final data = Csv()
+        .decode(file)
+        .map((r) => r.map((e) => e.toString()).toList())
+        .toList();
+    final headers = data.first;
+
+    test('is detected from the headers', () {
+      expect(CsvImportTemplates.cashew.matches(headers), isTrue);
+      expect(CsvImportTemplates.wallet.matches(headers), isFalse);
+    });
+
+    test('rebuilds the two rows of a transfer as one transaction', () {
+      final mapping = CsvImportTemplates.cashew.mappingFor(headers);
+      final result = CsvTransactionParser(mapping).parse(data.sublist(1));
+
+      expect(result.skippedRows, isEmpty);
+      expect(result.unpairedTransfers, 0);
+      expect(result.transactions, hasLength(4));
+
+      final transfer = result.transactions.singleWhere(
+        (e) => e.type.isTransfer,
+      );
+      expect(transfer.accountName, 'Banco');
+      expect(transfer.receivingAccountName, 'fdlkl');
+      expect(transfer.amount, 25);
+      expect(transfer.valueInDestiny, 24);
+      expect(transfer.categoryName, isNull);
+
+      expect(result.countOf(TransactionType.income), 2);
+      expect(result.countOf(TransactionType.expense), 1);
     });
   });
 
