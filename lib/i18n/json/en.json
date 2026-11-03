@@ -1450,7 +1450,11 @@
         "transfer-mode-one-descr": "Each transfer is a single row. The account column is the origin, and another column tells the destination account.",
         "transfer-values-text-help": "Separate them with commas. Example: Transfer, Transfer out",
         "transfer-auto": "Transfers are detected automatically from the text of this column.",
-        "transfer-values": "Which values mean a transfer?"
+        "transfer-values": "Which values mean a transfer?",
+        "preview-more": {
+          "one": "+ 1 more transaction",
+          "other": "+ {{n}} more transactions"
+        }
       },
       "success": "Import performed successfully",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com",

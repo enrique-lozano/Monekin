@@ -5,7 +5,6 @@ import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
 import 'package:monekin/core/models/tags/tag.dart';
-import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/expanding_segmented_tabs.dart';
 import 'package:monekin/core/presentation/widgets/form_fields/read_only_form_field.dart';
 import 'package:monekin/core/services/csv_import/csv_import_mapping.dart';
@@ -64,9 +63,14 @@ class CsvImportMappingForm extends StatefulWidget {
 }
 
 class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
-  late _Section? expanded = widget.mapping.hasValidAmount
+  /// Section opened at first: the first one with something required to fill
+  late final _Section _initiallyExpanded = widget.mapping.hasValidAmount
       ? _Section.category
       : _Section.amount;
+
+  final _controllers = {
+    for (final section in _Section.values) section: ExpansibleController(),
+  };
 
   /// First non-empty value of each column
   late final List<String> _samples = List.generate(
@@ -109,8 +113,25 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
       ? _TransferMode.twoRows
       : _TransferMode.none;
 
-  void _toggle(_Section section) =>
-      setState(() => expanded = expanded == section ? null : section);
+  /// Only one section is open at a time
+  void _onExpansionChanged(_Section section, bool isExpanded) {
+    if (!isExpanded) return;
+
+    for (final entry in _controllers.entries) {
+      if (entry.key != section && entry.value.isExpanded) {
+        entry.value.collapse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final controller in _controllers.values) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,12 +161,15 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
       return Padding(
         padding: const EdgeInsets.only(bottom: 10),
         child: _SectionCard(
+          key: ValueKey(id),
+          controller: _controllers[id]!,
           icon: icon,
           title: title,
           summary: summary,
-          isExpanded: expanded == id,
+          initiallyExpanded: id == _initiallyExpanded,
           isComplete: isComplete,
-          onToggle: () => _toggle(id),
+          onExpansionChanged: (isExpanded) =>
+              _onExpansionChanged(id, isExpanded),
           child: child,
         ),
       );
@@ -260,7 +284,7 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
       scrollDirection: Axis.horizontal,
       child: DataTable(
         headingRowColor: WidgetStatePropertyAll(
-          Theme.of(context).colorScheme.primary.withOpacity(0.15),
+          Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
         ),
         headingRowHeight: 36,
         headingTextStyle: Theme.of(context).textTheme.labelLarge,
@@ -759,20 +783,23 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
 /// A card that shows only its title and a [summary] until it is expanded
 class _SectionCard extends StatelessWidget {
   const _SectionCard({
+    super.key,
+    required this.controller,
     required this.icon,
     required this.title,
     required this.summary,
-    required this.isExpanded,
-    required this.onToggle,
+    required this.initiallyExpanded,
+    required this.onExpansionChanged,
     required this.child,
     this.isComplete,
   });
 
+  final ExpansibleController controller;
   final IconData icon;
   final String title;
   final String summary;
-  final bool isExpanded;
-  final VoidCallback onToggle;
+  final bool initiallyExpanded;
+  final ValueChanged<bool> onExpansionChanged;
   final Widget child;
 
   /// Only for the sections with required fields
@@ -782,81 +809,57 @@ class _SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Container(
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+      side: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.4)),
+    );
+
+    return ExpansionTile(
+      controller: controller,
+      initiallyExpanded: initiallyExpanded,
+      onExpansionChanged: onExpansionChanged,
+      shape: shape,
+      collapsedShape: shape,
       clipBehavior: Clip.antiAlias,
-      decoration: cardSurfaceDecoration(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: colors.surfaceContainerLow,
+      collapsedBackgroundColor: colors.surfaceContainerLow,
+      tilePadding: const EdgeInsets.fromLTRB(14, 4, 14, 4),
+      childrenPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+      expandedAlignment: Alignment.topLeft,
+      expandedCrossAxisAlignment: CrossAxisAlignment.start,
+      leading: CircleAvatar(
+        radius: 18,
+        backgroundColor: colors.primaryContainer,
+        child: Icon(icon, size: 20, color: colors.onPrimaryContainer),
+      ),
+      title: Row(
         children: [
-          InkWell(
-            onTap: onToggle,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(14, 12, 10, 12),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 18,
-                    backgroundColor: colors.primaryContainer,
-                    child: Icon(
-                      icon,
-                      size: 20,
-                      color: colors.onPrimaryContainer,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: Theme.of(context).textTheme.titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          summary,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: isComplete == false
-                                    ? colors.error
-                                    : colors.onSurfaceVariant,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (isComplete != null)
-                    Icon(
-                      isComplete!
-                          ? Icons.check_circle_rounded
-                          : Icons.error_outline_rounded,
-                      size: 20,
-                      color: isComplete! ? colors.primary : colors.error,
-                    ),
-                  AnimatedRotation(
-                    turns: isExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    child: const Icon(Icons.expand_more_rounded),
-                  ),
-                ],
-              ),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleSmall
+                  ?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          AnimatedSize(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeOut,
-            alignment: Alignment.topCenter,
-            child: isExpanded
-                ? Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-                    child: child,
-                  )
-                : const SizedBox(width: double.infinity),
-          ),
+          if (isComplete != null)
+            Icon(
+              isComplete!
+                  ? Icons.check_circle_rounded
+                  : Icons.error_outline_rounded,
+              size: 20,
+              color: isComplete! ? colors.primary : colors.error,
+            ),
         ],
       ),
+      subtitle: Text(
+        summary,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: isComplete == false ? colors.error : colors.onSurfaceVariant,
+        ),
+      ),
+      children: [child],
     );
   }
 }

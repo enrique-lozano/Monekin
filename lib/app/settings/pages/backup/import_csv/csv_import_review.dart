@@ -1,18 +1,16 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:intl/intl.dart';
+import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/backup/csv_import_service.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
-import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/no_results.dart';
 import 'package:monekin/core/services/csv_import/csv_transaction_parser.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
-const _transactionsToPreview = 5;
-
 /// Last step of the CSV import: tells the user what is going to happen
 /// before anything is written in the database.
-class CsvImportReview extends StatelessWidget {
+class CsvImportReview extends StatefulWidget {
   const CsvImportReview({
     super.key,
     required this.result,
@@ -23,8 +21,18 @@ class CsvImportReview extends StatelessWidget {
   final CsvImportDefaults defaults;
 
   @override
+  State<CsvImportReview> createState() => _CsvImportReviewState();
+}
+
+class _CsvImportReviewState extends State<CsvImportReview> {
+  /// Only the first transactions are built, however big the file is
+  late final Future<CsvImportPreview> _preview = CsvImportService.instance
+      .getPreview(widget.result.transactions, widget.defaults);
+
+  @override
   Widget build(BuildContext context) {
     final t = Translations.of(context).backup.import.manual_import;
+    final result = widget.result;
 
     if (result.transactions.isEmpty) {
       return NoResults(
@@ -72,33 +80,64 @@ class CsvImportReview extends StatelessWidget {
           const SizedBox(height: 8),
         ],
         FutureBuilder(
-          future: CsvImportService.instance.getAccountsToCreate(
-            result.transactions,
-            defaults,
-          ),
+          future: _preview,
           builder: (context, snapshot) {
-            final names = snapshot.data;
+            final preview = snapshot.data;
 
-            if (names == null || names.isEmpty) return const SizedBox.shrink();
+            if (preview == null) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 24),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
 
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: InlineInfoCard(
-                text: t.accounts_to_create(accounts: names.join(', ')),
-                mode: InlineInfoCardMode.info,
-              ),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (preview.newAccountNames.isNotEmpty) ...[
+                  InlineInfoCard(
+                    text: t.accounts_to_create(
+                      accounts: preview.newAccountNames.join(', '),
+                    ),
+                    mode: InlineInfoCardMode.info,
+                  ),
+                  const SizedBox(height: 8),
+                ],
+                const SizedBox(height: 4),
+                Text(
+                  t.preview,
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration: cardSurfaceDecoration(context),
+                  child: Column(
+                    children: [
+                      for (final tr in preview.sample)
+                        TransactionListTile(
+                          transaction: tr,
+                          heroTag: null,
+                          preventDefaultOnTap: true,
+                          onLongPress: () {},
+                        ),
+                    ],
+                  ),
+                ),
+                if (preview.total > preview.sample.length)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, left: 4),
+                    child: Text(
+                      t.preview_more(n: preview.total - preview.sample.length),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+              ],
             );
           },
-        ),
-        const SizedBox(height: 4),
-        CardWithHeader(
-          title: t.preview,
-          body: Column(
-            children: [
-              for (final tr in result.transactions.take(_transactionsToPreview))
-                _PreviewTile(transaction: tr),
-            ],
-          ),
         ),
       ],
     );
@@ -119,7 +158,7 @@ class _TypeStat extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -138,48 +177,6 @@ class _TypeStat extends StatelessWidget {
             style: Theme.of(context).textTheme.labelSmall,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PreviewTile extends StatelessWidget {
-  const _PreviewTile({required this.transaction});
-
-  final ParsedCsvTransaction transaction;
-
-  @override
-  Widget build(BuildContext context) {
-    final tr = transaction;
-    final color = tr.type.color(context);
-
-    final title = tr.title ?? tr.categoryName ?? tr.type.displayName(context);
-
-    final subtitle = [
-      DateFormat.yMMMd().format(tr.date),
-      if (tr.type.isTransfer)
-        '${tr.accountName ?? ''} → ${tr.receivingAccountName ?? ''}'
-      else if (tr.accountName != null)
-        tr.accountName,
-    ].join(' · ');
-
-    final sign = switch (tr.type) {
-      TransactionType.expense => '-',
-      TransactionType.income => '+',
-      _ => '',
-    };
-
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: color.withOpacity(0.12),
-        child: Icon(tr.type.icon, color: color, size: 20),
-      ),
-      title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-      subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
-      trailing: Text(
-        '$sign${NumberFormat.decimalPatternDigits(decimalDigits: 2).format(tr.amount)}',
-        style: Theme.of(context).textTheme.titleSmall
-            ?.copyWith(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }

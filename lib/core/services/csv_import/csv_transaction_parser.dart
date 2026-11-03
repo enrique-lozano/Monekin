@@ -117,6 +117,13 @@ class CsvTransactionParser {
   final CsvImportMapping mapping;
   final DateTime Function() _now;
 
+  // Created once, they are used by every row
+  late final RegExp? _transferRegex = mapping.transferPattern.isEmpty
+      ? null
+      : RegExp(mapping.transferPattern, multiLine: true);
+
+  final _dateFormats = <String, DateFormat>{};
+
   /// [rows] must not include the header row.
   CsvParseResult parse(List<List<String>> rows) {
     final skipped = <int, CsvRowIssue>{};
@@ -193,8 +200,7 @@ class CsvTransactionParser {
     final isFlagged =
         m.transferColumn != null &&
         (_matches(flagText, m.transferValues) ||
-            (m.transferPattern.isNotEmpty &&
-                RegExp(m.transferPattern, multiLine: true).hasMatch(flagText)));
+            (_transferRegex?.hasMatch(flagText) ?? false));
 
     final isTransfer = m.destinationAccountColumn != null
         ? destination.isNotEmpty && (m.transferColumn == null || isFlagged)
@@ -252,10 +258,11 @@ class CsvTransactionParser {
 
       for (final pattern in patterns) {
         try {
-          parsed = DateFormat(
-            pattern,
-            'en_US',
-          ).parseStrict(pattern == mapping.dateFormat ? date : '$date $time');
+          parsed = _dateFormats
+              .putIfAbsent(pattern, () => DateFormat(pattern, 'en_US'))
+              .parseStrict(
+                pattern == mapping.dateFormat ? date : '$date $time',
+              );
           break;
         } on FormatException {
           continue;

@@ -198,9 +198,10 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
           child: Row(
             children: [
               if (stage != _ImportStage.file) ...[
-                OutlinedButton(
+                OutlinedButton.icon(
                   onPressed: _goBack,
-                  child: Text(t.ui_actions.back),
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  label: Text(t.ui_actions.back),
                 ),
                 const SizedBox(width: 8),
               ],
@@ -494,7 +495,7 @@ class _AppChoice extends StatelessWidget {
 
     final fallback = DecoratedBox(
       decoration: BoxDecoration(
-        color: template.color.withOpacity(0.18),
+        color: template.color.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(template.icon, size: 18, color: template.color),
@@ -502,14 +503,14 @@ class _AppChoice extends StatelessWidget {
 
     return Material(
       color: isSelected
-          ? colors.primaryContainer.withOpacity(0.6)
+          ? colors.primaryContainer.withValues(alpha: 0.6)
           : colors.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
         side: BorderSide(
           color: isSelected
               ? colors.primary
-              : colors.outlineVariant.withOpacity(0.5),
+              : colors.outlineVariant.withValues(alpha: 0.5),
           width: isSelected ? 1.5 : 1,
         ),
       ),
