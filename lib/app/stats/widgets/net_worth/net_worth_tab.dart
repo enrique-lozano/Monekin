@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_composition_card.dart';
 import 'package:monekin/app/stats/widgets/net_worth/net_worth_evolution_card.dart';
 import 'package:monekin/app/stats/widgets/stats_cards_layout.dart';

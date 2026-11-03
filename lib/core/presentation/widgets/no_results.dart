@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:monekin/core/presentation/animations/fade_in.dart';
 import 'package:monekin/core/presentation/animations/scaled_animated_switcher.dart';

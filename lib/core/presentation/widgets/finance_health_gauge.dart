@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 
 /// A ~270° circular gauge that displays a 0-100 score with a rounded value arc

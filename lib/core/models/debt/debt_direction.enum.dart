@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show Colors, Icons;
+import 'package:material_ui/material_ui.dart' show Colors, Icons;
 import 'package:flutter/widgets.dart';
 import 'package:monekin/core/database/utils/database_enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';

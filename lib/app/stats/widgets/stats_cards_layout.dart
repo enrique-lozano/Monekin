@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Lays out a stats tab's cards in a single column, or in two balanced columns
 /// (a light masonry) once there's enough horizontal room — which typically

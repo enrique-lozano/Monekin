@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 
 /// Default corner radius for buttons across the app.

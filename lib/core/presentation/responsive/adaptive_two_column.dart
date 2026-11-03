@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/presentation/responsive/responsive_row_column.dart';
 
 /// Lays out [first] and [second] side-by-side (each flexed) when the available

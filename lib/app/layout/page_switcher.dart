@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide BottomNavigationBar;
+import 'package:material_ui/material_ui.dart' hide BottomNavigationBar;
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/indexed_stacks/fade_indexed_stack.dart';

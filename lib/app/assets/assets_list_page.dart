@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/assets/asset_details_page.dart';
 import 'package:monekin/app/assets/asset_form.dart';
 import 'package:monekin/app/layout/page_framework.dart';
