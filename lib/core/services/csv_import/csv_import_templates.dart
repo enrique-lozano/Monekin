@@ -35,6 +35,7 @@ class CsvImportTemplate {
     required this.color,
     required this.exportHint,
     required this.buildMapping,
+    this.playStorePackage,
     this.requiredHeaders = const [],
   });
 
@@ -46,6 +47,9 @@ class CsvImportTemplate {
 
   final IconData icon;
   final Color color;
+
+  /// Android package of the app, used to display its icon from Google Play
+  final String? playStorePackage;
 
   /// Explains the user how to get the CSV file from the source app
   final String Function(Translations t) exportHint;
@@ -75,6 +79,7 @@ class CsvImportTemplates {
     name: 'MyExpenses',
     icon: Icons.account_balance_wallet_rounded,
     color: const Color(0xFF2E7D32),
+    playStorePackage: 'org.totschnig.myexpenses',
     exportHint: (t) => t.backup.import.templates.my_expenses_hint,
     requiredHeaders: const ['Date', 'Income', 'Expense'],
     buildMapping: (h) => CsvImportMapping(
@@ -97,6 +102,7 @@ class CsvImportTemplates {
     name: 'Cashew',
     icon: Icons.savings_rounded,
     color: const Color(0xFF3F7D6B),
+    playStorePackage: 'com.budget.tracker_app',
     exportHint: (t) => t.backup.import.templates.cashew_hint,
     requiredHeaders: const ['account', 'amount', 'date', 'category name'],
     buildMapping: (h) => CsvImportMapping(
@@ -117,6 +123,7 @@ class CsvImportTemplates {
     name: 'Wallet by BudgetBakers',
     icon: Icons.wallet_rounded,
     color: const Color(0xFF1E88E5),
+    playStorePackage: 'com.droid4you.application.wallet',
     exportHint: (t) => t.backup.import.templates.wallet_hint,
     requiredHeaders: const ['account', 'category', 'amount', 'date'],
     buildMapping: (h) => CsvImportMapping(
@@ -134,14 +141,14 @@ class CsvImportTemplates {
     ),
   );
 
-  /// Fallback for spreadsheets and any other app. Columns are guessed by
-  /// their usual names and the user can review everything.
-  static final spreadsheet = CsvImportTemplate(
-    id: 'spreadsheet',
-    name: 'Excel · Google Sheets · Other',
+  /// Used when the file does not come from a known app. Columns are guessed
+  /// by their usual names and the user can review everything.
+  static final generic = CsvImportTemplate(
+    id: 'generic',
+    name: 'CSV',
     icon: Icons.table_chart_rounded,
     color: const Color(0xFF607D8B),
-    exportHint: (t) => t.backup.import.templates.spreadsheet_hint,
+    exportHint: (t) => t.backup.import.templates.generic_hint,
     buildMapping: (h) {
       final income = h.find(['income', 'credit', 'deposit']);
       final expense = h.find(['expense', 'debit', 'withdrawal']);
@@ -171,11 +178,6 @@ class CsvImportTemplates {
     },
   );
 
-  /// Templates in the order they are shown to the user
-  static final List<CsvImportTemplate> all = [
-    myExpenses,
-    cashew,
-    wallet,
-    spreadsheet,
-  ];
+  /// Known apps, in the order they are shown to the user
+  static final List<CsvImportTemplate> apps = [myExpenses, cashew, wallet];
 }
