@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/models/account/account.dart';

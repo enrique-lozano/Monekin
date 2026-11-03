@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_single_quotes
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/debts/components/add_register_to_debt_modal.dart';
 import 'package:monekin/app/debts/debt_form_page.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/accounts/widgets/balance_currency_form_field.dart';
 import 'package:monekin/app/securities/widgets/security_avatar.dart';
 import 'package:monekin/app/securities/widgets/taxonomy_category_picker.dart';

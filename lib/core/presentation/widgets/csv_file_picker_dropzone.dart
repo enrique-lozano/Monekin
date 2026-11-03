@@ -1,5 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// A dashed "drop zone"-styled button used to prompt the user to pick a

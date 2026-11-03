@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 
 /// Reactively builds a widget with the current user profile (name + avatar).

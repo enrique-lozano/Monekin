@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/budgets/budget_details_page.dart';
 import 'package:monekin/app/goals/goal_details_page.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';

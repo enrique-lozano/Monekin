@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:monekin/app/settings/purchases/in_app_purchase.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';

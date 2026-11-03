@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/tags/tags_selector.modal.dart';
 import 'package:monekin/app/transactions/form/dialogs/transaction_status_selector.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';

@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';

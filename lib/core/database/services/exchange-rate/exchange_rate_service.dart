@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/models/exchange-rate/exchange_rate.dart';
 import 'package:rxdart/rxdart.dart';

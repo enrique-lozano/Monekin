@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Two-column row where [info] sets the height and [chart] fills it.
 ///

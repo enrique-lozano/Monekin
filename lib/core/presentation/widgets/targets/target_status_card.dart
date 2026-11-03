@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/budget/target_progress_status.enum.dart';

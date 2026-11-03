@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
 import 'package:monekin/app/layout/page_framework.dart';

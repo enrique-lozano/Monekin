@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/database/app_db.dart'
     show BudgetInDB, TransactionFilterSetInDB;
 import 'package:monekin/core/models/date-utils/date_period.dart';

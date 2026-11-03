@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/services/market_data/market_data_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';

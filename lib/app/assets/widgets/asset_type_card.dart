@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/models/asset/asset_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/tappable.dart';
 

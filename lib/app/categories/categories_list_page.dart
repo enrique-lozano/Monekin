@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/categories/form/category_form.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';

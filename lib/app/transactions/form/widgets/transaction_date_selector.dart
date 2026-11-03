@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
 import 'package:monekin/core/models/transaction/transaction_form_field.enum.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';

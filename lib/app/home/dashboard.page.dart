@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/home/widgets/dashboard_account_list.dart';
 import 'package:monekin/app/home/widgets/dashboard_balance_chart.dart';
