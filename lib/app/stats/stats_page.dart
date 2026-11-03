@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/stats/widgets/balance_bar_chart.dart';
 import 'package:monekin/app/stats/widgets/finance_health_details.dart';

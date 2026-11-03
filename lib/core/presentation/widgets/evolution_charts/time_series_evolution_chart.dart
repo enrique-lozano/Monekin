@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/utils/common_axis_titles.dart';
 import 'package:monekin/core/database/app_db.dart';

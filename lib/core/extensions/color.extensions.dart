@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 extension ColorHex on Color {
   /// Return a color instance from an hex string

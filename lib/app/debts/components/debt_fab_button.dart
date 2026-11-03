@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:monekin/app/debts/debt_form_page.dart';
 import 'package:monekin/core/models/debt/debt_direction.enum.dart';

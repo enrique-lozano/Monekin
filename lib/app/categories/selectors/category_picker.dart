@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/categories/selectors/category_button_selector.dart';
 import 'package:monekin/app/categories/selectors/draggableScrollableKeyboardAware.mixin.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/models/budget/target_timeline_status.enum.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 

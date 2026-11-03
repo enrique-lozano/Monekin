@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Faint circle that shades the innermost part of a donut chart ring.
 ///

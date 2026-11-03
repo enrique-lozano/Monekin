@@ -5,6 +5,9 @@ analyzer:
     - '**/*.freezed.dart'
     - '**/*.mocks.dart'
     - 'lib/i18n/generated/**'
+    - build/**
+    - android/**
+    - windows/**
   errors:
     missing_required_param: warning
     missing_return: warning

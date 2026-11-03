@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/assets/assets_list_page.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';

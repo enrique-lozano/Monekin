@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 
 /// Renders selector/picker content as a draggable bottom sheet on mobile and as

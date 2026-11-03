@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list_date_separator.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';

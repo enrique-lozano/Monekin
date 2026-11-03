@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/onboarding/classes/OnboardingItem.dart';

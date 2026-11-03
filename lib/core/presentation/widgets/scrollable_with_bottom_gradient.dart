@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// A Stack widget formed by a `SingleChildScrollView` and a gradient at the bottom of it
 class ScrollableWithBottomGradient extends StatelessWidget {
