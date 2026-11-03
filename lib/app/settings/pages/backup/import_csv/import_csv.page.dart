@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart' show FileType;
+import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/categories/selectors/category_picker.dart';
@@ -15,6 +16,7 @@ import 'package:monekin/core/models/tags/tag.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/csv_file_picker_dropzone.dart';
+import 'package:monekin/core/presentation/widgets/dynamic_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
@@ -27,8 +29,26 @@ import 'package:monekin/core/services/csv_import/csv_transaction_parser.dart';
 import 'package:monekin/core/utils/logger.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 enum _ImportStage { file, columns, review }
+
+Widget _sourceIcon(BuildContext context, CsvImportTemplate? template) {
+  final colors = Theme.of(context).colorScheme;
+  final fallback = CircleAvatar(
+    radius: 18,
+    backgroundColor: template?.color ?? colors.primaryContainer,
+    child: Icon(
+      template?.icon ?? Icons.table_rows_rounded,
+      color: template == null ? colors.onPrimaryContainer : Colors.white,
+    ),
+  );
+
+  final packageName = template?.playStorePackage;
+  if (packageName == null) return fallback;
+
+  return StoreAppIcon(packageName: packageName, fallback: fallback, size: 36);
+}
 
 /// Wizard to import the transactions of a CSV file. If the file comes from a
 /// known app, its [CsvImportTemplate] pre-fills the column mapping.
@@ -44,6 +64,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
   List<List<String>>? csvData;
   String? fileName;
+  int? fileSize;
   List<String> get headers => csvData!.first;
   List<List<String>> get rows => csvData!.sublist(1);
 
@@ -85,6 +106,7 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         return;
       }
 
+      final selectedFileSize = await csvFile.length();
       var parsedCSV = await BackupDatabaseService().processCsv(
         await csvFile.readAsString(),
       );
@@ -110,11 +132,74 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       setState(() {
         csvData = parsedCSV;
         fileName = csvFile.uri.pathSegments.last;
+        fileSize = selectedFileSize;
         mappingOutdated = true;
       });
     } catch (err) {
       MonekinSnackbar.error(SnackbarParams.fromError(err));
     }
+  }
+
+  Future<void> _pickSource() async {
+    final t = Translations.of(context).backup.import.manual_import;
+    final result =
+        await showDynamicSelectorBottomSheet<CsvImportTemplate?, String?>(
+          context,
+          selectorWidget: DynamicSelectorModal<CsvImportTemplate?, String?>(
+            title: t.source_picker_title,
+            subtitle: t.autofill_descr,
+            items: [null, ...CsvImportTemplates.apps],
+            selectedValue: selectedTemplate?.id,
+            displayNameGetter: (template) => template?.name ?? t.source_auto,
+            valueGetter: (template) => template?.id,
+            elementTitleBuilder: (title, template) {
+              return Row(
+                children: [
+                  _sourceIcon(context, template),
+                  const SizedBox(width: 12),
+                  Expanded(child: Text(title)),
+                ],
+              );
+            },
+          ),
+        );
+
+    if (result == null) return;
+
+    setState(() {
+      selectedTemplate = CsvImportTemplates.apps.firstWhereOrNull(
+        (template) => template.id == result.result,
+      );
+      mappingOutdated = true;
+      templateMismatch =
+          csvData != null &&
+          selectedTemplate != null &&
+          !selectedTemplate!.matches(headers);
+    });
+  }
+
+  int _matchedColumnCount(CsvImportMapping mapping) {
+    final amountColumns = switch (mapping.amountMode) {
+      CsvAmountMode.signed => [mapping.amountColumn],
+      CsvAmountMode.separateColumns => [
+        mapping.incomeColumn,
+        mapping.expenseColumn,
+      ],
+      CsvAmountMode.typeColumn => [mapping.amountColumn, mapping.typeColumn],
+    };
+
+    return <int?>[
+      ...amountColumns,
+      mapping.transferColumn,
+      mapping.accountColumn,
+      mapping.destinationAccountColumn,
+      mapping.categoryColumn,
+      mapping.tagsColumn,
+      mapping.dateColumn,
+      mapping.timeColumn,
+      mapping.notesColumn,
+      mapping.titleColumn,
+    ].nonNulls.toSet().length;
   }
 
   /// Fills the mapping with the template of the selected app, or of the app
@@ -191,8 +276,16 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final isLast = stage == _ImportStage.review;
+    final manualImport = t.backup.import.manual_import;
+    final indicatorCount = _ImportStage.values.length;
+    final stageLabel = switch (stage) {
+      _ImportStage.file => manualImport.stage_file,
+      _ImportStage.columns => manualImport.stage_columns,
+      _ImportStage.review => manualImport.stage_review,
+    };
 
     return PageFramework(
+      title: t.backup.import.title,
       persistentFooterButtons: [
         PersistentFooterButton(
           child: Row(
@@ -225,10 +318,61 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
       ],
       body: Column(
         children: [
-          _StageIndicator(stage: stage),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                const expansionFactor = 4;
+                const spacing = 4.0;
+                final colors = Theme.of(context).colorScheme;
+
+                return AnimatedSmoothIndicator(
+                  activeIndex: stage.index,
+                  count: indicatorCount,
+                  effect: ExpandingDotsEffect(
+                    dotHeight: 8,
+                    radius: 4,
+                    dotColor: colors.surfaceContainerHighest,
+                    activeDotColor: colors.primary,
+                    spacing: spacing,
+                    dotWidth:
+                        constraints.maxWidth /
+                            (indicatorCount + expansionFactor - 1) -
+                        spacing / indicatorCount,
+                    expansionFactor: expansionFactor.toDouble(),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+            child: Align(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                manualImport
+                    .stage_indicator(
+                      step: stage.index + 1,
+                      total: indicatorCount,
+                      label: stageLabel,
+                    )
+                    .toUpperCase(),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
+              layoutBuilder: (currentChild, previousChildren) => Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  ...previousChildren,
+                  if (currentChild != null) currentChild,
+                ],
+              ),
               child: SingleChildScrollView(
                 key: ValueKey(stage),
                 padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -250,11 +394,45 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
 
   Widget _buildFileStage(BuildContext context) {
     final t = Translations.of(context).backup.import;
-    final selected = selectedTemplate;
+    final detectedTemplate = csvData == null
+        ? null
+        : CsvImportTemplates.apps.firstWhereOrNull(
+            (template) => template.matches(headers),
+          );
+    final source = selectedTemplate ?? detectedTemplate;
+    final matchingSource = csvData != null && source?.matches(headers) == true
+        ? source
+        : null;
+    final matchedColumnCount = matchingSource == null
+        ? null
+        : _matchedColumnCount(matchingSource.mappingFor(headers));
+    final String sourceSubtitle;
+
+    if (selectedTemplate != null) {
+      sourceSubtitle = t.manual_import.source_selected;
+    } else if (detectedTemplate != null) {
+      sourceSubtitle = t.manual_import.source_detected;
+    } else {
+      sourceSubtitle = t.manual_import.source_auto_descr;
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _SourceSelector(
+          title: t.manual_import.source_title,
+          source: source,
+          subtitle: sourceSubtitle,
+          onTap: _pickSource,
+        ),
+        if (selectedTemplate != null) ...[
+          const SizedBox(height: 12),
+          InlineInfoCard(
+            text: selectedTemplate!.exportHint(Translations.of(context)),
+            mode: InlineInfoCardMode.info,
+          ),
+        ],
+        const SizedBox(height: 20),
         _StepTitle(
           title: t.manual_import.file_title,
           subtitle: t.manual_import.file_descr,
@@ -264,45 +442,12 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
         else
           _PickedFileCard(
             name: fileName ?? '',
+            size: fileSize ?? 0,
             rows: rows.length,
             columns: headers.length,
+            matchedColumns: matchedColumnCount,
             onChange: readFile,
           ),
-        const SizedBox(height: 28),
-        Text(
-          t.manual_import.autofill_title,
-          style: Theme.of(context).textTheme.titleMedium
-              ?.copyWith(fontWeight: FontWeight.w700),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          t.manual_import.autofill_descr,
-          style: Theme.of(context).textTheme.bodySmall
-              ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final template in CsvImportTemplates.apps)
-              _AppChoice(
-                template: template,
-                isSelected: selected == template,
-                onTap: () => setState(() {
-                  selectedTemplate = selected == template ? null : template;
-                  mappingOutdated = true;
-                }),
-              ),
-          ],
-        ),
-        if (selected != null) ...[
-          const SizedBox(height: 12),
-          InlineInfoCard(
-            text: selected.exportHint(Translations.of(context)),
-            mode: InlineInfoCardMode.info,
-          ),
-        ],
       ],
     );
   }
@@ -420,17 +565,95 @@ class _StepTitle extends StatelessWidget {
   }
 }
 
+class _SourceSelector extends StatelessWidget {
+  const _SourceSelector({
+    required this.title,
+    required this.source,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final String title;
+  final CsvImportTemplate? source;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final sourceName =
+        source?.name ??
+        Translations.of(context).backup.import.manual_import.source_auto;
+    final shape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(14),
+      side: BorderSide(color: colors.outlineVariant.withValues(alpha: 0.5)),
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 8),
+        Material(
+          color: colors.surfaceContainerLow,
+          shape: shape,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  _sourceIcon(context, source),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          sourceName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        Text(
+                          subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: colors.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.expand_more_rounded),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PickedFileCard extends StatelessWidget {
   const _PickedFileCard({
     required this.name,
+    required this.size,
     required this.rows,
     required this.columns,
+    required this.matchedColumns,
     required this.onChange,
   });
 
   final String name;
+  final int size;
   final int rows;
   final int columns;
+  final int? matchedColumns;
   final VoidCallback onChange;
 
   @override
@@ -438,219 +661,100 @@ class _PickedFileCard extends StatelessWidget {
     final t = Translations.of(context).backup.import;
     final colors = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
-      decoration: cardSurfaceDecoration(context),
-      child: Row(
-        children: [
-          CircleAvatar(
-            backgroundColor: colors.primaryContainer,
-            child: Icon(
-              Icons.description_rounded,
-              color: colors.onPrimaryContainer,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
-                ),
-                Text(
-                  t.manual_import.file_info(rows: rows, columns: columns),
-                  style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(color: colors.onSurfaceVariant),
-                ),
-              ],
-            ),
-          ),
-          TextButton(onPressed: onChange, child: Text(t.select_other_file)),
-        ],
-      ),
-    );
-  }
-}
-
-/// A selectable chip with the icon and name of an app
-class _AppChoice extends StatelessWidget {
-  const _AppChoice({
-    required this.template,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final CsvImportTemplate template;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-
-    final fallback = DecoratedBox(
-      decoration: BoxDecoration(
-        color: template.color.withValues(alpha: 0.18),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Icon(template.icon, size: 18, color: template.color),
-    );
-
-    return Material(
-      color: isSelected
-          ? colors.primaryContainer.withValues(alpha: 0.6)
-          : colors.surfaceContainerLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: isSelected
-              ? colors.primary
-              : colors.outlineVariant.withValues(alpha: 0.5),
-          width: isSelected ? 1.5 : 1,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 14, 8),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+          decoration: cardSurfaceDecoration(context),
           child: Row(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              template.playStorePackage == null
-                  ? SizedBox.square(dimension: 32, child: fallback)
-                  : StoreAppIcon(
-                      packageName: template.playStorePackage!,
-                      fallback: fallback,
-                      size: 32,
-                    ),
-              const SizedBox(width: 10),
-              Flexible(
-                child: Text(
-                  template.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelLarge
-                      ?.copyWith(fontWeight: FontWeight.w600),
+              CircleAvatar(
+                backgroundColor: colors.primaryContainer,
+                child: Icon(
+                  Icons.description_rounded,
+                  color: colors.onPrimaryContainer,
                 ),
               ),
-              if (isSelected) ...[
-                const SizedBox(width: 8),
-                Icon(
-                  Icons.check_circle_rounded,
-                  size: 18,
-                  color: colors.primary,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      t.manual_import.file_info(
+                        size: _formatFileSize(size),
+                        rows: rows,
+                        columns: columns,
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: colors.onSurfaceVariant),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+              TextButton(onPressed: onChange, child: Text(t.select_other_file)),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Compact "File · Columns · Review" progress indicator
-class _StageIndicator extends StatelessWidget {
-  const _StageIndicator({required this.stage});
-
-  final _ImportStage stage;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = Translations.of(context);
-    final colors = Theme.of(context).colorScheme;
-
-    final labels = [
-      t.backup.import.manual_import.stage_file,
-      t.backup.import.manual_import.stage_columns,
-      t.backup.import.manual_import.stage_review,
-    ];
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
-      child: Row(
-        children: [
-          for (final (i, label) in labels.indexed) ...[
-            if (i > 0)
-              Expanded(
-                child: Divider(
-                  height: 1,
-                  color: i <= stage.index
-                      ? colors.primary
-                      : colors.outlineVariant,
+        if (matchedColumns != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 12, top: 8),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.tertiaryContainer,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 5,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle_rounded,
+                      size: 14,
+                      color: colors.onTertiaryContainer,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      t.manual_import.columns_matched(
+                        matched: matchedColumns!,
+                        total: columns,
+                      ),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: colors.onTertiaryContainer,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            _StageDot(
-              number: i + 1,
-              label: label,
-              isDone: i < stage.index,
-              isCurrent: i == stage.index,
             ),
-          ],
-        ],
-      ),
+          ),
+      ],
     );
   }
 }
 
-class _StageDot extends StatelessWidget {
-  const _StageDot({
-    required this.number,
-    required this.label,
-    required this.isDone,
-    required this.isCurrent,
-  });
+String _formatFileSize(int bytes) {
+  const units = ['B', 'KB', 'MB', 'GB'];
+  var size = bytes.toDouble();
+  var unit = 0;
 
-  final int number;
-  final String label;
-  final bool isDone;
-  final bool isCurrent;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final isActive = isDone || isCurrent;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Row(
-        children: [
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 250),
-            width: 24,
-            height: 24,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isActive ? colors.primary : colors.surfaceContainerHigh,
-            ),
-            child: isDone
-                ? Icon(Icons.check_rounded, size: 16, color: colors.onPrimary)
-                : Text(
-                    '$number',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: isActive
-                          ? colors.onPrimary
-                          : colors.onSurfaceVariant,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-          ),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-              color: isActive ? colors.onSurface : colors.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
+  while (size >= 1024 && unit < units.length - 1) {
+    size /= 1024;
+    unit++;
   }
+
+  return '${NumberFormat('0.#').format(size)} ${units[unit]}';
 }

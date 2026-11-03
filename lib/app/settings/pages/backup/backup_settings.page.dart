@@ -118,7 +118,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 subtitle: Text(t.backup.import.manual_import.descr),
                 minVerticalPadding: 16,
                 onTap: () {
-                  RouteUtils.pushRoute(const ImportCSVPage());
+                  RouteUtils.showResponsiveForm(const ImportCSVPage());
                 },
               ),
               createListSeparator(context, t.backup.export.title_short),
@@ -127,7 +127,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 subtitle: Text(t.backup.export.description),
                 minVerticalPadding: 16,
                 onTap: () {
-                  RouteUtils.pushRoute(const ExportDataPage());
+                  RouteUtils.showResponsiveForm(const ExportDataPage());
                 },
               ),
               createListSeparator(context, t.backup.about.title),
