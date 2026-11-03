@@ -1008,10 +1008,10 @@ packages:
     dependency: "direct main"
     description:
       name: saf_util
-      sha256: "35cd99ec282f9fc68ec0fb35338315a7198250f8ff0d24006f8507a6aae3d344"
+      sha256: c630df86aa412d3c5b715eb941ebefa9c97eefe31395bf45223ba5efb3862a43
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0"
+    version: "3.1.1"
   serial_csv:
     dependency: transitive
     description:
