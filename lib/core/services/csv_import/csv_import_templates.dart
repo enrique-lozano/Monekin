@@ -220,7 +220,10 @@ class CsvImportTemplates {
         titleColumn: h.find(['title', 'description', 'payee', 'name']),
         notesColumn: h.find(['note', 'notes', 'memo', 'comment']),
         tagsColumn: h.find(['tags', 'labels']),
-        transferColumn: h.find(['type']),
+        transferColumn:
+            h.find(['to account', 'destination account', 'destination']) == null
+            ? h.find(['type'])
+            : null,
         transferValues: const ['transfer'],
       );
     },
