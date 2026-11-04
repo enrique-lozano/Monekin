@@ -185,7 +185,8 @@ class CsvTransactionParser {
         signedAmount = income.abs() - expense.abs();
         if (income == 0 && expense == 0) signedAmount = null;
       case CsvAmountMode.typeColumn:
-        final amount = parseCsvAmount(_cell(row, m.amountColumn))?.abs();
+        final rawAmount = parseCsvAmount(_cell(row, m.amountColumn));
+        final amount = rawAmount?.abs();
         final type = _cell(row, m.typeColumn);
 
         if (amount != null) {
@@ -195,7 +196,7 @@ class CsvTransactionParser {
             signedAmount = -amount;
           } else if (_matches(type, m.transferValues) ||
               destination.isNotEmpty) {
-            signedAmount = -amount;
+            signedAmount = destination.isEmpty ? rawAmount : -amount;
           } else {
             unknownType = true;
           }
