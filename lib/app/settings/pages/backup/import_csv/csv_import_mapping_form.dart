@@ -53,10 +53,10 @@ class CsvImportMappingForm extends StatefulWidget {
   final Category? defaultCategory;
   final List<Tag> defaultTags;
 
-  final VoidCallback onPickDefaultAccount;
+  final ValueChanged<BuildContext> onPickDefaultAccount;
   final VoidCallback onClearDefaultAccount;
-  final VoidCallback onPickDefaultCategory;
-  final VoidCallback onPickDefaultTags;
+  final ValueChanged<BuildContext> onPickDefaultCategory;
+  final ValueChanged<BuildContext> onPickDefaultTags;
 
   @override
   State<CsvImportMappingForm> createState() => _CsvImportMappingFormState();
@@ -966,7 +966,9 @@ class _DefaultValueSelector extends StatelessWidget {
   final String? value;
   final SupportedIcon? supportedIcon;
   final Color? iconColor;
-  final VoidCallback onTap;
+
+  /// Receives the context of the field, to anchor the picker popover to it
+  final ValueChanged<BuildContext> onTap;
   final VoidCallback? onClear;
   final bool isRequired;
 
@@ -974,28 +976,31 @@ class _DefaultValueSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
 
-    return ReadOnlyTextFormField(
-      displayValue: value ?? t.general.unspecified,
-      onTap: onTap,
-      validator: (_) =>
-          isRequired && value == null ? t.general.validations.required : null,
-      decoration: InputDecoration(
-        labelText: title,
-        suffixIcon: onClear == null
-            ? const Icon(Icons.arrow_drop_down)
-            : IconButton(
-                icon: const Icon(Icons.close_rounded),
-                onPressed: onClear,
-              ),
-        prefixIcon: supportedIcon == null
-            ? null
-            : Container(
-                margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
-                child: IconDisplayer(
-                  mainColor: iconColor ?? Theme.of(context).colorScheme.primary,
-                  supportedIcon: supportedIcon,
+    return Builder(
+      builder: (fieldContext) => ReadOnlyTextFormField(
+        displayValue: value ?? t.general.unspecified,
+        onTap: () => onTap(fieldContext),
+        validator: (_) =>
+            isRequired && value == null ? t.general.validations.required : null,
+        decoration: InputDecoration(
+          labelText: title,
+          suffixIcon: onClear == null
+              ? const Icon(Icons.arrow_drop_down)
+              : IconButton(
+                  icon: const Icon(Icons.close_rounded),
+                  onPressed: onClear,
                 ),
-              ),
+          prefixIcon: supportedIcon == null
+              ? null
+              : Container(
+                  margin: const EdgeInsets.fromLTRB(14, 8, 8, 8),
+                  child: IconDisplayer(
+                    mainColor:
+                        iconColor ?? Theme.of(context).colorScheme.primary,
+                    supportedIcon: supportedIcon,
+                  ),
+                ),
+        ),
       ),
     );
   }

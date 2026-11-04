@@ -141,11 +141,11 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     }
   }
 
-  Future<void> _pickSource() async {
+  Future<void> _pickSource(BuildContext anchorContext) async {
     final t = Translations.of(context).backup.import.manual_import;
     final result =
         await showDynamicSelectorBottomSheet<CsvImportTemplate?, String?>(
-          context,
+          anchorContext,
           selectorWidget: DynamicSelectorModal<CsvImportTemplate?, String?>(
             title: t.source_picker_title,
             subtitle: t.autofill_descr,
@@ -497,9 +497,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     );
   }
 
-  Future<void> _pickDefaultAccount() async {
+  Future<void> _pickDefaultAccount(BuildContext anchorContext) async {
     final modalRes = await showAccountSelectorBottomSheet(
-      context,
+      anchorContext,
       AccountSelectorModal(
         allowMultiSelection: false,
         filterSavingAccounts: true,
@@ -512,9 +512,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     }
   }
 
-  Future<void> _pickDefaultCategory() async {
+  Future<void> _pickDefaultCategory(BuildContext anchorContext) async {
     final modalRes = await showCategoryPickerModal(
-      context,
+      anchorContext,
       modal: CategoryPicker(
         selectedCategory: defaultCategory,
         categoryType: const [CategoryType.B],
@@ -524,9 +524,9 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
     if (modalRes != null) setState(() => defaultCategory = modalRes);
   }
 
-  Future<void> _pickDefaultTags() async {
+  Future<void> _pickDefaultTags(BuildContext anchorContext) async {
     final selected = await showTagListModal(
-      context,
+      anchorContext,
       modal: TagSelector(
         selectedTags: defaultTags,
         allowEmptySubmit: true,
@@ -584,7 +584,9 @@ class _SourceSelector extends StatelessWidget {
   final String title;
   final CsvImportTemplate? source;
   final String subtitle;
-  final VoidCallback onTap;
+
+  /// Receives the context of the card, to anchor the picker popover to it
+  final ValueChanged<BuildContext> onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -602,42 +604,44 @@ class _SourceSelector extends StatelessWidget {
       children: [
         Text(title, style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: 8),
-        Material(
-          color: colors.surfaceContainerLow,
-          shape: shape,
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  _sourceIcon(context, source),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          sourceName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleSmall
-                              ?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        Text(
-                          subtitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: colors.onSurfaceVariant),
-                        ),
-                      ],
+        Builder(
+          builder: (cardContext) => Material(
+            color: colors.surfaceContainerLow,
+            shape: shape,
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => onTap(cardContext),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    _sourceIcon(context, source),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            sourceName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall
+                                ?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            subtitle,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: colors.onSurfaceVariant),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Icon(Icons.expand_more_rounded),
-                ],
+                    const SizedBox(width: 8),
+                    const Icon(Icons.expand_more_rounded),
+                  ],
+                ),
               ),
             ),
           ),
