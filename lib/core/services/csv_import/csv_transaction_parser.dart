@@ -41,7 +41,24 @@ class ParsedCsvTransaction {
   final List<String> tags;
   final String? notes;
   final String? title;
+
+  /// This transaction as a transfer to [to]. Transfers have no category.
+  ParsedCsvTransaction asTransfer(String? to, {double? valueInDestiny}) =>
+      ParsedCsvTransaction(
+        type: TransactionType.transfer,
+        date: date,
+        amount: amount,
+        accountName: accountName,
+        receivingAccountName: to,
+        valueInDestiny: valueInDestiny,
+        tags: tags,
+        notes: notes,
+        title: title,
+      );
 }
+
+/// A parsed row, and whether it is one of the two rows of a transfer
+typedef _Row = ({int index, ParsedCsvTransaction tx, bool isLeg});
 
 enum CsvRowIssue { invalidAmount, invalidDate, unknownType }
 
@@ -63,19 +80,15 @@ class CsvParseResult {
 
   int countOf(TransactionType type) =>
       transactions.where((e) => e.type == type).length;
-
-  Set<String> get accountNames => {
-    for (final tr in transactions) ...[
-      if (tr.accountName != null) tr.accountName!,
-      if (tr.receivingAccountName != null) tr.receivingAccountName!,
-    ],
-  };
 }
 
 /// Parses the amount of a CSV cell, supporting both `1,234.56` and `1.234,56`
 /// notations as well as currency symbols and spaces. Returns null if the text
 /// does not look like a number.
 double? parseCsvAmount(String raw) {
+  final plain = double.tryParse(raw.trim());
+  if (plain != null) return plain.isFinite ? plain : null;
+
   var text = raw.replaceAll(RegExp(r'[^\d.,\-+()]'), '');
 
   if (text.isEmpty) return null;
@@ -127,15 +140,15 @@ class CsvTransactionParser {
   /// [rows] must not include the header row.
   CsvParseResult parse(List<List<String>> rows) {
     final skipped = <int, CsvRowIssue>{};
-    final parsed = <_ParsedRow>[];
+    final parsed = <_Row>[];
 
     for (final (index, row) in rows.indexed) {
-      final result = _parseRow(row);
+      final result = _parseRow(row, index);
 
       if (result.issue != null) {
         skipped[index + 1] = result.issue!;
-      } else {
-        parsed.add(result.row!.withIndex(index));
+      } else if (result.row != null) {
+        parsed.add(result.row!);
       }
     }
 
@@ -154,7 +167,7 @@ class CsvTransactionParser {
   bool _matches(String value, List<String> options) =>
       options.any((o) => o.trim().toLowerCase() == value.toLowerCase());
 
-  ({_ParsedRow? row, CsvRowIssue? issue}) _parseRow(List<String> row) {
+  ({_Row? row, CsvRowIssue? issue}) _parseRow(List<String> row, int index) {
     final m = mapping;
 
     // Signed amount: negative = leaving the account
@@ -180,7 +193,7 @@ class CsvTransactionParser {
           } else if (_matches(type, m.expenseTypeValues)) {
             signedAmount = -amount;
           } else if (_matches(type, m.transferValues)) {
-            signedAmount = 0;
+            signedAmount = -amount;
           } else {
             unknownType = true;
           }
@@ -214,19 +227,26 @@ class CsvTransactionParser {
               .where((e) => e.isNotEmpty)
               .toList();
 
+    // Rows without amount are just empty lines of the spreadsheet
+    if (signedAmount == 0) return (row: null, issue: null);
+
+    final isTransferRow = destination.isNotEmpty && isTransfer;
+    final tx = ParsedCsvTransaction(
+      type: signedAmount < 0 ? TransactionType.expense : TransactionType.income,
+      date: date,
+      amount: signedAmount.abs(),
+      accountName: _nullIfEmpty(_cell(row, m.accountColumn)),
+      categoryName: _nullIfEmpty(_cell(row, m.categoryColumn)),
+      tags: tags,
+      notes: _nullIfEmpty(_cell(row, m.notesColumn)),
+      title: _nullIfEmpty(_cell(row, m.titleColumn)),
+    );
+
     return (
-      row: _ParsedRow(
-        signedAmount: signedAmount,
-        date: date,
-        isTransfer: isTransfer,
-        accountName: _nullIfEmpty(_cell(row, m.accountColumn)),
-        receivingAccountName: isTransfer && destination.isNotEmpty
-            ? destination
-            : null,
-        categoryName: _nullIfEmpty(_cell(row, m.categoryColumn)),
-        tags: tags,
-        notes: _nullIfEmpty(_cell(row, m.notesColumn)),
-        title: _nullIfEmpty(_cell(row, m.titleColumn)),
+      row: (
+        index: index,
+        tx: isTransferRow ? tx.asTransfer(destination) : tx,
+        isLeg: isTransfer && !isTransferRow,
       ),
       issue: null,
     );
@@ -273,151 +293,76 @@ class CsvTransactionParser {
     return parsed?.toLocal();
   }
 
+  /// Joins the outgoing and incoming rows of the transfers into one
+  /// transaction. The legs without counterpart remain regular transactions.
   ({List<ParsedCsvTransaction> transactions, int unpaired}) _resolveTransfers(
-    List<_ParsedRow> rows,
+    List<_Row> rows,
   ) {
-    // Rows that are one leg (out or in) of a transfer, without the destination
-    final legs = rows.where(
-      (r) => r.isTransfer && r.receivingAccountName == null,
-    );
-
+    // Index of each row that is now part of a transfer. Its incoming leg
+    // has no transaction anymore
     final paired = <int, ParsedCsvTransaction?>{};
-    int unpaired = 0;
 
     if (mapping.dateColumn != null) {
-      final incoming = legs.where((l) => l.signedAmount > 0).toList();
+      final legs = rows.where((r) => r.isLeg);
 
-      for (final out in legs.where((l) => l.signedAmount < 0)) {
+      // Incoming legs by minute, so each outgoing one only checks its own
+      int bucket(DateTime d) =>
+          d.millisecondsSinceEpoch ~/ _legsTimeTolerance.inMilliseconds;
+
+      final incoming = <int, List<_Row>>{};
+      for (final leg in legs.where(
+        (l) => l.tx.type == TransactionType.income,
+      )) {
+        incoming.putIfAbsent(bucket(leg.tx.date), () => []).add(leg);
+      }
+
+      for (final out in legs.where(
+        (l) => l.tx.type == TransactionType.expense,
+      )) {
+        final b = bucket(out.tx.date);
+
         // Exports often write both legs a few seconds apart
-        final candidates = incoming
-            .where(
-              (c) =>
-                  c.accountName != out.accountName &&
-                  c.date.difference(out.date).abs() <= _legsTimeTolerance,
-            )
-            .sortedBy<num>(
-              (c) => c.date.difference(out.date).abs().inMilliseconds,
-            );
+        final candidates =
+            [
+                  for (final i in [b - 1, b, b + 1]) ...?incoming[i],
+                ]
+                .where(
+                  (c) =>
+                      c.tx.accountName != null &&
+                      c.tx.accountName != out.tx.accountName &&
+                      c.tx.date.difference(out.tx.date).abs() <=
+                          _legsTimeTolerance,
+                )
+                .sortedBy<num>(
+                  (c) => c.tx.date.difference(out.tx.date).abs().inMilliseconds,
+                );
 
         final match =
-            candidates.firstWhereOrNull(
-              (c) => (c.signedAmount + out.signedAmount).abs() < 1e-9,
-            ) ??
+            candidates.firstWhereOrNull((c) => c.tx.amount == out.tx.amount) ??
             candidates.firstOrNull;
 
         if (match == null) continue;
 
-        incoming.remove(match);
+        incoming[bucket(match.tx.date)]!.remove(match);
 
-        final amount = out.signedAmount.abs();
-
-        paired[out.index!] = out.toTransaction(
-          TransactionType.transfer,
-          amount: amount,
-          receivingAccountName: match.accountName,
-          valueInDestiny: (match.signedAmount - amount).abs() < 1e-9
+        paired[out.index] = out.tx.asTransfer(
+          match.tx.accountName,
+          valueInDestiny: match.tx.amount == out.tx.amount
               ? null
-              : match.signedAmount,
+              : match.tx.amount,
         );
-        paired[match.index!] = null;
+        paired[match.index] = null;
       }
     }
 
-    final result = <ParsedCsvTransaction>[];
-
-    for (final row in rows) {
-      if (paired.containsKey(row.index)) {
-        final tr = paired[row.index];
-        if (tr != null) result.add(tr);
-        continue;
-      }
-
-      if (row.isTransfer && row.receivingAccountName != null) {
-        result.add(
-          row.toTransaction(
-            TransactionType.transfer,
-            amount: row.signedAmount.abs(),
-            receivingAccountName: row.receivingAccountName,
-          ),
-        );
-        continue;
-      }
-
-      if (row.isTransfer) unpaired++;
-
-      if (row.signedAmount == 0) continue;
-
-      result.add(
-        row.toTransaction(
-          row.signedAmount < 0
-              ? TransactionType.expense
-              : TransactionType.income,
-          amount: row.signedAmount.abs(),
-        ),
-      );
-    }
-
-    return (transactions: result, unpaired: unpaired);
-  }
-}
-
-class _ParsedRow {
-  const _ParsedRow({
-    required this.signedAmount,
-    required this.date,
-    required this.isTransfer,
-    this.index,
-    this.accountName,
-    this.receivingAccountName,
-    this.categoryName,
-    this.tags = const [],
-    this.notes,
-    this.title,
-  });
-
-  final int? index;
-  final double signedAmount;
-  final DateTime date;
-  final bool isTransfer;
-  final String? accountName;
-  final String? receivingAccountName;
-  final String? categoryName;
-  final List<String> tags;
-  final String? notes;
-  final String? title;
-
-  _ParsedRow withIndex(int index) => _ParsedRow(
-    index: index,
-    signedAmount: signedAmount,
-    date: date,
-    isTransfer: isTransfer,
-    accountName: accountName,
-    receivingAccountName: receivingAccountName,
-    categoryName: categoryName,
-    tags: tags,
-    notes: notes,
-    title: title,
-  );
-
-  ParsedCsvTransaction toTransaction(
-    TransactionType type, {
-    required double amount,
-    String? receivingAccountName,
-    double? valueInDestiny,
-  }) {
-    final isTransfer = type.isTransfer;
-
-    return ParsedCsvTransaction(
-      type: type,
-      date: date,
-      amount: amount,
-      accountName: accountName,
-      receivingAccountName: receivingAccountName,
-      valueInDestiny: valueInDestiny,
-      categoryName: isTransfer ? null : categoryName,
-      tags: tags,
-      notes: notes,
-      title: title,
+    return (
+      transactions: [
+        for (final row in rows)
+          if (!paired.containsKey(row.index)) row.tx else ?paired[row.index],
+      ],
+      unpaired: rows
+          .where((r) => r.isLeg && !paired.containsKey(r.index))
+          .length,
     );
   }
 }

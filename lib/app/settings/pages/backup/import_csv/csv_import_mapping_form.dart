@@ -466,6 +466,7 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
             child: Row(
               children: [
                 Expanded(
+                  flex: 2,
                   child: Text(
                     value,
                     maxLines: 1,
@@ -474,28 +475,31 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
                         ?.copyWith(fontWeight: FontWeight.w600),
                   ),
                 ),
-                ExpandingSegmentedTabs<_ValueRole>(
-                  fullWidth: false,
-                  height: 36,
-                  selected: roleOf(value),
-                  onSelected: (role) => setRole(value, role),
-                  items: [
-                    SegmentedTabItem(
-                      value: _ValueRole.income,
-                      icon: Icons.south_east_rounded,
-                      label: t.transaction.types.income(n: 1),
-                    ),
-                    SegmentedTabItem(
-                      value: _ValueRole.expense,
-                      icon: Icons.north_east_rounded,
-                      label: t.transaction.types.expense(n: 1),
-                    ),
-                    SegmentedTabItem(
-                      value: _ValueRole.skip,
-                      icon: Icons.block_rounded,
-                      label: t.backup.import.manual_import.skip,
-                    ),
-                  ],
+                Flexible(
+                  flex: 3,
+                  child: ExpandingSegmentedTabs<_ValueRole>(
+                    fullWidth: false,
+                    height: 36,
+                    selected: roleOf(value),
+                    onSelected: (role) => setRole(value, role),
+                    items: [
+                      SegmentedTabItem(
+                        value: _ValueRole.income,
+                        icon: Icons.south_east_rounded,
+                        label: t.transaction.types.income(n: 1),
+                      ),
+                      SegmentedTabItem(
+                        value: _ValueRole.expense,
+                        icon: Icons.north_east_rounded,
+                        label: t.transaction.types.expense(n: 1),
+                      ),
+                      SegmentedTabItem(
+                        value: _ValueRole.skip,
+                        icon: Icons.block_rounded,
+                        label: t.backup.import.manual_import.skip,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

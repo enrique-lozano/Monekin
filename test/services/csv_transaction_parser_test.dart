@@ -15,6 +15,8 @@ void main() {
       expect(parseCsvAmount('1,234'), 1234);
       expect(parseCsvAmount(r'$ 1 250.5'), 1250.5);
       expect(parseCsvAmount('(40)'), -40);
+      expect(parseCsvAmount('1e3'), 1000);
+      expect(parseCsvAmount('1.5E-7'), 1.5e-7);
     });
 
     test('returns null for non numeric text', () {
@@ -206,6 +208,143 @@ fdlkl: 33 \$",2026-05-15 17:51:31.000,true,default,Corrección de Balance,,0XFF6
 
       expect(result.countOf(TransactionType.income), 2);
       expect(result.countOf(TransactionType.expense), 1);
+    });
+  });
+
+  group('Wallet and Spendee templates', () {
+    final walletHeaders = [
+      'account',
+      'category',
+      'currency',
+      'amount',
+      'ref_currency_amount',
+      'type',
+      'payment_type',
+      'note',
+      'date',
+      'payee',
+      'labels',
+    ];
+
+    List<String> row(
+      String account,
+      String category,
+      String amount,
+      String type,
+      String date,
+    ) => [account, category, 'USD', amount, amount, type, '', '', date, '', ''];
+
+    test(
+      'read the direction from the type, whatever the sign of the amount',
+      () {
+        final mapping = CsvImportTemplates.wallet.mappingFor(walletHeaders);
+        final result = CsvTransactionParser(mapping).parse([
+          row('Bank', 'Food', '12.5', 'Expense', '2025-01-01T10:00:00.000Z'),
+          row('Bank', 'Salary', '100', 'Income', '2025-01-02T10:00:00.000Z'),
+          row('Bank', 'Food', '-3', 'Expenses', '2025-01-03T10:00:00.000Z'),
+        ]);
+
+        expect(result.transactions.map((e) => e.type), [
+          TransactionType.expense,
+          TransactionType.income,
+          TransactionType.expense,
+        ]);
+        expect(result.transactions.map((e) => e.amount), [12.5, 100, 3]);
+      },
+    );
+
+    test('join the transfer legs, even when the marker is translated', () {
+      final mapping = CsvImportTemplates.wallet.mappingFor(walletHeaders);
+      final result = CsvTransactionParser(mapping).parse([
+        row(
+          'Bank',
+          'Transferir, retirar',
+          '50',
+          'Gasto',
+          '2025-01-01T10:00:00',
+        ),
+        row(
+          'Cash',
+          'Transferir, retirar',
+          '50',
+          'Ingreso',
+          '2025-01-01T10:00:00',
+        ),
+      ]);
+
+      final transfer = result.transactions.single;
+      expect(transfer.type, TransactionType.transfer);
+      expect(transfer.accountName, 'Bank');
+      expect(transfer.receivingAccountName, 'Cash');
+    });
+
+    test('are only detected with their own headers', () {
+      expect(
+        CsvImportTemplates.wallet.matches([
+          'account',
+          'category',
+          'amount',
+          'date',
+          'destination account',
+        ]),
+        isFalse,
+      );
+      expect(
+        CsvImportTemplates.spendee.matches([
+          'Date',
+          'Wallet',
+          'Type',
+          'Category name',
+          'Amount',
+          'Currency',
+          'Note',
+        ]),
+        isTrue,
+      );
+    });
+  });
+
+  group('Transfer rows', () {
+    test('without account are reported as unpaired instead of failing', () {
+      final result =
+          CsvTransactionParser(
+            const CsvImportMapping(
+              amountColumn: 0,
+              accountColumn: 1,
+              dateColumn: 2,
+              transferColumn: 3,
+              transferValues: ['yes'],
+            ),
+          ).parse([
+            ['-10', 'Bank', '2025-01-01T10:00:00', 'yes'],
+            ['10', '', '2025-01-01T10:00:00', 'yes'],
+          ]);
+
+      expect(result.unpairedTransfers, 2);
+      expect(result.transactions.map((e) => e.receivingAccountName), [
+        null,
+        null,
+      ]);
+    });
+
+    test('keep their amount when the type column marks them', () {
+      final result =
+          CsvTransactionParser(
+            const CsvImportMapping(
+              amountMode: CsvAmountMode.typeColumn,
+              amountColumn: 0,
+              typeColumn: 1,
+              accountColumn: 2,
+              destinationAccountColumn: 3,
+              transferColumn: 1,
+              transferValues: ['Transfer'],
+            ),
+          ).parse([
+            ['40', 'Transfer', 'Bank', 'Cash'],
+          ]);
+
+      expect(result.transactions.single.type, TransactionType.transfer);
+      expect(result.transactions.single.amount, 40);
     });
   });
 

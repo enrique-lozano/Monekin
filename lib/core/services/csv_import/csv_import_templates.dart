@@ -36,6 +36,7 @@ class CsvImportTemplate {
     required this.exportHint,
     required this.buildMapping,
     this.playStorePackage,
+    this.guideUrl,
     this.requiredHeaders = const [],
   });
 
@@ -50,6 +51,9 @@ class CsvImportTemplate {
 
   /// Android package of the app, used to display its icon from Google Play
   final String? playStorePackage;
+
+  /// Public article of the app explaining how to export the data
+  final String? guideUrl;
 
   /// Explains the user how to get the CSV file from the source app
   final String Function(Translations t) exportHint;
@@ -124,20 +128,64 @@ class CsvImportTemplates {
     icon: Icons.wallet_rounded,
     color: const Color(0xFF1E88E5),
     playStorePackage: 'com.droid4you.application.wallet',
+    guideUrl: 'https://support.budgetbakers.com/hc/en-us/articles/7151606064018-How-to-export-transactions-from-Wallet',
     exportHint: (t) => t.backup.import.templates.wallet_hint,
-    requiredHeaders: const ['account', 'category', 'amount', 'date'],
+    requiredHeaders: const [
+      'account',
+      'category',
+      'amount',
+      'ref_currency_amount',
+      'type',
+      'date',
+    ],
     buildMapping: (h) => CsvImportMapping(
+      amountMode: CsvAmountMode.typeColumn,
       amountColumn: h.find(['amount']),
+      typeColumn: h.find(['type']),
+      // The values are written in the language of the app
+      incomeTypeValues: const ['Income', 'Ingreso'],
+      expenseTypeValues: const ['Expense', 'Expenses', 'Gasto', 'Gastos'],
       accountColumn: h.find(['account']),
       categoryColumn: h.find(['category']),
+      // Both legs of a transfer have this pseudo-category
+      transferColumn: h.find(['category']),
+      transferValues: const ['Transfer, withdraw', 'Transferir, retirar'],
       dateColumn: h.find(['date']),
-      dateFormat: '',
       titleColumn: h.find(['payee']),
       notesColumn: h.find(['note']),
       tagsColumn: h.find(['labels']),
       tagSeparator: ',',
-      transferColumn: h.find(['transfer']),
-      transferValues: const ['true'],
+    ),
+  );
+
+  static final spendee = CsvImportTemplate(
+    id: 'spendee',
+    name: 'Spendee',
+    icon: Icons.account_balance_wallet_outlined,
+    color: const Color(0xFF00A98F),
+    playStorePackage: 'com.cleevio.spendee',
+    guideUrl: 'https://help.spendee.com/article/137-export-transactions',
+    exportHint: (t) => t.backup.import.templates.spendee_hint,
+    requiredHeaders: const [
+      'date',
+      'wallet',
+      'type',
+      'category name',
+      'amount',
+      'currency',
+    ],
+    buildMapping: (h) => CsvImportMapping(
+      amountMode: CsvAmountMode.typeColumn,
+      amountColumn: h.find(['amount']),
+      typeColumn: h.find(['type']),
+      incomeTypeValues: const ['Income'],
+      expenseTypeValues: const ['Expense'],
+      accountColumn: h.find(['wallet']),
+      categoryColumn: h.find(['category name']),
+      dateColumn: h.find(['date']),
+      notesColumn: h.find(['note']),
+      tagsColumn: h.find(['labels']),
+      tagSeparator: ',',
     ),
   );
 
@@ -179,5 +227,10 @@ class CsvImportTemplates {
   );
 
   /// Known apps, in the order they are shown to the user
-  static final List<CsvImportTemplate> apps = [myExpenses, cashew, wallet];
+  static final List<CsvImportTemplate> apps = [
+    myExpenses,
+    cashew,
+    wallet,
+    spendee,
+  ];
 }

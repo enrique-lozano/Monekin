@@ -4,6 +4,7 @@ import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/csv_import_service.dart';
 import 'package:monekin/core/database/services/category/category_service.dart';
 import 'package:monekin/core/database/services/tags/tags_service.dart';
+import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/services/csv_import/csv_transaction_parser.dart';
@@ -112,6 +113,46 @@ void main() {
     expect(transfer.value, 25);
     expect(transfer.valueInDestiny, 24);
   });
+
+  test(
+    'imports nothing for a transfer that the default account empties',
+    () async {
+      final account = Account.fromDB(
+        AccountInDB(
+          id: 'default',
+          name: 'Default',
+          iniValue: 0,
+          displayOrder: 0,
+          date: DateTime(2020),
+          type: AccountType.money,
+          isSaving: false,
+          trackingMode: AccountTrackingMode.transactions,
+          iconId: 'wallet',
+          currencyId: 'USD',
+        ),
+        const CurrencyInDB(
+          code: 'USD',
+          symbol: r'$',
+          name: 'US Dollar',
+          decimalPlaces: 2,
+          isDefault: true,
+          type: 0,
+        ),
+      );
+
+      final count = await service.importTransactions([
+        ParsedCsvTransaction(
+          type: TransactionType.transfer,
+          date: DateTime(2025, 1, 1),
+          amount: 25,
+          accountName: 'Bank',
+          receivingAccountName: 'Cash',
+        ),
+      ], CsvImportDefaults(category: defaults.category, account: account));
+
+      expect(count, 0);
+    },
+  );
 
   test('imports a very large file in a reasonable time', () async {
     const total = 20000;

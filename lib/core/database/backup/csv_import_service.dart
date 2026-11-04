@@ -37,6 +37,7 @@ class CsvImportPreview {
     required this.total,
     required this.sample,
     required this.newAccountNames,
+    required this.discardedTransfers,
   });
 
   /// Number of transactions that will be inserted
@@ -46,6 +47,9 @@ class CsvImportPreview {
   final List<MoneyTransaction> sample;
 
   final List<String> newAccountNames;
+
+  /// Transfers whose origin and destination end up in the same account
+  final int discardedTransfers;
 }
 
 class _ImportPlan {
@@ -53,6 +57,7 @@ class _ImportPlan {
     required this.transactions,
     required this.tagLinks,
     required this.newAccounts,
+    required this.discardedTransfers,
     required this.accountsById,
     required this.categoriesById,
     required this.tagsById,
@@ -64,6 +69,7 @@ class _ImportPlan {
   final Map<String, List<String>> tagLinks;
 
   final List<AccountInDB> newAccounts;
+  final int discardedTransfers;
 
   final Map<String, AccountInDB> accountsById;
   final Map<String, Category> categoriesById;
@@ -171,6 +177,7 @@ class CsvImportService {
       for (final tag in tags) tag.name.toLowerCase().trim(): tag,
     };
 
+    var discardedTransfers = 0;
     final toInsert = <TransactionInDB>[];
     final tagLinks = <String, List<String>>{};
     final usedCategories = <String, Category>{
@@ -186,7 +193,10 @@ class CsvImportService {
         receivingAccount = resolveAccount(tr.receivingAccountName!);
 
         // Possible if the default account replaces both ends of the transfer
-        if (receivingAccount.id == account.id) continue;
+        if (receivingAccount.id == account.id) {
+          discardedTransfers++;
+          continue;
+        }
       }
 
       final found = tr.categoryName == null
@@ -231,6 +241,7 @@ class CsvImportService {
       transactions: toInsert,
       tagLinks: tagLinks,
       newAccounts: newAccounts,
+      discardedTransfers: discardedTransfers,
       accountsById: {
         for (final acc in [...accountsByName.values, ?defaults.account])
           acc.id: acc,
@@ -292,6 +303,7 @@ class CsvImportService {
           .map(toMoneyTransaction)
           .toList(),
       newAccountNames: plan.newAccounts.map((e) => e.name).toList(),
+      discardedTransfers: plan.discardedTransfers,
     );
   }
 

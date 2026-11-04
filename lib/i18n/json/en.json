@@ -1454,15 +1454,21 @@
         "preview-more": {
           "one": "+ 1 more transaction",
           "other": "+ {{n}} more transactions"
-        }
+        },
+        "discarded-transfers": {
+          "one": "1 transfer will not be imported because its origin and destination are the same account. Remove the default account to import it.",
+          "other": "{{n}} transfers will not be imported because their origin and destination are the same account. Remove the default account to import them."
+        },
+        "open-guide": "Open the official guide"
       },
       "success": "Import performed successfully",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com",
       "TEMPLATES": {
         "my-expenses-hint": "In MyExpenses, export your transactions as CSV. Dates are expected as day/month/year, but you can change it in the next step.",
         "cashew-hint": "In Cashew, export your transactions as CSV from its settings.",
-        "wallet-hint": "In Wallet by BudgetBakers, export your records as CSV. Transfers are imported as a single transaction.",
-        "generic-hint": "Any .csv file whose first row names each column."
+        "wallet-hint": "In Wallet, export your records as CSV (on Android: menu → Others → Export, or from the web app). Export is a Premium feature. Transfers are imported as a single transaction.",
+        "generic-hint": "Any .csv file whose first row names each column.",
+        "spendee-hint": "In the Spendee mobile app, go to More → Export and choose CSV. The file is sent to your email."
       }
     },
     "ABOUT": {

@@ -103,6 +103,13 @@ class _CsvImportReviewState extends State<CsvImportReview> {
                   ),
                   const SizedBox(height: 8),
                 ],
+                if (preview.discardedTransfers > 0) ...[
+                  InlineInfoCard(
+                    text: t.discarded_transfers(n: preview.discardedTransfers),
+                    mode: InlineInfoCardMode.warn,
+                  ),
+                  const SizedBox(height: 8),
+                ],
                 const SizedBox(height: 4),
                 Text(
                   t.preview,

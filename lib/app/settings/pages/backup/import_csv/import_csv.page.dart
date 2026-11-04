@@ -25,6 +25,7 @@ import 'package:monekin/core/services/csv_import/csv_import_mapping.dart';
 import 'package:monekin/core/services/csv_import/csv_import_templates.dart';
 import 'package:monekin/core/services/csv_import/csv_transaction_parser.dart';
 import 'package:monekin/core/utils/logger.dart';
+import 'package:monekin/core/utils/open_external_url.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -302,6 +303,12 @@ class _ImportCSVPageState extends State<ImportCSVPage> {
             text: selected.exportHint(Translations.of(context)),
             mode: InlineInfoCardMode.info,
           ),
+          if (selected.guideUrl != null)
+            TextButton.icon(
+              onPressed: () => openExternalURL(context, selected.guideUrl!),
+              icon: const Icon(Icons.open_in_new_rounded, size: 18),
+              label: Text(t.manual_import.open_guide),
+            ),
         ],
       ],
     );
