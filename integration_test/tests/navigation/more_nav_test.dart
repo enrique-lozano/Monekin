@@ -85,7 +85,7 @@ void main() {
     expect(find.byType(ImportCSVPage), findsOneWidget);
     expect(find.text(t.backup.import.manual_import.file_title), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Back').first);
+    await tester.tap(find.byType(CloseButton).first);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text(t.backup.export.title)); // "Export your data"
@@ -93,7 +93,7 @@ void main() {
     expect(find.byType(ExportDataPage), findsOneWidget);
     expect(find.text(t.backup.export.all), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Back').first);
+    await tester.tap(find.byType(CloseButton).first);
     await tester.pumpAndSettle();
     expect(find.byType(BackupSettingsPage), findsOneWidget);
     await tester.pageBack();

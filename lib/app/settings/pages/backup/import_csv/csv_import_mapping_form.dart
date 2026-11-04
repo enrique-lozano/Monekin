@@ -209,6 +209,7 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
           icon: Icons.event_rounded,
           title: t.date_title,
           summary: _name(mapping.dateColumn) ?? notSet,
+          isComplete: mapping.dateColumn == null ? null : true,
           child: _buildDate(context),
         ),
         section(
@@ -219,6 +220,10 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
             _name(mapping.accountColumn) ?? notSet,
             ?widget.defaultAccount?.name,
           ].join(' · '),
+          isComplete:
+              mapping.accountColumn != null || widget.defaultAccount != null
+              ? true
+              : null,
           child: _buildAccount(context),
         ),
         section(
@@ -226,6 +231,7 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
           icon: Icons.swap_horiz_rounded,
           title: t.transfers_title,
           summary: transferSummary,
+          isComplete: _transferMode == _TransferMode.none ? null : true,
           child: _buildTransfers(context),
         ),
         section(
@@ -233,6 +239,9 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
           icon: Icons.notes_rounded,
           title: t.details_title,
           summary: detailColumns.isEmpty ? notSet : detailColumns.join(' · '),
+          isComplete: detailColumns.isNotEmpty || widget.defaultTags.isNotEmpty
+              ? true
+              : null,
           child: _buildDetails(context),
         ),
       ],
@@ -827,7 +836,6 @@ class _SectionCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       backgroundColor: colors.surfaceContainerLow,
       collapsedBackgroundColor: colors.surfaceContainerLow,
-      tilePadding: const EdgeInsets.fromLTRB(14, 4, 14, 4),
       childrenPadding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
       expandedAlignment: Alignment.topLeft,
       expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -837,12 +845,29 @@ class _SectionCard extends StatelessWidget {
         child: Icon(icon, size: 20, color: colors.onPrimaryContainer),
       ),
       title: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w700),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  summary,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: isComplete == false
+                        ? colors.error
+                        : colors.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ),
           if (isComplete != null)
@@ -854,14 +879,6 @@ class _SectionCard extends StatelessWidget {
               color: isComplete! ? colors.primary : colors.error,
             ),
         ],
-      ),
-      subtitle: Text(
-        summary,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: isComplete == false ? colors.error : colors.onSurfaceVariant,
-        ),
       ),
       children: [child],
     );
