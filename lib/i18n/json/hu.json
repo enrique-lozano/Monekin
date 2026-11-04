@@ -1423,7 +1423,7 @@
         "transfer-mode-none-descr": "Minden sor bevételként vagy kiadásként lesz importálva.",
         "transfer-mode-two-descr": "Minden átutalás két sorban szerepel: az egyik elhagy egy számlát, a másik egy másik számlára érkezik. Egyetlen átutalássá egyesítjük őket.",
         "transfer-mode-one-descr": "Minden átutalás egyetlen sor. A számla oszlopa a forrás, egy másik oszlop pedig a célszámlát adja meg.",
-        "transfer-values-text-help": "Vesszővel válassza el őket. Példa: Átutalás, Kimenő átutalás",
+        "transfer-values-text-help": "Pontosvesszővel válassza el őket. Példa: Átutalás; Kimenő átutalás",
         "transfer-auto": "Az átutalások automatikusan felismerhetők ennek az oszlopnak a szövegéből.",
         "transfer-values": "Mely értékek jelentenek átutalást?",
         "preview-more": {

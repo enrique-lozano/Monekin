@@ -1430,7 +1430,7 @@
         "transfer-mode-none-descr": "Ogni riga viene importata come entrata o spesa.",
         "transfer-mode-two-descr": "Ogni trasferimento è scritto su due righe: una che esce da un conto e un'altra che arriva su un conto diverso. Le uniamo in un unico trasferimento.",
         "transfer-mode-one-descr": "Ogni trasferimento è una singola riga. La colonna del conto è l'origine e un'altra colonna indica il conto di destinazione.",
-        "transfer-values-text-help": "Separali con virgole. Esempio: Trasferimento, Trasferimento in uscita",
+        "transfer-values-text-help": "Separali con punti e virgola. Esempio: Trasferimento; Trasferimento in uscita",
         "transfer-auto": "I trasferimenti vengono rilevati automaticamente dal testo di questa colonna.",
         "transfer-values": "Quali valori indicano un trasferimento?",
         "preview-more": {

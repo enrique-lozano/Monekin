@@ -1456,7 +1456,7 @@
         "transfer-mode-none-descr": "Every row is imported as an income or an expense.",
         "transfer-mode-two-descr": "Each transfer is written as two rows: one leaving an account and another one arriving to a different account. We join them into a single transfer.",
         "transfer-mode-one-descr": "Each transfer is a single row. The account column is the origin, and another column tells the destination account.",
-        "transfer-values-text-help": "Separate them with commas. Example: Transfer, Transfer out",
+        "transfer-values-text-help": "Separate them with semicolons. Example: Transfer; Transfer out",
         "transfer-auto": "Transfers are detected automatically from the text of this column.",
         "transfer-values": "Which values mean a transfer?",
         "preview-more": {

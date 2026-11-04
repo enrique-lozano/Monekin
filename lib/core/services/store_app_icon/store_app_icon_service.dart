@@ -15,7 +15,6 @@ class StoreAppIconService {
   static final StoreAppIconService instance = StoreAppIconService._();
 
   final _lookups = <String, Future<String?>>{};
-  Map<String, String>? _stored;
 
   /// The URL of the icon of the app with this [packageName], or null if it
   /// can not be obtained (offline, unsupported platform, app not found...)
@@ -33,7 +32,7 @@ class StoreAppIconService {
     if (kIsWeb) return null;
 
     try {
-      final stored = await _readStored();
+      final stored = await _stored;
       if (stored.containsKey(packageName)) return stored[packageName];
 
       final response = await http
@@ -72,23 +71,29 @@ class StoreAppIconService {
     return File('${dir.path}/store_app_icons.json');
   }
 
-  Future<Map<String, String>> _readStored() async {
-    if (_stored != null) return _stored!;
+  /// Loaded once, so concurrent lookups share the same map
+  late final Future<Map<String, String>> _stored = _loadStored();
 
+  Future<Map<String, String>> _loadStored() async {
     try {
       final file = await _storeFile();
 
-      _stored = file.existsSync()
+      return file.existsSync()
           ? Map<String, String>.from(jsonDecode(await file.readAsString()))
           : {};
     } catch (_) {
-      _stored = {};
+      return {};
     }
-
-    return _stored!;
   }
 
-  Future<void> _writeStored(Map<String, String> value) async {
-    await (await _storeFile()).writeAsString(jsonEncode(value));
+  /// Writes one after another, so an older copy never overwrites a newer one
+  Future<void> _lastWrite = Future.value();
+
+  Future<void> _writeStored(Map<String, String> value) {
+    final json = jsonEncode(value);
+
+    return _lastWrite = _lastWrite.then(
+      (_) async => (await _storeFile()).writeAsString(json),
+    );
   }
 }

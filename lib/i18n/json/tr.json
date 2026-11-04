@@ -1423,7 +1423,7 @@
         "transfer-mode-none-descr": "Her satır gelir veya gider olarak içe aktarılır.",
         "transfer-mode-two-descr": "Her transfer iki satır olarak yazılır: biri bir hesaptan çıkar, diğeri farklı bir hesaba girer. Bunları tek bir transfer olarak birleştiririz.",
         "transfer-mode-one-descr": "Her transfer tek bir satırdır. Hesap sütunu kaynaktır, başka bir sütun ise hedef hesabı belirtir.",
-        "transfer-values-text-help": "Virgülle ayırın. Örnek: Transfer, Giden transfer",
+        "transfer-values-text-help": "Noktalı virgülle ayırın. Örnek: Transfer; Giden transfer",
         "transfer-auto": "Transferler bu sütunun metninden otomatik olarak algılanır.",
         "transfer-values": "Hangi değerler transfer anlamına gelir?",
         "preview-more": {

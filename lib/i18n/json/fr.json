@@ -1429,7 +1429,7 @@
         "transfer-mode-none-descr": "Chaque ligne est importée comme un revenu ou une dépense.",
         "transfer-mode-two-descr": "Chaque virement est écrit sur deux lignes : l'une sort d'un compte et l'autre arrive sur un compte différent. Nous les regroupons en un seul virement.",
         "transfer-mode-one-descr": "Chaque virement tient sur une seule ligne. La colonne du compte est l'origine et une autre colonne indique le compte de destination.",
-        "transfer-values-text-help": "Séparez-les par des virgules. Exemple : Virement, Virement sortant",
+        "transfer-values-text-help": "Séparez-les par des points-virgules. Exemple : Virement; Virement sortant",
         "transfer-auto": "Les virements sont détectés automatiquement à partir du texte de cette colonne.",
         "transfer-values": "Quelles valeurs désignent un virement ?",
         "preview-more": {

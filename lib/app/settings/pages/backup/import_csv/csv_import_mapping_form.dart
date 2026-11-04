@@ -698,7 +698,7 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
 
     if (values.length > _maxDistinctValues) {
       return TextFormField(
-        initialValue: mapping.transferValues.join(', '),
+        initialValue: mapping.transferValues.join('; '),
         decoration: InputDecoration(
           labelText: t.transfer_values,
           helperText: t.transfer_values_text_help,
@@ -707,7 +707,7 @@ class _CsvImportMappingFormState extends State<CsvImportMappingForm> {
         onChanged: (text) => _update(
           mapping.copyWith(
             transferValues: text
-                .split(',')
+                .split(';')
                 .map((e) => e.trim())
                 .where((e) => e.isNotEmpty)
                 .toList(),

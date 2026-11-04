@@ -169,6 +169,7 @@ class CsvTransactionParser {
 
   ({_Row? row, CsvRowIssue? issue}) _parseRow(List<String> row, int index) {
     final m = mapping;
+    final destination = _cell(row, m.destinationAccountColumn);
 
     // Signed amount: negative = leaving the account
     double? signedAmount;
@@ -192,7 +193,8 @@ class CsvTransactionParser {
             signedAmount = amount;
           } else if (_matches(type, m.expenseTypeValues)) {
             signedAmount = -amount;
-          } else if (_matches(type, m.transferValues)) {
+          } else if (_matches(type, m.transferValues) ||
+              destination.isNotEmpty) {
             signedAmount = -amount;
           } else {
             unknownType = true;
@@ -208,7 +210,6 @@ class CsvTransactionParser {
     final date = _parseDate(row);
     if (date == null) return (row: null, issue: CsvRowIssue.invalidDate);
 
-    final destination = _cell(row, m.destinationAccountColumn);
     final flagText = _cell(row, m.transferColumn);
     final isFlagged =
         m.transferColumn != null &&
@@ -317,7 +318,7 @@ class CsvTransactionParser {
       }
 
       for (final out in legs.where(
-        (l) => l.tx.type == TransactionType.expense,
+        (l) => l.tx.type == TransactionType.expense && l.tx.accountName != null,
       )) {
         final b = bucket(out.tx.date);
 
@@ -337,7 +338,11 @@ class CsvTransactionParser {
                   (c) => c.tx.date.difference(out.tx.date).abs().inMilliseconds,
                 );
 
+        // Both legs of a transfer usually share the note, and the amount
         final match =
+            candidates.firstWhereOrNull(
+              (c) => c.tx.notes != null && c.tx.notes == out.tx.notes,
+            ) ??
             candidates.firstWhereOrNull((c) => c.tx.amount == out.tx.amount) ??
             candidates.firstOrNull;
 

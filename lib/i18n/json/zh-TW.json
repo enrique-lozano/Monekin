@@ -1455,7 +1455,7 @@
         "transfer-mode-none-descr": "每一列都作為收入或支出匯入。",
         "transfer-mode-two-descr": "每筆轉帳寫成兩列：一列從某個帳戶轉出，另一列轉入另一個帳戶。我們會將它們合併為一筆轉帳。",
         "transfer-mode-one-descr": "每筆轉帳為一列。帳戶欄位為轉出帳戶，另一個欄位指明目標帳戶。",
-        "transfer-values-text-help": "以逗號分隔。範例：轉帳, 轉出",
+        "transfer-values-text-help": "以分號分隔。範例：轉帳; 轉出",
         "transfer-auto": "系統會根據此欄位的文字自動偵測轉帳。",
         "transfer-values": "哪些值表示轉帳？",
         "preview-more": {

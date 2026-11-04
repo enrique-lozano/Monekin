@@ -327,6 +327,72 @@ fdlkl: 33 \$",2026-05-15 17:51:31.000,true,default,Corrección de Balance,,0XFF6
       ]);
     });
 
+    test('with a destination do not need their type to be listed', () {
+      final result =
+          CsvTransactionParser(
+            const CsvImportMapping(
+              amountMode: CsvAmountMode.typeColumn,
+              amountColumn: 0,
+              typeColumn: 1,
+              accountColumn: 2,
+              destinationAccountColumn: 3,
+              incomeTypeValues: ['Income'],
+              expenseTypeValues: ['Expense'],
+            ),
+          ).parse([
+            ['40', 'Transfer', 'Bank', 'Cash'],
+            ['5', 'Income', 'Bank', ''],
+          ]);
+
+      expect(result.skippedRows, isEmpty);
+      expect(result.transactions.first.type, TransactionType.transfer);
+      expect(result.transactions.first.receivingAccountName, 'Cash');
+    });
+
+    test('with a blank origin account are not paired', () {
+      final result =
+          CsvTransactionParser(
+            const CsvImportMapping(
+              amountColumn: 0,
+              accountColumn: 1,
+              dateColumn: 2,
+              transferColumn: 3,
+              transferValues: ['yes'],
+            ),
+          ).parse([
+            ['-10', '', '2025-01-01T10:00:00', 'yes'],
+            ['10', 'Cash', '2025-01-01T10:00:00', 'yes'],
+          ]);
+
+      expect(result.unpairedTransfers, 2);
+    });
+
+    test('with the same note are joined together, whatever their amount', () {
+      final result =
+          CsvTransactionParser(
+            const CsvImportMapping(
+              amountColumn: 0,
+              accountColumn: 1,
+              dateColumn: 2,
+              notesColumn: 3,
+              transferColumn: 3,
+              transferPattern: '→',
+            ),
+          ).parse([
+            ['-100', 'A', '2025-01-01T10:00:00', 'A → B'],
+            ['110', 'B', '2025-01-01T10:00:00', 'A → B'],
+            ['-110', 'C', '2025-01-01T10:00:00', 'C → D'],
+            ['100', 'D', '2025-01-01T10:00:00', 'C → D'],
+          ]);
+
+      expect(
+        result.transactions.map(
+          (e) => '${e.accountName}>${e.receivingAccountName}',
+        ),
+        ['A>B', 'C>D'],
+      );
+    });
+
     test('keep their amount when the type column marks them', () {
       final result =
           CsvTransactionParser(

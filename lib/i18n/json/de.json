@@ -1430,7 +1430,7 @@
         "transfer-mode-none-descr": "Jede Zeile wird als Einnahme oder Ausgabe importiert.",
         "transfer-mode-two-descr": "Jede Überweisung steht in zwei Zeilen: eine verlässt ein Konto und eine andere kommt auf einem anderen Konto an. Wir fassen sie zu einer einzigen Überweisung zusammen.",
         "transfer-mode-one-descr": "Jede Überweisung ist eine einzelne Zeile. Die Kontospalte ist der Ursprung, und eine weitere Spalte gibt das Zielkonto an.",
-        "transfer-values-text-help": "Mit Kommas trennen. Beispiel: Überweisung, Ausgehende Überweisung",
+        "transfer-values-text-help": "Mit Semikolons trennen. Beispiel: Überweisung; Ausgehende Überweisung",
         "transfer-auto": "Überweisungen werden automatisch anhand des Texts dieser Spalte erkannt.",
         "transfer-values": "Welche Werte bedeuten eine Überweisung?",
         "preview-more": {

@@ -1422,7 +1422,7 @@
         "transfer-mode-none-descr": "每一行都作为收入或支出导入。",
         "transfer-mode-two-descr": "每笔转账写成两行：一行从某个账户转出，另一行转入另一个账户。我们会将它们合并为一笔转账。",
         "transfer-mode-one-descr": "每笔转账为一行。账户列为转出账户，另一列指明目标账户。",
-        "transfer-values-text-help": "用逗号分隔。示例：转账, 转出",
+        "transfer-values-text-help": "用分号分隔。示例：转账; 转出",
         "transfer-auto": "系统会根据此列的文本自动检测转账。",
         "transfer-values": "哪些值表示转账？",
         "preview-more": {

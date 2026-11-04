@@ -1444,7 +1444,7 @@
         "transfer-mode-none-descr": "Todas las filas se importan como ingresos o gastos.",
         "transfer-mode-two-descr": "Cada transferencia se escribe en dos filas: una que sale de una cuenta y otra que llega a una cuenta distinta. Las unimos en una sola transferencia.",
         "transfer-mode-one-descr": "Cada transferencia es una sola fila. La columna de la cuenta es el origen y otra columna indica la cuenta de destino.",
-        "transfer-values-text-help": "Sepáralos con comas. Ejemplo: Transferencia, Transferencia enviada",
+        "transfer-values-text-help": "Sepáralos con punto y coma. Ejemplo: Transferencia; Transferencia enviada",
         "transfer-auto": "Las transferencias se detectan automáticamente a partir del texto de esta columna.",
         "transfer-values": "¿Qué valores indican una transferencia?",
         "preview-more": {
