@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Number of "modal barrier" routes (e.g. bottom sheets) currently open on the
 /// content (nested) navigator.

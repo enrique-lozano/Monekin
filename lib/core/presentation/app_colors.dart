@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Monekin brand color.
 const brandBlue = Color(0xFF0F3375);

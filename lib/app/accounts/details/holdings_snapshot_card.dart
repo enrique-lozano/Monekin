@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/details/account_snapshots.dart';
 import 'package:monekin/app/securities/security_details_page.dart';

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/currencies/edit_currency_page.dart';
 import 'package:monekin/app/currencies/exchange_rate_details.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
@@ -10,7 +10,6 @@ import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
-import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/date.extensions.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/currency/currency.dart';

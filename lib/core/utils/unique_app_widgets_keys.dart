@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:monekin/app/layout/window_bar.dart';

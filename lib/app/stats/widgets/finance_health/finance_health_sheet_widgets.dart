@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/services/finance_health_service.dart';

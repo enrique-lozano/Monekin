@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide BottomNavigationBar;
+import 'package:material_ui/material_ui.dart' hide BottomNavigationBar;
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/indexed_stacks/fade_indexed_stack.dart';
@@ -38,6 +38,14 @@ class PageSwitcherState extends State<PageSwitcher> {
     });
 
     FocusScope.of(context).unfocus();
+
+    if (destination == AppMenuDestinationsID.dashboard) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && selectedDestination == destination) {
+          dashboardPageKey.currentState?.requestRefreshFocus();
+        }
+      });
+    }
   }
 
   @override

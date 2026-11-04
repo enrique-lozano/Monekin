@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_pillar_meta.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_pillar_sheet.dart';
 import 'package:monekin/app/stats/widgets/finance_health/finance_health_reliability_banner.dart';

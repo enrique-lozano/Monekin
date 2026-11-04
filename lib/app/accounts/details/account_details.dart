@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_form.dart';
@@ -841,10 +841,9 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
     const transactionsToShow = 8;
 
     final filters = TransactionFilterSet(
-      status: TransactionStatus.notIn({
-        TransactionStatus.pending,
-        TransactionStatus.voided,
-      }),
+      status: TransactionStatus.notIn({TransactionStatus.pending}),
+      isRecurrent: false,
+      maxDate: DateTime.now(),
       accountsIDs: [account.id],
     );
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' show IconData, Icons;
+import 'package:material_ui/material_ui.dart' show IconData, Icons;
 import 'package:monekin/core/database/app_db.dart';
 
 class Debt extends DebtInDB {

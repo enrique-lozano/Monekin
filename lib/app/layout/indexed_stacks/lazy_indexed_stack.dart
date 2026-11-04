@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// {@template lazy_indexed_stack}
 /// A widget that displays a [IndexedStack] with lazy loaded children.

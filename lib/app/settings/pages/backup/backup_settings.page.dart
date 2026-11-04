@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
-import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
@@ -118,7 +118,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 subtitle: Text(t.backup.import.manual_import.descr),
                 minVerticalPadding: 16,
                 onTap: () {
-                  RouteUtils.pushRoute(const ImportCSVPage());
+                  RouteUtils.showResponsiveForm(const ImportCSVPage());
                 },
               ),
               createListSeparator(context, t.backup.export.title_short),
@@ -127,7 +127,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 subtitle: Text(t.backup.export.description),
                 minVerticalPadding: 16,
                 onTap: () {
-                  RouteUtils.pushRoute(const ExportDataPage());
+                  RouteUtils.showResponsiveForm(const ExportDataPage());
                 },
               ),
               createListSeparator(context, t.backup.about.title),

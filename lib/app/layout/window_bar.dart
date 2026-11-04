@@ -1,5 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/utils/app_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';

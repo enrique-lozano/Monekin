@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/categories/form/category_form_functions.dart';
 import 'package:monekin/app/categories/form/icon_and_color_selector.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -10,10 +10,11 @@ import 'package:monekin/core/extensions/lists.extensions.dart';
 import 'package:monekin/core/models/category/category.dart';
 import 'package:monekin/core/models/supported-icon/icon_displayer.dart';
 import 'package:monekin/core/models/supported-icon/supported_icon.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
+import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/color_picker/color_picker.dart';
 import 'package:monekin/core/presentation/widgets/icon_selector_modal.dart';
-import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/constants.dart';
@@ -76,23 +77,42 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
 
   Future<void> submitForm() async {
     if (categoryToEdit != null) {
-      categoryToEdit = Category(
+      final updatedCategory = Category(
         id: categoryToEdit!.id,
         name: _nameController.text,
         displayOrder: categoryToEdit!.displayOrder,
         iconId: _icon.id,
         color: _color,
         parentCategory: categoryToEdit!.parentCategory,
-        type: categoryToEdit!.type,
+        type: _type,
       );
+      final typeName = _type == CategoryType.I
+          ? t.transaction.types.income(n: 1)
+          : t.transaction.types.expense(n: 1);
 
       await CategoryService.instance
-          .updateCategory(categoryToEdit!)
+          .updateCategory(updatedCategory)
           .then((value) {
+            categoryToEdit = updatedCategory;
             MonekinSnackbar.success(SnackbarParams(t.categories.edit_success));
           })
           .catchError((error) {
-            MonekinSnackbar.error(SnackbarParams.fromError(error));
+            if (error is CategoryTypeChangeException) {
+              MonekinSnackbar.error(
+                SnackbarParams(
+                  t.categories.type_change_conflict_title(type: typeName),
+                  message: t.categories.type_change_conflict(
+                    count: error.count,
+                    transactionType:
+                        error.transactionType == TransactionType.expense
+                        ? t.transaction.types.expense(n: error.count)
+                        : t.transaction.types.income(n: error.count),
+                  ),
+                ),
+              );
+            } else {
+              MonekinSnackbar.error(SnackbarParams.fromError(error));
+            }
           });
     } else {
       final db = AppDB.instance;
@@ -256,7 +276,9 @@ class _CategoryFormPageState extends State<CategoryFormPage> {
                             ),
                           ],
                           value: _type,
-                          onChanged: widget.categoryUUID != null
+                          onChanged:
+                              categoryToEdit != null &&
+                                  !categoryToEdit!.isMainCategory
                               ? null
                               : (value) {
                                   setState(() {

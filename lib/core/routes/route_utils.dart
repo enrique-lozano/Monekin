@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -38,9 +38,8 @@ abstract class RouteUtils {
         SideDrawerRoute<T>(
           child: form,
           desktopWidth: desktopWidth,
-          barrierLabel: MaterialLocalizations.of(
-            context,
-          ).modalBarrierDismissLabel,
+          barrierLabel: MaterialLocalizations.of(context)
+              .modalBarrierDismissLabel,
         ),
       );
     }
@@ -66,9 +65,8 @@ abstract class RouteUtils {
       SideDrawerRoute<T>(
         child: Builder(builder: builder),
         desktopWidth: desktopWidth,
-        barrierLabel: MaterialLocalizations.of(
-          context,
-        ).modalBarrierDismissLabel,
+        barrierLabel: MaterialLocalizations.of(context)
+            .modalBarrierDismissLabel,
       ),
     );
   }
@@ -108,9 +106,8 @@ abstract class RouteUtils {
         width: desktopWidth,
         maxHeight: desktopMaxHeight,
         anchorContext: context,
-        barrierLabel: MaterialLocalizations.of(
-          wideContext,
-        ).modalBarrierDismissLabel,
+        barrierLabel: MaterialLocalizations.of(wideContext)
+            .modalBarrierDismissLabel,
       ),
     );
   }
@@ -194,6 +191,11 @@ abstract class RouteUtils {
   /// Pop all the routes in the stack except the first one without any animation
   static void popAllRoutesExceptFirst() {
     // This function can be useful when we want to return to the main layout page
+
+    // Close any side drawer shown on the root navigator (wide layouts)
+    final rootNav = rootNavigatorKey.currentState;
+    if (rootNav != null && rootNav.canPop()) rootNav.pop();
+
     navigatorKey.currentState!.pushAndRemoveUntil(
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => const SizedBox(),
@@ -274,9 +276,8 @@ class SideDrawerRoute<T> extends PopupRoute<T> {
             left: Radius.circular(16),
           ),
           child: MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(size: Size(width, MediaQuery.sizeOf(context).height)),
+            data: MediaQuery.of(context)
+                .copyWith(size: Size(width, MediaQuery.sizeOf(context).height)),
             child: BreakpointProvider(
               // The drawer shows its own snackbars, instead of letting the app
               // messenger squeeze a window-sized one into this panel.

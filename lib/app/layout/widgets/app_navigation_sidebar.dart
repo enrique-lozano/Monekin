@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/widgets/app_navigation_drawer.dart';
 import 'package:monekin/app/layout/window_bar.dart';

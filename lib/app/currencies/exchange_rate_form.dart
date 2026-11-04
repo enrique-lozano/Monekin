@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/currencies/widgets/exchange_rate_source_indicator.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';

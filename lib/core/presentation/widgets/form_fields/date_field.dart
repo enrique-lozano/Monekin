@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/core/utils/date_time_picker.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';

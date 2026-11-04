@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/budgets/budgets_page.dart';
 import 'package:monekin/app/home/dashboard.page.dart';
 import 'package:monekin/app/settings/more_actions.page.dart';
@@ -8,7 +8,7 @@ import 'package:monekin/core/presentation/responsive/breakpoints.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 // GlobalKeys for each destination page
-final GlobalKey<State<StatefulWidget>> dashboardPageKey = GlobalKey();
+final GlobalKey<DashboardPageState> dashboardPageKey = GlobalKey();
 final GlobalKey budgetsPageKey = GlobalKey();
 final GlobalKey<TransactionsPageState> transactionsPageKey = GlobalKey();
 final GlobalKey<State<StatefulWidget>> statsPageKey = GlobalKey();

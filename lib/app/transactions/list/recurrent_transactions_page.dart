@@ -2,7 +2,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart' show OrderBy, OrderingMode, OrderingTerm;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list.dart';
 import 'package:monekin/app/transactions/list/widgets/transaction_list_tile.dart';

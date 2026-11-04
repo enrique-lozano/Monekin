@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/transactions/form/transaction_form.page.dart';
 import 'package:monekin/core/models/debt/debt.dart';
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';

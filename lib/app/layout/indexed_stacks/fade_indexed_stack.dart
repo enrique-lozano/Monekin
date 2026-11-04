@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/indexed_stacks/lazy_indexed_stack.dart';
 
 class FadeIndexedStack extends StatefulWidget {

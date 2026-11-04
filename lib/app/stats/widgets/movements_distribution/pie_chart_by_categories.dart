@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/category_stats_modal.dart';
 import 'package:monekin/app/stats/widgets/movements_distribution/tr_distribution_chart_item.dart';
@@ -52,15 +52,22 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
   final centerRadius = 35;
 
   TransactionFilterSet _getTransactionFilters() {
+    final hasConflictingRecurrenceFilter = widget.filters.isRecurrent == true;
+
     return widget.filters.copyWith(
+      transactionTypes: hasConflictingRecurrenceFilter
+          ? []
+          : [
+              transactionsType,
+            ].intersectionWithNullable(
+              widget.filters.transactionTypes,
+            ).toList(),
+      minDate: widget.datePeriodState.startDate,
+      maxDate: widget.datePeriodState.endDate,
       status: TransactionStatus.getStatusThatCountsForStats(
         widget.filters.status,
       ),
-      transactionTypes: [
-        transactionsType,
-      ].intersectionWithNullable(widget.filters.transactionTypes).toList(),
-      minDate: widget.datePeriodState.startDate,
-      maxDate: widget.datePeriodState.endDate,
+      isRecurrent: false,
     );
   }
 
@@ -222,7 +229,7 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
 
     return StreamBuilder(
       stream: TransactionService.instance
-          .getTransactions(filters: _getTransactionFilters())
+          .getTransactions(filters: _getTransactionFilters(), onlyPosted: true)
           .asyncMap((data) => getEvolutionData(context, data)),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {

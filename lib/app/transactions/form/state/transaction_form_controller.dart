@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart';
@@ -73,6 +73,8 @@ class TransactionFormController extends ChangeNotifier {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ShakeWidgetState> shakeKey = GlobalKey<ShakeWidgetState>();
+  final GlobalKey dualLegTopCardKey = GlobalKey();
+  final GlobalKey dualLegBottomCardKey = GlobalKey();
 
   final FocusNode amountFocusNode = FocusNode(debugLabel: 'transactionAmount');
   final FocusNode titleFocusNode = FocusNode(debugLabel: 'transactionTitle');
@@ -207,9 +209,7 @@ class TransactionFormController extends ChangeNotifier {
     final decimals = fromAccount?.currency.decimalPlaces ?? 2;
     tradeTotalController.text = _plainNumber(
       double.parse(
-        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(
-          decimals,
-        ),
+        (securityTradeTotal * _securityToAccountRate).toStringAsFixed(decimals),
       ),
     );
   }
@@ -754,6 +754,15 @@ class TransactionFormController extends ChangeNotifier {
       return;
     }
 
+    if (transactionType.isTransfer && fromAccount?.id == transferAccount?.id) {
+      MonekinSnackbar.warning(
+        SnackbarParams(
+          t.transaction.form.validators.transfer_between_same_accounts,
+        ),
+      );
+      return;
+    }
+
     final newTrID = _transactionToEdit?.id ?? generateUUID();
 
     final double signedValue;
@@ -1239,7 +1248,9 @@ class TransactionFormController extends ChangeNotifier {
   void openTransferSourceAmountSelector(BuildContext context) {
     final tr = Translations.of(context);
     RouteUtils.showResponsiveModal<void>(
-      context,
+      (dualLegTopIsOutflow ? dualLegTopCardKey : dualLegBottomCardKey)
+              .currentContext ??
+          context,
       builder: (ctx) => AmountSelector(
         title: tr.transaction.form.value,
         initialAmount: transactionValue.abs(),
@@ -1263,7 +1274,9 @@ class TransactionFormController extends ChangeNotifier {
     final tr = Translations.of(context);
     final initial = valueInDestinyToNumber ?? defaultDestinationAmount;
     RouteUtils.showResponsiveModal<void>(
-      context,
+      (dualLegTopIsOutflow ? dualLegBottomCardKey : dualLegTopCardKey)
+              .currentContext ??
+          context,
       builder: (ctx) => AmountSelector(
         title: tr.transfer.form.value_in_destiny.title,
         initialAmount: initial,

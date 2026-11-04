@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:monekin/app/debts/components/debt_fab_button.dart';
 import 'package:monekin/app/debts/components/debt_list.dart';

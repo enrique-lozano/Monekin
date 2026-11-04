@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart' as drift;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_type_selector.dart';
 import 'package:monekin/app/accounts/tracking_mode_selector.dart';

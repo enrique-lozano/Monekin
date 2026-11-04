@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/all_accounts_page.dart';
@@ -11,7 +11,7 @@ import 'package:monekin/app/settings/help_us_page.dart';
 import 'package:monekin/app/settings/more_actions.page.dart';
 import 'package:monekin/app/settings/pages/backup/backup_settings.page.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
-import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/app/settings/settings_page.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/stats/stats_page.dart';
@@ -83,12 +83,9 @@ void main() {
     await tester.tap(find.text(t.backup.import.manual_import.title));
     await tester.pumpAndSettle();
     expect(find.byType(ImportCSVPage), findsOneWidget);
-    expect(
-      find.text(t.backup.import.manual_import.steps.first),
-      findsOneWidget,
-    );
+    expect(find.text(t.backup.import.manual_import.file_title), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Back').first);
+    await tester.tap(find.byType(CloseButton).first);
     await tester.pumpAndSettle();
 
     await tester.tap(find.text(t.backup.export.title)); // "Export your data"
@@ -96,7 +93,7 @@ void main() {
     expect(find.byType(ExportDataPage), findsOneWidget);
     expect(find.text(t.backup.export.all), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Back').first);
+    await tester.tap(find.byType(CloseButton).first);
     await tester.pumpAndSettle();
     expect(find.byType(BackupSettingsPage), findsOneWidget);
     await tester.pageBack();

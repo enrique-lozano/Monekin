@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';

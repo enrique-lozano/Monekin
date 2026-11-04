@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:monekin/app/accounts/account_selector.dart';
 import 'package:monekin/app/accounts/details/holdings_card.dart'

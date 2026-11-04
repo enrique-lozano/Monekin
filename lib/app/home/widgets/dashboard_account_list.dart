@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/accounts/account_form.dart';
 import 'package:monekin/app/accounts/all_accounts_page.dart';
 import 'package:monekin/app/accounts/details/account_details.dart';
