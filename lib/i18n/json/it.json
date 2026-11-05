@@ -730,7 +730,7 @@
     "currency-manager.descr": "Configura la tua valuta e i suoi tassi di cambio con altre",
     "preferred-currency": "Valuta preferita/base",
     "update-rates": "Aggiorna i tassi",
-    "update-rates-loading": "Recupero dei tassi di cambio dalla BCE (Frankfurter)…",
+    "update-rates-loading": "Recupero dei tassi di cambio da Frankfurter…",
     "update-rates-success": {
       "one": "Tasso di cambio di oggi aggiornato per 1 valuta. Quelli inseriti da te non vengono mai sovrascritti.",
       "other": "Tassi di cambio di oggi aggiornati per {{n}} valute. Quelli inseriti da te non vengono mai sovrascritti."
@@ -740,7 +740,6 @@
     "delete-rates-error": "Impossibile eliminare i tassi di cambio. Riprova.",
     "update-rates-supported-up-to-date": "I tassi di cambio supportati sono già aggiornati",
     "update-rates-unavailable": "I tassi di cambio automatici non sono disponibili per {{currencies}}. Inserisci questi tassi manualmente.",
-    "update-rates-failure": "Impossibile aggiornare {{currency}}: la BCE non ha un tasso per questa valuta. Inseriscilo manualmente se ti serve.",
     "update-rates-error": "Impossibile raggiungere il servizio dei tassi di cambio. Controlla la connessione e riprova.",
     "updated-today": "Aggiornato oggi",
     "updated-days-ago": {
@@ -760,10 +759,10 @@
       "edit-success": "Tasso di cambio modificato con successo",
       "remove-all": "Elimina tutti i tassi di cambio",
       "remove-all-warning": "Questa azione è irreversibile e cancellerà tutti i tassi di cambio per questa valuta",
-      "ecb-loading": "Ricerca del tasso BCE…",
-      "ecb-filled": "Compilato dalla BCE",
-      "ecb-value": "BCE: {{rate}}",
-      "ecb-use-value": "Usa questo valore"
+      "auto-loading": "Ricerca del tasso…",
+      "auto-filled": "Compilato automaticamente",
+      "auto-value": "Suggerito: {{rate}}",
+      "auto-use-value": "Usa questo valore"
     },
     "TYPES": {
       "display": "Tipo di valuta",

@@ -754,7 +754,7 @@
     "currency-manager.descr": "配置您的貨幣及其與其他貨幣的匯率",
     "preferred-currency": "首選/基礎貨幣",
     "update-rates": "更新匯率",
-    "update-rates-loading": "正在從歐洲央行（Frankfurter）取得匯率…",
+    "update-rates-loading": "正在從 Frankfurter 取得匯率…",
     "update-rates-success": {
       "one": "已更新 1 種貨幣的今日匯率。您手動輸入的匯率不會被覆寫。",
       "other": "已更新 {{n}} 種貨幣的今日匯率。您手動輸入的匯率不會被覆寫。"
@@ -764,7 +764,6 @@
     "delete-rates-error": "無法刪除匯率。請重試。",
     "update-rates-supported-up-to-date": "支援的匯率已是最新",
     "update-rates-unavailable": "{{currencies}} 的自動匯率無法使用。請手動輸入這些匯率。",
-    "update-rates-failure": "無法更新 {{currency}}：歐洲央行沒有該貨幣的匯率。如有需要，請手動輸入。",
     "update-rates-error": "無法連線至匯率服務。請檢查網路連線後重試。",
     "updated-today": "今天已更新",
     "updated-days-ago": {
@@ -784,10 +783,10 @@
       "edit-success": "匯率編輯成功",
       "remove-all": "刪除所有匯率",
       "remove-all-warning": "此操作不可逆轉，並將刪除該貨幣的所有匯率",
-      "ecb-loading": "正在查詢歐洲央行匯率…",
-      "ecb-filled": "已從歐洲央行填入",
-      "ecb-value": "歐洲央行：{{rate}}",
-      "ecb-use-value": "使用此值"
+      "auto-loading": "正在查詢匯率…",
+      "auto-filled": "已自動填入",
+      "auto-value": "建議：{{rate}}",
+      "auto-use-value": "使用此值"
     },
     "TYPES": {
       "display": "貨幣類型",

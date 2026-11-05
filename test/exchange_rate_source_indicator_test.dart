@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/app/currencies/widgets/exchange_rate_source_indicator.dart';
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 void main() {
@@ -45,7 +45,7 @@ void main() {
   ) async {
     await tester.pumpWidget(buildIndicator(rate: null));
 
-    expect(find.text(frankfurterEcbCredit), findsNothing);
+    expect(find.text(frankfurterCredit), findsNothing);
     expect(find.byType(Card), findsNothing);
     expect(find.byType(IconButton), findsNothing);
   });
@@ -55,21 +55,21 @@ void main() {
   ) async {
     final form = t.currencies.exchange_rate_form;
     await tester.pumpWidget(buildIndicator(loading: true, rate: null));
-    expect(find.text(form.ecb_loading), findsOneWidget);
+    expect(find.text(form.auto_loading), findsOneWidget);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.byType(Card), findsOneWidget);
     expect(find.byType(IconButton), findsNothing);
-    final loadingStart = tester.getTopLeft(find.text(form.ecb_loading)).dx;
+    final loadingStart = tester.getTopLeft(find.text(form.auto_loading)).dx;
 
     await tester.pumpWidget(buildIndicator(matchesRate: true));
-    expect(find.text(form.ecb_filled), findsOneWidget);
+    expect(find.text(form.auto_filled), findsOneWidget);
     expect(find.byIcon(Icons.check_rounded), findsNothing);
     expect(find.byIcon(Icons.info_outline), findsNothing);
     expect(find.byType(Card), findsOneWidget);
     expect(find.byType(Chip), findsNothing);
     expect(find.byType(IconButton), findsNothing);
-    expect(tester.getTopLeft(find.text(form.ecb_filled)).dx, loadingStart);
-    expect(find.text(frankfurterEcbCredit), findsOneWidget);
+    expect(tester.getTopLeft(find.text(form.auto_filled)).dx, loadingStart);
+    expect(find.text(frankfurterCredit), findsOneWidget);
   });
 
   testWidgets('a differing rate has an explicit, working use-value action', (
@@ -79,12 +79,12 @@ void main() {
     final form = t.currencies.exchange_rate_form;
     await tester.pumpWidget(buildIndicator(onUseValue: () => applied = true));
 
-    expect(find.text(form.ecb_value(rate: '0.89509')), findsOneWidget);
-    expect(find.text(frankfurterEcbCredit), findsOneWidget);
+    expect(find.text(form.auto_value(rate: '0.89509')), findsOneWidget);
+    expect(find.text(frankfurterCredit), findsOneWidget);
     expect(find.byType(Card), findsOneWidget);
     expect(find.byIcon(Icons.sync_rounded), findsOneWidget);
     expect(find.byType(TextButton), findsNothing);
-    await tester.tap(find.byTooltip(form.ecb_use_value));
+    await tester.tap(find.byTooltip(form.auto_use_value));
     expect(applied, isTrue);
   });
 
@@ -94,9 +94,9 @@ void main() {
     final form = t.currencies.exchange_rate_form;
     await tester.pumpWidget(buildIndicator());
     final differentBounds = tester.getRect(find.byType(Card));
-    final creditBounds = tester.getRect(find.text(frankfurterEcbCredit));
+    final creditBounds = tester.getRect(find.text(frankfurterCredit));
     final textBounds = tester.getRect(
-      find.text(form.ecb_value(rate: '0.89509')),
+      find.text(form.auto_value(rate: '0.89509')),
     );
     final resetBounds = tester.getRect(find.byType(IconButton));
     expect(resetBounds.left, greaterThan(textBounds.right));
@@ -104,11 +104,11 @@ void main() {
     expect(resetBounds.height, greaterThanOrEqualTo(42));
     await tester.longPress(find.byType(IconButton));
     await tester.pumpAndSettle();
-    expect(find.text(form.ecb_use_value), findsOneWidget);
+    expect(find.text(form.auto_use_value), findsOneWidget);
 
     await tester.pumpWidget(buildIndicator(matchesRate: true));
     expect(tester.getRect(find.byType(Card)), differentBounds);
-    expect(tester.getRect(find.text(frankfurterEcbCredit)), creditBounds);
+    expect(tester.getRect(find.text(frankfurterCredit)), creditBounds);
     expect(find.byType(IconButton), findsNothing);
   });
 
@@ -124,7 +124,7 @@ void main() {
     expect(find.byIcon(Icons.account_balance_rounded), findsOneWidget);
     expect(
       tester.getRect(find.byIcon(Icons.account_balance_rounded)).right,
-      lessThan(tester.getRect(find.text(frankfurterEcbCredit)).left),
+      lessThan(tester.getRect(find.text(frankfurterCredit)).left),
     );
   });
 
@@ -147,7 +147,7 @@ void main() {
           final bounds = tester.getRect(
             find.byType(ExchangeRateSourceIndicator),
           );
-          final credit = tester.getRect(find.text(frankfurterEcbCredit));
+          final credit = tester.getRect(find.text(frankfurterCredit));
           expect(credit.left, greaterThanOrEqualTo(bounds.left));
           expect(credit.right, lessThanOrEqualTo(bounds.right));
           if (state == 'different') {

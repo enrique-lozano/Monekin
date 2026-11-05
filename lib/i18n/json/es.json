@@ -741,7 +741,7 @@
     "currency-manager.descr": "Configura tu divisa y sus tipos de cambio con otras",
     "preferred-currency": "Divisa predeterminada/base",
     "update-rates": "Actualizar tipos",
-    "update-rates-loading": "Obteniendo tipos de cambio del BCE (Frankfurter)…",
+    "update-rates-loading": "Obteniendo tipos de cambio de Frankfurter…",
     "update-rates-success": {
       "one": "Tipo de cambio de hoy actualizado para 1 divisa. Los que introdujiste nunca se sobrescriben.",
       "other": "Tipos de cambio de hoy actualizados para {{n}} divisas. Los que introdujiste nunca se sobrescriben."
@@ -751,7 +751,6 @@
     "delete-rates-error": "No se pudieron eliminar los tipos de cambio. Inténtalo de nuevo.",
     "update-rates-supported-up-to-date": "Los tipos de cambio disponibles ya están al día",
     "update-rates-unavailable": "No hay tipos de cambio automáticos para {{currencies}}. Introduce estos tipos manualmente.",
-    "update-rates-failure": "{{currency}} no se pudo actualizar: el BCE no tiene tipo de cambio para ella. Introdúcelo manualmente si lo necesitas.",
     "update-rates-error": "No se pudo conectar con el servicio de tipos de cambio. Comprueba tu conexión e inténtalo de nuevo.",
     "updated-today": "Actualizado hoy",
     "updated-days-ago": {
@@ -771,10 +770,10 @@
       "edit-success": "Tipo de cambio editado correctamente",
       "remove-all": "Eliminar todos los tipos de cambio",
       "remove-all-warning": "Esta acción es irreversible y eliminará todos los tipos de cambio de esta moneda.",
-      "ecb-loading": "Buscando el tipo del BCE…",
-      "ecb-filled": "Rellenado del BCE",
-      "ecb-value": "BCE: {{rate}}",
-      "ecb-use-value": "Usar este valor"
+      "auto-loading": "Buscando el tipo de cambio…",
+      "auto-filled": "Rellenado automáticamente",
+      "auto-value": "Sugerido: {{rate}}",
+      "auto-use-value": "Usar este valor"
     },
     "TYPES": {
       "display": "Tipo de moneda",

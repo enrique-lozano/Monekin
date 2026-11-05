@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 
 class _StubClient extends http.BaseClient {
   _StubClient(this.onSend);
@@ -24,7 +24,7 @@ http.StreamedResponse _json(int status, String body, http.BaseRequest request) {
 }
 
 void main() {
-  test('parses a Frankfurter v2 ECB quote', () {
+  test('parses a Frankfurter v2 quote', () {
     final quote = parseFrankfurterRate(
       '{"date":"2026-10-13","base":"USD","quote":"EUR","rate":0.89381}',
     );
@@ -38,13 +38,13 @@ void main() {
       () => parseFrankfurterRate(
         '{"date":"2026-10-13","base":"USD","quote":"EUR","rate":0}',
       ),
-      throwsA(isA<FrankfurterEcbException>()),
+      throwsA(isA<FrankfurterException>()),
     );
   });
 
-  test('latest asks Frankfurter v2 for the ECB provider', () async {
+  test('latest asks Frankfurter v2 without pinning a provider', () async {
     late Uri requested;
-    final client = FrankfurterEcbClient(
+    final client = FrankfurterClient(
       client: _StubClient((request) async {
         requested = request.url;
         return _json(
@@ -59,24 +59,46 @@ void main() {
 
     expect(quote.rate, 0.89381);
     expect(requested.path, '/v2/rate/usd/eur');
-    expect(requested.queryParameters['providers'], 'ecb');
     expect(requested.host, 'api.frankfurter.dev');
+    expect(requested.hasQuery, isFalse);
   });
 
-  test('flags a pair the ECB does not publish', () async {
-    final client = FrankfurterEcbClient(
-      client: _StubClient((request) async => _json(404, 'not found', request)),
+  test('latest sends the requested date', () async {
+    late Uri requested;
+    final client = FrankfurterClient(
+      client: _StubClient((request) async {
+        requested = request.url;
+        return _json(
+          200,
+          '{"date":"2026-10-13","base":"USD","quote":"EUR","rate":0.89381}',
+          request,
+        );
+      }),
     );
 
-    expect(
-      () => client.latest(from: 'BTC', to: 'EUR'),
-      throwsA(
-        isA<FrankfurterEcbException>().having(
-          (e) => e.notPublished,
-          'notPublished',
-          isTrue,
+    await client.latest(from: 'USD', to: 'EUR', date: DateTime(2026, 10, 13));
+
+    expect(requested.queryParameters, {'date': '2026-10-13'});
+  });
+
+  for (final status in [404, 422]) {
+    test('flags a pair Frankfurter has no rate for (HTTP $status)', () async {
+      final client = FrankfurterClient(
+        client: _StubClient(
+          (request) async => _json(status, 'not found', request),
         ),
-      ),
-    );
-  });
+      );
+
+      expect(
+        () => client.latest(from: 'BTC', to: 'EUR'),
+        throwsA(
+          isA<FrankfurterException>().having(
+            (e) => e.notAvailable,
+            'notAvailable',
+            isTrue,
+          ),
+        ),
+      );
+    });
+  }
 }

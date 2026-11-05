@@ -754,7 +754,7 @@
     "currency-manager.descr": "Configure your currency and its exchange rates with others",
     "preferred-currency": "Preferred/base currency",
     "update-rates": "Update rates",
-    "update-rates-loading": "Fetching exchange rates from the ECB (Frankfurter)…",
+    "update-rates-loading": "Fetching exchange rates from Frankfurter…",
     "update-rates-success": {
       "one": "Today's exchange rate updated for 1 currency. The ones you entered are never overwritten.",
       "other": "Today's exchange rates updated for {{n}} currencies. The ones you entered are never overwritten."
@@ -762,7 +762,6 @@
     "update-rates-up-to-date": "Your exchange rates are already up to date",
     "update-rates-supported-up-to-date": "Supported exchange rates are already up to date",
     "update-rates-unavailable": "Automatic rates unavailable for {{currencies}}. Enter these rates manually.",
-    "update-rates-failure": "{{currency}} could not be updated: the ECB has no rate for it. Enter the rate manually if you need it.",
     "update-rates-error": "Could not reach the exchange rate service. Check your connection and try again.",
     "updated-today": "Updated today",
     "updated-days-ago": {
@@ -782,10 +781,10 @@
       "edit-success": "Exchange rate edited successfully",
       "remove-all": "Delete all exchange rates",
       "remove-all-warning": "This action is irreversible and will delete all exchange rates for this currency",
-      "ecb-loading": "Looking up the ECB rate…",
-      "ecb-filled": "Filled from the ECB",
-      "ecb-value": "ECB: {{rate}}",
-      "ecb-use-value": "Use this value"
+      "auto-loading": "Looking up the rate…",
+      "auto-filled": "Filled automatically",
+      "auto-value": "Suggested: {{rate}}",
+      "auto-use-value": "Use this value"
     },
     "TYPES": {
       "display": "Currency type",

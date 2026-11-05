@@ -18,26 +18,26 @@ import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/exchange_rate_sync.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart' hide Skeleton;
 import 'package:sqlite3/sqlite3.dart' show SqliteException;
 
 import '../../core/presentation/widgets/no_results.dart';
 
-void showEcbSyncResultSnackbar(BuildContext context, EcbSyncResult result) {
+void showRateSyncResultSnackbar(BuildContext context, RateSyncResult result) {
   final t = Translations.of(context);
   final summary = result.addedRates > 0
       ? t.currencies.update_rates_success(n: result.addedRates)
-      : result.unpublishedCurrencies.isNotEmpty
+      : result.unavailableCurrencies.isNotEmpty
       ? t.currencies.update_rates_supported_up_to_date
       : t.currencies.update_rates_up_to_date;
   final warnings = [
     if (result.connectionFailed) t.currencies.update_rates_error,
-    if (result.unpublishedCurrencies.isNotEmpty)
+    if (result.unavailableCurrencies.isNotEmpty)
       t.currencies.update_rates_unavailable(
-        currencies: result.unpublishedCurrencies.join(', '),
+        currencies: result.unavailableCurrencies.join(', '),
       ),
   ];
 
@@ -45,7 +45,7 @@ void showEcbSyncResultSnackbar(BuildContext context, EcbSyncResult result) {
     MonekinSnackbar.error(
       SnackbarParams(
         t.currencies.update_rates_error,
-        message: result.unpublishedCurrencies.isEmpty
+        message: result.unavailableCurrencies.isEmpty
             ? null
             : warnings.skip(1).join('\n'),
         showAtTop: false,
@@ -64,7 +64,7 @@ void showEcbSyncResultSnackbar(BuildContext context, EcbSyncResult result) {
     MonekinSnackbar.success(
       SnackbarParams(
         summary,
-        message: result.addedRates > 0 ? frankfurterEcbCredit : null,
+        message: result.addedRates > 0 ? frankfurterCredit : null,
         showAtTop: false,
       ),
     );
@@ -94,10 +94,10 @@ class _CurrencyManagerPageState extends State<CurrencyManagerPage> {
       final preferred = await CurrencyService.instance
           .ensureAndGetPreferredCurrency()
           .first;
-      final result = await syncEcbRates(preferredCurrency: preferred.code);
+      final result = await syncExchangeRates(preferredCurrency: preferred.code);
       if (!mounted) return;
 
-      showEcbSyncResultSnackbar(context, result);
+      showRateSyncResultSnackbar(context, result);
     } catch (_) {
       if (!mounted) return;
       MonekinSnackbar.error(

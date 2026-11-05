@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-/// Visible credit required by Frankfurter for European Central Bank rates.
-const frankfurterEcbCredit = 'European Central Bank via Frankfurter';
+/// Visible credit for the rates obtained through Frankfurter.
+const frankfurterCredit = 'Exchange rates via Frankfurter';
 
 class FrankfurterRate {
   const FrankfurterRate({required this.date, required this.rate});
@@ -12,21 +12,22 @@ class FrankfurterRate {
   final double rate;
 }
 
-class FrankfurterEcbException implements Exception {
-  FrankfurterEcbException(this.message, {this.notPublished = false});
+class FrankfurterException implements Exception {
+  FrankfurterException(this.message, {this.notAvailable = false});
 
   final String message;
 
-  /// The ECB has no rate for the requested pair or date (HTTP 404).
-  final bool notPublished;
+  /// Frankfurter has no rate for the request: a currency or date none of its
+  /// providers cover (HTTP 404), or a currency code it doesn't know at all
+  /// (HTTP 422).
+  final bool notAvailable;
 
   @override
   String toString() => message;
 }
 
-class FrankfurterEcbClient {
-  FrankfurterEcbClient({http.Client? client})
-    : _client = client ?? http.Client();
+class FrankfurterClient {
+  FrankfurterClient({http.Client? client}) : _client = client ?? http.Client();
 
   final http.Client _client;
 
@@ -46,21 +47,20 @@ class FrankfurterEcbClient {
         .timeout(_timeout);
 
     if (response.statusCode != 200) {
-      throw FrankfurterEcbException(
+      throw FrankfurterException(
         'Frankfurter returned HTTP ${response.statusCode} for $label',
-        notPublished: response.statusCode == 404,
+        notAvailable: response.statusCode == 404 || response.statusCode == 422,
       );
     }
 
     return response.body;
   }
 
-  /// ECB rate: how many [to] units one [from] unit buys. Without a [date] it
-  /// is the latest one; otherwise the one of the closest ECB business day
-  /// on or before it.
+  /// Rate: how many [to] units one [from] unit buys. Without a [date] it is
+  /// the latest one; otherwise the one of the closest business day on or
+  /// before it.
   ///
-  /// Uses Frankfurter v2 pinned to the ECB provider. Unpinned v2 blends
-  /// other sources, and v1 is frozen.
+  /// Uses Frankfurter v2, which blends all its providers. v1 is frozen.
   Future<FrankfurterRate> latest({
     required String from,
     required String to,
@@ -70,10 +70,7 @@ class FrankfurterEcbClient {
     final quote = to.trim().toLowerCase();
     final uri = Uri.parse('https://api.frankfurter.dev/v2/rate/$base/$quote')
         .replace(
-          queryParameters: {
-            'providers': 'ecb',
-            if (date != null) 'date': _formatIsoDate(date),
-          },
+          queryParameters: date == null ? null : {'date': _formatIsoDate(date)},
         );
 
     return parseFrankfurterRate(await _get(uri, '$base/$quote'));
@@ -88,18 +85,18 @@ String _formatIsoDate(DateTime date) =>
 FrankfurterRate parseFrankfurterRate(String body) {
   final decoded = jsonDecode(body);
   if (decoded is! Map<String, dynamic>) {
-    throw FrankfurterEcbException('Unexpected Frankfurter response');
+    throw FrankfurterException('Unexpected Frankfurter response');
   }
 
   final dateRaw = decoded['date'];
   final rateRaw = decoded['rate'];
   if (dateRaw is! String || rateRaw is! num || rateRaw <= 0) {
-    throw FrankfurterEcbException('Unexpected Frankfurter response');
+    throw FrankfurterException('Unexpected Frankfurter response');
   }
 
   final date = _parseIsoDate(dateRaw);
   if (date == null) {
-    throw FrankfurterEcbException('Unexpected Frankfurter date');
+    throw FrankfurterException('Unexpected Frankfurter date');
   }
 
   return FrankfurterRate(date: date, rate: rateRaw.toDouble());

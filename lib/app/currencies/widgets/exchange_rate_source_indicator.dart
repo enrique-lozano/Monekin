@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/presentation/theme.dart';
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class ExchangeRateSourceIndicator extends StatelessWidget {
@@ -62,15 +62,15 @@ class ExchangeRateSourceIndicator extends StatelessWidget {
                   children: [
                     Text(
                       loading
-                          ? form.ecb_loading
+                          ? form.auto_loading
                           : matchesRate
-                          ? form.ecb_filled
-                          : form.ecb_value(rate: rate.toString()),
+                          ? form.auto_filled
+                          : form.auto_value(rate: rate.toString()),
                       style: theme.textTheme.titleSmall?.copyWith(
                         color: colors.onSurface,
                       ),
                     ),
-                    Text(frankfurterEcbCredit, style: secondaryStyle),
+                    Text(frankfurterCredit, style: secondaryStyle),
                   ],
                 ),
               ),
@@ -92,7 +92,7 @@ class ExchangeRateSourceIndicator extends StatelessWidget {
                     ? null
                     : IconButton.filledTonal(
                         onPressed: onUseValue,
-                        tooltip: form.ecb_use_value,
+                        tooltip: form.auto_use_value,
                         icon: const Icon(Icons.sync_rounded),
                       ),
               ),

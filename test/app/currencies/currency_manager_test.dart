@@ -2,7 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
+import 'package:monekin/core/services/exchange-rate/exchange_rate_sync.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -35,11 +35,11 @@ void main() {
       final context = await buildApp(tester);
 
       for (final added in [1, 0]) {
-        showEcbSyncResultSnackbar(
+        showRateSyncResultSnackbar(
           context,
-          EcbSyncResult(
+          RateSyncResult(
             addedRates: added,
-            unpublishedCurrencies: const ['ANG'],
+            unavailableCurrencies: const ['ANG'],
             connectionFailed: false,
           ),
         );
@@ -70,11 +70,11 @@ void main() {
     tester,
   ) async {
     final context = await buildApp(tester);
-    showEcbSyncResultSnackbar(
+    showRateSyncResultSnackbar(
       context,
-      const EcbSyncResult(
+      const RateSyncResult(
         addedRates: 1,
-        unpublishedCurrencies: ['ANG'],
+        unavailableCurrencies: ['ANG'],
         connectionFailed: true,
       ),
     );
@@ -97,11 +97,11 @@ void main() {
     tester,
   ) async {
     final context = await buildApp(tester);
-    showEcbSyncResultSnackbar(
+    showRateSyncResultSnackbar(
       context,
-      const EcbSyncResult(
+      const RateSyncResult(
         addedRates: 1,
-        unpublishedCurrencies: [],
+        unavailableCurrencies: [],
         connectionFailed: true,
       ),
     );
@@ -120,11 +120,11 @@ void main() {
     'total connection failure is an error and keeps unsupported detail',
     (tester) async {
       final context = await buildApp(tester);
-      showEcbSyncResultSnackbar(
+      showRateSyncResultSnackbar(
         context,
-        const EcbSyncResult(
+        const RateSyncResult(
           addedRates: 0,
-          unpublishedCurrencies: ['ANG'],
+          unavailableCurrencies: ['ANG'],
           connectionFailed: true,
         ),
       );
@@ -148,11 +148,11 @@ void main() {
       tester,
     ) async {
       final context = await buildApp(tester);
-      showEcbSyncResultSnackbar(
+      showRateSyncResultSnackbar(
         context,
-        EcbSyncResult(
+        RateSyncResult(
           addedRates: added,
-          unpublishedCurrencies: const [],
+          unavailableCurrencies: const [],
           connectionFailed: false,
         ),
       );

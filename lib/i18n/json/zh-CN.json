@@ -730,7 +730,7 @@
     "currency-manager.descr": "设置您的货币及其与其他货币的汇率",
     "preferred-currency": "默认货币",
     "update-rates": "更新汇率",
-    "update-rates-loading": "正在从欧洲央行（Frankfurter）获取汇率…",
+    "update-rates-loading": "正在从 Frankfurter 获取汇率…",
     "update-rates-success": {
       "one": "已更新 1 种货币的今日汇率。您手动输入的汇率不会被覆盖。",
       "other": "已更新 {{n}} 种货币的今日汇率。您手动输入的汇率不会被覆盖。"
@@ -740,7 +740,6 @@
     "delete-rates-error": "无法删除汇率。请重试。",
     "update-rates-supported-up-to-date": "支持的汇率已是最新",
     "update-rates-unavailable": "{{currencies}} 的自动汇率不可用。请手动输入这些汇率。",
-    "update-rates-failure": "无法更新 {{currency}}：欧洲央行没有该货币的汇率。如有需要，请手动输入。",
     "update-rates-error": "无法连接汇率服务。请检查网络连接后重试。",
     "updated-today": "今天已更新",
     "updated-days-ago": {
@@ -760,10 +759,10 @@
       "edit-success": "汇率编辑成功",
       "remove-all": "删除所有汇率",
       "remove-all-warning": "此操作不可逆转，并将删除该货币的所有汇率",
-      "ecb-loading": "正在查询欧洲央行汇率…",
-      "ecb-filled": "已从欧洲央行填入",
-      "ecb-value": "欧洲央行：{{rate}}",
-      "ecb-use-value": "使用此值"
+      "auto-loading": "正在查询汇率…",
+      "auto-filled": "已自动填入",
+      "auto-value": "建议：{{rate}}",
+      "auto-use-value": "使用此值"
     },
     "TYPES": {
       "display": "货币类型",

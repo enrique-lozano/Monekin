@@ -16,8 +16,7 @@ import 'package:monekin/core/presentation/widgets/form_fields/date_form_field.da
 import 'package:monekin/core/presentation/widgets/inline_info_card.dart';
 import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
-import 'package:monekin/core/services/exchange-rate/today_rate_plan.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/core/utils/text_field_utils.dart';
 import 'package:monekin/core/utils/uuid.dart';
@@ -67,29 +66,31 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
 
   bool get isEditMode => widget.exchangeRateToEdit != null;
 
-  final _ecbClient = FrankfurterEcbClient();
+  final _frankfurter = FrankfurterClient();
 
   bool get _hasStagedRate =>
       _currency?.code == widget.currency?.code &&
       widget.existingRateDates.any((day) => DateUtils.isSameDay(day, date));
 
-  /// ECB rate for the chosen currency and date, if the ECB has one.
-  double? _ecbRate;
-  bool _loadingEcbRate = false;
-  int _ecbRequestId = 0;
+  /// Frankfurter rate for the chosen currency and date, if there is one.
+  double? _fetchedRate;
+  bool _loadingRate = false;
+  int _rateRequestId = 0;
 
   /// Text that was autofilled and the user has not edited since.
   String? _autofilledText;
 
-  bool get _rateMatchesEcb =>
-      _ecbRate != null && double.tryParse(rateController.text) == _ecbRate;
+  bool get _rateMatchesFetched =>
+      _fetchedRate != null &&
+      double.tryParse(rateController.text) == _fetchedRate;
 
-  /// Looks up the ECB rate for the current currency/date and autofills the
-  /// field if it is empty. Dates that already have a rate are not autofilled.
-  Future<void> _loadEcbRate() async {
+  /// Looks up the Frankfurter rate for the current currency/date and autofills
+  /// the field if it is empty. Dates that already have a rate are not
+  /// autofilled.
+  Future<void> _loadRate() async {
     final currency = _currency;
     final preferred = userPreferredCurrency;
-    final requestId = ++_ecbRequestId;
+    final requestId = ++_rateRequestId;
 
     if (rateController.text == _autofilledText) rateController.clear();
     _autofilledText = null;
@@ -97,15 +98,13 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     final canFetch =
         !isEditMode &&
         !_hasStagedRate &&
-        ecbFetchAvailability(
-              currency: currency?.code,
-              preferred: preferred?.code,
-            ) ==
-            EcbFetchAvailability.available;
+        currency != null &&
+        preferred != null &&
+        currency.code != preferred.code;
 
     setState(() {
-      _ecbRate = null;
-      _loadingEcbRate = canFetch;
+      _fetchedRate = null;
+      _loadingRate = canFetch;
     });
     if (!canFetch) return;
 
@@ -113,26 +112,26 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
     try {
       final alreadyExists =
           await ExchangeRateService.instance
-              .getExchangeRateItem(currency!.code, date)
+              .getExchangeRateItem(currency.code, date)
               .first !=
           null;
 
       if (!alreadyExists) {
-        rate = (await _ecbClient.latest(
+        rate = (await _frankfurter.latest(
           from: currency.code,
-          to: preferred!.code,
+          to: preferred.code,
           date: date,
         )).rate;
       }
     } catch (_) {
-      // Offline or no ECB rate: the field is simply left to the user
+      // Offline or no rate available: the field is simply left to the user
     }
 
-    if (!mounted || requestId != _ecbRequestId) return;
+    if (!mounted || requestId != _rateRequestId) return;
 
     setState(() {
-      _loadingEcbRate = false;
-      _ecbRate = rate;
+      _loadingRate = false;
+      _fetchedRate = rate;
 
       if (rate != null && rateController.text.trim().isEmpty) {
         _autofilledText = rate.toString();
@@ -162,14 +161,14 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
       setState(() {
         userPreferredCurrency = value;
       });
-      unawaited(_loadEcbRate());
+      unawaited(_loadRate());
     });
   }
 
   @override
   void dispose() {
-    _ecbRequestId++;
-    _ecbClient.close();
+    _rateRequestId++;
+    _frankfurter.close();
     rateController.dispose();
     super.dispose();
   }
@@ -204,7 +203,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
         setState(() {
           date = value;
         });
-        unawaited(_loadEcbRate());
+        unawaited(_loadRate());
       },
     );
     final rateField = TextFormField(
@@ -271,7 +270,7 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                         setState(() {
                           _currency = newCurrency;
                         });
-                        unawaited(_loadEcbRate());
+                        unawaited(_loadRate());
                       },
                     ),
                   );
@@ -300,9 +299,10 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                           child: Icon(
                             Icons.circle,
                             size: 25,
-                            color: Theme.of(
-                              context,
-                            ).inputDecorationTheme.fillColor!.darken(0.2),
+                            color: Theme.of(context)
+                                .inputDecorationTheme
+                                .fillColor!
+                                .darken(0.2),
                           ),
                         ),
                 ),
@@ -341,11 +341,11 @@ class _ExchangeRateFormDialogState extends State<ExchangeRateFormDialog> {
                   ),
                 ),
               ExchangeRateSourceIndicator(
-                loading: _loadingEcbRate,
-                rate: _ecbRate,
-                matchesRate: _rateMatchesEcb,
+                loading: _loadingRate,
+                rate: _fetchedRate,
+                matchesRate: _rateMatchesFetched,
                 onUseValue: () => setState(() {
-                  _autofilledText = _ecbRate.toString();
+                  _autofilledText = _fetchedRate.toString();
                   rateController.text = _autofilledText!;
                 }),
               ),

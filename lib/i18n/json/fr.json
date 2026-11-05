@@ -730,7 +730,7 @@
     "currency-manager.descr": "Configurez votre devise et ses taux de change avec les autres",
     "preferred-currency": "Devise de base/préférée",
     "update-rates": "Mettre à jour les taux",
-    "update-rates-loading": "Récupération des taux de change de la BCE (Frankfurter)…",
+    "update-rates-loading": "Récupération des taux de change depuis Frankfurter…",
     "update-rates-success": {
       "one": "Taux de change du jour mis à jour pour 1 devise. Ceux que vous avez saisis ne sont jamais écrasés.",
       "other": "Taux de change du jour mis à jour pour {{n}} devises. Ceux que vous avez saisis ne sont jamais écrasés."
@@ -740,7 +740,6 @@
     "delete-rates-error": "Impossible de supprimer les taux de change. Réessayez.",
     "update-rates-supported-up-to-date": "Les taux de change pris en charge sont déjà à jour",
     "update-rates-unavailable": "Les taux de change automatiques ne sont pas disponibles pour {{currencies}}. Saisissez ces taux manuellement.",
-    "update-rates-failure": "{{currency}} n'a pas pu être mise à jour : la BCE n'a pas de taux pour cette devise. Saisissez le taux manuellement si besoin.",
     "update-rates-error": "Impossible de joindre le service de taux de change. Vérifiez votre connexion et réessayez.",
     "updated-today": "Mis à jour aujourd'hui",
     "updated-days-ago": {
@@ -760,10 +759,10 @@
       "edit-success": "Taux de change modifié avec succès",
       "remove-all": "Supprimer tous les taux de change",
       "remove-all-warning": "Cette action est irréversible et supprimera tous les taux de change de cette devise",
-      "ecb-loading": "Recherche du taux de la BCE…",
-      "ecb-filled": "Rempli depuis la BCE",
-      "ecb-value": "BCE : {{rate}}",
-      "ecb-use-value": "Utiliser cette valeur"
+      "auto-loading": "Recherche du taux…",
+      "auto-filled": "Rempli automatiquement",
+      "auto-value": "Suggéré : {{rate}}",
+      "auto-use-value": "Utiliser cette valeur"
     },
     "TYPES": {
       "display": "Type de devise",

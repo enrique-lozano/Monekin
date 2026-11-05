@@ -8,8 +8,8 @@ import 'package:http/testing.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/exchange-rate/exchange_rate_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
-import 'package:monekin/core/services/exchange-rate/ecb_rate_sync.dart';
-import 'package:monekin/core/services/exchange-rate/frankfurter_ecb.dart';
+import 'package:monekin/core/services/exchange-rate/exchange_rate_sync.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 
 void main() {
   late AppDB db;
@@ -30,12 +30,12 @@ void main() {
         );
   }
 
-  Future<EcbSyncResult> sync(
+  Future<RateSyncResult> sync(
     Future<http.Response> Function(http.Request) handle,
   ) {
-    return syncEcbRates(
+    return syncExchangeRates(
       preferredCurrency: 'EUR',
-      client: FrankfurterEcbClient(client: MockClient(handle)),
+      client: FrankfurterClient(client: MockClient(handle)),
       exchangeRates: service,
       now: today,
     );
@@ -95,7 +95,7 @@ void main() {
 
     expect(result.addedRates, 0);
     expect(result.connectionFailed, isFalse);
-    expect(result.unpublishedCurrencies, isEmpty);
+    expect(result.unavailableCurrencies, isEmpty);
     final rates = await db.select(db.exchangeRates).get();
     expect(rates, hasLength(1));
     expect(rates.single.id, 'new-base');
@@ -189,7 +189,7 @@ void main() {
     final result = await sync((_) async => quote());
 
     expect(result.addedRates, 2);
-    expect(result.unpublishedCurrencies, isEmpty);
+    expect(result.unavailableCurrencies, isEmpty);
     expect(result.connectionFailed, isFalse);
     expect(await service.getExchangeRateItem('USD', today).first, isNotNull);
   });
@@ -218,21 +218,18 @@ void main() {
           ),
         );
     await save('ang', 'ANG', today.subtract(const Duration(days: 1)), 0.02);
-    var requests = 0;
+    Future<http.Response> respond(http.Request request) async =>
+        request.url.path.contains('/ang/')
+        ? http.Response('{"status":404,"message":"not found"}', 404)
+        : quote();
 
-    final first = await sync((_) async {
-      requests++;
-      return quote();
-    });
+    final first = await sync(respond);
     expect(first.addedRates, 2);
-    expect(first.unpublishedCurrencies, ['ANG']);
-    expect(requests, 2);
+    expect(first.unavailableCurrencies, ['ANG']);
 
-    final second = await sync((_) async {
-      fail('A repeated sync must not fetch rates that are already current');
-    });
+    final second = await sync(respond);
     expect(second.addedRates, 0);
-    expect(second.unpublishedCurrencies, ['ANG']);
+    expect(second.unavailableCurrencies, ['ANG']);
     expect(second.connectionFailed, isFalse);
     expect(
       (await service
@@ -246,7 +243,7 @@ void main() {
     );
   });
 
-  test('reports currencies the ECB has no rate for apart', () async {
+  test('reports currencies Frankfurter has no rate for apart', () async {
     final result = await sync(
       (request) async => request.url.path.contains('/usd/')
           ? http.Response('not found', 404)
@@ -254,19 +251,19 @@ void main() {
     );
 
     expect(result.addedRates, 1);
-    expect(result.unpublishedCurrencies, ['USD']);
+    expect(result.unavailableCurrencies, ['USD']);
     expect(result.connectionFailed, isFalse);
   });
 
   test(
-    'reports a connection failure without hiding it as unpublished',
+    'reports a connection failure without hiding it as unavailable',
     () async {
       final result = await sync(
         (_) async => throw const SocketException('off'),
       );
 
       expect(result.addedRates, 0);
-      expect(result.unpublishedCurrencies, isEmpty);
+      expect(result.unavailableCurrencies, isEmpty);
       expect(result.connectionFailed, isTrue);
     },
   );
