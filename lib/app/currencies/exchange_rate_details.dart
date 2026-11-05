@@ -375,7 +375,12 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
   Future<void> _addRate() async {
     final newRate = await showExchangeRateFormDialog(
       context,
-      ExchangeRateFormDialog(currency: widget.currency),
+      ExchangeRateFormDialog(
+        currency: widget.currency,
+        existingRateDates: [
+          for (final rate in _currentRates ?? <ExchangeRate>[]) rate.date,
+        ],
+      ),
     );
 
     if (newRate == null) return;
