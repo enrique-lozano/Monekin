@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:monekin/app/currencies/currency_manager.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/services/exchange-rate/exchange_rate_sync.dart';
+import 'package:monekin/core/services/exchange-rate/frankfurter_client.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -56,7 +57,8 @@ void main() {
         expect(
           content.message,
           added > 0
-              ? t.currencies.update_rates_success(n: added)
+              ? '${t.currencies.update_rates_success(n: added)}. '
+                    '${t.currencies.update_rates_manual_kept}'
               : t.currencies.update_rates_supported_up_to_date,
         );
         expect(find.text(t.currencies.update_rates_loading), findsNothing);
@@ -89,7 +91,11 @@ void main() {
       content.title,
       contains(t.currencies.update_rates_unavailable(currencies: 'ANG')),
     );
-    expect(content.message, t.currencies.update_rates_success(n: 1));
+    expect(
+      content.message,
+      '${t.currencies.update_rates_success(n: 1)}. '
+      '${t.currencies.update_rates_manual_kept}',
+    );
     await dismissSnackbar(tester);
   });
 
@@ -112,7 +118,11 @@ void main() {
     );
     expect(content.icon, Icons.warning_amber_rounded);
     expect(content.title, t.currencies.update_rates_error);
-    expect(content.message, t.currencies.update_rates_success(n: 1));
+    expect(
+      content.message,
+      '${t.currencies.update_rates_success(n: 1)}. '
+      '${t.currencies.update_rates_manual_kept}',
+    );
     await dismissSnackbar(tester);
   });
 
@@ -167,6 +177,12 @@ void main() {
         added > 0
             ? t.currencies.update_rates_success(n: added)
             : t.currencies.update_rates_up_to_date,
+      );
+      expect(
+        content.message,
+        added > 0
+            ? '${t.currencies.update_rates_manual_kept}\n$frankfurterCredit'
+            : null,
       );
       await dismissSnackbar(tester);
     });

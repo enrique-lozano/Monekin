@@ -732,9 +732,10 @@
     "update-rates": "Kurse aktualisieren",
     "update-rates-loading": "Wechselkurse werden von Frankfurter abgerufen…",
     "update-rates-success": {
-      "one": "Heutiger Wechselkurs für 1 Währung aktualisiert. Von dir eingegebene Kurse werden nie überschrieben.",
-      "other": "Heutige Wechselkurse für {{n}} Währungen aktualisiert. Von dir eingegebene Kurse werden nie überschrieben."
+      "one": "Heutiger Wechselkurs für 1 Währung aktualisiert",
+      "other": "Heutige Wechselkurse für {{n}} Währungen aktualisiert"
     },
+    "update-rates-manual-kept": "Von dir eingegebene Kurse werden nie überschrieben.",
     "update-rates-up-to-date": "Deine Wechselkurse sind bereits aktuell",
     "update-rates-supported-up-to-date": "Die unterstützten Wechselkurse sind bereits aktuell",
     "remove-all-rates-warning": "Diese Aktion kann nicht rückgängig gemacht werden und löscht alle gespeicherten Wechselkurse für sämtliche Währungen. Währungen, Konten und Transaktionen werden nicht gelöscht. Umgerechnete Salden und Statistiken können sich ändern.",

@@ -732,9 +732,10 @@
     "update-rates": "Árfolyamok frissítése",
     "update-rates-loading": "Árfolyamok lekérése a Frankfurtertől…",
     "update-rates-success": {
-      "one": "A mai árfolyam frissítve 1 pénznemhez. Az Ön által megadott árfolyamok soha nem íródnak felül.",
-      "other": "A mai árfolyamok frissítve {{n}} pénznemhez. Az Ön által megadott árfolyamok soha nem íródnak felül."
+      "one": "A mai árfolyam frissítve 1 pénznemhez",
+      "other": "A mai árfolyamok frissítve {{n}} pénznemhez"
     },
+    "update-rates-manual-kept": "Az Ön által megadott árfolyamok soha nem íródnak felül.",
     "update-rates-up-to-date": "Az árfolyamai már naprakészek",
     "remove-all-rates-warning": "Ez a művelet nem vonható vissza, és minden pénznem összes mentett árfolyamát törli. A pénznemek, számlák és tranzakciók nem törlődnek. Az átváltott egyenlegek és statisztikák megváltozhatnak.",
     "delete-rates-error": "Nem sikerült törölni az árfolyamokat. Próbálja újra.",

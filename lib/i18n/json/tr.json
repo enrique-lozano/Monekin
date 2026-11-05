@@ -732,9 +732,10 @@
     "update-rates": "Kurları güncelle",
     "update-rates-loading": "Döviz kurları Frankfurter'dan alınıyor…",
     "update-rates-success": {
-      "one": "1 para birimi için bugünün döviz kuru güncellendi. Sizin girdiğiniz kurların üzerine asla yazılmaz.",
-      "other": "{{n}} para birimi için bugünün döviz kurları güncellendi. Sizin girdiğiniz kurların üzerine asla yazılmaz."
+      "one": "1 para birimi için bugünün döviz kuru güncellendi",
+      "other": "{{n}} para birimi için bugünün döviz kurları güncellendi"
     },
+    "update-rates-manual-kept": "Sizin girdiğiniz kurların üzerine asla yazılmaz.",
     "update-rates-up-to-date": "Döviz kurlarınız zaten güncel",
     "remove-all-rates-warning": "Bu işlem geri alınamaz ve tüm para birimleri için kaydedilen tüm döviz kurlarını siler. Para birimleri, hesaplar ve işlemler silinmez. Dönüştürülen bakiyeler ve istatistikler değişebilir.",
     "delete-rates-error": "Döviz kurları silinemedi. Tekrar deneyin.",

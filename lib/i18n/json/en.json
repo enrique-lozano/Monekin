@@ -756,9 +756,10 @@
     "update-rates": "Update rates",
     "update-rates-loading": "Fetching exchange rates from Frankfurter…",
     "update-rates-success": {
-      "one": "Today's exchange rate updated for 1 currency. The ones you entered are never overwritten.",
-      "other": "Today's exchange rates updated for {{n}} currencies. The ones you entered are never overwritten."
+      "one": "Today's exchange rate updated for 1 currency",
+      "other": "Today's exchange rates updated for {{n}} currencies"
     },
+    "update-rates-manual-kept": "The ones you entered are never overwritten.",
     "update-rates-up-to-date": "Your exchange rates are already up to date",
     "update-rates-supported-up-to-date": "Supported exchange rates are already up to date",
     "update-rates-unavailable": "Automatic rates unavailable for {{currencies}}. Enter these rates manually.",

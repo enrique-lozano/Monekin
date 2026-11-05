@@ -732,9 +732,10 @@
     "update-rates": "更新汇率",
     "update-rates-loading": "正在从 Frankfurter 获取汇率…",
     "update-rates-success": {
-      "one": "已更新 1 种货币的今日汇率。您手动输入的汇率不会被覆盖。",
-      "other": "已更新 {{n}} 种货币的今日汇率。您手动输入的汇率不会被覆盖。"
+      "one": "已更新 1 种货币的今日汇率",
+      "other": "已更新 {{n}} 种货币的今日汇率"
     },
+    "update-rates-manual-kept": "您手动输入的汇率不会被覆盖。",
     "update-rates-up-to-date": "您的汇率已是最新",
     "remove-all-rates-warning": "此操作无法撤销，将删除所有货币的全部已保存汇率。货币、账户和交易不会被删除。换算后的余额和统计数据可能会发生变化。",
     "delete-rates-error": "无法删除汇率。请重试。",

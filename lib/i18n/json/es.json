@@ -743,9 +743,10 @@
     "update-rates": "Actualizar tipos",
     "update-rates-loading": "Obteniendo tipos de cambio de Frankfurter…",
     "update-rates-success": {
-      "one": "Tipo de cambio de hoy actualizado para 1 divisa. Los que introdujiste nunca se sobrescriben.",
-      "other": "Tipos de cambio de hoy actualizados para {{n}} divisas. Los que introdujiste nunca se sobrescriben."
+      "one": "Tipo de cambio de hoy actualizado para 1 divisa",
+      "other": "Tipos de cambio de hoy actualizados para {{n}} divisas"
     },
+    "update-rates-manual-kept": "Los que introdujiste nunca se sobrescriben.",
     "update-rates-up-to-date": "Tus tipos de cambio ya están al día",
     "remove-all-rates-warning": "Esta acción no se puede deshacer y eliminará todos los tipos de cambio guardados de todas las divisas. No se eliminarán las divisas, cuentas ni transacciones. Los saldos convertidos y las estadísticas pueden cambiar.",
     "delete-rates-error": "No se pudieron eliminar los tipos de cambio. Inténtalo de nuevo.",

@@ -56,7 +56,9 @@ void showRateSyncResultSnackbar(BuildContext context, RateSyncResult result) {
       SnackbarParams(
         warnings.join('\n'),
         duration: const Duration(seconds: 6),
-        message: summary,
+        message: result.addedRates > 0
+            ? '$summary. ${t.currencies.update_rates_manual_kept}'
+            : summary,
         showAtTop: false,
       ),
     );
@@ -64,7 +66,9 @@ void showRateSyncResultSnackbar(BuildContext context, RateSyncResult result) {
     MonekinSnackbar.success(
       SnackbarParams(
         summary,
-        message: result.addedRates > 0 ? frankfurterCredit : null,
+        message: result.addedRates > 0
+            ? '${t.currencies.update_rates_manual_kept}\n$frankfurterCredit'
+            : null,
         showAtTop: false,
       ),
     );
