@@ -12211,6 +12211,7 @@ abstract class _$AppDB extends GeneratedDatabase {
           row.readNullable<String>('intervalPeriod'),
         ),
         remainingTransactions: row.readNullable<int>('remainingTransactions'),
+        installments: row.readNullable<int>('installments'),
         debtId: row.readNullable<String>('debtId'),
         assetID: row.readNullable<String>('assetID'),
         securityID: row.readNullable<String>('securityID'),

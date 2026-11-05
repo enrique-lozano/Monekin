@@ -529,7 +529,12 @@
       "exchange-to-preferred-title": "Cambio a {{ currency }}",
       "exchange-to-preferred-in-date": "El día de la transacción",
       "extra-info-section": "Información adicional",
-      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas."
+      "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas.",
+      "INSTALLMENTS": {
+        "title": "Meses sin intereses",
+        "months": "meses",
+        "per_month": "al mes"
+      }
     },
     "REVERSED": {
       "title": "Transacción invertida",
@@ -682,7 +687,10 @@
       "limit": "Límite de crédito",
       "min_payment_hint": "Estimado. Tu banco puede calcularlo distinto",
       "statement_balance": "Saldo al corte ({{date}})",
+      "period_charges_hint": "Se pagan a más tardar el {{date}}",
       "total_debt": "Deuda total",
+      "installments_pending_hint": "Se cobra en los siguientes cortes. Toca para verlos",
+      "upcoming_installments": "Próximas mensualidades",
       "statement_of": "Corte del {{date}}",
       "cutoff_day": "Día de corte",
       "paid": "pagado",
@@ -698,7 +706,8 @@
       "next_statement_short": "próximo corte",
       "next_statement_help": "Cargos del periodo actual, que se cobran en el próximo corte y se pagan a más tardar el {{date}}",
       "total_debt_short": "deuda total",
-      "total_debt_help": "Todo lo que debes en la tarjeta, facturado o no",
+      "total_debt_help": "Todo lo que debes en la tarjeta, incluidas las mensualidades aún no cobradas",
+      "installments_short": "a meses",
       "payments": "Pagos",
       "charges": "Cargos",
       "due_day": "Día límite de pago",

@@ -125,6 +125,9 @@ class CreditCardCycle {
   DateTime cutoffAfter(DateTime cutoff, int months) =>
       dayInMonth(cutoff.year, cutoff.month + months, cutoffDay);
 
+  /// When the statement closed on [cutoff] has to be paid.
+  DateTime dueDateOf(DateTime cutoff) => _dueDateAfter(cutoff, dueDay);
+
   /// The [day] of the given month, clamped to the last day of that month.
   /// [month] may overflow (13 is January of the next year, 0 is December of
   /// the previous one).

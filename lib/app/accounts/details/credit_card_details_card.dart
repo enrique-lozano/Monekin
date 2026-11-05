@@ -4,13 +4,16 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/database/services/account/credit_card_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/extensions/padding.extension.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
+import 'package:monekin/core/presentation/widgets/modal_container.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
 import 'package:monekin/core/presentation/widgets/targets/target_status_card.dart';
+import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
@@ -279,6 +282,18 @@ class _CreditCardDetailsCardState extends State<CreditCardDetailsCard>
             label: t.account.credit.total_debt_short,
             helpText: t.account.credit.total_debt_help,
           ),
+          if (status.installmentsPending > 0) ...[
+            const VerticalDivider(width: 1),
+            TargetStat(
+              icon: Icons.calendar_view_month_rounded,
+              amount: status.installmentsPending,
+              currency: currency,
+              showDecimals: true,
+              label: t.account.credit.installments_short,
+              helpText: t.account.credit.installments_pending_hint,
+              onTap: () => _showUpcomingInstallments(context, status),
+            ),
+          ],
         ],
       ),
     );
@@ -511,6 +526,49 @@ class _CreditCardDetailsCardState extends State<CreditCardDetailsCard>
       child: CurrencyDisplayer(
         amountToConvert: amount,
         currency: widget.account.currency,
+      ),
+    );
+  }
+
+  /// Installments each upcoming statement bills, until all are paid.
+  void _showUpcomingInstallments(
+    BuildContext context,
+    CreditCardStatus status,
+  ) {
+    final t = Translations.of(context);
+
+    unawaited(
+      RouteUtils.showResponsiveModal<void>(
+        context,
+        builder: (context) => ModalContainer(
+          title: t.account.credit.upcoming_installments,
+          responseToKeyboard: false,
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 16).withSafeBottom(context),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final e in status.upcomingInstallments)
+                  ListTile(
+                    title: Text(
+                      t.account.credit.statement_of(
+                        date: DateFormat.yMMMd().format(e.cutoff),
+                      ),
+                    ),
+                    subtitle: Text(
+                      t.account.credit.period_charges_hint(
+                        date: DateFormat.MMMd().format(e.dueDate),
+                      ),
+                    ),
+                    trailing: CurrencyDisplayer(
+                      amountToConvert: e.amount,
+                      currency: widget.account.currency,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

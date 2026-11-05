@@ -1,12 +1,15 @@
 import 'dart:math';
 
+import 'package:drift/drift.dart' show ComparableExpr;
 import 'package:monekin/core/database/services/account/account_service.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/account/credit_card_cycle.dart';
+import 'package:monekin/core/models/account/installment_purchase.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
 import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
+import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -22,6 +25,7 @@ class CreditCardStatus {
     required this.periodCharges,
     this.previousStatementBalance = 0,
     this.paymentsSincePreviousCutoff = 0,
+    this.installmentPurchases = const [],
     this.decimals = 2,
     this.creditLimit,
     this.minPaymentPct,
@@ -48,6 +52,11 @@ class CreditCardStatus {
   /// Net money that came into the card since [CreditCardCycle.previousCutoff].
   final double paymentsSincePreviousCutoff;
 
+  /// Purchases paid in installments made up to now. The account balances above
+  /// count them whole, and the statement getters take back the part that is
+  /// not billed yet.
+  final List<InstallmentPurchase> installmentPurchases;
+
   /// Decimals of the account currency, used to round the derived amounts.
   final int decimals;
 
@@ -57,9 +66,17 @@ class CreditCardStatus {
   /// Everything owed right now.
   double get totalDebt => max(0, -balance);
 
+  /// Installment debt that, at the end of [cutoff], no statement has billed.
+  double _unbilledAt(DateTime cutoff) => installmentPurchases.fold(
+    0,
+    (sum, p) => sum + p.unbilledAt(cutoff, cycle.cutoffDay),
+  );
+
   /// What the last statement asked to pay.
-  double get statementDebt =>
-      max(0, -statementBalance).roundWithDecimals(decimals);
+  double get statementDebt => max(
+    0,
+    -(statementBalance + _unbilledAt(cycle.lastCutoff)),
+  ).roundWithDecimals(decimals);
 
   /// What is left to pay of the last statement to avoid interest.
   double get statementPaymentLeft => max(
@@ -73,12 +90,52 @@ class CreditCardStatus {
   /// [statementPaymentLeft] too, since unpaid debt carries over.
   double get previousStatementOverdue => max(
     0,
-    -previousStatementBalance - max(0, paymentsSincePreviousCutoff),
+    -(previousStatementBalance + _unbilledAt(cycle.previousCutoff)) -
+        max(0, paymentsSincePreviousCutoff),
   ).roundWithDecimals(decimals);
 
   /// What the statement that closes on [CreditCardCycle.nextCutoff] bills so
-  /// far: the purchases of the current period.
-  double get nextStatementCharges => periodCharges;
+  /// far: the purchases of the current period, with installment purchases
+  /// replaced by the installments it bills (of new and older purchases alike).
+  double get nextStatementCharges {
+    final installmentsCharged = installmentPurchases.fold<double>(
+      0,
+      (sum, p) => sum + p.chargeAt(cycle, cycle.nextCutoff),
+    );
+    final installmentPurchasesOfPeriod = installmentPurchases
+        .where((p) => !p.date.isBefore(cycle.periodStart))
+        .fold<double>(0, (sum, p) => sum + p.amount);
+
+    return (periodCharges - installmentPurchasesOfPeriod + installmentsCharged)
+        .roundWithDecimals(decimals);
+  }
+
+  /// Installment debt left for the statements after the next one.
+  double get installmentsPending =>
+      _unbilledAt(cycle.nextCutoff).roundWithDecimals(decimals);
+
+  /// Installments each upcoming statement will bill, starting with the next
+  /// one, until every purchase is billed.
+  List<({DateTime cutoff, DateTime dueDate, double amount})>
+  get upcomingInstallments {
+    final res = <({DateTime cutoff, DateTime dueDate, double amount})>[];
+
+    var cutoff = cycle.nextCutoff;
+    while (res.isEmpty || _unbilledAt(res.last.cutoff) > 0) {
+      final amount = installmentPurchases.fold<double>(
+        0,
+        (sum, p) => sum + p.chargeAt(cycle, cutoff),
+      );
+      res.add((
+        cutoff: cutoff,
+        dueDate: cycle.dueDateOf(cutoff),
+        amount: amount.roundWithDecimals(decimals),
+      ));
+      cutoff = cycle.cutoffAfter(cutoff, 1);
+    }
+
+    return res.where((e) => e.amount > 0).toList();
+  }
 
   /// Credit that can still be used. A positive balance (overpaid card) adds
   /// to the limit. `null` when the card has no limit set.
@@ -165,16 +222,46 @@ class CreditCardService {
               .toList(),
         );
 
-    return Rx.combineLatest4(
+    final installmentPurchases = TransactionService.instance
+        .getTransactionsFromPredicate(
+          predicate:
+              TransactionFilterSet(
+                accountsIDs: [account.id],
+                maxDate: date,
+                transactionTypes: const [TransactionType.expense],
+                status: TransactionStatus.getStatusThatCountsForStats(null),
+              ).toTransactionExpression(
+                extraFilters: (t, a, ac, ra, rac, c, pc) => [
+                  t.installments.isNotNull(),
+                  t.value.isSmallerThanValue(0),
+                ],
+              ),
+        )
+        .map(
+          (txs) => txs
+              .map(
+                (tx) => InstallmentPurchase(
+                  date: tx.date,
+                  amount: -tx.value,
+                  count: tx.installments!,
+                  decimals: decimals,
+                ),
+              )
+              .toList(),
+        );
+
+    return Rx.combineLatest5(
       balance,
       statementBalanceAt(cycle.lastCutoff),
       statementBalanceAt(cycle.previousCutoff),
       flows,
+      installmentPurchases,
       (
         double bal,
         double stmt,
         double prevStmt,
         List<({DateTime date, double effect})> flows,
+        List<InstallmentPurchase> installments,
       ) {
         double sum(bool Function(({DateTime date, double effect}) f) test) =>
             flows.where(test).fold<double>(0, (acc, f) => acc + f.effect);
@@ -196,6 +283,7 @@ class CreditCardService {
           paymentsSincePreviousCutoff: sum(
             (f) => f.effect > 0,
           ).roundWithDecimals(decimals),
+          installmentPurchases: installments,
           decimals: decimals,
           creditLimit: account.creditLimit,
           minPaymentPct: account.minPaymentPct,
