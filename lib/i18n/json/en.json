@@ -192,10 +192,22 @@
     "sl2Descr2": "Also, the source code of the application is public, anyone can collaborate on it and see how it works",
     "lastSlideTitle": "All ready",
     "lastSlideDescr": "With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.",
-    "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions..."
+    "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...",
+    "startTitle": "How do you want to start?",
+    "startDescr": "Pick the quickest way to see Monekin with real numbers. You can change everything later.",
+    "startImport": "Import your data",
+    "startImportDescr": "From a CSV file or another app",
+    "startSample": "Explore with sample data",
+    "startSampleDescr": "Fake accounts and transactions. You can delete them at any time from the settings",
+    "startScratch": "Start from scratch",
+    "startScratchDescr": "Add your first transaction"
   },
   "HOME": {
     "title": "Dashboard",
+    "firstTransactionTitle": "Let's add your first transaction",
+    "firstTransactionDescr": "Start with something simple, like your last purchase. You can edit it later.",
+    "firstTransactionAction": "Add transaction",
+    "firstTransactionDismiss": "Not now",
     "filter-transactions": "Filter transactions",
     "hello-day": "Good morning,",
     "hello-night": "Good night,",
@@ -1396,6 +1408,14 @@
       },
       "success": "Import performed successfully",
       "error": "Error importing file. Please contact developer via lozin.technologies@gmail.com"
+    },
+    "DELETE": {
+      "title": "Delete data",
+      "action": "Delete all my data",
+      "descr": "Removes your accounts, transactions, budgets, goals and debts. Useful to leave the sample data. Categories and settings are kept.",
+      "confirmTitle": "Delete all your data?",
+      "confirmDescr": "All your accounts, transactions, budgets, goals and debts will be permanently deleted. Consider exporting a backup first. This action cannot be undone.",
+      "success": "Your data has been deleted"
     },
     "ABOUT": {
       "title": "Information about your database",

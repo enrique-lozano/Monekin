@@ -457,9 +457,10 @@ List<GoalInDB> _goalsToCreate() => [
   ),
 ];
 
-/// Deletes everything [fillWithDemoData] creates, so it can run again (e.g. in
-/// another currency). Categories, currencies and settings are kept.
-Future<void> clearDemoData() async {
+/// Deletes all the user data (accounts, transactions, budgets, goals, debts...),
+/// including everything [fillWithDemoData] creates. Categories, currencies and
+/// settings are kept.
+Future<void> deleteAllUserData() async {
   final db = AppDB.instance;
   await db.transaction(() async {
     for (final TableInfo table in [
@@ -474,6 +475,7 @@ Future<void> clearDemoData() async {
       db.goals,
       db.transactionFilterSets,
       db.exchangeRates,
+      db.debts,
       db.tags,
       db.accounts,
     ]) {

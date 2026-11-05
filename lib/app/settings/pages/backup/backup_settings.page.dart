@@ -8,9 +8,11 @@ import 'package:monekin/app/settings/pages/backup/export_page.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
@@ -26,6 +28,35 @@ class BackupSettingsPage extends StatefulWidget {
 }
 
 class _BackupSettingsPageState extends State<BackupSettingsPage> {
+  Future<void> _deleteAllData(BuildContext context) async {
+    final confirmed = await confirmDialog(
+      context,
+      icon: Icons.delete_forever_rounded,
+      dialogTitle: t.backup.delete.confirm_title,
+      contentParagraphs: [Text(t.backup.delete.confirm_descr)],
+      showCancelButton: true,
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final loadingOverlay = LoadingOverlay.of(context);
+    loadingOverlay.show();
+
+    try {
+      await deleteAllUserData();
+      loadingOverlay.hide();
+
+      RouteUtils.popAllRoutesExceptFirst();
+      tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
+
+      MonekinSnackbar.success(SnackbarParams(t.backup.delete.success));
+    } catch (e) {
+      loadingOverlay.hide();
+
+      MonekinSnackbar.error(SnackbarParams.fromError(e));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -129,6 +160,13 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 onTap: () {
                   RouteUtils.pushRoute(const ExportDataPage());
                 },
+              ),
+              createListSeparator(context, t.backup.delete.title),
+              ListTile(
+                title: Text(t.backup.delete.action),
+                subtitle: Text(t.backup.delete.descr),
+                minVerticalPadding: 16,
+                onTap: () => _deleteAllData(context),
               ),
               createListSeparator(context, t.backup.about.title),
               ListTile(
