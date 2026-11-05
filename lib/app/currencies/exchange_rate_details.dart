@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:material_ui/material_ui.dart';
 import 'package:intl/intl.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/currencies/exchange_rate_form.dart';
 import 'package:monekin/app/currencies/widgets/currency_edit_fields.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -157,6 +157,10 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
     });
   }
 
+  void _sortCurrentRatesNewestFirst() {
+    _currentRates?.sort((a, b) => b.date.compareTo(a.date));
+  }
+
   void getExchangeRates() {
     ExchangeRateService.instance
         .getExchangeRatesOf(widget.currency.code)
@@ -165,6 +169,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
           setState(() {
             _originalRates = value;
             _currentRates = List.from(value);
+            _sortCurrentRatesNewestFirst();
             _deletedRateIds.clear();
           });
         });
@@ -400,6 +405,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
       } else {
         _currentRates?.add(newRate);
       }
+      _sortCurrentRatesNewestFirst();
     });
   }
 
@@ -414,6 +420,7 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
         final index = _currentRates!.indexWhere((r) => r.id == item.id);
         if (index != -1) {
           _currentRates![index] = updatedRate;
+          _sortCurrentRatesNewestFirst();
         }
       });
     }
@@ -1038,9 +1045,8 @@ class _ExchangeRateDetailsPageState extends State<ExchangeRateDetailsPage> {
           for (final e in visible) _buildUsedInTile(e),
           Divider(
             height: 1,
-            color: Theme.of(
-              context,
-            ).colorScheme.outlineVariant.withValues(alpha: 0.4),
+            color: Theme.of(context).colorScheme.outlineVariant
+                .withValues(alpha: 0.4),
           ),
           _buildTotalRow(total),
         ],
