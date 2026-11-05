@@ -17,11 +17,16 @@ enum AccountType {
 
   /// An investment account (broker, crypto exchange, portfolio) that holds cash
   /// plus financial holdings (securities).
-  investment;
+  investment,
+
+  /// A credit card. Its balance is the debt with the bank (usually negative),
+  /// and it has a monthly billing cycle (cut-off day and payment due day).
+  credit;
 
   IconData get icon => switch (this) {
     AccountType.money => Icons.wallet,
     AccountType.investment => Icons.trending_up_rounded,
+    AccountType.credit => Icons.credit_card_rounded,
   };
 
   String title(BuildContext context) {
@@ -30,6 +35,7 @@ enum AccountType {
     return switch (this) {
       AccountType.money => t.account.types.money,
       AccountType.investment => t.account.types.investment,
+      AccountType.credit => t.account.types.credit,
     };
   }
 
@@ -39,6 +45,7 @@ enum AccountType {
     return switch (this) {
       AccountType.money => t.account.types.money_descr,
       AccountType.investment => t.account.types.investment_descr,
+      AccountType.credit => t.account.types.credit_descr,
     };
   }
 }
@@ -100,6 +107,10 @@ class Account extends AccountInDB {
     super.iban,
     super.swift,
     super.color,
+    super.cutoffDay,
+    super.dueDay,
+    super.creditLimit,
+    super.minPaymentPct,
   }) : super(currencyId: currency.code);
 
   /// Currency of all the transactions of this account. When you change this currency all transactions in this account
@@ -109,6 +120,8 @@ class Account extends AccountInDB {
   SupportedIcon get icon => SupportedIconService.instance.getIconByID(iconId);
 
   bool get isClosed => closingDate != null;
+
+  bool get isCredit => type == AccountType.credit;
 
   Color getComputedColor(BuildContext context) {
     return color != null
@@ -163,5 +176,9 @@ class Account extends AccountInDB {
     isSaving: account.isSaving,
     trackingMode: account.trackingMode,
     color: account.color,
+    cutoffDay: account.cutoffDay,
+    dueDay: account.dueDay,
+    creditLimit: account.creditLimit,
+    minPaymentPct: account.minPaymentPct,
   );
 }

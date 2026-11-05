@@ -677,7 +677,52 @@
       "saving.descr": "Money only comes in or out via transfers from other accounts. Perfect to start saving.",
       "investment": "Investment account",
       "investment.descr": "A broker, crypto exchange, or portfolio account that holds cash plus financial holdings (stocks, funds, crypto...).",
+      "credit": "Credit card",
+      "credit.descr": "A credit card with a monthly billing cycle. Its balance is what you owe, and it shows the statement to pay, the payment due date and your available credit.",
       "locked_warn": "This account can no longer change its type, since it already has holdings, trades or snapshots."
+    },
+    "CREDIT": {
+      "statement_paid": "Statement paid",
+      "nothing_to_pay": "Nothing to pay on this statement",
+      "due_today": "Due today",
+      "due_overdue": "Overdue since {{date}}",
+      "cutoff_in": {
+        "one": "Statement closes tomorrow, {{date}}",
+        "other": "Statement closes in {{n}} days, {{date}}"
+      },
+      "cutoff_today": "Statement closes today",
+      "available": "Available credit",
+      "limit": "Credit limit",
+      "min_payment_hint": "Estimate. Your bank may compute it differently",
+      "statement_balance": "Statement balance ({{date}})",
+      "total_debt": "Total debt",
+      "statement_of": "Statement of {{date}}",
+      "cutoff_day": "Cut-off day",
+      "paid": "paid",
+      "overdue": "Overdue",
+      "due_short": {
+        "one": "Due tomorrow",
+        "other": "Due in {{n}} days"
+      },
+      "in_use": "{{x}} in use",
+      "used": "used",
+      "min_payment_short": "min. payment",
+      "statement_short": "statement",
+      "next_statement_short": "next statement",
+      "next_statement_help": "Charges of the current period, billed in the next statement and payable by {{date}}",
+      "total_debt_short": "total debt",
+      "total_debt_help": "Everything owed on the card, billed or not",
+      "payments": "Payments",
+      "charges": "Charges",
+      "due_day": "Payment due day",
+      "FORM": {
+        "day_descr": "Day of the month (1-31)",
+        "day_validation": "Enter a day between 1 and 31",
+        "min_payment_pct": "Minimum payment",
+        "min_payment_pct_descr": "Share of the statement your bank asks as minimum payment. Optional",
+        "pct_validation": "Enter a percentage between 0 and 100",
+        "initial_debt": "Current debt"
+      }
     },
     "TRACKING_MODES": {
       "title": "Tracking mode",
