@@ -8,6 +8,7 @@ enum AppDataKey {
   introSeen,
   lastExportDate,
   lastDashboardDatePeriod,
+  firstTransactionGuideDismissed,
 }
 
 final Map<AppDataKey, String?> appStateData = {};
