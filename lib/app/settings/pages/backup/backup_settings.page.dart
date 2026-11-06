@@ -1,13 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
-import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -32,26 +35,37 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
     final confirmed = await confirmDialog(
       context,
       icon: Icons.delete_forever_rounded,
-      dialogTitle: t.more.data.delete_all.confirm_title,
-      contentParagraphs: [Text(t.more.data.delete_all.confirm_descr)],
+      dialogTitle: t.backup.delete.confirm_title,
+      contentParagraphs: [Text(t.backup.delete.confirm_descr)],
       showCancelButton: true,
+      confirmationText: t.ui_actions.continue_text,
     );
 
     if (confirmed != true || !context.mounted) return;
+
+    final reallySure = await confirmDialog(
+      context,
+      icon: Icons.warning_rounded,
+      dialogTitle: t.backup.delete.final_confirm_title,
+      contentParagraphs: [Text(t.backup.delete.final_confirm_descr)],
+      showCancelButton: true,
+      confirmationText: t.backup.delete.final_confirm_action,
+    );
+
+    if (reallySure != true || !context.mounted) return;
 
     final loadingOverlay = LoadingOverlay.of(context);
     loadingOverlay.show();
 
     try {
       await deleteAllUserData();
+      await AppDataService.instance.resetAppData();
       loadingOverlay.hide();
 
       RouteUtils.popAllRoutesExceptFirst();
-      tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
+      unawaited(RouteUtils.pushRoute(const IntroPage(), withReplacement: true));
 
-      MonekinSnackbar.success(
-        SnackbarParams(t.more.data.delete_all.success),
-      );
+      MonekinSnackbar.success(SnackbarParams(t.backup.delete.success));
     } catch (e) {
       loadingOverlay.hide();
 
@@ -151,7 +165,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 subtitle: Text(t.backup.import.manual_import.descr),
                 minVerticalPadding: 16,
                 onTap: () {
-                  RouteUtils.pushRoute(const ImportCSVPage());
+                  RouteUtils.showResponsiveForm(const ImportCSVPage());
                 },
               ),
               createListSeparator(context, t.backup.export.title_short),
@@ -160,13 +174,13 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 subtitle: Text(t.backup.export.description),
                 minVerticalPadding: 16,
                 onTap: () {
-                  RouteUtils.pushRoute(const ExportDataPage());
+                  RouteUtils.showResponsiveForm(const ExportDataPage());
                 },
               ),
-              createListSeparator(context, t.more.data.delete_all.title),
+              createListSeparator(context, t.backup.delete.title),
               ListTile(
-                title: Text(t.more.data.delete_all.action),
-                subtitle: Text(t.more.data.delete_all.descr),
+                title: Text(t.backup.delete.action),
+                subtitle: Text(t.backup.delete.descr),
                 minVerticalPadding: 16,
                 onTap: () => _deleteAllData(context),
               ),

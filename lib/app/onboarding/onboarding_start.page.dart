@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_svg/svg.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
-import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
