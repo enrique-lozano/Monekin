@@ -1,13 +1,16 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -35,19 +38,34 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
       dialogTitle: t.backup.delete.confirm_title,
       contentParagraphs: [Text(t.backup.delete.confirm_descr)],
       showCancelButton: true,
+      confirmationText: t.ui_actions.continue_text,
     );
 
     if (confirmed != true || !context.mounted) return;
+
+    final reallySure = await confirmDialog(
+      context,
+      icon: Icons.warning_rounded,
+      dialogTitle: t.backup.delete.final_confirm_title,
+      contentParagraphs: [Text(t.backup.delete.final_confirm_descr)],
+      showCancelButton: true,
+      confirmationText: t.backup.delete.final_confirm_action,
+    );
+
+    if (reallySure != true || !context.mounted) return;
 
     final loadingOverlay = LoadingOverlay.of(context);
     loadingOverlay.show();
 
     try {
       await deleteAllUserData();
+      await AppDataService.instance.resetAppData();
       loadingOverlay.hide();
 
       RouteUtils.popAllRoutesExceptFirst();
-      tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
+      unawaited(
+        RouteUtils.pushRoute(const IntroPage(), withReplacement: true),
+      );
 
       MonekinSnackbar.success(SnackbarParams(t.backup.delete.success));
     } catch (e) {
