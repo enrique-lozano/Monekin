@@ -530,6 +530,7 @@
       "exchange-to-preferred-in-date": "El día de la transacción",
       "extra-info-section": "Información adicional",
       "negative-balance-warning": "Este importe es superior al saldo actual de la cuenta seleccionada. Al guardar, el saldo quedará negativo y las estadísticas pueden verse afectadas.",
+      "credit-limit-warning": "Este importe supera el crédito disponible de la tarjeta. Al guardar, la tarjeta quedará por encima de su límite.",
       "INSTALLMENTS": {
         "title": "Meses sin intereses",
         "months": "meses",
