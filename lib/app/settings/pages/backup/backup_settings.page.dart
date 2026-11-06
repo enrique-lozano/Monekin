@@ -11,6 +11,7 @@ import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dar
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -59,6 +60,7 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
 
     try {
       await deleteAllUserData();
+      DefaultTransactionValuesService.lastCreatedTransaction.value = null;
       await AppDataService.instance.resetAppData();
       loadingOverlay.hide();
 

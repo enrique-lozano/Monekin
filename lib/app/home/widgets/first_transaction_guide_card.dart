@@ -64,8 +64,9 @@ class _FirstTransactionGuideCardState extends State<FirstTransactionGuideCard> {
                   style: TextStyle(color: colors.onPrimaryContainer),
                 ),
                 const SizedBox(height: 12),
-                Row(
+                Wrap(
                   spacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     FilledButton.icon(
                       onPressed: () => onNewTransactionButtonPressed(context),

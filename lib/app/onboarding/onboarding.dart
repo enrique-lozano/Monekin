@@ -29,7 +29,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
   PageController pageController = PageController();
 
   void introFinished() {
-    RouteUtils.pushRoute(const OnboardingStartPage());
+    RouteUtils.pushRoute(
+      const OnboardingStartPage(),
+      withReplacement: true,
+    );
   }
 
   void _goToNextPage() {
