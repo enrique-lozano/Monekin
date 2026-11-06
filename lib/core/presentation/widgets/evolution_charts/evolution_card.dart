@@ -9,6 +9,7 @@ import 'package:monekin/core/presentation/styles/borders.dart';
 import 'package:monekin/core/presentation/widgets/dates/date_range_chips.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/presentation/widgets/trending_value.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -37,6 +38,7 @@ class EvolutionCard extends StatelessWidget {
     this.showDateSelector = true,
     this.loading = false,
     this.contentInset = 16,
+    this.onValueLabelTap,
   });
 
   final String valueLabel;
@@ -64,6 +66,10 @@ class EvolutionCard extends StatelessWidget {
 
   /// Horizontal inset for the header and chips when the card is not decorated.
   final double contentInset;
+
+  /// When set, the [valueLabel] becomes tappable and shows a swap icon (e.g.
+  /// to switch what the value adds up).
+  final VoidCallback? onValueLabelTap;
 
   DateRangeChips _chips({bool shrink = false}) {
     return DateRangeChips(
@@ -98,6 +104,37 @@ class EvolutionCard extends StatelessWidget {
     return (
       change: change,
       percentage: initialValue == 0 ? 0.0 : change / initialValue!.abs(),
+    );
+  }
+
+  Widget _buildValueLabel(ThemeData theme, Color hint) {
+    final label = Text(
+      valueLabel.toUpperCase(),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: theme.textTheme.labelMedium!.copyWith(
+        color: hint,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.8,
+      ),
+    );
+
+    if (onValueLabelTap == null) return label;
+
+    return Tappable(
+      onTap: onValueLabelTap,
+      borderRadius: BorderRadius.circular(6),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 4,
+          children: [
+            Flexible(child: label),
+            Icon(Icons.swap_horiz_rounded, size: 16, color: hint),
+          ],
+        ),
+      ),
     );
   }
 
@@ -190,16 +227,7 @@ class EvolutionCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          valueLabel.toUpperCase(),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: theme.textTheme.labelMedium!.copyWith(
-            color: hint,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0.8,
-          ),
-        ),
+        _buildValueLabel(theme, hint),
         const SizedBox(height: 4),
         Skeletonizer(
           enabled: loading,
