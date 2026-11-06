@@ -32,8 +32,8 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
     final confirmed = await confirmDialog(
       context,
       icon: Icons.delete_forever_rounded,
-      dialogTitle: t.backup.delete.confirm_title,
-      contentParagraphs: [Text(t.backup.delete.confirm_descr)],
+      dialogTitle: t.more.data.delete_all.confirm_title,
+      contentParagraphs: [Text(t.more.data.delete_all.confirm_descr)],
       showCancelButton: true,
     );
 
@@ -49,7 +49,9 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
       RouteUtils.popAllRoutesExceptFirst();
       tabsPageKey.currentState!.changePage(AppMenuDestinationsID.dashboard);
 
-      MonekinSnackbar.success(SnackbarParams(t.backup.delete.success));
+      MonekinSnackbar.success(
+        SnackbarParams(t.more.data.delete_all.success),
+      );
     } catch (e) {
       loadingOverlay.hide();
 
@@ -161,10 +163,10 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                   RouteUtils.pushRoute(const ExportDataPage());
                 },
               ),
-              createListSeparator(context, t.backup.delete.title),
+              createListSeparator(context, t.more.data.delete_all.title),
               ListTile(
-                title: Text(t.backup.delete.action),
-                subtitle: Text(t.backup.delete.descr),
+                title: Text(t.more.data.delete_all.action),
+                subtitle: Text(t.more.data.delete_all.descr),
                 minVerticalPadding: 16,
                 onTap: () => _deleteAllData(context),
               ),

@@ -193,10 +193,26 @@
     "sl2Descr2": "Además, el código fuente de la aplicación es público, cualquiera puede colaborar en el y ver como funciona",
     "lastSlideTitle": "Todo listo!",
     "lastSlideDescr": "Con Monekin, podrás al fin lograr la independencia financiaria que tanto deseas. Podrás ver gráficas, presupuestos, consejos, estadisticas y mucho más sobre tu dinero.",
-    "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias..."
+    "lastSlideDescr2": "Esperemos que disfrutes de tu experiencia! No dudes en contactar con nosotros en caso de dudas, sugerencias...",
+    "START-OPTIONS": {
+      "title": "¿Cómo quieres empezar?",
+      "descr": "Elige la forma más rápida de ver Monekin con datos reales. Puedes cambiarlo todo más adelante.",
+      "import": "Importar tus datos",
+      "import-descr": "Desde un archivo CSV u otra aplicación",
+      "sample": "Explorar con datos de ejemplo",
+      "sample-descr": "Cuentas y transacciones ficticias. Puedes eliminarlas cuando quieras desde los ajustes.",
+      "scratch": "Empezar desde cero",
+      "scratch-descr": "Añade tu primera transacción"
+    }
   },
   "HOME": {
     "title": "Inicio",
+    "FIRST-TRANSACTION": {
+      "title": "Añadamos tu primera transacción",
+      "descr": "Empieza con algo sencillo, como tu última compra. Puedes editarla más tarde.",
+      "action": "Añadir transacción",
+      "dismiss": "Ahora no"
+    },
     "filter-transactions": "Filtrar transacciones",
     "hello-day": "Buenos días,",
     "hello-night": "Buenas noches,",
@@ -1501,11 +1517,16 @@
     "DATA": {
       "display": "Datos",
       "display.descr": "Exporta y importa tus datos para no perder nada",
-      "delete-all": "Eliminar mis datos",
-      "delete-all-header1": "Alto ahí padawan ⚠️⚠️",
-      "delete-all-message1": "¿Estas seguro de que quieres continuar? Todos tus datos serán borrados permanentemente y no podrán ser recuperados",
-      "delete-all-header2": "Un último paso ⚠️⚠️",
-      "delete-all-message2": "Al eliminar una cuenta eliminarás todos tus datos personales almacenados. Tus cuentas, transacciones, presupuestos y categorías serán borrados y no podrán ser recuperados. ¿Estas de acuerdo?"
+      "DELETE-ALL": {
+        "title": "Eliminar datos",
+        "action": "Eliminar mis datos",
+        "descr": "Elimina tus cuentas, transacciones, presupuestos, objetivos y deudas. Es útil para borrar los datos de ejemplo. Las categorías y los ajustes se conservan.",
+        "confirm-title": "Alto ahí, padawan ⚠️⚠️",
+        "confirm-descr": "¿Seguro que quieres continuar? Todos tus datos se eliminarán de forma permanente y no se podrán recuperar.",
+        "final-confirm-title": "Un último paso ⚠️⚠️",
+        "final-confirm-descr": "Se eliminarán permanentemente tus cuentas, transacciones, presupuestos, objetivos, deudas y categorías, y no se podrán recuperar. ¿Estás de acuerdo?",
+        "success": "Tus datos se han eliminado"
+      }
     },
     "ABOUT_US": {
       "display": "Información de la app",

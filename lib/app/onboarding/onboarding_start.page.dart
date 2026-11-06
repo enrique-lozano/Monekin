@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_svg/svg.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
-import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/import_csv.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -92,29 +92,29 @@ class OnboardingStartPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    t.intro.start_title,
+                    t.intro.start_options.title,
                     style: Theme.of(context).textTheme.titleLarge!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 6),
-                  Text(t.intro.start_descr),
+                  Text(t.intro.start_options.descr),
                   const SizedBox(height: 16),
                   _StartOptionTile(
                     icon: Icons.file_upload_outlined,
-                    title: t.intro.start_import,
-                    subtitle: t.intro.start_import_descr,
+                    title: t.intro.start_options.import,
+                    subtitle: t.intro.start_options.import_descr,
                     onTap: _importData,
                   ),
                   _StartOptionTile(
                     icon: Icons.auto_awesome_rounded,
-                    title: t.intro.start_sample,
-                    subtitle: t.intro.start_sample_descr,
+                    title: t.intro.start_options.sample,
+                    subtitle: t.intro.start_options.sample_descr,
                     onTap: () => _loadSampleData(context),
                   ),
                   _StartOptionTile(
                     icon: Icons.add_rounded,
-                    title: t.intro.start_scratch,
-                    subtitle: t.intro.start_scratch_descr,
+                    title: t.intro.start_options.scratch,
+                    subtitle: t.intro.start_options.scratch_descr,
                     onTap: _goToDashboard,
                   ),
                 ],

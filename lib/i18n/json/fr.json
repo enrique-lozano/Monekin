@@ -190,10 +190,26 @@
     "sl2Descr2": "De plus, le code source de l'application est public ; tout le monde peut y collaborer et voir comment elle fonctionne.",
     "lastSlideTitle": "Tout est prêt",
     "lastSlideDescr": "Avec Monekin, vous pouvez enfin atteindre l'indépendance financière que vous désirez tant. Vous disposerez de graphiques, budgets, conseils, statistiques et bien plus encore sur votre argent.",
-    "lastSlideDescr2": "Nous espérons que vous apprécierez votre expérience ! N'hésitez pas à nous contacter en cas de doutes, de suggestions..."
+    "lastSlideDescr2": "Nous espérons que vous apprécierez votre expérience ! N'hésitez pas à nous contacter en cas de doutes, de suggestions...",
+    "START-OPTIONS": {
+      "title": "Comment souhaitez-vous commencer ?",
+      "descr": "Choisissez le moyen le plus rapide de découvrir Monekin avec des chiffres réels. Vous pourrez tout modifier plus tard.",
+      "import": "Importer vos données",
+      "import-descr": "Depuis un fichier CSV ou une autre application",
+      "sample": "Découvrir avec des données d'exemple",
+      "sample-descr": "Des comptes et transactions fictifs, supprimables à tout moment dans les paramètres.",
+      "scratch": "Commencer de zéro",
+      "scratch-descr": "Ajoutez votre première transaction"
+    }
   },
   "HOME": {
     "title": "Tableau de bord",
+    "FIRST-TRANSACTION": {
+      "title": "Ajoutons votre première transaction",
+      "descr": "Commencez par quelque chose de simple, comme votre dernier achat. Vous pourrez le modifier plus tard.",
+      "action": "Ajouter une transaction",
+      "dismiss": "Plus tard"
+    },
     "filter-transactions": "Filtrer les transactions",
     "hello-day": "Bonjour,",
     "hello-night": "Bonsoir,",
@@ -1485,11 +1501,16 @@
     "DATA": {
       "display": "Données",
       "display.descr": "Exportez et importez vos données pour ne rien perdre",
-      "delete-all": "Supprimer mes données",
-      "delete-all-header1": "Stop là padawan ⚠️⚠️",
-      "delete-all-message1": "Êtes-vous sûr de vouloir continuer ? Toutes vos données seront définitivement supprimées et ne pourront pas être récupérées",
-      "delete-all-header2": "Une dernière étape ⚠️⚠️",
-      "delete-all-message2": "En supprimant un compte vous supprimerez toutes vos données personnelles enregistrées. Vos comptes, transactions, budgets et catégories seront supprimés et ne pourront pas être récupérés. Êtes-vous d'accord ?"
+      "DELETE-ALL": {
+        "title": "Supprimer les données",
+        "action": "Supprimer mes données",
+        "descr": "Supprime vos comptes, transactions, budgets, objectifs et dettes. Pratique pour supprimer les données d'exemple. Les catégories et les paramètres sont conservés.",
+        "confirm-title": "Halte là, padawan ⚠️⚠️",
+        "confirm-descr": "Voulez-vous vraiment continuer ? Toutes vos données seront définitivement supprimées et ne pourront pas être récupérées.",
+        "final-confirm-title": "Une dernière étape ⚠️⚠️",
+        "final-confirm-descr": "Vos comptes, transactions, budgets, objectifs, dettes et catégories seront définitivement supprimés et ne pourront pas être récupérés. Êtes-vous d'accord ?",
+        "success": "Vos données ont été supprimées"
+      }
     },
     "ABOUT_US": {
       "display": "Informations sur l'application",

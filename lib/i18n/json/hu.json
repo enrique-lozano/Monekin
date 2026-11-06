@@ -190,9 +190,25 @@
     "sl2Descr2": "Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.",
     "lastSlideTitle": "Minden kész",
     "lastSlideDescr": "A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.",
-    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak..."
+    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...",
+    "START-OPTIONS": {
+      "title": "Hogyan szeretnéd kezdeni?",
+      "descr": "Válaszd a leggyorsabb módot, hogy valódi számokkal ismerd meg a Monekin működését. Később mindent megváltoztathatsz.",
+      "import": "Adatok importálása",
+      "import-descr": "CSV-fájlból vagy egy másik alkalmazásból",
+      "sample": "Felfedezés mintaadatokkal",
+      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban.",
+      "scratch": "Kezdés az alapoktól",
+      "scratch-descr": "Add hozzá az első tranzakciódat"
+    }
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "Adjuk hozzá az első tranzakciódat",
+      "descr": "Kezdd valami egyszerűvel, például a legutóbbi vásárlásoddal. Később szerkesztheted.",
+      "action": "Tranzakció hozzáadása",
+      "dismiss": "Most nem"
+    },
     "title": "Kezdőlap",
     "filter-transactions": "Tranzakciók szűrése",
     "hello-day": "Jó reggelt,",
@@ -1480,11 +1496,16 @@
     "DATA": {
       "display": "Adatok",
       "display.descr": "Exportálja és importálja az adatait, hogy ne veszítsen el semmit se",
-      "delete-all": "Adataim törlése",
-      "delete-all-header1": "Álljon meg ⚠️⚠️",
-      "delete-all-message1": "Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza",
-      "delete-all-header2": "Még egy utolsó lépés ⚠️⚠️",
-      "delete-all-message2": "A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?"
+      "DELETE-ALL": {
+        "title": "Adatok törlése",
+        "action": "Adataim törlése",
+        "descr": "Eltávolítja a számláidat, tranzakcióidat, költségvetéseidet, céljaidat és tartozásaidat. Hasznos a mintaadatok törléséhez. A kategóriák és beállítások megmaradnak.",
+        "confirm-title": "Állj meg, padavan ⚠️⚠️",
+        "confirm-descr": "Biztosan folytatni szeretnéd? Minden adatod véglegesen törlődik, és nem állítható vissza.",
+        "final-confirm-title": "Még egy utolsó lépés ⚠️⚠️",
+        "final-confirm-descr": "A számláid, tranzakcióid, költségvetéseid, céljaid, tartozásaid és kategóriáid véglegesen törlődnek, és nem állíthatók vissza. Egyetértesz?",
+        "success": "Az adataid törölve"
+      }
     },
     "ABOUT_US": {
       "display": "Alkalmazásinformációk",

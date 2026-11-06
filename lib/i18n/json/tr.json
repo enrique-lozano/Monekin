@@ -190,9 +190,25 @@
     "sl2Descr2": "Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir",
     "lastSlideTitle": "Her şey hazır",
     "lastSlideDescr": "Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.",
-    "lastSlideDescr2": "Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin..."
+    "lastSlideDescr2": "Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin...",
+    "START-OPTIONS": {
+      "title": "Nasıl başlamak istersiniz?",
+      "descr": "Monekin'i gerçek verilerle görmenin en hızlı yolunu seçin. Her şeyi daha sonra değiştirebilirsiniz.",
+      "import": "Verilerinizi içe aktarın",
+      "import-descr": "Bir CSV dosyasından veya başka bir uygulamadan",
+      "sample": "Örnek verilerle keşfedin",
+      "sample-descr": "Sahte hesaplar ve işlemler. Bunları istediğiniz zaman ayarlardan silebilirsiniz.",
+      "scratch": "Sıfırdan başlayın",
+      "scratch-descr": "İlk işleminizi ekleyin"
+    }
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "İlk işleminizi ekleyelim",
+      "descr": "Son alışverişiniz gibi basit bir şeyle başlayın. Daha sonra düzenleyebilirsiniz.",
+      "action": "İşlem ekle",
+      "dismiss": "Şimdi değil"
+    },
     "title": "Gösterge Paneli",
     "filter-transactions": "İşlemleri filtrele",
     "hello-day": "Günaydın,",
@@ -1480,11 +1496,16 @@
     "DATA": {
       "display": "Veri",
       "display.descr": "Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın",
-      "delete-all": "Verilerimi sil",
-      "delete-all-header1": "Orada dur padawan ⚠️⚠️",
-      "delete-all-message1": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır",
-      "delete-all-header2": "Son bir adım ⚠️⚠️",
-      "delete-all-message2": "Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?"
+      "DELETE-ALL": {
+        "title": "Verileri sil",
+        "action": "Verilerimi sil",
+        "descr": "Hesaplarınızı, işlemlerinizi, bütçelerinizi, hedeflerinizi ve borçlarınızı kaldırır. Örnek verileri silmek için kullanışlıdır. Kategoriler ve ayarlar korunur.",
+        "confirm-title": "Dur bakalım padawan ⚠️⚠️",
+        "confirm-descr": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır.",
+        "final-confirm-title": "Son bir adım ⚠️⚠️",
+        "final-confirm-descr": "Hesaplarınız, işlemleriniz, bütçeleriniz, hedefleriniz, borçlarınız ve kategorileriniz kalıcı olarak silinecek ve kurtarılamayacaktır. Onaylıyor musunuz?",
+        "success": "Verileriniz silindi"
+      }
     },
     "ABOUT_US": {
       "display": "Uygulama bilgileri",

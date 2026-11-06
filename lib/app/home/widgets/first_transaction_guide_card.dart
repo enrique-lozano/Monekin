@@ -52,7 +52,7 @@ class _FirstTransactionGuideCardState extends State<FirstTransactionGuideCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  t.home.first_transaction_title,
+                  t.home.first_transaction.title,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colors.onPrimaryContainer,
@@ -60,7 +60,7 @@ class _FirstTransactionGuideCardState extends State<FirstTransactionGuideCard> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  t.home.first_transaction_descr,
+                  t.home.first_transaction.descr,
                   style: TextStyle(color: colors.onPrimaryContainer),
                 ),
                 const SizedBox(height: 12),
@@ -70,11 +70,11 @@ class _FirstTransactionGuideCardState extends State<FirstTransactionGuideCard> {
                     FilledButton.icon(
                       onPressed: () => onNewTransactionButtonPressed(context),
                       icon: const Icon(Icons.add_rounded),
-                      label: Text(t.home.first_transaction_action),
+                      label: Text(t.home.first_transaction.action),
                     ),
                     TextButton(
                       onPressed: _dismiss,
-                      child: Text(t.home.first_transaction_dismiss),
+                      child: Text(t.home.first_transaction.dismiss),
                     ),
                   ],
                 ),

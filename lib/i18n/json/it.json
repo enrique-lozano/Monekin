@@ -190,9 +190,25 @@
     "sl2Descr2": "Inoltre, il codice sorgente dell'applicazione è pubblico, chiunque può collaborare e vedere come funziona",
     "lastSlideTitle": "Tutto pronto",
     "lastSlideDescr": "Con Monekin, puoi finalmente raggiungere l'indipendenza finanziaria che tanto desideri. Avrai grafici, budget, consigli, statistiche e molto altro sul tuo denaro.",
-    "lastSlideDescr2": "Speriamo che la tua esperienza ti piaccia! Non esitare a contattarci in caso di dubbi, suggerimenti..."
+    "lastSlideDescr2": "Speriamo che la tua esperienza ti piaccia! Non esitare a contattarci in caso di dubbi, suggerimenti...",
+    "START-OPTIONS": {
+      "title": "Come vuoi iniziare?",
+      "descr": "Scegli il modo più rapido per scoprire Monekin con dati reali. Potrai cambiare tutto in seguito.",
+      "import": "Importa i tuoi dati",
+      "import-descr": "Da un file CSV o da un'altra app",
+      "sample": "Esplora con dati di esempio",
+      "sample-descr": "Account e transazioni fittizi, eliminabili in qualsiasi momento dalle impostazioni.",
+      "scratch": "Inizia da zero",
+      "scratch-descr": "Aggiungi la tua prima transazione"
+    }
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "Aggiungiamo la tua prima transazione",
+      "descr": "Inizia con qualcosa di semplice, come il tuo ultimo acquisto. Potrai modificarlo in seguito.",
+      "action": "Aggiungi transazione",
+      "dismiss": "Non ora"
+    },
     "title": "Dashboard",
     "filter-transactions": "Filtra transazioni",
     "hello-day": "Buongiorno,",
@@ -1487,11 +1503,16 @@
     "DATA": {
       "display": "Dati",
       "display.descr": "Esporta e importa i tuoi dati per non perdere nulla",
-      "delete-all": "Elimina i miei dati",
-      "delete-all-header1": "Fermati subito padawan ⚠️⚠️",
-      "delete-all-message1": "Sei sicuro di voler continuare? Tutti i tuoi dati verranno eliminati in modo permanente e non potranno essere recuperati",
-      "delete-all-header2": "Un ultimo passo ⚠️⚠️",
-      "delete-all-message2": "Eliminando un account eliminerai tutti i tuoi dati personali memorizzati. I tuoi conti, transazioni, budget e categorie verranno eliminati e non potranno essere recuperati. Sei d'accordo?"
+      "DELETE-ALL": {
+        "title": "Elimina i dati",
+        "action": "Elimina i miei dati",
+        "descr": "Rimuove account, transazioni, budget, obiettivi e debiti. Utile per eliminare i dati di esempio. Categorie e impostazioni vengono mantenute.",
+        "confirm-title": "Fermo lì, padawan ⚠️⚠️",
+        "confirm-descr": "Vuoi davvero continuare? Tutti i tuoi dati verranno eliminati definitivamente e non potranno essere recuperati.",
+        "final-confirm-title": "Un ultimo passo ⚠️⚠️",
+        "final-confirm-descr": "Account, transazioni, budget, obiettivi, debiti e categorie verranno eliminati definitivamente e non potranno essere recuperati. Sei d'accordo?",
+        "success": "I tuoi dati sono stati eliminati"
+      }
     },
     "ABOUT_US": {
       "display": "Informazioni sull'app",
