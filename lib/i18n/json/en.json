@@ -542,7 +542,8 @@
       "exchange-to-preferred-title": "Exchnage rate to {{ currency }}",
       "exchange-to-preferred-in-date": "On transaction date",
       "extra-info-section": "Extra info",
-      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics."
+      "negative-balance-warning": "This amount is higher than the current balance of the selected account. Saving will produce a negative balance and may skew statistics.",
+      "credit-limit-warning": "This amount exceeds the available credit of the card. Saving will put the card over its limit."
     },
     "REVERSED": {
       "title": "Inverse transaction",
