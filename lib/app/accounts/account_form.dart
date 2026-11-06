@@ -282,10 +282,12 @@ class _AccountFormPageState extends State<AccountFormPage> {
 
     _cutoffDayController.text = _accountToEdit.cutoffDay?.toString() ?? '';
     _dueDayController.text = _accountToEdit.dueDay?.toString() ?? '';
-    _creditLimitController.text = _accountToEdit.creditLimit?.toString() ?? '';
+    _creditLimitController.text = _accountToEdit.creditLimit == null
+        ? ''
+        : _plainNumber(_accountToEdit.creditLimit!);
     _minPaymentPctController.text = _accountToEdit.minPaymentPct == null
         ? ''
-        : (_accountToEdit.minPaymentPct! * 100).toString();
+        : _plainNumber(_accountToEdit.minPaymentPct! * 100);
 
     accountService.getAccountMoney(account: _accountToEdit).first.then((value) {
       setState(() {
@@ -906,4 +908,12 @@ class _AccountFormPageState extends State<AccountFormPage> {
       ),
     );
   }
+}
+
+/// [value] as typed in a field: no trailing `.0` nor float noise (`5`, not `5.0`).
+String _plainNumber(double value) {
+  final rounded = double.parse(value.toStringAsFixed(4));
+  return rounded == rounded.roundToDouble()
+      ? rounded.toInt().toString()
+      : rounded.toString();
 }
