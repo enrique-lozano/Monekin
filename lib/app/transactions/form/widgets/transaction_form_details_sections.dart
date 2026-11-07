@@ -3,6 +3,7 @@ import 'package:monekin/app/transactions/form/state/transaction_form_controller.
 import 'package:monekin/app/transactions/form/widgets/debt_link_banner.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_date_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_form_fields.dart';
+import 'package:monekin/app/transactions/form/widgets/transaction_installments_selector.dart';
 import 'package:monekin/app/transactions/form/widgets/transaction_selectors.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
@@ -36,7 +37,10 @@ class TransactionFormDetailsSections extends StatelessWidget {
       ),
 
       const TransactionDateSelector(),
-      const TransactionRecurrencySelector(),
+      if (c.canPayInInstallments) const TransactionInstallmentsSelector(),
+      // A purchase in installments already repeats on each statement.
+      if (!c.canPayInInstallments || c.installments == null)
+        const TransactionRecurrencySelector(),
       const TransactionStatusSelector(),
     ];
 
