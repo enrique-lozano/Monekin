@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:monekin/app/transactions/form/state/transaction_form_controller.dart';
+import 'package:monekin/core/models/account/installment_purchase.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:provider/provider.dart';
@@ -44,7 +45,12 @@ class TransactionInstallmentsSelector extends StatelessWidget {
           : Row(
               children: [
                 CurrencyDisplayer(
-                  amountToConvert: c.transactionValue / installments,
+                  amountToConvert: InstallmentPurchase(
+                    date: c.date,
+                    amount: c.transactionValue,
+                    count: installments,
+                    decimals: c.fromAccount?.currency.decimalPlaces ?? 2,
+                  ).installmentAmount,
                   currency: c.fromAccount?.currency,
                 ),
                 Text(' ${t.transaction.form.installments.per_month}'),
