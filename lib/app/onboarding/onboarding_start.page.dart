@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
+import 'package:monekin/app/settings/widgets/display_app_icon.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
@@ -68,6 +69,13 @@ class OnboardingStartPage extends StatelessWidget {
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final isWide = constraints.maxWidth >= 700;
+                final contentWidth = (constraints.maxWidth - 48).clamp(
+                  0.0,
+                  double.infinity,
+                );
+                final otherWaysWidth = isWide
+                    ? (contentWidth - 24) / 2
+                    : contentWidth;
 
                 final startNow = _StartNowCard(
                   tall: isWide,
@@ -78,12 +86,37 @@ class OnboardingStartPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
-                      child: Text(
-                        t.intro.start_options.other_ways,
-                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: AppColors.of(context).textBody,
-                        ),
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Row(
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: (otherWaysWidth - 8).clamp(
+                                0.0,
+                                double.infinity,
+                              ),
+                            ),
+                            child: Text(
+                              t.intro.start_options.other_ways,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.labelMedium!
+                                  .copyWith(
+                                    color: AppColors.of(context).textBody,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Divider(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant
+                                  .withValues(alpha: .4),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     _StartOptionTile(
@@ -92,6 +125,7 @@ class OnboardingStartPage extends StatelessWidget {
                       subtitle: t.intro.start_options.import_descr,
                       onTap: _importData,
                     ),
+                    const SizedBox(height: 10),
                     _StartOptionTile(
                       icon: Icons.auto_awesome_rounded,
                       title: t.intro.start_options.sample,
@@ -102,36 +136,65 @@ class OnboardingStartPage extends StatelessWidget {
                 );
 
                 return SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8),
-                      Text(
-                        t.intro.start_options.title,
-                        style: Theme.of(context).textTheme.headlineSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                  padding: const EdgeInsets.all(24),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: (constraints.maxHeight - 48).clamp(
+                        0,
+                        double.infinity,
                       ),
-                      const SizedBox(height: 6),
-                      Text(t.intro.start_options.descr),
-                      const SizedBox(height: 24),
-                      if (isWide)
-                        IntrinsicHeight(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            spacing: 24,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8),
+                              child: DisplayAppIcon(height: 80),
+                            ),
+                            const SizedBox(height: 36),
+                            Text(
+                              t.intro.start_options.title,
+                              style: Theme.of(context).textTheme.headlineSmall!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              t.intro.start_options.descr,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(child: startNow),
-                              Expanded(child: otherWays),
+                              if (isWide)
+                                IntrinsicHeight(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    spacing: 24,
+                                    children: [
+                                      Expanded(child: startNow),
+                                      Expanded(child: otherWays),
+                                    ],
+                                  ),
+                                )
+                              else ...[
+                                startNow,
+                                const SizedBox(height: 24),
+                                otherWays,
+                              ],
                             ],
                           ),
-                        )
-                      else ...[
-                        startNow,
-                        const SizedBox(height: 24),
-                        otherWays,
+                        ),
                       ],
-                    ],
+                    ),
                   ),
                 );
               },
@@ -155,14 +218,21 @@ class _StartNowCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
-    final icon = CircleAvatar(
-      radius: tall ? 28 : 22,
-      backgroundColor: colors.onPrimary.withValues(alpha: 0.16),
-      child: Icon(
-        Icons.rocket_launch_rounded,
+    final icon = DecoratedBox(
+      decoration: BoxDecoration(
         color: colors.onPrimary,
-        size: tall ? 28 : 22,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: SizedBox(
+        width: 42,
+        height: 42,
+        child: Icon(
+          Icons.rocket_launch_rounded,
+          color: colors.primary,
+          size: 22,
+        ),
       ),
     );
 
@@ -172,46 +242,56 @@ class _StartNowCard extends StatelessWidget {
       children: [
         Text(
           t.intro.start_options.start_now,
-          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+          style: textTheme.titleMedium!.copyWith(
             fontWeight: FontWeight.bold,
             color: colors.onPrimary,
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 4),
         Text(
           t.intro.start_options.start_now_descr,
-          style: TextStyle(color: colors.onPrimary.withValues(alpha: 0.85)),
+          style: textTheme.bodySmall!.copyWith(
+            color: colors.onPrimary.withValues(alpha: 0.85),
+          ),
         ),
       ],
     );
 
-    final arrow = Icon(Icons.arrow_forward_rounded, color: colors.onPrimary);
+    final arrow = DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.onPrimary,
+        shape: BoxShape.circle,
+      ),
+      child: SizedBox(
+        width: 34,
+        height: 34,
+        child: Icon(Icons.arrow_forward_rounded, color: colors.primary),
+      ),
+    );
 
     return Material(
       color: colors.primary,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: tall
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    icon,
-                    const SizedBox(height: 32),
-                    Row(
-                      spacing: 12,
-                      children: [Expanded(child: texts), arrow],
-                    ),
-                  ],
-                )
-              : Row(
-                  spacing: 16,
-                  children: [icon, Expanded(child: texts), arrow],
-                ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: tall
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [icon, arrow],
+              ),
+              SizedBox(height: tall ? 32 : 16),
+              texts,
+            ],
+          ),
         ),
       ),
     );
@@ -234,25 +314,54 @@ class _StartOptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final borderRadius = BorderRadius.circular(14);
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: ListTile(
-        tileColor: colors.onSurface.withOpacity(0.04),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        leading: CircleAvatar(
-          backgroundColor: colors.primaryContainer,
-          child: Icon(icon, color: colors.onPrimaryContainer),
-        ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        subtitle: Text(subtitle),
-        trailing: Icon(
-          Icons.arrow_forward_ios_rounded,
-          size: 14,
-          color: colors.onSurface.withOpacity(0.45),
-        ),
+    return Material(
+      color: colors.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius,
+        side: BorderSide(color: colors.outlineVariant.withValues(alpha: .35)),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
         onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
+          child: Row(
+            children: [
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: colors.primaryContainer,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SizedBox(
+                  width: 38,
+                  height: 38,
+                  child: Icon(icon, color: colors.onPrimaryContainer),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: textTheme.labelLarge!.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(subtitle, style: textTheme.bodySmall),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Icon(Icons.chevron_right_rounded, color: colors.onSurfaceVariant),
+            ],
+          ),
+        ),
       ),
     );
   }
