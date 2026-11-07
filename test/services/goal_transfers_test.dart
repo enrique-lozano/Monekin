@@ -15,7 +15,7 @@ void main() {
   late AppDB db;
   late TransactionService service;
 
-  Future<void> insertAccount(String id) {
+  Future<void> insertAccount(String id, {String currency = 'EUR'}) {
     return db
         .into(db.accounts)
         .insert(
@@ -29,7 +29,7 @@ void main() {
             trackingMode: AccountTrackingMode.transactions,
             iconId: 'wallet',
             displayOrder: 0,
-            currencyId: 'EUR',
+            currencyId: currency,
           ),
         );
   }
@@ -40,6 +40,7 @@ void main() {
     required String to,
     required double value,
     required DateTime date,
+    double? valueInDestiny,
   }) {
     return db
         .into(db.transactions)
@@ -50,6 +51,7 @@ void main() {
             accountID: from,
             receivingAccountID: to,
             value: value,
+            valueInDestiny: valueInDestiny,
             type: TransactionType.transfer,
             isHidden: false,
           ),
@@ -72,7 +74,11 @@ void main() {
         );
   }
 
-  Goal goal(GoalType type, {List<String>? accounts}) => Goal(
+  Goal goal(
+    GoalType type, {
+    List<String>? accounts,
+    List<String>? categories,
+  }) => Goal(
     id: 'goal',
     name: 'Goal',
     amount: 1000,
@@ -80,15 +86,46 @@ void main() {
     startDate: DateTime(2026),
     endDate: DateTime(2027),
     type: type,
-    trFilters: TransactionFilterSetInDB(id: 'filter', accountsIDs: accounts),
+    trFilters: TransactionFilterSetInDB(
+      id: 'filter',
+      accountsIDs: accounts,
+      categoriesIds: categories,
+    ),
   );
 
-  Future<double> balance(Goal goal) => service
+  Future<double> balance(Goal goal, {bool converted = false}) => service
       .getTransactionsValueBalance(
         filters: goal.trFilters,
-        convertToPreferredCurrency: false,
+        convertToPreferredCurrency: converted,
       )
       .first;
+
+  /// A USD account worth 0.90 EUR per dollar, EUR being the preferred currency.
+  Future<void> insertUsdAccount() async {
+    await db
+        .into(db.currencies)
+        .insert(
+          const CurrencyInDB(
+            code: 'USD',
+            symbol: r'$',
+            name: 'US Dollar',
+            decimalPlaces: 2,
+            isDefault: false,
+            type: 0,
+          ),
+        );
+    await db
+        .into(db.exchangeRates)
+        .insert(
+          ExchangeRateInDB(
+            id: 'usd',
+            date: DateTime(2026),
+            currencyCode: 'USD',
+            exchangeRate: 0.9,
+          ),
+        );
+    await insertAccount('usd', currency: 'USD');
+  }
 
   setUp(() async {
     db = AppDB.forTesting(NativeDatabase.memory());
@@ -219,5 +256,88 @@ void main() {
     );
 
     expect(await balance(goal(GoalType.expense, accounts: ['checking'])), -400);
+  });
+
+  test('a category filter leaves transfers out of the goal', () async {
+    await insertMovement('expense', TransactionType.expense, -100);
+    await insertTransfer(
+      'out',
+      from: 'checking',
+      to: 'savings',
+      value: 500,
+      date: DateTime(2026, 6),
+    );
+
+    expect(
+      await balance(goal(GoalType.expense, categories: ['category'])),
+      -100,
+    );
+  });
+
+  test(
+    'a transfer into another currency counts its destination amount',
+    () async {
+      await insertUsdAccount();
+      await insertTransfer(
+        'in',
+        from: 'checking',
+        to: 'usd',
+        value: 100,
+        valueInDestiny: 110,
+        date: DateTime(2026, 6),
+      );
+
+      expect(
+        await balance(
+          goal(GoalType.income, accounts: ['usd']),
+          converted: true,
+        ),
+        closeTo(99, 1e-9),
+      );
+    },
+  );
+
+  test('a cross-currency transfer within a goal only counts the conversion '
+      'difference', () async {
+    await insertUsdAccount();
+    await insertTransfer(
+      'internal',
+      from: 'checking',
+      to: 'usd',
+      value: 100,
+      valueInDestiny: 110,
+      date: DateTime(2026, 6),
+    );
+
+    expect(
+      await balance(
+        goal(GoalType.income, accounts: ['checking', 'usd']),
+        converted: true,
+      ),
+      closeTo(-1, 1e-9),
+    );
+  });
+
+  test('a transfer without destination amount is converted with the '
+      'destination rate', () async {
+    await insertUsdAccount();
+    await insertTransfer(
+      'in',
+      from: 'checking',
+      to: 'usd',
+      value: 100,
+      date: DateTime(2026, 6),
+    );
+
+    final transfer = (await service.getTransactions().first).single;
+
+    expect(
+      transfer.currentValueInDestinyInPreferredCurrency,
+      closeTo(90, 1e-9),
+    );
+    expect(
+      await balance(goal(GoalType.income, accounts: ['usd']), converted: true),
+      closeTo(90, 1e-9),
+    );
   });
 }
