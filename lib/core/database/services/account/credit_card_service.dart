@@ -6,7 +6,6 @@ import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/models/account/account.dart';
 import 'package:monekin/core/models/account/credit_card_cycle.dart';
 import 'package:monekin/core/models/transaction/transaction.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/presentation/widgets/transaction_filter/transaction_filter_set.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -152,11 +151,11 @@ class CreditCardService {
     // payment, and money sent out of the card is a charge.
     final flows = TransactionService.instance
         .getTransactions(
+          onlyPosted: true,
           filters: TransactionFilterSet(
             accountsIDs: [account.id],
             minDate: cycle.previousPeriodStart,
             maxDate: date,
-            status: TransactionStatus.getStatusThatCountsForStats(null),
           ),
         )
         .map(
