@@ -211,6 +211,9 @@
       "title": "Let's add your first transaction",
       "descr": "Start with something simple, like your last purchase. You can edit it later.",
       "action": "Add transaction",
+      "account-title": "Let's create your first account",
+      "account-descr": "Accounts hold your money, like a bank account or your wallet. You need one to add transactions.",
+      "account-action": "Create account",
       "dismiss": "Not now"
     },
     "filter-transactions": "Filter transactions",
