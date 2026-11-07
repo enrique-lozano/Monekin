@@ -60,13 +60,19 @@ class TransactionFormAmountBlock extends StatelessWidget {
         final oldEffect = c.oldEffectOnFromAccountLedgerForEdit ?? 0;
         final projected = balance + newEffect - oldEffect;
 
-        if (projected >= -1e-6) return const SizedBox.shrink();
+        // A credit card is usually negative: it only warns past its limit.
+        final floor = from.isCredit
+            ? -(from.creditLimit ?? double.infinity)
+            : 0.0;
+        if (projected >= floor - 1e-6) return const SizedBox.shrink();
 
         final t = Translations.of(context);
         return Padding(
           padding: const EdgeInsets.only(top: 10),
           child: InlineInfoCard(
-            text: t.transaction.form.negative_balance_warning,
+            text: from.isCredit
+                ? t.transaction.form.credit_limit_warning
+                : t.transaction.form.negative_balance_warning,
             mode: InlineInfoCardMode.warn,
             margin: EdgeInsets.zero,
           ),
