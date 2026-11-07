@@ -197,9 +197,7 @@
       "import": "Daten importieren",
       "import-descr": "Aus einer CSV-Datei oder einer anderen App",
       "sample": "Beispieldaten erkunden",
-      "sample-descr": "Fiktive Konten und Transaktionen. Du kannst sie jederzeit in den Einstellungen löschen.",
-      "scratch": "Ganz von vorne anfangen",
-      "scratch-descr": "Füge deine erste Transaktion hinzu"
+      "sample-descr": "Fiktive Konten und Transaktionen. Du kannst sie jederzeit in den Einstellungen löschen."
     }
   },
   "HOME": {

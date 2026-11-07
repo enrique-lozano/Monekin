@@ -197,9 +197,7 @@
       "import": "Importer vos données",
       "import-descr": "Depuis un fichier CSV ou une autre application",
       "sample": "Découvrir avec des données d'exemple",
-      "sample-descr": "Des comptes et transactions fictifs, supprimables à tout moment dans les paramètres.",
-      "scratch": "Commencer de zéro",
-      "scratch-descr": "Ajoutez votre première transaction"
+      "sample-descr": "Des comptes et transactions fictifs, supprimables à tout moment dans les paramètres."
     }
   },
   "HOME": {

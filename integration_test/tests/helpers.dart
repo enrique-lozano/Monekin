@@ -42,7 +42,7 @@ Future<void> startMonekin(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.arrow_forward_rounded));
   await tester.pumpAndSettle();
 
-  await tester.tap(find.text(t.intro.start_options.scratch));
+  await tester.tap(find.text(t.intro.start_options.start_now));
   await tester.pumpAndSettle();
   expect(find.byType(DashboardPage), findsOneWidget);
 }

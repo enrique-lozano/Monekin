@@ -197,9 +197,7 @@
       "import": "Importa i tuoi dati",
       "import-descr": "Da un file CSV o da un'altra app",
       "sample": "Esplora con dati di esempio",
-      "sample-descr": "Account e transazioni fittizi, eliminabili in qualsiasi momento dalle impostazioni.",
-      "scratch": "Inizia da zero",
-      "scratch-descr": "Aggiungi la tua prima transazione"
+      "sample-descr": "Account e transazioni fittizi, eliminabili in qualsiasi momento dalle impostazioni."
     }
   },
   "HOME": {

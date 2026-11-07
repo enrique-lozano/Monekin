@@ -195,13 +195,14 @@
     "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...",
     "START-OPTIONS": {
       "title": "How do you want to start?",
-      "descr": "Pick the quickest way to see Monekin with real numbers. You can change everything later.",
+      "descr": "Jump right in, or fill the app with data first. You can change everything later.",
+      "start-now": "Start now",
+      "start-now-descr": "Add your first transaction and build from there",
+      "other-ways": "Or fill the app with data first",
       "import": "Import your data",
       "import-descr": "From a CSV file or another app",
       "sample": "Explore with sample data",
-      "sample-descr": "Fake accounts and transactions. You can delete them at any time from the settings",
-      "scratch": "Start from scratch",
-      "scratch-descr": "Add your first transaction"
+      "sample-descr": "Fake accounts and transactions. You can delete them at any time from the settings"
     }
   },
   "HOME": {

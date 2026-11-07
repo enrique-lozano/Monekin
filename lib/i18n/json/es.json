@@ -200,9 +200,7 @@
       "import": "Importar tus datos",
       "import-descr": "Desde un archivo CSV u otra aplicación",
       "sample": "Explorar con datos de ejemplo",
-      "sample-descr": "Cuentas y transacciones ficticias. Puedes eliminarlas cuando quieras desde los ajustes.",
-      "scratch": "Empezar desde cero",
-      "scratch-descr": "Añade tu primera transacción"
+      "sample-descr": "Cuentas y transacciones ficticias. Puedes eliminarlas cuando quieras desde los ajustes."
     }
   },
   "HOME": {

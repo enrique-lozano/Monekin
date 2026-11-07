@@ -199,9 +199,7 @@
       "import": "匯入資料",
       "import-descr": "從 CSV 檔案或其他應用程式匯入",
       "sample": "使用範例資料探索",
-      "sample-descr": "範例帳戶和交易，可隨時在設定中刪除。",
-      "scratch": "從頭開始",
-      "scratch-descr": "新增您的第一筆交易"
+      "sample-descr": "範例帳戶和交易，可隨時在設定中刪除。"
     }
   },
   "HOME": {

@@ -197,9 +197,7 @@
       "import": "导入数据",
       "import-descr": "从 CSV 文件或其他应用导入",
       "sample": "使用示例数据体验",
-      "sample-descr": "示例账户和交易，可随时在设置中删除。",
-      "scratch": "从头开始",
-      "scratch-descr": "添加您的第一笔交易"
+      "sample-descr": "示例账户和交易，可随时在设置中删除。"
     }
   },
   "HOME": {

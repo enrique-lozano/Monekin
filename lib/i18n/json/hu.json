@@ -197,9 +197,7 @@
       "import": "Adatok importálása",
       "import-descr": "CSV-fájlból vagy egy másik alkalmazásból",
       "sample": "Felfedezés mintaadatokkal",
-      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban.",
-      "scratch": "Kezdés az alapoktól",
-      "scratch-descr": "Add hozzá az első tranzakciódat"
+      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban."
     }
   },
   "HOME": {

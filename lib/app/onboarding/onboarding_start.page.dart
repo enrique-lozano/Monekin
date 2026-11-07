@@ -1,14 +1,12 @@
 import 'dart:async';
 
-import 'package:flutter_svg/svg.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
 import 'package:monekin/core/database/utils/demo_app_seeders.dart';
-import 'package:monekin/core/extensions/color.extensions.dart';
+import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
-import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/logger.dart';
@@ -61,66 +59,159 @@ class OnboardingStartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: FractionallySizedBox(
-            widthFactor: screenWidth < 700 ? 1.0 : 700 / screenWidth,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 160,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: isAppInDarkBrightness(context)
-                          ? Theme.of(context).colorScheme.primary.lighten(0.8)
-                          : Theme.of(context).colorScheme.primaryContainer
-                                .lighten(0.58),
-                      borderRadius: BorderRadius.circular(12),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final isWide = constraints.maxWidth >= 700;
+
+                final startNow = _StartNowCard(
+                  tall: isWide,
+                  onTap: _goToDashboard,
+                );
+
+                final otherWays = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Text(
+                        t.intro.start_options.other_ways,
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          color: AppColors.of(context).textBody,
+                        ),
+                      ),
                     ),
-                    child: SvgPicture.asset(
-                      'assets/icons/app_onboarding/wallet.svg',
-                      fit: BoxFit.contain,
-                      alignment: Alignment.bottomCenter,
+                    _StartOptionTile(
+                      icon: Icons.file_upload_outlined,
+                      title: t.intro.start_options.import,
+                      subtitle: t.intro.start_options.import_descr,
+                      onTap: _importData,
                     ),
+                    _StartOptionTile(
+                      icon: Icons.auto_awesome_rounded,
+                      title: t.intro.start_options.sample,
+                      subtitle: t.intro.start_options.sample_descr,
+                      onTap: () => _loadSampleData(context),
+                    ),
+                  ],
+                );
+
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        t.intro.start_options.title,
+                        style: Theme.of(context).textTheme.headlineSmall!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(t.intro.start_options.descr),
+                      const SizedBox(height: 24),
+                      if (isWide)
+                        IntrinsicHeight(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            spacing: 24,
+                            children: [
+                              Expanded(child: startNow),
+                              Expanded(child: otherWays),
+                            ],
+                          ),
+                        )
+                      else ...[
+                        startNow,
+                        const SizedBox(height: 24),
+                        otherWays,
+                      ],
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  Text(
-                    t.intro.start_options.title,
-                    style: Theme.of(context).textTheme.titleLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(t.intro.start_options.descr),
-                  const SizedBox(height: 16),
-                  _StartOptionTile(
-                    icon: Icons.file_upload_outlined,
-                    title: t.intro.start_options.import,
-                    subtitle: t.intro.start_options.import_descr,
-                    onTap: _importData,
-                  ),
-                  _StartOptionTile(
-                    icon: Icons.auto_awesome_rounded,
-                    title: t.intro.start_options.sample,
-                    subtitle: t.intro.start_options.sample_descr,
-                    onTap: () => _loadSampleData(context),
-                  ),
-                  _StartOptionTile(
-                    icon: Icons.add_rounded,
-                    title: t.intro.start_options.scratch,
-                    subtitle: t.intro.start_options.scratch_descr,
-                    onTap: _goToDashboard,
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Main call to action of the page: the fastest way to reach the app.
+class _StartNowCard extends StatelessWidget {
+  const _StartNowCard({required this.tall, required this.onTap});
+
+  /// Taller layout, used when the card is placed beside the other options
+  final bool tall;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    final colors = Theme.of(context).colorScheme;
+
+    final icon = CircleAvatar(
+      radius: tall ? 28 : 22,
+      backgroundColor: colors.onPrimary.withValues(alpha: 0.16),
+      child: Icon(
+        Icons.rocket_launch_rounded,
+        color: colors.onPrimary,
+        size: tall ? 28 : 22,
+      ),
+    );
+
+    final texts = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          t.intro.start_options.start_now,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colors.onPrimary,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          t.intro.start_options.start_now_descr,
+          style: TextStyle(color: colors.onPrimary.withValues(alpha: 0.85)),
+        ),
+      ],
+    );
+
+    final arrow = Icon(Icons.arrow_forward_rounded, color: colors.onPrimary);
+
+    return Material(
+      color: colors.primary,
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: tall
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    icon,
+                    const SizedBox(height: 32),
+                    Row(
+                      spacing: 12,
+                      children: [Expanded(child: texts), arrow],
+                    ),
+                  ],
+                )
+              : Row(
+                  spacing: 16,
+                  children: [icon, Expanded(child: texts), arrow],
+                ),
         ),
       ),
     );

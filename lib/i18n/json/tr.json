@@ -197,9 +197,7 @@
       "import": "Verilerinizi içe aktarın",
       "import-descr": "Bir CSV dosyasından veya başka bir uygulamadan",
       "sample": "Örnek verilerle keşfedin",
-      "sample-descr": "Sahte hesaplar ve işlemler. Bunları istediğiniz zaman ayarlardan silebilirsiniz.",
-      "scratch": "Sıfırdan başlayın",
-      "scratch-descr": "İlk işleminizi ekleyin"
+      "sample-descr": "Sahte hesaplar ve işlemler. Bunları istediğiniz zaman ayarlardan silebilirsiniz."
     }
   },
   "HOME": {
