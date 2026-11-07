@@ -209,11 +209,11 @@ class CreditCardService {
     // payment, and money sent out of the card is a charge.
     final flows = TransactionService.instance
         .getTransactions(
+          onlyPosted: true,
           filters: TransactionFilterSet(
             accountsIDs: [account.id],
             minDate: cycle.previousPeriodStart,
             maxDate: date,
-            status: TransactionStatus.getStatusThatCountsForStats(null),
           ),
         )
         .map(

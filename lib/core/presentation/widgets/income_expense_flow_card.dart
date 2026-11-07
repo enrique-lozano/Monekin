@@ -2,7 +2,6 @@ import 'package:material_ui/material_ui.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/transaction/transaction_service.dart';
 import 'package:monekin/core/models/date-utils/date_period_state.dart';
-import 'package:monekin/core/models/transaction/transaction_status.enum.dart';
 import 'package:monekin/core/models/transaction/transaction_type.enum.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoints.dart';
@@ -63,9 +62,9 @@ class IncomeExpenseFlowCard extends StatelessWidget {
 
     final transfers = TransactionService.instance
         .getTransactions(
+          onlyPosted: true,
           filters: filters.copyWith(
             transactionTypes: [TransactionType.transfer],
-            status: TransactionStatus.getStatusThatCountsForStats(null),
           ),
         )
         .map(
