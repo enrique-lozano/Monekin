@@ -31,6 +31,7 @@ class PieChartByCategories extends StatefulWidget {
     this.showList = false,
     this.initialSelectedType = TransactionType.expense,
     this.filters = const TransactionFilterSet(),
+    this.includeTransfers = false,
   });
 
   final DatePeriodState datePeriodState;
@@ -40,6 +41,10 @@ class PieChartByCategories extends StatefulWidget {
   final TransactionType initialSelectedType;
 
   final TransactionFilterSet filters;
+
+  /// Adds a slice with the transfers leaving (expense tab) or entering (income
+  /// tab) the accounts of [filters]. Transfers between those accounts are ignored
+  final bool includeTransfers;
 
   @override
   State<PieChartByCategories> createState() => _PieChartByCategoriesState();
@@ -58,10 +63,11 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
       transactionTypes: hasConflictingRecurrenceFilter
           ? []
           : [
-              transactionsType,
-            ].intersectionWithNullable(
-              widget.filters.transactionTypes,
-            ).toList(),
+                  transactionsType,
+                  if (widget.includeTransfers) TransactionType.transfer,
+                ]
+                .intersectionWithNullable(widget.filters.transactionTypes)
+                .toList(),
       minDate: widget.datePeriodState.startDate,
       maxDate: widget.datePeriodState.endDate,
       status: TransactionStatus.getStatusThatCountsForStats(
@@ -71,13 +77,57 @@ class _PieChartByCategoriesState extends State<PieChartByCategories> {
     );
   }
 
+  /// Whether the transfer moves money in the direction of the selected tab,
+  /// across the boundary of the filtered accounts
+  bool _isTransferInSelectedDirection(MoneyTransaction transfer) {
+    final accountsIDs = widget.filters.accountsIDs;
+    if (accountsIDs == null) return false;
+
+    final isFromFiltered = accountsIDs.contains(transfer.account.id);
+    final isToFiltered = accountsIDs.contains(transfer.receivingAccount?.id);
+
+    return transactionsType == TransactionType.expense
+        ? isFromFiltered && !isToFiltered
+        : isToFiltered && !isFromFiltered;
+  }
+
+  double _transferValue(MoneyTransaction transfer) {
+    if (transactionsType == TransactionType.expense) {
+      return transfer.currentValueInPreferredCurrency;
+    }
+
+    return transfer.currentValueInDestinyInPreferredCurrency ??
+        transfer.currentValueInPreferredCurrency;
+  }
+
   Future<List<TrDistributionChartItem<Category>>> getEvolutionData(
     BuildContext context,
     List<MoneyTransaction> transactions,
   ) async {
     final data = <TrDistributionChartItem<Category>>[];
 
-    for (final transaction in transactions) {
+    final transfers = transactions
+        .where((tr) => tr.isTransfer && _isTransferInSelectedDirection(tr))
+        .toList();
+
+    if (transfers.isNotEmpty) {
+      data.add(
+        TrDistributionChartItem(
+          category: Category(
+            id: 'transfers',
+            name: TransactionType.transfer.displayName(context, plural: true),
+            iconId: 'savings',
+            displayOrder: 0,
+            color: TransactionType.transfer.color(context).toHex(),
+            type: CategoryType.B,
+          ),
+          transactions: transfers,
+          value: transfers.map(_transferValue).sum,
+        ),
+      );
+    }
+
+    for (final transaction in transactions.whereNot((tr) => tr.isTransfer)) {
       final trValue =
           transaction.currentValueInPreferredCurrency *
           (transactionsType == TransactionType.expense ? -1 : 1);
