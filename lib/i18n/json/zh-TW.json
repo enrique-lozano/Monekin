@@ -192,9 +192,23 @@
     "sl2Descr2": "此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的",
     "lastSlideTitle": "一切準備就緒",
     "lastSlideDescr": "有了 Monekin，您終於可以實現您想要的財務獨立。您將擁有圖表、預算、提示、統計數據以及更多有關您的資金的信息。",
-    "lastSlideDescr2": "我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......"
+    "lastSlideDescr2": "我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......",
+    "START-OPTIONS": {
+      "title": "您想如何開始？",
+      "descr": "選擇最快的方式，透過真實資料體驗 Monekin。之後隨時可以修改。",
+      "import": "匯入資料",
+      "import-descr": "從 CSV 檔案或其他應用程式匯入",
+      "sample": "使用範例資料探索",
+      "sample-descr": "範例帳戶和交易，可隨時在設定中刪除。"
+    }
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "新增您的第一筆交易",
+      "descr": "從簡單的內容開始，例如最近的一筆消費。之後可以編輯。",
+      "action": "新增交易",
+      "dismiss": "暫時不要"
+    },
     "title": "儀表板",
     "filter-transactions": "篩選交易",
     "hello-day": "早安，",
@@ -1615,11 +1629,16 @@
     "DATA": {
       "display": "數據",
       "display.descr": "匯出和匯入您的數據，這樣您就不會丟失任何東西",
-      "delete-all": "刪除我的資料",
-      "delete-all-header1": "Stop right there padawan ⚠️⚠️",
-      "delete-all-message1": "您確定要繼續嗎？您的所有資料將永久刪除且無法恢復",
-      "delete-all-header2": "最後一步⚠️⚠️",
-      "delete-all-message2": "刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？"
+      "DELETE-ALL": {
+        "title": "刪除資料",
+        "action": "刪除我的資料",
+        "descr": "刪除您的帳戶、交易、預算、目標和債務。可用於清除範例資料。類別和設定會保留。",
+        "confirm-title": "停下來，帕達萬 ⚠️⚠️",
+        "confirm-descr": "確定要繼續嗎？所有資料都將永久刪除且無法復原。",
+        "final-confirm-title": "最後一步 ⚠️⚠️",
+        "final-confirm-descr": "您的帳戶、交易、預算、目標、債務和類別都將永久刪除且無法復原。確定要繼續嗎？",
+        "success": "您的資料已刪除"
+      }
     },
     "ABOUT_US": {
       "display": "應用程式資訊",

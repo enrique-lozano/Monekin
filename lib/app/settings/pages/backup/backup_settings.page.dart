@@ -1,16 +1,22 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
+import 'package:monekin/core/database/utils/demo_app_seeders.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
@@ -26,6 +32,49 @@ class BackupSettingsPage extends StatefulWidget {
 }
 
 class _BackupSettingsPageState extends State<BackupSettingsPage> {
+  Future<void> _deleteAllData(BuildContext context) async {
+    final confirmed = await confirmDialog(
+      context,
+      icon: Icons.delete_forever_rounded,
+      dialogTitle: t.backup.delete.confirm_title,
+      contentParagraphs: [Text(t.backup.delete.confirm_descr)],
+      showCancelButton: true,
+      confirmationText: t.ui_actions.continue_text,
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final reallySure = await confirmDialog(
+      context,
+      icon: Icons.warning_rounded,
+      dialogTitle: t.backup.delete.final_confirm_title,
+      contentParagraphs: [Text(t.backup.delete.final_confirm_descr)],
+      showCancelButton: true,
+      confirmationText: t.backup.delete.final_confirm_action,
+    );
+
+    if (reallySure != true || !context.mounted) return;
+
+    final loadingOverlay = LoadingOverlay.of(context);
+    loadingOverlay.show();
+
+    try {
+      await deleteAllUserData();
+      DefaultTransactionValuesService.lastCreatedTransaction.value = null;
+      await AppDataService.instance.resetAppData();
+      loadingOverlay.hide();
+
+      RouteUtils.popAllRoutesExceptFirst();
+      unawaited(RouteUtils.pushRoute(const IntroPage(), withReplacement: true));
+
+      MonekinSnackbar.success(SnackbarParams(t.backup.delete.success));
+    } catch (e) {
+      loadingOverlay.hide();
+
+      MonekinSnackbar.error(SnackbarParams.fromError(e));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -129,6 +178,13 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 onTap: () {
                   RouteUtils.showResponsiveForm(const ExportDataPage());
                 },
+              ),
+              createListSeparator(context, t.backup.delete.title),
+              ListTile(
+                title: Text(t.backup.delete.action),
+                subtitle: Text(t.backup.delete.descr),
+                minVerticalPadding: 16,
+                onTap: () => _deleteAllData(context),
               ),
               createListSeparator(context, t.backup.about.title),
               ListTile(

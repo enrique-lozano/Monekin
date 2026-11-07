@@ -192,10 +192,30 @@
     "sl2Descr2": "Also, the source code of the application is public, anyone can collaborate on it and see how it works",
     "lastSlideTitle": "All ready",
     "lastSlideDescr": "With Monekin, you can finally achieve the financial independence you want so much. You will have graphs, budgets, tips, statistics and much more about your money.",
-    "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions..."
+    "lastSlideDescr2": "We hope you enjoy your experience! Do not hesitate to contact us in case of doubts, suggestions...",
+    "START-OPTIONS": {
+      "title": "How do you want to start?",
+      "descr": "Jump right in, or fill the app with data first. You can change everything later.",
+      "start-now": "Start now",
+      "start-now-descr": "Add your first transaction and build from there",
+      "other-ways": "Or fill the app with data first",
+      "import": "Import your data",
+      "import-descr": "From a CSV file or another app",
+      "sample": "Explore with sample data",
+      "sample-descr": "Fake accounts and transactions. You can delete them at any time from the settings"
+    }
   },
   "HOME": {
     "title": "Dashboard",
+    "FIRST-TRANSACTION": {
+      "title": "Let's add your first transaction",
+      "descr": "Start with something simple, like your last purchase. You can edit it later.",
+      "action": "Add transaction",
+      "account-title": "Let's create your first account",
+      "account-descr": "Accounts hold your money, like a bank account or your wallet. You need one to add transactions.",
+      "account-action": "Create account",
+      "dismiss": "Not now"
+    },
     "filter-transactions": "Filter transactions",
     "hello-day": "Good morning,",
     "hello-night": "Good night,",
@@ -1501,6 +1521,17 @@
         "spendee-hint": "In the Spendee mobile app, go to More → Export and choose CSV. The file is sent to your email."
       }
     },
+    "DELETE": {
+      "title": "Delete data",
+      "action": "Delete all my data",
+      "descr": "Removes your accounts, transactions, budgets, goals and debts and takes you back to the onboarding. Useful to leave the sample data.",
+      "confirmTitle": "Delete all your data?",
+      "confirmDescr": "All your accounts, transactions, budgets, goals and debts will be permanently deleted, and the app will go back to its initial state. Consider exporting a backup first.",
+      "finalConfirmTitle": "This cannot be undone",
+      "finalConfirmDescr": "Everything will be erased from this device for good. Are you absolutely sure?",
+      "finalConfirmAction": "Delete everything",
+      "success": "Your data has been deleted"
+    },
     "ABOUT": {
       "title": "Information about your database",
       "create-date": "Creation date",
@@ -1616,11 +1647,16 @@
     "DATA": {
       "display": "Data",
       "display.descr": "Export and import your data so you don't lose anything",
-      "delete-all": "Delete my data",
-      "delete-all-header1": "Stop right there padawan ⚠️⚠️",
-      "delete-all-message1": "Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered",
-      "delete-all-header2": "One last step ⚠️⚠️",
-      "delete-all-message2": "By deleting an account you will delete all your stored personal data. Your accounts, transactions, budgets and categories will be deleted and cannot be recovered. Do you agree?"
+      "DELETE-ALL": {
+        "title": "Delete data",
+        "action": "Delete my data",
+        "descr": "Removes your accounts, transactions, budgets, goals and debts. Useful to leave the sample data. Categories and settings are kept.",
+        "confirm-title": "Stop right there padawan ⚠️⚠️",
+        "confirm-descr": "Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered.",
+        "final-confirm-title": "One last step ⚠️⚠️",
+        "final-confirm-descr": "Your accounts, transactions, budgets, goals, debts and categories will be permanently deleted and cannot be recovered. Do you agree?",
+        "success": "Your data has been deleted"
+      }
     },
     "ABOUT_US": {
       "display": "App information",
