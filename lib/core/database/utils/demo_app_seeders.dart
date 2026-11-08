@@ -50,7 +50,8 @@ double demoAmount(double amount) {
   return (scaled / step).roundToDouble() * step;
 }
 
-final List<AccountInDB> _accountsToCreate = [
+/// A getter so the accounts use the current preferred currency on every seed.
+List<AccountInDB> get _accountsToCreate => [
   AccountInDB(
     id: _cashAccountID,
     name: 'Cash',

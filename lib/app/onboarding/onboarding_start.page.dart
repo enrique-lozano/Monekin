@@ -16,8 +16,28 @@ import 'package:monekin/i18n/generated/translations.g.dart';
 
 /// Last step of the onboarding: lets the user choose how to fill the app
 /// before reaching the dashboard.
-class OnboardingStartPage extends StatelessWidget {
+class OnboardingStartPage extends StatefulWidget {
   const OnboardingStartPage({super.key});
+
+  @override
+  State<OnboardingStartPage> createState() => _OnboardingStartPageState();
+}
+
+class _OnboardingStartPageState extends State<OnboardingStartPage> {
+  /// Whether one of the options is running, to ignore repeated taps
+  bool _busy = false;
+
+  Future<void> _run(Future<void> Function() action) async {
+    if (_busy) return;
+
+    setState(() => _busy = true);
+
+    try {
+      await action();
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
 
   Future<void> _goToDashboard() async {
     await AppDataService.instance.setItem(
@@ -46,14 +66,13 @@ class OnboardingStartPage extends StatelessWidget {
 
     try {
       await fillWithDemoData();
-      loadingOverlay.hide();
-
       await _goToDashboard();
     } catch (e) {
       Logger.printDebug(e);
-      loadingOverlay.hide();
 
       MonekinSnackbar.error(SnackbarParams.fromError(e));
+    } finally {
+      loadingOverlay.hide();
     }
   }
 
@@ -79,7 +98,7 @@ class OnboardingStartPage extends StatelessWidget {
 
                 final startNow = _StartNowCard(
                   tall: isWide,
-                  onTap: _goToDashboard,
+                  onTap: () => _run(_goToDashboard),
                 );
 
                 final otherWays = Column(
@@ -123,14 +142,14 @@ class OnboardingStartPage extends StatelessWidget {
                       icon: Icons.file_upload_outlined,
                       title: t.intro.start_options.import,
                       subtitle: t.intro.start_options.import_descr,
-                      onTap: _importData,
+                      onTap: () => _run(_importData),
                     ),
                     const SizedBox(height: 10),
                     _StartOptionTile(
                       icon: Icons.auto_awesome_rounded,
                       title: t.intro.start_options.sample,
                       subtitle: t.intro.start_options.sample_descr,
-                      onTap: () => _loadSampleData(context),
+                      onTap: () => _run(() => _loadSampleData(context)),
                     ),
                   ],
                 );
