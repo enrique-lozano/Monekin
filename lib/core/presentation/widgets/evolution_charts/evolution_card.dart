@@ -121,19 +121,16 @@ class EvolutionCard extends StatelessWidget {
 
     if (onValueLabelTap == null) return label;
 
-    return Tappable(
-      onTap: onValueLabelTap,
-      borderRadius: BorderRadius.circular(6),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 4,
-          children: [
-            Flexible(child: label),
-            Icon(Icons.swap_horiz_rounded, size: 16, color: hint),
-          ],
-        ),
+    // The whole header is the tap target (see `build`), the icon is the hint.
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 4,
+        children: [
+          Flexible(child: label),
+          Icon(Icons.swap_horiz_rounded, size: 16, color: hint),
+        ],
       ),
     );
   }
@@ -253,12 +250,20 @@ class EvolutionCard extends StatelessWidget {
             showDateSelector && local.isLargerOrEqualTo(BreakpointID.lg);
         final height = chartHeight ?? (decorated ? 150.0 : 110.0);
 
-        final header = _valueHeader(
+        final valueHeader = _valueHeader(
           context,
           maxWidth: constraints.maxWidth - (decorated ? 48 : contentInset * 2),
           wideAmount: decorated,
           inlineTrend: !chipsInline,
         );
+        final header = onValueLabelTap == null
+            ? valueHeader
+            : Tappable(
+                onTap: onValueLabelTap,
+                bgColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(12),
+                child: valueHeader,
+              );
 
         final body = Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
