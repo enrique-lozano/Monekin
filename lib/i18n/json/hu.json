@@ -197,7 +197,10 @@
       "import": "Adatok importálása",
       "import-descr": "CSV-fájlból vagy egy másik alkalmazásból",
       "sample": "Felfedezés mintaadatokkal",
-      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban."
+      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban.",
+      "start-now": "Kezdés most",
+      "start-now-descr": "Add hozzá az első tranzakciódat, és építkezz innen",
+      "other-ways": "Vagy töltsd fel előbb az alkalmazást adatokkal"
     }
   },
   "HOME": {
@@ -205,7 +208,10 @@
       "title": "Adjuk hozzá az első tranzakciódat",
       "descr": "Kezdd valami egyszerűvel, például a legutóbbi vásárlásoddal. Később szerkesztheted.",
       "action": "Tranzakció hozzáadása",
-      "dismiss": "Most nem"
+      "dismiss": "Most nem",
+      "account-title": "Hozzuk létre az első számládat",
+      "account-descr": "A számlák tartalmazzák a pénzedet, például egy bankszámlát vagy a pénztárcádat. Tranzakciók hozzáadásához szükséged van egyre.",
+      "account-action": "Számla létrehozása"
     },
     "title": "Kezdőlap",
     "filter-transactions": "Tranzakciók szűrése",
@@ -1604,7 +1610,10 @@
         "confirm-title": "Állj meg, padavan ⚠️⚠️",
         "confirm-descr": "Biztosan folytatni szeretnéd? Minden adatod véglegesen törlődik, és nem állítható vissza.",
         "final-confirm-title": "Még egy utolsó lépés ⚠️⚠️",
-        "success": "Az adataid törölve"
+        "success": "Az adataid törölve",
+        "descr": "Az alkalmazást új telepítés állapotába állítja vissza: törli a számláidat, tranzakcióidat, költségkereteidet, céljaidat, adósságaidat, kategóriáidat és a profilodat, és visszavisz a bemutatkozáshoz. Hasznos a mintaadatok eltávolításához.",
+        "final-confirm-descr": "A számláid, tranzakcióid, költségkereteid, céljaid, adósságaid, kategóriáid, pénznemeid és a profilod véglegesen törlődnek, az alkalmazás pedig visszaáll a kiindulási állapotba. Ez nem vonható vissza. Egyetértesz?",
+        "reset-appearance": "A nyelv és a megjelenés visszaállítása is"
       }
     },
     "ABOUT_US": {

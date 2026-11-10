@@ -197,7 +197,10 @@
       "import": "Verilerinizi içe aktarın",
       "import-descr": "Bir CSV dosyasından veya başka bir uygulamadan",
       "sample": "Örnek verilerle keşfedin",
-      "sample-descr": "Sahte hesaplar ve işlemler. Bunları istediğiniz zaman ayarlardan silebilirsiniz."
+      "sample-descr": "Sahte hesaplar ve işlemler. Bunları istediğiniz zaman ayarlardan silebilirsiniz.",
+      "start-now": "Şimdi başla",
+      "start-now-descr": "İlk işleminizi ekleyin ve oradan devam edin",
+      "other-ways": "Veya önce uygulamayı verilerle doldurun"
     }
   },
   "HOME": {
@@ -205,7 +208,10 @@
       "title": "İlk işleminizi ekleyelim",
       "descr": "Son alışverişiniz gibi basit bir şeyle başlayın. Daha sonra düzenleyebilirsiniz.",
       "action": "İşlem ekle",
-      "dismiss": "Şimdi değil"
+      "dismiss": "Şimdi değil",
+      "account-title": "İlk hesabınızı oluşturalım",
+      "account-descr": "Hesaplar, banka hesabı veya cüzdanınız gibi paranızı tutar. İşlem eklemek için bir hesaba ihtiyacınız var.",
+      "account-action": "Hesap oluştur"
     },
     "title": "Gösterge Paneli",
     "filter-transactions": "İşlemleri filtrele",
@@ -1604,7 +1610,10 @@
         "confirm-title": "Dur bakalım padawan ⚠️⚠️",
         "confirm-descr": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır.",
         "final-confirm-title": "Son bir adım ⚠️⚠️",
-        "success": "Verileriniz silindi"
+        "success": "Verileriniz silindi",
+        "descr": "Uygulamayı yeni kurulum durumuna sıfırlar: hesaplarınızı, işlemlerinizi, bütçelerinizi, hedeflerinizi, borçlarınızı, kategorilerinizi ve profilinizi siler ve sizi tanıtım ekranına geri götürür. Örnek verilerden kurtulmak için kullanışlıdır.",
+        "final-confirm-descr": "Hesaplarınız, işlemleriniz, bütçeleriniz, hedefleriniz, borçlarınız, kategorileriniz, para birimleriniz ve profiliniz kalıcı olarak silinecek ve uygulama ilk durumuna dönecektir. Bu işlem geri alınamaz. Kabul ediyor musunuz?",
+        "reset-appearance": "Dili ve görünümü de sıfırla"
       }
     },
     "ABOUT_US": {

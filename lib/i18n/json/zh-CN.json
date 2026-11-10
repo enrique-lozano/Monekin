@@ -197,7 +197,10 @@
       "import": "导入数据",
       "import-descr": "从 CSV 文件或其他应用导入",
       "sample": "使用示例数据体验",
-      "sample-descr": "示例账户和交易，可随时在设置中删除。"
+      "sample-descr": "示例账户和交易，可随时在设置中删除。",
+      "start-now": "立即开始",
+      "start-now-descr": "添加您的第一笔交易，然后继续使用",
+      "other-ways": "或者先用数据填充应用"
     }
   },
   "HOME": {
@@ -205,7 +208,10 @@
       "title": "添加您的第一笔交易",
       "descr": "从简单的内容开始，例如最近的一笔消费。之后可以编辑。",
       "action": "添加交易",
-      "dismiss": "暂不"
+      "dismiss": "暂不",
+      "account-title": "让我们创建您的第一个账户",
+      "account-descr": "账户用于存放您的资金，例如银行账户或钱包。添加交易前需要先有一个账户。",
+      "account-action": "创建账户"
     },
     "title": "面板",
     "filter-transactions": "筛选交易",
@@ -1603,7 +1609,10 @@
         "confirm-title": "停下，帕达万 ⚠️⚠️",
         "confirm-descr": "确定要继续吗？所有数据都将被永久删除且无法恢复。",
         "final-confirm-title": "最后一步 ⚠️⚠️",
-        "success": "您的数据已删除"
+        "success": "您的数据已删除",
+        "descr": "将应用重置为全新安装状态：删除您的账户、交易、预算、目标、债务、分类和个人资料，并带您返回引导页。适合用来清除示例数据。",
+        "final-confirm-descr": "您的账户、交易、预算、目标、债务、分类、货币和个人资料将被永久删除，应用将恢复到初始状态，且无法恢复。是否同意？",
+        "reset-appearance": "同时重置语言和外观"
       }
     },
     "ABOUT_US": {

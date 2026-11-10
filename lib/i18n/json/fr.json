@@ -197,7 +197,10 @@
       "import": "Importer vos données",
       "import-descr": "Depuis un fichier CSV ou une autre application",
       "sample": "Découvrir avec des données d'exemple",
-      "sample-descr": "Des comptes et transactions fictifs, supprimables à tout moment dans les paramètres."
+      "sample-descr": "Des comptes et transactions fictifs, supprimables à tout moment dans les paramètres.",
+      "start-now": "Commencer maintenant",
+      "start-now-descr": "Ajoutez votre première transaction et construisez à partir de là",
+      "other-ways": "Ou remplissez d'abord l'application avec des données"
     }
   },
   "HOME": {
@@ -206,7 +209,10 @@
       "title": "Ajoutons votre première transaction",
       "descr": "Commencez par quelque chose de simple, comme votre dernier achat. Vous pourrez le modifier plus tard.",
       "action": "Ajouter une transaction",
-      "dismiss": "Plus tard"
+      "dismiss": "Plus tard",
+      "account-title": "Créons votre premier compte",
+      "account-descr": "Les comptes contiennent votre argent, comme un compte bancaire ou votre portefeuille. Vous en avez besoin d'un pour ajouter des transactions.",
+      "account-action": "Créer un compte"
     },
     "filter-transactions": "Filtrer les transactions",
     "hello-day": "Bonjour,",
@@ -1609,7 +1615,10 @@
         "confirm-title": "Halte là, padawan ⚠️⚠️",
         "confirm-descr": "Voulez-vous vraiment continuer ? Toutes vos données seront définitivement supprimées et ne pourront pas être récupérées.",
         "final-confirm-title": "Une dernière étape ⚠️⚠️",
-        "success": "Vos données ont été supprimées"
+        "success": "Vos données ont été supprimées",
+        "descr": "Remet l'application dans l'état d'une nouvelle installation : supprime vos comptes, transactions, budgets, objectifs, dettes, catégories et votre profil, puis vous ramène à l'introduction. Utile pour se débarrasser des données d'exemple.",
+        "final-confirm-descr": "Vos comptes, transactions, budgets, objectifs, dettes, catégories, devises et votre profil seront définitivement supprimés et l'application reviendra à son état initial. Cette action est irréversible. Êtes-vous d'accord ?",
+        "reset-appearance": "Réinitialiser aussi la langue et l'apparence"
       }
     },
     "ABOUT_US": {

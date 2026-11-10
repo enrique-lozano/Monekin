@@ -197,7 +197,10 @@
       "import": "Daten importieren",
       "import-descr": "Aus einer CSV-Datei oder einer anderen App",
       "sample": "Beispieldaten erkunden",
-      "sample-descr": "Fiktive Konten und Transaktionen. Du kannst sie jederzeit in den Einstellungen löschen."
+      "sample-descr": "Fiktive Konten und Transaktionen. Du kannst sie jederzeit in den Einstellungen löschen.",
+      "start-now": "Jetzt starten",
+      "start-now-descr": "Füge deine erste Transaktion hinzu und baue von dort aus auf",
+      "other-ways": "Oder fülle die App zuerst mit Daten"
     }
   },
   "HOME": {
@@ -206,7 +209,10 @@
       "title": "Fügen wir deine erste Transaktion hinzu",
       "descr": "Beginne mit etwas Einfachem, zum Beispiel deinem letzten Einkauf. Du kannst ihn später bearbeiten.",
       "action": "Transaktion hinzufügen",
-      "dismiss": "Jetzt nicht"
+      "dismiss": "Jetzt nicht",
+      "account-title": "Erstellen wir dein erstes Konto",
+      "account-descr": "Konten enthalten dein Geld, z. B. ein Bankkonto oder deine Geldbörse. Du brauchst eines, um Transaktionen hinzuzufügen.",
+      "account-action": "Konto erstellen"
     },
     "filter-transactions": "Transaktionen filtern",
     "hello-day": "Guten Morgen,",
@@ -1611,7 +1617,10 @@
         "confirm-title": "Halt, Padawan ⚠️⚠️",
         "confirm-descr": "Möchtest du wirklich fortfahren? Alle deine Daten werden unwiderruflich gelöscht.",
         "final-confirm-title": "Ein letzter Schritt ⚠️⚠️",
-        "success": "Deine Daten wurden gelöscht"
+        "success": "Deine Daten wurden gelöscht",
+        "descr": "Setzt die App auf den Zustand einer Neuinstallation zurück: Sie entfernt deine Konten, Transaktionen, Budgets, Ziele, Schulden, Kategorien und dein Profil und führt dich zurück zum Onboarding. Nützlich, um die Beispieldaten loszuwerden.",
+        "final-confirm-descr": "Deine Konten, Transaktionen, Budgets, Ziele, Schulden, Kategorien, Währungen und dein Profil werden dauerhaft gelöscht und die App kehrt in ihren Ausgangszustand zurück. Das kann nicht rückgängig gemacht werden. Bist du einverstanden?",
+        "reset-appearance": "Sprache und Darstellung ebenfalls zurücksetzen"
       }
     },
     "ABOUT_US": {

@@ -197,7 +197,10 @@
       "import": "Importa i tuoi dati",
       "import-descr": "Da un file CSV o da un'altra app",
       "sample": "Esplora con dati di esempio",
-      "sample-descr": "Account e transazioni fittizi, eliminabili in qualsiasi momento dalle impostazioni."
+      "sample-descr": "Account e transazioni fittizi, eliminabili in qualsiasi momento dalle impostazioni.",
+      "start-now": "Inizia ora",
+      "start-now-descr": "Aggiungi la tua prima transazione e costruisci da lì",
+      "other-ways": "Oppure riempi prima l'app con dei dati"
     }
   },
   "HOME": {
@@ -205,7 +208,10 @@
       "title": "Aggiungiamo la tua prima transazione",
       "descr": "Inizia con qualcosa di semplice, come il tuo ultimo acquisto. Potrai modificarlo in seguito.",
       "action": "Aggiungi transazione",
-      "dismiss": "Non ora"
+      "dismiss": "Non ora",
+      "account-title": "Creiamo il tuo primo conto",
+      "account-descr": "I conti contengono il tuo denaro, come un conto bancario o il tuo portafoglio. Te ne serve uno per aggiungere transazioni.",
+      "account-action": "Crea conto"
     },
     "title": "Dashboard",
     "filter-transactions": "Filtra transazioni",
@@ -1611,7 +1617,10 @@
         "confirm-title": "Fermo lì, padawan ⚠️⚠️",
         "confirm-descr": "Vuoi davvero continuare? Tutti i tuoi dati verranno eliminati definitivamente e non potranno essere recuperati.",
         "final-confirm-title": "Un ultimo passo ⚠️⚠️",
-        "success": "I tuoi dati sono stati eliminati"
+        "success": "I tuoi dati sono stati eliminati",
+        "descr": "Riporta l'app allo stato di una nuova installazione: rimuove i tuoi conti, transazioni, budget, obiettivi, debiti, categorie e il tuo profilo, e ti riporta all'introduzione. Utile per eliminare i dati di esempio.",
+        "final-confirm-descr": "I tuoi conti, transazioni, budget, obiettivi, debiti, categorie, valute e il tuo profilo verranno eliminati definitivamente e l'app tornerà al suo stato iniziale. Non sarà possibile recuperarli. Sei d'accordo?",
+        "reset-appearance": "Reimposta anche lingua e aspetto"
       }
     },
     "ABOUT_US": {

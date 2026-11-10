@@ -200,7 +200,10 @@
       "import": "Importar tus datos",
       "import-descr": "Desde un archivo CSV u otra aplicación",
       "sample": "Explorar con datos de ejemplo",
-      "sample-descr": "Cuentas y transacciones ficticias. Puedes eliminarlas cuando quieras desde los ajustes."
+      "sample-descr": "Cuentas y transacciones ficticias. Puedes eliminarlas cuando quieras desde los ajustes.",
+      "start-now": "Empezar ahora",
+      "start-now-descr": "Añade tu primera transacción y construye desde ahí",
+      "other-ways": "O llena primero la app con datos"
     }
   },
   "HOME": {
@@ -209,7 +212,10 @@
       "title": "Añadamos tu primera transacción",
       "descr": "Empieza con algo sencillo, como tu última compra. Puedes editarla más tarde.",
       "action": "Añadir transacción",
-      "dismiss": "Ahora no"
+      "dismiss": "Ahora no",
+      "account-title": "Vamos a crear tu primera cuenta",
+      "account-descr": "Las cuentas guardan tu dinero, como una cuenta bancaria o tu cartera. Necesitas una para añadir transacciones.",
+      "account-action": "Crear cuenta"
     },
     "filter-transactions": "Filtrar transacciones",
     "hello-day": "Buenos días,",
