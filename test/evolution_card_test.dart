@@ -50,4 +50,43 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('the whole value header switches the value label', (
+    tester,
+  ) async {
+    var taps = 0;
+    final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
+
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: MaterialApp(
+          theme: ThemeData(
+            colorScheme: colorScheme,
+            extensions: [AppColors.fromColorScheme(colorScheme)],
+          ),
+          home: Scaffold(
+            body: EvolutionCard(
+              valueLabel: 'Net worth',
+              onValueLabelTap: () => taps++,
+              initialValue: 80,
+              finalValue: 100,
+              currency: Currency(name: 'Euro', code: 'EUR', symbol: '€'),
+              chart: const SizedBox.expand(),
+              currentPeriod: const DatePeriod.lastDays(30),
+              onPresetSelected: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('NET WORTH'));
+    await tester.tap(find.textContaining('100'));
+    expect(taps, 2);
+
+    final header = tester.getSize(
+      find.ancestor(of: find.text('NET WORTH'), matching: find.byType(InkWell)),
+    );
+    expect(header.height, greaterThanOrEqualTo(48));
+  });
 }
