@@ -1601,11 +1601,9 @@
       "DELETE-ALL": {
         "title": "Adatok törlése",
         "action": "Adataim törlése",
-        "descr": "Eltávolítja a számláidat, tranzakcióidat, költségvetéseidet, céljaidat és tartozásaidat. Hasznos a mintaadatok törléséhez. A kategóriák és beállítások megmaradnak.",
         "confirm-title": "Állj meg, padavan ⚠️⚠️",
         "confirm-descr": "Biztosan folytatni szeretnéd? Minden adatod véglegesen törlődik, és nem állítható vissza.",
         "final-confirm-title": "Még egy utolsó lépés ⚠️⚠️",
-        "final-confirm-descr": "A számláid, tranzakcióid, költségvetéseid, céljaid, tartozásaid és kategóriáid véglegesen törlődnek, és nem állíthatók vissza. Egyetértesz?",
         "success": "Az adataid törölve"
       }
     },

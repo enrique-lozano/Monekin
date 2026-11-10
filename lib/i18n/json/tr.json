@@ -1601,11 +1601,9 @@
       "DELETE-ALL": {
         "title": "Verileri sil",
         "action": "Verilerimi sil",
-        "descr": "Hesaplarınızı, işlemlerinizi, bütçelerinizi, hedeflerinizi ve borçlarınızı kaldırır. Örnek verileri silmek için kullanışlıdır. Kategoriler ve ayarlar korunur.",
         "confirm-title": "Dur bakalım padawan ⚠️⚠️",
         "confirm-descr": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır.",
         "final-confirm-title": "Son bir adım ⚠️⚠️",
-        "final-confirm-descr": "Hesaplarınız, işlemleriniz, bütçeleriniz, hedefleriniz, borçlarınız ve kategorileriniz kalıcı olarak silinecek ve kurtarılamayacaktır. Onaylıyor musunuz?",
         "success": "Verileriniz silindi"
       }
     },

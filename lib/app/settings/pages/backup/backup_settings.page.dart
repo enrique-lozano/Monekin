@@ -10,9 +10,7 @@ import 'package:monekin/app/settings/pages/backup/export_page.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/backup/backup_database_service.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
-import 'package:monekin/core/database/services/user-setting/default_transaction_values.service.dart';
-import 'package:monekin/core/database/utils/demo_app_seeders.dart';
+import 'package:monekin/core/database/utils/app_reset.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
@@ -36,22 +34,39 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
     final confirmed = await confirmDialog(
       context,
       icon: Icons.delete_forever_rounded,
-      dialogTitle: t.backup.delete.confirm_title,
-      contentParagraphs: [Text(t.backup.delete.confirm_descr)],
+      dialogTitle: t.more.data.delete_all.confirm_title,
+      contentParagraphs: [Text(t.more.data.delete_all.confirm_descr)],
       showCancelButton: true,
       confirmationText: t.ui_actions.continue_text,
     );
 
     if (confirmed != true || !context.mounted) return;
 
+    final resetAppearance = ValueNotifier(false);
+
     final reallySure = await confirmDialog(
       context,
       icon: Icons.warning_rounded,
-      dialogTitle: t.backup.delete.final_confirm_title,
-      contentParagraphs: [Text(t.backup.delete.final_confirm_descr)],
+      dialogTitle: t.more.data.delete_all.final_confirm_title,
+      contentParagraphs: [
+        Text(t.more.data.delete_all.final_confirm_descr),
+        ValueListenableBuilder(
+          valueListenable: resetAppearance,
+          builder: (context, value, _) => CheckboxListTile(
+            value: value,
+            onChanged: (v) => resetAppearance.value = v ?? false,
+            title: Text(t.more.data.delete_all.reset_appearance),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+        ),
+      ],
       showCancelButton: true,
-      confirmationText: t.backup.delete.final_confirm_action,
+      confirmationText: t.more.data.delete_all.action,
     );
+
+    final shouldResetAppearance = resetAppearance.value;
+    resetAppearance.dispose();
 
     if (reallySure != true || !context.mounted) return;
 
@@ -59,15 +74,13 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
     loadingOverlay.show();
 
     try {
-      await deleteAllUserData();
-      DefaultTransactionValuesService.lastCreatedTransaction.value = null;
-      await AppDataService.instance.resetAppData();
+      await resetApp(resetAppearance: shouldResetAppearance);
       loadingOverlay.hide();
 
       RouteUtils.popAllRoutesExceptFirst();
       unawaited(RouteUtils.pushRoute(const IntroPage(), withReplacement: true));
 
-      MonekinSnackbar.success(SnackbarParams(t.backup.delete.success));
+      MonekinSnackbar.success(SnackbarParams(t.more.data.delete_all.success));
     } catch (e) {
       loadingOverlay.hide();
 
@@ -179,10 +192,10 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                   RouteUtils.showResponsiveForm(const ExportDataPage());
                 },
               ),
-              createListSeparator(context, t.backup.delete.title),
+              createListSeparator(context, t.more.data.delete_all.title),
               ListTile(
-                title: Text(t.backup.delete.action),
-                subtitle: Text(t.backup.delete.descr),
+                title: Text(t.more.data.delete_all.action),
+                subtitle: Text(t.more.data.delete_all.descr),
                 minVerticalPadding: 16,
                 onTap: () => _deleteAllData(context),
               ),

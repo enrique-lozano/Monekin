@@ -1608,11 +1608,9 @@
       "DELETE-ALL": {
         "title": "Daten löschen",
         "action": "Meine Daten löschen",
-        "descr": "Entfernt deine Konten, Transaktionen, Budgets, Sparziele und Schulden. Nützlich, um Beispieldaten zu entfernen. Kategorien und Einstellungen bleiben erhalten.",
         "confirm-title": "Halt, Padawan ⚠️⚠️",
         "confirm-descr": "Möchtest du wirklich fortfahren? Alle deine Daten werden unwiderruflich gelöscht.",
         "final-confirm-title": "Ein letzter Schritt ⚠️⚠️",
-        "final-confirm-descr": "Konten, Transaktionen, Budgets, Sparziele, Schulden und Kategorien werden dauerhaft gelöscht und können nicht wiederhergestellt werden. Bist du einverstanden?",
         "success": "Deine Daten wurden gelöscht"
       }
     },

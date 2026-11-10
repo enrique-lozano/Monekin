@@ -1622,11 +1622,12 @@
       "DELETE-ALL": {
         "title": "Eliminar datos",
         "action": "Eliminar mis datos",
-        "descr": "Elimina tus cuentas, transacciones, presupuestos, objetivos y deudas. Es útil para borrar los datos de ejemplo. Las categorías y los ajustes se conservan.",
+        "descr": "Devuelve la app a su estado inicial: elimina tus cuentas, transacciones, presupuestos, objetivos, deudas, categorías y perfil, y te lleva de nuevo al onboarding. Es útil para borrar los datos de ejemplo.",
         "confirm-title": "Alto ahí, padawan ⚠️⚠️",
         "confirm-descr": "¿Seguro que quieres continuar? Todos tus datos se eliminarán de forma permanente y no se podrán recuperar.",
         "final-confirm-title": "Un último paso ⚠️⚠️",
-        "final-confirm-descr": "Se eliminarán permanentemente tus cuentas, transacciones, presupuestos, objetivos, deudas y categorías, y no se podrán recuperar. ¿Estás de acuerdo?",
+        "final-confirm-descr": "Se eliminarán permanentemente tus cuentas, transacciones, presupuestos, objetivos, deudas, categorías, monedas y perfil, y la app volverá a su estado inicial. No se podrá recuperar. ¿Estás de acuerdo?",
+        "reset-appearance": "Restablecer también el idioma y la apariencia",
         "success": "Tus datos se han eliminado"
       }
     },

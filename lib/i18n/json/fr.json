@@ -1606,11 +1606,9 @@
       "DELETE-ALL": {
         "title": "Supprimer les données",
         "action": "Supprimer mes données",
-        "descr": "Supprime vos comptes, transactions, budgets, objectifs et dettes. Pratique pour supprimer les données d'exemple. Les catégories et les paramètres sont conservés.",
         "confirm-title": "Halte là, padawan ⚠️⚠️",
         "confirm-descr": "Voulez-vous vraiment continuer ? Toutes vos données seront définitivement supprimées et ne pourront pas être récupérées.",
         "final-confirm-title": "Une dernière étape ⚠️⚠️",
-        "final-confirm-descr": "Vos comptes, transactions, budgets, objectifs, dettes et catégories seront définitivement supprimés et ne pourront pas être récupérés. Êtes-vous d'accord ?",
         "success": "Vos données ont été supprimées"
       }
     },

@@ -1608,11 +1608,9 @@
       "DELETE-ALL": {
         "title": "Elimina i dati",
         "action": "Elimina i miei dati",
-        "descr": "Rimuove account, transazioni, budget, obiettivi e debiti. Utile per eliminare i dati di esempio. Categorie e impostazioni vengono mantenute.",
         "confirm-title": "Fermo lì, padawan ⚠️⚠️",
         "confirm-descr": "Vuoi davvero continuare? Tutti i tuoi dati verranno eliminati definitivamente e non potranno essere recuperati.",
         "final-confirm-title": "Un ultimo passo ⚠️⚠️",
-        "final-confirm-descr": "Account, transazioni, budget, obiettivi, debiti e categorie verranno eliminati definitivamente e non potranno essere recuperati. Sei d'accordo?",
         "success": "I tuoi dati sono stati eliminati"
       }
     },

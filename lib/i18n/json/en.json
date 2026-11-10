@@ -1521,17 +1521,6 @@
         "spendee-hint": "In the Spendee mobile app, go to More → Export and choose CSV. The file is sent to your email."
       }
     },
-    "DELETE": {
-      "title": "Delete data",
-      "action": "Delete all my data",
-      "descr": "Removes your accounts, transactions, budgets, goals and debts and takes you back to the onboarding. Useful to leave the sample data.",
-      "confirmTitle": "Delete all your data?",
-      "confirmDescr": "All your accounts, transactions, budgets, goals and debts will be permanently deleted, and the app will go back to its initial state. Consider exporting a backup first.",
-      "finalConfirmTitle": "This cannot be undone",
-      "finalConfirmDescr": "Everything will be erased from this device for good. Are you absolutely sure?",
-      "finalConfirmAction": "Delete everything",
-      "success": "Your data has been deleted"
-    },
     "ABOUT": {
       "title": "Information about your database",
       "create-date": "Creation date",
@@ -1650,11 +1639,12 @@
       "DELETE-ALL": {
         "title": "Delete data",
         "action": "Delete my data",
-        "descr": "Removes your accounts, transactions, budgets, goals and debts. Useful to leave the sample data. Categories and settings are kept.",
+        "descr": "Resets the app to a fresh install: removes your accounts, transactions, budgets, goals, debts, categories and profile, and takes you back to the onboarding. Useful to leave the sample data.",
         "confirm-title": "Stop right there padawan ⚠️⚠️",
         "confirm-descr": "Are you sure you want to continue? All your data will be permanently deleted and cannot be recovered.",
         "final-confirm-title": "One last step ⚠️⚠️",
-        "final-confirm-descr": "Your accounts, transactions, budgets, goals, debts and categories will be permanently deleted and cannot be recovered. Do you agree?",
+        "final-confirm-descr": "Your accounts, transactions, budgets, goals, debts, categories, currencies and profile will be permanently deleted and the app will go back to its initial state. This cannot be recovered. Do you agree?",
+        "reset-appearance": "Also reset language and appearance",
         "success": "Your data has been deleted"
       }
     },
