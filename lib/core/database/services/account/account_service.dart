@@ -427,8 +427,9 @@ class AccountService {
   }
 
   /// Relative change in combined account balance between two dates: fraction
-  /// `(end - start) / start` in the same sense as [getAccountsMoney] (e.g. `0.05`
-  /// means +5% when formatted as a percent).
+  /// `(end - start) / |start|` in the same sense as [getAccountsMoney] (e.g.
+  /// `0.05` means +5% when formatted as a percent). Dividing by the absolute
+  /// value keeps the sign of the change when the balance is negative (debts).
   ///
   /// If the starting balance is zero (or numerically near zero), returns `0.0`
   /// when the ending balance is also near zero, otherwise `double.nan`.
@@ -481,7 +482,7 @@ class AccountService {
           return finalBalance.abs() < eps ? 0.0 : double.nan;
         }
 
-        return (finalBalance - startBalance) / startBalance;
+        return (finalBalance - startBalance) / startBalance.abs();
       },
     );
   }
