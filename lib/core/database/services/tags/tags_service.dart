@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/models/tags/tag.dart';
 
@@ -7,6 +8,9 @@ class TagService {
 
   TagService._(this.db);
   static final TagService instance = TagService._(AppDB.instance);
+
+  @visibleForTesting
+  TagService.forTesting(this.db);
 
   Future<int> insertTag(TagInDB tag) {
     return db.into(db.tags).insert(tag);
