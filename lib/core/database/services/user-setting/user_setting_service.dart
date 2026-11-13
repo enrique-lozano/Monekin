@@ -20,6 +20,9 @@ enum SettingKey {
   /// Key to storage if the user will enter in the "private mode" when the app launches.
   privateModeAtLaunch,
 
+  /// Key to storage if the app is locked behind the device authentication. Could be '1' (true) or '0' (false)
+  appLock,
+
   /// Key to storage the app theme. Could be 'system', 'light' or 'dark'
   themeMode,
 
