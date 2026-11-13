@@ -184,7 +184,7 @@
     "welcome.footer": "登入即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隱私權政策</a>和<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>應用程式的使用條款</a>",
     "offline.descr.title": "離線帳戶：",
     "offline.descr": "您的資料只會儲存在您的裝置上，只要您不卸載應用程式或更換手機，資料就安全。為防止資料遺失，建議定期從應用程式設定中進行備份。",
-    "offline.start": "離線啟動會話",
+    "offline.start": "開始使用",
     "sl1Title": "選擇您的貨幣",
     "sl1Descr": "您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言",
     "sl2Title": "安全、隱私、可靠",
@@ -203,7 +203,8 @@
       "start-now": "立即開始",
       "start-now-descr": "新增您的第一筆交易，然後繼續使用",
       "other-ways": "或者先用資料填滿應用程式"
-    }
+    },
+    "restore-backup": "還原 Monekin 備份"
   },
   "HOME": {
     "FIRST-TRANSACTION": {

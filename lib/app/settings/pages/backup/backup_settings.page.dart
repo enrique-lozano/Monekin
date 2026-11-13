@@ -2,14 +2,13 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
 import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/restore_backup.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/backup/backup_database_service.dart';
 import 'package:monekin/core/database/utils/app_reset.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
@@ -119,59 +118,19 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       return;
                     }
 
-                    BackupDatabaseService()
-                        .importDatabase()
-                        .then((value) {
-                          if (!value) {
-                            RouteUtils.popRoute();
+                    pickAndRestoreBackup().then((restored) {
+                      if (!restored) return;
 
-                            MonekinSnackbar.info(
-                              SnackbarParams(t.backup.no_file_selected),
-                            );
+                      RouteUtils.popAllRoutesExceptFirst();
 
-                            return;
-                          }
+                      tabsPageKey.currentState!.changePage(
+                        AppMenuDestinationsID.dashboard,
+                      );
 
-                          RouteUtils.popAllRoutesExceptFirst();
-
-                          tabsPageKey.currentState!.changePage(
-                            AppMenuDestinationsID.dashboard,
-                          );
-
-                          MonekinSnackbar.success(
-                            SnackbarParams(t.backup.import.success),
-                          );
-                        })
-                        .catchError((err) {
-                          RouteUtils.popRoute();
-
-                          if (err is MigrationFailedException) {
-                            MonekinSnackbar.error(
-                              SnackbarParams(
-                                "Failed to migrate the database to version ${err.targetVersion}",
-                                message:
-                                    "A backup was kept at ${err.backupPath}",
-                                duration: const Duration(seconds: 8),
-                                actions: [
-                                  MonekinSnackbarAction(
-                                    label: "Copy full error",
-                                    onPressed: () {
-                                      Clipboard.setData(
-                                        ClipboardData(
-                                          text: err.cause.toString(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            MonekinSnackbar.error(
-                              SnackbarParams.fromError(err),
-                            );
-                          }
-                        });
+                      MonekinSnackbar.success(
+                        SnackbarParams(t.backup.import.success),
+                      );
+                    });
                   });
                 },
               ),

@@ -182,7 +182,7 @@
     "welcome.footer": "登录即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隐私策略</a>和此应用的<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>使用条款</a>",
     "offline.descr.title": "本地账户：",
     "offline.descr": "您的数据只会存储于此设备中，只要您不卸载应用或更换手机，数据就会保持安全。为避免数据丢失，建议定期从应用设置中备份数据。",
-    "offline.start": "开始使用本地账户",
+    "offline.start": "开始使用",
     "sl1Title": "选择您的货币",
     "sl1Descr": "您的默认货币会被用于报表和图表中。您之后可以随时更改默认货币和应用语言",
     "sl2Title": "安全、隐私、可靠",
@@ -201,7 +201,8 @@
       "start-now": "立即开始",
       "start-now-descr": "添加您的第一笔交易，然后继续使用",
       "other-ways": "或者先用数据填充应用"
-    }
+    },
+    "restore-backup": "恢复 Monekin 备份"
   },
   "HOME": {
     "FIRST-TRANSACTION": {

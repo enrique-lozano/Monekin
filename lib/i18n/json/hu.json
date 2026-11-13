@@ -182,7 +182,7 @@
     "welcome.footer": "A bejelentkezéssel elfogadja az <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Felhasználási feltételeit</a>",
     "offline.descr.title": "OFFLINE SZÁMLA:",
     "offline.descr": "Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.",
-    "offline.start": "Offline munkamenet indítása",
+    "offline.start": "Kezdés",
     "sl1Title": "Válassza ki a pénznemet",
     "sl1Descr": "Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.",
     "sl2Title": "Biztonságos, privát és megbízható",
@@ -201,7 +201,8 @@
       "start-now": "Kezdés most",
       "start-now-descr": "Add hozzá az első tranzakciódat, és építkezz innen",
       "other-ways": "Vagy töltsd fel előbb az alkalmazást adatokkal"
-    }
+    },
+    "restore-backup": "Monekin biztonsági mentés visszaállítása"
   },
   "HOME": {
     "FIRST-TRANSACTION": {

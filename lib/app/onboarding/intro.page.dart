@@ -1,15 +1,40 @@
+import 'dart:async';
+
 import 'package:material_ui/material_ui.dart';
+import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/onboarding/onboarding.dart';
+import 'package:monekin/app/settings/pages/backup/restore_backup.dart';
 import 'package:monekin/app/settings/widgets/display_app_icon.dart';
+import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/presentation/app_colors.dart';
 import 'package:monekin/core/presentation/responsive/breakpoint_container.dart';
 import 'package:monekin/core/presentation/styles/button_styles.dart';
 import 'package:monekin/core/presentation/widgets/html_text.dart';
 import 'package:monekin/core/routes/route_utils.dart';
+import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
+import 'package:monekin/main.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
+
+  Future<void> _restoreBackup() async {
+    if (!await pickAndRestoreBackup()) return;
+
+    // The restored database has its own settings and app data
+    await UserSettingService.instance.initializeGlobalStateMap();
+    await AppDataService.instance.initializeGlobalStateMap();
+    await AppDataService.instance.setItem(AppDataKey.introSeen, '1');
+    appStateKey.currentState?.refreshAppState();
+
+    unawaited(
+      RouteUtils.pushRoute(
+        PageSwitcher(key: tabsPageKey),
+        withReplacement: true,
+      ),
+    );
+  }
 
   Widget buildFirstSection(BuildContext context) {
     return Column(
@@ -80,6 +105,17 @@ class IntroPage extends StatelessWidget {
             child: Text(t.intro.offline_start),
           ),
           style: getBigButtonStyle(context),
+        ),
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          onPressed: _restoreBackup,
+          icon: const Icon(Icons.file_open_outlined, size: 20),
+          label: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(t.intro.restore_backup),
+          ),
+          style: getMediumButtonStyle(context),
         ),
         const Divider(height: 24),
         HTMLText(

@@ -184,7 +184,7 @@
     "welcome.footer": "By logging in you agree to the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Privacy Policy</a> and the <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Terms of Use</a> of the application",
     "offline.descr.title": "OFFLINE ACCOUNT:",
     "offline.descr": "Your data will only be stored on your device, and will be safe as long as you don't uninstall the app or change phone. To prevent data loss, it is recommended to make a backup regularly from the app settings.",
-    "offline.start": "Start session offline",
+    "offline.start": "Get started",
     "sl1Title": "Select your currency",
     "sl1Descr": "Your default currency will be used in reports and general charts. You will be able to change the currency and the app language later at any time in the application settings",
     "sl2Title": "Safe, private and reliable",
@@ -203,7 +203,8 @@
       "import-descr": "From a CSV file or another app",
       "sample": "Explore with sample data",
       "sample-descr": "Fake accounts and transactions. You can delete them at any time from the settings"
-    }
+    },
+    "restore-backup": "Restore a Monekin backup"
   },
   "HOME": {
     "title": "Dashboard",

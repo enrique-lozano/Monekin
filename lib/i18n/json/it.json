@@ -182,7 +182,7 @@
     "welcome.footer": "Effettuando l'accesso accetti l'<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>informativa sulla privacy</a> e i <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Termini di utilizzo</a> dell'applicazione",
     "offline.descr.title": "CONTO OFFLINE:",
     "offline.descr": "I tuoi dati saranno conservati solo sul tuo dispositivo e saranno al sicuro finché non disinstallerai l'app o cambierai telefono. Per prevenire la perdita di dati, si consiglia di effettuare un backup regolarmente dalle impostazioni dell'app.",
-    "offline.start": "Avvia sessione offline",
+    "offline.start": "Inizia",
     "sl1Title": "Seleziona la tua valuta",
     "sl1Descr": "La tua valuta predefinita sarà utilizzata nei rapporti e nei grafici generali. Potrai cambiare la valuta e la lingua dell'app in qualsiasi momento nelle impostazioni dell'applicazione",
     "sl2Title": "Sicura, privata e affidabile",
@@ -201,7 +201,8 @@
       "start-now": "Inizia ora",
       "start-now-descr": "Aggiungi la tua prima transazione e costruisci da lì",
       "other-ways": "Oppure riempi prima l'app con dei dati"
-    }
+    },
+    "restore-backup": "Ripristina un backup di Monekin"
   },
   "HOME": {
     "FIRST-TRANSACTION": {
