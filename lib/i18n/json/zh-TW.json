@@ -184,7 +184,7 @@
     "welcome.footer": "登入即表示您同意<a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>隱私權政策</a>和<a href= 'https: //github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>應用程式的使用條款</a>",
     "offline.descr.title": "離線帳戶：",
     "offline.descr": "您的資料只會儲存在您的裝置上，只要您不卸載應用程式或更換手機，資料就安全。為防止資料遺失，建議定期從應用程式設定中進行備份。",
-    "offline.start": "離線啟動會話",
+    "offline.start": "開始使用",
     "sl1Title": "選擇您的貨幣",
     "sl1Descr": "您的預設貨幣將用於報告和一般圖表。您以後可以隨時在應用程式設定中更改貨幣和應用程式語言",
     "sl2Title": "安全、隱私、可靠",
@@ -192,9 +192,30 @@
     "sl2Descr2": "此外，該應用程式的源代碼是公開的，任何人都可以對其進行協作並查看它是如何工作的",
     "lastSlideTitle": "一切準備就緒",
     "lastSlideDescr": "有了 Monekin，您終於可以實現您想要的財務獨立。您將擁有圖表、預算、提示、統計數據以及更多有關您的資金的信息。",
-    "lastSlideDescr2": "我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......"
+    "lastSlideDescr2": "我們希望您享受這次體驗！如有疑問、建議，請隨時與我們聯繫......",
+    "START-OPTIONS": {
+      "title": "您想如何開始？",
+      "descr": "選擇最快的方式，透過真實資料體驗 Monekin。之後隨時可以修改。",
+      "import": "匯入資料",
+      "import-descr": "從 CSV 檔案或其他應用程式匯入",
+      "sample": "使用範例資料探索",
+      "sample-descr": "範例帳戶和交易，可隨時在設定中刪除。",
+      "start-now": "立即開始",
+      "start-now-descr": "新增您的第一筆交易，然後繼續使用",
+      "other-ways": "或者先用資料填滿應用程式"
+    },
+    "restore-backup": "還原 Monekin 備份"
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "新增您的第一筆交易",
+      "descr": "從簡單的內容開始，例如最近的一筆消費。之後可以編輯。",
+      "action": "新增交易",
+      "dismiss": "暫時不要",
+      "account-title": "讓我們建立您的第一個帳戶",
+      "account-descr": "帳戶用於存放您的資金，例如銀行帳戶或錢包。新增交易前需要先有一個帳戶。",
+      "account-action": "建立帳戶"
+    },
     "title": "儀表板",
     "filter-transactions": "篩選交易",
     "hello-day": "早安，",
@@ -1615,11 +1636,17 @@
     "DATA": {
       "display": "數據",
       "display.descr": "匯出和匯入您的數據，這樣您就不會丟失任何東西",
-      "delete-all": "刪除我的資料",
-      "delete-all-header1": "Stop right there padawan ⚠️⚠️",
-      "delete-all-message1": "您確定要繼續嗎？您的所有資料將永久刪除且無法恢復",
-      "delete-all-header2": "最後一步⚠️⚠️",
-      "delete-all-message2": "刪除帳戶後，您將刪除所有儲存的個人資料。您的帳戶、交易、預算和類別將被刪除且無法恢復。您同意嗎？"
+      "DELETE-ALL": {
+        "title": "刪除資料",
+        "action": "刪除我的資料",
+        "confirm-title": "停下來，帕達萬 ⚠️⚠️",
+        "confirm-descr": "確定要繼續嗎？所有資料都將永久刪除且無法復原。",
+        "final-confirm-title": "最後一步 ⚠️⚠️",
+        "success": "您的資料已刪除",
+        "descr": "將應用程式重設為全新安裝狀態：刪除您的帳戶、交易、預算、目標、債務、分類和個人資料，並帶您回到引導頁。適合用來清除範例資料。",
+        "final-confirm-descr": "您的帳戶、交易、預算、目標、債務、分類、貨幣和個人資料將被永久刪除，應用程式將恢復到初始狀態，且無法復原。是否同意？",
+        "reset-appearance": "同時重設語言和外觀"
+      }
     },
     "ABOUT_US": {
       "display": "應用程式資訊",

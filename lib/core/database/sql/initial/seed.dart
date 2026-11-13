@@ -10,22 +10,28 @@ String appDataInitialSeedSQL(int schemaVersion) {
     """;
 }
 
+/// Initial value of the user settings in a fresh install. Settings not listed
+/// here start as `null`
+const Map<SettingKey, String?> initialUserSettings = {
+  SettingKey.avatar: 'man',
+  SettingKey.userName: 'User',
+  SettingKey.font: '0',
+  SettingKey.appLanguage: null,
+  SettingKey.privateModeAtLaunch: '0',
+  SettingKey.accentColor: 'auto',
+  SettingKey.amoledMode: '0',
+  SettingKey.themeMode: 'system',
+  SettingKey.defaultTransactionType: 'E',
+  SettingKey.transactionSwipeLeftAction: null,
+  SettingKey.transactionSwipeRightAction: null,
+  SettingKey.showAllDecimals: '1',
+  SettingKey.transactionTileShowTags: '1',
+  SettingKey.transactionTileShowTime: '1',
+};
+
 // TODO: Pref currency missing, maybe we should initialise it too
 String settingsInitialSeedSQL =
     """
   INSERT INTO userSettings VALUES 
-  ('${SettingKey.avatar.name}', 'man'), 
-  ('${SettingKey.userName.name}', 'User'), 
-  ('${SettingKey.font.name}', '0'), 
-  ('${SettingKey.appLanguage.name}', null), 
-  ('${SettingKey.privateModeAtLaunch.name}', '0'), 
-  ('${SettingKey.accentColor.name}', 'auto'), 
-  ('${SettingKey.amoledMode.name}', '0'), 
-  ('${SettingKey.themeMode.name}', 'system'),
-  ('${SettingKey.defaultTransactionType.name}', 'E'),
-  ('${SettingKey.transactionSwipeLeftAction.name}', null), 
-  ('${SettingKey.transactionSwipeRightAction.name}', null),
-  ('${SettingKey.showAllDecimals.name}', '1'),
-  ('${SettingKey.transactionTileShowTags.name}', '1'),
-  ('${SettingKey.transactionTileShowTime.name}', '1')
+  ${initialUserSettings.entries.map((e) => "('${e.key.name}', ${e.value == null ? 'null' : "'${e.value}'"})").join(',\n  ')}
 """;

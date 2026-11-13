@@ -182,7 +182,7 @@
     "welcome.footer": "Mit der Anmeldung stimmst Du der <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Datenschutzrichtlinie</a> und den <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Nutzungsbedingungen</a> der App zu",
     "offline.descr.title": "OFFLINE-KONTO:",
     "offline.descr": "Deine Daten werden nur auf Deinem Gerät gespeichert und sind sicher, solange Du die App nicht deinstallieren oder das Telefon wechselst. ",
-    "offline.start": "Sitzung offline starten",
+    "offline.start": "Los geht's",
     "sl1Title": "Wähle Deine Währung aus",
     "sl1Descr": "Deine Standardwährung wird in Berichten und allgemeinen Diagrammen verwendet. ",
     "sl2Title": "Sicher, privat und zuverlässig",
@@ -190,10 +190,31 @@
     "sl2Descr2": "Außerdem ist der Quellcode der Anwendung öffentlich, jeder kann daran mitarbeiten und sehen, wie es funktioniert",
     "lastSlideTitle": "Alles bereit",
     "lastSlideDescr": "Mit Monekin kannst Du endlich die finanzielle Unabhängigkeit erreichen, die Du dir so sehr wünschst. ",
-    "lastSlideDescr2": "Wir hoffen, dass Du Deine Erfahrung genießet! Zögerne nicht, uns im Falle von Fragen oder Vorschlägen zu kontaktieren..."
+    "lastSlideDescr2": "Wir hoffen, dass Du Deine Erfahrung genießet! Zögerne nicht, uns im Falle von Fragen oder Vorschlägen zu kontaktieren...",
+    "START-OPTIONS": {
+      "title": "Wie möchtest du starten?",
+      "descr": "Wähle den schnellsten Weg, Monekin mit echten Zahlen kennenzulernen. Du kannst später alles ändern.",
+      "import": "Daten importieren",
+      "import-descr": "Aus einer CSV-Datei oder einer anderen App",
+      "sample": "Beispieldaten erkunden",
+      "sample-descr": "Fiktive Konten und Transaktionen. Du kannst sie jederzeit in den Einstellungen löschen.",
+      "start-now": "Jetzt starten",
+      "start-now-descr": "Füge deine erste Transaktion hinzu und baue von dort aus auf",
+      "other-ways": "Oder fülle die App zuerst mit Daten"
+    },
+    "restore-backup": "Monekin-Backup wiederherstellen"
   },
   "HOME": {
     "title": "Übersicht",
+    "FIRST-TRANSACTION": {
+      "title": "Fügen wir deine erste Transaktion hinzu",
+      "descr": "Beginne mit etwas Einfachem, zum Beispiel deinem letzten Einkauf. Du kannst ihn später bearbeiten.",
+      "action": "Transaktion hinzufügen",
+      "dismiss": "Jetzt nicht",
+      "account-title": "Erstellen wir dein erstes Konto",
+      "account-descr": "Konten enthalten dein Geld, z. B. ein Bankkonto oder deine Geldbörse. Du brauchst eines, um Transaktionen hinzuzufügen.",
+      "account-action": "Konto erstellen"
+    },
     "filter-transactions": "Transaktionen filtern",
     "hello-day": "Guten Morgen,",
     "hello-night": "Gute Nacht,",
@@ -1591,11 +1612,17 @@
     "DATA": {
       "display": "Daten",
       "display.descr": "Exportiere und importiere Deine Daten, damit Du nichts verlierst",
-      "delete-all": "Meine Daten löschen",
-      "delete-all-header1": "Höre genau dort auf, Padawan ⚠️⚠️",
-      "delete-all-message1": "Bist Du sicher, dass Du fortfahren möchtest? Alle Daten werden endgültig gelöscht und können nicht wiederhergestellt werden.",
-      "delete-all-header2": "Ein letzter Schritt ⚠️⚠️",
-      "delete-all-message2": "Durch das Löschen eines Kontos löschst Du alle Deine gespeicherten persönlichen Daten. Deine Konten, Transaktionen, Budgets und Kategorien werden gelöscht und können nicht wiederhergestellt werden. Bist Du damit einverstanden?"
+      "DELETE-ALL": {
+        "title": "Daten löschen",
+        "action": "Meine Daten löschen",
+        "confirm-title": "Halt, Padawan ⚠️⚠️",
+        "confirm-descr": "Möchtest du wirklich fortfahren? Alle deine Daten werden unwiderruflich gelöscht.",
+        "final-confirm-title": "Ein letzter Schritt ⚠️⚠️",
+        "success": "Deine Daten wurden gelöscht",
+        "descr": "Setzt die App auf den Zustand einer Neuinstallation zurück: Sie entfernt deine Konten, Transaktionen, Budgets, Ziele, Schulden, Kategorien und dein Profil und führt dich zurück zum Onboarding. Nützlich, um die Beispieldaten loszuwerden.",
+        "final-confirm-descr": "Deine Konten, Transaktionen, Budgets, Ziele, Schulden, Kategorien, Währungen und dein Profil werden dauerhaft gelöscht und die App kehrt in ihren Ausgangszustand zurück. Das kann nicht rückgängig gemacht werden. Bist du einverstanden?",
+        "reset-appearance": "Sprache und Darstellung ebenfalls zurücksetzen"
+      }
     },
     "ABOUT_US": {
       "display": "App-Informationen",

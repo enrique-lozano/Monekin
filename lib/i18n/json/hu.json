@@ -182,7 +182,7 @@
     "welcome.footer": "A bejelentkezéssel elfogadja az <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Felhasználási feltételeit</a>",
     "offline.descr.title": "OFFLINE SZÁMLA:",
     "offline.descr": "Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.",
-    "offline.start": "Offline munkamenet indítása",
+    "offline.start": "Kezdés",
     "sl1Title": "Válassza ki a pénznemet",
     "sl1Descr": "Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.",
     "sl2Title": "Biztonságos, privát és megbízható",
@@ -190,9 +190,30 @@
     "sl2Descr2": "Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.",
     "lastSlideTitle": "Minden kész",
     "lastSlideDescr": "A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.",
-    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak..."
+    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...",
+    "START-OPTIONS": {
+      "title": "Hogyan szeretnéd kezdeni?",
+      "descr": "Válaszd a leggyorsabb módot, hogy valódi számokkal ismerd meg a Monekin működését. Később mindent megváltoztathatsz.",
+      "import": "Adatok importálása",
+      "import-descr": "CSV-fájlból vagy egy másik alkalmazásból",
+      "sample": "Felfedezés mintaadatokkal",
+      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban.",
+      "start-now": "Kezdés most",
+      "start-now-descr": "Add hozzá az első tranzakciódat, és építkezz innen",
+      "other-ways": "Vagy töltsd fel előbb az alkalmazást adatokkal"
+    },
+    "restore-backup": "Monekin biztonsági mentés visszaállítása"
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "Adjuk hozzá az első tranzakciódat",
+      "descr": "Kezdd valami egyszerűvel, például a legutóbbi vásárlásoddal. Később szerkesztheted.",
+      "action": "Tranzakció hozzáadása",
+      "dismiss": "Most nem",
+      "account-title": "Hozzuk létre az első számládat",
+      "account-descr": "A számlák tartalmazzák a pénzedet, például egy bankszámlát vagy a pénztárcádat. Tranzakciók hozzáadásához szükséged van egyre.",
+      "account-action": "Számla létrehozása"
+    },
     "title": "Kezdőlap",
     "filter-transactions": "Tranzakciók szűrése",
     "hello-day": "Jó reggelt,",
@@ -1584,11 +1605,17 @@
     "DATA": {
       "display": "Adatok",
       "display.descr": "Exportálja és importálja az adatait, hogy ne veszítsen el semmit se",
-      "delete-all": "Adataim törlése",
-      "delete-all-header1": "Álljon meg ⚠️⚠️",
-      "delete-all-message1": "Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza",
-      "delete-all-header2": "Még egy utolsó lépés ⚠️⚠️",
-      "delete-all-message2": "A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?"
+      "DELETE-ALL": {
+        "title": "Adatok törlése",
+        "action": "Adataim törlése",
+        "confirm-title": "Állj meg, padavan ⚠️⚠️",
+        "confirm-descr": "Biztosan folytatni szeretnéd? Minden adatod véglegesen törlődik, és nem állítható vissza.",
+        "final-confirm-title": "Még egy utolsó lépés ⚠️⚠️",
+        "success": "Az adataid törölve",
+        "descr": "Az alkalmazást új telepítés állapotába állítja vissza: törli a számláidat, tranzakcióidat, költségkereteidet, céljaidat, adósságaidat, kategóriáidat és a profilodat, és visszavisz a bemutatkozáshoz. Hasznos a mintaadatok eltávolításához.",
+        "final-confirm-descr": "A számláid, tranzakcióid, költségkereteid, céljaid, adósságaid, kategóriáid, pénznemeid és a profilod véglegesen törlődnek, az alkalmazás pedig visszaáll a kiindulási állapotba. Ez nem vonható vissza. Egyetértesz?",
+        "reset-appearance": "A nyelv és a megjelenés visszaállítása is"
+      }
     },
     "ABOUT_US": {
       "display": "Alkalmazásinformációk",
