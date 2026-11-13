@@ -1542,6 +1542,15 @@
     },
     "SECURITY": {
       "title": "Security",
+      "app_lock": {
+        "title": "App lock",
+        "descr": "Ask for your fingerprint, face, PIN, pattern or password to open the app",
+        "unavailable": "Set a screen lock (PIN, pattern, password or biometrics) on your device to use this option",
+        "confirm_reason": "Confirm your identity to change the app lock",
+        "unlock_reason": "Unlock Monekin",
+        "locked": "Monekin is locked",
+        "unlock": "Unlock"
+      },
       "private_mode_at_launch": "Private mode at launch",
       "private_mode_at_launch_descr": "Launch the app in private mode by default",
       "private_mode": "Private mode",

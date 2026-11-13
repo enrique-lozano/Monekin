@@ -19,6 +19,7 @@ String settingsInitialSeedSQL =
   ('${SettingKey.font.name}', '0'), 
   ('${SettingKey.appLanguage.name}', null), 
   ('${SettingKey.privateModeAtLaunch.name}', '0'), 
+  ('${SettingKey.appLock.name}', '0'), 
   ('${SettingKey.accentColor.name}', 'auto'), 
   ('${SettingKey.amoledMode.name}', '0'), 
   ('${SettingKey.themeMode.name}', 'system'),

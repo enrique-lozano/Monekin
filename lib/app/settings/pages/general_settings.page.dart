@@ -5,6 +5,7 @@ import 'package:monekin/app/settings/widgets/language_selector.dart';
 import 'package:monekin/app/settings/widgets/monekin_tile_switch.dart';
 import 'package:monekin/app/settings/widgets/settings_list_utils.dart';
 import 'package:monekin/core/database/services/user-setting/enum/supported_locales.dart';
+import 'package:monekin/core/database/services/user-setting/app_lock_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/padding.extension.dart';
@@ -83,6 +84,36 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               ),
               ShowAllDecimalPlacesSwitch(),
               createListSeparator(context, t.settings.security.title),
+              FutureBuilder<bool>(
+                future: AppLockService.instance.isDeviceSupported(),
+                builder: (context, snapshot) {
+                  final supported = snapshot.data ?? false;
+                  final enabled = AppLockService.instance.isEnabled;
+
+                  return MonekinTileSwitch(
+                    title: t.settings.security.app_lock.title,
+                    subtitle: supported || enabled
+                        ? t.settings.security.app_lock.descr
+                        : t.settings.security.app_lock.unavailable,
+                    icon: const Icon(Icons.fingerprint),
+                    initialValue: enabled,
+                    disabled: !supported && !enabled,
+                    onSwitch: (bool value) async {
+                      // Verify the user before changing the lock (if the device lock
+                      // was removed there is nothing to verify against)
+                      if (supported) {
+                        final ok = await AppLockService.instance.authenticate(
+                          t.settings.security.app_lock.confirm_reason,
+                        );
+
+                        if (!ok) throw Exception('Authentication failed');
+                      }
+
+                      await AppLockService.instance.setEnabled(value);
+                    },
+                  );
+                },
+              ),
               MonekinTileSwitch(
                 title: t.settings.security.private_mode_at_launch,
                 subtitle: t.settings.security.private_mode_at_launch_descr,
