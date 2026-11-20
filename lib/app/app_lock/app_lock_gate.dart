@@ -46,11 +46,11 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
     // The system auth prompt also sends the app to background, ignore it
     if (_authenticating) return;
 
-    // Desktop platforms report `hidden` (not `paused`) when minimizing
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.hidden) {
+    // Any non-resumed state counts: desktop reports `inactive` when focusing
+    // another window and `hidden` when minimizing
+    if (state != AppLifecycleState.resumed) {
       _backgroundedAt ??= DateTime.now();
-    } else if (state == AppLifecycleState.resumed) {
+    } else {
       final since = _backgroundedAt;
       _backgroundedAt = null;
 
@@ -98,6 +98,7 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
       child: widget.child,
       builder: (context, locked, child) {
         return Stack(
+          fit: StackFit.expand,
           children: [
             // Offstage alone doesn't stop hidden fields from getting keyboard input
             ExcludeFocus(

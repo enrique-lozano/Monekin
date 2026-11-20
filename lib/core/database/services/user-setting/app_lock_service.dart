@@ -47,7 +47,11 @@ class AppLockService {
       return ok ? AppLockAuthResult.success : AppLockAuthResult.failed;
     } on LocalAuthException catch (e) {
       Logger.printDebug('Authentication failed: ${e.code}');
-      return e.code == LocalAuthExceptionCode.noCredentialsSet
+      // Windows reports an unconfigured Windows Hello as `noBiometricsEnrolled`
+      final noCredentials =
+          e.code == LocalAuthExceptionCode.noCredentialsSet ||
+          e.code == LocalAuthExceptionCode.noBiometricsEnrolled;
+      return noCredentials
           ? AppLockAuthResult.noCredentials
           : AppLockAuthResult.failed;
     } catch (e) {
