@@ -182,7 +182,7 @@
     "welcome.footer": "A bejelentkezéssel elfogadja az <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Adatvédelmi irányelveket</a> és az alkalmazás <a href=' https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Felhasználási feltételeit</a>",
     "offline.descr.title": "OFFLINE SZÁMLA:",
     "offline.descr": "Az Ön adatai csak az Ön készülékén tárolódnak, és biztonságban lesznek, amíg nem távolítja el az alkalmazást, vagy nem cseréli le a telefont. Az adatvesztés megelőzése érdekében ajánlott rendszeresen biztonsági mentést készíteni az alkalmazás beállításaiból.",
-    "offline.start": "Offline munkamenet indítása",
+    "offline.start": "Kezdés",
     "sl1Title": "Válassza ki a pénznemet",
     "sl1Descr": "Az alapértelmezett pénznemet a jelentésekben és az általános diagramokban használjuk. A pénznemet és az alkalmazás nyelvét később bármikor megváltoztathatja az alkalmazás beállításaiban.",
     "sl2Title": "Biztonságos, privát és megbízható",
@@ -190,9 +190,30 @@
     "sl2Descr2": "Az alkalmazás forráskódja is nyilvános, így bárki közreműködhet benne, és megnézheti, hogyan is működik.",
     "lastSlideTitle": "Minden kész",
     "lastSlideDescr": "A Monekin segítségével végre elérheti azt az anyagi függetlenséget, amelyre annyira vágyik. Grafikonok, költségvetések, tippek, statisztikák és még sok minden más lesz megtalálható a pénzével kapcsolatban.",
-    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak..."
+    "lastSlideDescr2": "Reméljük, hogy élvezni fogja az élményt! Ne habozzon kapcsolatba lépni velünk, ha kétségei, javaslatai vannak...",
+    "START-OPTIONS": {
+      "title": "Hogyan szeretnéd kezdeni?",
+      "descr": "Válaszd a leggyorsabb módot, hogy valódi számokkal ismerd meg a Monekin működését. Később mindent megváltoztathatsz.",
+      "import": "Adatok importálása",
+      "import-descr": "CSV-fájlból vagy egy másik alkalmazásból",
+      "sample": "Felfedezés mintaadatokkal",
+      "sample-descr": "Minta számlák és tranzakciók. Bármikor törölheted őket a Beállításokban.",
+      "start-now": "Kezdés most",
+      "start-now-descr": "Add hozzá az első tranzakciódat, és építkezz innen",
+      "other-ways": "Vagy töltsd fel előbb az alkalmazást adatokkal"
+    },
+    "restore-backup": "Monekin biztonsági mentés visszaállítása"
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "Adjuk hozzá az első tranzakciódat",
+      "descr": "Kezdd valami egyszerűvel, például a legutóbbi vásárlásoddal. Később szerkesztheted.",
+      "action": "Tranzakció hozzáadása",
+      "dismiss": "Most nem",
+      "account-title": "Hozzuk létre az első számládat",
+      "account-descr": "A számlák tartalmazzák a pénzedet, például egy bankszámlát vagy a pénztárcádat. Tranzakciók hozzáadásához szükséged van egyre.",
+      "account-action": "Számla létrehozása"
+    },
     "title": "Kezdőlap",
     "filter-transactions": "Tranzakciók szűrése",
     "hello-day": "Jó reggelt,",
@@ -729,6 +750,24 @@
     "currency-manager": "Valutakezelő",
     "currency-manager.descr": "Konfigurálja a pénznemet és annak árfolyamait másokkal együtt",
     "preferred-currency": "Kedvelt/alap pénznem",
+    "update-rates": "Árfolyamok frissítése",
+    "update-rates-loading": "Árfolyamok lekérése a Frankfurtertől…",
+    "update-rates-success": {
+      "one": "A mai árfolyam frissítve 1 pénznemhez",
+      "other": "A mai árfolyamok frissítve {{n}} pénznemhez"
+    },
+    "update-rates-manual-kept": "Az Ön által megadott árfolyamok soha nem íródnak felül.",
+    "update-rates-up-to-date": "Az árfolyamai már naprakészek",
+    "remove-all-rates-warning": "Ez a művelet nem vonható vissza, és minden pénznem összes mentett árfolyamát törli. A pénznemek, számlák és tranzakciók nem törlődnek. Az átváltott egyenlegek és statisztikák megváltozhatnak.",
+    "delete-rates-error": "Nem sikerült törölni az árfolyamokat. Próbálja újra.",
+    "update-rates-supported-up-to-date": "A támogatott árfolyamok már naprakészek",
+    "update-rates-unavailable": "Nem érhetők el automatikus árfolyamok ezekhez a pénznemekhez: {{currencies}}. Adja meg ezeket az árfolyamokat kézzel.",
+    "update-rates-error": "Az árfolyamszolgáltatás nem érhető el. Ellenőrizze a kapcsolatot, és próbálja újra.",
+    "updated-today": "Ma frissítve",
+    "updated-days-ago": {
+      "one": "1 napja",
+      "other": "{{n}} napja"
+    },
     "tap-to-change-preferred-currency": "Érintse meg a módosításhoz",
     "change-preferred-currency-title": "Kedvelt pénznem módosítása",
     "change-preferred-currency-msg": "Mostantól minden statisztika és költségvetés ebben a pénznemben jelenik meg. A számlák és tranzakciók megtartják a korábbi pénznemet. Minden elmentett árfolyam törlődik, ha ezt a műveletet végrehajtja. Szeretné folytatni?",
@@ -741,7 +780,11 @@
       "edit": "Árfolyam szerkesztése",
       "edit-success": "Az árfolyam szerkesztése sikerült",
       "remove-all": "Törölje az összes árfolyamot",
-      "remove-all-warning": "Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez"
+      "remove-all-warning": "Ez a művelet visszafordíthatatlan, és törli az összes átváltási árfolyamot ehhez a pénznemhez",
+      "auto-loading": "Árfolyam keresése…",
+      "auto-filled": "Automatikusan kitöltve",
+      "auto-value": "Javasolt: {{rate}}",
+      "auto-use-value": "Érték használata"
     },
     "TYPES": {
       "display": "Pénznem típusa",
@@ -1330,39 +1373,121 @@
       "select-other-file": "Másik fájl kiválasztása",
       "tap-to-select-file": "Koppintson a fájl kiválasztásához",
       "MANUAL-IMPORT": {
-        "title": "Kézi importálás",
-        "descr": "Tranzakciók kézi importálása egy .csv fájlból",
+        "title": "Importálás CSV-ből",
+        "descr": "Hozza át a tranzakcióit egy másik alkalmazásból vagy bármely .csv fájlból",
         "defaultAccount": "Alapértelm. számla",
-        "removeDefaultAccount": "Alapértelmezett számla törlése",
         "defaultCategory": "Alapértelm. kategória",
         "defaultTags": "Alapértelmezett címkék",
-        "select-a-column": "Válasszon ki egy oszlopot a .csv fájlból",
         "date-format": "Dátumformátum",
         "note-column": "Megjegyzés oszlop",
         "title-column": "Cím oszlop",
         "tag-separator": "Címkeelválasztó a .csv fájlban",
-        "steps": [
-          "Fájl kiválasztása",
-          "Mennyiség oszlop",
-          "Számlaoszlop",
-          "Kategória oszlop",
-          "Címkék oszlopa",
-          "Dátum oszlop",
-          "Egyéb oszlopok"
-        ],
-        "steps-descr": [
-          "Válasszon ki egy .csv fájlt az eszközről. Győződjön meg arról, hogy van egy első sora, amely leírja az egyes oszlopok nevét.",
-          "Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre. Válassza ki azt az oszlopot, ahol az egyes tranzakciók értéke meg van adva. Használjon negatív értékeket a kiadásokhoz és pozitív értékeket a bevételekhez.",
-          "Válassza ki azt az oszlopot, amelyben meg van adva az a számla, amelyhez az egyes tranzakciók tartoznak. Kiválaszthat egy alapértelmezett fiókot is arra az esetre, ha nem találnánk a kívánt fiókot. Ha nincs megadva alapértelmezett fiók, akkor létrehozunk egyet ugyanazzal a névvel. ",
-          "Adja meg azt az oszlopot, ahol a tranzakciókategória neve található. Meg kell adnia egy alapértelmezett kategóriát, hogy ezt a kategóriát rendeljük hozzá a tranzakciókhoz, ha a kategória nem található.",
-          "Adja meg azt az oszlopot, ahol a tranzakciós címkék találhatók. Ha nincs megadva, a tranzakciók az alapértelmezett címkékkel jönnek létre.",
-          "Válassza ki azt az oszlopot, amelyben az egyes tranzakciók dátuma meg van adva. Ha nincs megadva, a tranzakciók az aktuális dátummal jönnek létre.",
-          "Az egyéb opcionális tranzakciós attribútumok oszlopainak meghatározása"
-        ],
-        "success": "{{x}} tranzakció sikeresen importálva"
+        "success": "{{x}} tranzakció sikeresen importálva",
+        "stage-file": "Forrás és fájl",
+        "stage-columns": "Oszlopok",
+        "stage-review": "Áttekintés",
+        "stage-indicator": "{{step}}. lépés / {{total}} · {{label}}",
+        "file-title": "Válassza ki a fájlt",
+        "empty-file": "A fájl üres, vagy nincs sor a fejléc alatt",
+        "template-mismatch": "Ez a fájl nem tűnik {{app}}-exportnak, ezért kitaláltuk az oszlopokat. Kérjük, gondosan ellenőrizze őket.",
+        "file-preview": "Fájl előnézete",
+        "rows-detected": {
+          "one": "1 sor észlelve",
+          "other": "{{n}} sor észlelve"
+        },
+        "amount-title": "Összeg",
+        "amount-mode-signed": "Egy oszlop",
+        "amount-mode-separate": "Bevétel / Kiadás",
+        "amount-mode-type": "Típussal",
+        "amount-mode-signed-descr": "Egyetlen oszlop az összeggel. A negatív értékek kiadások, a pozitívak bevételek.",
+        "amount-mode-separate-descr": "Egy oszlop a bevételeknek és egy másik a kiadásoknak.",
+        "amount-mode-type-descr": "Egy oszlop az összeggel és egy másik, amely megmondja, hogy az egyes sorok bevételek vagy kiadások.",
+        "amount-column": "Összeg oszlopa",
+        "income-column": "Bevétel oszlopa",
+        "expense-column": "Kiadás oszlopa",
+        "type-column": "Típus oszlopa",
+        "account-title": "Számla",
+        "account-column": "Számla oszlopa",
+        "category-title": "Kategória",
+        "category-column": "Kategória oszlopa",
+        "transfers-title": "Átutalások",
+        "transfers-descr": "Opcionális. Mondja el, hogyan írja le a fájl a számlái közötti átutalásokat.",
+        "transfer-column": "Az átutalás sorokat jelölő oszlop",
+        "destination-column": "Célszámla oszlopa",
+        "date-title": "Dátum",
+        "date-column": "Dátum oszlopa",
+        "time-column": "Idő oszlopa",
+        "date-format-help": "Példák: dd/MM/yyyy vagy MM/dd/yyyy HH:mm. Hagyja üresen, ha a dátumok 2025-01-31 vagy 2025-01-31T10:30:00 formájúak.",
+        "details-title": "Részletek",
+        "tags-column": "Címkék oszlopa",
+        "review-title": {
+          "one": "1 tranzakció készen áll az importálásra",
+          "other": "{{n}} tranzakció készen áll az importálásra"
+        },
+        "no-transactions-found": "Ezekkel az oszlopokkal egyetlen tranzakciót sem sikerült beolvasni. Lépjen vissza, és ellenőrizze őket.",
+        "skipped-rows": {
+          "one": "1 sor kimarad, mert az összege, dátuma vagy típusa érvénytelen",
+          "other": "{{n}} sor kimarad, mert az összegük, dátumuk vagy típusuk érvénytelen"
+        },
+        "unpaired-transfers": {
+          "one": "1 átutalás sornak nincs párja, ezért normál tranzakcióként lesz importálva",
+          "other": "{{n}} átutalás sornak nincs párja, ezért normál tranzakcióként lesznek importálva"
+        },
+        "accounts-to-create": "Ezek a számlák még nem léteznek, és létre lesznek hozva: {{accounts}}",
+        "preview": "Előnézet",
+        "file-descr": "Válassza ki a tranzakcióit tartalmazó .csv fájlt. Az első sornak tartalmaznia kell az egyes oszlopok nevét.",
+        "file-info": "{{size}} · {{rows}} sor · {{columns}} oszlop",
+        "autofill-title": "Az alábbi alkalmazások valamelyikéből származik?",
+        "autofill-descr": "Opcionális. Megfeleltetjük az oszlopait, és importálás előtt ellenőrizheti őket.",
+        "source-title": "Forrás (opcionális)",
+        "source-picker-title": "Forrásalkalmazás kiválasztása",
+        "source-auto": "Bármely CSV fájl (automatikus felismerés)",
+        "source-auto-descr": "Megpróbáljuk felismerni a forrást, és automatikusan kitölteni a következő lépés oszlopait",
+        "source-selected": "A formátumát használjuk az oszlopok megfeleltetéséhez.",
+        "source-detected": "A CSV fejlécéből felismerve.",
+        "columns-matched": "{{total}} oszlopból {{matched}} megfeleltetve",
+        "columns-title": "Oszlopok megfeleltetése",
+        "columns-descr": "Mondja meg, hol található az egyes adatok. Csak az összeg és egy alapértelmezett kategória kötelező.",
+        "template-applied": "Ez {{app}}-exportnak tűnik, ezért megfeleltettük az oszlopait.",
+        "not-set": "Nincs megadva",
+        "default-category-missing": "Válasszon alapértelmezett kategóriát",
+        "category-descr": "A Monekinben nem létező kategóriájú tranzakciók az alapértelmezett kategóriát kapják.",
+        "account-descr": "A Monekinben nem létező számlák a fájlban szereplő névvel jönnek létre, hacsak nem választ alapértelmezett számlát.",
+        "date-descr": "Ha a fájlban nincs dátum oszlop, a tranzakciók a mai dátummal jönnek létre.",
+        "details-descr": "Opcionális további információk minden tranzakcióhoz.",
+        "date-sample": "Az első érték a fájlban: {{value}}",
+        "type-values-title": "Mit jelent az egyes érték?",
+        "type-values-help": "Válassza ki, hogy az oszlop egyes értékei bevételek vagy kiadások. A kihagyott értékű sorok nem lesznek importálva.",
+        "too-many-values": "Ebben az oszlopban túl sok különböző érték van ahhoz, hogy típus legyen. Válasszon másik oszlopot.",
+        "skip": "Kihagyás",
+        "transfer-mode-none": "Nincs átutalás",
+        "transfer-mode-two": "Két sor",
+        "transfer-mode-one": "Egy sor",
+        "transfer-mode-none-descr": "Minden sor bevételként vagy kiadásként lesz importálva.",
+        "transfer-mode-two-descr": "Minden átutalás két sorban szerepel: az egyik elhagy egy számlát, a másik egy másik számlára érkezik. Egyetlen átutalássá egyesítjük őket.",
+        "transfer-mode-one-descr": "Minden átutalás egyetlen sor. A számla oszlopa a forrás, egy másik oszlop pedig a célszámlát adja meg.",
+        "transfer-values-text-help": "Pontosvesszővel válassza el őket. Példa: Átutalás; Kimenő átutalás",
+        "transfer-auto": "Az átutalások automatikusan felismerhetők ennek az oszlopnak a szövegéből.",
+        "transfer-values": "Mely értékek jelentenek átutalást?",
+        "preview-more": {
+          "one": "+ 1 további tranzakció",
+          "other": "+ {{n}} további tranzakció"
+        },
+        "discarded-transfers": {
+          "one": "1 átutalás nem lesz importálva, mert a forrása és a célja ugyanaz a számla. Az importáláshoz távolítsa el az alapértelmezett számlát.",
+          "other": "{{n}} átutalás nem lesz importálva, mert a forrásuk és a céljuk ugyanaz a számla. Az importáláshoz távolítsa el az alapértelmezett számlát."
+        },
+        "open-guide": "Hivatalos útmutató megnyitása"
       },
       "success": "Az importálás sikeresen végrehajtva",
       "error": "Hiba történt importálásakor. Kérjük, lépjen kapcsolatba a fejlesztővel a lozin.technologies@gmail.com címen keresztül.",
+      "TEMPLATES": {
+        "my-expenses-hint": "A MyExpensesben exportálja a tranzakcióit CSV-ként. A dátumokat nap/hónap/év formátumban várjuk, de ezt a következő lépésben módosíthatja.",
+        "cashew-hint": "A Cashewban exportálja a tranzakcióit CSV-ként a beállításaiból.",
+        "wallet-hint": "A Walletben exportálja a bejegyzéseit CSV-ként (Androidon: menü → Egyebek → Exportálás, vagy a webes alkalmazásból). Az exportálás Premium funkció. Az átutalások egyetlen tranzakcióként lesznek importálva.",
+        "generic-hint": "Bármely .csv fájl, amelynek első sora az egyes oszlopok nevét tartalmazza.",
+        "spendee-hint": "A Spendee mobilalkalmazásban lépjen a Továbbiak → Exportálás menüpontra, és válassza a CSV-t. A fájlt e-mailben elküldik Önnek."
+      },
       "cancelled": "Az importálást a felhasználó megszakította"
     },
     "ABOUT": {
@@ -1480,11 +1605,17 @@
     "DATA": {
       "display": "Adatok",
       "display.descr": "Exportálja és importálja az adatait, hogy ne veszítsen el semmit se",
-      "delete-all": "Adataim törlése",
-      "delete-all-header1": "Álljon meg ⚠️⚠️",
-      "delete-all-message1": "Biztosan benne, hogy folytatja? Minden adata véglegesen törlődik, és nem állítható vissza",
-      "delete-all-header2": "Még egy utolsó lépés ⚠️⚠️",
-      "delete-all-message2": "A fiók törlésével törli az összes tárolt személyes adatát. A számlái, tranzakciói, költségvetései és kategóriái törlődnek, és nem állíthatók helyre. Egyetért ezzel?"
+      "DELETE-ALL": {
+        "title": "Adatok törlése",
+        "action": "Adataim törlése",
+        "confirm-title": "Állj meg, padavan ⚠️⚠️",
+        "confirm-descr": "Biztosan folytatni szeretnéd? Minden adatod véglegesen törlődik, és nem állítható vissza.",
+        "final-confirm-title": "Még egy utolsó lépés ⚠️⚠️",
+        "success": "Az adataid törölve",
+        "descr": "Az alkalmazást új telepítés állapotába állítja vissza: törli a számláidat, tranzakcióidat, költségkereteidet, céljaidat, adósságaidat, kategóriáidat és a profilodat, és visszavisz a bemutatkozáshoz. Hasznos a mintaadatok eltávolításához.",
+        "final-confirm-descr": "A számláid, tranzakcióid, költségkereteid, céljaid, adósságaid, kategóriáid, pénznemeid és a profilod véglegesen törlődnek, az alkalmazás pedig visszaáll a kiindulási állapotba. Ez nem vonható vissza. Egyetértesz?",
+        "reset-appearance": "A nyelv és a megjelenés visszaállítása is"
+      }
     },
     "ABOUT_US": {
       "display": "Alkalmazásinformációk",
