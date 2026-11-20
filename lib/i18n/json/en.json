@@ -202,7 +202,7 @@
       "import": "Import your data",
       "import-descr": "From a CSV file or another app",
       "sample": "Explore with sample data",
-      "sample-descr": "Fake accounts and transactions. You can delete them at any time from the settings"
+      "sample-descr": "Try with sample accounts and transactions. Delete them anytime in Settings."
     },
     "restore-backup": "Restore a Monekin backup"
   },

@@ -104,13 +104,31 @@ void main() {
   testWidgets('wide layout keeps both action columns visible', (tester) async {
     setSize(tester, const Size(1000, 800));
     await tester.pumpWidget(app(const OnboardingStartPage()));
-    expect(
-      find.text(t.intro.start_options.start_now).hitTestable(),
-      findsOneWidget,
-    );
+    final startNow = find.text(t.intro.start_options.start_now);
+    final otherWays = find.text(t.intro.start_options.other_ways);
+    expect(startNow.hitTestable(), findsOneWidget);
     expect(
       find.text(t.intro.start_options.sample).hitTestable(),
       findsOneWidget,
+    );
+    expect(
+      tester.getTopLeft(startNow).dx,
+      greaterThan(tester.getTopLeft(otherWays).dx),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('mobile layout keeps the start option above the other choices', (
+    tester,
+  ) async {
+    setSize(tester, const Size(450, 800));
+    await tester.pumpWidget(app(const OnboardingStartPage()));
+
+    final startNow = find.text(t.intro.start_options.start_now);
+    final otherWays = find.text(t.intro.start_options.other_ways);
+    expect(
+      tester.getTopLeft(startNow).dy,
+      lessThan(tester.getTopLeft(otherWays).dy),
     );
     expect(tester.takeException(), isNull);
   });

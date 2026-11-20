@@ -199,8 +199,8 @@ class _OnboardingStartPageState extends State<OnboardingStartPage> {
                                         CrossAxisAlignment.stretch,
                                     spacing: 24,
                                     children: [
-                                      Expanded(child: startNow),
                                       Expanded(child: otherWays),
+                                      Expanded(child: startNow),
                                     ],
                                   ),
                                 )

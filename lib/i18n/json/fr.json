@@ -197,7 +197,7 @@
       "import": "Importer vos données",
       "import-descr": "Depuis un fichier CSV ou une autre application",
       "sample": "Découvrir avec des données d'exemple",
-      "sample-descr": "Des comptes et transactions fictifs, supprimables à tout moment dans les paramètres.",
+      "sample-descr": "Comptes et transactions d'exemple. Supprimez-les à tout moment dans les paramètres.",
       "start-now": "Commencer maintenant",
       "start-now-descr": "Ajoutez votre première transaction et construisez à partir de là",
       "other-ways": "Ou remplissez d'abord l'application avec des données"

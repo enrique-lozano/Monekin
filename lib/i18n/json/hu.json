@@ -197,7 +197,7 @@
       "import": "Adatok importálása",
       "import-descr": "CSV-fájlból vagy egy másik alkalmazásból",
       "sample": "Felfedezés mintaadatokkal",
-      "sample-descr": "Fiktív számlák és tranzakciók. Bármikor törölheted őket a beállításokban.",
+      "sample-descr": "Minta számlák és tranzakciók. Bármikor törölheted őket a Beállításokban.",
       "start-now": "Kezdés most",
       "start-now-descr": "Add hozzá az első tranzakciódat, és építkezz innen",
       "other-ways": "Vagy töltsd fel előbb az alkalmazást adatokkal"
