@@ -54,10 +54,13 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
       final since = _backgroundedAt;
       _backgroundedAt = null;
 
-      if (_service.isEnabled &&
-          since != null &&
-          DateTime.now().difference(since) >= AppLockService.relockAfter) {
-        _service.isLocked.value = true;
+      if (_service.isEnabled && since != null) {
+        final elapsed = DateTime.now().difference(since);
+
+        // A negative value means the clock was moved back: lock anyway
+        if (elapsed.isNegative || elapsed >= AppLockService.relockAfter) {
+          _service.isLocked.value = true;
+        }
       }
     }
   }
