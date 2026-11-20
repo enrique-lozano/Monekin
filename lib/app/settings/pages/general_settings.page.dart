@@ -87,6 +87,8 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
               FutureBuilder<bool>(
                 future: AppLockService.instance.isDeviceSupported(),
                 builder: (context, snapshot) {
+                  final checked =
+                      snapshot.connectionState == ConnectionState.done;
                   final supported = snapshot.data ?? false;
                   final enabled = AppLockService.instance.isEnabled;
 
@@ -97,17 +99,19 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
                         : t.settings.security.app_lock.unavailable,
                     icon: const Icon(Icons.fingerprint),
                     initialValue: enabled,
-                    disabled: !supported && !enabled,
+                    disabled: !checked || (!supported && !enabled),
                     onSwitch: (bool value) async {
-                      // Verify the user before changing the lock (if the device lock
-                      // was removed there is nothing to verify against)
-                      if (supported) {
-                        final ok = await AppLockService.instance.authenticate(
-                          t.settings.security.app_lock.confirm_reason,
-                        );
+                      // Verify the user before changing the lock. If the device
+                      // has no screen lock anymore, allow only turning it off
+                      final result = await AppLockService.instance.authenticate(
+                        t.settings.security.app_lock.confirm_reason,
+                      );
 
-                        if (!ok) throw Exception('Authentication failed');
-                      }
+                      final allowed =
+                          result == AppLockAuthResult.success ||
+                          (result == AppLockAuthResult.noCredentials && !value);
+
+                      if (!allowed) throw Exception('Authentication failed');
 
                       await AppLockService.instance.setEnabled(value);
                     },

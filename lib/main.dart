@@ -252,7 +252,10 @@ class MaterialAppContainer extends StatelessWidget {
               getSystemUiOverlayStyle(Theme.of(context).brightness),
             );
 
-            Widget content = child ?? const SizedBox.shrink();
+            // Only the app content is locked: the window controls stay usable
+            Widget content = AppLockGate(
+              child: child ?? const SizedBox.shrink(),
+            );
 
             // The window title bar lives *above* the root navigator, so nothing
             // routed on top of it (side drawers, popovers, dialogs and their
@@ -266,7 +269,7 @@ class MaterialAppContainer extends StatelessWidget {
               );
             }
 
-            return BreakpointProvider(child: AppLockGate(child: content));
+            return BreakpointProvider(child: content);
           },
           home: HandleWillPopScope(
             child: Builder(

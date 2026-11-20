@@ -19,6 +19,10 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
   DateTime? _backgroundedAt;
   bool _authenticating = false;
 
+  /// Hides the content while the app is not in the foreground, so the system
+  /// task preview doesn't show it
+  bool _obscured = false;
+
   @override
   void initState() {
     super.initState();
@@ -36,10 +40,15 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    final obscured = _service.isEnabled && state != AppLifecycleState.resumed;
+    if (obscured != _obscured) setState(() => _obscured = obscured);
+
     // The system auth prompt also sends the app to background, ignore it
     if (_authenticating) return;
 
-    if (state == AppLifecycleState.paused) {
+    // Desktop platforms report `hidden` (not `paused`) when minimizing
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.hidden) {
       _backgroundedAt ??= DateTime.now();
     } else if (state == AppLifecycleState.resumed) {
       final since = _backgroundedAt;
@@ -55,6 +64,7 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
 
   void _onLockChanged() {
     if (_service.isLocked.value) {
+      FocusManager.instance.primaryFocus?.unfocus();
       WidgetsBinding.instance.addPostFrameCallback((_) => _unlock());
     }
   }
@@ -63,18 +73,21 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
     if (_authenticating || !mounted || !_service.isLocked.value) return;
 
     _authenticating = true;
-    final ok = await _service.authenticate(
+    final result = await _service.authenticate(
       Translations.of(context).settings.security.app_lock.unlock_reason,
     );
     _authenticating = false;
 
-    if (ok) {
-      _service.isLocked.value = false;
-    } else if (!await _service.isDeviceSupported()) {
-      // The device lock was removed after enabling the app lock: let the user in
-      // instead of locking them out forever
-      await _service.setEnabled(false);
-      _service.isLocked.value = false;
+    switch (result) {
+      case AppLockAuthResult.success:
+        _service.isLocked.value = false;
+      case AppLockAuthResult.noCredentials:
+        // The device lock was removed after enabling the app lock: let the user
+        // in instead of locking them out forever
+        await _service.setEnabled(false);
+        _service.isLocked.value = false;
+      case AppLockAuthResult.failed:
+        break;
     }
   }
 
@@ -86,8 +99,17 @@ class _AppLockGateState extends State<AppLockGate> with WidgetsBindingObserver {
       builder: (context, locked, child) {
         return Stack(
           children: [
-            Offstage(offstage: locked, child: child),
-            if (locked) _LockScreen(onUnlock: _unlock),
+            // Offstage alone doesn't stop hidden fields from getting keyboard input
+            ExcludeFocus(
+              excluding: locked,
+              child: Offstage(offstage: locked, child: child),
+            ),
+            if (locked)
+              _LockScreen(onUnlock: _unlock)
+            else if (_obscured)
+              Positioned.fill(
+                child: ColoredBox(color: Theme.of(context).colorScheme.surface),
+              ),
           ],
         );
       },

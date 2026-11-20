@@ -3,6 +3,8 @@ import 'package:local_auth/local_auth.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/utils/logger.dart';
 
+enum AppLockAuthResult { success, failed, noCredentials }
+
 /// Locks the app behind the device authentication (biometrics, or the device
 /// PIN / pattern / password as a fallback). It relies entirely on the OS: if the
 /// device has no screen lock configured, the lock can't be enabled.
@@ -34,13 +36,23 @@ class AppLockService {
     }
   }
 
-  /// Prompts the device authentication. Returns whether it succeeded.
-  Future<bool> authenticate(String reason) async {
+  /// Prompts the device authentication.
+  ///
+  /// Only [AppLockAuthResult.noCredentials] means the device has no screen lock
+  /// configured. Any other problem is a [AppLockAuthResult.failed], so callers
+  /// never open the lock because of a transient error.
+  Future<AppLockAuthResult> authenticate(String reason) async {
     try {
-      return await _auth.authenticate(localizedReason: reason);
+      final ok = await _auth.authenticate(localizedReason: reason);
+      return ok ? AppLockAuthResult.success : AppLockAuthResult.failed;
+    } on LocalAuthException catch (e) {
+      Logger.printDebug('Authentication failed: ${e.code}');
+      return e.code == LocalAuthExceptionCode.noCredentialsSet
+          ? AppLockAuthResult.noCredentials
+          : AppLockAuthResult.failed;
     } catch (e) {
       Logger.printDebug('Authentication failed: $e');
-      return false;
+      return AppLockAuthResult.failed;
     }
   }
 
