@@ -1000,10 +1000,10 @@ packages:
     dependency: "direct main"
     description:
       name: saf_stream
-      sha256: "3f740a4bb8411100d2b6b209e9cbbc3e711f4992d5af2c1513d9f047f2162620"
+      sha256: "9a1b6f70527a52f7464c161f9cb05e8d471e71d460b987adbb94b15ed2b0e8cf"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.3"
   saf_util:
     dependency: "direct main"
     description:
