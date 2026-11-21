@@ -99,7 +99,7 @@ void main() {
         // whenever the currency changes (captures come grouped by currency).
         if (capture.currency != seededCurrency) {
           await _timed('${capture.currency} demo data', () async {
-            await clearDemoData();
+            await deleteAllUserData();
             await UserSettingService.instance.setItem(
               SettingKey.preferredCurrency,
               capture.currency,

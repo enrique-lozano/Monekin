@@ -8,6 +8,7 @@ import 'package:monekin/app/home/widgets/dashboard_account_list.dart';
 import 'package:monekin/app/home/widgets/dashboard_balance_chart.dart';
 import 'package:monekin/app/home/widgets/dashboard_balance_scope.dart';
 import 'package:monekin/app/home/widgets/finance_health_donut.dart';
+import 'package:monekin/app/home/widgets/first_transaction_guide_card.dart';
 import 'package:monekin/app/home/widgets/new_transaction_fl_button.dart';
 import 'package:monekin/app/layout/page_context.dart';
 import 'package:monekin/app/layout/page_framework.dart';
@@ -116,7 +117,7 @@ class DashboardPageState extends State<DashboardPage> {
         const eps = 1e-10;
         final percentage = startBalance.abs() < eps
             ? (endBalance.abs() < eps ? 0.0 : double.nan)
-            : delta / startBalance;
+            : delta / startBalance.abs();
 
         return (delta: delta, percentage: percentage);
       },
@@ -411,6 +412,7 @@ class DashboardPageState extends State<DashboardPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              const FirstTransactionGuideCard(),
               if (isVeryWide)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

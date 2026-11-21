@@ -50,8 +50,8 @@ class Goal extends GoalInDB
           _dbTrFilters.status,
         ),
         transactionTypes: type == GoalType.expense
-            ? [TransactionType.expense]
-            : [TransactionType.income],
+            ? [TransactionType.expense, TransactionType.transfer]
+            : TransactionType.values,
         minDate: startDate,
         maxDate: endDate,
       );

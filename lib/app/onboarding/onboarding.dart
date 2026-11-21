@@ -1,8 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/onboarding/classes/OnboardingItem.dart';
-import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/app/onboarding/onboarding_start.page.dart';
 import 'package:monekin/core/database/services/currency/currency_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
@@ -14,7 +13,6 @@ import 'package:monekin/core/presentation/theme.dart';
 import 'package:monekin/core/presentation/widgets/currency_selector_modal.dart';
 import 'package:monekin/core/presentation/widgets/persistent_footer_button.dart';
 import 'package:monekin/core/routes/route_utils.dart';
-import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -31,14 +29,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
   PageController pageController = PageController();
 
   void introFinished() {
-    AppDataService.instance
-        .setItem(AppDataKey.introSeen, '1', updateGlobalState: true)
-        .then((value) {
-          RouteUtils.pushRoute(
-            PageSwitcher(key: tabsPageKey),
-            withReplacement: true,
-          );
-        });
+    RouteUtils.pushRoute(
+      const OnboardingStartPage(),
+      withReplacement: true,
+    );
   }
 
   void _goToNextPage() {

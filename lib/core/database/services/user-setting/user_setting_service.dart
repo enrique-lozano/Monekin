@@ -1,6 +1,8 @@
 import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/database/services/shared/key_value_pair.dart';
 import 'package:monekin/core/database/services/shared/key_value_service.dart';
+import 'package:monekin/core/database/sql/initial/seed.dart';
+import 'package:monekin/main.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// The keys of the avalaible settings of the app
@@ -56,6 +58,15 @@ enum SettingKey {
 
 final Map<SettingKey, String?> appStateSettings = {};
 
+/// Settings related to the language and appearance of the app
+const _appearanceSettings = {
+  SettingKey.font,
+  SettingKey.appLanguage,
+  SettingKey.themeMode,
+  SettingKey.accentColor,
+  SettingKey.amoledMode,
+};
+
 class UserSettingService
     extends KeyValueService<SettingKey, UserSettings, UserSetting> {
   UserSettingService._(AppDB db)
@@ -71,6 +82,18 @@ class UserSettingService
     AppDB.instance,
   );
   static UserSettingService get instance => _instance;
+
+  /// Restores the settings to their initial values. The language and
+  /// appearance settings are only restored if [includeAppearance] is `true`.
+  Future<void> resetSettings({required bool includeAppearance}) async {
+    for (final key in SettingKey.values) {
+      if (!includeAppearance && _appearanceSettings.contains(key)) continue;
+
+      await setItem(key, initialUserSettings[key]);
+    }
+
+    appStateKey.currentState?.refreshAppState();
+  }
 
   Stream<String?> getSettingFromDB(SettingKey settingKey) {
     return (db.select(db.userSettings)
