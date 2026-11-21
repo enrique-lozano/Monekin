@@ -18,6 +18,7 @@ const Map<SettingKey, String?> initialUserSettings = {
   SettingKey.font: '0',
   SettingKey.appLanguage: null,
   SettingKey.privateModeAtLaunch: '0',
+  SettingKey.appLock: '0',
   SettingKey.accentColor: 'auto',
   SettingKey.amoledMode: '0',
   SettingKey.themeMode: 'system',
