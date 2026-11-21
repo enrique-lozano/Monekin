@@ -51,7 +51,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('the whole value header switches the value label', (
+  testWidgets('only the value label and icon switch the value label', (
     tester,
   ) async {
     var taps = 0;
@@ -81,12 +81,12 @@ void main() {
     );
 
     await tester.tap(find.text('NET WORTH'));
-    await tester.tap(find.textContaining('100'));
+    await tester.tap(find.byIcon(Icons.swap_horiz_rounded));
     expect(taps, 2);
 
-    final header = tester.getSize(
-      find.ancestor(of: find.text('NET WORTH'), matching: find.byType(InkWell)),
-    );
-    expect(header.height, greaterThanOrEqualTo(48));
+    await tester.tap(find.textContaining('100'));
+    final labelPosition = tester.getCenter(find.text('NET WORTH'));
+    await tester.tapAt(Offset(700, labelPosition.dy));
+    expect(taps, 2);
   });
 }

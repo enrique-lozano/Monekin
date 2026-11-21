@@ -10489,8 +10489,8 @@ class AccountSnapshotInDB extends DataClass
 
   /// Cash the account held at the snapshot date, in the account currency. The
   /// snapshot is the account's authoritative state on its date, so this value
-  /// (and not the transaction ledger) sets the cash side of the balance from
-  /// that date on. Transactions dated after it accumulate on top of it.
+  /// sets the cash side of the balance from that date on. Transactions dated
+  /// after it accumulate on top of it.
   final double cash;
   const AccountSnapshotInDB({
     required this.id,
