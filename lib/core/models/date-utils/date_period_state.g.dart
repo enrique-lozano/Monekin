@@ -12,7 +12,8 @@ abstract class _$DatePeriodStateCWProxy {
   DatePeriodState periodModifier(int periodModifier);
 
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DatePeriodState(...).copyWith.fieldName(value)`.
+  /// Omitted fields keep their values; explicit `null` clears nullable fields.
+  /// The public API rejects `null` for non-nullable fields. To update a single field use `DatePeriodState(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
@@ -36,14 +37,15 @@ class _$DatePeriodStateCWProxyImpl implements _$DatePeriodStateCWProxy {
   DatePeriodState periodModifier(int periodModifier) =>
       call(periodModifier: periodModifier);
 
-  @override
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DatePeriodState(...).copyWith.fieldName(value)`.
+  /// Omitted fields keep their values; explicit `null` clears nullable fields.
+  /// The public API rejects `null` for non-nullable fields. To update a single field use `DatePeriodState(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
   /// DatePeriodState(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   DatePeriodState call({
     Object? datePeriod = const $CopyWithPlaceholder(),
     Object? periodModifier = const $CopyWithPlaceholder(),
