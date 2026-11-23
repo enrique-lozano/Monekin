@@ -5,11 +5,13 @@ import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:monekin/app/app_lock/app_lock_gate.dart';
 import 'package:monekin/app/layout/page_switcher.dart';
 import 'package:monekin/app/layout/widgets/app_navigation_sidebar.dart';
 import 'package:monekin/app/layout/window_bar.dart';
 import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/core/database/services/app-data/app_data_service.dart';
+import 'package:monekin/core/database/services/user-setting/app_lock_service.dart';
 import 'package:monekin/core/database/services/user-setting/private_mode_service.dart';
 import 'package:monekin/core/database/services/user-setting/user_setting_service.dart';
 import 'package:monekin/core/database/services/user-setting/utils/get_theme_from_string.dart';
@@ -36,6 +38,8 @@ void main() async {
   PrivateModeService.instance.setPrivateMode(
     appStateSettings[SettingKey.privateModeAtLaunch] == '1',
   );
+
+  AppLockService.instance.lockIfEnabled();
 
   // Set plural resolver for Turkish
   LocaleSettings.setPluralResolver(
@@ -248,7 +252,10 @@ class MaterialAppContainer extends StatelessWidget {
               getSystemUiOverlayStyle(Theme.of(context).brightness),
             );
 
-            Widget content = child ?? const SizedBox.shrink();
+            // Only the app content is locked: the window controls stay usable
+            Widget content = AppLockGate(
+              child: child ?? const SizedBox.shrink(),
+            );
 
             // The window title bar lives *above* the root navigator, so nothing
             // routed on top of it (side drawers, popovers, dialogs and their

@@ -46,7 +46,8 @@ abstract class _$TransactionFilterSetCWProxy {
   TransactionFilterSet assetIds(Iterable<String>? assetIds);
 
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
+  /// Omitted fields keep their values; explicit `null` clears nullable fields.
+  /// The public API rejects `null` for non-nullable fields. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
@@ -145,14 +146,15 @@ class _$TransactionFilterSetCWProxyImpl
   TransactionFilterSet assetIds(Iterable<String>? assetIds) =>
       call(assetIds: assetIds);
 
-  @override
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
+  /// Omitted fields keep their values; explicit `null` clears nullable fields.
+  /// The public API rejects `null` for non-nullable fields. To update a single field use `TransactionFilterSet(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
   /// TransactionFilterSet(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   TransactionFilterSet call({
     Object? minDate = const $CopyWithPlaceholder(),
     Object? maxDate = const $CopyWithPlaceholder(),

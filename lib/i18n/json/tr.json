@@ -182,7 +182,7 @@
     "welcome.footer": "Giriş yaparak, uygulamanın <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Gizlilik Politikası</a> ve <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Kullanım Şartları</a>'nı kabul etmiş olursunuz",
     "offline.descr.title": "ÇEVRİMDIŞI HESAP:",
     "offline.descr": "Verileriniz yalnızca cihazınızda saklanacak ve uygulamayı kaldırmadığınız veya telefon değiştirmediniz sürece güvende olacaktır. Veri kaybını önlemek için, uygulama ayarlarından düzenli olarak yedekleme yapılması önerilir.",
-    "offline.start": "Çevrimdışı oturum başlat",
+    "offline.start": "Başla",
     "sl1Title": "Para birimini seçin",
     "sl1Descr": "Varsayılan para biriminiz raporlarda ve genel grafiklerde kullanılacaktır. Uygulama ayarlarından daha sonra istediğiniz zaman para birimini ve uygulama dilini değiştirebileceksiniz",
     "sl2Title": "Güvenli, gizli ve güvenilir",
@@ -190,9 +190,30 @@
     "sl2Descr2": "Ayrıca, uygulamanın kaynak kodu herkese açıktır, herkes üzerinde işbirliği yapabilir ve nasıl çalıştığını görebilir",
     "lastSlideTitle": "Her şey hazır",
     "lastSlideDescr": "Monekin ile sonunda çok istediğiniz finansal bağımsızlığa ulaşabilirsiniz. Paranız hakkında grafiklere, bütçelere, ipuçlarına, istatistiklere ve çok daha fazlasına sahip olacaksınız.",
-    "lastSlideDescr2": "Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin..."
+    "lastSlideDescr2": "Umarız deneyiminizden keyif alırsınız! Şüpheleriniz, önerileriniz durumunda bizimle iletişime geçmekten çekinmeyin...",
+    "START-OPTIONS": {
+      "title": "Nasıl başlamak istersiniz?",
+      "descr": "Monekin'i gerçek verilerle görmenin en hızlı yolunu seçin. Her şeyi daha sonra değiştirebilirsiniz.",
+      "import": "Verilerinizi içe aktarın",
+      "import-descr": "Bir CSV dosyasından veya başka bir uygulamadan",
+      "sample": "Örnek verilerle keşfedin",
+      "sample-descr": "Örnek hesaplar ve işlemler. İstediğiniz zaman Ayarlar'dan silebilirsiniz.",
+      "start-now": "Şimdi başla",
+      "start-now-descr": "İlk işleminizi ekleyin ve oradan devam edin",
+      "other-ways": "Veya önce uygulamayı verilerle doldurun"
+    },
+    "restore-backup": "Monekin yedeğini geri yükle"
   },
   "HOME": {
+    "FIRST-TRANSACTION": {
+      "title": "İlk işleminizi ekleyelim",
+      "descr": "Son alışverişiniz gibi basit bir şeyle başlayın. Daha sonra düzenleyebilirsiniz.",
+      "action": "İşlem ekle",
+      "dismiss": "Şimdi değil",
+      "account-title": "İlk hesabınızı oluşturalım",
+      "account-descr": "Hesaplar, banka hesabı veya cüzdanınız gibi paranızı tutar. İşlem eklemek için bir hesaba ihtiyacınız var.",
+      "account-action": "Hesap oluştur"
+    },
     "title": "Gösterge Paneli",
     "filter-transactions": "İşlemleri filtrele",
     "hello-day": "Günaydın,",
@@ -207,7 +228,6 @@
     "welcome-back-afternoon": "İyi günler!",
     "welcome-back-evening": "Naber patron?",
     "welcome-back-night": "Gece kuşu?",
-    "total-balance": "Toplam bakiye",
     "no-income-this-period": "Bu dönemde gelir yok",
     "no-expenses-this-period": "Bu dönemde masraf yok",
     "vs-previous-period": "vs önceki",
@@ -729,6 +749,24 @@
     "currency-manager": "Para birimi yöneticisi",
     "currency-manager.descr": "Para biriminizi ve diğerleriyle döviz kurlarını yapılandırın",
     "preferred-currency": "Tercih edilen/temel para birimi",
+    "update-rates": "Kurları güncelle",
+    "update-rates-loading": "Döviz kurları Frankfurter'dan alınıyor…",
+    "update-rates-success": {
+      "one": "1 para birimi için bugünün döviz kuru güncellendi",
+      "other": "{{n}} para birimi için bugünün döviz kurları güncellendi"
+    },
+    "update-rates-manual-kept": "Sizin girdiğiniz kurların üzerine asla yazılmaz.",
+    "update-rates-up-to-date": "Döviz kurlarınız zaten güncel",
+    "remove-all-rates-warning": "Bu işlem geri alınamaz ve tüm para birimleri için kaydedilen tüm döviz kurlarını siler. Para birimleri, hesaplar ve işlemler silinmez. Dönüştürülen bakiyeler ve istatistikler değişebilir.",
+    "delete-rates-error": "Döviz kurları silinemedi. Tekrar deneyin.",
+    "update-rates-supported-up-to-date": "Desteklenen döviz kurları zaten güncel",
+    "update-rates-unavailable": "{{currencies}} için otomatik döviz kurları mevcut değil. Bu kurları elle girin.",
+    "update-rates-error": "Döviz kuru hizmetine ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+    "updated-today": "Bugün güncellendi",
+    "updated-days-ago": {
+      "one": "1 gün önce",
+      "other": "{{n}} gün önce"
+    },
     "tap-to-change-preferred-currency": "Değiştirmek için dokunun",
     "change-preferred-currency-title": "Tercih edilen para birimini değiştir",
     "change-preferred-currency-msg": "Tüm istatistikler ve bütçeler bundan sonra bu para biriminde görüntülenecektir. Hesaplar ve işlemler sahip oldukları para birimini koruyacaktır. Bu eylemi gerçekleştirirseniz, kaydedilen tüm döviz kurları silinecektir. Devam etmek istiyor musunuz?",
@@ -741,7 +779,11 @@
       "edit": "Döviz kurunu düzenle",
       "edit-success": "Döviz kuru başarıyla düzenlendi",
       "remove-all": "Tüm döviz kurlarını sil",
-      "remove-all-warning": "Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir"
+      "remove-all-warning": "Bu işlem geri alınamaz ve bu para biriminin tüm döviz kurlarını silecektir",
+      "auto-loading": "Kur aranıyor…",
+      "auto-filled": "Otomatik dolduruldu",
+      "auto-value": "Önerilen: {{rate}}",
+      "auto-use-value": "Bu değeri kullan"
     },
     "TYPES": {
       "display": "Para birimi türü",
@@ -1562,11 +1604,17 @@
     "DATA": {
       "display": "Veri",
       "display.descr": "Hiçbir şeyi kaybetmemek için verilerinizi dışa ve içe aktarın",
-      "delete-all": "Verilerimi sil",
-      "delete-all-header1": "Orada dur padawan ⚠️⚠️",
-      "delete-all-message1": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır",
-      "delete-all-header2": "Son bir adım ⚠️⚠️",
-      "delete-all-message2": "Bir hesabı sildiğinizde, kayıtlı tüm kişisel verilerinizi silmiş olursunuz. Hesaplarınız, işlemleriniz, bütçeleriniz ve kategorileriniz silinecek ve kurtarılamayacaktır. Kabul ediyor musunuz?"
+      "DELETE-ALL": {
+        "title": "Verileri sil",
+        "action": "Verilerimi sil",
+        "confirm-title": "Dur bakalım padawan ⚠️⚠️",
+        "confirm-descr": "Devam etmek istediğinizden emin misiniz? Tüm verileriniz kalıcı olarak silinecek ve kurtarılamayacaktır.",
+        "final-confirm-title": "Son bir adım ⚠️⚠️",
+        "success": "Verileriniz silindi",
+        "descr": "Uygulamayı yeni kurulum durumuna sıfırlar: hesaplarınızı, işlemlerinizi, bütçelerinizi, hedeflerinizi, borçlarınızı, kategorilerinizi ve profilinizi siler ve sizi tanıtım ekranına geri götürür. Örnek verilerden kurtulmak için kullanışlıdır.",
+        "final-confirm-descr": "Hesaplarınız, işlemleriniz, bütçeleriniz, hedefleriniz, borçlarınız, kategorileriniz, para birimleriniz ve profiliniz kalıcı olarak silinecek ve uygulama ilk durumuna dönecektir. Bu işlem geri alınamaz. Kabul ediyor musunuz?",
+        "reset-appearance": "Dili ve görünümü de sıfırla"
+      }
     },
     "ABOUT_US": {
       "display": "Uygulama bilgileri",
