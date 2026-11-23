@@ -22,6 +22,8 @@ class IncomeExpenseFlowCard extends StatelessWidget {
     required this.periodState,
     this.filters,
     this.currency,
+    this.includeTransfers = false,
+    this.title,
   });
 
   final TransactionType type;
@@ -31,6 +33,13 @@ class IncomeExpenseFlowCard extends StatelessWidget {
   /// When set, amounts are shown in this currency without conversion.
   /// Otherwise they are converted to the user's preferred currency.
   final CurrencyInDB? currency;
+
+  /// Also counts the transfers entering (income) or leaving (expense) the
+  /// accounts of [filters]. Transfers between those accounts are ignored.
+  final bool includeTransfers;
+
+  /// Shown instead of the name of [type].
+  final String? title;
 
   TransactionFilterSet _filtersForDates(DateTime? min, DateTime? max) {
     return TransactionFilterSet(
@@ -43,10 +52,44 @@ class IncomeExpenseFlowCard extends StatelessWidget {
   }
 
   Stream<double> _balanceStream(TransactionFilterSet filters) {
-    return TransactionService.instance.getTransactionsValueBalance(
+    final balance = TransactionService.instance.getTransactionsValueBalance(
       filters: filters,
       convertToPreferredCurrency: currency == null,
     );
+
+    final accountsIDs = this.filters?.accountsIDs;
+    if (!includeTransfers || accountsIDs == null) return balance;
+
+    final transfers = TransactionService.instance
+        .getTransactions(
+          onlyPosted: true,
+          filters: filters.copyWith(
+            transactionTypes: [TransactionType.transfer],
+          ),
+        )
+        .map(
+          (txs) => txs.fold<double>(0, (sum, tx) {
+            final isFromAccounts = accountsIDs.contains(tx.account.id);
+            final isToAccounts = accountsIDs.contains(tx.receivingAccount?.id);
+
+            if (type == TransactionType.expense) {
+              if (!isFromAccounts || isToAccounts) return sum;
+              return sum -
+                  (currency == null
+                      ? tx.currentValueInPreferredCurrency
+                      : tx.value);
+            }
+
+            if (!isToAccounts || isFromAccounts) return sum;
+            return sum +
+                (currency == null
+                    ? tx.currentValueInDestinyInPreferredCurrency ??
+                          tx.currentValueInPreferredCurrency
+                    : tx.valueInDestiny ?? tx.value);
+          }),
+        );
+
+    return Rx.combineLatest2(balance, transfers, (double a, double b) => a + b);
   }
 
   @override
@@ -118,7 +161,7 @@ class IncomeExpenseFlowCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        type.displayName(context).toUpperCase(),
+                        (title ?? type.displayName(context)).toUpperCase(),
                         style: Theme.of(context).textTheme.labelMedium!
                             .copyWith(
                               color: AppColors.of(context).textHint,
