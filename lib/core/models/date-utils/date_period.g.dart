@@ -16,7 +16,8 @@ abstract class _$DatePeriodCWProxy {
   DatePeriod customDateRange((DateTime?, DateTime?) customDateRange);
 
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DatePeriod(...).copyWith.fieldName(value)`.
+  /// Omitted fields keep their values; explicit `null` clears nullable fields.
+  /// The public API rejects `null` for non-nullable fields. To update a single field use `DatePeriod(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
@@ -51,14 +52,15 @@ class _$DatePeriodCWProxyImpl implements _$DatePeriodCWProxy {
   DatePeriod customDateRange((DateTime?, DateTime?) customDateRange) =>
       call(customDateRange: customDateRange);
 
-  @override
   /// Creates a new instance with the provided field values.
-  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `DatePeriod(...).copyWith.fieldName(value)`.
+  /// Omitted fields keep their values; explicit `null` clears nullable fields.
+  /// The public API rejects `null` for non-nullable fields. To update a single field use `DatePeriod(...).copyWith.fieldName(value)`.
   ///
   /// Example:
   /// ```dart
   /// DatePeriod(...).copyWith(id: 12, name: "My name")
   /// ```
+  @override
   DatePeriod call({
     Object? periodType = const $CopyWithPlaceholder(),
     Object? periodicity = const $CopyWithPlaceholder(),

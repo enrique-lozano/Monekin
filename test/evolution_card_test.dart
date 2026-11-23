@@ -50,4 +50,43 @@ void main() {
 
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('only the value label and icon switch the value label', (
+    tester,
+  ) async {
+    var taps = 0;
+    final colorScheme = ColorScheme.fromSeed(seedColor: Colors.blue);
+
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: MaterialApp(
+          theme: ThemeData(
+            colorScheme: colorScheme,
+            extensions: [AppColors.fromColorScheme(colorScheme)],
+          ),
+          home: Scaffold(
+            body: EvolutionCard(
+              valueLabel: 'Net worth',
+              onValueLabelTap: () => taps++,
+              initialValue: 80,
+              finalValue: 100,
+              currency: Currency(name: 'Euro', code: 'EUR', symbol: '€'),
+              chart: const SizedBox.expand(),
+              currentPeriod: const DatePeriod.lastDays(30),
+              onPresetSelected: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('NET WORTH'));
+    await tester.tap(find.byIcon(Icons.swap_horiz_rounded));
+    expect(taps, 2);
+
+    await tester.tap(find.textContaining('100'));
+    final labelPosition = tester.getCenter(find.text('NET WORTH'));
+    await tester.tapAt(Offset(700, labelPosition.dy));
+    expect(taps, 2);
+  });
 }

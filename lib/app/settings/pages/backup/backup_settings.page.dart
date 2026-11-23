@@ -1,16 +1,19 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:intl/intl.dart';
 import 'package:monekin/app/layout/page_framework.dart';
+import 'package:monekin/app/onboarding/intro.page.dart';
 import 'package:monekin/app/settings/pages/backup/export_page.dart';
 import 'package:monekin/app/settings/pages/backup/import_csv/import_csv.page.dart';
+import 'package:monekin/app/settings/pages/backup/restore_backup.dart';
 import 'package:monekin/core/database/app_db.dart';
-import 'package:monekin/core/database/backup/backup_database_service.dart';
+import 'package:monekin/core/database/utils/app_reset.dart';
 import 'package:monekin/core/extensions/numbers.extensions.dart';
 import 'package:monekin/core/presentation/helpers/snackbar.dart';
 import 'package:monekin/core/presentation/widgets/confirm_dialog.dart';
+import 'package:monekin/core/presentation/widgets/loading_overlay.dart';
 import 'package:monekin/core/routes/destinations.dart';
 import 'package:monekin/core/routes/route_utils.dart';
 import 'package:monekin/core/utils/unique_app_widgets_keys.dart';
@@ -26,6 +29,64 @@ class BackupSettingsPage extends StatefulWidget {
 }
 
 class _BackupSettingsPageState extends State<BackupSettingsPage> {
+  Future<void> _deleteAllData(BuildContext context) async {
+    final confirmed = await confirmDialog(
+      context,
+      icon: Icons.delete_forever_rounded,
+      dialogTitle: t.more.data.delete_all.confirm_title,
+      contentParagraphs: [Text(t.more.data.delete_all.confirm_descr)],
+      showCancelButton: true,
+      confirmationText: t.ui_actions.continue_text,
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final resetAppearance = ValueNotifier(false);
+
+    final reallySure = await confirmDialog(
+      context,
+      icon: Icons.warning_rounded,
+      dialogTitle: t.more.data.delete_all.final_confirm_title,
+      contentParagraphs: [
+        Text(t.more.data.delete_all.final_confirm_descr),
+        ValueListenableBuilder(
+          valueListenable: resetAppearance,
+          builder: (context, value, _) => CheckboxListTile(
+            value: value,
+            onChanged: (v) => resetAppearance.value = v ?? false,
+            title: Text(t.more.data.delete_all.reset_appearance),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
+        ),
+      ],
+      showCancelButton: true,
+      confirmationText: t.more.data.delete_all.action,
+    );
+
+    final shouldResetAppearance = resetAppearance.value;
+    resetAppearance.dispose();
+
+    if (reallySure != true || !context.mounted) return;
+
+    final loadingOverlay = LoadingOverlay.of(context);
+    loadingOverlay.show();
+
+    try {
+      await resetApp(resetAppearance: shouldResetAppearance);
+      loadingOverlay.hide();
+
+      RouteUtils.popAllRoutesExceptFirst();
+      unawaited(RouteUtils.pushRoute(const IntroPage(), withReplacement: true));
+
+      MonekinSnackbar.success(SnackbarParams(t.more.data.delete_all.success));
+    } catch (e) {
+      loadingOverlay.hide();
+
+      MonekinSnackbar.error(SnackbarParams.fromError(e));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translations.of(context);
@@ -57,59 +118,19 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                       return;
                     }
 
-                    BackupDatabaseService()
-                        .importDatabase()
-                        .then((value) {
-                          if (!value) {
-                            RouteUtils.popRoute();
+                    pickAndRestoreBackup().then((restored) {
+                      if (!restored) return;
 
-                            MonekinSnackbar.info(
-                              SnackbarParams(t.backup.no_file_selected),
-                            );
+                      RouteUtils.popAllRoutesExceptFirst();
 
-                            return;
-                          }
+                      tabsPageKey.currentState!.changePage(
+                        AppMenuDestinationsID.dashboard,
+                      );
 
-                          RouteUtils.popAllRoutesExceptFirst();
-
-                          tabsPageKey.currentState!.changePage(
-                            AppMenuDestinationsID.dashboard,
-                          );
-
-                          MonekinSnackbar.success(
-                            SnackbarParams(t.backup.import.success),
-                          );
-                        })
-                        .catchError((err) {
-                          RouteUtils.popRoute();
-
-                          if (err is MigrationFailedException) {
-                            MonekinSnackbar.error(
-                              SnackbarParams(
-                                "Failed to migrate the database to version ${err.targetVersion}",
-                                message:
-                                    "A backup was kept at ${err.backupPath}",
-                                duration: const Duration(seconds: 8),
-                                actions: [
-                                  MonekinSnackbarAction(
-                                    label: "Copy full error",
-                                    onPressed: () {
-                                      Clipboard.setData(
-                                        ClipboardData(
-                                          text: err.cause.toString(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          } else {
-                            MonekinSnackbar.error(
-                              SnackbarParams.fromError(err),
-                            );
-                          }
-                        });
+                      MonekinSnackbar.success(
+                        SnackbarParams(t.backup.import.success),
+                      );
+                    });
                   });
                 },
               ),
@@ -129,6 +150,13 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
                 onTap: () {
                   RouteUtils.showResponsiveForm(const ExportDataPage());
                 },
+              ),
+              createListSeparator(context, t.more.data.delete_all.title),
+              ListTile(
+                title: Text(t.more.data.delete_all.action),
+                subtitle: Text(t.more.data.delete_all.descr),
+                minVerticalPadding: 16,
+                onTap: () => _deleteAllData(context),
               ),
               createListSeparator(context, t.backup.about.title),
               ListTile(
