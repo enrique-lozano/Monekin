@@ -1,4 +1,5 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:monekin/core/database/app_db.dart';
 import 'package:monekin/core/extensions/color.extensions.dart';
 import 'package:monekin/core/models/budget/budget.dart';
 import 'package:monekin/core/models/budget/target_progress_status.enum.dart';
@@ -12,6 +13,7 @@ import 'package:monekin/core/presentation/widgets/animated_progress_bar.dart';
 import 'package:monekin/core/presentation/widgets/card_with_header.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/currency_displayer.dart';
 import 'package:monekin/core/presentation/widgets/number_ui_formatters/ui_number_formatter.dart';
+import 'package:monekin/core/presentation/widgets/tappable.dart';
 import 'package:monekin/core/utils/date_utils.dart';
 import 'package:monekin/i18n/generated/translations.g.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -337,7 +339,7 @@ class _TargetPaceStats extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _TargetStat(
+          TargetStat(
             icon: Icons.calendar_today_rounded,
             amount: pace.dailyAmountLeft,
             showDecimals: true,
@@ -345,7 +347,7 @@ class _TargetPaceStats extends StatelessWidget {
             helpText: '${t.per_day_help}\n${t.per_day(n: pace.remainingDays)}',
           ),
           divider,
-          _TargetStat(
+          TargetStat(
             icon: paceDiff > 0
                 ? Icons.trending_up_rounded
                 : Icons.trending_down_rounded,
@@ -355,7 +357,7 @@ class _TargetPaceStats extends StatelessWidget {
             helpText: t.pace_help,
           ),
           divider,
-          _TargetStat(
+          TargetStat(
             icon: Icons.show_chart_rounded,
             color: isProjectionGood ? null : Colors.orange,
             amount: pace.projectedValue,
@@ -368,14 +370,18 @@ class _TargetPaceStats extends StatelessWidget {
   }
 }
 
-class _TargetStat extends StatelessWidget {
-  const _TargetStat({
+/// A highlighted amount with an icon, a label and a help tooltip, laid out to
+/// share a row with other stats.
+class TargetStat extends StatelessWidget {
+  const TargetStat({
     required this.icon,
     required this.amount,
     required this.label,
     required this.helpText,
     this.color,
     this.showDecimals = false,
+    this.currency,
+    this.onTap,
   });
 
   final IconData icon;
@@ -384,6 +390,8 @@ class _TargetStat extends StatelessWidget {
   final String helpText;
   final Color? color;
   final bool showDecimals;
+  final CurrencyInDB? currency;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -393,56 +401,62 @@ class _TargetStat extends StatelessWidget {
     final accent = color ?? hintColor;
 
     return Expanded(
-      child: Column(
-        children: [
-          DecoratedBox(
-            decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(6),
-              child: Icon(icon, size: 18, color: accent),
-            ),
-          ),
-          const SizedBox(height: 10),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: CurrencyDisplayer(
-              amountToConvert: amount,
-              showDecimals: showDecimals,
-              integerStyle: textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
+      child: Tappable(
+        onTap: onTap,
+        bgColor: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: Column(
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: accent.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(icon, size: 18, color: accent),
               ),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text.rich(
-            TextSpan(
-              text: '$label ',
-              children: [
-                WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Tooltip(
-                    message: helpText,
-                    triggerMode: TooltipTriggerMode.tap,
-                    constraints: const BoxConstraints(maxWidth: 250),
-                    child: Icon(
-                      Icons.info_outline_rounded,
-                      size: 13,
-                      color: hintColor,
+            const SizedBox(height: 10),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: CurrencyDisplayer(
+                amountToConvert: amount,
+                currency: currency,
+                showDecimals: showDecimals,
+                integerStyle: textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text.rich(
+              TextSpan(
+                text: '$label ',
+                children: [
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Tooltip(
+                      message: helpText,
+                      triggerMode: TooltipTriggerMode.tap,
+                      constraints: const BoxConstraints(maxWidth: 250),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        size: 13,
+                        color: hintColor,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme.labelMedium!.copyWith(color: hintColor),
             ),
-            maxLines: 2,
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-            style: textTheme.labelMedium!.copyWith(color: hintColor),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
