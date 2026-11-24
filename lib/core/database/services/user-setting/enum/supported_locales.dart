@@ -50,6 +50,11 @@ const appSupportedLocales = [
     writingSystem: WritingSystem.latin,
   ),
   SupportedLocale(
+    locale: AppLocale.ptBr,
+    label: 'Português (Brasil)',
+    writingSystem: WritingSystem.latin,
+  ),
+  SupportedLocale(
     locale: AppLocale.uk,
     label: 'українська',
     writingSystem: WritingSystem.cyrillic,
