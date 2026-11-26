@@ -1,0 +1,1552 @@
+{
+  "UI-ACTIONS": {
+    "cancel": "Batal",
+    "confirm": "Konfirmasi",
+    "continue_text": "Lanjutkan",
+    "save": "Simpan",
+    "save_changes": "Simpan perubahan",
+    "close_and_save": "Simpan dan tutup",
+    "add": "Tambah",
+    "edit": "Edit",
+    "delete": "Hapus",
+    "see-more": "Lihat selengkapnya",
+    "see-more-count": "Lihat selengkapnya ({{n}})",
+    "see-all": "Lihat semua",
+    "see-all-count": "Lihat semua ({{n}})",
+    "select-all": "Pilih semua",
+    "deselect-all": "Batal pilih semua",
+    "select": "Pilih",
+    "search": "Cari",
+    "filter": "Filter",
+    "sort": "Urutkan",
+    "display_options": "Opsi tampilan",
+    "reset": "Atur ulang",
+    "submit": "Kirim",
+    "next": "Berikutnya",
+    "previous": "Sebelumnya",
+    "back": "Kembali",
+    "reload": "Muat ulang",
+    "view": "Lihat",
+    "download": "Unduh",
+    "upload": "Unggah",
+    "retry": "Coba lagi",
+    "copy": "Salin",
+    "paste": "Tempel",
+    "undo": "Urungkan",
+    "redo": "Ulangi",
+    "open": "Buka",
+    "close": "Tutup",
+    "apply": "Terapkan",
+    "discard": "Buang",
+    "refresh": "Segarkan",
+    "share": "Bagikan"
+  },
+  "GENERAL": {
+    "or": "atau",
+    "of": "dari",
+    "showing": "Menampilkan",
+    "understood": "Mengerti",
+    "unspecified": "Tidak ditentukan",
+    "min_one_entry_required": "Setidaknya satu nilai harus tersisa",
+    "quick_actions": "Aksi cepat",
+    "details": "Detail",
+    "balance": "Saldo",
+    "account": "Akun",
+    "accounts": "Akun",
+    "categories": "Kategori",
+    "category": "Kategori",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "filters": "Filter",
+    "all": "Semua",
+    "empty-warn": "Ups! Masih kosong melompong",
+    "search-no-results": "Tidak ada item yang cocok dengan kriteria pencarianmu",
+    "insufficient-data": "Data tidak mencukupi",
+    "show-more-fields": "Tampilkan lebih banyak kolom",
+    "show-less-fields": "Tampilkan lebih sedikit kolom",
+    "tap-to-search": "Ketuk untuk mencari",
+    "delete_success": "Item berhasil dihapus",
+    "LEAVE-WITHOUT-SAVING": {
+      "title": "Keluar tanpa menyimpan?",
+      "message": "Kamu memiliki perubahan yang belum disimpan, yakin ingin keluar tanpa menyimpannya?"
+    },
+    "CLIPBOARD": {
+      "success": "{{x}} disalin ke papan klip",
+      "error": "Gagal menyalin"
+    },
+    "TIME": {
+      "start-date": "Tanggal mulai",
+      "end-date": "Tanggal berakhir",
+      "from-date": "Dari tanggal",
+      "until-date": "Hingga tanggal",
+      "date": "Tanggal",
+      "datetime": "Tanggal & waktu",
+      "time": "Waktu",
+      "each": "Setiap",
+      "after": "Setelah",
+      "RANGES": {
+        "display": "Rentang waktu",
+        "it-repeat": "Berulang",
+        "it-ends": "Berakhir",
+        "forever": "Selamanya",
+        "TYPES": {
+          "cycle": "Siklus",
+          "last_days": "Hari terakhir",
+          "last_days_form": "{{x}} hari sebelumnya",
+          "all": "Selalu",
+          "date_range": "Rentang kustom"
+        },
+        "each-range": {
+          "one": "Setiap {{range}}",
+          "other": "Setiap {{n}} {{range}}"
+        },
+        "each-range-until-date": {
+          "one": "Setiap {{range}} hingga {{day}}",
+          "other": "Setiap {{n}} {{range}} hingga {{day}}"
+        },
+        "each-range-until-times": {
+          "one": "Setiap {{range}} sebanyak {{limit}} kali",
+          "other": "Setiap {{n}} {{range}} sebanyak {{limit}} kali"
+        },
+        "each-range-until-once": {
+          "one": "Setiap {{range}} sekali",
+          "other": "Setiap {{n}} {{range}} sekali"
+        },
+        "month": {
+          "one": "Bulan",
+          "other": "Bulan"
+        },
+        "year": {
+          "one": "Tahun",
+          "other": "Tahun"
+        },
+        "day": {
+          "one": "Hari",
+          "other": "Hari"
+        },
+        "week": {
+          "one": "Minggu",
+          "other": "Minggu"
+        }
+      },
+      "PERIODICITY": {
+        "display": "Pengulangan",
+        "no-repeat": "Tidak berulang",
+        "repeat": {
+          "one": "Pengulangan",
+          "other": "Pengulangan"
+        },
+        "diary": "Harian",
+        "monthly": "Bulanan",
+        "annually": "Tahunan",
+        "quaterly": "Kuartalan",
+        "weekly": "Mingguan",
+        "custom": "Kustom",
+        "infinite": "Selalu"
+      },
+      "CURRENT": {
+        "Monthly": "Bulan ini",
+        "Annually": "Tahun ini",
+        "Quaterly": "Kuartal ini",
+        "Weekly": "Minggu ini",
+        "Infinite": "Selamanya",
+        "Custom": "Rentang Kustom"
+      },
+      "ALL": {
+        "diary": "Setiap hari",
+        "Monthly": "Setiap bulan",
+        "Annually": "Setiap tahun",
+        "Quaterly": "Setiap kuartal",
+        "Weekly": "Setiap minggu"
+      }
+    },
+    "TRANSACTION-ORDER": {
+      "display": "Urutkan transaksi",
+      "Category": "Berdasarkan kategori",
+      "Quantity": "Berdasarkan jumlah",
+      "Date": "Berdasarkan tanggal"
+    },
+    "VALIDATIONS": {
+      "form_error": "Perbaiki kolom yang ditandai untuk melanjutkan",
+      "required": "Kolom wajib diisi",
+      "positive": "Harus bernilai positif",
+      "min_number": "Harus lebih besar dari {{x}}",
+      "max_number": "Harus lebih kecil dari {{x}}"
+    }
+  },
+  "INTRO": {
+    "start": "Mulai",
+    "skip": "Lewati",
+    "next": "Berikutnya",
+    "select-your-currency": "Pilih mata uangmu",
+    "welcome.subtitle": "Pengelola keuangan pribadimu",
+    "welcome.subtitle2": "100% terbuka, 100% privat",
+    "welcome.footer": "Dengan masuk, kamu menyetujui <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/PRIVACY_POLICY.md'>Kebijakan Privasi</a> dan <a href='https://github.com/enrique-lozano/Monekin/blob/main/docs/TERMS_OF_USE.md'>Ketentuan Penggunaan</a> aplikasi",
+    "offline.descr.title": "AKUN OFFLINE:",
+    "offline.descr": "Datamu hanya akan disimpan di perangkatmu, dan akan aman selama kamu tidak menghapus instalasi aplikasi atau berganti ponsel. Untuk mencegah kehilangan data, disarankan untuk membuat cadangan secara berkala dari pengaturan aplikasi.",
+    "offline.start": "Mulai sesi offline",
+    "sl1Title": "Pilih mata uangmu",
+    "sl1Descr": "Mata uang utamamu akan digunakan dalam laporan dan grafik umum. Kamu dapat mengubah mata uang dan bahasa aplikasi kapan saja nanti di pengaturan aplikasi",
+    "sl2Title": "Aman, privat, dan andal",
+    "sl2Descr": "Datamu sepenuhnya milikmu. Kami menyimpan informasi langsung di perangkatmu, tanpa melalui server eksternal. Hal ini memungkinkan aplikasi tetap dapat digunakan bahkan tanpa internet",
+    "sl2Descr2": "Selain itu, kode sumber aplikasi ini bersifat publik, siapa pun dapat berkolaborasi dan melihat cara kerjanya",
+    "lastSlideTitle": "Semua siap",
+    "lastSlideDescr": "Dengan Monekin, kamu akhirnya bisa mencapai kebebasan finansial yang kamu inginkan. Kamu akan mendapatkan grafik, anggaran, tips, statistik, dan banyak lagi tentang keuanganmu.",
+    "lastSlideDescr2": "Semoga kamu menikmati pengalamanmu! Jangan ragu untuk menghubungi kami jika ada pertanyaan, saran..."
+  },
+  "HOME": {
+    "title": "Dasbor",
+    "filter-transactions": "Filter transaksi",
+    "hello-day": "Selamat pagi,",
+    "hello-night": "Selamat malam,",
+    "welcome-back-1": "Hai, si boros!",
+    "welcome-back-2": "Kamu kembali!",
+    "welcome-back-3": "Cring-cring!",
+    "welcome-back-4": "Waktunya menabung!",
+    "welcome-back-5": "Waktunya atur anggaran!",
+    "welcome-back-6": "Wah, wah...",
+    "welcome-back-morning": "Kopi & koin!",
+    "welcome-back-afternoon": "Cuan siang hari!",
+    "welcome-back-evening": "Selamat sore, bos!",
+    "welcome-back-night": "Belum tidur juga?",
+    "total-balance": "Total saldo",
+    "no-income-this-period": "Tidak ada pemasukan pada periode ini",
+    "no-expenses-this-period": "Tidak ada pengeluaran pada periode ini",
+    "vs-previous-period": "vs sblm.",
+    "date-ranges": {
+      "week": "1M",
+      "month": "1B",
+      "quarter": "3B",
+      "half-year": "6B",
+      "year": "1T",
+      "max": "MAKS",
+      "custom": "Kustom"
+    },
+    "my-accounts": "Akun saya",
+    "active-accounts": "Akun aktif",
+    "no-accounts": "Belum ada akun yang dibuat",
+    "no-accounts.descr": "Mulai gunakan seluruh fitur Monekin. Buat setidaknya satu akun untuk mulai menambahkan transaksi",
+    "last-transactions": "Transaksi terakhir",
+    "should-create-account.header": "Ups!",
+    "should-create-account.message": "Kamu harus memiliki setidaknya satu akun yang tidak diarsipkan sebelum dapat mulai membuat transaksi"
+  },
+  "FINANCIAL-HEALTH": {
+    "display": "Kesehatan finansial",
+    "review": {
+      "very_good(context=GenderContext)": {
+        "male,female": "Sangat baik!"
+      },
+      "good(context=GenderContext)": {
+        "male,female": "Baik"
+      },
+      "normal(context=GenderContext)": {
+        "male,female": "Cukup"
+      },
+      "bad(context=GenderContext)": {
+        "male,female": "Kurang"
+      },
+      "very_bad(context=GenderContext)": {
+        "male,female": "Sangat Buruk"
+      },
+      "insufficient_data(context=GenderContext)": {
+        "male,female": "Data tidak mencukupi"
+      },
+      "descr": {
+        "insufficient_data": "Sepertinya kami belum memiliki cukup data pengeluaran untuk menghitung kesehatan finansialmu. Tambahkan beberapa pengeluaran/pemasukan pada periode ini agar kami dapat membantumu!",
+        "very_good": "Selamat! Kesehatan finansialmu luar biasa. Semoga tren baik ini terus berlanjut dan kamu terus belajar bersama Monekin",
+        "good": "Bagus! Kesehatan finansialmu baik. Kunjungi tab analisis untuk melihat cara menabung lebih banyak lagi!",
+        "normal": "Kesehatan finansialmu kurang lebih berada di rata-rata populasi lainnya untuk periode ini",
+        "bad": "Sepertinya kondisi finansialmu belum dalam keadaan terbaik. Jelajahi grafik lainnya untuk memahami keuanganmu lebih dalam",
+        "very_bad": "Hmm, kesehatan finansialmu jauh di bawah yang seharusnya. Jelajahi grafik lainnya untuk memahami keuanganmu lebih dalam"
+      }
+    },
+    "monthsWithoutIncome": {
+      "title": "Daya tahan finansial",
+      "subtitle": "Berdasarkan saldomu, lama waktu kamu bisa bertahan tanpa pemasukan",
+      "text.zero": "Kamu tidak akan mampu bertahan sebulan tanpa pemasukan dengan tingkat pengeluaran seperti ini!",
+      "text.one": "Kamu nyaris hanya bisa bertahan sekitar satu bulan tanpa pemasukan dengan tingkat pengeluaran seperti ini!",
+      "text.other": "Kamu bisa bertahan sekitar <b>{{ n }} bulan</b> tanpa pemasukan dengan tingkat pengeluaran seperti ini.",
+      "text.infinite": "Kamu bisa bertahan sekitar <b>seumur hidup</b> tanpa pemasukan dengan tingkat pengeluaran seperti ini.",
+      "suggestion": "Ingatlah bahwa sangat disarankan untuk selalu menjaga rasio ini setidaknya di atas 5 bulan. Jika dana cadangan tabunganmu belum mencukupi, kurangi pengeluaran yang tidak perlu.",
+      "insufficient_data": "Sepertinya kami belum memiliki cukup data pengeluaran untuk menghitung berapa bulan kamu bisa bertahan tanpa pemasukan. Masukkan beberapa transaksi dan kembali ke sini untuk memeriksa kesehatan finansialmu",
+      "valueShort": "{{n}} bulan",
+      "formula": "Uang yang tersedia di akunmu ÷ rata-rata pengeluaran bulananmu pada periode ini.",
+      "unlock": "Catat setidaknya 4 transaksi, termasuk beberapa pengeluaran, dalam periode ini."
+    },
+    "savingsPercentage": {
+      "title": "Persentase tabungan",
+      "subtitle": "Bagian dari pemasukanmu yang tidak dibelanjakan pada periode ini",
+      "text": {
+        "good": "Selamat! Kamu berhasil menabung <b>{{value}}%</b> dari pemasukanmu selama periode ini. Sepertinya kamu sudah ahli, pertahankan kerja bagus ini!",
+        "normal": "Selamat, kamu berhasil menabung <b>{{value}}%</b> dari pemasukanmu selama periode ini.",
+        "bad": "Kamu berhasil menabung <b>{{value}}%</b> dari pemasukanmu selama periode ini. Namun, kami rasa kamu masih bisa jauh lebih baik lagi!",
+        "very_bad": "Wah, kamu belum berhasil menabung sama sekali selama periode ini."
+      },
+      "suggestion": "Ingatlah bahwa disarankan untuk menabung setidaknya 15-20% dari penghasilanmu.",
+      "formula": "(Pemasukan − pengeluaran) ÷ pemasukan, semuanya dalam rentang waktu yang dipilih.",
+      "insufficient_data": "Aktivitas pada periode ini belum cukup untuk menilai seberapa banyak uang yang berhasil kamu simpan.",
+      "unlock": "Catat satu pemasukan dalam periode ini, atau setidaknya 10 transaksi jenis apa pun."
+    },
+    "debtToAssetRatio": {
+      "title": "Rasio utang terhadap aset",
+      "subtitle": "Seberapa besar kepemilikanmu yang terbebani oleh sisa utang",
+      "text": {
+        "value": "Sisa utangmu sebesar <b>{{value}}%</b> dari total aset kotormu.",
+        "no_assets": "Kamu memiliki sisa utang tetapi belum ada aset tercatat untuk menutupinya."
+      },
+      "suggestion": "Rasio yang lebih rendah umumnya berarti kamu lebih mampu melunasi utang dengan aset yang kamu miliki.",
+      "insufficient_data": "Kamu belum mencatat utang atau aset apa pun, sehingga belum ada neraca yang bisa dinilai.",
+      "formula": "Sisa utang ÷ total aset kotor, keduanya per akhir rentang waktu yang dipilih.",
+      "unlock": "Tambahkan salah satu utangmu atau salah satu asetmu (rumah, kendaraan...)."
+    },
+    "cashFlowConsistency": {
+      "title": "Konsistensi arus kas",
+      "subtitle": "Seberapa sering kamu menjaga pengeluaran tetap di bawah pemasukan pada periode ini",
+      "text": {
+        "good": "Pengeluaranmu tetap sesuai kemampuan selama <b>{{value}}%</b> dari periode ini. Arus kasmu stabil.",
+        "normal": "Pengeluaranmu tetap sesuai kemampuan selama <b>{{value}}%</b> dari periode ini.",
+        "bad": "Pengeluaranmu hanya sesuai kemampuan selama <b>{{value}}%</b> dari periode ini, sehingga arus kasmu sangat fluktuatif."
+      },
+      "suggestion": "Membagi pembayaran besar secara merata dan menjaga ritme pengeluaran yang stabil membuat keuanganmu jauh lebih terprediksi.",
+      "insufficient_data": "Aktivitas yang tersebar di rentang waktu ini belum cukup untuk menilai kestabilan arus kasmu.",
+      "formula": "Kami membagi rentang waktu menjadi beberapa bagian dan membagi pemasukanmu secara merata. Di setiap bagian, pengeluaran maksimal sesuai jatah dihitung penuh, pengeluaran dua kali lipat dihitung nol, dan di antaranya dihitung secara proporsional.",
+      "unlock": "Pilih rentang waktu yang memiliki aktivitas di setidaknya 3 bagian waktunya."
+    },
+    "investmentRatio": {
+      "title": "Rasio investasi",
+      "subtitle": "Bagian dari pemasukanmu yang dialokasikan ke instrumen investasi pada periode ini",
+      "text": {
+        "value": "Kamu mengalokasikan <b>{{value}}%</b> dari pemasukanmu ke instrumen investasi selama periode ini.",
+        "none": "Kamu belum mengalokasikan dana ke instrumen investasi selama periode ini."
+      },
+      "suggestion": "Menginvestasikan sebagian pemasukan secara rutin membantu uangmu tumbuh lebih cepat daripada inflasi.",
+      "build_emergency_fund": "Prioritaskan dana daruratmu terlebih dahulu. Setiap bulan dana darurat yang terpenuhi, hingga lima bulan, akan membuka poin dari rasio investasimu secara bertahap.",
+      "runway_insufficient_data": "Kami belum dapat menilai rasio ini sebelum daya tahan dana daruratmu dapat diukur.",
+      "formula": "Pembelian bruto efek dan kenaikan nilai perolehan positif yang tercatat pada snapshot portofolio ÷ pemasukan, semuanya dalam rentang waktu yang dipilih.",
+      "insufficient_data": "Kamu tidak memiliki akun investasi yang aktif selama periode ini, sehingga kami tidak dapat mengukur bagian keuangan ini.",
+      "unlock": "Buka akun investasi, atau pilih rentang waktu saat salah satu akun investasi sudah aktif.",
+      "runway_unlock": "Pilih rentang waktu dengan setidaknya 4 transaksi dan beberapa catatan pengeluaran agar daya tahan dana daruratmu dapat diukur."
+    },
+    "howCalculated": {
+      "action": "Cara skormu dihitung",
+      "intro": "Skormu menggabungkan 5 indikator ini, masing-masing dengan bobotnya sendiri. Jika data untuk salah satu indikator belum mencukupi, bobotnya akan dibagikan secara proporsional ke indikator lainnya, sehingga skormu tetap bisa mencapai 100.",
+      "notAvailable": "Belum dihitung"
+    },
+    "composition": {
+      "earned": "Diperoleh",
+      "earnedDescr": "Poin yang sudah kamu dapatkan berdasarkan data pada rentang waktu ini.",
+      "pending": "Dapat diraih",
+      "pendingDescr": "Poin yang masih kurang dari indikator yang sudah bisa kami ukur saat ini.",
+      "paused": "Tidak diukur",
+      "pausedDescr": "{{indicators}}: kamu belum menggunakannya, sehingga kami belum bisa mengukur poinnya.",
+      "scoreExplanation": "Skormu ({{score}}) hanya memperhitungkan {{measurable}} poin yang dapat diukur hari ini, sehingga indikator yang belum terukur tidak menurunkan skormu.",
+      "total": "Total"
+    },
+    "lowReliability": "Skor ini hanya bertumpu pada <b>{{measurable}} dari {{total}} indikator</b>, jadi anggaplah sebagai gambaran awal: semakin banyak indikator yang kamu gunakan, semakin akurat hasilnya dengan kondisimu.",
+    "shortRange": "Rentang waktu yang <b>kurang dari sebulan</b> melewatkan tanggal gajian dan tagihan rutin, yang dapat membiaskan indikator seperti rasio tabungan. Perlebar rentang waktu untuk skor yang lebih stabil.",
+    "unreliableShort": "Keandalan rendah",
+    "pointsContribution": "Menyumbang {{earned}} dari {{total}} poin",
+    "pointsOfTotal": "{{earned}} dari {{total}} poin",
+    "pointsShort": "{{value}} poin",
+    "pausedPoints": "{{total}} poin tidak diukur",
+    "pausedShort": "Tidak diukur",
+    "aboutIndicator": "Tentang indikator ini",
+    "formulaLabel": "Cara perhitungannya",
+    "howToUnlock": "Cara membukanya",
+    "indicatorsLabel": "Indikator",
+    "yourOwnPast": "Masa lalumu sendiri",
+    "noComparisonNote": "Aplikasi ini sepenuhnya milikmu: kami tidak pernah membandingkanmu dengan pengguna lain, kami membandingkanmu dengan dirimu sendiri.",
+    "previousPeriodLabel": "Periode sebelumnya",
+    "nowLabel": "Sekarang"
+  },
+  "STATS": {
+    "title": "Statistik",
+    "balance": "Saldo",
+    "final-balance": "Saldo akhir",
+    "final-net-worth": "Kekayaan bersih akhir",
+    "balance-by-account": "Saldo per akun",
+    "balance-by-account-subtitle": "Di mana sebagian besar uangku berada?",
+    "balance-by-currency": "Saldo per mata uang",
+    "balance-by-currency-subtitle": "Berapa banyak uang yang kumiliki dalam mata uang asing?",
+    "balance-evolution": "Tren saldo",
+    "balance-evolution-subtitle": "Apakah uangku lebih banyak dari sebelumnya?",
+    "net-worth": "Kekayaan bersih",
+    "net-worth-subtitle": "Selisih antara apa yang kamu miliki dan apa yang menjadi kewajibanmu.",
+    "net-worth-gross": "Kekayaan bersih kotor",
+    "net-worth-net": "Kekayaan bersih",
+    "net-worth-composition": "Komposisi kekayaan bersih",
+    "net-worth-composition-subtitle": "Distribusi antara akun, investasi, dan utang.",
+    "portfolio": "Portofolio",
+    "portfolio-composition": "Komposisi portofolio",
+    "portfolio-composition-subtitle": "Bagaimana investasimu terdistribusi di seluruh akunmu.",
+    "portfolio-heat-map": "Peta panas (Heat map)",
+    "portfolio-heat-map-subtitle": "Semakin besar kotaknya, semakin besar posisinya. Semakin hijau, semakin baik kinerjanya.",
+    "daily-performance": "Harian",
+    "compared-to-previous-period": "vs periode sebelumnya",
+    "cash-flow": "Arus kas",
+    "cash-flow-subtitle": "Apakah pengeluaranku lebih kecil dari pemasukanku?",
+    "by-periods": "Per periode",
+    "by-categories": "Per kategori",
+    "by-tags": "Per tag",
+    "distribution": "Distribusi",
+    "finance-health-resume": "Ringkasan",
+    "finance-health-breakdown": "Rincian"
+  },
+  "ICON-SELECTOR": {
+    "name": "Nama:",
+    "icon": "Ikon",
+    "color": "Warna",
+    "select-icon": "Pilih ikon",
+    "select-color": "Pilih warna",
+    "custom-color": "Warna kustom",
+    "current-color-selection": "Pilihan saat ini",
+    "select-account-icon": "Identifikasi akunmu",
+    "select-category-icon": "Identifikasi kategorimu",
+    "SCOPES": {
+      "transport": "Transportasi",
+      "money": "Uang",
+      "food": "Makanan",
+      "medical": "Kesehatan",
+      "entertainment": "Hiburan",
+      "technology": "Teknologi",
+      "other": "Lainnya",
+      "logos/financial_institutions": "Lembaga keuangan"
+    }
+  },
+  "TRANSACTION": {
+    "display": {
+      "one": "Transaksi",
+      "other": "Transaksi"
+    },
+    "create": "Transaksi baru",
+    "new.income": "Pemasukan baru",
+    "new.expense": "Pengeluaran baru",
+    "new.success": "Transaksi berhasil dibuat",
+    "edit": "Edit transaksi",
+    "edit.success": "Transaksi berhasil diperbarui",
+    "edit.multiple": "Edit transaksi",
+    "edit.multiple.success": "{{ x }} transaksi berhasil diperbarui",
+    "duplicate": "Duplikat transaksi",
+    "duplicate.short": "Duplikat",
+    "duplicate.warning-message": "Transaksi yang identik dengan ini akan dibuat pada tanggal yang sama, ingin melanjutkan?",
+    "duplicate.success": "Transaksi berhasil diduplikasi",
+    "delete": "Hapus transaksi",
+    "delete.warning-message": "Tindakan ini tidak dapat dibatalkan. Saldo akun saat ini dan seluruh statistikmu akan dihitung ulang",
+    "delete.success": "Transaksi berhasil dihapus",
+    "delete.multiple": "Hapus transaksi",
+    "delete.multiple.warning-message": "Tindakan ini tidak dapat dibatalkan dan akan menghapus {{ x }} transaksi. Saldo akun saat ini dan seluruh statistikmu akan dihitung ulang",
+    "delete.multiple.success": "{{x}} transaksi berhasil dihapus",
+    "details": "Detail mutasi",
+    "select": "Pilih transaksi",
+    "operation": "Operasi",
+    "linked-security": "Efek tertaut",
+    "NEXT-PAYMENTS": {
+      "accept": "Terima",
+      "skip": "Lewati",
+      "skip.success": "Transaksi berhasil dilewati",
+      "skip-dialog.title": "Lewati transaksi",
+      "skip-dialog.msg": "Tindakan ini tidak dapat dibatalkan. Kami akan memindahkan tanggal mutasi berikutnya ke {{date}}",
+      "accept-today": "Terima hari ini",
+      "accept-in-required-date": "Terima pada tanggal yang dijadwalkan ({{date}})",
+      "accept-dialog.title": "Terima transaksi",
+      "accept-dialog.msg-single": "Status baru transaksi akan menjadi kosong. Kamu dapat mengedit ulang status transaksi ini kapan saja",
+      "accept-dialog.msg": "Tindakan ini akan membuat transaksi baru bertanggal {{date}}. Kamu dapat memeriksa detail transaksi ini di halaman transaksi",
+      "accept-dialog.trade": "{{quantity}} unit {{security}} seharga {{price}} {{currency}}, harga terbaru. Kamu dapat mengeditnya setelah ini.",
+      "recurrent-rule-finished": "Aturan berulang telah selesai, tidak ada lagi pembayaran yang harus dilakukan!"
+    },
+    "LIST": {
+      "all": "Semua transaksi",
+      "empty": "Tidak ada transaksi yang dapat ditampilkan di sini. Tambahkan beberapa transaksi di aplikasi terlebih dahulu.",
+      "searcher.placeholder": "Cari berdasarkan kategori, deskripsi...",
+      "searcher.no-results": "Tidak ditemukan transaksi yang cocok dengan kriteria pencarian",
+      "loading": "Memuat transaksi lainnya...",
+      "upcoming": {
+        "one": "{{n}} transaksi mendatang",
+        "other": "{{n}} transaksi mendatang"
+      },
+      "FILTERED_EMPTY": {
+        "title": "Tidak ada transaksi dengan filter ini",
+        "description": {
+          "one": "{{n}} transaksimu masih ada — hanya saja tidak cocok dengan filter saat ini. Coba perluas rentang waktu atau hapus filter.",
+          "other": "Semua {{n}} transaksimu masih ada — hanya saja tidak cocok dengan filter saat ini. Coba perluas rentang waktu atau hapus filter."
+        },
+        "clear": {
+          "one": "Hapus filter",
+          "other": "Hapus {{n}} filter"
+        },
+        "expand-dates": "Tampilkan semua tanggal"
+      },
+      "selected.short": {
+        "one": "{{n}} dipilih",
+        "other": "{{n}} dipilih"
+      },
+      "selected.long": {
+        "one": "{{n}} transaksi dipilih",
+        "other": "{{n}} transaksi dipilih"
+      },
+      "selected_of": {
+        "one": "{{n}} dari {{total}} dipilih",
+        "other": "{{n}} dari {{total}} dipilih"
+      },
+      "shown": "ditampilkan",
+      "BULK_EDIT": {
+        "dates": "Edit tanggal",
+        "categories": "Edit kategori",
+        "status": "Edit status",
+        "tags": "Edit tag"
+      }
+    },
+    "FILTERS": {
+      "title": "Filter transaksi",
+      "from_value": "Dari nominal",
+      "to_value": "Hingga nominal",
+      "from_value_def": "Dari {{ x }}",
+      "to_value_def": "Hingga {{ x }}",
+      "from_date_def": "Dari {{ date }}",
+      "to_date_def": "Hingga {{ date }}",
+      "reset": "Atur ulang filter",
+      "inapplicable_here": {
+        "one": "<b>1</b> filter aktif tidak berlaku untuk tampilan ini.",
+        "other": "<b>{{n}}</b> filter aktif tidak berlaku untuk tampilan ini."
+      },
+      "saved": {
+        "title": "Filter tersimpan",
+        "new_title": "Filter Baru",
+        "edit_title": "Edit Filter",
+        "name_label": "Nama Filter",
+        "name_hint": "Filter kustom saya",
+        "save_dialog_title": "Simpan Filter",
+        "save_tooltip": "Simpan filter saat ini",
+        "load_tooltip": "Muat filter tersimpan",
+        "empty_title": "Belum ada filter tersimpan",
+        "empty_description": "Simpan filter di sini untuk mengaksesnya dengan cepat nanti.",
+        "save_success": "Filter berhasil disimpan",
+        "delete_success": "Filter berhasil dihapus"
+      }
+    },
+    "FORM": {
+      "VALIDATORS": {
+        "zero": "Nilai transaksi tidak boleh sama dengan nol",
+        "date-max": "Tanggal yang dipilih melewati tanggal saat ini. Transaksi akan ditambahkan sebagai tertunda",
+        "date-after-account-creation": "Kamu tidak dapat membuat transaksi dengan tanggal sebelum tanggal pembuatan akun terkait",
+        "negative-transfer": "Nilai nominal transfer tidak boleh negatif",
+        "transfer-between-same-accounts": "Akun asal dan akun tujuan tidak boleh sama"
+      },
+      "title": "Judul transaksi",
+      "title.short": "Judul",
+      "value": "Nilai transaksi",
+      "tap-to-see-more": "Ketuk untuk melihat detail selengkapnya",
+      "no-tags": "-- Tanpa tag --",
+      "description": "Deskripsi",
+      "description-info": "Ketuk di sini untuk memasukkan deskripsi lebih rinci tentang transaksi ini",
+      "exchange-to-preferred-title": "Nilai tukar ke {{ currency }}",
+      "exchange-to-preferred-in-date": "Pada tanggal transaksi",
+      "extra-info-section": "Info tambahan",
+      "negative-balance-warning": "Jumlah ini lebih besar dari saldo akun yang dipilih saat ini. Menyimpan transaksi ini akan menghasilkan saldo negatif dan dapat memengaruhi statistik."
+    },
+    "REVERSED": {
+      "title": "Transaksi terbalik",
+      "title.short": "Tr. terbalik",
+      "description-for-expenses": "Meskipun berjenis transaksi pengeluaran, nilainya positif. Jenis transaksi ini dapat digunakan untuk mencatat pengembalian pengeluaran sebelumnya, seperti refund atau pelunasan utang.",
+      "description-for-incomes": "Meskipun berjenis transaksi pemasukan, nilainya negatif. Jenis transaksi ini dapat digunakan untuk membatalkan atau mengoreksi pemasukan yang salah catat, mencerminkan pengembalian dana, atau mencatat pembayaran utang."
+    },
+    "STATUS": {
+      "display": {
+        "one": "Status",
+        "other": "Status"
+      },
+      "display_long": "Status transaksi",
+      "tr_status": "Transaksi {{ status }}",
+      "none": "Tanpa status",
+      "none.descr": "Transaksi tanpa status khusus",
+      "reconciled": "Terekonsiliasi",
+      "reconciled.descr": "Transaksi ini telah divalidasi dan sesuai dengan transaksi nyata di rekening bankmu",
+      "unreconciled": "Belum terekonsiliasi",
+      "unreconciled.descr": "Transaksi ini belum divalidasi sehingga belum muncul di rekening bank nyatamu. Namun, transaksi ini tetap dihitung dalam saldo dan statistik di Monekin",
+      "pending": "Tertunda",
+      "pending.descr": "Transaksi ini masih tertunda sehingga tidak akan diperhitungkan dalam saldo dan statistik",
+      "voided": "Dibatalkan",
+      "voided.descr": "Transaksi batal/hangus karena kesalahan pembayaran atau alasan lainnya. Tidak akan diperhitungkan dalam saldo dan statistik"
+    },
+    "TYPES": {
+      "display": {
+        "one": "Jenis transaksi",
+        "other": "Jenis transaksi"
+      },
+      "income": {
+        "one": "Pemasukan",
+        "other": "Pemasukan"
+      },
+      "expense": {
+        "one": "Pengeluaran",
+        "other": "Pengeluaran"
+      },
+      "transfer": {
+        "one": "Transfer",
+        "other": "Transfer"
+      },
+      "investment": {
+        "one": "Investasi",
+        "other": "Investasi"
+      }
+    }
+  },
+  "TRANSFER": {
+    "display": "Transfer",
+    "transfers": "Transfer",
+    "transfer-to": "Transfer ke {{ account }}",
+    "create": "Transfer Baru",
+    "need-two-accounts.warning.header": "Ups!",
+    "need-two-accounts.warning.message": "Diperlukan setidaknya dua akun untuk melakukan tindakan ini. Jika kamu perlu menyesuaikan atau mengedit saldo akun ini saat ini, ketuk tombol edit",
+    "FORM": {
+      "from": "Akun asal",
+      "to": "Akun tujuan",
+      "label-from": "Dari",
+      "label-to": "Ke",
+      "custom-amounts": "Jumlah kustom",
+      "difference": "selisih",
+      "VALUE-IN-DESTINY": {
+        "title": "Jumlah yang diterima di tujuan",
+        "amount-short": "{{amount}} ke akun tujuan"
+      }
+    }
+  },
+  "RECURRENT-TRANSACTIONS": {
+    "title": "Transaksi berulang",
+    "title.short": "Tr. berulang",
+    "empty": "Sepertinya kamu belum memiliki transaksi berulang. Buat transaksi berulang bulanan, tahunan, atau mingguan dan akan muncul di sini",
+    "empty-for-type": "Kamu tidak memiliki transaksi berulang untuk jenis ini. Ubah filter di atas untuk melihat pengulangan lainnya",
+    "total-expense.title": "Total pengeluaran per periode",
+    "total-income.title": "Total pemasukan per periode",
+    "total-all.title": "Total per periode",
+    "total-expense.descr": "* Tanpa memperhitungkan tanggal mulai dan berakhirnya setiap pengulangan",
+    "DETAILS": {
+      "title": "Transaksi berulang",
+      "descr": "Mutasi berikutnya untuk transaksi ini ditampilkan di bawah. Kamu dapat menerima mutasi pertama atau melewatinya",
+      "generated-transaction-status": "Status saat diterima: {{status}}",
+      "last-payment-info": "Mutasi ini adalah yang terakhir dari aturan berulang, sehingga aturan ini akan otomatis dihapus setelah mengonfirmasi tindakan ini",
+      "delete-header": "Hapus transaksi berulang",
+      "delete-message": "Tindakan ini tidak dapat dibatalkan dan tidak akan memengaruhi transaksi yang sudah kamu konfirmasi/bayar"
+    },
+    "STATUS": {
+      "delayed_by": "Terlambat {{x}}h",
+      "coming_in": "Dalam {{x}} hari"
+    }
+  },
+  "ACCOUNT": {
+    "details": "Detail akun",
+    "date": "Tanggal pembukaan",
+    "close_date": "Tanggal penutupan",
+    "reopen": "Buka kembali akun",
+    "reopen.short": "Buka kembali",
+    "reopen.descr": "Apakah kamu yakin ingin membuka kembali akun ini?",
+    "balance": "Saldo akun",
+    "n_transactions": "Jumlah transaksi",
+    "add_money": "Tambah dana",
+    "withdraw_money": "Tarik dana",
+    "correct_balance": "Koreksi saldo",
+    "no-accounts": "Tidak ada akun yang dapat ditampilkan di sini. Tambahkan akun dengan mengetuk tombol '+' di bagian bawah",
+    "current_balance": "Saldo saat ini",
+    "total_value": "Nilai total",
+    "investments": "Investasi",
+    "cash": "Tunai",
+    "total_cost": "Total modal",
+    "total_cost_help": "Jumlah yang kamu bayarkan untuk efek yang saat ini kamu pegang (biaya beli rata-rata tertimbang), bukan nilai pasarnya saat ini.",
+    "unrealized_pnl_help": "Keuntungan atau kerugian di atas kertas atas efek yang masih kamu pegang: nilai pasar saat ini dikurangi total modal. Baru terealisasi saat kamu menjualnya.",
+    "range_income": "Pemasukan",
+    "range_expense": "Pengeluaran",
+    "no_income_range": "Tidak ada pemasukan periode ini",
+    "no_expense_range": "Tidak ada pengeluaran periode ini",
+    "movements_count": "{{n}} mutasi",
+    "GROUP": {
+      "accounts_count": {
+        "one": "{{n}} akun",
+        "other": "{{n}} akun"
+      }
+    },
+    "TABS": {
+      "movements": "Mutasi",
+      "info": "Info"
+    },
+    "TYPES": {
+      "title": "Jenis akun",
+      "warning": "Setelah jenis akun dipilih, jenis tersebut tidak dapat diubah di kemudian hari",
+      "money": "Akun uang / kas",
+      "money.descr": "Menyimpan uang tunai atau rekening untuk keuangan sehari-hari. Tambahkan pengeluaran, pemasukan, dan transfer.",
+      "saving": "Akun tabungan",
+      "saving.descr": "Uang hanya masuk atau keluar melalui transfer dari akun lain. Cocok untuk mulai menabung.",
+      "investment": "Akun investasi",
+      "investment.descr": "Akun broker, bursa kripto, atau portofolio yang menyimpan uang tunai beserta kepemilikan finansial (saham, reksa dana, kripto...).",
+      "locked_warn": "Akun ini tidak lagi dapat diubah jenisnya karena sudah memiliki kepemilikan, transaksi jual-beli, atau snapshot."
+    },
+    "TRACKING_MODES": {
+      "title": "Mode pelacakan",
+      "transactions": "Transaksi",
+      "transactions_descr": "Posisi dihitung secara otomatis dari transaksi beli dan jualmu. Paling cocok jika kamu memiliki (atau ingin menyimpan) riwayat transaksi lengkap dan menginginkan harga perolehan yang akurat.",
+      "holdings": "Kepemilikan (Holdings)",
+      "holdings_descr": "Masukkan posisimu secara manual sebagai snapshot bertanggal (jumlah unit dan harga rata-rata). Paling cocok jika kamu hanya mengetahui posisi saat ini dan tidak ingin mencatat setiap transaksi. Pemasukan, pengeluaran, dan transfer di akun ini tetap tercatat seperti biasa.",
+      "switch_warn": "Setiap mode menghitung posisimu dari sumber yang berbeda. Saat disimpan, posisimu saat ini akan dikonversi ke mode baru. Tanggal sebelumnya akan dinilai menggunakan riwayat yang sudah dimiliki mode tersebut."
+    },
+    "FORM": {
+      "name": "Nama akun",
+      "name.placeholder": "Contoh: Rekening tabungan",
+      "group": "Grup",
+      "group.placeholder": "Contoh: Bank saya",
+      "group.descr": "Akun dengan grup yang sama akan ditampilkan bersama",
+      "notes": "Catatan",
+      "notes.placeholder": "Tulis catatan/deskripsi tentang akun ini",
+      "initial-balance": "Saldo awal",
+      "current-balance": "Saldo saat ini",
+      "create": "Buat akun",
+      "edit": "Edit akun",
+      "currency-not-found-warn": "Kamu belum memiliki informasi nilai tukar untuk mata uang ini. Nilai 1.0 akan digunakan sebagai kurs bawaan. Kamu dapat mengubahnya di pengaturan",
+      "already-exists": "Sudah ada akun lain dengan nama yang sama, silakan gunakan nama lain",
+      "tr-before-opening-date": "Terdapat transaksi di akun ini dengan tanggal sebelum tanggal pembukaan akun",
+      "iban": "IBAN",
+      "swift": "SWIFT",
+      "include-in-net-worth": "Sertakan dalam kekayaan bersih",
+      "include-in-net-worth.descr": "Tambahkan akun ini ke dalam perhitungan total kekayaan bersih",
+      "correct_balance_description": "Menyesuaikan saldo akan mengubah nilai awal akun. Koreksi ini tidak akan tercermin dalam statistikmu.",
+      "valuation_before_creation_date": "Terdapat valuasi di akun ini dengan tanggal sebelum tanggal pembuatan"
+    },
+    "DELETE": {
+      "warning-header": "Hapus akun?",
+      "warning-text": "Tindakan ini akan menghapus akun ini beserta seluruh transaksinya",
+      "success": "Akun berhasil dihapus"
+    },
+    "CLOSE": {
+      "title": "Tutup akun",
+      "title.short": "Tutup",
+      "warn": "Akun ini tidak akan lagi muncul di daftar tertentu dan kamu tidak akan dapat membuat transaksi di dalamnya dengan tanggal setelah tanggal yang ditentukan di bawah ini. Tindakan ini tidak memengaruhi transaksi atau saldo apa pun, dan kamu juga dapat membuka kembali akun ini kapan saja. ",
+      "should-have-zero-balance": "Saldo akun ini harus bernilai 0 untuk menutupnya. Silakan edit akun terlebih dahulu sebelum melanjutkan",
+      "should-have-no-transactions": "Akun ini memiliki transaksi setelah tanggal penutupan yang ditentukan. Hapus transaksi tersebut atau ubah tanggal penutupan akun sebelum melanjutkan",
+      "success": "Akun berhasil ditutup",
+      "unarchive-succes": "Akun berhasil dibuka kembali"
+    },
+    "SELECT": {
+      "one": "Pilih akun",
+      "all": "Semua akun",
+      "multiple": "Pilih beberapa akun"
+    }
+  },
+  "CURRENCIES": {
+    "currency-converter": "Konverter mata uang",
+    "currency": "Mata uang",
+    "currency-settings": "Pengaturan mata uang",
+    "DETAILS": {
+      "equals-to": "1 {{code}} setara dengan",
+      "min": "Minimum",
+      "max": "Maksimum",
+      "updated": "Diperbarui",
+      "decimals": "{{n}} desimal",
+      "used-in": "Digunakan di",
+      "total-exposure": "Total eksposur",
+      "no-usage": "Mata uang ini belum digunakan di akun atau investasi mana pun",
+      "code-locked-hint": "Tidak dapat diubah: digunakan untuk mengidentifikasi mata uang di seluruh aplikasi.",
+      "type-locked-hint": "Ditentukan saat mata uang dibuat. Mengubahnya akan mengubah cara perolehan kursnya.",
+      "TABS": {
+        "rates": "Kurs",
+        "used-in": "Digunakan",
+        "settings": "Pengaturan"
+      }
+    },
+    "currency-manager": "Pengelola mata uang",
+    "currency-manager.descr": "Atur mata uang dan nilai tukarnya dengan mata uang lain",
+    "preferred-currency": "Mata uang utama/dasar",
+    "tap-to-change-preferred-currency": "Ketuk untuk mengubah",
+    "change-preferred-currency-title": "Ubah mata uang utama",
+    "change-preferred-currency-msg": "Semua statistik dan anggaran akan ditampilkan dalam mata uang ini mulai sekarang. Akun dan transaksi akan tetap menggunakan mata uang aslinya. Semua nilai tukar yang tersimpan akan dihapus jika kamu melakukan tindakan ini. Ingin melanjutkan?",
+    "EXCHANGE-RATE-FORM": {
+      "equal-to-preferred-warn": "Mata uang tidak boleh sama dengan mata uang utama pengguna",
+      "override-existing-warn": "Nilai tukar untuk mata uang ini pada tanggal tersebut sudah ada. Jika dilanjutkan, nilai sebelumnya akan ditimpa",
+      "specify-a-currency": "Silakan tentukan mata uang",
+      "add": "Tambah nilai tukar",
+      "add-success": "Nilai tukar berhasil ditambahkan",
+      "edit": "Edit nilai tukar",
+      "edit-success": "Nilai tukar berhasil diperbarui",
+      "remove-all": "Hapus semua nilai tukar",
+      "remove-all-warning": "Tindakan ini tidak dapat dibatalkan dan akan menghapus seluruh nilai tukar untuk mata uang ini"
+    },
+    "TYPES": {
+      "display": "Jenis mata uang",
+      "fiat": "FIAT",
+      "crypto": "Mata uang kripto",
+      "other": "Lainnya"
+    },
+    "CURRENCY-FORM": {
+      "name": "Nama Tampilan",
+      "code": "Kode Mata Uang",
+      "symbol": "Simbol",
+      "decimal-digits": "Digit Desimal",
+      "create": "Buat mata uang",
+      "create-success": "Mata uang berhasil dibuat",
+      "edit": "Edit mata uang",
+      "edit-success": "Mata uang berhasil diperbarui",
+      "delete": "Hapus mata uang",
+      "delete-success": "Mata uang berhasil dihapus",
+      "already-exists": "Mata uang dengan kode ini sudah ada. Kamu mungkin ingin mengeditnya"
+    },
+    "delete-all-success": "Seluruh nilai tukar berhasil dihapus",
+    "historical": "Riwayat kurs",
+    "historical-empty": "Tidak ditemukan riwayat nilai tukar untuk mata uang ini",
+    "exchange-rate": "Nilai tukar",
+    "exchange-rates": "Nilai tukar",
+    "min-exchange-rate": "Nilai tukar minimum",
+    "max-exchange-rate": "Nilai tukar maksimum",
+    "empty": "Tambahkan nilai tukar di sini agar jika kamu memiliki akun dengan mata uang selain mata uang dasarmu, grafik kami menjadi lebih akurat",
+    "select-a-currency": "Pilih mata uang",
+    "search": "Cari berdasarkan nama atau kode mata uang"
+  },
+  "TAGS": {
+    "display": {
+      "one": "Label",
+      "other": "Tag"
+    },
+    "FORM": {
+      "name": "Nama tag",
+      "name-hint": "Misal: Makanan",
+      "forbidden-char-error": "Nama tidak boleh mengandung karakter ';'",
+      "description": "Deskripsi"
+    },
+    "SELECT": {
+      "title": "Pilih tag",
+      "all": "Semua tag"
+    },
+    "empty-list": "Kamu belum membuat tag apa pun. Tag dan kategori adalah cara tepat untuk mengelompokkan mutasimu",
+    "no-tags": "Kamu belum membuat tag apa pun. Buka pengaturan untuk membuat tag.",
+    "without-tags": "Tanpa tag",
+    "add": "Tambah tag",
+    "create": "Buat label",
+    "create.success": "Label berhasil dibuat",
+    "already-exists": "Nama tag ini sudah ada. Kamu mungkin ingin mengeditnya",
+    "edit": "Edit tag",
+    "edit.success": "Tag berhasil diperbarui",
+    "delete.success": "Tag berhasil dihapus",
+    "delete-warning-header": "Hapus tag?",
+    "delete-warning-message": "Tindakan ini tidak akan menghapus transaksi yang memiliki tag ini."
+  },
+  "CATEGORIES": {
+    "unknown": "Kategori tidak dikenal",
+    "create": "Buat kategori",
+    "create.success": "Kategori berhasil dibuat",
+    "new-category": "Kategori baru",
+    "already-exists": "Nama kategori ini sudah ada. Mungkin kamu ingin mengeditnya",
+    "edit": "Edit kategori",
+    "edit.success": "Kategori berhasil diperbarui",
+    "name": "Nama kategori",
+    "type": "Jenis kategori",
+    "both-types": "Kedua jenis",
+    "subcategories": "Subkategori",
+    "subcategories.add": "Tambah subkategori",
+    "make-parent": "Jadikan kategori utama",
+    "make-child": "Jadikan subkategori",
+    "make-child.warning1": "Kategori ini beserta subkategorinya akan menjadi subkategori dari <b>{{destiny}}</b>.",
+    "make-child.warning2": "Transaksinya <b>({{x}})</b> akan dipindahkan ke subkategori baru yang dibuat di dalam kategori <b>{{destiny}}</b>.",
+    "make-child.success": "Subkategori berhasil dibuat",
+    "merge": "Gabungkan dengan kategori lain",
+    "merge.warning1": "Semua transaksi ({{x}}) yang terkait dengan kategori <b>{{from}}</b> akan dipindahkan ke kategori <b>{{destiny}}</b>",
+    "merge.warning2": "Kategori <b>{{from}}</b> akan dihapus secara permanen.",
+    "merge.success": "Kategori berhasil digabungkan",
+    "delete.success": "Kategori berhasil dihapus",
+    "delete-warning-header": "Hapus kategori?",
+    "delete-warning-message": "Tindakan ini akan menghapus secara permanen semua transaksi <b>({{x}})</b> yang terkait dengan kategori ini.",
+    "SELECT": {
+      "title": "Pilih kategori",
+      "select-one": "Pilih satu kategori",
+      "select-subcategory": "Pilih subkategori",
+      "without-subcategory": "Tanpa subkategori",
+      "all": "Semua kategori",
+      "all.short": "Semua"
+    }
+  },
+  "BUDGETS": {
+    "title": "Anggaran",
+    "status": "Status anggaran",
+    "repeated": "Berulang",
+    "one-time": "Sekali",
+    "actives": "Aktif",
+    "from-budgeted": "tersisa dari ",
+    "days-left": "hari tersisa",
+    "days-to-start": "hari lagi mulai",
+    "since-expiration": "hari sejak berakhir",
+    "no-budgets": "Belum ada anggaran untuk ditampilkan di bagian ini. Mulai buat anggaran dengan mengetuk tombol di bawah",
+    "delete": "Hapus anggaran",
+    "delete-warning": "Tindakan ini tidak dapat dibatalkan. Kategori dan transaksi yang merujuk pada anggaran ini tidak akan dihapus",
+    "FORM": {
+      "title": "Tambah anggaran",
+      "name": "Nama anggaran",
+      "value": "Batas nominal",
+      "create": "Tambah anggaran",
+      "create-success": "Anggaran berhasil dibuat",
+      "edit": "Edit anggaran",
+      "edit-success": "Anggaran berhasil diperbarui",
+      "negative-warn": "Anggaran tidak boleh bernilai negatif"
+    },
+    "DETAILS": {
+      "title": "Detail Anggaran",
+      "statistics": "Statistik",
+      "budget-value": "Dianggarkan",
+      "expend-evolution": "Perkembangan pengeluaran",
+      "no-transactions": "Sepertinya kamu belum melakukan pengeluaran apa pun yang terkait dengan anggaran ini"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Anggaran aktif",
+      "past": "Anggaran selesai",
+      "future": "Anggaran mendatang"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Sesuai jalur",
+        "active-overspending": "Melebihi batas",
+        "active-indeterminate": "Aktif",
+        "success": "Tercapai",
+        "fail": "Terlampaui"
+      }
+    }
+  },
+  "GOALS": {
+    "title": "Target",
+    "status": "Status target",
+    "type": {
+      "display": "Jenis Target",
+      "income": {
+        "title": "Target Tabungan",
+        "descr": "Ideal untuk menabung. Kamu berhasil ketika saldo melampaui targetmu."
+      },
+      "expense": {
+        "title": "Target Pengeluaran",
+        "descr": "Lacak seberapa banyak pengeluaranmu dan capai nominal target. Cocok untuk donasi, amal, anggaran liburan..."
+      }
+    },
+    "empty_title": "Belum ada target",
+    "empty_description": "Buat target baru untuk mulai melacak tabunganmu!",
+    "delete": "Hapus target",
+    "delete_warning": "Tindakan ini tidak dapat dibatalkan. Kategori dan transaksi yang merujuk pada target ini tidak akan dihapus",
+    "FORM": {
+      "new_title": "Target Baru",
+      "edit_title": "Edit Target",
+      "target_amount": "Nominal Target",
+      "initial_amount": "Nominal Awal",
+      "name": "Nama",
+      "name_hint": "Target Tabungan Saya",
+      "create_success": "Target berhasil dibuat",
+      "edit_success": "Target berhasil diperbarui",
+      "negative_warn": "Nominal target tidak boleh negatif"
+    },
+    "DETAILS": {
+      "title": "Detail Target",
+      "statistics": "Statistik",
+      "goal_value": "Nominal Target",
+      "evolution": "Perkembangan",
+      "no_transactions": "Sepertinya kamu belum melakukan transaksi apa pun yang terkait dengan target ini"
+    },
+    "TARGET_TIMELINE_STATUSES": {
+      "active": "Target aktif",
+      "past": "Target selesai",
+      "future": "Target mendatang"
+    },
+    "PROGRESS": {
+      "LABELS": {
+        "active-on-track": "Sesuai jalur",
+        "active-behind-schedule": "Tertinggal dari jadwal",
+        "active-indeterminate": "Aktif",
+        "success": "Tercapai",
+        "fail": "Gagal"
+      }
+    }
+  },
+  "TARGETS": {
+    "left": "tersisa",
+    "over": "berlebih",
+    "spent": "terpakai",
+    "saved": "terkumpul",
+    "CHART": {
+      "spent": "Terpakai",
+      "saved": "Terkumpul",
+      "projected": "Proyeksi",
+      "pace": "Laju ideal"
+    },
+    "STATS": {
+      "per-day": {
+        "one": "per hari, {{n}} hari tersisa",
+        "other": "per hari, {{n}} hari tersisa"
+      },
+      "per-day-short": "per hari",
+      "per-day-help": "Seberapa banyak yang masih bisa kamu tambahkan setiap hari hingga akhir periode untuk mencapai nominal target",
+      "above-pace": "di atas laju ideal",
+      "below-pace": "di bawah laju ideal",
+      "pace-help": "Selisih antara jumlah saat ini dan jumlah yang diharapkan hari ini jika dibagi rata sepanjang periode",
+      "projected": "proyeksi",
+      "projected-help": "Perkiraan jumlah pada akhir periode jika laju saat ini terus berlanjut"
+    }
+  },
+  "DEBTS": {
+    "display": {
+      "one": "Utang / Piutang",
+      "other": "Utang & Piutang"
+    },
+    "FORM": {
+      "name": "Nama utang/piutang",
+      "initial_amount": "Jumlah awal",
+      "total_amount": "Jumlah total",
+      "step_initial_value": "Nilai awal",
+      "step_details": "Detail",
+      "from_transaction": {
+        "title": "Dari transaksi",
+        "tap_to_select": "Ketuk untuk memilih transaksi"
+      },
+      "from_amount": {
+        "title": "Dari jumlah awal",
+        "description": "Jumlah ini tidak akan diperhitungkan dalam statistik sebagai pengeluaran/pemasukan, melainkan digunakan untuk menghitung saldo dan kekayaan bersih"
+      }
+    },
+    "DIRECTION": {
+      "lent": "Piutang (Meminjamkan)",
+      "borrowed": "Utang (Meminjam)"
+    },
+    "STATUS": {
+      "active": "Aktif",
+      "close": "Lunas / Ditutup"
+    },
+    "DETAILS": {
+      "collected_amount": "Jumlah terkumpul/dibayar",
+      "remaining": "Sisa",
+      "no_deadline": "Tanpa tenggat waktu",
+      "in_days": "Dalam {{x}} hari",
+      "due_today": "Jatuh tempo hari ini",
+      "days_ago": "{{x}} hari yang lalu",
+      "overdue_by": "Terlambat {{x}} hari",
+      "per_day": "/ hari",
+      "no_transactions": "Tidak ditemukan transaksi untuk catatan ini"
+    },
+    "EMPTY": {
+      "no_debts_active": "Tidak ada catatan utang/piutang aktif. Mulai buat catatan baru dengan mengetuk tombol di bawah",
+      "no_debts_closed": "Tidak ada catatan utang/piutang yang selesai. Catatan ditutup ketika semua uang telah tertagih atau seluruh utang telah dilunasi."
+    },
+    "ACTIONS": {
+      "edit": {
+        "title": "Edit utang/piutang",
+        "success": "Utang/piutang berhasil diperbarui"
+      },
+      "delete": {
+        "warning_header": "Hapus catatan ini?",
+        "warning_text": "Tindakan ini tidak dapat dibatalkan. Transaksi yang tertaut tidak akan dihapus, tetapi tidak lagi dikaitkan dengan utang/piutang ini."
+      },
+      "add_register": {
+        "title": "Tambah mutasi",
+        "success": "Mutasi berhasil ditambahkan",
+        "fab_label": "Tambah catatan",
+        "modal_title": "Tambahkan catatan ke utang/piutang ini",
+        "modal_subtitle": "Pilih salah satu opsi berikut untuk menautkan transaksi ke catatan ini"
+      },
+      "link_transaction": {
+        "title": "Tautkan transaksi yang ada",
+        "description": "Pilih catatan yang sudah ada untuk ditautkan ke utang/piutang ini",
+        "success": "Transaksi berhasil ditautkan",
+        "creating": "Kamu sedang membuat transaksi yang tertaut ke <b>{{ name }}</b>"
+      },
+      "unlink_transaction": {
+        "title": "Lepas tautan transaksi",
+        "warning_text": "Transaksi ini tidak lagi akan dikaitkan dengan utang/piutang ini.",
+        "success": "Tautan transaksi berhasil dilepas"
+      },
+      "new_transaction": {
+        "title": "Tambah transaksi baru",
+        "description": "Tambah atau kurangi sisa utang/piutang secara manual dengan membuat transaksi baru yang tertaut"
+      },
+      "create": {
+        "title": "Buat catatan utang/piutang",
+        "success": "Catatan utang/piutang berhasil dibuat"
+      }
+    }
+  },
+  "ASSETS": {
+    "title": "Aset",
+    "linked_asset": "Aset tertaut",
+    "empty_description": "Kamu belum menambahkan aset apa pun. Aset seperti properti, kendaraan, atau barang koleksi dapat dilacak valuasinya",
+    "create": "Tambah aset",
+    "ADD": {
+      "title": "Tambah aset baru",
+      "subtitle": "Pilih jenis aset yang ingin ditambahkan"
+    },
+    "create_success": "Aset berhasil dibuat",
+    "edit_success": "Aset berhasil diperbarui",
+    "delete": "Hapus aset",
+    "delete_success": "Aset berhasil dihapus",
+    "delete_confirmation": "Tindakan ini tidak dapat dibatalkan. Semua riwayat valuasi untuk aset ini juga akan dihapus.",
+    "profit": "Keuntungan",
+    "profit_percent": "Imbal hasil %",
+    "total_value": "Total nilai aset",
+    "group_by_type": "Kelompokkan berdasarkan jenis aset",
+    "show_value_variation": "Tampilkan persentase perubahan",
+    "amount_invested": "Kamu telah menginvestasikan {{ X }} dari akun ini",
+    "TYPES": {
+      "stocks": "Saham",
+      "funds": "Reksa Dana",
+      "crypto": "Kripto",
+      "real_estate": "Properti",
+      "vehicle": "Kendaraan",
+      "precious_metal": "Logam mulia",
+      "jewelry_art": "Perhiasan & seni",
+      "other": "Lainnya"
+    },
+    "TYPE_DESCRIPTIONS": {
+      "real_estate": "Rumah, apartemen, dan tanah",
+      "vehicle": "Mobil, motor, perahu, dan lainnya",
+      "precious_metal": "Emas, perak, dan platinum",
+      "jewelry_art": "Karya seni, perhiasan, dan barang koleksi",
+      "other": "Aset kustom"
+    },
+    "SECURITY_TYPES": {
+      "stock": "Saham",
+      "fund": "Reksa Dana / ETF",
+      "crypto": "Kripto"
+    },
+    "HOLDINGS": {
+      "title": "Kepemilikan",
+      "empty": "Belum ada kepemilikan. Beli efek untuk mulai melacak portofoliomu.",
+      "buy": "Beli",
+      "sell": "Jual",
+      "buy_title": "Beli {{security}}",
+      "sell_title": "Jual {{security}}",
+      "avg_cost": "Harga rata-rata",
+      "update_price": "Perbarui harga",
+      "choose_security": "Pilih efek",
+      "create_security": "Buat efek baru",
+      "security_name": "Nama efek",
+      "security": "Efek",
+      "ticker": "Ticker / simbol (opsional)",
+      "security_type": "Jenis efek",
+      "current_price": "Harga saat ini",
+      "quantity": "Jumlah",
+      "price_per_unit": "Harga per unit",
+      "total": "Total",
+      "total_in_account_currency": "Total dalam {{currency}}",
+      "rate_stored": "Nilai tukar {{from}} → {{to}}",
+      "equivalent_in": "Setara dalam {{currency}}",
+      "fees_and_exchange": "Biaya dan selisih kurs",
+      "custom_total_configure": "Atur total kustom",
+      "custom_total_reset": "Atur ulang total",
+      "fees_and_exchange_info": "Gabungan biaya transaksi dan selisih kurs. Jumlah ini tidak diperhitungkan dalam harga rata-rata per unit maupun statistik lainnya.",
+      "rate_stored_caption": "Kurs tersimpan {{rate}}",
+      "total_mode_auto": "Otomatis",
+      "total_mode_custom": "Kustom",
+      "calculated": "Terhitung",
+      "rate_effective": "efektif",
+      "units_available": "{{quantity}} tersedia",
+      "not_enough_units": "Jumlah unit yang kamu miliki tidak mencukupi",
+      "opening_position": "Posisi awal",
+      "add_position": "Tambah posisi",
+      "positions_history": "Riwayat posisi",
+      "edit_snapshot": "Edit snapshot",
+      "SNAPSHOTS": {
+        "history_title": "Riwayat snapshot",
+        "history_intro": "Setiap snapshot menyimpan kondisi lengkap akun pada tanggal tertentu. Pilih salah satu untuk mengeditnya.",
+        "count": "{{n}} snapshot",
+        "new_snapshot": "Baru",
+        "no_snapshots": "Belum ada snapshot",
+        "empty_portfolio": "Portofolio kosong",
+        "positions_count": "{{n}} posisi",
+        "manual": "Manual",
+        "current": "Snapshot saat ini",
+        "cost_label": "modal",
+        "update": "Perbarui",
+        "update_positions": "Perbarui posisi",
+        "full_portfolio": "portofolio lengkap",
+        "how_it_works": "Cara kerja snapshot",
+        "snapshot_contents_description": "Snapshot adalah catatan lengkap akun ini pada {{date}}. Masukkan kas yang belum diinvestasikan dan setiap posisi yang ditampilkan brokermu pada tanggal tersebut. Posisi yang tidak dicantumkan dianggap sudah tidak dimiliki.",
+        "date_label": "Tanggal snapshot",
+        "cash_label": "Tunai",
+        "balance_effect_description": "Snapshot ini digunakan untuk menghitung saldo dan statistik hingga snapshot berikutnya. Nilai posisi tetap mengikuti harga pasar, sedangkan transaksi dan transfer setelah tanggal ini akan mengubah saldo kasnya. Jika tidak ada snapshot baru yang ditambahkan, aturan ini berlaku seterusnya.",
+        "overwrite_warning": "Snapshot pada tanggal ini sudah ada. Menyimpan akan menimpanya.",
+        "add_position": "Tambah posisi lain",
+        "add_first_position": "Tambahkan posisi pertamamu",
+        "col_symbol": "Simbol",
+        "total_cost": "Total modal portofolio",
+        "snapshot_total": "Total harga perolehan",
+        "save": "Simpan snapshot",
+        "zero_qty_hint": "Jumlah 0 tetap mempertahankan posisi ini di dalam snapshot. Untuk menghapusnya sepenuhnya, hapus baris tersebut.",
+        "delete_title": "Hapus snapshot?",
+        "delete_descr": "Snapshot ini akan dihapus. Jika ini adalah snapshot terbaru, posisimu saat ini akan kembali mengikuti snapshot sebelumnya."
+      }
+    },
+    "SECURITIES": {
+      "title": "Efek / Instrumen",
+      "create": "Tambah efek",
+      "edit": "Edit efek",
+      "view_details": "Lihat detail",
+      "empty_description": "Kamu belum menambahkan efek apa pun. Tambahkan saham, reksa dana, atau kripto untuk mulai melacak portofoliomu.",
+      "total_value": "Nilai portofolio",
+      "group_by_type": "Kelompokkan berdasarkan jenis efek",
+      "price": "Harga",
+      "market_value": "Nilai pasar",
+      "units_held": "Unit dimiliki",
+      "unrealized_pnl": "Laba/Rugi belum terealisasi",
+      "your_position": "Posisimu",
+      "positions": "Posisi",
+      "no_positions": "Kamu belum memiliki efek ini di akun mana pun.",
+      "by_security": "Per efek",
+      "by_type": "Per jenis",
+      "by_account": "Per akun",
+      "by_classification": "Per klasifikasi",
+      "no_trades": "Belum ada transaksi beli atau jual.",
+      "no_price_history": "Belum ada riwayat harga. Tambahkan harga untuk mulai melacaknya.",
+      "TABS": {
+        "about": "Tentang",
+        "positions": "Posisi",
+        "trades": "Transaksi",
+        "price_history": "Harga"
+      },
+      "PRICE_HISTORY": {
+        "add": "Tambah harga",
+        "edit": "Edit harga",
+        "price": "Harga",
+        "overwrite_warning": "Harga pada tanggal ini sudah ada. Menyimpan akan menimpanya."
+      },
+      "IMPORT": {
+        "title": "Impor harga",
+        "description": "Pilih file .csv atau tempel satu harga per baris dengan format tanggal, harga. Tidak memerlukan koneksi internet.",
+        "review_description": "Periksa daftar harga di bawah ini sebelum mengimpornya.",
+        "field_label": "Data CSV",
+        "button": "Impor harga",
+        "rows_detected": "{{n}} baris valid terdeteksi",
+        "overwrite_warning": "{{n}} dari tanggal tersebut sudah memiliki catatan harga dan akan ditimpa.",
+        "success": "{{n}} harga berhasil diimpor"
+      },
+      "FORM": {
+        "tab_general": "Umum",
+        "tab_classification": "Klasifikasi",
+        "notes": "Catatan"
+      },
+      "CLASSIFICATION": {
+        "title": "Klasifikasi",
+        "edit_title": "Edit klasifikasi",
+        "empty": "Belum diklasifikasikan. Tambahkan kelas aset, wilayah, sektor, atau risiko untuk melihat efek ini dalam komposisi portofoliomu.",
+        "none": "Tidak ada",
+        "add_category": "Tambah",
+        "select_category": "Pilih kategori",
+        "search_categories": "Cari kategori...",
+        "unclassified": "Belum diklasifikasikan",
+        "weight_over_100": "Total bobot dari \"{{taxonomy}}\" melebihi 100%."
+      },
+      "delete": "Hapus efek",
+      "delete_confirmation": "Tindakan ini akan menghapus efek tersebut dan tidak dapat dibatalkan.",
+      "delete_success": "Efek berhasil dihapus",
+      "in_use_error": "Efek ini masih memiliki kepemilikan atau transaksi yang tertaut. Hapus terlebih dahulu sebelum menghapus efek ini."
+    },
+    "ACTIONS": {
+      "add_register": {
+        "button_label": "Tautkan transaksi"
+      },
+      "link_transaction": {
+        "success": "Transaksi berhasil ditautkan"
+      },
+      "unlink_transaction": {
+        "title": "Lepas tautan dari aset"
+      }
+    },
+    "DETAILS": {
+      "about": "Tentang",
+      "gross_value": "Nilai kotor",
+      "liability": "Kewajiban",
+      "net_worth": "Kekayaan bersih",
+      "acquisition_transaction_badge": "Perolehan",
+      "select_account": "Pilih akun",
+      "update_value": "Perbarui nilai",
+      "notes_optional": "Catatan (opsional)",
+      "performance_title": "Kinerja",
+      "performance_return": "Imbal hasil periode",
+      "performance_return_help": "Keuntungan atau kerugian dari pergerakan pasar, bukan dari dana yang kamu tambah atau tarik. Jika nilai hanya naik karena kamu menyetor dana tambahan, angka ini akan tetap mendekati nol.",
+      "performance_invested_value": "Nilai terinvestasi",
+      "performance_invested_value_caption": "Total kas dalam aset ini: nilai awal ditambah pembelian dan penjualan tertaut.",
+      "performance_value_diff": "Perubahan valuasi",
+      "performance_value_diff_caption": "Seberapa besar nilai aset berubah dari awal periode yang dipilih hingga sekarang."
+    },
+    "FORM": {
+      "asset_type": "Jenis aset",
+      "linked_account": "Akun tertaut (opsional)",
+      "linked_liability": "Kewajiban tertaut",
+      "link_existing_liability": "Tautkan kewajiban yang ada",
+      "no_liabilities": "Kamu belum memiliki catatan kewajiban apa pun.",
+      "name": "Nama aset",
+      "name_required": "Silakan masukkan nama aset",
+      "NAME_HINTS": {
+        "real_estate": "Rumah pantai, Apartemen pusat kota...",
+        "vehicle": "Mobil keluarga, Motor...",
+        "precious_metal": "Emas batangan, Koin perak...",
+        "jewelry_art": "Jam tangan mewah, Lukisan...",
+        "other": "Gitar antik, Domain web..."
+      },
+      "description": "Deskripsi",
+      "initial_value": "Nilai awal",
+      "initial_value_required": "Silakan masukkan nilai awal",
+      "initial_value_invalid": "Silakan masukkan angka yang valid",
+      "acquisition_info": "Detail perolehan",
+      "purchase_value": "Nilai pembelian",
+      "purchase_value_option": "Masukkan nilai pembelian",
+      "purchase_value_help": "Jika dibiarkan kosong, valuasi pertama akan digunakan sebagai harga pembelian.",
+      "current_value": "Nilai saat ini",
+      "current_value_help": "Opsional. Mencatat valuasi bertanggal hari ini.",
+      "link_acquisition_transaction": "Tautkan transaksi pembelian",
+      "link_acquisition_transaction_descr": "Pilih pengeluaran yang mencerminkan pembelian aset ini. Nominalnya (dikonversi ke mata uang aset) dan tanggalnya akan digunakan sebagai nilai awal dan tanggal perolehan",
+      "acquisition_transaction": "Transaksi perolehan",
+      "creation_date_before_acquisition_transaction": "Tanggal perolehan tidak boleh mendahului tanggal transaksi yang tertaut",
+      "acquisition_date_from_transaction": "Tanggal perolehan diambil dari transaksi yang tertaut dan tidak dapat diedit. Lepas tautan transaksi untuk mengubahnya.",
+      "currency": "Mata uang",
+      "select_currency": "Silakan pilih mata uang",
+      "creation_date": "Tanggal pembuatan",
+      "acquisition_date": "Tanggal perolehan",
+      "edit": "Edit aset",
+      "create": "Buat aset",
+      "already_exists": "Aset dengan nama ini sudah ada. Kamu mungkin ingin mengeditnya",
+      "valuation_before_creation_date": "Terdapat valuasi di aset ini dengan tanggal sebelum tanggal perolehan"
+    },
+    "VALUATION": {
+      "history": "Riwayat valuasi",
+      "no_valuations": "Belum ada valuasi yang tercatat. Mulai dengan menambahkan valuasi pertama",
+      "add_valuation": "Tambah valuasi",
+      "edit_valuation": "Edit valuasi",
+      "value": "Nilai",
+      "net_contribution": "Kontribusi bersih",
+      "net_contribution_help": "Uang tunai yang telah kamu masukkan ke aset ini: nilai awalnya ditambah transaksi tertaut. Ini terpisah dari perubahan nilai pasar yang kamu catat secara manual melalui valuasi.",
+      "value_required": "Silakan masukkan nilai",
+      "value_invalid": "Silakan masukkan angka yang valid",
+      "update_value_success": "Valuasi berhasil ditambahkan",
+      "edit_valuation_success": "Valuasi berhasil diperbarui",
+      "delete_valuation_success": "Valuasi berhasil dihapus",
+      "delete_all_valuations": "Hapus semua valuasi",
+      "delete_all_valuations_success": "Semua valuasi berhasil dihapus"
+    },
+    "SORT": {
+      "name_asc": "Nama (A-Z)",
+      "name_desc": "Nama (Z-A)",
+      "value_asc": "Nilai (terendah dulu)",
+      "value_desc": "Nilai (tertinggi dulu)"
+    }
+  },
+  "TARGET_TIMELINE_STATUSES": {
+    "active": "Aktif",
+    "past": "Selesai",
+    "future": "Mendatang"
+  },
+  "BACKUP": {
+    "no_file_selected": "Tidak ada file yang dipilih",
+    "no_directory_selected": "Tidak ada direktori yang dipilih",
+    "EXPORT": {
+      "title": "Ekspor datamu",
+      "title.short": "Ekspor",
+      "type-of-export": "Jenis ekspor",
+      "other-options": "Opsi",
+      "all": "Cadangan penuh",
+      "all.descr": "Ekspor semua datamu (akun, transaksi, anggaran, pengaturan...). Impor kembali kapan saja agar kamu tidak kehilangan apa pun.",
+      "transactions": "Cadangan transaksi",
+      "transactions.descr": "Ekspor transaksimu dalam format CSV agar lebih mudah dianalisis di program atau aplikasi lain.",
+      "transactions-to-export": {
+        "one": "1 transaksi untuk diekspor",
+        "other": "{{ n }} transaksi untuk diekspor"
+      },
+      "description": "Unduh datamu dalam berbagai format",
+      "send_file": "Kirim file",
+      "see_folder": "Lihat folder",
+      "success": "File berhasil disimpan di {{x}}",
+      "error": "Terjadi kesalahan saat mengunduh file. Silakan hubungi pengembang melalui lozin.technologies@gmail.com"
+    },
+    "IMPORT": {
+      "title": "Impor datamu",
+      "title.short": "Impor",
+      "restore-backup": "Pulihkan Cadangan",
+      "restore-backup-descr": "Impor database yang sebelumnya disimpan dari Monekin. Tindakan ini akan menggantikan seluruh data aplikasi saat ini dengan data baru",
+      "restore-backup-warn.description": "Saat mengimpor database baru, semua data yang saat ini tersimpan di aplikasi akan hilang. Disarankan membuat cadangan terlebih dahulu sebelum melanjutkan. Jangan mengunggah file yang tidak jelas asalnya, unggah hanya file yang sebelumnya kamu unduh dari Monekin",
+      "restore-backup-warn.title": "Timpa semua data",
+      "select-other-file": "Pilih file lain",
+      "tap-to-select-file": "Ketuk untuk memilih file",
+      "MANUAL-IMPORT": {
+        "title": "Impor manual",
+        "descr": "Impor transaksi dari file .csv secara manual",
+        "defaultAccount": "Akun bawaan",
+        "removeDefaultAccount": "Hapus akun bawaan",
+        "defaultCategory": "Kategori Bawaan",
+        "defaultTags": "Tag Bawaan",
+        "select-a-column": "Pilih kolom dari file .csv",
+        "date-format": "Format tanggal",
+        "note-column": "Kolom catatan",
+        "title-column": "Kolom judul",
+        "tag-separator": "Pemisah tag di dalam .csv",
+        "steps": [
+          "Pilih file kamu",
+          "Kolom untuk nominal",
+          "Kolom untuk akun",
+          "Kolom untuk kategori",
+          "Kolom untuk tag",
+          "Kolom untuk tanggal",
+          "Kolom lainnya"
+        ],
+        "steps-descr": [
+          "Pilih file .csv dari perangkatmu. Pastikan baris pertamanya berisi nama setiap kolom.",
+          "Pilih kolom yang menentukan nilai setiap transaksi. Gunakan nilai negatif untuk pengeluaran dan nilai positif untuk pemasukan.",
+          "Pilih kolom yang menentukan akun milik setiap transaksi. Kamu juga dapat memilih akun bawaan jika akun yang diinginkan tidak ditemukan. Jika akun bawaan tidak ditentukan, kami akan membuat akun baru dengan nama yang sama.",
+          "Tentukan kolom tempat nama kategori transaksi berada. Kamu harus menentukan kategori bawaan agar transaksi tetap mendapatkan kategori jika kategori aslinya tidak ditemukan.",
+          "Tentukan kolom tempat tag transaksi berada. Jika tidak ditentukan, transaksi akan dibuat dengan tag bawaan.",
+          "Pilih kolom yang menentukan tanggal setiap transaksi. Jika tidak ditentukan, transaksi akan dibuat dengan tanggal hari ini.",
+          "Tentukan kolom untuk atribut transaksi opsional lainnya."
+        ],
+        "success": "Berhasil mengimpor {{x}} transaksi"
+      },
+      "success": "Impor berhasil dilakukan",
+      "error": "Terjadi kesalahan saat mengimpor file. Silakan hubungi pengembang melalui lozin.technologies@gmail.com"
+    },
+    "ABOUT": {
+      "title": "Informasi tentang databasemu",
+      "create-date": "Tanggal pembuatan",
+      "modify-date": "Terakhir diubah",
+      "last-backup": "Cadangan terakhir",
+      "size": "Ukuran"
+    }
+  },
+  "SETTINGS": {
+    "title_long": "Pengaturan & Kustomisasi",
+    "title_short": "Pengaturan",
+    "description": "Tema, Bahasa, Data, dan lainnya",
+    "edit_profile": "Edit profil",
+    "GENERAL": {
+      "menu_title": "Pengaturan Umum",
+      "menu_descr": "Bahasa, privasi, dan lainnya",
+      "show_all_decimals": "Tampilkan semua angka desimal",
+      "show_all_decimals_descr": "Menampilkan seluruh digit desimal meskipun berupa angka nol di belakang koma",
+      "LANGUAGE": {
+        "section": "Bahasa dan teks",
+        "title": "Bahasa aplikasi",
+        "descr": "Bahasa yang digunakan untuk menampilkan teks di dalam aplikasi",
+        "help": "Jika kamu ingin berkontribusi menerjemahkan aplikasi ini, kamu dapat membaca <a href='https://github.com/enrique-lozano/Monekin/tree/main/lib/i18n'>panduan kami</a>"
+      },
+      "LOCALE": {
+        "title": "Wilayah",
+        "auto": "Sistem",
+        "descr": "Atur format yang digunakan untuk tanggal, angka...",
+        "warn": "Saat mengubah wilayah, aplikasi akan diperbarui",
+        "first_day_of_week": "Hari pertama dalam seminggu"
+      }
+    },
+    "APP_STRUCTURES": {
+      "title": "Struktur aplikasi",
+      "tags": "Atur tag untuk pengelompokan transaksi yang lebih rapi",
+      "categories": "Pengaturan kategori dan subkategori",
+      "accounts": "Kelola dan edit akunmu",
+      "filters": "Atur filter global yang dapat digunakan untuk transaksi dan statistik"
+    },
+    "SECURITY": {
+      "title": "Keamanan",
+      "private_mode_at_launch": "Mode privat saat dibuka",
+      "private_mode_at_launch_descr": "Buka aplikasi dalam mode privat secara bawaan",
+      "private_mode": "Mode privat",
+      "private_mode_descr": "Sembunyikan semua nominal uang",
+      "private_mode_activated": "Mode privat diaktifkan",
+      "private_mode_deactivated": "Mode privat dinonaktifkan"
+    },
+    "TRANSACTIONS": {
+      "menu_title": "Transaksi",
+      "menu_descr": "Atur perilaku dan tampilan semua fitur terkait transaksi",
+      "title": "Pengaturan Transaksi",
+      "STYLE": {
+        "title": "Gaya transaksi",
+        "subtitle": "Atur tampilan transaksi di berbagai daftar dalam aplikasi",
+        "show_tags": "Tampilkan Tag",
+        "show_time": "Tampilkan Waktu"
+      },
+      "SWIPE_ACTIONS": {
+        "title": "Aksi usap (Swipe)",
+        "choose_description": "Pilih tindakan yang akan dijalankan saat kamu mengusap item transaksi di daftar sesuai arah usapan ini",
+        "swipe_left": "Usap ke kiri",
+        "swipe_right": "Usap ke kanan",
+        "none": "Tidak ada aksi",
+        "toggle_reconciled": "Ubah status terekonsiliasi",
+        "toggle_pending": "Ubah status tertunda",
+        "toggle_voided": "Ubah status dibatalkan",
+        "toggle_unreconciled": "Ubah status belum terekonsiliasi",
+        "remove_status": "Hapus status"
+      },
+      "DEFAULT_VALUES": {
+        "title": "Nilai Bawaan Formulir",
+        "page_title": "Transaksi Baru: Nilai Bawaan Formulir",
+        "reuse_last_transaction": "Gunakan Ulang Nilai Transaksi Terakhir",
+        "reuse_last_transaction_descr": "Isi formulir secara otomatis dengan beberapa nilai dari transaksi terakhir yang dibuat",
+        "fields_to_reuse": "Kolom yang digunakan ulang",
+        "reuse_last_values_modal_descr": "Pilih kolom yang harus diisi otomatis dengan nilai dari transaksi terakhir yang dibuat.",
+        "default_values_separator": "Nilai Bawaan",
+        "default_category": "Kategori Bawaan",
+        "default_status": "Status Bawaan",
+        "default_tags": "Tag Bawaan",
+        "no_tags_selected": "Tidak ada tag yang dipilih"
+      },
+      "DEFAULT_TYPE": {
+        "title": "Jenis Bawaan",
+        "modal_title": "Pilih Jenis Bawaan"
+      }
+    },
+    "APPEARANCE": {
+      "menu_title": "Tema & Gaya",
+      "menu_descr": "Skema warna, font, dan pengaturan visual global lainnya",
+      "theme_and_colors": "Tema dan warna",
+      "THEME": {
+        "title": "Tema",
+        "auto": "Sistem",
+        "light": "Terang",
+        "dark": "Gelap"
+      },
+      "amoled_mode": "Mode AMOLED",
+      "amoled_mode_descr": "Gunakan latar belakang hitam pekat bila memungkinkan. Ini akan sedikit menghemat baterai pada perangkat dengan layar AMOLED",
+      "dynamic_colors": "Warna dinamis",
+      "dynamic_colors_descr": "Gunakan warna aksen sistemmu bila memungkinkan",
+      "accent_color": "Warna aksen",
+      "accent_color_descr": "Pilih warna yang akan digunakan aplikasi untuk menonjolkan bagian tertentu pada antarmuka",
+      "text": "Teks",
+      "font": "Font",
+      "font_platform": "Platform"
+    }
+  },
+  "MORE": {
+    "title": "Lainnya",
+    "title_long": "Tindakan lainnya",
+    "DATA": {
+      "display": "Data",
+      "display.descr": "Ekspor dan impor datamu agar tidak kehilangan apa pun",
+      "delete-all": "Hapus data saya",
+      "delete-all-header1": "Berhenti di situ dulu ⚠️⚠️",
+      "delete-all-message1": "Apakah kamu yakin ingin melanjutkan? Semua datamu akan dihapus secara permanen dan tidak dapat dipulihkan",
+      "delete-all-header2": "Satu langkah terakhir ⚠️⚠️",
+      "delete-all-message2": "Dengan menghapus data akun, kamu akan menghapus seluruh data pribadi yang tersimpan. Akun, transaksi, anggaran, dan kategorimu akan dihapus dan tidak dapat dipulihkan. Apakah kamu setuju?"
+    },
+    "ABOUT_US": {
+      "display": "Informasi aplikasi",
+      "description": "Temukan ketentuan Monekin, info penting, dan terhubung dengan melaporkan bug atau berbagi ide",
+      "LEGAL": {
+        "display": "Informasi hukum",
+        "privacy": "Kebijakan privasi",
+        "terms": "Ketentuan penggunaan",
+        "licenses": "Lisensi"
+      },
+      "PROJECT": {
+        "display": "Proyek",
+        "contributors": "Kolaborator",
+        "contributors.descr": "Semua pengembang yang telah membuat Monekin berkembang",
+        "contact": "Hubungi kami"
+      }
+    },
+    "HELP_US": {
+      "display": "Bantu kami",
+      "description": "Cari tahu bagaimana kamu dapat membantu Monekin menjadi semakin baik",
+      "rate-us": "Beri nilai",
+      "rate-us.descr": "Penilaian apa pun sangat berarti!",
+      "share": "Bagikan Monekin",
+      "share.descr": "Bagikan aplikasi kami ke teman dan keluarga",
+      "share.text": "Monekin! Aplikasi keuangan pribadi terbaik. Unduh di sini",
+      "thanks": "Terima kasih!",
+      "thanks_long": "Kontribusimu pada Monekin dan proyek open source lainnya, besar maupun kecil, memungkinkan proyek hebat seperti ini terus berjalan. Terima kasih telah meluangkan waktu untuk berkontribusi.",
+      "donate": "Berdonasi",
+      "donate.descr": "Dengan donasimu, kamu membantu aplikasi ini terus mendapatkan pembaruan. Cara terbaik apa lagi untuk mengapresiasi kerja keras ini selain mentraktir segelas kopi?",
+      "donate.success": "Donasi berhasil. Terima kasih banyak atas kontribusimu! ❤️",
+      "donate.err": "Ups! Sepertinya terjadi kesalahan saat menerima pembayaranmu",
+      "report": "Laporkan bug, kirim saran..."
+    }
+  }
+}
